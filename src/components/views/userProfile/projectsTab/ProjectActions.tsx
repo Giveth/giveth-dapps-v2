@@ -3,9 +3,11 @@ import {
 	IconArrowDownCircle16,
 	IconEdit16,
 	IconEye16,
+	IconTrash16,
 	IconUpdate16,
 	IconWalletOutline16,
 	neutralColors,
+	semanticColors,
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import React, { Dispatch, SetStateAction, useState } from 'react';
@@ -14,7 +16,7 @@ import router from 'next/router';
 import { useAccount, useSwitchChain } from 'wagmi';
 import { IProject } from '@/apollo/types/types';
 import { EProjectStatus } from '@/apollo/types/gqlEnums';
-import { Dropdown, IOption } from '@/components/Dropdown';
+import { Dropdown, EOptionType, IOption } from '@/components/Dropdown';
 import { idToProjectEdit, slugToProjectView } from '@/lib/routeCreators';
 import { capitalizeAllWords } from '@/lib/helpers';
 import config from '@/configuration';
@@ -97,7 +99,21 @@ const ProjectActions = (props: IProjectActions) => {
 		},
 	};
 
+	const deleteProjectOption: IOption = {
+		label: formatMessage({
+			id: 'label.delete_project',
+		}),
+		icon: <IconTrash16 />,
+		color: semanticColors.punch[500],
+		cb: () => {},
+	};
+
 	anchorContractAddress && options.push(recurringDonationOption);
+	project.status.name === EProjectStatus.DRAFT &&
+		options.push({
+			type: EOptionType.SEPARATOR,
+		}) &&
+		options.push(deleteProjectOption);
 
 	const dropdownStyle = {
 		padding: '4px 16px',
