@@ -112,6 +112,7 @@ const ProjectDonationTable = ({ selectedQF }: IProjectDonationTable) => {
 					orderBy: { field: order.by, direction: order.direction },
 					status: isAdmin ? null : EDonationStatus.VERIFIED,
 				},
+				fetchPolicy: 'cache-first',
 			});
 			setLoading(false);
 			const { donationsByProjectId } = projectDonations;
