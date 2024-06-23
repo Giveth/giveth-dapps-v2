@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 import { type FC } from 'react';
-import { IconTrash32, P } from '@giveth/ui-design-system';
+import { Button, Flex, IconTrash32, P } from '@giveth/ui-design-system';
+import { useIntl } from 'react-intl';
 import { IProject } from '@/apollo/types/types';
 import { Modal } from '@/components/modals/Modal';
 import { IModal } from '@/types/common';
@@ -14,6 +15,7 @@ const DeleteProjectModal: FC<IDeleteProjectModal> = ({
 	setShowModal,
 	project,
 }) => {
+	const { formatMessage } = useIntl();
 	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
 
 	return (
@@ -26,16 +28,43 @@ const DeleteProjectModal: FC<IDeleteProjectModal> = ({
 		>
 			<ModalContainer>
 				<P>
-					Are you sure you want to remove {project.title} permanently?
+					{formatMessage(
+						{
+							id: 'component.delete_project.confirmation',
+						},
+						{
+							title: project.title,
+						},
+					)}
 				</P>
+				<Flex gap='24px' $flexDirection='column' $alignItems='center'>
+					<Button
+						buttonType='primary'
+						label={formatMessage({
+							id: 'component.delete_project.yes',
+						})}
+						size='small'
+						onClick={() => setShowModal(true)}
+					/>
+					<Button
+						buttonType='texty-gray'
+						label={formatMessage({
+							id: 'component.delete_project.no',
+						})}
+						size='small'
+						onClick={() => setShowModal(false)}
+					/>
+				</Flex>
 			</ModalContainer>
 		</Modal>
 	);
 };
 
-const ModalContainer = styled.div`
+const ModalContainer = styled(Flex)`
 	padding: 24px;
-	min-width: 650px;
+	min-width: 450px;
+	flex-direction: column;
+	gap: 36px;
 `;
 
 export default DeleteProjectModal;
