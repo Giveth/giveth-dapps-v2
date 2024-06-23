@@ -99,6 +99,7 @@ createWeb3Modal({
 		[configuration.CLASSIC_NETWORK_NUMBER]:
 			'/images/currencies/classic/32.svg',
 	},
+	allowUnsupportedChain: false,
 });
 
 function MyApp({ Component, pageProps }: AppProps) {
