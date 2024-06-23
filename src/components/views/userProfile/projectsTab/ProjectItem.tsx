@@ -23,6 +23,7 @@ import ProjectQFStatus from './ProjectQFStatus';
 import ProjectListedStatus from './ProjectListedStatus';
 import { formatDonation } from '@/helpers/number';
 import VerificationBadge from '@/components/VerificationBadge';
+import DeleteProjectModal from './DeleteProjectModal';
 
 interface IProjectItem {
 	project: IProject;
@@ -34,6 +35,7 @@ const ProjectItem = ({ project, setProjects }: IProjectItem) => {
 	const [showAddressModal, setShowAddressModal] = useState(false);
 	const [selectedProject, setSelectedProject] = useState<IProject>();
 	const [showClaimModal, setShowClaimModal] = useState(false);
+	const [showDeleteModal, setShowDeleteModal] = useState(false);
 
 	return (
 		<ProjectContainer>
@@ -63,6 +65,7 @@ const ProjectItem = ({ project, setProjects }: IProjectItem) => {
 					setShowAddressModal={setShowAddressModal}
 					project={project}
 					setShowClaimModal={setShowClaimModal}
+					setShowDeleteModal={setShowDeleteModal}
 				/>
 			</ProjectInfoContainer>
 			<HorizontalDivider />
@@ -142,6 +145,12 @@ const ProjectItem = ({ project, setProjects }: IProjectItem) => {
 				<ClaimRecurringDonationModal
 					setShowModal={setShowClaimModal}
 					project={project}
+				/>
+			)}
+			{showDeleteModal && selectedProject && (
+				<DeleteProjectModal
+					setShowModal={setShowDeleteModal}
+					project={selectedProject}
 				/>
 			)}
 		</ProjectContainer>
