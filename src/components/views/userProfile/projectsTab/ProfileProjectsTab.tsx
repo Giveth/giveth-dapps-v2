@@ -143,10 +143,6 @@ const ProfileProjectsTab: FC<IUserProfileView> = () => {
 	);
 };
 
-const ProjectsTableWrapper = styled.div`
-	overflow: auto;
-`;
-
 export const ProjectsContainer = styled.div`
 	margin-bottom: 40px;
 `;

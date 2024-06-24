@@ -27,8 +27,8 @@ import { IconEthereum } from '@/components/Icons/Eth';
 import { IconUnknown } from '@/components/Icons/Unknown';
 import IconBase from '@/components/Icons/Base';
 import IconSolana from '@/components/Icons/Solana';
+import IconZKEVM from '@/components/Icons/ZKEVM';
 import IconArbitrum from '@/components/Icons/Arbitrum';
-import { IconPolygonZkEvm } from '@/components/Icons/PolygonZkEvm';
 
 const BASE_ROUTE =
 	process.env.NEXT_PUBLIC_BASE_ROUTE ||
@@ -56,7 +56,7 @@ const CELO_NETWORK_NUMBER = 44787;
 const CLASSIC_NETWORK_NUMBER = 63;
 const ARBITRUM_NETWORK_NUMBER = 421614;
 const BASE_NETWORK_NUMBER = 84532;
-const POLYGON_ZKEVM_NETWORK_NUMBER = polygonZkEvmCardona.id;
+const ZKEVM_NETWORK_NUMBER = 2442;
 
 const SOLANA_NETWORK: NonEVMChain = {
 	id: 0,
@@ -131,7 +131,7 @@ const config: EnvConfig = {
 	ARBITRUM_NETWORK_NUMBER: ARBITRUM_NETWORK_NUMBER,
 	CLASSIC_NETWORK_NUMBER: CLASSIC_NETWORK_NUMBER,
 	BASE_NETWORK_NUMBER: BASE_NETWORK_NUMBER,
-	POLYGON_ZKEVM_NETWORK_NUMBER: POLYGON_ZKEVM_NETWORK_NUMBER,
+	ZKEVM_NETWORK_NUMBER: ZKEVM_NETWORK_NUMBER,
 
 	RARIBLE_ADDRESS: 'https://testnet.rarible.com/',
 	MAINNET_CONFIG: {
@@ -391,7 +391,7 @@ const config: EnvConfig = {
 			'0x503055e1f8b99c60a51c479a60b233976617bc7a',
 		superFluidSubgraph:
 			process.env.NEXT_PUBLIC_SUBGRAPH_SUPER_FLUID ||
-			'https://optimism-sepolia.subgraph.x.superfluid.dev/?source=giveth',
+			'https://subgraph-endpoints.superfluid.dev/optimism-sepolia/protocol-v1',
 		SUPER_FLUID_TOKENS: [
 			{
 				underlyingToken: {
@@ -456,6 +456,16 @@ const config: EnvConfig = {
 		chainLogo: (logoSize?: number) => <IconBase size={logoSize} />,
 	},
 
+	ZKEVM_CONFIG: {
+		...polygonZkEvmCardona,
+		chainType: ChainType.EVM,
+		coingeckoChainName: 'polygon-zkevm',
+		gasPreference: {
+			// Keep it empty for automatic configuration
+		},
+		chainLogo: (logoSize?: number) => <IconZKEVM size={logoSize} />,
+	},
+
 	CLASSIC_CONFIG: {
 		...classic,
 		//TODO: should change the icon
@@ -466,19 +476,10 @@ const config: EnvConfig = {
 			// Keep it empty for automatic configuration
 		},
 	},
-
 	SOLANA_CONFIG: {
 		...SOLANA_NETWORK,
 		coingeckoChainName: 'solana',
 		chainLogo: (logoSize?: number) => <IconSolana size={logoSize} />,
-	},
-
-	POLYGON_ZKEVM_CONFIG: {
-		...polygonZkEvmCardona,
-		chainType: ChainType.EVM,
-		coingeckoChainName: 'polygon-pos',
-		chainLogo: (logoSize?: number) => <IconPolygonZkEvm size={logoSize} />,
-		gasPreference: {},
 	},
 };
 

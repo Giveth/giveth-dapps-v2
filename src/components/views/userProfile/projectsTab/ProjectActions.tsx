@@ -3,21 +3,23 @@ import {
 	IconArrowDownCircle16,
 	IconEdit16,
 	IconEye16,
+	IconTrash16,
 	IconUpdate16,
 	IconWalletOutline16,
 	neutralColors,
+	semanticColors,
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
-import React, { Dispatch, SetStateAction, useState } from 'react';
+import { Dispatch, type FC, SetStateAction, useState } from 'react';
 import { useIntl } from 'react-intl';
 import router from 'next/router';
 import { useAccount, useSwitchChain } from 'wagmi';
 import { IProject } from '@/apollo/types/types';
 import { EProjectStatus } from '@/apollo/types/gqlEnums';
-import { Dropdown, IOption } from '@/components/Dropdown';
+import { Dropdown, EOptionType, IOption } from '@/components/Dropdown';
 import { idToProjectEdit, slugToProjectView } from '@/lib/routeCreators';
 import { capitalizeAllWords } from '@/lib/helpers';
-import config from '@/configuration';
+import config, { isDeleteProjectEnabled } from '@/configuration';
 import { findAnchorContractAddress } from '@/helpers/superfluid';
 
 interface IProjectActions {
@@ -25,23 +27,23 @@ interface IProjectActions {
 	setSelectedProject: Dispatch<SetStateAction<IProject | undefined>>;
 	setShowAddressModal: Dispatch<SetStateAction<boolean>>;
 	setShowClaimModal?: Dispatch<SetStateAction<boolean>>;
+	setShowDeleteModal: Dispatch<SetStateAction<boolean>>;
 	className?: string;
 }
 
-const ProjectActions = (props: IProjectActions) => {
-	const {
-		project,
-		setSelectedProject,
-		setShowAddressModal,
-		setShowClaimModal,
-		className,
-	} = props;
-	const status = project.status.name;
-	const isCancelled = status === EProjectStatus.CANCEL;
-
+const ProjectActions: FC<IProjectActions> = ({
+	project,
+	setSelectedProject,
+	setShowAddressModal,
+	setShowClaimModal,
+	setShowDeleteModal,
+	className,
+}) => {
+	const [isHover, setIsHover] = useState(false);
 	const { formatMessage } = useIntl();
 
-	const [isHover, setIsHover] = useState(false);
+	const status = project.status.name;
+	const isCancelled = status === EProjectStatus.CANCEL;
 
 	const anchorContractAddress = findAnchorContractAddress(
 		project.anchorContracts,
@@ -80,24 +82,43 @@ const ProjectActions = (props: IProjectActions) => {
 		},
 	];
 
-	const recurringDonationOption: IOption = {
-		label: formatMessage({
-			id: 'label.claim_recurring_donation',
-		}),
-		icon: <IconArrowDownCircle16 />,
-		cb: () => {
-			if (chainId !== config.OPTIMISM_NETWORK_NUMBER) {
-				switchChain({
-					chainId: config.OPTIMISM_NETWORK_NUMBER,
-				});
-			} else {
+	if (anchorContractAddress) {
+		const recurringDonationOption: IOption = {
+			label: formatMessage({
+				id: 'label.claim_recurring_donation',
+			}),
+			icon: <IconArrowDownCircle16 />,
+			cb: () => {
+				if (chainId !== config.OPTIMISM_NETWORK_NUMBER) {
+					switchChain({
+						chainId: config.OPTIMISM_NETWORK_NUMBER,
+					});
+				} else {
+					setSelectedProject(project);
+					setShowClaimModal && setShowClaimModal(true);
+				}
+			},
+		};
+		options.push(recurringDonationOption);
+	}
+	if (
+		isDeleteProjectEnabled &&
+		project.status.name === EProjectStatus.DRAFT
+	) {
+		const deleteProjectOption: IOption = {
+			label: formatMessage({
+				id: 'label.delete_project',
+			}),
+			icon: <IconTrash16 />,
+			color: semanticColors.punch[500],
+			cb: () => {
 				setSelectedProject(project);
-				setShowClaimModal && setShowClaimModal(true);
-			}
-		},
-	};
-
-	anchorContractAddress && options.push(recurringDonationOption);
+				setShowDeleteModal(true);
+			},
+		};
+		options.push({ type: EOptionType.SEPARATOR });
+		options.push(deleteProjectOption);
+	}
 
 	const dropdownStyle = {
 		padding: '4px 16px',

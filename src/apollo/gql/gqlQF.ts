@@ -1,7 +1,6 @@
 import { gql } from '@apollo/client';
 
-export const FETCH_QF_ROUNDS_QUERY = gql`
-	query FetchQFRounds($slug: String, $activeOnly: Boolean) {
+export const QF_ROUNDS_QUERY = `
 		qfRounds(slug: $slug, activeOnly: $activeOnly) {
 			id
 			slug
@@ -19,6 +18,11 @@ export const FETCH_QF_ROUNDS_QUERY = gql`
 			allocatedFundUSDPreferred
 			allocatedTokenSymbol
 		}
+`;
+
+export const FETCH_QF_ROUNDS_QUERY = gql`
+	query FetchQFRounds($slug: String, $activeOnly: Boolean) {
+		${QF_ROUNDS_QUERY}
 	}
 `;
 
@@ -67,6 +71,7 @@ export const FETCH_ARCHIVED_QF_ROUNDS = gql`
 			endDate
 			totalDonations
 			uniqueDonors
+			# isDataAnalysisDone // TODO: uncomment when backend is ready
 		}
 	}
 `;

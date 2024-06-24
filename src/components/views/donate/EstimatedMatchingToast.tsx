@@ -3,6 +3,7 @@ import {
 	B,
 	Caption,
 	IconHelpFilled16,
+	IconAlertTriangleFilled,
 	neutralColors,
 	semanticColors,
 	Subline,
@@ -28,11 +29,11 @@ interface IEstimatedMatchingToast {
 	amountTyped?: number;
 }
 
-const EstimatedMatchingToast = ({
+const EstimatedMatchingToast: React.FC<IEstimatedMatchingToast> = ({
 	projectData,
 	token,
 	amountTyped,
-}: IEstimatedMatchingToast) => {
+}) => {
 	const { formatMessage, locale } = useIntl();
 	const { estimatedMatching, qfRounds } = projectData || {};
 	const { allProjectsSum, matchingPool, projectDonationsSqrtRootSum } =
@@ -45,54 +46,102 @@ const EstimatedMatchingToast = ({
 		allocatedFundUSDPreferred,
 		allocatedFundUSD,
 		allocatedTokenSymbol,
+		minimumValidUsdValue,
+		maximumReward,
 	} = activeStartedRound || {};
 
+	const amountInUsd = (tokenPrice || 0) * (amountTyped || 0);
+
 	const esMatching = calculateEstimatedMatchingWithDonationAmount(
-		(tokenPrice || 0) * (amountTyped || 0),
+		amountInUsd,
 		projectDonationsSqrtRootSum,
 		allProjectsSum,
 		allocatedFundUSDPreferred ? allocatedFundUSD : matchingPool,
-		activeStartedRound?.maximumReward,
+		maximumReward,
 	);
 
+	const isAboveMinValidUsdValue =
+		minimumValidUsdValue != null
+			? amountInUsd >= minimumValidUsdValue
+			: true;
+
+	const borderColor = isAboveMinValidUsdValue
+		? semanticColors.jade['500']
+		: semanticColors.golden['500'];
+
+	const textColor = isAboveMinValidUsdValue
+		? semanticColors.jade['700']
+		: semanticColors.golden['500'];
+
+	const tooltipIcon = isAboveMinValidUsdValue ? (
+		<IconHelpFilled16 color={textColor} />
+	) : (
+		<IconAlertTriangleFilled color={textColor} />
+	);
+
+	const formatWithCurrency = (
+		amount: number,
+		currency: string,
+		locale: string,
+	) => {
+		return (
+			formatDonation(amount, currency, locale, true) +
+			(currency ? '' : ` ${allocatedTokenSymbol}`)
+		);
+	};
+
+	const getEstimatedMatchingRange = (esMatching: number) => {
+		if (esMatching >= 1) {
+			return `${formatWithCurrency((esMatching * 30) / 100, allocatedFundUSDPreferred ? '$' : '', locale)} - ${formatWithCurrency(esMatching, allocatedFundUSDPreferred ? '$' : '', locale)}`;
+		}
+		return formatWithCurrency(
+			esMatching,
+			allocatedFundUSDPreferred ? '$' : '',
+			locale,
+		);
+	};
+
+	const formattedDonation = isAboveMinValidUsdValue
+		? getEstimatedMatchingRange(esMatching)
+		: '---';
+
+	const bottomText = isAboveMinValidUsdValue
+		? formatMessage({ id: 'page.donate.matching_toast.bottom_valid' })
+		: formatMessage({
+				id: 'page.donate.matching_toast.bottom_invalid_p1',
+			}) +
+			' $' +
+			minimumValidUsdValue +
+			' ' +
+			formatMessage({
+				id: 'page.donate.matching_toast.bottom_invalid_p2',
+			});
+
 	return (
-		<Wrapper>
-			<Upper>
+		<Wrapper style={{ borderColor }}>
+			<Upper style={{ color: textColor }}>
 				<EstimatedMatching>
 					<Caption $medium>
 						{formatMessage({
-							id: 'page.donate.matching_toast.upper',
+							id: isAboveMinValidUsdValue
+								? 'page.donate.matching_toast.upper_valid'
+								: 'page.donate.matching_toast.upper_invalid',
 						})}
 					</Caption>
-					<IconWithTooltip
-						icon={
-							<IconHelpFilled16
-								color={semanticColors.jade['700']}
-							/>
-						}
-						direction='top'
-					>
-						<TooltipContent>
-							{formatMessage({
-								id: 'component.qf-section.tooltip_polygon',
-							})}
-						</TooltipContent>
+					<IconWithTooltip icon={tooltipIcon} direction='top'>
+						{isAboveMinValidUsdValue && (
+							<TooltipContent>
+								{formatMessage({
+									id: 'component.qf-section.tooltip_polygon',
+								})}
+							</TooltipContent>
+						)}
 					</IconWithTooltip>
 				</EstimatedMatching>
-				<B>
-					{formatDonation(
-						esMatching,
-						allocatedFundUSDPreferred ? '$' : '',
-						locale,
-						true,
-					)}{' '}
-					{allocatedFundUSDPreferred ? '' : allocatedTokenSymbol}
-				</B>
+				<B>{formattedDonation}</B>
 			</Upper>
 			<Divider />
-			<Bottom>
-				{formatMessage({ id: 'page.donate.matching_toast.bottom' })}
-			</Bottom>
+			<Bottom>{bottomText}</Bottom>
 		</Wrapper>
 	);
 };
@@ -111,13 +160,12 @@ const Bottom = styled(Subline)`
 
 const Upper = styled.div`
 	margin-bottom: 4px;
-	color: ${semanticColors.jade['700']};
 	display: flex;
 	justify-content: space-between;
 `;
 
 const Wrapper = styled.div`
-	border: 1px solid ${semanticColors.jade['500']};
+	border: 1px solid;
 	border-radius: 8px;
 	padding: 16px;
 	margin-top: 8px;
