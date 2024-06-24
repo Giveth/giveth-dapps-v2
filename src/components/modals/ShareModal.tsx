@@ -17,10 +17,12 @@ import {
 import { useIntl } from 'react-intl';
 import { FC } from 'react';
 
+import Link from 'next/link';
 import { Modal } from './Modal';
 import FacebookIcon from '../../../public/images/social-fb.svg';
 import LinkedinIcon from '../../../public/images/social-linkedin.svg';
 import ShareIcon from '../../../public/images/icons/share_dots.svg';
+import Warpcast from '../../../public/images/icons/social-warpcast.svg';
 import { slugToProjectView } from '@/lib/routeCreators';
 import { IModal } from '@/types/common';
 import CopyLink from '@/components/CopyLink';
@@ -114,6 +116,20 @@ const ShareModal: FC<IShareModal> = props => {
 							/>
 						</FacebookShareButton>
 					</SocialButtonContainer>
+					<SocialButtonContainer>
+						<Link
+							href={`https://warpcast.com/~/compose?embeds[]=${url}&text=${shareTitleTwitter}`}
+							target='_blank'
+							className='warpcast-share-button'
+						>
+							<Image
+								src={Warpcast}
+								alt='warpcast icon'
+								width={25}
+								height={25}
+							/>
+						</Link>
+					</SocialButtonContainer>
 				</FlexCenter>
 				<LeadText>
 					{formatMessage({ id: 'label.or_copy_the_link' })}
@@ -155,6 +171,12 @@ const SocialButtonContainer = styled(FlexCenter)`
 	> * {
 		height: 40px;
 		width: 40px;
+	}
+
+	& .warpcast-share-button {
+		display: flex;
+		align-items: center;
+		justify-content: center;
 	}
 `;
 
