@@ -75,7 +75,10 @@ const ProjectActions: FC<IProjectActions> = ({
 				mutation: ACTIVATE_PROJECT,
 				variables: { projectId: Number(projectId || '') },
 			});
-			setProject({ ...project, status: { name: EProjectStatus.ACTIVE } });
+			const _project = structuredClone(project);
+			_project.listed = null;
+			_project.status.name = EProjectStatus.ACTIVE;
+			setProject(_project);
 		} catch (e) {
 			showToastError(e);
 			captureException(e, {
@@ -89,6 +92,12 @@ const ProjectActions: FC<IProjectActions> = ({
 	// Handle deactivate project action
 	const handleDeactivateProject = async () => {
 		setDeactivateModal(true);
+	};
+
+	const onDeactivateProject = async () => {
+		const _project = structuredClone(project);
+		_project.status.name = EProjectStatus.DEACTIVE;
+		setProject(_project);
 	};
 
 	const options: IOption[] = [
@@ -220,7 +229,7 @@ const ProjectActions: FC<IProjectActions> = ({
 						<DeactivateProjectModal
 							setShowModal={setDeactivateModal}
 							projectId={projectId}
-							onSuccess={async () => {}}
+							onSuccess={onDeactivateProject}
 						/>
 					)}
 				</>
