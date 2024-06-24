@@ -17,6 +17,7 @@ import { ProjectsContributeCard } from '@/components/ContributeCard';
 import { useProfileContext } from '@/context/profile.context';
 import { ProjectProvider } from '@/context/project.context';
 import ProjectItem from './ProjectItem';
+import { getUserName } from '@/helpers/user';
 
 const itemPerPage = 10;
 
@@ -31,7 +32,7 @@ const ProfileProjectsTab: FC<IUserProfileView> = () => {
 	});
 	const { user, myAccount } = useProfileContext();
 	const { formatMessage } = useIntl();
-	const userName = user?.name || 'Unknown';
+	const userName = getUserName(user);
 
 	const changeOrder = (orderBy: EOrderBy) => {
 		if (orderBy === order.by) {
@@ -145,10 +146,6 @@ const ProfileProjectsTab: FC<IUserProfileView> = () => {
 		</UserProfileTab>
 	);
 };
-
-const ProjectsTableWrapper = styled.div`
-	overflow: auto;
-`;
 
 export const ProjectsContainer = styled.div`
 	margin-bottom: 40px;

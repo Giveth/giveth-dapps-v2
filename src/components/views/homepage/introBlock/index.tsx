@@ -50,7 +50,10 @@ const IntroBlock = () => {
 								})}
 							</CustomLead>
 							<ButtonsContainer gap='16px'>
-								<Link href={Routes.AllProjects}>
+								<Link
+									id='Explore_Hero'
+									href={Routes.AllProjects}
+								>
 									<ButtonLink
 										label={formatMessage({
 											id: 'label.explore_projects',

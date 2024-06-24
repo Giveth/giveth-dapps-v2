@@ -138,7 +138,7 @@ const AlloProtocolFirstDonationModal: FC<IAlloProtocolModal> = ({
 					})}{' '}
 				</P>
 				<Ellipse />
-				<br />F
+				<br />
 				<P>
 					{formatMessage({
 						id: 'label.there_will_be_one_extra_transaction_you_need_to_sign_to',

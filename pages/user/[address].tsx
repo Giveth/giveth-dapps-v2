@@ -11,6 +11,7 @@ import ErrorsIndex from '@/components/views/Errors/ErrorsIndex';
 import { ProfileProvider } from '@/context/profile.context';
 import { useAppSelector } from '@/features/hooks';
 import { useReferral } from '@/hooks/useReferral';
+import { getUserName } from '@/helpers/user';
 
 interface IUserRouteProps {
 	user?: IUser;
@@ -20,7 +21,6 @@ const UserRoute: FC<IUserRouteProps> = ({ user }) => {
 	const { isSignedIn, userData } = useAppSelector(state => state.user);
 	useReferral();
 
-	// When user is not found, GQL doesn't return any error. After backend is fixed, this can be deleted.
 	if (!user) {
 		return <ErrorsIndex statusCode='404' />;
 	}
@@ -29,13 +29,13 @@ const UserRoute: FC<IUserRouteProps> = ({ user }) => {
 		user.walletAddress?.toLowerCase() ===
 		userData?.walletAddress?.toLowerCase();
 
+	const userName = getUserName(user, true);
+
 	return (
 		<>
 			<GeneralMetatags
 				info={{
-					title: `Giveth | ${
-						user.name || `${user.firstName} ${user.lastName}`
-					} User Profile`,
+					title: `Giveth | ${userName} User Profile`,
 					desc: 'See the donations, projects & other public information about this user.',
 					image:
 						user.avatar || 'https://i.ibb.co/HTbdCdd/Thumbnail.png',

@@ -48,7 +48,6 @@ export const PROJECT_CARD_FIELDS = gql`
 			round
 		}
 		sumDonationValueUsdForActiveQfRound
-		sumDonationValueUsd
 		countUniqueDonorsForActiveQfRound
 		countUniqueDonors
 		estimatedMatching {
@@ -147,7 +146,7 @@ export const FETCH_PROJECT_BY_SLUG_DONATION = gql`
 			slug
 			descriptionSummary
 			verified
-			sumDonationValueUsd
+			totalDonations
 			sumDonationValueUsdForActiveQfRound
 			countUniqueDonorsForActiveQfRound
 			adminUser {
@@ -185,6 +184,7 @@ export const FETCH_PROJECT_BY_SLUG_DONATION = gql`
 				allocatedTokenSymbol
 				allocatedFundUSDPreferred
 				allocatedFundUSD
+				minimumValidUsdValue
 			}
 			anchorContracts {
 				address
@@ -261,7 +261,6 @@ export const FETCH_PROJECT_BY_SLUG_SINGLE_PROJECT = gql`
 			}
 			givbackFactor
 			sumDonationValueUsdForActiveQfRound
-			sumDonationValueUsd
 			countUniqueDonorsForActiveQfRound
 			countUniqueDonors
 			estimatedMatching {
@@ -689,19 +688,23 @@ export const SIMILAR_PROJECTS = gql`
 	}
 `;
 
+export const MAIN_CATEGORIES_QUERY = `
+	mainCategories {
+		title
+		banner
+		slug
+		description
+		categories {
+			name
+			value
+			isActive
+		}
+	}
+`;
+
 export const FETCH_MAIN_CATEGORIES = gql`
 	query {
-		mainCategories {
-			title
-			banner
-			slug
-			description
-			categories {
-				name
-				value
-				isActive
-			}
-		}
+		${MAIN_CATEGORIES_QUERY}
 	}
 `;
 

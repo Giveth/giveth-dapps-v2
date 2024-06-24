@@ -11,6 +11,7 @@ import { useProfileContext } from '@/context/profile.context';
 import { OneTimeTab } from './oneTimeTab/OneTimeTab';
 import { RecurringTab } from './recurringTab/RecurringTab';
 import { ProfileDonateTabProvider } from './recurringTab/ProfileDonateTab.context';
+import { getUserName } from '@/helpers/user';
 
 enum ETab {
 	ONE_TIME,
@@ -40,7 +41,7 @@ const ProfileDonationsTab: FC<IUserProfileView> = () => {
 	const { myAccount, user } = useProfileContext();
 	const { formatMessage } = useIntl();
 
-	const userName = user?.name || 'Unknown';
+	const userName = getUserName(user);
 
 	return (
 		<ProfileDonateTabProvider>

@@ -4,7 +4,6 @@ import {
 	Col,
 	Container,
 	IconDonation24,
-	mediaQueries,
 	neutralColors,
 	Row,
 	semanticColors,
@@ -13,6 +12,7 @@ import {
 } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
 import { useRouter } from 'next/router';
+import { useAccount } from 'wagmi';
 import SocialBox from '../../DonateSocialBox';
 import NiceBanner from './NiceBanner';
 // import PurchaseXDAI from './PurchaseXDAIBanner';
@@ -32,6 +32,7 @@ import QFSection from '../project/projectActionCard/QFSection';
 import ProjectCardImage from '@/components/project-card/ProjectCardImage';
 import { useGeneralWallet } from '@/providers/generalWalletProvider';
 import { DonatePageProjectDescription } from './DonatePageProjectDescription';
+import { getActiveRound } from '@/helpers/qf';
 
 const DonateIndex: FC = () => {
 	const { formatMessage } = useIntl();
@@ -42,6 +43,7 @@ const DonateIndex: FC = () => {
 	const isSafeEnv = useIsSafeEnvironment();
 	const { isOnSolana } = useGeneralWallet();
 	const router = useRouter();
+	const { chainId } = useAccount();
 
 	useEffect(() => {
 		dispatch(setShowHeader(false));
@@ -51,6 +53,9 @@ const DonateIndex: FC = () => {
 	}, [dispatch]);
 
 	const isRecurringTab = router.query.tab?.toString() === ETabs.RECURRING;
+	const { activeStartedRound } = getActiveRound(project.qfRounds);
+	const isOnEligibleNetworks =
+		chainId && activeStartedRound?.eligibleNetworks?.includes(chainId);
 
 	return successDonation ? (
 		<>
@@ -62,9 +67,6 @@ const DonateIndex: FC = () => {
 	) : (
 		<>
 			<DonateHeader />
-			{!isSafeEnv && hasActiveQFRound && !isOnSolana && (
-				<PassportBanner />
-			)}
 			<DonateContainer>
 				{/* <PurchaseXDAI /> */}
 				{alreadyDonated && !isRecurringTab && (
@@ -77,6 +79,9 @@ const DonateIndex: FC = () => {
 						</SublineBold>
 					</AlreadyDonatedWrapper>
 				)}
+				{!isSafeEnv && hasActiveQFRound && !isOnSolana && (
+					<PassportBanner />
+				)}
 				<NiceBanner />
 				<Row>
 					<Col xs={12} lg={6}>
@@ -87,15 +92,16 @@ const DonateIndex: FC = () => {
 							<ImageWrapper>
 								<ProjectCardImage image={project.image} />
 							</ImageWrapper>
-							{!isMobile &&
-							!isRecurringTab &&
-							hasActiveQFRound ? (
-								<QFSection projectData={project} />
-							) : (
-								<DonatePageProjectDescription
-									projectData={project}
-								/>
-							)}
+							{!isMobile ? (
+								(!isRecurringTab && hasActiveQFRound) ||
+								(isRecurringTab && isOnEligibleNetworks) ? (
+									<QFSection projectData={project} />
+								) : (
+									<DonatePageProjectDescription
+										projectData={project}
+									/>
+								)
+							) : null}
 						</InfoWrapper>
 					</Col>
 				</Row>
@@ -124,15 +130,9 @@ const AlreadyDonatedWrapper = styled(Flex)`
 
 const DonateContainer = styled(Container)`
 	text-align: center;
-	padding-top: 128px;
+	padding-top: 110px;
 	padding-bottom: 64px;
 	position: relative;
-`;
-
-const Wrapper = styled.div`
-	max-width: 1052px;
-	padding: 64px 0;
-	margin: 0 auto;
 `;
 
 const InfoWrapper = styled.div`
@@ -150,31 +150,6 @@ const ImageWrapper = styled.div`
 	margin-bottom: 24px;
 	border-radius: 8px;
 	overflow: hidden;
-`;
-
-const Sections = styled.div`
-	height: 100%;
-	${mediaQueries.tablet} {
-		display: grid;
-		grid-template-columns: repeat(2, minmax(500px, 1fr));
-		grid-auto-rows: minmax(100px, auto);
-	}
-	${mediaQueries.mobileL} {
-		grid-template-columns: repeat(2, minmax(100px, 1fr));
-		padding: 0 40px;
-	}
-`;
-
-const Right = styled.div`
-	z-index: 1;
-	background: white;
-	text-align: left;
-	padding: 32px;
-	min-height: 620px;
-	border-radius: 16px;
-	${mediaQueries.tablet} {
-		border-radius: 0 16px 16px 0;
-	}
 `;
 
 export default DonateIndex;

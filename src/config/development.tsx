@@ -6,6 +6,8 @@ import {
 	optimismSepolia,
 	polygon,
 	arbitrumSepolia,
+	baseSepolia,
+	polygonZkEvmCardona,
 } from 'wagmi/chains';
 import { WalletAdapterNetwork } from '@solana/wallet-adapter-base';
 import { type Chain } from 'viem';
@@ -23,7 +25,9 @@ import { IconOptimism } from '@/components/Icons/Optimism';
 import { IconGnosisChain } from '@/components/Icons/GnosisChain';
 import { IconEthereum } from '@/components/Icons/Eth';
 import { IconUnknown } from '@/components/Icons/Unknown';
+import IconBase from '@/components/Icons/Base';
 import IconSolana from '@/components/Icons/Solana';
+import IconZKEVM from '@/components/Icons/ZKEVM';
 import IconArbitrum from '@/components/Icons/Arbitrum';
 
 const BASE_ROUTE =
@@ -51,6 +55,8 @@ const OPTIMISM_NETWORK_NUMBER = 11155420;
 const CELO_NETWORK_NUMBER = 44787;
 const CLASSIC_NETWORK_NUMBER = 63;
 const ARBITRUM_NETWORK_NUMBER = 421614;
+const BASE_NETWORK_NUMBER = 84532;
+const ZKEVM_NETWORK_NUMBER = 2442;
 
 const SOLANA_NETWORK: NonEVMChain = {
 	id: 0,
@@ -86,7 +92,9 @@ const classic = {
 			url: 'https://etc-mordor.blockscout.com',
 		},
 	},
-	subgraphAddress: 'http://167.172.97.150:8000/subgraphs/name/giveth/etc',
+	subgraphAddress:
+		process.env.NEXT_PUBLIC_SUBGRAPH_CLASSIC ||
+		'http://167.172.97.150:8000/subgraphs/name/giveth/etc',
 };
 
 const EVM_CHAINS = [
@@ -96,7 +104,9 @@ const EVM_CHAINS = [
 	optimismSepolia,
 	celoAlfajores,
 	arbitrumSepolia,
+	baseSepolia,
 	classic,
+	polygonZkEvmCardona,
 ] as readonly [Chain, ...Chain[]];
 
 const NON_EVM_CHAINS: NonEVMChain[] = [SOLANA_NETWORK];
@@ -120,6 +130,8 @@ const config: EnvConfig = {
 	CELO_NETWORK_NUMBER: CELO_NETWORK_NUMBER,
 	ARBITRUM_NETWORK_NUMBER: ARBITRUM_NETWORK_NUMBER,
 	CLASSIC_NETWORK_NUMBER: CLASSIC_NETWORK_NUMBER,
+	BASE_NETWORK_NUMBER: BASE_NETWORK_NUMBER,
+	ZKEVM_NETWORK_NUMBER: ZKEVM_NETWORK_NUMBER,
 
 	RARIBLE_ADDRESS: 'https://testnet.rarible.com/',
 	MAINNET_CONFIG: {
@@ -133,6 +145,7 @@ const config: EnvConfig = {
 			// Keep it empty for automatic configuration
 		},
 		subgraphAddress:
+			process.env.NEXT_PUBLIC_SUBGRAPH_MAINNET ||
 			'https://api.studio.thegraph.com/query/40764/giveconomy-staging-goerli/1.5.0?source=giveth',
 		coingeckoChainName: 'ethereum',
 		chainLogo: (logoSize?: number) => <IconEthereum size={logoSize} />,
@@ -176,6 +189,7 @@ const config: EnvConfig = {
 		],
 		regenPools: [],
 		uniswapV2Subgraph:
+			process.env.NEXT_PUBLIC_SUBGRAPH_UNISWAP_V2 ||
 			'https://api.thegraph.com/subgraphs/name/uniswap/uniswap-v2?source=giveth',
 		regenStreams: [],
 	},
@@ -189,6 +203,7 @@ const config: EnvConfig = {
 		},
 
 		subgraphAddress:
+			process.env.NEXT_PUBLIC_SUBGRAPH_GNOSIS ||
 			'https://api.studio.thegraph.com/query/40764/giveconomy-staging-gnosischain/1.5.1?source=giveth',
 		coingeckoChainName: 'xdai',
 		chainLogo: (logoSize?: number) => <IconGnosisChain size={logoSize} />,
@@ -301,6 +316,7 @@ const config: EnvConfig = {
 		],
 
 		uniswapV2Subgraph:
+			process.env.NEXT_PUBLIC_SUBGRAPH_HONEYSWAP_V2 ||
 			'https://api.thegraph.com/subgraphs/name/1hive/honeyswap-v2?source=giveth',
 
 		regenStreams: [
@@ -351,6 +367,7 @@ const config: EnvConfig = {
 		},
 		anchorRegistryAddress: '0x4AAcca72145e1dF2aeC137E1f3C5E3D75DB8b5f3',
 		subgraphAddress:
+			process.env.NEXT_PUBLIC_SUBGRAPH_OPTIMISM ||
 			'https://api.thegraph.com/subgraphs/name/giveth/giveth-economy-optim-sepolia?source=giveth',
 		GIV_TOKEN_ADDRESS: OPTIMISM_GIV_TOKEN_ADDRESS,
 		GIV_BUY_LINK:
@@ -373,7 +390,8 @@ const config: EnvConfig = {
 		GIVETH_ANCHOR_CONTRACT_ADDRESS:
 			'0x503055e1f8b99c60a51c479a60b233976617bc7a',
 		superFluidSubgraph:
-			'https://optimism-sepolia.subgraph.x.superfluid.dev/?source=giveth',
+			process.env.NEXT_PUBLIC_SUBGRAPH_SUPER_FLUID ||
+			'https://subgraph-endpoints.superfluid.dev/optimism-sepolia/protocol-v1',
 		SUPER_FLUID_TOKENS: [
 			{
 				underlyingToken: {
@@ -428,6 +446,26 @@ const config: EnvConfig = {
 		chainLogo: (logoSize?: number) => <IconArbitrum size={logoSize} />,
 	},
 
+	BASE_CONFIG: {
+		...baseSepolia,
+		chainType: ChainType.EVM,
+		coingeckoChainName: 'base',
+		gasPreference: {
+			// Keep it empty for automatic configuration
+		},
+		chainLogo: (logoSize?: number) => <IconBase size={logoSize} />,
+	},
+
+	ZKEVM_CONFIG: {
+		...polygonZkEvmCardona,
+		chainType: ChainType.EVM,
+		coingeckoChainName: 'polygon-zkevm',
+		gasPreference: {
+			// Keep it empty for automatic configuration
+		},
+		chainLogo: (logoSize?: number) => <IconZKEVM size={logoSize} />,
+	},
+
 	CLASSIC_CONFIG: {
 		...classic,
 		//TODO: should change the icon
@@ -438,7 +476,6 @@ const config: EnvConfig = {
 			// Keep it empty for automatic configuration
 		},
 	},
-
 	SOLANA_CONFIG: {
 		...SOLANA_NETWORK,
 		coingeckoChainName: 'solana',

@@ -12,7 +12,6 @@ import {
 import React, { FC, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { useIntl } from 'react-intl';
-import { useAccount } from 'wagmi';
 import ExternalLink from '@/components/ExternalLink';
 import { client } from '@/apollo/apolloClient';
 import { FETCH_GIVETH_PROJECT_BY_ID } from '@/apollo/gql/gqlProjects';
@@ -38,6 +37,7 @@ export const SuccessView: FC = () => {
 	const {
 		givBackEligible,
 		txHash = [],
+		chainId,
 		excludeFromQF,
 		isRecurring,
 	} = successDonation || {};
@@ -48,9 +48,6 @@ export const SuccessView: FC = () => {
 	const {
 		info: { passportState },
 	} = usePassport();
-
-	const { chain } = useAccount();
-	const networkId = chain?.id;
 
 	const message = hasMultipleTxs ? (
 		<>
@@ -70,14 +67,15 @@ export const SuccessView: FC = () => {
 	const { activeStartedRound } = getActiveRound(project.qfRounds);
 
 	const isOnEligibleNetworks =
-		networkId && activeStartedRound?.eligibleNetworks?.includes(networkId);
+		chainId && activeStartedRound?.eligibleNetworks?.includes(chainId);
 
 	useEffect(() => {
+		if (!hasMultipleTxs) return;
 		client
 			.query({
 				query: FETCH_GIVETH_PROJECT_BY_ID,
 				variables: { id: config.GIVETH_PROJECT_ID },
-				fetchPolicy: 'no-cache',
+				fetchPolicy: 'cache-first',
 			})
 			.then((res: IFetchGivethProjectGQL) =>
 				setGivethSlug(res.data.projectById.slug),
@@ -105,7 +103,7 @@ export const SuccessView: FC = () => {
 				<Col xs={12} lg={6}>
 					<RightSectionWrapper>
 						<div>
-							<GiverH4 weight={700}>
+							<GiverH4 id='donation-success' weight={700}>
 								{formatMessage({ id: 'label.youre_giver_now' })}
 							</GiverH4>
 							<br />

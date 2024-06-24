@@ -86,7 +86,7 @@ const SuccessfulCreation = (props: IProps) => {
 								animationData={CongratsAnimation}
 							/>
 						</ConfettiContainer>
-						<GiverH4>
+						<GiverH4 id='project-creation'>
 							{formatMessage({ id: 'label.high_five' })}
 						</GiverH4>
 						<SuccessMessage>
