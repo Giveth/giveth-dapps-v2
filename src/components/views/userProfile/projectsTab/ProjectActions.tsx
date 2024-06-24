@@ -16,6 +16,7 @@ import { Dispatch, type FC, SetStateAction, useState } from 'react';
 import { useIntl } from 'react-intl';
 import router from 'next/router';
 import { useAccount, useSwitchChain } from 'wagmi';
+import { captureException } from '@sentry/nextjs';
 import { EVerificationStatus, IProject } from '@/apollo/types/types';
 import { EProjectStatus } from '@/apollo/types/gqlEnums';
 import { Dropdown, IOption, EOptionType } from '@/components/Dropdown';
@@ -24,11 +25,12 @@ import {
 	slugToProjectView,
 	slugToVerification,
 } from '@/lib/routeCreators';
-import { capitalizeAllWords } from '@/lib/helpers';
+import { capitalizeAllWords, showToastError } from '@/lib/helpers';
 import config, { isDeleteProjectEnabled } from '@/configuration';
 import { findAnchorContractAddress } from '@/helpers/superfluid';
 import DeactivateProjectModal from '@/components/modals/deactivateProject/DeactivateProjectIndex';
-import { useProjectContext } from '@/context/project.context';
+import { client } from '@/apollo/apolloClient';
+import { ACTIVATE_PROJECT } from '@/apollo/gql/gqlProjects';
 
 interface IProjectActions {
 	project: IProject;
@@ -54,7 +56,6 @@ const ProjectActions: FC<IProjectActions> = ({
 	const { formatMessage } = useIntl();
 	const { chain } = useAccount();
 	const { switchChain } = useSwitchChain();
-	const { isActive, activateProject } = useProjectContext();
 
 	const status = project.status.name;
 	const isCancelled = status === EProjectStatus.CANCEL;
@@ -65,10 +66,24 @@ const ProjectActions: FC<IProjectActions> = ({
 
 	const chainId = chain?.id;
 	const projectId = project?.id;
+	const isActive = project?.status.name === EProjectStatus.ACTIVE;
 
 	// Handle activate project action
 	const handleActivateProject = async () => {
-		await activateProject();
+		try {
+			await client.mutate({
+				mutation: ACTIVATE_PROJECT,
+				variables: { projectId: Number(projectId || '') },
+			});
+			setProject({ ...project, status: { name: EProjectStatus.ACTIVE } });
+		} catch (e) {
+			showToastError(e);
+			captureException(e, {
+				tags: {
+					section: 'handleProjectStatus',
+				},
+			});
+		}
 	};
 
 	// Handle deactivate project action
@@ -205,6 +220,7 @@ const ProjectActions: FC<IProjectActions> = ({
 						<DeactivateProjectModal
 							setShowModal={setDeactivateModal}
 							projectId={projectId}
+							onSuccess={async () => {}}
 						/>
 					)}
 				</>
