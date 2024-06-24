@@ -71,7 +71,7 @@ export const FETCH_ARCHIVED_QF_ROUNDS = gql`
 			endDate
 			totalDonations
 			uniqueDonors
-			isDataAnalysisDone
+			# isDataAnalysisDone // TODO: uncomment when backend is ready
 		}
 	}
 `;
