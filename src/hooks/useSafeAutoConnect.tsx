@@ -18,7 +18,7 @@ function useSafeAutoConnect() {
 			);
 			if (safeConnector) {
 				try {
-					await connect({ connector: safeConnector, chainId: 10 });
+					await connect({ connector: safeConnector });
 				} catch (error) {
 					console.error('Failed to connect with Gnosis Safe:', error);
 				}
