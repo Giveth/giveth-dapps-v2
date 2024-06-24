@@ -1,12 +1,8 @@
 import { useConnect } from 'wagmi';
 import { useEffect, useState } from 'react';
 
-const AUTOCONNECTED_CONNECTOR_IDS = ['safe'];
-
-function checkForSafeConnector(connectors: any) {
-	return AUTOCONNECTED_CONNECTOR_IDS.some(connector => {
-		return connectors.find((c: any) => c.id === connector && c.ready);
-	});
+async function hasSafeConnector(connectors: any) {
+	return connectors.some((connector: any) => connector.id === 'safe');
 }
 
 function useSafeAutoConnect() {
@@ -14,24 +10,39 @@ function useSafeAutoConnect() {
 	const isSafeEnv = useIsSafeEnvironment();
 
 	useEffect(() => {
-		if (checkForSafeConnector(connectors)) {
-			const connectorInstance = connectors.find(
-				c => c.id === AUTOCONNECTED_CONNECTOR_IDS[0], // TODO:Migrate && c.ready,
+		const autoConnect = async () => {
+			if (!isSafeEnv) return;
+
+			const safeConnector = connectors.find(
+				connector => connector.id === 'safe',
 			);
-			if (connectorInstance) connect({ connector: connectorInstance });
-		}
+			if (safeConnector) {
+				try {
+					await connect({ connector: safeConnector, chainId: 10 });
+				} catch (error) {
+					console.error('Failed to connect with Gnosis Safe:', error);
+				}
+			}
+		};
+
+		autoConnect();
 	}, [connect, connectors, isSafeEnv]);
 }
 
 function useIsSafeEnvironment() {
 	const { connectors } = useConnect();
-	const [isSafe, setIsSafe] = useState<null | Boolean>(null);
+	const [isSafe, setIsSafe] = useState(false);
 
 	useEffect(() => {
-		setIsSafe(checkForSafeConnector(connectors));
+		const checkForSafeConnector = async () => {
+			const safeExists = await hasSafeConnector(connectors);
+			setIsSafe(safeExists);
+		};
+
+		checkForSafeConnector();
 	}, [connectors]);
 
-	return !!isSafe;
+	return isSafe;
 }
 
 export { useSafeAutoConnect, useIsSafeEnvironment };
