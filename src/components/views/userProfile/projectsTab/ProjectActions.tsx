@@ -36,7 +36,7 @@ interface IProjectActions {
 	setShowAddressModal: Dispatch<SetStateAction<boolean>>;
 	setShowClaimModal?: Dispatch<SetStateAction<boolean>>;
 	setShowDeleteModal: Dispatch<SetStateAction<boolean>>;
-	setProjects: Dispatch<SetStateAction<IProject[]>>;
+	setProject: Dispatch<SetStateAction<IProject>>;
 	className?: string;
 }
 
@@ -46,7 +46,7 @@ const ProjectActions: FC<IProjectActions> = ({
 	setShowAddressModal,
 	setShowClaimModal,
 	setShowDeleteModal,
-	setProjects,
+	setProject,
 	className,
 }) => {
 	const [isHover, setIsHover] = useState(false);

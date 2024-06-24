@@ -24,11 +24,11 @@ const { CHAINS } = config;
 
 interface IModalProps extends IModal {
 	project: IProject;
-	setProjects: Dispatch<SetStateAction<IProject[]>>;
+	setProject: Dispatch<SetStateAction<IProject>>;
 }
 
 export const ManageProjectAddressesModal: FC<IModalProps> = props => {
-	const { project, setShowModal, setProjects } = props;
+	const { project, setShowModal, setProject } = props;
 	const [selectedChain, setSelectedChain] = useState<Chain | NonEVMChain>();
 	const [addresses, setAddresses] = useState<IWalletAddress[]>(
 		project.addresses || [],
@@ -86,7 +86,7 @@ export const ManageProjectAddressesModal: FC<IModalProps> = props => {
 					<AddNewAddress
 						project={project}
 						selectedChain={selectedChain}
-						setProjects={setProjects}
+						setProject={setProject}
 						setSelectedChain={setSelectedChain}
 						setAddresses={setAddresses}
 					/>

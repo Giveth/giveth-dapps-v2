@@ -115,11 +115,7 @@ const ProfileProjectsTab: FC<IUserProfileView> = () => {
 				) : myAccount ? (
 					<Flex $flexDirection='column' gap='18px'>
 						{projects.map(project => (
-							<ProjectItem
-								project={project}
-								key={project.id}
-								setProjects={setProjects}
-							/>
+							<ProjectItem project={project} key={project.id} />
 						))}
 					</Flex>
 				) : (
