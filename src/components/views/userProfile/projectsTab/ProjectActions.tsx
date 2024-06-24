@@ -19,7 +19,7 @@ import { EProjectStatus } from '@/apollo/types/gqlEnums';
 import { Dropdown, EOptionType, IOption } from '@/components/Dropdown';
 import { idToProjectEdit, slugToProjectView } from '@/lib/routeCreators';
 import { capitalizeAllWords } from '@/lib/helpers';
-import config from '@/configuration';
+import config, { isDeleteProjectEnabled } from '@/configuration';
 import { findAnchorContractAddress } from '@/helpers/superfluid';
 
 interface IProjectActions {
@@ -101,7 +101,10 @@ const ProjectActions: FC<IProjectActions> = ({
 		};
 		options.push(recurringDonationOption);
 	}
-	if (project.status.name === EProjectStatus.DRAFT) {
+	if (
+		isDeleteProjectEnabled &&
+		project.status.name === EProjectStatus.DRAFT
+	) {
 		const deleteProjectOption: IOption = {
 			label: formatMessage({
 				id: 'label.delete_project',

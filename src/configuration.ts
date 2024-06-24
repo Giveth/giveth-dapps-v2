@@ -3,6 +3,8 @@ import production from './config/production';
 import { ChainType, GlobalConfig, NonEVMNetworkConfig } from './types/config';
 
 export const isProduction = process.env.NEXT_PUBLIC_ENV === 'production';
+export const isDeleteProjectEnabled =
+	process.env.NEXT_PUBLIC_DELETE_PROJECT_ENABLED === 'true';
 
 const envConfig = isProduction ? production : development;
 
