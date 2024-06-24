@@ -1,5 +1,4 @@
 import {
-	GLink,
 	IconArchiving,
 	IconArrowDownCircle16,
 	IconEdit16,
@@ -223,12 +222,6 @@ const Actions = styled.div<{ $isCancelled: boolean; $isOpen: boolean }>`
 	background-color: ${neutralColors.gray[200]};
 	border-radius: 8px;
 	padding: 8px 10px;
-`;
-
-const ActionsOld = styled(GLink)<{ $isCancelled: boolean; $isOpen: boolean }>`
-	color: ${props =>
-		props.$isCancelled ? neutralColors.gray[500] : neutralColors.gray[900]};
-	cursor: ${props => (props.$isCancelled ? 'default' : 'pointer')};
 `;
 
 export default ProjectActions;
