@@ -98,8 +98,7 @@ createWeb3Modal({
 	chainImages: {
 		[configuration.CLASSIC_NETWORK_NUMBER]:
 			'/images/currencies/classic/32.svg',
-		[configuration.ZKEVM_NETWORK_NUMBER]:
-			'/images/currencies/zkevm/16.svg',
+		[configuration.ZKEVM_NETWORK_NUMBER]: '/images/currencies/zkevm/16.svg',
 		[configuration.POLYGON_NETWORK_NUMBER]:
 			'/images/currencies/polygon/16.svg',
 	},
