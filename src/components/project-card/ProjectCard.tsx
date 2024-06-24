@@ -19,7 +19,7 @@ import Link from 'next/link';
 import { useIntl } from 'react-intl';
 import { useRouter } from 'next/router';
 import { Shadow } from '@/components/styled-components/Shadow';
-import ProjectCardBadges from './ProjectCardLikeAndShareButtons';
+import ProjectCardBadges from './ProjectCardBookMarkAndShareButtons';
 import ProjectCardOrgBadge from './ProjectCardOrgBadge';
 import { IProject } from '@/apollo/types/types';
 import { thousandsSeparator, timeFromNow } from '@/lib/helpers';

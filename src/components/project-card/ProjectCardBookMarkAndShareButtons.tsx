@@ -25,13 +25,13 @@ import { EContentType } from '@/lib/constants/shareContent';
 import ShareModal from '../modals/ShareModal';
 import BoostModal from '../modals/Boost/BoostModal';
 
-interface IProjectCardLikeAndShareButtons {
+interface IProjectCardBookMarkAndShareButtons {
 	project: IProject;
 }
 
-const ProjectCardLikeAndShareButtons: FC<IProjectCardLikeAndShareButtons> = ({
-	project,
-}) => {
+const ProjectCardBookMarkAndShareButtons: FC<
+	IProjectCardBookMarkAndShareButtons
+> = ({ project }) => {
 	const [showShare, setShowShare] = useState(false);
 	const [showBoost, setShowBoost] = useState(false);
 	const { slug, id: projectId, verified } = project;
@@ -260,4 +260,4 @@ const BadgeWrapper = styled.div`
 	pointer-events: none;
 `;
 
-export default ProjectCardLikeAndShareButtons;
+export default ProjectCardBookMarkAndShareButtons;
