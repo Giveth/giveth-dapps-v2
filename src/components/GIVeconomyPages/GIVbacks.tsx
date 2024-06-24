@@ -1,13 +1,13 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import {
 	IconExternalLink,
-	IconGIVBack,
 	P,
 	brandColors,
 	Col,
 	Container,
 	Row,
 	Flex,
+	IconGIVBack64,
 } from '@giveth/ui-design-system';
 import Link from 'next/link';
 import { useIntl } from 'react-intl';
@@ -83,7 +83,7 @@ export const TabGIVbacksTop = () => {
 						<Col xs={12} sm={7} xl={8}>
 							<Flex $alignItems='baseline' gap='16px'>
 								<GBTitle>GIVbacks</GBTitle>
-								<IconGIVBack size={64} />
+								<IconGIVBack64 />
 							</Flex>
 							<GBSubtitle size='medium'>
 								{formatMessage({

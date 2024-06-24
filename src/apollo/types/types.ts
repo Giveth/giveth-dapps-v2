@@ -77,16 +77,11 @@ export interface IProject {
 	countUniqueDonors?: number;
 	countUniqueDonorsForActiveQfRound?: number;
 	estimatedMatching: IEstimatedMatching;
-	sumDonationValueUsd?: number;
 	sumDonationValueUsdForActiveQfRound?: number;
 	qfRounds?: IQFRound[];
 	campaigns?: ICampaign[];
 	anchorContracts: IAnchorContractData[];
 	socialMedia: IProjectSocialMedia[];
-}
-
-export interface IDonationProject extends IProject {
-	givethAddresses: IWalletAddress[];
 }
 
 export enum EProjectsFilter {
@@ -99,9 +94,11 @@ export enum EProjectsFilter {
 	ACCEPT_FUND_ON_POLYGON = 'AcceptFundOnPolygon',
 	ACCEPT_FUND_ON_CELO = 'AcceptFundOnCelo',
 	ACCEPT_FUND_ON_ARBITRUM = 'AcceptFundOnArbitrum',
+	ACCEPT_FUND_ON_BASE = 'AcceptFundOnBase',
 	ACCEPT_FUND_ON_OPTIMISM = 'AcceptFundOnOptimism',
 	ACCEPT_FUND_ON_ETC = 'AcceptFundOnETC',
 	ACCEPT_FUND_ON_SOLANA = 'AcceptFundOnSolana',
+	ACCEPT_FUND_ON_ZKEVM = 'AcceptFundOnZKEVM',
 	ACTIVE_QF_ROUND = 'ActiveQfRound',
 }
 
@@ -122,8 +119,10 @@ export enum ECampaignFilterField {
 	AcceptFundOnPolygon = 'acceptFundOnPolygon',
 	AcceptFundOnCelo = 'acceptFundOnCelo',
 	AcceptFundOnArbitrum = 'acceptFundOnArbitrum',
+	AcceptFundOnBase = 'acceptFundOnBase',
 	AcceptFundOnOptimism = 'acceptFundOnOptimism',
 	AcceptFundOnSolana = 'acceptFundOnSolana',
+	AcceptFundOnZKEVM = 'acceptFundOnZKEVM',
 }
 
 export interface ICampaign {
@@ -282,6 +281,7 @@ export interface IWalletRecurringDonation {
 	flowRate: string;
 	currency: string;
 	amountStreamed: string;
+	totalUsdStreamed: string;
 	networkId: number;
 	finished: boolean;
 	anonymous: boolean;
@@ -475,11 +475,13 @@ export interface IQFRound {
 	allocatedFundUSDPreferred: boolean;
 	allocatedTokenSymbol: string;
 	allocatedTokenChainId: number;
+	minimumValidUsdValue?: number;
 }
 
 export interface IArchivedQFRound extends IQFRound {
 	totalDonations: number;
 	uniqueDonors: number;
+	isDataAnalysisDone: boolean;
 }
 
 export interface IGetQfRoundHistory {

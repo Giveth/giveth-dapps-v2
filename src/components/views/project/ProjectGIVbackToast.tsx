@@ -6,7 +6,6 @@ import {
 	IconChevronRight,
 	IconDeactivated24,
 	IconDiscord18,
-	IconGIVBack,
 	IconPublish24,
 	IconRocketInSpace16,
 	IconSunrise16,
@@ -17,6 +16,7 @@ import {
 	P,
 	semanticColors,
 	Flex,
+	IconGIVBack24,
 } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
 import { useEffect, useState } from 'react';
@@ -78,7 +78,7 @@ const ProjectGIVbackToast = () => {
 
 	const useIntlTitle = 'project.givback_toast.title.';
 	const useIntlDescription = 'project.givback_toast.description.';
-	let icon = <IconGIVBack color={color} size={24} />;
+	let icon = <IconGIVBack24 color={color} />;
 	let link = links.GIVBACK_DOC;
 
 	let title = '';

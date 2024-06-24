@@ -8,7 +8,7 @@ import {
 	type Dispatch,
 } from 'react';
 import { useCallback } from 'react';
-import { IDonationProject } from '@/apollo/types/types';
+import { IProject } from '@/apollo/types/types';
 import { hasActiveRound } from '@/helpers/qf';
 import { ISuperfluidStream, IToken } from '@/types/superFluid';
 import { ChainType } from '@/types/config';
@@ -22,6 +22,7 @@ export interface TxHashWithChainType {
 }
 interface ISuccessDonation {
 	txHash: TxHashWithChainType[];
+	chainId: number;
 	givBackEligible?: boolean;
 	excludeFromQF?: boolean;
 	isRecurring?: boolean;
@@ -29,7 +30,7 @@ interface ISuccessDonation {
 
 interface IDonateContext {
 	hasActiveQFRound?: boolean;
-	project: IDonationProject;
+	project: IProject;
 	successDonation?: ISuccessDonation;
 	tokenStreams: ITokenStreams;
 	setSuccessDonation: (successDonation?: ISuccessDonation) => void;
@@ -42,13 +43,13 @@ interface IDonateContext {
 
 interface IProviderProps {
 	children: ReactNode;
-	project: IDonationProject;
+	project: IProject;
 }
 
 const DonateContext = createContext<IDonateContext>({
 	setSuccessDonation: () => {},
 	setSelectedToken: () => {},
-	project: {} as IDonationProject,
+	project: {} as IProject,
 	tokenStreams: {},
 	fetchProject: async () => {},
 });
@@ -71,14 +72,14 @@ export const DonateProvider: FC<IProviderProps> = ({ children, project }) => {
 		ISelectTokenWithBalance | undefined
 	>();
 	const [successDonation, setSuccessDonation] = useState<ISuccessDonation>();
-	const [projectData, setProjectData] = useState<IDonationProject>(project);
+	const [projectData, setProjectData] = useState<IProject>(project);
 
 	const fetchProject = useCallback(async () => {
 		const { data } = (await client.query({
 			query: FETCH_PROJECT_BY_SLUG_DONATION,
 			variables: { slug: project.slug },
 			fetchPolicy: 'no-cache',
-		})) as { data: { projectBySlug: IDonationProject } };
+		})) as { data: { projectBySlug: IProject } };
 
 		setProjectData(data.projectBySlug);
 	}, [project.slug]);

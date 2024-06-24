@@ -57,6 +57,14 @@ const fundsFilter = [
 		label: 'Arbitrum',
 		value: EProjectsFilter.ACCEPT_FUND_ON_ARBITRUM,
 	},
+	{
+		label: 'Base',
+		value: EProjectsFilter.ACCEPT_FUND_ON_BASE,
+	},
+	{
+		label: 'Polygon ZKEVM',
+		value: EProjectsFilter.ACCEPT_FUND_ON_ZKEVM,
+	},
 ];
 
 fundsFilter.push({

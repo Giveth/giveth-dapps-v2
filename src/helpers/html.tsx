@@ -22,7 +22,7 @@ import {
 	IconUnstake24,
 	IconVerifiedBadge24,
 	IconNotificationOutline24,
-	IconGIVBack,
+	IconGIVBack24,
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import { INotification } from '@/features/notification/notification.types';
@@ -150,7 +150,7 @@ export function convertBackendIconsToComponents(icon: string) {
 		case 'IconUnstake':
 			return <IconUnstake24 />;
 		case 'IconGIVBack':
-			return <IconGIVBack size={24} color='currentColor' />;
+			return <IconGIVBack24 color='currentColor' />;
 		case 'IconStake':
 			return <IconStake24 />;
 		case 'IconDonation':

@@ -3,7 +3,6 @@ import {
 	H1,
 	mediaQueries,
 	Flex,
-	brandColors,
 	deviceSize,
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
@@ -11,8 +10,8 @@ import Image from 'next/image';
 
 export const BannerContainer = styled.div`
 	position: relative;
-	padding-top: 100px;
-	padding-bottom: 100px;
+	padding-top: 40px;
+	padding-bottom: 60px;
 	background: linear-gradient(98deg, #0f0116 24.06%, #380950 93.92%);
 	img {
 		-webkit-user-drag: none;
@@ -53,19 +52,21 @@ export const ActiveStyledCol = styled(Col)`
 
 export const Title = styled(H1)`
 	margin-top: 32px;
+	color: #618600;
 `;
 
 export const Desc = styled(Flex)`
 	width: fit-content;
-	border: 2px solid white;
+	border: 2px solid #865837;
 	border-radius: 27px;
 	align-items: center;
 	justify-content: center;
 	gap: 8px;
 	padding: 9px 20px;
-	background: ${brandColors.giv[400]};
+	background: #fbff44;
 	margin-top: 12px;
 	margin-bottom: 32px;
+	color: #545517;
 `;
 
 export const ImgBase = styled.img`

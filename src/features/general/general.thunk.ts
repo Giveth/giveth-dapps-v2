@@ -1,18 +1,26 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { backendGQLRequest } from '@/helpers/requests';
-import { FETCH_MAIN_CATEGORIES } from './general.queries';
-import { FETCH_QF_ROUNDS_QUERY } from '@/apollo/gql/gqlQF';
+import { gql } from '@apollo/client';
+import { QF_ROUNDS_QUERY } from '@/apollo/gql/gqlQF';
+import { client } from '@/apollo/apolloClient';
+import { MAIN_CATEGORIES_QUERY } from '@/apollo/gql/gqlProjects';
 
-export const fetchMainCategories = createAsyncThunk(
-	'general/fetchMainCategories',
-	async () => {
-		return backendGQLRequest(FETCH_MAIN_CATEGORIES);
-	},
-);
+const MAIN_CATEGORIES_AND_ACTIVE_QF_ROUND_QUERY = gql`
+	query fetchMainCategoriesAndQFRounds($slug: String, $activeOnly: Boolean) {
+		${QF_ROUNDS_QUERY}
+		${MAIN_CATEGORIES_QUERY}
+	}
+`;
 
-export const fetchQFRounds = createAsyncThunk(
-	'general/fetchQFRounds',
+export const fetchMainCategoriesAndActiveQFRound = createAsyncThunk(
+	'general/fetchMainCategoriesAndActiveQFRound',
 	async () => {
-		return backendGQLRequest(FETCH_QF_ROUNDS_QUERY);
+		const {
+			data: { mainCategories, qfRounds },
+		} = await client.query({
+			query: MAIN_CATEGORIES_AND_ACTIVE_QF_ROUND_QUERY,
+			variables: { activeOnly: true },
+			fetchPolicy: 'no-cache',
+		});
+		return { mainCategories, qfRounds };
 	},
 );

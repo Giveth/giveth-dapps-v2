@@ -34,12 +34,9 @@ export interface ISelected {
 }
 
 const _options = [
-	{ network: config.MAINNET_CONFIG, active: true },
 	{ network: config.GNOSIS_CONFIG, active: true },
 	{ network: config.OPTIMISM_CONFIG, active: true },
-	{ network: config.CLASSIC_CONFIG, active: true },
-	{ network: config.CELO_CONFIG, active: false },
-	{ network: config.ARBITRUM_CONFIG, active: false },
+	{ network: config.ZKEVM_CONFIG, active: false },
 ];
 
 const options = _options.map(o => ({

@@ -52,7 +52,7 @@ const ProjectCard = (props: IProjectCard) => {
 		image,
 		slug,
 		adminUser,
-		sumDonationValueUsd,
+		totalDonations,
 		sumDonationValueUsdForActiveQfRound,
 		updatedAt,
 		organization,
@@ -95,6 +95,29 @@ const ProjectCard = (props: IProjectCard) => {
 			e.stopPropagation();
 			setShowHintModal(true);
 		}
+	};
+
+	const formatWithCurrency = (
+		amount: number,
+		currency: string,
+		locale: string,
+	) => {
+		return (
+			thousandsSeparator(formatDonation(amount, currency, locale, true)) +
+			(currency ? '' : ` ${allocatedTokenSymbol}`)
+		);
+	};
+
+	const getEstimatedMatchingRange = (esMatching: number) => {
+		if (esMatching >= 1) {
+			return `${formatWithCurrency((esMatching * 30) / 100, allocatedFundUSDPreferred ? '$' : '', locale)} - ${formatWithCurrency(esMatching, allocatedFundUSDPreferred ? '$' : '', locale)}`;
+		}
+
+		return formatWithCurrency(
+			esMatching,
+			allocatedFundUSDPreferred ? '$' : '',
+			locale,
+		);
 	};
 
 	return (
@@ -172,7 +195,7 @@ const ProjectCard = (props: IProjectCard) => {
 								{formatDonation(
 									(activeStartedRound
 										? sumDonationValueUsdForActiveQfRound
-										: sumDonationValueUsd) || 0,
+										: totalDonations) || 0,
 									'$',
 									locale,
 								)}
@@ -190,7 +213,7 @@ const ProjectCard = (props: IProjectCard) => {
 										}) + ' '}
 										<span>
 											{formatDonation(
-												sumDonationValueUsd || 0,
+												totalDonations || 0,
 												'$',
 												locale,
 											)}
@@ -235,26 +258,16 @@ const ProjectCard = (props: IProjectCard) => {
 						{activeStartedRound && (
 							<Flex $flexDirection='column' gap='6px'>
 								<EstimatedMatchingPrice>
-									+
-									{thousandsSeparator(
-										formatDonation(
-											calculateTotalEstimatedMatching(
-												projectDonationsSqrtRootSum,
-												allProjectsSum,
-												allocatedFundUSDPreferred
-													? allocatedFundUSD
-													: matchingPool,
-												activeStartedRound?.maximumReward,
-											),
+									{getEstimatedMatchingRange(
+										calculateTotalEstimatedMatching(
+											projectDonationsSqrtRootSum,
+											allProjectsSum,
 											allocatedFundUSDPreferred
-												? '$'
-												: '',
-											locale,
-											true,
+												? allocatedFundUSD
+												: matchingPool,
+											activeStartedRound?.maximumReward,
 										),
-									)}{' '}
-									{!allocatedFundUSDPreferred &&
-										allocatedTokenSymbol}
+									)}
 								</EstimatedMatchingPrice>
 								<EstimatedMatching>
 									<span>
@@ -311,6 +324,7 @@ const ProjectCard = (props: IProjectCard) => {
 				)}
 				<ActionButtons>
 					<Link
+						id='Donate_Card'
 						href={donateLink}
 						onClick={e => {
 							setDestination(donateLink);

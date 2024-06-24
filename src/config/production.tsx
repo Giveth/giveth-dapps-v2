@@ -6,6 +6,8 @@ import {
 	optimism,
 	polygon,
 	arbitrum,
+	base,
+	polygonZkEvm,
 } from '@wagmi/core/chains';
 import { WalletAdapterNetwork } from '@solana/wallet-adapter-base';
 import React from 'react';
@@ -24,8 +26,10 @@ import { IconPolygon } from '@/components/Icons/Polygon';
 import { IconOptimism } from '@/components/Icons/Optimism';
 import { IconCelo } from '@/components/Icons/Celo';
 import { IconClassic } from '@/components/Icons/Classic';
+import IconBase from '@/components/Icons/Base';
 import IconSolana from '@/components/Icons/Solana';
 import IconArbitrum from '@/components/Icons/Arbitrum';
+import IconZKEVM from '@/components/Icons/ZKEVM';
 
 const GNOSIS_GIV_TOKEN_ADDRESS = '0x4f4F9b8D5B4d0Dc10506e5551B0513B61fD59e75';
 const OPTIMISM_GIV_TOKEN_ADDRESS = '0x528CDc92eAB044E1E39FE43B9514bfdAB4412B98';
@@ -37,6 +41,8 @@ const POLYGON_NETWORK_NUMBER = 137;
 const OPTIMISM_NETWORK_NUMBER = 10;
 const CELO_NETWORK_NUMBER = 42220;
 const ARBITRUM_NETWORK_NUMBER = 42161;
+const BASE_NETWORK_NUMBER = 8453;
+const ZKEVM_NETWORK_NUMBER = 1101;
 const CLASSIC_NETWORK_NUMBER = 61;
 const SOLANA_NETWORK: NonEVMChain = {
 	id: 0,
@@ -60,6 +66,8 @@ const EVM_CHAINS = [
 	celo,
 	arbitrum,
 	classic,
+	base,
+	polygonZkEvm,
 ] as readonly [Chain, ...Chain[]];
 
 const NON_EVM_CHAINS: NonEVMChain[] = [SOLANA_NETWORK];
@@ -93,6 +101,8 @@ const config: EnvConfig = {
 	OPTIMISM_NETWORK_NUMBER: OPTIMISM_NETWORK_NUMBER,
 	CELO_NETWORK_NUMBER: CELO_NETWORK_NUMBER,
 	ARBITRUM_NETWORK_NUMBER: ARBITRUM_NETWORK_NUMBER,
+	BASE_NETWORK_NUMBER: BASE_NETWORK_NUMBER,
+	ZKEVM_NETWORK_NUMBER: ZKEVM_NETWORK_NUMBER,
 	CLASSIC_NETWORK_NUMBER: CLASSIC_NETWORK_NUMBER,
 
 	RARIBLE_ADDRESS: 'https://rarible.com/',
@@ -107,6 +117,7 @@ const config: EnvConfig = {
 		},
 
 		subgraphAddress:
+			process.env.NEXT_PUBLIC_SUBGRAPH_MAINNET ||
 			'https://api.thegraph.com/subgraphs/name/giveth/giveth-economy-second-mainnet?source=giveth',
 		coingeckoChainName: 'ethereum',
 		chainLogo: (logoSize = 24) => <IconEthereum size={logoSize} />,
@@ -225,6 +236,7 @@ const config: EnvConfig = {
 			},
 		],
 		uniswapV2Subgraph:
+			process.env.NEXT_PUBLIC_SUBGRAPH_UNISWAP_V2 ||
 			'https://api.thegraph.com/subgraphs/name/uniswap/uniswap-v2?source=giveth',
 		regenStreams: [
 			{
@@ -251,6 +263,7 @@ const config: EnvConfig = {
 		},
 
 		subgraphAddress:
+			process.env.NEXT_PUBLIC_SUBGRAPH_GNOSIS ||
 			'https://api.thegraph.com/subgraphs/name/giveth/giveth-economy-second-xdai?source=giveth',
 		coingeckoChainName: 'xdai',
 		chainLogo: (logoSize = 24) => <IconGnosisChain size={logoSize} />,
@@ -361,6 +374,7 @@ const config: EnvConfig = {
 		],
 
 		uniswapV2Subgraph:
+			process.env.NEXT_PUBLIC_SUBGRAPH_HONEYSWAP_V2 ||
 			'https://api.thegraph.com/subgraphs/name/1hive/honeyswap-v2?source=giveth',
 
 		regenStreams: [
@@ -398,6 +412,7 @@ const config: EnvConfig = {
 		},
 		anchorRegistryAddress: '0x4AAcca72145e1dF2aeC137E1f3C5E3D75DB8b5f3',
 		subgraphAddress:
+			process.env.NEXT_PUBLIC_SUBGRAPH_OPTIMISM ||
 			'https://api.thegraph.com/subgraphs/name/giveth/giveconomy-optimism-mainnet?source=giveth',
 		GIV_TOKEN_ADDRESS: OPTIMISM_GIV_TOKEN_ADDRESS,
 		GIV_BUY_LINK:
@@ -420,7 +435,8 @@ const config: EnvConfig = {
 		GIVETH_ANCHOR_CONTRACT_ADDRESS:
 			'0x5430757bc19c87ec562e4660e56af6cac324b50a',
 		superFluidSubgraph:
-			'https://api.thegraph.com/subgraphs/name/superfluid-finance/protocol-v1-optimism-mainnet?source=giveth',
+			process.env.NEXT_PUBLIC_SUBGRAPH_SUPER_FLUID ||
+			'https://subgraph-endpoints.superfluid.dev/optimism-mainnet/protocol-v1',
 		SUPER_FLUID_TOKENS: [
 			{
 				underlyingToken: {
@@ -520,13 +536,35 @@ const config: EnvConfig = {
 		coingeckoChainName: 'arbitrum',
 		chainLogo: (logoSize = 24) => <IconArbitrum size={logoSize} />,
 	},
+	BASE_CONFIG: {
+		...base,
+		chainType: ChainType.EVM,
+		gasPreference: {
+			// Keep it empty for automatic configuration
+		},
+		subgraphAddress: '',
+		coingeckoChainName: 'base',
+		chainLogo: (logoSize = 24) => <IconBase size={logoSize} />,
+	},
+
+	ZKEVM_CONFIG: {
+		...polygonZkEvm,
+		chainType: ChainType.EVM,
+		coingeckoChainName: 'polygon-zkevm',
+		gasPreference: {
+			// Keep it empty for automatic configuration
+		},
+		chainLogo: (logoSize?: number) => <IconZKEVM size={logoSize} />,
+	},
 	CLASSIC_CONFIG: {
 		...classic,
 		chainType: ChainType.EVM,
 		gasPreference: {
 			// Keep it empty for automatic configuration
 		},
-		subgraphAddress: 'http://167.172.97.150:8000/subgraphs/name/giveth/etc',
+		subgraphAddress:
+			process.env.NEXT_PUBLIC_SUBGRAPH_CLASSIC ||
+			'http://167.172.97.150:8000/subgraphs/name/giveth/etc',
 		coingeckoChainName: 'ethereum-classic',
 		chainLogo: (logoSize = 24) => <IconClassic size={logoSize} />,
 	},

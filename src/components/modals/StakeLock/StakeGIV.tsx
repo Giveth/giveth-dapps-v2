@@ -31,9 +31,11 @@ import { useStakingPool } from '@/hooks/useStakingPool';
 import { StakingAmountInput } from '@/components/AmountInput/StakingAmountInput';
 import { StakeSteps } from './StakeSteps';
 import { getGIVConfig } from '@/helpers/givpower';
-import type {
-	PoolStakingConfig,
-	SimplePoolStakingConfig,
+import {
+	RegenPoolStakingConfig,
+	StakingType,
+	type PoolStakingConfig,
+	type SimplePoolStakingConfig,
 } from '@/types/config';
 
 interface IStakeInnerModalProps {
@@ -84,8 +86,21 @@ const StakeGIVInnerModal: FC<IStakeModalProps> = ({
 	const maxAmount = _maxAmount || 0n;
 	const isSafeEnv = useIsSafeEnvironment();
 
-	const { POOL_ADDRESS, LM_ADDRESS } =
+	const { POOL_ADDRESS, LM_ADDRESS, type } =
 		poolStakingConfig as SimplePoolStakingConfig;
+
+	const { regenStreamType } = poolStakingConfig as RegenPoolStakingConfig;
+
+	const isGIVpower =
+		type === StakingType.GIV_GARDEN_LM ||
+		type === StakingType.GIV_UNIPOOL_LM;
+
+	// preffix property for heading elements used by analytics
+	const idPropertyPreffix = regenStreamType
+		? 'regenfarm'
+		: isGIVpower
+			? 'givpower'
+			: '';
 
 	const onApprove = async () => {
 		if (amount === 0n) return;
@@ -236,7 +251,7 @@ const StakeGIVInnerModal: FC<IStakeModalProps> = ({
 								stakeState === StakeState.WRAPPING) && (
 								<>
 									<BriefContainer>
-										<H5>
+										<H5 id={`${idPropertyPreffix}-staking`}>
 											{formatMessage({
 												id: 'label.you_are_staking',
 											})}
@@ -287,7 +302,9 @@ const StakeGIVInnerModal: FC<IStakeModalProps> = ({
 				<StakeInnerModalContainer>
 					<BriefContainer>
 						<H5>Successful!</H5>
-						<H5White>You have staked</H5White>
+						<H5White id={`${idPropertyPreffix}-staked`}>
+							You have staked
+						</H5White>
 						<H5White weight={700}>
 							{formatWeiHelper(amount.toString())} GIV
 						</H5White>

@@ -1,30 +1,32 @@
 import {
-	brandColors,
 	GLink,
 	IconArchiving,
 	IconArrowDownCircle16,
 	IconEdit16,
 	IconEye16,
+	IconTrash16,
 	IconUpdate16,
 	IconVerifiedBadge16,
 	IconWalletOutline16,
+	brandColors,
 	neutralColors,
+	semanticColors,
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
-import React, { Dispatch, SetStateAction, useState } from 'react';
+import { Dispatch, type FC, SetStateAction, useState } from 'react';
 import { useIntl } from 'react-intl';
 import router from 'next/router';
 import { useAccount, useSwitchChain } from 'wagmi';
 import { EVerificationStatus, IProject } from '@/apollo/types/types';
 import { EProjectStatus } from '@/apollo/types/gqlEnums';
-import { Dropdown, IOption } from '@/components/Dropdown';
+import { Dropdown, IOption, EOptionType } from '@/components/Dropdown';
 import {
 	idToProjectEdit,
 	slugToProjectView,
 	slugToVerification,
 } from '@/lib/routeCreators';
 import { capitalizeAllWords } from '@/lib/helpers';
-import config from '@/configuration';
+import config, { isDeleteProjectEnabled } from '@/configuration';
 import { findAnchorContractAddress } from '@/helpers/superfluid';
 import DeactivateProjectModal from '@/components/modals/deactivateProject/DeactivateProjectIndex';
 import { useProjectContext } from '@/context/project.context';
@@ -34,33 +36,36 @@ interface IProjectActions {
 	setSelectedProject: Dispatch<SetStateAction<IProject | undefined>>;
 	setShowAddressModal: Dispatch<SetStateAction<boolean>>;
 	setShowClaimModal?: Dispatch<SetStateAction<boolean>>;
+	setShowDeleteModal: Dispatch<SetStateAction<boolean>>;
 	setProjects: Dispatch<SetStateAction<IProject[]>>;
+	className?: string;
 }
 
-const ProjectActions = (props: IProjectActions) => {
+const ProjectActions: FC<IProjectActions> = ({
+	project,
+	setSelectedProject,
+	setShowAddressModal,
+	setShowClaimModal,
+	setShowDeleteModal,
+	setProjects,
+	className,
+}) => {
+	const [isHover, setIsHover] = useState(false);
 	const [deactivateModal, setDeactivateModal] = useState(false);
+	const { formatMessage } = useIntl();
+	const { chain } = useAccount();
+	const { switchChain } = useSwitchChain();
+	const { isActive, activateProject } = useProjectContext();
 
-	const {
-		project,
-		setSelectedProject,
-		setShowAddressModal,
-		setShowClaimModal,
-	} = props;
 	const status = project.status.name;
 	const isCancelled = status === EProjectStatus.CANCEL;
-	const projectId = project?.id;
-
-	const { isActive, activateProject } = useProjectContext();
-	const { formatMessage } = useIntl();
-	const [isHover, setIsHover] = useState(false);
 
 	const anchorContractAddress = findAnchorContractAddress(
 		project.anchorContracts,
 	);
 
-	const { chain } = useAccount();
-	const { switchChain } = useSwitchChain();
 	const chainId = chain?.id;
+	const projectId = project?.id;
 
 	// Handle activate project action
 	const handleActivateProject = async () => {
@@ -113,6 +118,26 @@ const ProjectActions = (props: IProjectActions) => {
 		},
 	];
 
+	if (anchorContractAddress) {
+		const recurringDonationOption: IOption = {
+			label: formatMessage({
+				id: 'label.claim_recurring_donation',
+			}),
+			icon: <IconArrowDownCircle16 />,
+			cb: () => {
+				if (chainId !== config.OPTIMISM_NETWORK_NUMBER) {
+					switchChain({
+						chainId: config.OPTIMISM_NETWORK_NUMBER,
+					});
+				} else {
+					setSelectedProject(project);
+					setShowClaimModal && setShowClaimModal(true);
+				}
+			},
+		};
+		options.push(recurringDonationOption);
+	}
+
 	// Add action if project need verification or verification is partially done
 	if (
 		project.projectVerificationForm?.status === EVerificationStatus.DRAFT ||
@@ -134,24 +159,24 @@ const ProjectActions = (props: IProjectActions) => {
 		});
 	}
 
-	const recurringDonationOption: IOption = {
-		label: formatMessage({
-			id: 'label.claim_recurring_donation',
-		}),
-		icon: <IconArrowDownCircle16 />,
-		cb: () => {
-			if (chainId !== config.OPTIMISM_NETWORK_NUMBER) {
-				switchChain({
-					chainId: config.OPTIMISM_NETWORK_NUMBER,
-				});
-			} else {
+	if (
+		isDeleteProjectEnabled &&
+		project.status.name === EProjectStatus.DRAFT
+	) {
+		const deleteProjectOption: IOption = {
+			label: formatMessage({
+				id: 'label.delete_project',
+			}),
+			icon: <IconTrash16 />,
+			color: semanticColors.punch[500],
+			cb: () => {
 				setSelectedProject(project);
-				setShowClaimModal && setShowClaimModal(true);
-			}
-		},
-	};
-
-	anchorContractAddress && options.push(recurringDonationOption);
+				setShowDeleteModal(true);
+			},
+		};
+		options.push({ type: EOptionType.SEPARATOR });
+		options.push(deleteProjectOption);
+	}
 
 	const dropdownStyle = {
 		padding: '4px 16px',
@@ -165,6 +190,7 @@ const ProjectActions = (props: IProjectActions) => {
 			onMouseLeave={() => setIsHover(false)}
 			$isOpen={isHover}
 			$isCancelled={isCancelled}
+			className={className}
 		>
 			{isCancelled ? (
 				<CancelledWrapper>CANCELLED</CancelledWrapper>

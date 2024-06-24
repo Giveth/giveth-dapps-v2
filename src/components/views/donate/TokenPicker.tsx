@@ -4,7 +4,6 @@ import {
 	P,
 	brandColors,
 	Caption,
-	IconGIVBack,
 	IconCheck,
 	B,
 	IconCaretUp,
@@ -12,6 +11,7 @@ import {
 	IconSearch,
 	IconX,
 	FlexCenter,
+	IconGIVBack24,
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import { useIntl } from 'react-intl';
@@ -49,7 +49,7 @@ const MenuList = (props: MenuListProps<IProjectAcceptedToken, false>) => {
 		<components.MenuList {...props}>
 			{projectVerified && (
 				<GivBackIconContainer>
-					<IconGIVBack size={24} color={brandColors.giv[500]} />
+					<IconGIVBack24 color={brandColors.giv[500]} />
 					<Caption>
 						{formatMessage({
 							id: 'label.givbacks_eligible_tokens',
@@ -75,7 +75,7 @@ const Option = ({ ...props }: OptionProps<IProjectAcceptedToken, false>) => {
 						{name} ({symbol}){' '}
 					</B>
 					{isGivbackEligible && projectVerified && (
-						<IconGIVBack size={24} color={brandColors.giv[500]} />
+						<IconGIVBack24 color={brandColors.giv[500]} />
 					)}
 				</RowContainer>
 				{props.isSelected && <IconCheck color={brandColors.giv[500]} />}
