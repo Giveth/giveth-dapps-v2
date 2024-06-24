@@ -97,6 +97,7 @@ const ProjectActions: FC<IProjectActions> = ({
 	const onDeactivateProject = async () => {
 		const _project = structuredClone(project);
 		_project.status.name = EProjectStatus.DEACTIVE;
+		_project.listed = null;
 		setProject(_project);
 	};
 
