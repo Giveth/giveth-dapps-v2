@@ -102,6 +102,7 @@ createWeb3Modal({
 		[configuration.POLYGON_NETWORK_NUMBER]:
 			'/images/currencies/polygon/16.svg',
 	},
+	allowUnsupportedChain: false,
 });
 
 function MyApp({ Component, pageProps }: AppProps) {
