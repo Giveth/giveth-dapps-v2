@@ -24,6 +24,7 @@ import {
 	calculateEstimatedMatchingWithDonationAmount,
 	calculateTotalEstimatedMatching,
 	getActiveRound,
+	getEstimatedMatchingRange,
 } from '@/helpers/qf';
 import links from '@/lib/constants/links';
 import { IconWithTooltip } from '@/components/IconWithToolTip';
@@ -78,33 +79,16 @@ const QFSection: FC<IQFSectionProps> = ({ projectData }) => {
 	const isForeignOrg =
 		orgLabel !== ORGANIZATION.trace && orgLabel !== ORGANIZATION.giveth;
 
-	const formatWithCurrency = (
-		amount: number,
-		currency: string,
-		locale: string,
-	) => {
-		return (
-			formatDonation(amount, currency, locale, true) +
-			(currency ? '' : ` ${allocatedTokenSymbol}`)
-		);
-	};
-
-	const getEstimatedMatchingRange = (esMatching: number) => {
-		if (esMatching >= 1) {
-			return `${formatWithCurrency((esMatching * 30) / 100, allocatedFundUSDPreferred ? '$' : '', locale)} - ${formatWithCurrency(esMatching, allocatedFundUSDPreferred ? '$' : '', locale)}`;
-		}
-		return formatWithCurrency(
-			esMatching,
-			allocatedFundUSDPreferred ? '$' : '',
-			locale,
-		);
-	};
-
 	const EstimatedMatchingSection = () =>
 		totalEstimatedMatching !== 0 ? (
 			<Flex $flexDirection='column' gap='4px'>
 				<EstimatedMatchingPrice>
-					{getEstimatedMatchingRange(totalEstimatedMatching)}
+					{getEstimatedMatchingRange(
+						totalEstimatedMatching,
+						allocatedFundUSDPreferred ? '$' : '',
+						locale,
+						allocatedTokenSymbol,
+					)}
 				</EstimatedMatchingPrice>
 				<Flex $alignItems='center' gap='4px'>
 					<LightCaption>
@@ -142,6 +126,9 @@ const QFSection: FC<IQFSectionProps> = ({ projectData }) => {
 							: matchingPool,
 						activeStartedRound?.maximumReward,
 					),
+					allocatedFundUSDPreferred ? '$' : '',
+					locale,
+					allocatedTokenSymbol,
 				)}
 			</EndAlignedSubline>
 		</FlexSameSize>
