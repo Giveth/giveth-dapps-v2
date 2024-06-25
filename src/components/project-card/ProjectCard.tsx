@@ -28,11 +28,7 @@ import { slugToProjectDonate, slugToProjectView } from '@/lib/routeCreators';
 import { ORGANIZATION } from '@/lib/constants/organizations';
 import { mediaQueries } from '@/lib/constants/constants';
 import { ProjectCardUserName } from './ProjectCardUserName';
-import {
-	calculateTotalEstimatedMatching,
-	getActiveRound,
-	getEstimatedMatchingRange,
-} from '@/helpers/qf';
+import { calculateTotalEstimatedMatching, getActiveRound } from '@/helpers/qf';
 import { formatDonation } from '@/helpers/number';
 import { RoundNotStartedModal } from './RoundNotStartedModal';
 import { TooltipContent } from '@/components/modals/HarvestAll.sc';
@@ -239,7 +235,7 @@ const ProjectCard = (props: IProjectCard) => {
 						{activeStartedRound && (
 							<Flex $flexDirection='column' gap='6px'>
 								<EstimatedMatchingPrice>
-									{getEstimatedMatchingRange(
+									{formatDonation(
 										calculateTotalEstimatedMatching(
 											projectDonationsSqrtRootSum,
 											allProjectsSum,
@@ -250,8 +246,11 @@ const ProjectCard = (props: IProjectCard) => {
 										),
 										allocatedFundUSDPreferred ? '$' : '',
 										locale,
-										allocatedTokenSymbol,
+										true,
 									)}
+									{allocatedFundUSDPreferred
+										? ''
+										: ` ${allocatedTokenSymbol}`}
 								</EstimatedMatchingPrice>
 								<EstimatedMatching>
 									<span>

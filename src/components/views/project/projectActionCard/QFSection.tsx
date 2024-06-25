@@ -24,7 +24,6 @@ import {
 	calculateEstimatedMatchingWithDonationAmount,
 	calculateTotalEstimatedMatching,
 	getActiveRound,
-	getEstimatedMatchingRange,
 } from '@/helpers/qf';
 import links from '@/lib/constants/links';
 import { IconWithTooltip } from '@/components/IconWithToolTip';
@@ -83,12 +82,15 @@ const QFSection: FC<IQFSectionProps> = ({ projectData }) => {
 		totalEstimatedMatching !== 0 ? (
 			<Flex $flexDirection='column' gap='4px'>
 				<EstimatedMatchingPrice>
-					{getEstimatedMatchingRange(
+					{formatDonation(
 						totalEstimatedMatching,
 						allocatedFundUSDPreferred ? '$' : '',
 						locale,
-						allocatedTokenSymbol,
+						true,
 					)}
+					{allocatedFundUSDPreferred
+						? ''
+						: ` ${allocatedTokenSymbol}`}
 				</EstimatedMatchingPrice>
 				<Flex $alignItems='center' gap='4px'>
 					<LightCaption>
@@ -116,7 +118,7 @@ const QFSection: FC<IQFSectionProps> = ({ projectData }) => {
 			</Subline>
 			<IconArrowRight16 color={brandColors.cyan[500]} />
 			<EndAlignedSubline>
-				{getEstimatedMatchingRange(
+				{formatDonation(
 					calculateEstimatedMatchingWithDonationAmount(
 						amount,
 						projectDonationsSqrtRootSum,
@@ -128,8 +130,9 @@ const QFSection: FC<IQFSectionProps> = ({ projectData }) => {
 					),
 					allocatedFundUSDPreferred ? '$' : '',
 					locale,
-					allocatedTokenSymbol,
+					true,
 				)}
+				{allocatedFundUSDPreferred ? '' : ` ${allocatedTokenSymbol}`}
 			</EndAlignedSubline>
 		</FlexSameSize>
 	);

@@ -1217,7 +1217,7 @@
 	"label.you_can_enter_a_new_address": "You can enter a new address to receive funds on",
 	"label.you_can_now_close_this_page_and_continue_verifying": "You can now close this page and continue verifying your project.",
 	"label.you_can_review_and_manage_your_givpower": "You can review and manage your GIVpower allocations in",
-	"label.you_can_set_a_custom_ethereum_address": "You can set a custom Ethereum address or ENS to receive donations.",
+	"label.you_can_set_a_custom_ethereum_address": "You can set a custom Ethereum address or ENS to receive donations. The more chains your project can accept funds on, the more likely it is to receive donations. ",
 	"label.you_can_still_access": "You can still access your project from your account and share it with your friends.",
 	"label.you_can_still_access_your_project_from_your_account": "You can still access your project from your account and share it with your friends via the project link!",
 	"label.you_can_still_donate": "You can still donate on other networks, but your donation won't be matched by quadratic funding.",

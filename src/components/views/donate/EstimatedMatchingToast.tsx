@@ -18,10 +18,11 @@ import { IProject } from '@/apollo/types/types';
 import {
 	calculateEstimatedMatchingWithDonationAmount,
 	getActiveRound,
-	getEstimatedMatchingRange,
 } from '@/helpers/qf';
 import { IProjectAcceptedToken } from '@/apollo/types/gqlTypes';
 import { useTokenPrice } from '@/hooks/useTokenPrice';
+import { formatDonation } from '@/helpers/number';
+
 interface IEstimatedMatchingToast {
 	projectData: IProject;
 	token?: IProjectAcceptedToken;
@@ -79,12 +80,12 @@ const EstimatedMatchingToast: React.FC<IEstimatedMatchingToast> = ({
 	);
 
 	const formattedDonation = isAboveMinValidUsdValue
-		? getEstimatedMatchingRange(
+		? `${formatDonation(
 				esMatching,
 				allocatedFundUSDPreferred ? '$' : '',
 				locale,
-				allocatedTokenSymbol,
-			)
+				true,
+			)} ${allocatedFundUSDPreferred ? '' : ` ${allocatedTokenSymbol}`}`
 		: '---';
 
 	const bottomText = isAboveMinValidUsdValue
