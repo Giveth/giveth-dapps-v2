@@ -27,18 +27,19 @@ export default function TermsAndConditions() {
 		useVerificationData();
 
 	console.log({ verificationData });
+
 	const [accepted, setAccepted] = useState(
 		verificationData?.isTermAndConditionsAccepted || false,
 	);
 	const { formatMessage } = useIntl();
 
-	const updateVerificationState = () => {
+	const updateVerificationState = (newCheckedState: boolean) => {
 		setVerificationData(prevState =>
 			prevState
 				? {
 						...prevState,
 						status: EVerificationStatus.DRAFT,
-						isTermAndConditionsAccepted: true,
+						isTermAndConditionsAccepted: newCheckedState,
 					}
 				: undefined,
 		);
@@ -47,13 +48,11 @@ export default function TermsAndConditions() {
 	// Handle when checkbox is confirmed
 	const handleAccepted = (newCheckedState: boolean) => {
 		setAccepted(newCheckedState);
-		if (newCheckedState) {
-			handleNext();
-		}
+		handleNext(newCheckedState);
 	};
 
 	// Save term and condition accept data to database
-	const handleNext = async () => {
+	const handleNext = async (newCheckedState: boolean) => {
 		try {
 			setLoading(true);
 			await client.mutate({
@@ -62,12 +61,12 @@ export default function TermsAndConditions() {
 					projectVerificationUpdateInput: {
 						projectVerificationId: Number(verificationData?.id),
 						step: EVerificationSteps.TERM_AND_CONDITION,
-						isTermAndConditionsAccepted: true,
+						isTermAndConditionsAccepted: newCheckedState,
 					},
 				},
 			});
 			setLoading(false);
-			updateVerificationState();
+			updateVerificationState(newCheckedState);
 		} catch (error) {
 			setLoading(false);
 			showToastError(error);
@@ -75,15 +74,30 @@ export default function TermsAndConditions() {
 	};
 
 	// Handle when user click on finish button
-	const handleFinish = () => {
+	const handleFinish = async () => {
 		if (accepted && allChecked) {
-			setStep(8);
+			try {
+				setLoading(true);
+				await client.mutate({
+					mutation: UPDATE_PROJECT_VERIFICATION,
+					variables: {
+						projectVerificationUpdateInput: {
+							projectVerificationId: Number(verificationData?.id),
+							step: EVerificationSteps.SUBMIT,
+						},
+					},
+				});
+				setLoading(false);
+				setStep(8); // GO TO FINAL STEP "DONE"
+			} catch (error) {
+				setLoading(false);
+				showToastError(error);
+			}
 		}
 	};
 
 	// Check have user submited all data needed for verification
 	useEffect(() => {
-		console.log('effect');
 		// Check if all elements are true
 		const allCheckedSteps = checkAllVerificationsSteps(
 			menuList,

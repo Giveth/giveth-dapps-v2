@@ -13,6 +13,8 @@ import { useVerificationData } from '@/context/verification.context';
 const ContentSelector: FC = () => {
 	const { step } = useVerificationData();
 
+	console.log('step switch', step);
+
 	switch (step) {
 		case 0:
 			return <BeforeStart />;
