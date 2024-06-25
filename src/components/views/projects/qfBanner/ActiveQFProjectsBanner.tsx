@@ -159,6 +159,10 @@ export const ActiveQFProjectsBanner = () => {
 
 const sponsors = [
 	{
+		title: '@publicNouns',
+		image: '/images/banners/qf-round/publicNouns.svg',
+	},
+	{
 		title: '@climate_program',
 		image: '/images/banners/qf-round/climate_program.svg',
 	},
