@@ -88,13 +88,26 @@ const EstimatedMatchingToast: React.FC<IEstimatedMatchingToast> = ({
 			)} ${allocatedFundUSDPreferred ? '' : ` ${allocatedTokenSymbol}`}`
 		: '---';
 
+	const formatMinUSDValue = (
+		num: number | undefined,
+		precision: number = 2,
+	) => {
+		if (!num) return '0';
+
+		if (num >= 1 || num < 0.01) {
+			return num.toString();
+		}
+
+		return num.toFixed(precision);
+	};
+
 	const bottomText = isAboveMinValidUsdValue
 		? formatMessage({ id: 'page.donate.matching_toast.bottom_valid' })
 		: formatMessage({
 				id: 'page.donate.matching_toast.bottom_invalid_p1',
 			}) +
 			' $' +
-			minimumValidUsdValue +
+			formatMinUSDValue(minimumValidUsdValue) +
 			' ' +
 			formatMessage({
 				id: 'page.donate.matching_toast.bottom_invalid_p2',
