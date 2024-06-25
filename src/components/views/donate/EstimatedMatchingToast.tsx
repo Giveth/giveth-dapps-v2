@@ -18,11 +18,10 @@ import { IProject } from '@/apollo/types/types';
 import {
 	calculateEstimatedMatchingWithDonationAmount,
 	getActiveRound,
+	getEstimatedMatchingRange,
 } from '@/helpers/qf';
 import { IProjectAcceptedToken } from '@/apollo/types/gqlTypes';
-import { formatDonation } from '@/helpers/number';
 import { useTokenPrice } from '@/hooks/useTokenPrice';
-
 interface IEstimatedMatchingToast {
 	projectData: IProject;
 	token?: IProjectAcceptedToken;
@@ -79,35 +78,13 @@ const EstimatedMatchingToast: React.FC<IEstimatedMatchingToast> = ({
 		<IconAlertTriangleFilled color={textColor} />
 	);
 
-	const formatWithCurrency = (
-		amount: number,
-		currency: string,
-		locale: string,
-	) => {
-		return (
-			formatDonation(amount, currency, locale, true) +
-			(currency ? '' : ` ${allocatedTokenSymbol}`)
-		);
-	};
-
-	const getEstimatedMatchingRange = (esMatching: number) => {
-		if (esMatching >= 2) {
-			return `${formatWithCurrency((esMatching * 30) / 100, allocatedFundUSDPreferred ? '$' : '', locale)} - ${formatWithCurrency(esMatching, allocatedFundUSDPreferred ? '$' : '', locale)}`;
-		}
-
-		if (esMatching >= 1) {
-			return '< $2';
-		}
-
-		return formatWithCurrency(
-			esMatching,
-			allocatedFundUSDPreferred ? '$' : '',
-			locale,
-		);
-	};
-
 	const formattedDonation = isAboveMinValidUsdValue
-		? getEstimatedMatchingRange(esMatching)
+		? getEstimatedMatchingRange(
+				esMatching,
+				allocatedFundUSDPreferred ? '$' : '',
+				locale,
+				allocatedTokenSymbol,
+			)
 		: '---';
 
 	const bottomText = isAboveMinValidUsdValue

@@ -28,7 +28,11 @@ import { slugToProjectDonate, slugToProjectView } from '@/lib/routeCreators';
 import { ORGANIZATION } from '@/lib/constants/organizations';
 import { mediaQueries } from '@/lib/constants/constants';
 import { ProjectCardUserName } from './ProjectCardUserName';
-import { calculateTotalEstimatedMatching, getActiveRound } from '@/helpers/qf';
+import {
+	calculateTotalEstimatedMatching,
+	getActiveRound,
+	getEstimatedMatchingRange,
+} from '@/helpers/qf';
 import { formatDonation } from '@/helpers/number';
 import { RoundNotStartedModal } from './RoundNotStartedModal';
 import { TooltipContent } from '@/components/modals/HarvestAll.sc';
@@ -95,33 +99,6 @@ const ProjectCard = (props: IProjectCard) => {
 			e.stopPropagation();
 			setShowHintModal(true);
 		}
-	};
-
-	const formatWithCurrency = (
-		amount: number,
-		currency: string,
-		locale: string,
-	) => {
-		return (
-			formatDonation(amount, currency, locale, true) +
-			(currency ? '' : ` ${allocatedTokenSymbol}`)
-		);
-	};
-
-	const getEstimatedMatchingRange = (esMatching: number) => {
-		if (esMatching >= 2) {
-			return `${formatWithCurrency((esMatching * 30) / 100, allocatedFundUSDPreferred ? '$' : '', locale)} - ${formatWithCurrency(esMatching, allocatedFundUSDPreferred ? '$' : '', locale)}`;
-		}
-
-		if (esMatching >= 1) {
-			return '< $2';
-		}
-
-		return formatWithCurrency(
-			esMatching,
-			allocatedFundUSDPreferred ? '$' : '',
-			locale,
-		);
 	};
 
 	return (
@@ -271,6 +248,9 @@ const ProjectCard = (props: IProjectCard) => {
 												: matchingPool,
 											activeStartedRound?.maximumReward,
 										),
+										allocatedFundUSDPreferred ? '$' : '',
+										locale,
+										allocatedTokenSymbol,
 									)}
 								</EstimatedMatchingPrice>
 								<EstimatedMatching>
