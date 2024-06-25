@@ -47,12 +47,11 @@ export const ArchivedQFRoundsTable: FC<ArchivedQFRoundsTableProps> = ({
 						</P>
 						<P>{formatDonation(round.totalDonations, '$') || 0}</P>
 						<P>
-							{/* {round.isDataAnalysisDone ? ( // TODO: uncomment when backend is ready
+							{round.isDataAnalysisDone ? (
 								round.uniqueDonors
 							) : (
 								<AnalysisStatus>Pending</AnalysisStatus>
-							)} */}
-							{round.uniqueDonors}
+							)}
 						</P>
 						<Flex $flexDirection='column'>
 							<P>{formatDate(new Date(round.beginDate))}</P>
