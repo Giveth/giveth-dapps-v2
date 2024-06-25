@@ -22,13 +22,17 @@ import { Shadow } from '@/components/styled-components/Shadow';
 import ProjectCardBadges from './ProjectCardLikeAndShareButtons';
 import ProjectCardOrgBadge from './ProjectCardOrgBadge';
 import { IProject } from '@/apollo/types/types';
-import { thousandsSeparator, timeFromNow } from '@/lib/helpers';
+import { timeFromNow } from '@/lib/helpers';
 import ProjectCardImage from './ProjectCardImage';
 import { slugToProjectDonate, slugToProjectView } from '@/lib/routeCreators';
 import { ORGANIZATION } from '@/lib/constants/organizations';
 import { mediaQueries } from '@/lib/constants/constants';
 import { ProjectCardUserName } from './ProjectCardUserName';
-import { calculateTotalEstimatedMatching, getActiveRound } from '@/helpers/qf';
+import {
+	calculateTotalEstimatedMatching,
+	getActiveRound,
+	getEstimatedMatchingRange,
+} from '@/helpers/qf';
 import { formatDonation } from '@/helpers/number';
 import { RoundNotStartedModal } from './RoundNotStartedModal';
 import { TooltipContent } from '@/components/modals/HarvestAll.sc';
@@ -95,29 +99,6 @@ const ProjectCard = (props: IProjectCard) => {
 			e.stopPropagation();
 			setShowHintModal(true);
 		}
-	};
-
-	const formatWithCurrency = (
-		amount: number,
-		currency: string,
-		locale: string,
-	) => {
-		return (
-			thousandsSeparator(formatDonation(amount, currency, locale, true)) +
-			(currency ? '' : ` ${allocatedTokenSymbol}`)
-		);
-	};
-
-	const getEstimatedMatchingRange = (esMatching: number) => {
-		if (esMatching >= 1) {
-			return `${formatWithCurrency((esMatching * 30) / 100, allocatedFundUSDPreferred ? '$' : '', locale)} - ${formatWithCurrency(esMatching, allocatedFundUSDPreferred ? '$' : '', locale)}`;
-		}
-
-		return formatWithCurrency(
-			esMatching,
-			allocatedFundUSDPreferred ? '$' : '',
-			locale,
-		);
 	};
 
 	return (
@@ -267,6 +248,9 @@ const ProjectCard = (props: IProjectCard) => {
 												: matchingPool,
 											activeStartedRound?.maximumReward,
 										),
+										allocatedFundUSDPreferred ? '$' : '',
+										locale,
+										allocatedTokenSymbol,
 									)}
 								</EstimatedMatchingPrice>
 								<EstimatedMatching>
