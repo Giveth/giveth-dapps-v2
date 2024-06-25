@@ -169,6 +169,9 @@ export const MiddleSponsors = styled(Flex)`
 	:nth-child(2) {
 		margin-top: -12px;
 	}
+	:nth-child(3) {
+		margin-top: -12px;
+	}
 `;
 
 export const BottomSponsors = styled(Flex)`
