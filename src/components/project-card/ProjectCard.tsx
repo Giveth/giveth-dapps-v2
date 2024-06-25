@@ -109,8 +109,12 @@ const ProjectCard = (props: IProjectCard) => {
 	};
 
 	const getEstimatedMatchingRange = (esMatching: number) => {
-		if (esMatching >= 1) {
+		if (esMatching >= 2) {
 			return `${formatWithCurrency((esMatching * 30) / 100, allocatedFundUSDPreferred ? '$' : '', locale)} - ${formatWithCurrency(esMatching, allocatedFundUSDPreferred ? '$' : '', locale)}`;
+		}
+
+		if (esMatching >= 1) {
+			return '< $2';
 		}
 
 		return formatWithCurrency(
