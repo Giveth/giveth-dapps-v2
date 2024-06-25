@@ -1,6 +1,5 @@
 import { IQFRound } from '@/apollo/types/types';
 import { getNowUnixMS } from './time';
-import { formatDonation } from '@/helpers/number';
 
 export const hasActiveRound = (qfRounds: IQFRound[] | undefined) => {
 	if (!qfRounds) return false;
@@ -75,28 +74,4 @@ export const calculateEstimatedMatchingWithDonationAmount = (
 		newEstimateMatching *
 		((afterNewDonationPow - beforeNewDonationPow) / afterNewDonationPow)
 	);
-};
-
-export const getEstimatedMatchingRange = (
-	amount: number,
-	currency: string,
-	locale: string,
-	allocatedTokenSymbol: string | undefined,
-): string => {
-	const formatWithCurrency = (amount: number) => {
-		const formattedAmount = formatDonation(amount, currency, locale, true);
-		return currency
-			? formattedAmount
-			: `${formattedAmount} ${allocatedTokenSymbol}`;
-	};
-
-	if (amount >= 2) {
-		return `${formatWithCurrency((amount * 30) / 100)} - ${formatWithCurrency(amount)}`;
-	}
-
-	if (amount >= 1) {
-		return '< $2';
-	}
-
-	return formatWithCurrency(amount);
 };

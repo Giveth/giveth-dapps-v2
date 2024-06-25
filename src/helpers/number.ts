@@ -60,7 +60,7 @@ export const formatDonation = (
 	if (num < threshold) return `< ${symbol}${threshold}`;
 	return !rounded
 		? symbol + num.toLocaleString(local, { maximumFractionDigits })
-		: symbol + Math.round(num).toLocaleString(local);
+		: symbol + Math.round(num);
 };
 
 export function limitFraction(
