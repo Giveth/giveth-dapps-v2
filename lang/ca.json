@@ -1216,7 +1216,7 @@
 	"label.you_can_enter_a_new_address": "Pots introduir una nova adreça per rebre fons a",
 	"label.you_can_now_close_this_page_and_continue_verifying": "Ja pots tancar aquesta pàgina i continuar verificant el teu projecte.",
 	"label.you_can_review_and_manage_your_givpower": "Pots revisar i gestionar la distribució del teu GIVpower a",
-	"label.you_can_set_a_custom_ethereum_address": "Podeu establir una adreça personalitzada d'Ethereum o ENS per rebre donacions.",
+	"label.you_can_set_a_custom_ethereum_address": "Podeu configurar una adreça d'Ethereum personalitzada o ENS per rebre donacions. Com més cadenes pugui acceptar fons el vostre projecte, més probable és que rebi donacions.",
 	"label.you_can_still_access": "Pots accedir al teu projecte des del teu compte i compartir-lo amb els teus amics.",
 	"label.you_can_still_access_your_project_from_your_account": "Encara pots accedir al teu projecte des del teu compte i compartir-lo amb els teus amics mitjançant el link del projecte!",
 	"label.you_can_still_donate": "Encara podeu fer una donació a altres xarxes, però la vostra donació no es compensarà amb el finançament quadràtic.",
