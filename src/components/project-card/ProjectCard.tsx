@@ -22,7 +22,7 @@ import { Shadow } from '@/components/styled-components/Shadow';
 import ProjectCardBadges from './ProjectCardLikeAndShareButtons';
 import ProjectCardOrgBadge from './ProjectCardOrgBadge';
 import { IProject } from '@/apollo/types/types';
-import { thousandsSeparator, timeFromNow } from '@/lib/helpers';
+import { timeFromNow } from '@/lib/helpers';
 import ProjectCardImage from './ProjectCardImage';
 import { slugToProjectDonate, slugToProjectView } from '@/lib/routeCreators';
 import { ORGANIZATION } from '@/lib/constants/organizations';
@@ -103,7 +103,7 @@ const ProjectCard = (props: IProjectCard) => {
 		locale: string,
 	) => {
 		return (
-			thousandsSeparator(formatDonation(amount, currency, locale, true)) +
+			formatDonation(amount, currency, locale, true) +
 			(currency ? '' : ` ${allocatedTokenSymbol}`)
 		);
 	};
