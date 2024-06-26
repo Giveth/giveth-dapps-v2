@@ -78,33 +78,19 @@ const QFSection: FC<IQFSectionProps> = ({ projectData }) => {
 	const isForeignOrg =
 		orgLabel !== ORGANIZATION.trace && orgLabel !== ORGANIZATION.giveth;
 
-	const formatWithCurrency = (
-		amount: number,
-		currency: string,
-		locale: string,
-	) => {
-		return (
-			formatDonation(amount, currency, locale, true) +
-			(currency ? '' : ` ${allocatedTokenSymbol}`)
-		);
-	};
-
-	const getEstimatedMatchingRange = (esMatching: number) => {
-		if (esMatching >= 1) {
-			return `${formatWithCurrency((esMatching * 30) / 100, allocatedFundUSDPreferred ? '$' : '', locale)} - ${formatWithCurrency(esMatching, allocatedFundUSDPreferred ? '$' : '', locale)}`;
-		}
-		return formatWithCurrency(
-			esMatching,
-			allocatedFundUSDPreferred ? '$' : '',
-			locale,
-		);
-	};
-
 	const EstimatedMatchingSection = () =>
 		totalEstimatedMatching !== 0 ? (
 			<Flex $flexDirection='column' gap='4px'>
 				<EstimatedMatchingPrice>
-					{getEstimatedMatchingRange(totalEstimatedMatching)}
+					{formatDonation(
+						totalEstimatedMatching,
+						allocatedFundUSDPreferred ? '$' : '',
+						locale,
+						true,
+					)}
+					{allocatedFundUSDPreferred
+						? ''
+						: ` ${allocatedTokenSymbol}`}
 				</EstimatedMatchingPrice>
 				<Flex $alignItems='center' gap='4px'>
 					<LightCaption>
@@ -132,7 +118,7 @@ const QFSection: FC<IQFSectionProps> = ({ projectData }) => {
 			</Subline>
 			<IconArrowRight16 color={brandColors.cyan[500]} />
 			<EndAlignedSubline>
-				{getEstimatedMatchingRange(
+				{formatDonation(
 					calculateEstimatedMatchingWithDonationAmount(
 						amount,
 						projectDonationsSqrtRootSum,
@@ -142,7 +128,11 @@ const QFSection: FC<IQFSectionProps> = ({ projectData }) => {
 							: matchingPool,
 						activeStartedRound?.maximumReward,
 					),
+					allocatedFundUSDPreferred ? '$' : '',
+					locale,
+					true,
 				)}
+				{allocatedFundUSDPreferred ? '' : ` ${allocatedTokenSymbol}`}
 			</EndAlignedSubline>
 		</FlexSameSize>
 	);

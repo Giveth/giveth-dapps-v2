@@ -10,7 +10,7 @@ import {
 } from '@giveth/ui-design-system';
 import Link from 'next/link';
 import { IArchivedQFRound } from '@/apollo/types/types';
-import { formatDate } from '@/lib/helpers';
+import { formatDate, formatPrice } from '@/lib/helpers';
 import { Shadow } from '@/components/styled-components/Shadow';
 import Routes from '@/lib/constants/Routes';
 import { formatDonation } from '@/helpers/number';
@@ -39,7 +39,7 @@ export const ArchivedQFRoundsTable: FC<ArchivedQFRoundsTableProps> = ({
 						<P>
 							<Flex gap='1px'>
 								{!round.allocatedTokenSymbol && <span>$</span>}
-								<span>{round.allocatedFund}</span>
+								<span>{formatPrice(round.allocatedFund)}</span>
 								{round.allocatedTokenSymbol && (
 									<span>{round.allocatedTokenSymbol}</span>
 								)}

@@ -101,7 +101,9 @@ export const ProjectProvider = ({
 	const { isSignedIn, userData: user } = useAppSelector(state => state.user);
 	const dispatch = useAppDispatch();
 	const router = useRouter();
-	const slug = router.query.projectIdSlug as string;
+	const slug = (router.query.projectIdSlug as string)
+		? router.query.projectIdSlug
+		: project?.slug;
 
 	const isAdmin = compareAddresses(
 		projectData?.adminUser?.walletAddress,

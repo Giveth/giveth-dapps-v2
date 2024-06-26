@@ -10,6 +10,8 @@ import { ProjectProvider } from '@/context/project.context';
 const ProjectRoute: FC<IProjectBySlug> = ({ project }) => {
 	useReferral();
 
+	console.log({ project });
+
 	return (
 		<ProjectProvider project={project}>
 			<ProjectIndex />
