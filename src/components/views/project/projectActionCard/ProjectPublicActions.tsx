@@ -1,16 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import {
-	Button,
 	ButtonLink,
 	mediaQueries,
-	neutralColors,
 	semanticColors,
 	IconDonation16,
 	SublineBold,
 	Flex,
 	IconBookmarkFilled16,
 	IconBookmark16,
+	brandColors,
 } from '@giveth/ui-design-system';
 import { captureException } from '@sentry/nextjs';
 import { useIntl } from 'react-intl';
@@ -30,6 +29,7 @@ import { FETCH_PROJECT_REACTION_BY_ID } from '@/apollo/gql/gqlProjects';
 import { client } from '@/apollo/apolloClient';
 import { slugToProjectDonate } from '@/lib/routeCreators';
 import { useAlreadyDonatedToProject } from '@/hooks/useAlreadyDonatedToProject';
+import { BadgeButton } from '@/components/project-card/ProjectCardBookmarkAndShareButtons';
 
 export const ProjectPublicActions = () => {
 	const [showModal, setShowShareModal] = useState<boolean>(false);
@@ -142,21 +142,16 @@ export const ProjectPublicActions = () => {
 					onClick={() => isActive && setShowShareModal(true)}
 					isSimple={isMobile}
 				/>
-				<StyledButton
-					label={''}
-					onClick={() => isActive && checkSignInThenLike()}
-					buttonType='texty-gray'
-					icon={
-						reaction?.userId && reaction?.userId === user?.id ? (
-							<IconBookmarkFilled16 />
-						) : (
-							<IconBookmark16 />
-						)
-					}
-					loading={likeLoading}
-					disabled={likeLoading}
-					size='small'
-				/>
+				<StyledBadgeButton
+					$isLoading={likeLoading}
+					onClick={likeLoading ? undefined : checkSignInThenLike}
+				>
+					{reaction?.userId && reaction?.userId === user?.id ? (
+						<IconBookmarkFilled16 color={brandColors.pinky[500]} />
+					) : (
+						<IconBookmark16 />
+					)}
+				</StyledBadgeButton>
 			</BadgeWrapper>
 			{showModal && slug && (
 				<ShareModal
@@ -196,16 +191,12 @@ const BadgeWrapper = styled(Flex)`
 	justify-content: space-between;
 `;
 
-const StyledButton = styled(Button)`
+const StyledBadgeButton = styled(BadgeButton)`
 	box-shadow: 0px 3px 20px rgba(212, 218, 238, 0.4);
-	flex-direction: row-reverse;
-	gap: 8px;
-	padding: 16px 10px;
-	& > div[loading='1'] > div {
-		left: 0;
-	}
-	color: ${neutralColors.gray[700]};
-	&:hover {
-		color: ${neutralColors.gray[800]};
+	width: 48px;
+	border-radius: 24px;
+	padding: 0 16px;
+	&::after {
+		border-radius: 24px;
 	}
 `;
