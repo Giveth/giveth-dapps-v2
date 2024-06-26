@@ -193,7 +193,6 @@ export default function ProjectContactIndex() {
 						disabled={!isDraft}
 					/>
 					<ShareLikeBadge
-						type='share'
 						onClick={() => setShowShareModal(true)}
 						isSimple={isMobile}
 					/>

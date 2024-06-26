@@ -49,7 +49,6 @@ const DonateSocialBox: FC<ISocialBox> = props => {
 
 			<BadgeWrapper>
 				<ShareLikeBadge
-					type={verified ? 'reward' : 'share'}
 					onClick={() => isActive && setShowModal(true)}
 					isSimple={isMobile}
 					fromDonate={true}
