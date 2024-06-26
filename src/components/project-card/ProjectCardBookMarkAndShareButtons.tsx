@@ -11,10 +11,10 @@ import {
 import styled, { css } from 'styled-components';
 import { captureException } from '@sentry/nextjs';
 import { useWeb3Modal } from '@web3modal/wagmi/react';
-import { likeProject, unlikeProject } from '@/lib/reaction';
+import { bookmarkProject, unBookmarkProject } from '@/lib/reaction';
 import { isSSRMode, showToastError } from '@/lib/helpers';
 import { IProject } from '@/apollo/types/types';
-import { useAppDispatch, useAppSelector } from '@/features/hooks';
+import { useAppSelector } from '@/features/hooks';
 import { useModalCallback } from '@/hooks/useModalCallback';
 import { EContentType } from '@/lib/constants/shareContent';
 import ShareModal from '../modals/ShareModal';
@@ -37,7 +37,6 @@ const ProjectCardBookmarkAndShareButtons: FC<
 		userData: user,
 		isEnabled,
 	} = useAppSelector(state => state.user);
-	const dispatch = useAppDispatch();
 	const { open: openConnectModal } = useWeb3Modal();
 
 	useEffect(() => {
@@ -50,10 +49,10 @@ const ProjectCardBookmarkAndShareButtons: FC<
 
 			try {
 				if (!reaction) {
-					const newReaction = await likeProject(projectId);
+					const newReaction = await bookmarkProject(projectId);
 					setReaction(newReaction);
 				} else if (reaction?.userId === user?.id) {
-					const successful = await unlikeProject(reaction.id);
+					const successful = await unBookmarkProject(reaction.id);
 					if (successful) {
 						setReaction(undefined);
 					}

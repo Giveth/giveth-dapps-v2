@@ -21,11 +21,11 @@ import ShareModal from '@/components/modals/ShareModal';
 import ShareLikeBadge from '@/components/badges/ShareLikeBadge';
 import { EContentType } from '@/lib/constants/shareContent';
 import { useProjectContext } from '@/context/project.context';
-import { useAppDispatch, useAppSelector } from '@/features/hooks';
+import { useAppSelector } from '@/features/hooks';
 import { isSSRMode, showToastError } from '@/lib/helpers';
 import { useModalCallback } from '@/hooks/useModalCallback';
 
-import { likeProject, unlikeProject } from '@/lib/reaction';
+import { bookmarkProject, unBookmarkProject } from '@/lib/reaction';
 import { FETCH_PROJECT_REACTION_BY_ID } from '@/apollo/gql/gqlProjects';
 import { client } from '@/apollo/apolloClient';
 import { slugToProjectDonate } from '@/lib/routeCreators';
@@ -44,7 +44,6 @@ export const ProjectPublicActions = () => {
 		userData: user,
 		isEnabled,
 	} = useAppSelector(state => state.user);
-	const dispatch = useAppDispatch();
 	const { formatMessage } = useIntl();
 	const { open: openConnectModal } = useWeb3Modal();
 	const alreadyDonated = useAlreadyDonatedToProject(projectData);
@@ -84,10 +83,10 @@ export const ProjectPublicActions = () => {
 
 			try {
 				if (!reaction) {
-					const newReaction = await likeProject(projectId);
+					const newReaction = await bookmarkProject(projectId);
 					setReaction(newReaction);
 				} else if (reaction?.userId === user?.id) {
-					const successful = await unlikeProject(reaction.id);
+					const successful = await unBookmarkProject(reaction.id);
 					if (successful) {
 						setReaction(undefined);
 					}
