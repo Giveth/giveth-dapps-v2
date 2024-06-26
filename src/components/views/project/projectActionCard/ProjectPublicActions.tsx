@@ -24,10 +24,7 @@ import { useProjectContext } from '@/context/project.context';
 import { useAppDispatch, useAppSelector } from '@/features/hooks';
 import { isSSRMode, showToastError } from '@/lib/helpers';
 import { useModalCallback } from '@/hooks/useModalCallback';
-import {
-	incrementLikedProjectsCount,
-	decrementLikedProjectsCount,
-} from '@/features/user/user.slice';
+
 import { likeProject, unlikeProject } from '@/lib/reaction';
 import { FETCH_PROJECT_REACTION_BY_ID } from '@/apollo/gql/gqlProjects';
 import { client } from '@/apollo/apolloClient';
@@ -40,9 +37,6 @@ export const ProjectPublicActions = () => {
 	const project = projectData!;
 	const { slug, id: projectId, verified } = project;
 	const [reaction, setReaction] = useState(project.reaction);
-	const [totalReactions, setTotalReactions] = useState(
-		project.totalReactions,
-	);
 	const { isMobile } = useDetectDevice();
 	const [likeLoading, setLikeLoading] = useState(false);
 	const {
@@ -67,9 +61,7 @@ export const ProjectPublicActions = () => {
 						},
 						fetchPolicy: 'no-cache',
 					});
-					const _totalReactions = data?.projectById?.totalReactions;
 					const _reaction = data?.projectById?.reaction;
-					setTotalReactions(_totalReactions);
 					setReaction(_reaction);
 				} catch (e) {
 					showToastError(e);
@@ -94,20 +86,10 @@ export const ProjectPublicActions = () => {
 				if (!reaction) {
 					const newReaction = await likeProject(projectId);
 					setReaction(newReaction);
-					if (newReaction) {
-						setTotalReactions(
-							_totalReactions => (_totalReactions || 0) + 1,
-						);
-						dispatch(incrementLikedProjectsCount());
-					}
 				} else if (reaction?.userId === user?.id) {
 					const successful = await unlikeProject(reaction.id);
 					if (successful) {
 						setReaction(undefined);
-						setTotalReactions(
-							_totalReactions => (_totalReactions || 1) - 1,
-						);
-						dispatch(decrementLikedProjectsCount());
 					}
 				}
 			} catch (e) {
@@ -163,7 +145,7 @@ export const ProjectPublicActions = () => {
 					isSimple={isMobile}
 				/>
 				<StyledButton
-					label={totalReactions.toString()}
+					label={''}
 					onClick={() => isActive && checkSignInThenLike()}
 					buttonType='texty-gray'
 					icon={
