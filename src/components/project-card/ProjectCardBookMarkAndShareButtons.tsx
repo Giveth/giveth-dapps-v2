@@ -6,7 +6,6 @@ import {
 	IconRocketInSpace,
 	IconShare16,
 	neutralColors,
-	Subline,
 	Flex,
 } from '@giveth/ui-design-system';
 import styled, { css } from 'styled-components';
@@ -16,10 +15,6 @@ import { likeProject, unlikeProject } from '@/lib/reaction';
 import { isSSRMode, showToastError } from '@/lib/helpers';
 import { IProject } from '@/apollo/types/types';
 import { useAppDispatch, useAppSelector } from '@/features/hooks';
-import {
-	decrementLikedProjectsCount,
-	incrementLikedProjectsCount,
-} from '@/features/user/user.slice';
 import { useModalCallback } from '@/hooks/useModalCallback';
 import { EContentType } from '@/lib/constants/shareContent';
 import ShareModal from '../modals/ShareModal';
@@ -36,9 +31,6 @@ const ProjectCardBookmarkAndShareButtons: FC<
 	const [showBoost, setShowBoost] = useState(false);
 	const { slug, id: projectId, verified } = project;
 	const [reaction, setReaction] = useState(project.reaction);
-	const [totalReactions, setTotalReactions] = useState(
-		project.totalReactions,
-	);
 	const [likeLoading, setLikeLoading] = useState(false);
 	const {
 		isSignedIn,
@@ -52,10 +44,6 @@ const ProjectCardBookmarkAndShareButtons: FC<
 		setReaction(project.reaction);
 	}, [project.reaction, user?.id]);
 
-	useEffect(() => {
-		setTotalReactions(project.totalReactions);
-	}, [project.totalReactions]);
-
 	const likeUnlikeProject = async () => {
 		if (projectId) {
 			setLikeLoading(true);
@@ -64,20 +52,10 @@ const ProjectCardBookmarkAndShareButtons: FC<
 				if (!reaction) {
 					const newReaction = await likeProject(projectId);
 					setReaction(newReaction);
-					if (newReaction) {
-						setTotalReactions(
-							_totalReactions => (_totalReactions || 0) + 1,
-						);
-						dispatch(incrementLikedProjectsCount());
-					}
 				} else if (reaction?.userId === user?.id) {
 					const successful = await unlikeProject(reaction.id);
 					if (successful) {
 						setReaction(undefined);
-						setTotalReactions(
-							_totalReactions => (_totalReactions || 1) - 1,
-						);
-						dispatch(decrementLikedProjectsCount());
 					}
 				}
 			} catch (e) {
@@ -144,9 +122,6 @@ const ProjectCardBookmarkAndShareButtons: FC<
 						$isLoading={likeLoading}
 						onClick={likeLoading ? undefined : checkSignInThenLike}
 					>
-						{Number(totalReactions) > 0 && (
-							<Subline>{totalReactions}</Subline>
-						)}
 						{reaction?.userId && reaction?.userId === user?.id ? (
 							<IconHeartFilled16 color={brandColors.pinky[500]} />
 						) : (
