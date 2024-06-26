@@ -1,18 +1,13 @@
-import { FC, useEffect, useState } from 'react';
+import { FC, useState } from 'react';
 import {
 	brandColors,
 	IconRocketInSpace,
 	IconShare16,
 	neutralColors,
 	Flex,
-	IconBookmarkFilled16,
-	IconBookmark16,
 } from '@giveth/ui-design-system';
 import styled, { css } from 'styled-components';
-import { captureException } from '@sentry/nextjs';
 import { useWeb3Modal } from '@web3modal/wagmi/react';
-import { bookmarkProject, unBookmarkProject } from '@/lib/reaction';
-import { isSSRMode, showToastError } from '@/lib/helpers';
 import { IProject } from '@/apollo/types/types';
 import { useAppSelector } from '@/features/hooks';
 import { useModalCallback } from '@/hooks/useModalCallback';
@@ -20,76 +15,22 @@ import { EContentType } from '@/lib/constants/shareContent';
 import ShareModal from '../modals/ShareModal';
 import BoostModal from '../modals/Boost/BoostModal';
 
-interface IProjectCardBookmarkAndShareButtons {
+interface IProjectCardBadgeButtons {
 	project: IProject;
 }
 
-const ProjectCardBookmarkAndShareButtons: FC<
-	IProjectCardBookmarkAndShareButtons
-> = ({ project }) => {
+const ProjectCardBadgeButtons: FC<IProjectCardBadgeButtons> = ({ project }) => {
 	const [showShare, setShowShare] = useState(false);
 	const [showBoost, setShowBoost] = useState(false);
-	const { slug, id: projectId, verified } = project;
-	const [reaction, setReaction] = useState(project.reaction);
-	const [likeLoading, setLikeLoading] = useState(false);
-	const {
-		isSignedIn,
-		userData: user,
-		isEnabled,
-	} = useAppSelector(state => state.user);
+	const { slug, verified } = project;
+	const { isSignedIn, isEnabled } = useAppSelector(state => state.user);
 	const { open: openConnectModal } = useWeb3Modal();
-
-	useEffect(() => {
-		setReaction(project.reaction);
-	}, [project.reaction, user?.id]);
-
-	const likeUnlikeProject = async () => {
-		if (projectId) {
-			setLikeLoading(true);
-
-			try {
-				if (!reaction) {
-					const newReaction = await bookmarkProject(projectId);
-					setReaction(newReaction);
-				} else if (reaction?.userId === user?.id) {
-					const successful = await unBookmarkProject(reaction.id);
-					if (successful) {
-						setReaction(undefined);
-					}
-				}
-			} catch (e) {
-				showToastError(e);
-				captureException(e, {
-					tags: {
-						section: 'likeUnlikeProject',
-					},
-				});
-			} finally {
-				setLikeLoading(false);
-			}
-		}
-	};
 
 	const showBoostModal = () => {
 		setShowBoost(true);
 	};
 
 	const { modalCallback: signInThenBoost } = useModalCallback(showBoostModal);
-
-	const { modalCallback: signInThenLike } =
-		useModalCallback(likeUnlikeProject);
-
-	const checkSignInThenLike = () => {
-		if (isSSRMode) return;
-		if (!isEnabled) {
-			openConnectModal?.();
-		} else if (!isSignedIn) {
-			signInThenLike();
-		} else {
-			likeUnlikeProject();
-		}
-	};
-
 	const checkSignInThenBoost = () => {
 		if (!isEnabled) {
 			openConnectModal?.();
@@ -117,18 +58,6 @@ const ProjectCardBookmarkAndShareButtons: FC<
 							<IconRocketInSpace />
 						</BadgeButton>
 					)}
-					<BadgeButton
-						$isLoading={likeLoading}
-						onClick={likeLoading ? undefined : checkSignInThenLike}
-					>
-						{reaction?.userId && reaction?.userId === user?.id ? (
-							<IconBookmarkFilled16
-								color={brandColors.pinky[500]}
-							/>
-						) : (
-							<IconBookmark16 />
-						)}
-					</BadgeButton>
 					<BadgeButton
 						onClick={e => {
 							setShowShare(true);
@@ -236,4 +165,4 @@ const BadgeWrapper = styled.div`
 	pointer-events: none;
 `;
 
-export default ProjectCardBookmarkAndShareButtons;
+export default ProjectCardBadgeButtons;
