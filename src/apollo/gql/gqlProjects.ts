@@ -28,10 +28,6 @@ export const PROJECT_CARD_FIELDS = gql`
 	fragment ProjectCardFields on Project {
 		...ProjectCoreFields
 		descriptionSummary
-		reaction {
-			id
-			userId
-		}
 		adminUser {
 			name
 			walletAddress
