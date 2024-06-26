@@ -7,16 +7,20 @@ import { Shadow } from '@/components/styled-components/Shadow';
 import menuList from '@/components/views/verification/menu/menuList';
 import { useVerificationData } from '@/context/verification.context';
 import { StepsProgressBar } from '@/components/views/verification/Common';
-import { findStepByName } from '@/lib/verification';
-import { checkVerificationStep } from '@/helpers/projects';
+import {
+	checkAllVerificationsSteps,
+	checkVerificationStep,
+} from '@/helpers/projects';
 
 const DesktopMenu = () => {
 	const { step, setStep, verificationData, isDraft } = useVerificationData();
-	console.log({ verificationData });
-	const { project, lastStep } = verificationData || {};
+	const { project } = verificationData || {};
 	const { title } = project || {};
-	const lastStepIndex = findStepByName(lastStep);
 	const { formatMessage } = useIntl();
+	const allCheckedSteps = checkAllVerificationsSteps(
+		menuList,
+		verificationData,
+	);
 
 	return (
 		<MenuSection sm={3.75} md={2.75}>
@@ -28,14 +32,14 @@ const DesktopMenu = () => {
 			{menuList.map((item, index) => {
 				let isClickable = index != 8; // Do not enable click on last step "Done"
 				isClickable = !isDraft ? false : isClickable; // user first time came to verification steps
-				const IconCheck = checkVerificationStep(
-					item.slug,
-					verificationData,
-				) ? (
-					<CheckCircle />
-				) : (
-					<WarningCircle />
-				);
+				const IconCheck =
+					checkVerificationStep(item.slug, verificationData) ||
+					(allCheckedSteps && index == 8 && step == 8) ? (
+						<CheckCircle />
+					) : (
+						<WarningCircle />
+					);
+
 				return (
 					<MenuTitle
 						$hover={isClickable}

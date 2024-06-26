@@ -26,8 +26,6 @@ export default function TermsAndConditions() {
 	const { verificationData, setVerificationData, setStep, isDraft } =
 		useVerificationData();
 
-	console.log({ verificationData });
-
 	const [accepted, setAccepted] = useState(
 		verificationData?.isTermAndConditionsAccepted || false,
 	);

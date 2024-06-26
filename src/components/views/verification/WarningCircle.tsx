@@ -1,5 +1,5 @@
 import {
-	IconAdminNotif,
+	IconWarning32,
 	semanticColors,
 	FlexCenter,
 } from '@giveth/ui-design-system';
@@ -8,7 +8,7 @@ import styled from 'styled-components';
 const WarningCircle = () => {
 	return (
 		<Container>
-			<IconAdminNotif color='white' size={10} />
+			<IconWarning32 color='white' />
 		</Container>
 	);
 };
