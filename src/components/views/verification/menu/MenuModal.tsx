@@ -10,7 +10,7 @@ import { findStepByName } from '@/lib/verification';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
 
 const MenuModal: FC<IModal> = ({ setShowModal }) => {
-	const { step, setStep, verificationData } = useVerificationData();
+	const { step, setStep, verificationData, isDraft } = useVerificationData();
 	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
 	const { lastStep } = verificationData || {};
 	const lastStepIndex = findStepByName(lastStep);
@@ -31,15 +31,20 @@ const MenuModal: FC<IModal> = ({ setShowModal }) => {
 			isAnimating={isAnimating}
 		>
 			<Container>
-				{menuList.map((i, index) => (
-					<MenuItem
-						onClick={() => handleClick(index)}
-						$active={step === index}
-						key={i}
-					>
-						{formatMessage({ id: i })}
-					</MenuItem>
-				))}
+				{menuList.map((item, index) => {
+					let isClickable = index != 8; // Do not enable click on last step "Done"
+					isClickable = !isDraft ? false : isClickable; // user first time came to verification steps
+					return (
+						<MenuItem
+							onClick={() => isClickable && handleClick(index)}
+							$active={step === index}
+							$clickable={isClickable}
+							key={item.slug}
+						>
+							{formatMessage({ id: item.label })}
+						</MenuItem>
+					);
+				})}
 			</Container>
 		</Modal>
 	);
@@ -50,9 +55,9 @@ const Container = styled.div`
 	text-align: left;
 `;
 
-const MenuItem = styled(B)<{ $active: boolean }>`
+const MenuItem = styled(B)<{ $active: boolean; $clickable: boolean }>`
 	margin-bottom: 28px;
-	cursor: pointer;
+	cursor: ${props => (props.$clickable ? 'pointer' : 'default')};
 	color: ${props =>
 		props.$active ? neutralColors.gray[900] : neutralColors.gray[700]};
 `;
