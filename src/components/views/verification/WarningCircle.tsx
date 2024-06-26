@@ -1,5 +1,5 @@
 import {
-	IconWarning32,
+	IconWarning16,
 	semanticColors,
 	FlexCenter,
 } from '@giveth/ui-design-system';
@@ -8,7 +8,7 @@ import styled from 'styled-components';
 const WarningCircle = () => {
 	return (
 		<Container>
-			<IconWarning32 color='white' />
+			<IconWarning16 color='white' size={10} />
 		</Container>
 	);
 };
