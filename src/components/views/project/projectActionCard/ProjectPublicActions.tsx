@@ -29,7 +29,7 @@ import { FETCH_PROJECT_REACTION_BY_ID } from '@/apollo/gql/gqlProjects';
 import { client } from '@/apollo/apolloClient';
 import { slugToProjectDonate } from '@/lib/routeCreators';
 import { useAlreadyDonatedToProject } from '@/hooks/useAlreadyDonatedToProject';
-import { BadgeButton } from '@/components/project-card/ProjectCardBookmarkAndShareButtons';
+import { BadgeButton } from '@/components/project-card/ProjectCardBadgeButtons';
 
 export const ProjectPublicActions = () => {
 	const [showModal, setShowShareModal] = useState<boolean>(false);
