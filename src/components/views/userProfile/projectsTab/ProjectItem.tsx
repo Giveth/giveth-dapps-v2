@@ -8,7 +8,7 @@ import {
 	Flex,
 	mediaQueries,
 } from '@giveth/ui-design-system';
-import React, { Dispatch, SetStateAction, useState } from 'react';
+import { type FC, useState } from 'react';
 import styled from 'styled-components';
 import { useIntl } from 'react-intl';
 import Link from 'next/link';
@@ -26,11 +26,11 @@ import DeleteProjectModal from './DeleteProjectModal';
 
 interface IProjectItem {
 	project: IProject;
-	setProjects: Dispatch<SetStateAction<IProject[]>>;
 }
 
-const ProjectItem = ({ project, setProjects }: IProjectItem) => {
+const ProjectItem: FC<IProjectItem> = props => {
 	const { formatMessage, locale } = useIntl();
+	const [project, setProject] = useState(props.project);
 	const [showAddressModal, setShowAddressModal] = useState(false);
 	const [selectedProject, setSelectedProject] = useState<IProject>();
 	const [showClaimModal, setShowClaimModal] = useState(false);
@@ -64,6 +64,7 @@ const ProjectItem = ({ project, setProjects }: IProjectItem) => {
 					setShowAddressModal={setShowAddressModal}
 					project={project}
 					setShowClaimModal={setShowClaimModal}
+					setProject={setProject}
 					setShowDeleteModal={setShowDeleteModal}
 				/>
 			</ProjectInfoContainer>
@@ -128,7 +129,7 @@ const ProjectItem = ({ project, setProjects }: IProjectItem) => {
 				<ManageProjectAddressesModal
 					project={selectedProject}
 					setShowModal={setShowAddressModal}
-					setProjects={setProjects}
+					setProject={setProject}
 				/>
 			)}
 			{showClaimModal && selectedProject && (

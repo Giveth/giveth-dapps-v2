@@ -765,6 +765,8 @@
 	"label.project_status": "Estat del projecte",
 	"label.project_story": "Història del projecte",
 	"label.project_verification": "Verificació del projecte",
+	"label.project_verify": "Verifica el projecte",
+	"label.project_verify_resume": "Reprendre la verificació",
 	"label.proud_of_our_partners": "Orgullosos dels nostres socis",
 	"label.provide_liquidity": "Proporciona liquiditat",
 	"label.providing_location_details_makes_a_personal_connection_with": "Proporcionar detalls de ubicació crea una connexió personal amb persones de la teva àrea.",
