@@ -152,7 +152,7 @@ interface IBadgeButton {
 	$isLoading?: boolean;
 }
 
-const BadgeButton = styled(Flex)<IBadgeButton>`
+export const BadgeButton = styled(Flex)<IBadgeButton>`
 	gap: 3px;
 	padding: 6px 7px;
 	z-index: 2;
