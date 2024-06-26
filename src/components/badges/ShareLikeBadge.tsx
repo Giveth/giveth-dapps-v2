@@ -4,46 +4,33 @@ import {
 	neutralColors,
 	IconShare,
 	brandColors,
-	IconHeartOutline,
 	ButtonText,
-	IconHeartFilled,
 	FlexCenter,
 } from '@giveth/ui-design-system';
 import { Shadow } from '../styled-components/Shadow';
 const ShareLikeBadge = (props: {
-	type: 'share' | 'like' | 'reward';
 	active?: boolean;
 	onClick: () => void;
 	isSimple?: boolean | null;
 	fromDonate?: boolean | null;
 }) => {
 	const { formatMessage } = useIntl();
-	const { type, active, onClick, isSimple, fromDonate } = props;
-	const isShare = type === 'share' || type === 'reward';
-	const text =
-		type === 'share'
-			? formatMessage({ id: 'label.share' })
-			: type === 'reward'
-				? formatMessage({ id: 'label.share' })
-				: formatMessage({ id: 'label.like' });
-	const icon = isShare ? (
-		<IconShare
-			color={
-				fromDonate ? brandColors.pinky[500] : neutralColors.gray[700]
-			}
-		/>
-	) : active ? (
-		<IconHeartFilled color={brandColors.pinky[500]} />
-	) : (
-		<IconHeartOutline color={neutralColors.gray[700]} />
-	);
+	const { active, onClick, isSimple, fromDonate } = props;
 
 	return (
 		<Wrapper onClick={onClick}>
-			{icon}
+			{
+				<IconShare
+					color={
+						fromDonate
+							? brandColors.pinky[500]
+							: neutralColors.gray[700]
+					}
+				/>
+			}
 			{!isSimple && (
 				<BadgeText size='small' $fromDonate={fromDonate}>
-					{text}
+					{formatMessage({ id: 'label.share' })}
 				</BadgeText>
 			)}
 		</Wrapper>

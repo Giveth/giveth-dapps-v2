@@ -52,7 +52,6 @@ export interface IProject {
 	listed?: boolean | null;
 	categories: ICategory[];
 	reaction?: IReaction;
-	totalReactions: number;
 	adminUser: IAdminUser;
 	donations: {
 		id?: string;
