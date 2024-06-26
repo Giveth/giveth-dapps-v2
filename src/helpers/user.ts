@@ -6,8 +6,7 @@ export function getTokens() {
 	return getLocalStorageData(StorageLabel.TOKENS);
 }
 
-export function getUserName(user?: IUser, short = false) {
-	console.log('user', user);
+export function getUserName(user?: IUser, short = true) {
 	if (!user) return 'Unknown';
 	return (
 		user.name ||
