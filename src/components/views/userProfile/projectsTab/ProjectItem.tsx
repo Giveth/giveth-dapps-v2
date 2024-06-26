@@ -1,7 +1,6 @@
 import {
 	H2,
 	IconFund24,
-	IconHeartOutline24,
 	IconPublish16,
 	P,
 	Subline,
@@ -110,15 +109,6 @@ const ProjectItem = ({ project, setProjects }: IProjectItem) => {
 					</Flex>
 				</ProjectStatusesContainer>
 				<ProjectStatusesContainer $flexDirection='column' gap='16px'>
-					<Flex $justifyContent='space-between'>
-						<P>
-							<Flex $alignItems='center' gap='6px'>
-								<IconHeartOutline24 />
-								{formatMessage({ id: 'label.likes' })}
-							</Flex>
-						</P>
-						<div>{project.totalReactions}</div>
-					</Flex>
 					<Flex $justifyContent='space-between'>
 						<P>
 							<Flex $alignItems='center' gap='6px'>
