@@ -3,14 +3,14 @@ import styled from 'styled-components';
 import {
 	Button,
 	ButtonLink,
-	IconHeartFilled16,
-	IconHeartOutline16,
 	mediaQueries,
 	neutralColors,
 	semanticColors,
 	IconDonation16,
 	SublineBold,
 	Flex,
+	IconBookmarkFilled16,
+	IconBookmark16,
 } from '@giveth/ui-design-system';
 import { captureException } from '@sentry/nextjs';
 import { useIntl } from 'react-intl';
@@ -139,7 +139,6 @@ export const ProjectPublicActions = () => {
 			</Link>
 			<BadgeWrapper gap='4px'>
 				<ShareLikeBadge
-					type={verified ? 'reward' : 'share'}
 					onClick={() => isActive && setShowShareModal(true)}
 					isSimple={isMobile}
 				/>
@@ -149,9 +148,9 @@ export const ProjectPublicActions = () => {
 					buttonType='texty-gray'
 					icon={
 						reaction?.userId && reaction?.userId === user?.id ? (
-							<IconHeartFilled16 />
+							<IconBookmarkFilled16 />
 						) : (
-							<IconHeartOutline16 />
+							<IconBookmark16 />
 						)
 					}
 					loading={likeLoading}

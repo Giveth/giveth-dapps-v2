@@ -1,12 +1,12 @@
 import { FC, useEffect, useState } from 'react';
 import {
 	brandColors,
-	IconHeartFilled16,
-	IconHeartOutline16,
 	IconRocketInSpace,
 	IconShare16,
 	neutralColors,
 	Flex,
+	IconBookmarkFilled16,
+	IconBookmark16,
 } from '@giveth/ui-design-system';
 import styled, { css } from 'styled-components';
 import { captureException } from '@sentry/nextjs';
@@ -122,9 +122,11 @@ const ProjectCardBookmarkAndShareButtons: FC<
 						onClick={likeLoading ? undefined : checkSignInThenLike}
 					>
 						{reaction?.userId && reaction?.userId === user?.id ? (
-							<IconHeartFilled16 color={brandColors.pinky[500]} />
+							<IconBookmarkFilled16
+								color={brandColors.pinky[500]}
+							/>
 						) : (
-							<IconHeartOutline16 />
+							<IconBookmark16 />
 						)}
 					</BadgeButton>
 					<BadgeButton
