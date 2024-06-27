@@ -37,7 +37,6 @@ function useIsSafeEnvironment() {
 					const connection: any = await connect({
 						connector: safeConnector,
 					});
-					console.log({ connection });
 					setIsSafe(!!connection);
 				} catch (error) {
 					console.error('Failed to connect with Gnosis Safe:', error);
