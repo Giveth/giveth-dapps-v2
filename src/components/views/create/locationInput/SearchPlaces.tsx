@@ -1,61 +1,84 @@
-import PlacesAutocomplete from 'react-places-autocomplete';
-import React, { FC } from 'react';
-import styled from 'styled-components';
+import React, { FC, useRef, useState } from 'react';
+import styled, { createGlobalStyle } from 'styled-components';
 import { useIntl } from 'react-intl';
-import { globalLocation } from '@/lib/constants/projects';
-import { Shadow } from '@/components/styled-components/Shadow';
+import {
+	LoadScript,
+	StandaloneSearchBox,
+	Libraries,
+} from '@react-google-maps/api';
 import Input from '@/components/styled-components/Input';
+import config from '@/configuration';
+import { ICoords } from './LocationInput';
+import { globalLocation } from '@/lib/constants/projects';
 
 interface IMyProps {
-	setLocation: (a: string) => void;
 	address: string;
-	onSelect: (a: string) => void;
+	onSelect: (a: string, c: ICoords) => void;
 }
 
-const SearchPlaces: FC<IMyProps> = ({ setLocation, address, onSelect }) => {
+const libraries: Libraries = ['places'];
+
+const SearchPlaces: FC<IMyProps> = ({ address, onSelect }) => {
+	const [searchBox, setSearchBox] =
+		useState<google.maps.places.SearchBox | null>(null);
+	const [, setPlaces] = useState<google.maps.places.PlaceResult[]>([]);
+	const [, setSelectedPlace] =
+		useState<google.maps.places.PlaceResult | null>(null);
+	const mapRef = useRef<google.maps.Map | null>(null);
 	const isGlobal = address === globalLocation;
 	const { formatMessage } = useIntl();
 
+	const onLoadSearchBox = (ref: google.maps.places.SearchBox) => {
+		setSearchBox(ref);
+	};
+
+	// When user pickup some location we must provide full address and cooirdinates to parent component
+	const onPlacesChanged = () => {
+		if (searchBox) {
+			const places = searchBox.getPlaces() || [];
+			setPlaces(places);
+			if (places.length > 0) {
+				setSelectedPlace(places[0]);
+				console.log(places[0]);
+				const location = places[0].geometry?.location;
+				if (location && mapRef.current) {
+					const choosedAddress =
+						places[0].name + ', ' + places[0].formatted_address;
+					onSelect(choosedAddress, {
+						lat: location?.lat(),
+						lng: location?.lng(),
+					});
+					mapRef.current.setCenter(location);
+					mapRef.current.setZoom(15);
+				}
+			}
+		}
+	};
+
 	return (
-		<PlacesAutocomplete
-			value={address}
-			onChange={address => setLocation(address)}
-			onSelect={onSelect}
-		>
-			{({
-				getInputProps,
-				suggestions,
-				getSuggestionItemProps,
-				loading,
-			}) => (
-				<>
+		<div>
+			<GlobalStyles />
+			<LoadScript
+				googleMapsApiKey={config.GOOGLE_MAPS_API_KEY || ''}
+				libraries={libraries}
+			>
+				<StandaloneSearchBox
+					onLoad={onLoadSearchBox}
+					onPlacesChanged={onPlacesChanged}
+				>
 					<InputStyled
-						{...getInputProps({
-							placeholder: isGlobal
+						placeholder={
+							isGlobal
 								? formatMessage({ id: 'label.global_impact' })
 								: formatMessage({
 										id: 'label.search_places...',
-									}),
-						})}
+									})
+						}
 						disabled={isGlobal}
 					/>
-					{(suggestions.length > 0 || loading) && (
-						<DropdownContainer>
-							{loading && <div>Loading...</div>}
-							{!loading &&
-								suggestions.map(suggestion => (
-									<ListContainer
-										{...getSuggestionItemProps(suggestion)}
-										key={suggestion.placeId}
-									>
-										<span>{suggestion.description}</span>
-									</ListContainer>
-								))}
-						</DropdownContainer>
-					)}
-				</>
-			)}
-		</PlacesAutocomplete>
+				</StandaloneSearchBox>
+			</LoadScript>
+		</div>
 	);
 };
 
@@ -63,23 +86,36 @@ const InputStyled = styled(Input)`
 	margin-bottom: 20px;
 `;
 
-const ListContainer = styled.div`
-	padding: 10px 20px;
-	border-radius: 8px;
-	cursor: pointer;
-	&:hover {
-		background: #f5f5f5;
-	}
-`;
+/* Custom styles for the Google Places Autocomplete dropdown */
+const GlobalStyles = createGlobalStyle`
+  .pac-container {
+    background-color: #fff;
+    z-index: 10000000001; /* Ensure it is above other elements */
+    border-radius: 4px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+	border-bottom-left-radius: 10px;
+	border-bottom-right-radius: 10px;
+  }
 
-const DropdownContainer = styled.div`
-	background: white;
-	position: absolute;
-	margin-top: -20px;
-	z-index: 2;
-	box-shadow: ${Shadow.Giv[400]};
-	border-radius: 8px;
-	padding: 15px;
+  .pac-item {
+    padding: 10px 20px;
+    font-size: 14px;
+    color: #333;
+  }
+
+  .pac-item:hover {
+    background-color: #f0f0f0;
+	cursor: pointer;
+  }
+
+  .pac-item-query {
+    font-weight: bold;
+  }
+
+  /* Hide the "Powered by Google" text */
+  .pac-logo::after {
+    display: none !important;
+  }
 `;
 
 export default SearchPlaces;

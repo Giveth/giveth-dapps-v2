@@ -1,11 +1,11 @@
-import React, { Component } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { geocodeByAddress, getLatLng } from 'react-places-autocomplete';
 import { captureException } from '@sentry/nextjs';
 
-import { withScriptjs } from 'react-google-maps';
-import CheckBox from '@/components/Checkbox';
+// import { withScriptjs } from 'react-google-maps';
+// import CheckBox from '@/components/Checkbox';
 import { globalLocation } from '@/lib/constants/projects';
-import GoogleMapComponent from '@/components/views/create/locationInput/GoogleMap';
+// import GoogleMapComponent from '@/components/views/create/locationInput/GoogleMap';
 import SearchPlaces from '@/components/views/create/locationInput/SearchPlaces';
 
 export interface ICoords {
@@ -21,73 +21,124 @@ type MyState = {
 	address: string;
 };
 
-class LocationInput extends Component<MyProps, MyState> {
-	constructor(props: MyProps | Readonly<MyProps>) {
-		super(props);
-		this.state = {
-			coords: { lat: 41.3879, lng: 2.15899 },
-			address: '',
-		};
-	}
+const LocationIndex = ({ defaultLocation, setLocation }: MyProps) => {
+	const [address, setAddress] = useState<string>('');
+	const [coords, setCoords] = useState<ICoords>({
+		lat: 41.3879,
+		lng: 2.15899,
+	});
 
-	componentDidMount() {
-		const { defaultLocation } = this.props;
+	const handleSelect = useCallback(
+		(address: string, coordinates: ICoords) => {
+			setLocation(address);
+			setAddress(address);
+			setCoords(coordinates);
+			// geocodeByAddress(address)
+			// 	.then(results => {
+			// 		return getLatLng(results[0]);
+			// 	})
+			// 	.then((latLng: ICoords) => {
+			// 		setLocation(address);
+			// 		setCoords(latLng);
+			// 	})
+			// 	.catch(error => {
+			// 		console.error('GeocodeByAddress Error: ', error);
+			// 		captureException(error, {
+			// 			tags: {
+			// 				section: 'geocodeByAddress',
+			// 			},
+			// 		});
+			// 	});
+		},
+		[setLocation],
+	);
+
+	useEffect(() => {
 		if (defaultLocation) {
 			if (defaultLocation === globalLocation) {
-				this.setState({ address: globalLocation });
-			} else this.handleSelect(defaultLocation);
+				setAddress(globalLocation);
+			} else {
+				handleSelect(defaultLocation, coords);
+			}
 		}
-	}
+	}, [defaultLocation, coords, handleSelect]);
 
-	handleSelect = (address: string) => {
-		geocodeByAddress(address)
-			.then(results => {
-				return getLatLng(results[0]);
-			})
-			.then((latLng: ICoords) => {
-				this.props.setLocation(address);
-				this.setState({
-					address,
-					coords: latLng,
-				});
-			})
-			.catch(error => {
-				console.error('GeocodeByAddress Error: ', error);
-				captureException(error, {
-					tags: {
-						section: 'geocodeByAddress',
-					},
-				});
-			});
-	};
+	return (
+		<>
+			<SearchPlaces address={address} onSelect={handleSelect} />
+		</>
+	);
+};
 
-	render() {
-		const { coords, address } = this.state;
-		const { setLocation } = this.props;
+export default LocationIndex;
 
-		const isGlobal = address === globalLocation;
+// class LocationInputOLD extends Component<MyProps, MyState> {
+// 	constructor(props: MyProps | Readonly<MyProps>) {
+// 		super(props);
+// 		this.state = {
+// 			coords: { lat: 41.3879, lng: 2.15899 },
+// 			address: '',
+// 		};
+// 	}
 
-		return (
-			<>
-				<SearchPlaces
-					setLocation={address => this.setState({ address })}
-					address={address}
-					onSelect={this.handleSelect}
-				/>
-				<CheckBox
-					//  TODO: FORMAT THIS TO BE A FUNCTIONAL COMPONENT AND ADD USE INTL FOR TRANSLATIONS
-					label='This project has a global impact'
-					checked={isGlobal}
-					onChange={() => {
-						const loc = isGlobal ? '' : globalLocation;
-						this.setState({ address: loc });
-						setLocation(loc);
-					}}
-				/>
-				<GoogleMapComponent coords={coords} />
-			</>
-		);
-	}
-}
+// 	componentDidMount() {
+// 		const { defaultLocation } = this.props;
+// 		if (defaultLocation) {
+// 			if (defaultLocation === globalLocation) {
+// 				this.setState({ address: globalLocation });
+// 			} else this.handleSelect(defaultLocation);
+// 		}
+// 	}
 
-export default withScriptjs(LocationInput);
+// 	handleSelect = (address: string) => {
+// 		geocodeByAddress(address)
+// 			.then(results => {
+// 				return getLatLng(results[0]);
+// 			})
+// 			.then((latLng: ICoords) => {
+// 				this.props.setLocation(address);
+// 				this.setState({
+// 					address,
+// 					coords: latLng,
+// 				});
+// 			})
+// 			.catch(error => {
+// 				console.error('GeocodeByAddress Error: ', error);
+// 				captureException(error, {
+// 					tags: {
+// 						section: 'geocodeByAddress',
+// 					},
+// 				});
+// 			});
+// 	};
+
+// 	render() {
+// 		const { coords, address } = this.state;
+// 		const { setLocation } = this.props;
+
+// 		const isGlobal = address === globalLocation;
+
+// 		return (
+// 			<>
+// 				<SearchPlaces
+// 					setLocation={address => this.setState({ address })}
+// 					address={address}
+// 					onSelect={this.handleSelect}
+// 				/>
+// 				<CheckBox
+// 					//  TODO: FORMAT THIS TO BE A FUNCTIONAL COMPONENT AND ADD USE INTL FOR TRANSLATIONS
+// 					label='This project has a global impact'
+// 					checked={isGlobal}
+// 					onChange={() => {
+// 						const loc = isGlobal ? '' : globalLocation;
+// 						this.setState({ address: loc });
+// 						setLocation(loc);
+// 					}}
+// 				/>
+// 				<GoogleMapComponent coords={coords} />
+// 			</>
+// 		);
+// 	}
+// }
+
+// // withScriptjs(LocationInputOLD);

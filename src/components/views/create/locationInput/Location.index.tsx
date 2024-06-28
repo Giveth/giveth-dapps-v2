@@ -8,7 +8,7 @@ import { InputContainer, Label } from '../Create.sc';
 import config from '@/configuration';
 import { ECreateProjectSections, EInputs } from '../types';
 
-const googleMapURL = `https://maps.googleapis.com/maps/api/js?key=${config.GOOGLE_MAPS_API_KEY}&v=3.exp&libraries=geometry,drawing,places`;
+// const googleMapURL = `https://maps.googleapis.com/maps/api/js?key=${config.GOOGLE_MAPS_API_KEY}&v=3.exp&libraries=geometry,drawing,places`;
 
 interface ILocationIndexProps {
 	setActiveProjectSection: (section: ECreateProjectSections) => void;
@@ -45,8 +45,8 @@ const LocationIndex = ({ setActiveProjectSection }: ILocationIndexProps) => {
 				<LocationInput
 					defaultLocation={defaultLocation}
 					setLocation={handleLocation}
-					googleMapURL={googleMapURL}
-					loadingElement={<MapContainer />}
+					// googleMapURL={googleMapURL}
+					// loadingElement={<MapContainer />}
 				/>
 			</InputContainer>
 		</div>
