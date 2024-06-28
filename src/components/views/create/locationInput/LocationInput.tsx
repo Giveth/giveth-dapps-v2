@@ -1,12 +1,12 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { geocodeByAddress, getLatLng } from 'react-places-autocomplete';
-import { captureException } from '@sentry/nextjs';
-
-// import { withScriptjs } from 'react-google-maps';
-// import CheckBox from '@/components/Checkbox';
+import { LoadScript, Libraries } from '@react-google-maps/api';
 import { globalLocation } from '@/lib/constants/projects';
-// import GoogleMapComponent from '@/components/views/create/locationInput/GoogleMap';
+import config from '@/configuration';
+import GoogleMapComponent from '@/components/views/create/locationInput/GoogleMap';
 import SearchPlaces from '@/components/views/create/locationInput/SearchPlaces';
+import CheckBox from '@/components/Checkbox';
+
+const libraries: Libraries = ['places'];
 
 export interface ICoords {
 	lat: number;
@@ -16,9 +16,24 @@ type MyProps = {
 	defaultLocation?: string;
 	setLocation: (a: string) => void;
 };
-type MyState = {
-	coords: ICoords;
-	address: string;
+
+const getCoordinates = async (address: string): Promise<ICoords | null> => {
+	try {
+		const response = await fetch(
+			`https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(address)}&key=${config.GOOGLE_MAPS_API_KEY || ''}`,
+		);
+		const data = await response.json();
+		if (data.status === 'OK') {
+			const location = data.results[0].geometry.location;
+			return { lat: location.lat, lng: location.lng };
+		} else {
+			console.error('Geocoding API error:', data.status);
+			return null;
+		}
+	} catch (error) {
+		console.error('Geocoding API error:', error);
+		return null;
+	}
 };
 
 const LocationIndex = ({ defaultLocation, setLocation }: MyProps) => {
@@ -28,117 +43,54 @@ const LocationIndex = ({ defaultLocation, setLocation }: MyProps) => {
 		lng: 2.15899,
 	});
 
-	const handleSelect = useCallback(
-		(address: string, coordinates: ICoords) => {
-			setLocation(address);
-			setAddress(address);
-			setCoords(coordinates);
-			// geocodeByAddress(address)
-			// 	.then(results => {
-			// 		return getLatLng(results[0]);
-			// 	})
-			// 	.then((latLng: ICoords) => {
-			// 		setLocation(address);
-			// 		setCoords(latLng);
-			// 	})
-			// 	.catch(error => {
-			// 		console.error('GeocodeByAddress Error: ', error);
-			// 		captureException(error, {
-			// 			tags: {
-			// 				section: 'geocodeByAddress',
-			// 			},
-			// 		});
-			// 	});
-		},
-		[setLocation],
-	);
+	const isGlobal = address === globalLocation;
 
+	// Set user default address if it isn't global location and find coordinates to setup map location
 	useEffect(() => {
 		if (defaultLocation) {
 			if (defaultLocation === globalLocation) {
 				setAddress(globalLocation);
 			} else {
-				handleSelect(defaultLocation, coords);
+				getCoordinates(defaultLocation).then(defaultCoords => {
+					if (defaultCoords) {
+						setCoords(defaultCoords);
+					}
+				});
 			}
 		}
-	}, [defaultLocation, coords, handleSelect]);
+	}, [defaultLocation]);
+
+	// this function we provide to child search input component to get address and coordinates
+	const handleSelect = useCallback(
+		(address: string, coordinates: ICoords) => {
+			setLocation(address);
+			setAddress(address);
+			setCoords(coordinates);
+		},
+		[setLocation],
+	);
 
 	return (
 		<>
-			<SearchPlaces address={address} onSelect={handleSelect} />
+			<LoadScript
+				googleMapsApiKey={config.GOOGLE_MAPS_API_KEY || ''}
+				libraries={libraries}
+			>
+				<SearchPlaces address={address} onSelect={handleSelect} />
+				<CheckBox
+					//  TODO: FORMAT THIS TO BE A FUNCTIONAL COMPONENT AND ADD USE INTL FOR TRANSLATIONS
+					label='This project has a global impact'
+					checked={isGlobal}
+					onChange={() => {
+						const loc = isGlobal ? '' : globalLocation;
+						setAddress(loc);
+						setLocation(loc);
+					}}
+				/>
+				<GoogleMapComponent coords={coords} />
+			</LoadScript>
 		</>
 	);
 };
 
 export default LocationIndex;
-
-// class LocationInputOLD extends Component<MyProps, MyState> {
-// 	constructor(props: MyProps | Readonly<MyProps>) {
-// 		super(props);
-// 		this.state = {
-// 			coords: { lat: 41.3879, lng: 2.15899 },
-// 			address: '',
-// 		};
-// 	}
-
-// 	componentDidMount() {
-// 		const { defaultLocation } = this.props;
-// 		if (defaultLocation) {
-// 			if (defaultLocation === globalLocation) {
-// 				this.setState({ address: globalLocation });
-// 			} else this.handleSelect(defaultLocation);
-// 		}
-// 	}
-
-// 	handleSelect = (address: string) => {
-// 		geocodeByAddress(address)
-// 			.then(results => {
-// 				return getLatLng(results[0]);
-// 			})
-// 			.then((latLng: ICoords) => {
-// 				this.props.setLocation(address);
-// 				this.setState({
-// 					address,
-// 					coords: latLng,
-// 				});
-// 			})
-// 			.catch(error => {
-// 				console.error('GeocodeByAddress Error: ', error);
-// 				captureException(error, {
-// 					tags: {
-// 						section: 'geocodeByAddress',
-// 					},
-// 				});
-// 			});
-// 	};
-
-// 	render() {
-// 		const { coords, address } = this.state;
-// 		const { setLocation } = this.props;
-
-// 		const isGlobal = address === globalLocation;
-
-// 		return (
-// 			<>
-// 				<SearchPlaces
-// 					setLocation={address => this.setState({ address })}
-// 					address={address}
-// 					onSelect={this.handleSelect}
-// 				/>
-// 				<CheckBox
-// 					//  TODO: FORMAT THIS TO BE A FUNCTIONAL COMPONENT AND ADD USE INTL FOR TRANSLATIONS
-// 					label='This project has a global impact'
-// 					checked={isGlobal}
-// 					onChange={() => {
-// 						const loc = isGlobal ? '' : globalLocation;
-// 						this.setState({ address: loc });
-// 						setLocation(loc);
-// 					}}
-// 				/>
-// 				<GoogleMapComponent coords={coords} />
-// 			</>
-// 		);
-// 	}
-// }
-
-// // withScriptjs(LocationInputOLD);

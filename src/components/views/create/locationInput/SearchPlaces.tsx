@@ -1,13 +1,8 @@
-import React, { FC, useRef, useState } from 'react';
+import React, { FC, useState } from 'react';
 import styled, { createGlobalStyle } from 'styled-components';
 import { useIntl } from 'react-intl';
-import {
-	LoadScript,
-	StandaloneSearchBox,
-	Libraries,
-} from '@react-google-maps/api';
+import { StandaloneSearchBox } from '@react-google-maps/api';
 import Input from '@/components/styled-components/Input';
-import config from '@/configuration';
 import { ICoords } from './LocationInput';
 import { globalLocation } from '@/lib/constants/projects';
 
@@ -16,15 +11,12 @@ interface IMyProps {
 	onSelect: (a: string, c: ICoords) => void;
 }
 
-const libraries: Libraries = ['places'];
-
 const SearchPlaces: FC<IMyProps> = ({ address, onSelect }) => {
 	const [searchBox, setSearchBox] =
 		useState<google.maps.places.SearchBox | null>(null);
 	const [, setPlaces] = useState<google.maps.places.PlaceResult[]>([]);
 	const [, setSelectedPlace] =
 		useState<google.maps.places.PlaceResult | null>(null);
-	const mapRef = useRef<google.maps.Map | null>(null);
 	const isGlobal = address === globalLocation;
 	const { formatMessage } = useIntl();
 
@@ -32,53 +24,48 @@ const SearchPlaces: FC<IMyProps> = ({ address, onSelect }) => {
 		setSearchBox(ref);
 	};
 
-	// When user pickup some location we must provide full address and cooirdinates to parent component
+	// When user pickup some location we must provide full address and coordinates to parent component
 	const onPlacesChanged = () => {
 		if (searchBox) {
 			const places = searchBox.getPlaces() || [];
 			setPlaces(places);
 			if (places.length > 0) {
 				setSelectedPlace(places[0]);
-				console.log(places[0]);
 				const location = places[0].geometry?.location;
-				if (location && mapRef.current) {
+				if (location) {
 					const choosedAddress =
 						places[0].name + ', ' + places[0].formatted_address;
+
+					console.log('coord adres', places[0]);
+
 					onSelect(choosedAddress, {
 						lat: location?.lat(),
 						lng: location?.lng(),
 					});
-					mapRef.current.setCenter(location);
-					mapRef.current.setZoom(15);
 				}
 			}
 		}
 	};
 
 	return (
-		<div>
+		<>
 			<GlobalStyles />
-			<LoadScript
-				googleMapsApiKey={config.GOOGLE_MAPS_API_KEY || ''}
-				libraries={libraries}
+			<StandaloneSearchBox
+				onLoad={onLoadSearchBox}
+				onPlacesChanged={onPlacesChanged}
 			>
-				<StandaloneSearchBox
-					onLoad={onLoadSearchBox}
-					onPlacesChanged={onPlacesChanged}
-				>
-					<InputStyled
-						placeholder={
-							isGlobal
-								? formatMessage({ id: 'label.global_impact' })
-								: formatMessage({
-										id: 'label.search_places...',
-									})
-						}
-						disabled={isGlobal}
-					/>
-				</StandaloneSearchBox>
-			</LoadScript>
-		</div>
+				<InputStyled
+					placeholder={
+						isGlobal
+							? formatMessage({ id: 'label.global_impact' })
+							: formatMessage({
+									id: 'label.search_places...',
+								})
+					}
+					disabled={isGlobal}
+				/>
+			</StandaloneSearchBox>
+		</>
 	);
 };
 
