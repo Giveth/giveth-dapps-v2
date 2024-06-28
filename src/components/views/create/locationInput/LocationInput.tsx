@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
+import { useIntl } from 'react-intl';
 import { LoadScript, Libraries } from '@react-google-maps/api';
 import { globalLocation } from '@/lib/constants/projects';
 import config from '@/configuration';
@@ -43,6 +44,7 @@ const LocationIndex = ({ defaultLocation, setLocation }: MyProps) => {
 		lat: 41.3879,
 		lng: 2.15899,
 	});
+	const { formatMessage } = useIntl();
 
 	const isGlobal = address === globalLocation;
 
@@ -79,7 +81,9 @@ const LocationIndex = ({ defaultLocation, setLocation }: MyProps) => {
 			>
 				<SearchPlaces address={address} onSelect={handleSelect} />
 				<CheckBox
-					label='This project has a global impact'
+					label={formatMessage({
+						id: 'label.this_project_has_global_impact',
+					})}
 					checked={isGlobal}
 					onChange={() => {
 						const loc = isGlobal ? '' : globalLocation;
