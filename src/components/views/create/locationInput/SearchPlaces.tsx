@@ -1,4 +1,4 @@
-import React, { FC, useState } from 'react';
+import React, { FC, useEffect, useRef, useState } from 'react';
 import styled, { createGlobalStyle } from 'styled-components';
 import { useIntl } from 'react-intl';
 import { StandaloneSearchBox } from '@react-google-maps/api';
@@ -17,8 +17,19 @@ const SearchPlaces: FC<IMyProps> = ({ address, onSelect }) => {
 	const [, setPlaces] = useState<google.maps.places.PlaceResult[]>([]);
 	const [, setSelectedPlace] =
 		useState<google.maps.places.PlaceResult | null>(null);
-	const isGlobal = address === globalLocation;
+	const [inputValue, setInputValue] = useState<string>(address);
 	const { formatMessage } = useIntl();
+
+	// If it is global address disable search and add default value
+	const searchInputRef = useRef<HTMLInputElement>(null);
+	const isGlobal = address === globalLocation;
+
+	useEffect(() => {
+		if (isGlobal && searchInputRef.current) {
+			searchInputRef.current.value = globalLocation;
+			setInputValue(globalLocation);
+		}
+	}, [isGlobal]);
 
 	const onLoadSearchBox = (ref: google.maps.places.SearchBox) => {
 		setSearchBox(ref);
@@ -35,9 +46,6 @@ const SearchPlaces: FC<IMyProps> = ({ address, onSelect }) => {
 				if (location) {
 					const choosedAddress =
 						places[0].name + ', ' + places[0].formatted_address;
-
-					console.log('coord adres', places[0]);
-
 					onSelect(choosedAddress, {
 						lat: location?.lat(),
 						lng: location?.lng(),
@@ -55,6 +63,7 @@ const SearchPlaces: FC<IMyProps> = ({ address, onSelect }) => {
 				onPlacesChanged={onPlacesChanged}
 			>
 				<InputStyled
+					ref={searchInputRef}
 					placeholder={
 						isGlobal
 							? formatMessage({ id: 'label.global_impact' })
@@ -62,6 +71,7 @@ const SearchPlaces: FC<IMyProps> = ({ address, onSelect }) => {
 									id: 'label.search_places...',
 								})
 					}
+					defaultValue={inputValue}
 					disabled={isGlobal}
 				/>
 			</StandaloneSearchBox>
@@ -73,7 +83,7 @@ const InputStyled = styled(Input)`
 	margin-bottom: 20px;
 `;
 
-/* Custom styles for the Google Places Autocomplete dropdown */
+// Custom styles for the Google Places autocomplete dropdown
 const GlobalStyles = createGlobalStyle`
   .pac-container {
     background-color: #fff;

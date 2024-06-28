@@ -17,6 +17,7 @@ type MyProps = {
 	setLocation: (a: string) => void;
 };
 
+// Get coordinates from address
 const getCoordinates = async (address: string): Promise<ICoords | null> => {
 	try {
 		const response = await fetch(
@@ -45,7 +46,7 @@ const LocationIndex = ({ defaultLocation, setLocation }: MyProps) => {
 
 	const isGlobal = address === globalLocation;
 
-	// Set user default address if it isn't global location and find coordinates to setup map location
+	// Set user default address, if it isn't global location and find coordinates to setup map location
 	useEffect(() => {
 		if (defaultLocation) {
 			if (defaultLocation === globalLocation) {
@@ -60,7 +61,7 @@ const LocationIndex = ({ defaultLocation, setLocation }: MyProps) => {
 		}
 	}, [defaultLocation]);
 
-	// this function we provide to child search input component to get address and coordinates
+	// This function we provide to child search input component to get address and coordinates
 	const handleSelect = useCallback(
 		(address: string, coordinates: ICoords) => {
 			setLocation(address);
@@ -78,7 +79,6 @@ const LocationIndex = ({ defaultLocation, setLocation }: MyProps) => {
 			>
 				<SearchPlaces address={address} onSelect={handleSelect} />
 				<CheckBox
-					//  TODO: FORMAT THIS TO BE A FUNCTIONAL COMPONENT AND ADD USE INTL FOR TRANSLATIONS
 					label='This project has a global impact'
 					checked={isGlobal}
 					onChange={() => {

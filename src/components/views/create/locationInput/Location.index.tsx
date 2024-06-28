@@ -42,8 +42,6 @@ const LocationIndex = ({ setActiveProjectSection }: ILocationIndexProps) => {
 				<LocationInput
 					defaultLocation={defaultLocation}
 					setLocation={handleLocation}
-					// googleMapURL={googleMapURL}
-					// loadingElement={<MapContainer />}
 				/>
 			</InputContainer>
 		</div>
