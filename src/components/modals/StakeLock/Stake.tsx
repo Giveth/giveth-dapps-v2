@@ -167,6 +167,7 @@ const StakeInnerModal: FC<IStakeModalProps> = ({
 	const handlePermit = () => {
 		if (permit) {
 			setPermit(false);
+			setPermitSignature(undefined);
 			setStakeState(StakeState.APPROVE);
 		} else {
 			setPermit(true);

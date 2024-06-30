@@ -247,6 +247,10 @@ const StakeGIVInnerModal: FC<IStakeModalProps> = ({
 											<ToggleSwitch
 												isOn={permit}
 												toggleOnOff={() => {
+													if (permit)
+														setPermitSignature(
+															undefined,
+														);
 													setPermit(!permit);
 												}}
 												label={`${
