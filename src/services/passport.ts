@@ -1,6 +1,10 @@
 import { signMessage } from '@wagmi/core';
 import { client } from '@/apollo/apolloClient';
-import { REFRESH_USER_SCORES } from '@/apollo/gql/gqlPassport';
+import {
+	REFRESH_USER_SCORES,
+	FETCH_MBD_USER_SCORE,
+	SCORE_ACTIVE_QF_DONOR_ADDRESS,
+} from '@/apollo/gql/gqlPassport';
 import config from '@/configuration';
 import { getPassports } from '@/helpers/passport';
 import { getRequest, postRequest } from '@/helpers/requests';
@@ -71,5 +75,39 @@ export const connectPassport = async (account: string, singin: boolean) => {
 			showToastError(error);
 		}
 		return false;
+	}
+};
+
+// get user's address score using the model-based detection endpoint
+export const scoreUserAddress = async (address: `0x${string}` | undefined) => {
+	try {
+		const { data } = await client.query({
+			query: SCORE_ACTIVE_QF_DONOR_ADDRESS,
+			variables: {
+				address: address?.toLowerCase(),
+			},
+			fetchPolicy: 'no-cache',
+		});
+
+		console.log('data', data);
+		return data;
+	} catch (error) {
+		console.log('error', error);
+	}
+};
+
+// fetch user's score stored on DB
+export const fecthMBDScore = async (address: string) => {
+	try {
+		const { data } = await client.query({
+			query: FETCH_MBD_USER_SCORE,
+			variables: {
+				address: address?.toLowerCase(),
+			},
+			fetchPolicy: 'no-cache',
+		});
+		return data;
+	} catch (error) {
+		console.log('error', error);
 	}
 };

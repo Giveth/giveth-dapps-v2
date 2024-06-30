@@ -1,7 +1,11 @@
 import { useCallback, useEffect, useState } from 'react';
 import { useAccount } from 'wagmi';
 import { getPassports } from '@/helpers/passport';
-import { connectPassport, fetchPassportScore } from '@/services/passport';
+import {
+	connectPassport,
+	fetchPassportScore,
+	fecthMBDScore,
+} from '@/services/passport';
 import { IPassportInfo, IQFRound } from '@/apollo/types/types';
 import { getNowUnixMS } from '@/helpers/time';
 import { useIsSafeEnvironment } from '@/hooks/useSafeAutoConnect';
@@ -133,6 +137,27 @@ export const usePassport = () => {
 		[activeQFRound],
 	);
 
+	// TODO: finish this function
+	const fetchUserMBDScore = useCallback(async () => {
+		if (!address) return;
+		setInfo({
+			passportState: EPassportState.LOADING,
+			passportScore: null,
+			currentRound: null,
+		});
+		try {
+			const { scoreUserAddress } = await fecthMBDScore(address);
+			await updateState(scoreUserAddress);
+		} catch (error) {
+			console.log(error);
+			setInfo({
+				passportState: EPassportState.ERROR,
+				passportScore: null,
+				currentRound: null,
+			});
+		}
+	}, [address]);
+
 	const refreshScore = useCallback(async () => {
 		if (!address) return;
 		if (isSafeEnv) {
@@ -236,5 +261,5 @@ export const usePassport = () => {
 		fetchData();
 	}, [address, isUserFullFilled, updateState, user, isSafeEnv]);
 
-	return { info, handleSign, refreshScore };
+	return { info, handleSign, refreshScore, fetchUserMBDScore };
 };

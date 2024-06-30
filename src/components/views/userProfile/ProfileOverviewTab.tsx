@@ -36,7 +36,7 @@ import { getTotalGIVpower } from '@/helpers/givpower';
 import { useProfileContext } from '@/context/profile.context';
 import { useIsSafeEnvironment } from '@/hooks/useSafeAutoConnect';
 import { useGeneralWallet } from '@/providers/generalWalletProvider';
-
+import { QFDonorEligibilityCard } from '@/components/views/userProfile/QFDonorEligibilityCard';
 interface IBtnProps extends IButtonProps {
 	outline?: boolean;
 }
@@ -217,6 +217,7 @@ const ProfileOverviewTab: FC<IUserProfileView> = () => {
 								</PassportLink>
 							</SectionDesc>
 							<PassportCard />
+							<QFDonorEligibilityCard />
 						</Col>
 					</Row>
 				))
