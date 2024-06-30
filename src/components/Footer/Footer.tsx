@@ -122,6 +122,17 @@ const Footer = () => {
 								})}
 							</LinkItem>
 						</Link>
+						<a
+							href={links.FEEDBACK}
+							target='_blank'
+							rel='noreferrer noopener'
+						>
+							<LinkItem color={textColor}>
+								{formatMessage({
+									id: 'label.leave_feedback',
+								})}
+							</LinkItem>
+						</a>
 						<a href={links.RECRUITEE}>
 							<LinkItem color={textColor}>
 								{formatMessage({
