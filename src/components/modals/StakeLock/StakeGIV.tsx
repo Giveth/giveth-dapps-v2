@@ -3,6 +3,7 @@ import { captureException } from '@sentry/nextjs';
 import { ButtonLink, H5, IconExternalLink } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
 import { useAccount } from 'wagmi';
+import { Address } from 'viem';
 import { Modal } from '../Modal';
 import {
 	approveERC20tokenTransfer,
@@ -79,6 +80,7 @@ const StakeGIVInnerModal: FC<IStakeModalProps> = ({
 }) => {
 	const { formatMessage } = useIntl();
 	const [permit, setPermit] = useState<boolean>(false);
+	const [permitSignature, setPermitSignature] = useState<Address>();
 	const [amount, setAmount] = useState(0n);
 	const [txHash, setTxHash] = useState('');
 	const [stakeState, setStakeState] = useState<StakeState>(
@@ -118,15 +120,16 @@ const StakeGIVInnerModal: FC<IStakeModalProps> = ({
 		setStakeState(StakeState.APPROVING);
 		try {
 			if (permit) {
-				const permitSignature = await permitTokens(
+				const _permitSignature = await permitTokens(
 					chainId,
 					address,
 					poolStakingConfig.POOL_ADDRESS,
 					poolStakingConfig.LM_ADDRESS,
 					amount,
 				);
-				if (!permitSignature)
+				if (!_permitSignature)
 					throw new Error('Permit signature failed');
+				setPermitSignature(_permitSignature);
 			} else {
 				const isApproved = await approveERC20tokenTransfer(
 					amount,
@@ -186,6 +189,7 @@ const StakeGIVInnerModal: FC<IStakeModalProps> = ({
 				amount,
 				poolStakingConfig.LM_ADDRESS,
 				chainId,
+				permitSignature,
 			);
 			if (txResponse) {
 				setTxHash(txResponse);

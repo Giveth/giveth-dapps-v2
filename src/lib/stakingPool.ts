@@ -1,6 +1,12 @@
 import { captureException } from '@sentry/nextjs';
 import { signTypedData } from 'wagmi/actions';
-import { Abi, erc20Abi, WriteContractReturnType, parseSignature } from 'viem';
+import {
+	Abi,
+	erc20Abi,
+	WriteContractReturnType,
+	parseSignature,
+	encodeFunctionData,
+} from 'viem';
 import { type Address } from 'viem';
 import BigNumber from 'bignumber.js';
 import { readContract, readContracts, writeContract } from '@wagmi/core';
@@ -409,7 +415,7 @@ export const permitTokens = async (
 	chainId: number,
 	walletAddress: Address,
 	poolAddress: Address,
-	lmAddress: string,
+	lmAddress: Address,
 	amount: bigint,
 ) => {
 	try {
@@ -466,8 +472,7 @@ export const permitTokens = async (
 			types,
 		});
 		const signature = parseSignature(hexSignature);
-		const tx = await writeContract(wagmiConfig, {
-			address: poolAddress,
+		const data = encodeFunctionData({
 			abi: UNI_ABI,
 			functionName: 'permit',
 			args: [
@@ -479,10 +484,8 @@ export const permitTokens = async (
 				signature.r,
 				signature.s,
 			],
-			value: 0n,
 		});
-		const res = await waitForTransaction(tx);
-		return res;
+		return data;
 	} catch (error) {
 		console.error('Error on permitTokens:', error);
 		captureException(error, {
@@ -581,17 +584,27 @@ export const stakeGIV = async (
 	amount: bigint,
 	lmAddress: Address,
 	chainId: number,
+	permitSignature?: Address,
 ): Promise<WriteContractReturnType | undefined> => {
 	if (amount === 0n) return;
 	try {
-		return await writeContract(wagmiConfig, {
-			address: lmAddress,
-			abi: UNIPOOL_GIVPOWER_ABI,
-			chainId,
-			functionName: 'stake',
-			args: [amount],
-			value: 0n,
-		});
+		return permitSignature
+			? await writeContract(wagmiConfig, {
+					address: lmAddress,
+					abi: UNIPOOL_GIVPOWER_ABI,
+					functionName: 'stakeWithPermit',
+					args: [amount, permitSignature],
+					value: 0n,
+					chainId,
+				})
+			: await writeContract(wagmiConfig, {
+					address: lmAddress,
+					abi: UNIPOOL_GIVPOWER_ABI,
+					chainId,
+					functionName: 'stake',
+					args: [amount],
+					value: 0n,
+				});
 	} catch (error) {
 		console.log('Error on stake token:', error);
 		captureException(error, {
