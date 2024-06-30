@@ -1,6 +1,7 @@
 import React, { FC, useEffect, useMemo, useState } from 'react';
 import { captureException } from '@sentry/nextjs';
 import { useAccount } from 'wagmi';
+import { Address } from 'viem';
 import { Modal } from '../Modal';
 import { StakingPoolImages } from '../../StakingPoolImages';
 import {
@@ -72,6 +73,7 @@ const StakeInnerModal: FC<IStakeModalProps> = ({
 	const [amount, setAmount] = useState(0n);
 	const [txHash, setTxHash] = useState('');
 	const [permit, setPermit] = useState<boolean>(false);
+	const [permitSignature, setPermitSignature] = useState<Address>();
 	const [stakeState, setStakeState] = useState<StakeState>(
 		StakeState.APPROVE,
 	);
@@ -122,17 +124,23 @@ const StakeInnerModal: FC<IStakeModalProps> = ({
 		setStakeState(StakeState.STAKING);
 		try {
 			if (permit) {
-				const permitSignature = await permitTokens(
+				const _permitSignature = await permitTokens(
 					chainId,
 					address,
 					poolStakingConfig.POOL_ADDRESS,
 					poolStakingConfig.LM_ADDRESS,
 					amount,
 				);
-				if (!permitSignature)
+				if (!_permitSignature)
 					throw new Error('Permit signature failed');
+				setPermitSignature(_permitSignature);
 			}
-			const txResponse = await stakeTokens(amount, LM_ADDRESS, chainId);
+			const txResponse = await stakeTokens(
+				amount,
+				LM_ADDRESS,
+				chainId,
+				permitSignature,
+			);
 			if (txResponse) {
 				setTxHash(txResponse);
 				setStakeState(StakeState.CONFIRMING);

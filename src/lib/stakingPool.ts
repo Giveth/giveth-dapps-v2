@@ -645,18 +645,28 @@ export const stakeTokens = async (
 	amount: bigint,
 	lmAddress: Address,
 	chainId: number,
+	permitSignature?: Address,
 ): Promise<WriteContractReturnType | undefined> => {
 	if (amount === 0n) return;
 
 	try {
-		return await writeContract(wagmiConfig, {
-			address: lmAddress,
-			chainId,
-			abi: LM_ABI,
-			functionName: 'stake',
-			args: [amount],
-			value: 0n,
-		});
+		return permitSignature
+			? await writeContract(wagmiConfig, {
+					address: lmAddress,
+					abi: LM_ABI,
+					functionName: 'stakeWithPermit',
+					args: [amount, permitSignature],
+					value: 0n,
+					chainId,
+				})
+			: await writeContract(wagmiConfig, {
+					address: lmAddress,
+					chainId,
+					abi: LM_ABI,
+					functionName: 'stake',
+					args: [amount],
+					value: 0n,
+				});
 	} catch (e) {
 		console.error('Error on staking:', e);
 		captureException(e, {
