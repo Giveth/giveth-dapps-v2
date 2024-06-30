@@ -6,7 +6,7 @@ import { useRouter } from 'next/router';
 import { isAddress } from 'viem';
 import { Shadow } from '@/components/styled-components/Shadow';
 import { RecurringDonationCard } from './RecurringDonationCard';
-import CryptoDonation from './CryptoDonation';
+import CryptoDonation from './OneTimeDonation';
 import config from '@/configuration';
 import { useDonateData } from '@/context/donate.context';
 import { ChainType } from '@/types/config';
