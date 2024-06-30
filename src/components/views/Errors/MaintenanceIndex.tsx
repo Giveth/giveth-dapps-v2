@@ -4,6 +4,8 @@ import { useEffect } from 'react';
 import { useIntl } from 'react-intl';
 import Link from 'next/link';
 import Head from 'next/head';
+import { useRouter } from 'next/router';
+import styled from 'styled-components';
 import links from '@/lib/constants/links';
 import givFontLogo from '/public/images/icons/giv_font_logo.svg';
 import twitter from '/public/images/icons/twitter.svg';
@@ -26,10 +28,12 @@ import {
 	showHeaderFooter,
 } from '@/features/general/general.slice';
 import { useAppDispatch } from '@/features/hooks';
+import { GhostButton } from '@/components/styled-components/Button';
 
 const MaintenanceIndex = () => {
 	const dispatch = useAppDispatch();
 	const { formatMessage } = useIntl();
+	const router = useRouter();
 
 	const {
 		TWITTER: twitterLink,
@@ -43,6 +47,13 @@ const MaintenanceIndex = () => {
 			dispatch(showHeaderFooter());
 		};
 	}, [dispatch]);
+
+	// you can bypass maintenance mode by setting bypassMaintenance to true in local storage or
+	// by clicking on transparent button in top left corner
+	const bypassMaintenance = () => {
+		localStorage.setItem('bypassMaintenance', JSON.stringify(true));
+		router.reload();
+	};
 
 	return (
 		<ErrorContainer>
@@ -130,8 +141,25 @@ const MaintenanceIndex = () => {
 					/>
 				</a>
 			</SocialContainer>
+			<HiddenButton
+				onClick={bypassMaintenance}
+				label='bypass maintenance'
+			/>
 		</ErrorContainer>
 	);
 };
 
 export default MaintenanceIndex;
+
+const HiddenButton = styled(GhostButton)`
+	position: absolute;
+	top: 10px;
+	left: 10px;
+	width: 50px;
+	height: 50px;
+	background: transparent;
+	border: none;
+	cursor: pointer;
+	z-index: 1000;
+	text-indent: -9999px;
+`;

@@ -183,6 +183,7 @@ const DonateModal: FC<IDonateModalProps> = props => {
 			setSuccessDonation({
 				txHash: txHashArray,
 				givBackEligible,
+				chainId,
 			});
 		}, 4000);
 	};

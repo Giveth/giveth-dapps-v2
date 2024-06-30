@@ -8,6 +8,7 @@ import {
 } from 'react-share';
 import { IconXSocial24, Lead, neutralColors } from '@giveth/ui-design-system';
 import styled from 'styled-components';
+import Link from 'next/link';
 import { fullPath } from '@/lib/helpers';
 import { IProject } from '@/apollo/types/types';
 import { slugToProjectView } from '@/lib/routeCreators';
@@ -16,6 +17,7 @@ import {
 	ESocialType,
 	shareContentCreator,
 } from '@/lib/constants/shareContent';
+import Warpcast from '../../public/images/icons/social-warpcast.svg';
 
 interface ISocialBox {
 	project: IProject;
@@ -82,6 +84,19 @@ const SocialBox: FC<ISocialBox> = props => {
 							height='44'
 						/>
 					</FacebookShareButton>
+				</SocialItem>
+				<SocialItem $isDonateFooter={isDonateFooter}>
+					<Link
+						href={`https://warpcast.com/~/compose?embeds[]=${projectUrl}&text=${shareTitleTwitter}`}
+						target='_blank'
+					>
+						<Image
+							src={Warpcast}
+							alt='warpcast icon'
+							width={25}
+							height={25}
+						/>
+					</Link>
 				</SocialItem>
 			</SocialItems>
 		</Social>

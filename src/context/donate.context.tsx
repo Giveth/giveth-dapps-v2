@@ -22,6 +22,7 @@ export interface TxHashWithChainType {
 }
 interface ISuccessDonation {
 	txHash: TxHashWithChainType[];
+	chainId: number;
 	givBackEligible?: boolean;
 	excludeFromQF?: boolean;
 	isRecurring?: boolean;

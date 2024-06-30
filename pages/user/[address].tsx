@@ -29,7 +29,7 @@ const UserRoute: FC<IUserRouteProps> = ({ user }) => {
 		user.walletAddress?.toLowerCase() ===
 		userData?.walletAddress?.toLowerCase();
 
-	const userName = getUserName(user, true);
+	const userName = getUserName(user);
 
 	return (
 		<>

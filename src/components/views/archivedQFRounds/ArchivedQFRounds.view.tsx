@@ -5,7 +5,6 @@ import { QFHeader } from './QFHeader';
 import { client } from '@/apollo/apolloClient';
 import { IArchivedQFRound } from '@/apollo/types/types';
 import { ArchivedQFRoundsTable } from './ArchivedQFRoundsTable';
-import { ArchivedQFRoundsMiddleBanner } from './ArchivedQFRoundsMiddleBanner';
 import { FETCH_ARCHIVED_QF_ROUNDS } from '@/apollo/gql/gqlQF';
 import { useArchivedQFRounds } from './archivedQfRounds.context';
 import { EQFRoundsSortBy } from '@/apollo/types/gqlEnums';
@@ -24,6 +23,11 @@ enum EQfArchivedRoundsSort {
 enum EOrderDirection {
 	ASC = 'ASC',
 	DESC = 'DESC',
+}
+
+interface HeaderWrapperProps {
+	$gap: string;
+	$justifyContent: string;
 }
 
 const ITEMS_PER_PAGE = 10;
@@ -106,26 +110,15 @@ export const ArchivedQFRoundsView = () => {
 		<Wrapper>
 			<DefaultQFBanner />
 			<Container>
-				<HeaderWrapper gap='24px' $justifyContent='space-between'>
+				<HeaderWrapper $gap='24px' $justifyContent='space-between'>
 					<QFHeader />
 					<ArchivedQFRoundsSort />
 				</HeaderWrapper>
 
-				<ArchivedQFRoundsTable
-					archivedQFRounds={archivedQFRounds.slice(0, 5)}
-				/>
+				<ArchivedQFRoundsTable archivedQFRounds={archivedQFRounds} />
 				{archivedQFRounds.length == 0 && loading && (
 					<WrappedSpinner size={100} />
 				)}
-			</Container>
-			<ArchivedQFRoundsMiddleBanner />
-			<Container>
-				<ArchivedQFRoundsTable
-					archivedQFRounds={archivedQFRounds.slice(
-						5,
-						archivedQFRounds.length,
-					)}
-				/>
 			</Container>
 			{archivedQFRounds.length > 0 && loading ? (
 				<WrappedSpinner size={100} />
@@ -145,8 +138,9 @@ const Wrapper = styled(Flex)`
 	gap: 40px;
 `;
 
-const HeaderWrapper = styled(Flex)`
+const HeaderWrapper = styled(Flex)<HeaderWrapperProps>`
 	margin-bottom: 24px;
+	gap: ${props => props.$gap};
 `;
 
 const LoadMoreButton = styled(OutlineButton)`

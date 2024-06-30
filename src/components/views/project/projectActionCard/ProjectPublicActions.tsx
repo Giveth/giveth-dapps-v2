@@ -1,16 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import {
-	Button,
 	ButtonLink,
-	IconHeartFilled16,
-	IconHeartOutline16,
 	mediaQueries,
-	neutralColors,
 	semanticColors,
 	IconDonation16,
 	SublineBold,
 	Flex,
+	IconBookmarkFilled16,
+	IconBookmark16,
+	brandColors,
 } from '@giveth/ui-design-system';
 import { captureException } from '@sentry/nextjs';
 import { useIntl } from 'react-intl';
@@ -21,18 +20,16 @@ import ShareModal from '@/components/modals/ShareModal';
 import ShareLikeBadge from '@/components/badges/ShareLikeBadge';
 import { EContentType } from '@/lib/constants/shareContent';
 import { useProjectContext } from '@/context/project.context';
-import { useAppDispatch, useAppSelector } from '@/features/hooks';
+import { useAppSelector } from '@/features/hooks';
 import { isSSRMode, showToastError } from '@/lib/helpers';
 import { useModalCallback } from '@/hooks/useModalCallback';
-import {
-	incrementLikedProjectsCount,
-	decrementLikedProjectsCount,
-} from '@/features/user/user.slice';
-import { likeProject, unlikeProject } from '@/lib/reaction';
+
+import { bookmarkProject, unBookmarkProject } from '@/lib/reaction';
 import { FETCH_PROJECT_REACTION_BY_ID } from '@/apollo/gql/gqlProjects';
 import { client } from '@/apollo/apolloClient';
 import { slugToProjectDonate } from '@/lib/routeCreators';
 import { useAlreadyDonatedToProject } from '@/hooks/useAlreadyDonatedToProject';
+import { BadgeButton } from '@/components/project-card/ProjectCardBadgeButtons';
 
 export const ProjectPublicActions = () => {
 	const [showModal, setShowShareModal] = useState<boolean>(false);
@@ -40,9 +37,6 @@ export const ProjectPublicActions = () => {
 	const project = projectData!;
 	const { slug, id: projectId, verified } = project;
 	const [reaction, setReaction] = useState(project.reaction);
-	const [totalReactions, setTotalReactions] = useState(
-		project.totalReactions,
-	);
 	const { isMobile } = useDetectDevice();
 	const [likeLoading, setLikeLoading] = useState(false);
 	const {
@@ -50,7 +44,6 @@ export const ProjectPublicActions = () => {
 		userData: user,
 		isEnabled,
 	} = useAppSelector(state => state.user);
-	const dispatch = useAppDispatch();
 	const { formatMessage } = useIntl();
 	const { open: openConnectModal } = useWeb3Modal();
 	const alreadyDonated = useAlreadyDonatedToProject(projectData);
@@ -67,9 +60,7 @@ export const ProjectPublicActions = () => {
 						},
 						fetchPolicy: 'no-cache',
 					});
-					const _totalReactions = data?.projectById?.totalReactions;
 					const _reaction = data?.projectById?.reaction;
-					setTotalReactions(_totalReactions);
 					setReaction(_reaction);
 				} catch (e) {
 					showToastError(e);
@@ -92,22 +83,12 @@ export const ProjectPublicActions = () => {
 
 			try {
 				if (!reaction) {
-					const newReaction = await likeProject(projectId);
+					const newReaction = await bookmarkProject(projectId);
 					setReaction(newReaction);
-					if (newReaction) {
-						setTotalReactions(
-							_totalReactions => (_totalReactions || 0) + 1,
-						);
-						dispatch(incrementLikedProjectsCount());
-					}
 				} else if (reaction?.userId === user?.id) {
-					const successful = await unlikeProject(reaction.id);
+					const successful = await unBookmarkProject(reaction.id);
 					if (successful) {
 						setReaction(undefined);
-						setTotalReactions(
-							_totalReactions => (_totalReactions || 1) - 1,
-						);
-						dispatch(decrementLikedProjectsCount());
 					}
 				}
 			} catch (e) {
@@ -149,7 +130,7 @@ export const ProjectPublicActions = () => {
 					</SublineBold>
 				</AlreadyDonatedWrapper>
 			)}
-			<Link href={slugToProjectDonate(slug || '')}>
+			<Link id='Donate_Project' href={slugToProjectDonate(slug || '')}>
 				<DonateButton
 					label={formatMessage({ id: 'label.donate' })}
 					disabled={!isActive}
@@ -158,25 +139,19 @@ export const ProjectPublicActions = () => {
 			</Link>
 			<BadgeWrapper gap='4px'>
 				<ShareLikeBadge
-					type={verified ? 'reward' : 'share'}
 					onClick={() => isActive && setShowShareModal(true)}
 					isSimple={isMobile}
 				/>
-				<StyledButton
-					label={totalReactions.toString()}
-					onClick={() => isActive && checkSignInThenLike()}
-					buttonType='texty-gray'
-					icon={
-						reaction?.userId && reaction?.userId === user?.id ? (
-							<IconHeartFilled16 />
-						) : (
-							<IconHeartOutline16 />
-						)
-					}
-					loading={likeLoading}
-					disabled={likeLoading}
-					size='small'
-				/>
+				<StyledBadgeButton
+					$isLoading={likeLoading}
+					onClick={likeLoading ? undefined : checkSignInThenLike}
+				>
+					{reaction?.userId && reaction?.userId === user?.id ? (
+						<IconBookmarkFilled16 color={brandColors.pinky[500]} />
+					) : (
+						<IconBookmark16 />
+					)}
+				</StyledBadgeButton>
 			</BadgeWrapper>
 			{showModal && slug && (
 				<ShareModal
@@ -216,16 +191,12 @@ const BadgeWrapper = styled(Flex)`
 	justify-content: space-between;
 `;
 
-const StyledButton = styled(Button)`
+const StyledBadgeButton = styled(BadgeButton)`
 	box-shadow: 0px 3px 20px rgba(212, 218, 238, 0.4);
-	flex-direction: row-reverse;
-	gap: 8px;
-	padding: 16px 10px;
-	& > div[loading='1'] > div {
-		left: 0;
-	}
-	color: ${neutralColors.gray[700]};
-	&:hover {
-		color: ${neutralColors.gray[800]};
+	width: 48px;
+	border-radius: 24px;
+	padding: 0 16px;
+	&::after {
+		border-radius: 24px;
 	}
 `;
