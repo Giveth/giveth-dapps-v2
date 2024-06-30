@@ -6,7 +6,7 @@ import { useRouter } from 'next/router';
 import { isAddress } from 'viem';
 import { Shadow } from '@/components/styled-components/Shadow';
 import { RecurringDonationCard } from './RecurringDonationCard';
-import CryptoDonation from './OneTimeDonation';
+import OneTimeDonationCard from './OneTimeDonationCard';
 import config from '@/configuration';
 import { useDonateData } from '@/context/donate.context';
 import { ChainType } from '@/types/config';
@@ -103,7 +103,7 @@ export const DonationCard = () => {
 				<EmptyTab />
 			</Flex>
 			<TabWrapper>
-				{tab === ETabs.ONE_TIME && <CryptoDonation />}
+				{tab === ETabs.ONE_TIME && <OneTimeDonationCard />}
 				{tab === ETabs.RECURRING && <RecurringDonationCard />}
 			</TabWrapper>
 		</DonationCardWrapper>
