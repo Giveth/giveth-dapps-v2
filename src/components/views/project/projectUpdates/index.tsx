@@ -96,7 +96,7 @@ const ProjectUpdates = () => {
 			});
 			return true;
 		} catch (error: any) {
-			console.log({ error });
+			console.error({ error });
 			captureException(error, {
 				tags: {
 					section: 'editProjectUpdate',

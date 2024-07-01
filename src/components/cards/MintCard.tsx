@@ -106,7 +106,7 @@ export const MintCard = () => {
 					maxSupply: _maxSupply || 0,
 				});
 			} catch (error) {
-				console.log('failed to fetch GIversPFP data');
+				console.error('failed to fetch GIversPFP data');
 			}
 		}
 		fetchData();
@@ -125,7 +125,7 @@ export const MintCard = () => {
 				});
 				setBalance(Number(_balanceOf || '0'));
 			} catch (error) {
-				console.log('failed to fetch user balance data');
+				console.error('failed to fetch user balance data');
 			}
 		}
 		fetchData();

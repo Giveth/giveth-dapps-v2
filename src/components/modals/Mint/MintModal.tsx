@@ -75,7 +75,7 @@ export const MintModal: FC<IMintModalProps> = ({
 			}
 		} catch (error) {
 			setStep(MintStep.APPROVE);
-			console.log('error on approve dai', error);
+			console.error('error on approve dai', error);
 		}
 	}
 
@@ -115,7 +115,7 @@ export const MintModal: FC<IMintModalProps> = ({
 			}
 		} catch (error) {
 			setMintStep(EPFPMinSteps.FAILURE);
-			console.log('error on mint', error);
+			console.error('error on mint', error);
 		}
 	}
 

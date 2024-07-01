@@ -146,7 +146,7 @@ export const useCreateEvmDonation = () => {
 				setFailedModalType(EDonationFailedType.NOT_SAVED);
 			}
 		} catch (error) {
-			console.log('Error sending transaction', { error });
+			console.error('Error sending transaction', { error });
 		}
 	};
 
@@ -155,14 +155,14 @@ export const useCreateEvmDonation = () => {
 		donationId: number,
 		setFailedModalType: (type: EDonationFailedType) => void,
 	) => {
-		console.log('name', error.name);
+		console.error('name', error.name);
 		const localTxHash = error.replacement?.hash || error.transactionHash;
 		setTxHash(localTxHash);
 
 		if (error.name === 'TransactionExecutionError') {
 			setFailedModalType(EDonationFailedType.FAILED);
 		} else {
-			console.log('Rejected1', error);
+			console.error('Rejected1', error);
 			setFailedModalType(EDonationFailedType.REJECTED);
 		}
 

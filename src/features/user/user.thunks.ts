@@ -129,7 +129,7 @@ export const signToGetToken = createAsyncThunk(
 							sessionPending = true;
 						}
 					} catch (error) {
-						console.log({ error });
+						console.error({ error });
 					}
 					console.log({
 						activeSafeToken,
@@ -165,7 +165,7 @@ export const signToGetToken = createAsyncThunk(
 						});
 					} catch (error) {
 						// user will close the transaction but it will create anyway
-						console.log({ error });
+						console.error({ error });
 					}
 					// calls the backend to create gnosis safe token
 					console.log({
@@ -203,7 +203,7 @@ export const signToGetToken = createAsyncThunk(
 				return Promise.reject('Signing failed');
 			}
 		} catch (error) {
-			console.log({ error });
+			console.error({ error });
 			return Promise.reject('Signing failed');
 		}
 	},
@@ -234,7 +234,7 @@ export const startChainvineReferral = createAsyncThunk(
 			dispatch(fetchUserByAddress(address));
 			return res?.payload;
 		} catch (error) {
-			console.log({ error });
+			console.error({ error });
 			return Promise.reject('Referral start failed');
 		}
 	},
@@ -250,7 +250,7 @@ export const countReferralClick = createAsyncThunk(
 			);
 			return response?.payload;
 		} catch (error) {
-			console.log({ error });
+			console.error({ error });
 			return Promise.reject('Referral start failed');
 		}
 	},

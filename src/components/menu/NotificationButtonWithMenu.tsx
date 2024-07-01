@@ -64,7 +64,7 @@ export const NotificationButtonWithMenu: FC<IHeaderButtonProps> = ({
 				const res = await fetchNotificationsData({ limit: 4 });
 				if (res?.notifications) setNotifications(res.notifications);
 			} catch (e) {
-				console.log('fetchNotificationsAndSetState error: ', e);
+				console.error('fetchNotificationsAndSetState error: ', e);
 			}
 		};
 		if (NOTIFICATION_ENABLED) {

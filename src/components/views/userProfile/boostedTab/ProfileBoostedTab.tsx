@@ -83,7 +83,7 @@ export const ProfileBoostedTab: FC<IUserProfileView> = () => {
 				setLoading(false);
 				return false;
 			} catch (error) {
-				console.log({ error });
+				console.error({ error });
 				captureException(error, {
 					tags: {
 						section: 'Save manage power boosting',
@@ -122,7 +122,7 @@ export const ProfileBoostedTab: FC<IUserProfileView> = () => {
 				setLoading(false);
 				return false;
 			} catch (error) {
-				console.log({ error });
+				console.error({ error });
 				captureException(error, {
 					tags: {
 						section: 'Save manage power boosting',

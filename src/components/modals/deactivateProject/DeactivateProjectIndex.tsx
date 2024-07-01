@@ -94,7 +94,7 @@ const DeactivateProjectModal: FC<IDeactivateProjectModal> = ({
 			setIsLoading(false);
 		} catch (error) {
 			setIsLoading(false);
-			console.log('deactivation error', { error });
+			console.error('deactivation error', { error });
 		}
 	};
 

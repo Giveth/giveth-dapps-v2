@@ -42,7 +42,7 @@ export const USDInput: FC<IAmountInput> = ({
 		try {
 			temp = parseUnits(value || '0', 6).toString();
 		} catch (error) {
-			console.log('number is not acceptable');
+			console.error('number is not acceptable');
 			captureException(error, {
 				tags: {
 					section: 'USDInput',

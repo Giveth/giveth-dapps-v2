@@ -97,7 +97,7 @@ const PersonalInfo = () => {
 			await sendEmail();
 			setResetMail(false);
 		} catch (error) {
-			console.log('SubmitError', error);
+			console.error('SubmitError', error);
 		} finally {
 			setIsSentMailLoading(false);
 		}

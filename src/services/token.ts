@@ -45,7 +45,7 @@ export const fetchBalance = async (
 			});
 		}
 	} catch (error) {
-		console.log('error on fetchBalance', { error });
+		console.error('error on fetchBalance', { error });
 		return;
 	}
 };

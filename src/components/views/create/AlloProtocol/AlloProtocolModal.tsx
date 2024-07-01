@@ -120,7 +120,7 @@ const AlloProtocolModal: FC<IAlloProtocolModal> = ({
 				}
 				setShowModal(false); // Close the modal
 			} catch (error) {
-				console.log('Error Contract', error);
+				console.error('Error Contract', error);
 			} finally {
 				setIsLoading(false);
 			}

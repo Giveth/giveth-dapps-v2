@@ -40,7 +40,7 @@ const TotalGIVpowerBox = () => {
 					return setTotalGIVpower(total);
 				}
 			} catch (err) {
-				console.log('Error on getGIVpowerOnChain', { err });
+				console.error('Error on getGIVpowerOnChain', { err });
 			}
 			// if we can't get the GIVpower from the contract, we calculate it from the subgraph
 			const { total } = getTotalGIVpower(values);

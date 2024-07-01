@@ -53,7 +53,7 @@ export const getServerSideProps: GetServerSideProps = async props => {
 			},
 		};
 	} catch (error: any) {
-		console.log({ error });
+		console.error({ error });
 		captureException(error, {
 			tags: {
 				section: 'Donate SSR',

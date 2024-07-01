@@ -504,7 +504,7 @@ export const showToastError = (err: any) => {
 		type: ToastType.DANGER,
 		position: 'top-center',
 	});
-	console.log({ err });
+	console.error({ err });
 };
 
 export const calcBiggestUnitDifferenceTime = (_time: string) => {
@@ -607,7 +607,7 @@ export const getUserIPInfo = async () => {
 	return fetch('https://api.db-ip.com/v2/free/self')
 		.then(res => res.json())
 		.catch(err => {
-			console.log('getUserIp error: ', { err });
+			console.error('getUserIp error: ', { err });
 			throw err;
 		});
 };

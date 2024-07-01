@@ -91,7 +91,7 @@ export const DepositSuperToken: FC<IDepositSuperTokenProps> = ({
 				setStep(EModifySuperTokenSteps.APPROVE);
 			}
 		} catch (error) {
-			console.log('error', error);
+			console.error('error', error);
 			setStep(EModifySuperTokenSteps.APPROVE);
 		}
 	};
@@ -150,7 +150,7 @@ export const DepositSuperToken: FC<IDepositSuperTokenProps> = ({
 				showToastError(error);
 				setStep(EModifySuperTokenSteps.DEPOSIT);
 			}
-			console.log('error', error);
+			console.error('error', error);
 		}
 	};
 

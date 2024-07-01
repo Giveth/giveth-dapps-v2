@@ -18,7 +18,7 @@ export function isSolanaAddress(address: string) {
 		const isOnCurve = PublicKey.isOnCurve(publicKey);
 		return typeof isOnCurve === 'boolean';
 	} catch (e) {
-		console.log(e);
+		console.error(e);
 		return false;
 	}
 }

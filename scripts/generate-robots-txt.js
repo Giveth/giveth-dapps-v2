@@ -21,7 +21,7 @@ function generateRobotsTxt() {
 			} public/robots.txt`,
 		);
 	} catch (error) {
-		console.log(`Cannot Generate a public/robots.txt`, error);
+		console.error(`Cannot Generate a public/robots.txt`, error);
 	}
 }
 

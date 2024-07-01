@@ -131,7 +131,7 @@ export const ProjectProvider = ({
 				setIsLoading(false);
 			})
 			.catch((error: unknown) => {
-				console.log('fetchProjectBySlug error: ', error);
+				console.error('fetchProjectBySlug error: ', error);
 				captureException(error, {
 					tags: {
 						section: 'fetchProject',

@@ -68,7 +68,7 @@ const VerificationRoute = () => {
 				setIsProjectLoading(false);
 			})
 			.catch((error: unknown) => {
-				console.log('fetchProjectBySlug error: ', error);
+				console.error('fetchProjectBySlug error: ', error);
 				captureException(error, {
 					tags: {
 						section: 'verificationFetchProjectBySlug',
