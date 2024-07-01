@@ -22,6 +22,7 @@ import {
 import { IProjectAcceptedToken } from '@/apollo/types/gqlTypes';
 import { useTokenPrice } from '@/hooks/useTokenPrice';
 import { formatDonation } from '@/helpers/number';
+import { formatBalance } from '@/lib/helpers';
 
 interface IEstimatedMatchingToast {
 	projectData: IProject;
@@ -94,7 +95,7 @@ const EstimatedMatchingToast: React.FC<IEstimatedMatchingToast> = ({
 				id: 'page.donate.matching_toast.bottom_invalid_p1',
 			}) +
 			' $' +
-			minimumValidUsdValue +
+			formatBalance(minimumValidUsdValue) +
 			' ' +
 			formatMessage({
 				id: 'page.donate.matching_toast.bottom_invalid_p2',

@@ -205,6 +205,10 @@ const bottomSponsors = [
 		image: '/images/banners/qf-round/OctantApp.svg',
 	},
 	{
+		title: '@maearthmedia',
+		image: '/images/banners/qf-round/maearthmedia.svg',
+	},
+	{
 		title: '@RegenToken',
 		image: '/images/banners/qf-round/regenToken.svg',
 	},
