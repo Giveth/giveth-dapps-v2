@@ -190,7 +190,7 @@ const config: EnvConfig = {
 		regenPools: [],
 		uniswapV2Subgraph:
 			process.env.NEXT_PUBLIC_SUBGRAPH_UNISWAP_V2 ||
-			'https://api.thegraph.com/subgraphs/name/uniswap/uniswap-v2?source=giveth',
+			'https://gateway-arbitrum.network.thegraph.com/api/49102048d5822209c7cd189f8e4a51a9/subgraphs/id/EYCKATKGBKLWvSfwvBjzfCBmGwYNdVkduYXVivCsLRFu',
 		regenStreams: [],
 	},
 
@@ -317,7 +317,7 @@ const config: EnvConfig = {
 
 		uniswapV2Subgraph:
 			process.env.NEXT_PUBLIC_SUBGRAPH_HONEYSWAP_V2 ||
-			'https://api.thegraph.com/subgraphs/name/1hive/honeyswap-v2?source=giveth',
+			'https://api.studio.thegraph.com/proxy/40931/honeyswap-gnosis/version/latest',
 
 		regenStreams: [
 			{
