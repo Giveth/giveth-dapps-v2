@@ -2,9 +2,12 @@ import styled from 'styled-components';
 import React, { FC, useCallback, useEffect, useRef, useState } from 'react';
 import { useIntl } from 'react-intl';
 import {
+	B,
 	brandColors,
 	Button,
+	Flex,
 	GLink,
+	IconCaretDown16,
 	neutralColors,
 	semanticColors,
 } from '@giveth/ui-design-system';
@@ -16,14 +19,9 @@ import { PublicKey } from '@solana/web3.js';
 import { useConnection } from '@solana/wallet-adapter-react';
 import { setShowWelcomeModal } from '@/features/modal/modal.slice';
 import { Shadow } from '@/components/styled-components/Shadow';
-import InputBox from '../InputBox';
 import CheckBox from '@/components/Checkbox';
 
-import {
-	donationDecimals,
-	mediaQueries,
-	minDonationAmount,
-} from '@/lib/constants/constants';
+import { donationDecimals, mediaQueries } from '@/lib/constants/constants';
 import { InsufficientFundModal } from '@/components/modals/InsufficientFund';
 import GeminiModal from './GeminiModal';
 import config from '@/configuration';
@@ -60,9 +58,15 @@ import { INetworkIdWithChain } from '../common.types';
 import { wagmiConfig } from '@/wagmiConfigs';
 import DonateModal from './DonateModal';
 import QFModal from './QFModal';
-import TokenPicker from './TokenPicker';
 import EstimatedMatchingToast from '@/components/views/donate/OnTime/EstimatedMatchingToast';
 import TotalDonation from './TotalDonation';
+import {
+	Input,
+	InputWrapper,
+	SelectTokenPlaceHolder,
+	SelectTokenWrapper,
+} from '../Recurring/RecurringDonationCard';
+import { TokenIcon } from '../TokenIcon/TokenIcon';
 
 const POLL_DELAY_TOKENS = config.SUBGRAPH_POLLING_INTERVAL;
 
@@ -98,6 +102,7 @@ const CryptoDonation: FC = () => {
 	const [selectedTokenBalance, setSelectedTokenBalance] = useState(0n);
 	const [customInput, setCustomInput] = useState<any>();
 	const [amountTyped, setAmountTyped] = useState<number>();
+	const [amount, setAmount] = useState(0n);
 	const [inputBoxFocused, setInputBoxFocused] = useState(false);
 	const [geminiModal, setGeminiModal] = useState(false);
 	const [erc20List, setErc20List] = useState<IProjectAcceptedToken[]>();
@@ -118,6 +123,7 @@ const CryptoDonation: FC = () => {
 		noDonationSplit ? 0 : 5,
 	);
 	const [showQFModal, setShowQFModal] = useState(false);
+	const [showSelectTokenModal, setShowSelectTokenModal] = useState(false);
 
 	const { modalCallback: signInThenDonate } = useModalCallback(() =>
 		setShowDonateModal(true),
@@ -243,8 +249,11 @@ const CryptoDonation: FC = () => {
 	}, [selectedToken, isConnected, address, networkId]);
 
 	const checkGIVTokenAvailability = () => {
+		console.log('cheking1');
 		if (orgLabel !== ORGANIZATION.givingBlock) return true;
+		console.log('cheking2');
 		if (selectedToken?.symbol === 'GIV') {
+			console.log('cheking3');
 			setGeminiModal(true);
 			return false;
 		} else {
@@ -431,14 +440,14 @@ const CryptoDonation: FC = () => {
 					}
 				/>
 			)}
-			<InputContainer>
-				{walletChainType && (
-					<SwitchToAcceptedChain
-						acceptedChains={acceptedChains}
-						setShowChangeNetworkModal={setShowChangeNetworkModal}
-					/>
-				)}
-				<SaveGasFees acceptedChains={acceptedChains} />
+			{walletChainType && (
+				<SwitchToAcceptedChain
+					acceptedChains={acceptedChains}
+					setShowChangeNetworkModal={setShowChangeNetworkModal}
+				/>
+			)}
+			<SaveGasFees acceptedChains={acceptedChains} />
+			{/* <InputContainer>
 				<SearchContainer
 					$error={amountError}
 					$focused={inputBoxFocused}
@@ -475,6 +484,7 @@ const CryptoDonation: FC = () => {
 						onChange={val => {
 							const checkGIV = checkGIVTokenAvailability();
 							if (/^0+(?=\d)/.test(String(val))) return;
+							console.log;
 							setAmountError(
 								val !== undefined
 									? val < minDonationAmount
@@ -492,7 +502,37 @@ const CryptoDonation: FC = () => {
 						{userBalance} {tokenSymbol}
 					</AvText>
 				)}
-			</InputContainer>
+			</InputContainer> */}
+			<InputWrapper>
+				<SelectTokenWrapper
+					$alignItems='center'
+					$justifyContent='space-between'
+					onClick={() => setShowSelectTokenModal(true)}
+				>
+					{selectedToken ? (
+						<Flex gap='8px' $alignItems='center'>
+							<TokenIcon
+								symbol={selectedToken.symbol}
+								size={24}
+							/>
+							<B>{selectedToken.symbol}</B>
+						</Flex>
+					) : (
+						<SelectTokenPlaceHolder>
+							{formatMessage({
+								id: 'label.select_token',
+							})}
+						</SelectTokenPlaceHolder>
+					)}
+					<IconCaretDown16 />
+				</SelectTokenWrapper>
+				<Input
+					amount={amount}
+					setAmount={setAmount}
+					disabled={selectedToken === undefined}
+					decimals={selectedToken?.decimals}
+				/>
+			</InputWrapper>
 			{hasActiveQFRound && !isOnEligibleNetworks && walletChainType && (
 				<DonateQFEligibleNetworks />
 			)}

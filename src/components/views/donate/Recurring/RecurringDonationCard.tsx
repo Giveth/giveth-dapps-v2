@@ -811,7 +811,7 @@ export const InputWrapper = styled(Flex)`
 	align-items: center;
 `;
 
-const Input = styled(AmountInput)`
+export const Input = styled(AmountInput)`
 	width: 100%;
 	border-left: 2px solid ${neutralColors.gray[300]};
 	#amount-input {
