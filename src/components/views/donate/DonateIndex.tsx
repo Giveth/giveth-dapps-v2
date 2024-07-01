@@ -67,7 +67,7 @@ const DonateIndex: FC = () => {
 		<>
 			<DonateHeader />
 			<DonateContainer>
-				{alreadyDonated && !isRecurringTab && (
+				{alreadyDonated && (
 					<AlreadyDonatedWrapper>
 						<IconDonation24 />
 						<SublineBold>
