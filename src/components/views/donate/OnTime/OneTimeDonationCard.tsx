@@ -48,7 +48,6 @@ import GIVBackToast from '@/components/views/donate/GIVBackToast';
 import { DonateWrongNetwork } from '@/components/modals/DonateWrongNetwork';
 import { useAppDispatch, useAppSelector } from '@/features/hooks';
 import DonateToGiveth from '@/components/views/donate/DonateToGiveth';
-import TotalDonation from '@/components/views/donate/TotalDonation';
 import SaveGasFees from './SaveGasFees';
 import SwitchToAcceptedChain from '@/components/views/donate/SwitchToAcceptedChain';
 import { useDonateData } from '@/context/donate.context';
@@ -63,6 +62,7 @@ import DonateModal from './DonateModal';
 import QFModal from './QFModal';
 import TokenPicker from './TokenPicker';
 import EstimatedMatchingToast from '@/components/views/donate/OnTime/EstimatedMatchingToast';
+import TotalDonation from './TotalDonation';
 
 const POLL_DELAY_TOKENS = config.SUBGRAPH_POLLING_INTERVAL;
 
