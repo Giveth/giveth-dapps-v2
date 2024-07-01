@@ -46,7 +46,6 @@ const ProfileProjectsTab: FC<IUserProfileView> = () => {
 					orderBy: order.by,
 					direction: order.direction,
 				},
-				fetchPolicy: 'no-cache',
 			});
 			setLoading(false);
 			if (userProjects?.projectsByUserId) {

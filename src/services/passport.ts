@@ -15,7 +15,6 @@ export const fetchPassportScore = async (account: string) => {
 			variables: {
 				address: account?.toLowerCase(),
 			},
-			fetchPolicy: 'no-cache',
 		});
 		return data;
 	} catch (error) {
