@@ -16,9 +16,9 @@ import { PublicKey } from '@solana/web3.js';
 import { useConnection } from '@solana/wallet-adapter-react';
 import { setShowWelcomeModal } from '@/features/modal/modal.slice';
 import { Shadow } from '@/components/styled-components/Shadow';
-import InputBox from './InputBox';
+import InputBox from '../InputBox';
 import CheckBox from '@/components/Checkbox';
-import DonateModal from '@/components/views/donate/DonateModal';
+
 import {
 	donationDecimals,
 	mediaQueries,
@@ -27,7 +27,7 @@ import {
 import { InsufficientFundModal } from '@/components/modals/InsufficientFund';
 import GeminiModal from './GeminiModal';
 import config from '@/configuration';
-import TokenPicker from './TokenPicker';
+
 import InlineToast, { EToastType } from '@/components/toasts/InlineToast';
 import { EProjectStatus } from '@/apollo/types/gqlEnums';
 import { client } from '@/apollo/apolloClient';
@@ -49,18 +49,20 @@ import { DonateWrongNetwork } from '@/components/modals/DonateWrongNetwork';
 import { useAppDispatch, useAppSelector } from '@/features/hooks';
 import DonateToGiveth from '@/components/views/donate/DonateToGiveth';
 import TotalDonation from '@/components/views/donate/TotalDonation';
-import SaveGasFees from '@/components/views/donate/SaveGasFees';
+import SaveGasFees from './SaveGasFees';
 import SwitchToAcceptedChain from '@/components/views/donate/SwitchToAcceptedChain';
 import { useDonateData } from '@/context/donate.context';
 import { useModalCallback } from '@/hooks/useModalCallback';
-import EstimatedMatchingToast from '@/components/views/donate/EstimatedMatchingToast';
 import DonateQFEligibleNetworks from './DonateQFEligibleNetworks';
 import { getActiveRound } from '@/helpers/qf';
-import QFModal from '@/components/views/donate/QFModal';
 import { useGeneralWallet } from '@/providers/generalWalletProvider';
 import { ChainType } from '@/types/config';
-import { INetworkIdWithChain } from './common.types';
+import { INetworkIdWithChain } from '../common.types';
 import { wagmiConfig } from '@/wagmiConfigs';
+import DonateModal from './DonateModal';
+import QFModal from './QFModal';
+import TokenPicker from './TokenPicker';
+import EstimatedMatchingToast from '@/components/views/donate/OnTime/EstimatedMatchingToast';
 
 const POLL_DELAY_TOKENS = config.SUBGRAPH_POLLING_INTERVAL;
 

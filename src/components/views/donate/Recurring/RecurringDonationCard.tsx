@@ -28,12 +28,12 @@ import { AddressZero, ONE_MONTH_SECONDS } from '@/lib/constants/constants';
 import { FlowRateTooltip } from '@/components/GIVeconomyPages/GIVstream.sc';
 import { IconWithTooltip } from '@/components/IconWithToolTip';
 import { SelectTokenModal } from './SelectTokenModal/SelectTokenModal';
-import { TokenIcon } from './TokenIcon/TokenIcon';
+import { TokenIcon } from '../TokenIcon/TokenIcon';
 import { useDonateData } from '@/context/donate.context';
 import { RecurringDonationModal } from './RecurringDonationModal/RecurringDonationModal';
 import { AmountInput } from '@/components/AmountInput/AmountInput';
 import 'rc-slider/assets/index.css';
-import DonateToGiveth from './DonateToGiveth';
+import DonateToGiveth from '../DonateToGiveth';
 import { Spinner } from '@/components/Spinner';
 import InlineToast, { EToastType } from '@/components/toasts/InlineToast';
 import {
@@ -43,18 +43,18 @@ import {
 import { ISuperfluidStream } from '@/types/superFluid';
 import { showToastError, truncateToDecimalPlaces } from '@/lib/helpers';
 import config from '@/configuration';
-import { WrongNetworkLayer } from './WrongNetworkLayer';
+import { WrongNetworkLayer } from '../WrongNetworkLayer';
 import { ModifySuperTokenModal } from './ModifySuperToken/ModifySuperTokenModal';
 import { limitFraction } from '@/helpers/number';
 import CheckBox from '@/components/Checkbox';
-import { CheckBoxContainer } from './OneTimeDonationCard';
+import { CheckBoxContainer } from '../OnTime/OneTimeDonationCard';
 import AlloProtocolFirstDonationModal from './AlloProtocolFirstDonationModal';
 import links from '@/lib/constants/links';
 import Routes from '@/lib/constants/Routes';
 import { useModalCallback } from '@/hooks/useModalCallback';
 import { useAppSelector } from '@/features/hooks';
 import { findAnchorContractAddress } from '@/helpers/superfluid';
-import GIVBackToast from './GIVBackToast';
+import GIVBackToast from '../GIVBackToast';
 
 // These two functions are used to make the slider more user friendly by mapping the slider's value to a new range.
 /**
