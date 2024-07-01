@@ -118,7 +118,7 @@ const config: EnvConfig = {
 
 		subgraphAddress:
 			process.env.NEXT_PUBLIC_SUBGRAPH_MAINNET ||
-			'https://api.thegraph.com/subgraphs/name/giveth/giveth-economy-second-mainnet?source=giveth',
+			'https://gateway-arbitrum.network.thegraph.com/api/720ca27934ee17d259dc2975d9a6d714/subgraphs/id/9QK3vLoWF69TXSenUzQkkLhessaViu4naE58gRyKCxU7',
 		coingeckoChainName: 'ethereum',
 		chainLogo: (logoSize = 24) => <IconEthereum size={logoSize} />,
 
@@ -237,7 +237,7 @@ const config: EnvConfig = {
 		],
 		uniswapV2Subgraph:
 			process.env.NEXT_PUBLIC_SUBGRAPH_UNISWAP_V2 ||
-			'https://api.thegraph.com/subgraphs/name/uniswap/uniswap-v2?source=giveth',
+			'https://gateway-arbitrum.network.thegraph.com/api/49102048d5822209c7cd189f8e4a51a9/subgraphs/id/EYCKATKGBKLWvSfwvBjzfCBmGwYNdVkduYXVivCsLRFu',
 		regenStreams: [
 			{
 				network: MAINNET_NETWORK_NUMBER,
@@ -264,7 +264,7 @@ const config: EnvConfig = {
 
 		subgraphAddress:
 			process.env.NEXT_PUBLIC_SUBGRAPH_GNOSIS ||
-			'https://api.thegraph.com/subgraphs/name/giveth/giveth-economy-second-xdai?source=giveth',
+			'https://gateway-arbitrum.network.thegraph.com/api/720ca27934ee17d259dc2975d9a6d714/subgraphs/id/Bbz1imi78Set7VYKxqwNGZ4dwqJpEUBNYqGsbPPZPh4q',
 		coingeckoChainName: 'xdai',
 		chainLogo: (logoSize = 24) => <IconGnosisChain size={logoSize} />,
 
@@ -375,7 +375,7 @@ const config: EnvConfig = {
 
 		uniswapV2Subgraph:
 			process.env.NEXT_PUBLIC_SUBGRAPH_HONEYSWAP_V2 ||
-			'https://api.thegraph.com/subgraphs/name/1hive/honeyswap-v2?source=giveth',
+			'https://api.studio.thegraph.com/proxy/40931/honeyswap-gnosis/version/latest',
 
 		regenStreams: [
 			{
@@ -413,7 +413,7 @@ const config: EnvConfig = {
 		anchorRegistryAddress: '0x4AAcca72145e1dF2aeC137E1f3C5E3D75DB8b5f3',
 		subgraphAddress:
 			process.env.NEXT_PUBLIC_SUBGRAPH_OPTIMISM ||
-			'https://api.thegraph.com/subgraphs/name/giveth/giveconomy-optimism-mainnet?source=giveth',
+			'https://gateway-arbitrum.network.thegraph.com/api/720ca27934ee17d259dc2975d9a6d714/subgraphs/id/zyoJAUh2eGLEbEkBqESDD497qHLGH1YcKH9PBEMnWjM',
 		GIV_TOKEN_ADDRESS: OPTIMISM_GIV_TOKEN_ADDRESS,
 		GIV_BUY_LINK:
 			'https://velodrome.finance/swap?from=eth&to=0x528cdc92eab044e1e39fe43b9514bfdab4412b98',

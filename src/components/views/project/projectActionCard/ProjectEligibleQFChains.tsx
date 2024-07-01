@@ -22,7 +22,7 @@ const ProjectEligibleQFChains = () => {
 		<Container>
 			<MakeDonationDescription>
 				{formatMessage({ id: 'label.donations_made_on' })}
-				&nbsp; <BoldCaption>{chainsString}</BoldCaption> &nbsp;
+				&nbsp;<BoldCaption>{chainsString}</BoldCaption>&nbsp;
 				{formatMessage({ id: 'label.are_eligible_to_be_matched' })}
 			</MakeDonationDescription>
 		</Container>
