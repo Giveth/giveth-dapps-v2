@@ -10,7 +10,7 @@ import {
 } from '@giveth/ui-design-system';
 import Link from 'next/link';
 import { IArchivedQFRound } from '@/apollo/types/types';
-import { formatDate } from '@/lib/helpers';
+import { formatDate, formatPrice } from '@/lib/helpers';
 import { Shadow } from '@/components/styled-components/Shadow';
 import Routes from '@/lib/constants/Routes';
 import { formatDonation } from '@/helpers/number';
@@ -39,7 +39,7 @@ export const ArchivedQFRoundsTable: FC<ArchivedQFRoundsTableProps> = ({
 						<P>
 							<Flex gap='1px'>
 								{!round.allocatedTokenSymbol && <span>$</span>}
-								<span>{round.allocatedFund}</span>
+								<span>{formatPrice(round.allocatedFund)}</span>
 								{round.allocatedTokenSymbol && (
 									<span>{round.allocatedTokenSymbol}</span>
 								)}
@@ -47,12 +47,11 @@ export const ArchivedQFRoundsTable: FC<ArchivedQFRoundsTableProps> = ({
 						</P>
 						<P>{formatDonation(round.totalDonations, '$') || 0}</P>
 						<P>
-							{/* {round.isDataAnalysisDone ? ( // TODO: uncomment when backend is ready
+							{round.isDataAnalysisDone ? (
 								round.uniqueDonors
 							) : (
 								<AnalysisStatus>Pending</AnalysisStatus>
-							)} */}
-							{round.uniqueDonors}
+							)}
 						</P>
 						<Flex $flexDirection='column'>
 							<P>{formatDate(new Date(round.beginDate))}</P>

@@ -5,7 +5,7 @@ import {
 	UNLIKE_PROJECT_MUTATION,
 } from '@/apollo/gql/gqlProjects';
 
-export const likeProject = async (
+export const bookmarkProject = async (
 	projectId: number | string,
 ): Promise<IReaction | undefined> => {
 	const { data } = await client.mutate({
@@ -18,7 +18,7 @@ export const likeProject = async (
 	return data.likeProject;
 };
 
-export const unlikeProject = async (
+export const unBookmarkProject = async (
 	reactionId: number | string,
 ): Promise<boolean> => {
 	const { data } = await client.mutate({
