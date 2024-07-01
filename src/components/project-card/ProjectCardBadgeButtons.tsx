@@ -1,118 +1,36 @@
-import { FC, useEffect, useState } from 'react';
+import { FC, useState } from 'react';
 import {
 	brandColors,
-	IconHeartFilled16,
-	IconHeartOutline16,
 	IconRocketInSpace,
 	IconShare16,
 	neutralColors,
-	Subline,
 	Flex,
 } from '@giveth/ui-design-system';
 import styled, { css } from 'styled-components';
-import { captureException } from '@sentry/nextjs';
 import { useWeb3Modal } from '@web3modal/wagmi/react';
-import { likeProject, unlikeProject } from '@/lib/reaction';
-import { isSSRMode, showToastError } from '@/lib/helpers';
 import { IProject } from '@/apollo/types/types';
-import { useAppDispatch, useAppSelector } from '@/features/hooks';
-import {
-	decrementLikedProjectsCount,
-	incrementLikedProjectsCount,
-} from '@/features/user/user.slice';
+import { useAppSelector } from '@/features/hooks';
 import { useModalCallback } from '@/hooks/useModalCallback';
 import { EContentType } from '@/lib/constants/shareContent';
 import ShareModal from '../modals/ShareModal';
 import BoostModal from '../modals/Boost/BoostModal';
 
-interface IProjectCardLikeAndShareButtons {
+interface IProjectCardBadgeButtons {
 	project: IProject;
 }
 
-const ProjectCardLikeAndShareButtons: FC<IProjectCardLikeAndShareButtons> = ({
-	project,
-}) => {
+const ProjectCardBadgeButtons: FC<IProjectCardBadgeButtons> = ({ project }) => {
 	const [showShare, setShowShare] = useState(false);
 	const [showBoost, setShowBoost] = useState(false);
-	const { slug, id: projectId, verified } = project;
-	const [reaction, setReaction] = useState(project.reaction);
-	const [totalReactions, setTotalReactions] = useState(
-		project.totalReactions,
-	);
-	const [likeLoading, setLikeLoading] = useState(false);
-	const {
-		isSignedIn,
-		userData: user,
-		isEnabled,
-	} = useAppSelector(state => state.user);
-	const dispatch = useAppDispatch();
+	const { slug, verified } = project;
+	const { isSignedIn, isEnabled } = useAppSelector(state => state.user);
 	const { open: openConnectModal } = useWeb3Modal();
-
-	useEffect(() => {
-		setReaction(project.reaction);
-	}, [project.reaction, user?.id]);
-
-	useEffect(() => {
-		setTotalReactions(project.totalReactions);
-	}, [project.totalReactions]);
-
-	const likeUnlikeProject = async () => {
-		if (projectId) {
-			setLikeLoading(true);
-
-			try {
-				if (!reaction) {
-					const newReaction = await likeProject(projectId);
-					setReaction(newReaction);
-					if (newReaction) {
-						setTotalReactions(
-							_totalReactions => (_totalReactions || 0) + 1,
-						);
-						dispatch(incrementLikedProjectsCount());
-					}
-				} else if (reaction?.userId === user?.id) {
-					const successful = await unlikeProject(reaction.id);
-					if (successful) {
-						setReaction(undefined);
-						setTotalReactions(
-							_totalReactions => (_totalReactions || 1) - 1,
-						);
-						dispatch(decrementLikedProjectsCount());
-					}
-				}
-			} catch (e) {
-				showToastError(e);
-				captureException(e, {
-					tags: {
-						section: 'likeUnlikeProject',
-					},
-				});
-			} finally {
-				setLikeLoading(false);
-			}
-		}
-	};
 
 	const showBoostModal = () => {
 		setShowBoost(true);
 	};
 
 	const { modalCallback: signInThenBoost } = useModalCallback(showBoostModal);
-
-	const { modalCallback: signInThenLike } =
-		useModalCallback(likeUnlikeProject);
-
-	const checkSignInThenLike = () => {
-		if (isSSRMode) return;
-		if (!isEnabled) {
-			openConnectModal?.();
-		} else if (!isSignedIn) {
-			signInThenLike();
-		} else {
-			likeUnlikeProject();
-		}
-	};
-
 	const checkSignInThenBoost = () => {
 		if (!isEnabled) {
 			openConnectModal?.();
@@ -141,19 +59,6 @@ const ProjectCardLikeAndShareButtons: FC<IProjectCardLikeAndShareButtons> = ({
 						</BadgeButton>
 					)}
 					<BadgeButton
-						$isLoading={likeLoading}
-						onClick={likeLoading ? undefined : checkSignInThenLike}
-					>
-						{Number(totalReactions) > 0 && (
-							<Subline>{totalReactions}</Subline>
-						)}
-						{reaction?.userId && reaction?.userId === user?.id ? (
-							<IconHeartFilled16 color={brandColors.pinky[500]} />
-						) : (
-							<IconHeartOutline16 />
-						)}
-					</BadgeButton>
-					<BadgeButton
 						onClick={e => {
 							setShowShare(true);
 						}}
@@ -176,7 +81,7 @@ interface IBadgeButton {
 	$isLoading?: boolean;
 }
 
-const BadgeButton = styled(Flex)<IBadgeButton>`
+export const BadgeButton = styled(Flex)<IBadgeButton>`
 	gap: 3px;
 	padding: 6px 7px;
 	z-index: 2;
@@ -260,4 +165,4 @@ const BadgeWrapper = styled.div`
 	pointer-events: none;
 `;
 
-export default ProjectCardLikeAndShareButtons;
+export default ProjectCardBadgeButtons;

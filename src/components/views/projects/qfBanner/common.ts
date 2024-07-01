@@ -165,6 +165,25 @@ export const Sponsor = styled(Image)`
 	}
 `;
 
+export const MiddleSponsors = styled(Flex)`
+	:nth-child(2) {
+		margin-top: -12px;
+	}
+	:nth-child(3) {
+		margin-top: -12px;
+	}
+`;
+
+export const BottomSponsors = styled(Flex)`
+	padding-top: 16px;
+	:nth-child(2) {
+		margin-top: -12px;
+	}
+	:nth-child(3) {
+		margin-top: -12px;
+	}
+`;
+
 export const SmallerSponsor = styled(Image)`
 	width: 80px;
 	height: 80px;

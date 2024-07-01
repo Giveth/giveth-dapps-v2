@@ -5,7 +5,6 @@ import {
 	brandColors,
 	IconArrowTop,
 	IconArrowBottom,
-	IconHeartOutline16,
 	IconDonation16,
 	neutralColors,
 	IconFlash16,
@@ -71,11 +70,6 @@ const ProjectsSortSelect = () => {
 			label: formatMessage({ id: 'label.oldest' }),
 			value: EProjectsSortBy.OLDEST,
 			icon: <IconArrowBottom size={16} />,
-		},
-		{
-			label: formatMessage({ id: 'label.likes' }),
-			value: EProjectsSortBy.MOST_LIKED,
-			icon: <IconHeartOutline16 />,
 		},
 		{
 			label: capitalizeFirstLetter(
