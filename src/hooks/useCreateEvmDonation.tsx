@@ -77,7 +77,7 @@ export const useCreateEvmDonation = () => {
 				token,
 				draftDonationId,
 				setFailedModalType,
-				useDonationBox
+				useDonationBox,
 			} = props;
 
 			if (isSafeEnv) {
