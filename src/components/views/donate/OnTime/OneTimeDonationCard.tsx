@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import React, { FC, useCallback, useEffect, useRef, useState } from 'react';
+import React, { FC, useEffect, useRef, useState } from 'react';
 import { useIntl } from 'react-intl';
 import {
 	B,
@@ -13,9 +13,7 @@ import {
 } from '@giveth/ui-design-system';
 // @ts-ignore
 import { captureException } from '@sentry/nextjs';
-import { Address, Chain, erc20Abi, formatUnits, parseUnits } from 'viem';
-import { readContract } from '@wagmi/core';
-import { PublicKey } from '@solana/web3.js';
+import { Address, Chain, formatUnits, parseUnits } from 'viem';
 import { useConnection } from '@solana/wallet-adapter-react';
 import { setShowWelcomeModal } from '@/features/modal/modal.slice';
 import { Shadow } from '@/components/styled-components/Shadow';
@@ -30,11 +28,7 @@ import InlineToast, { EToastType } from '@/components/toasts/InlineToast';
 import { EProjectStatus } from '@/apollo/types/gqlEnums';
 import { client } from '@/apollo/apolloClient';
 import { PROJECT_ACCEPTED_TOKENS } from '@/apollo/gql/gqlProjects';
-import {
-	pollEvery,
-	showToastError,
-	truncateToDecimalPlaces,
-} from '@/lib/helpers';
+import { showToastError, truncateToDecimalPlaces } from '@/lib/helpers';
 import {
 	IProjectAcceptedToken,
 	IProjectAcceptedTokensGQL,
@@ -55,7 +49,6 @@ import { getActiveRound } from '@/helpers/qf';
 import { useGeneralWallet } from '@/providers/generalWalletProvider';
 import { ChainType } from '@/types/config';
 import { INetworkIdWithChain } from '../common.types';
-import { wagmiConfig } from '@/wagmiConfigs';
 import DonateModal from './DonateModal';
 import QFModal from './QFModal';
 import EstimatedMatchingToast from '@/components/views/donate/OnTime/EstimatedMatchingToast';
@@ -210,6 +203,7 @@ const CryptoDonation: FC = () => {
 				setShowChangeNetworkModal(true);
 			}
 			const tokens = prepareTokenList(filteredTokens);
+			console.log('tokens', tokens);
 			console.log('tokens', tokens.length);
 			setErc20OriginalList(tokens);
 			setErc20List(tokens);
@@ -218,13 +212,13 @@ const CryptoDonation: FC = () => {
 		}
 	}, [networkId, acceptedTokens, walletChainType, addresses]);
 
-	useEffect(() => {
-		if (isConnected || address) pollToken();
-		else {
-			setSelectedToken(undefined);
-		}
-		return () => clearPoll();
-	}, [selectedToken, isConnected, address, balance]);
+	// useEffect(() => {
+	// 	if (isConnected || address) pollToken();
+	// 	else {
+	// 		setSelectedToken(undefined);
+	// 	}
+	// 	return () => clearPoll();
+	// }, [selectedToken, isConnected, address, balance]);
 
 	useEffect(() => {
 		client
@@ -270,72 +264,72 @@ const CryptoDonation: FC = () => {
 		}
 	};
 
-	const pollToken = useCallback(async () => {
-		clearPoll();
+	// const pollToken = useCallback(async () => {
+	// 	clearPoll();
 
-		if (!selectedToken) {
-			return setSelectedTokenBalance(0n);
-		}
-		// Native token balance is provided by the Web3Provider
-		const _selectedTokenSymbol = selectedToken.symbol.toUpperCase();
-		const nativeCurrency =
-			config.NETWORKS_CONFIG[
-				!walletChainType || walletChainType == ChainType.EVM
-					? networkId
-					: walletChainType
-			]?.nativeCurrency;
+	// 	if (!selectedToken) {
+	// 		return setSelectedTokenBalance(0n);
+	// 	}
+	// 	// Native token balance is provided by the Web3Provider
+	// 	const _selectedTokenSymbol = selectedToken.symbol.toUpperCase();
+	// 	const nativeCurrency =
+	// 		config.NETWORKS_CONFIG[
+	// 			!walletChainType || walletChainType == ChainType.EVM
+	// 				? networkId
+	// 				: walletChainType
+	// 		]?.nativeCurrency;
 
-		if (_selectedTokenSymbol === nativeCurrency?.symbol?.toUpperCase()) {
-			return setSelectedTokenBalance(
-				parseUnits(balance || '0', nativeCurrency.decimals),
-			);
-		}
-		stopPolling.current = pollEvery(
-			() => ({
-				request: async () => {
-					try {
-						if (walletChainType === ChainType.SOLANA) {
-							const splTokenMintAddress = new PublicKey(
-								selectedToken.address,
-							);
-							const tokenAccounts =
-								await solanaConnection.getParsedTokenAccountsByOwner(
-									new PublicKey(address!),
-									{ mint: splTokenMintAddress },
-								);
-							const accountInfo =
-								tokenAccounts.value[0].account.data;
-							const splBalance =
-								accountInfo.parsed.info.tokenAmount.amount;
-							return setSelectedTokenBalance(BigInt(splBalance));
-						}
+	// 	if (_selectedTokenSymbol === nativeCurrency?.symbol?.toUpperCase()) {
+	// 		return setSelectedTokenBalance(
+	// 			parseUnits(balance || '0', nativeCurrency.decimals),
+	// 		);
+	// 	}
+	// 	stopPolling.current = pollEvery(
+	// 		() => ({
+	// 			request: async () => {
+	// 				try {
+	// 					if (walletChainType === ChainType.SOLANA) {
+	// 						const splTokenMintAddress = new PublicKey(
+	// 							selectedToken.address,
+	// 						);
+	// 						const tokenAccounts =
+	// 							await solanaConnection.getParsedTokenAccountsByOwner(
+	// 								new PublicKey(address!),
+	// 								{ mint: splTokenMintAddress },
+	// 							);
+	// 						const accountInfo =
+	// 							tokenAccounts.value[0].account.data;
+	// 						const splBalance =
+	// 							accountInfo.parsed.info.tokenAmount.amount;
+	// 						return setSelectedTokenBalance(BigInt(splBalance));
+	// 					}
 
-						const _balance = await readContract(wagmiConfig, {
-							address: selectedToken.address! as Address,
-							abi: erc20Abi,
-							functionName: 'balanceOf',
-							args: [address as Address],
-						});
-						setSelectedTokenBalance(_balance);
-						return _balance;
-					} catch (e) {
-						captureException(e, {
-							tags: {
-								section: 'Polltoken pollEvery',
-							},
-						});
-						return setSelectedTokenBalance(0n);
-					}
-				},
-				onResult: (_balance: bigint) => {
-					if (_balance && _balance !== selectedTokenBalance) {
-						setSelectedTokenBalance(_balance);
-					}
-				},
-			}),
-			POLL_DELAY_TOKENS,
-		)();
-	}, [address, networkId, tokenSymbol, balance, walletChainType]);
+	// 					const _balance = await readContract(wagmiConfig, {
+	// 						address: selectedToken.address! as Address,
+	// 						abi: erc20Abi,
+	// 						functionName: 'balanceOf',
+	// 						args: [address as Address],
+	// 					});
+	// 					setSelectedTokenBalance(_balance);
+	// 					return _balance;
+	// 				} catch (e) {
+	// 					captureException(e, {
+	// 						tags: {
+	// 							section: 'Polltoken pollEvery',
+	// 						},
+	// 					});
+	// 					return setSelectedTokenBalance(0n);
+	// 				}
+	// 			},
+	// 			onResult: (_balance: bigint) => {
+	// 				if (_balance && _balance !== selectedTokenBalance) {
+	// 					setSelectedTokenBalance(_balance);
+	// 				}
+	// 			},
+	// 		}),
+	// 		POLL_DELAY_TOKENS,
+	// 	)();
+	// }, [address, networkId, tokenSymbol, balance, walletChainType]);
 
 	const handleCustomToken = (i: Address) => {
 		if (!supportCustomTokens) return;
@@ -614,7 +608,10 @@ const CryptoDonation: FC = () => {
 				</div>
 			</CheckBoxContainer>
 			{showSelectTokenModal && (
-				<SelectTokenModal setShowModal={setShowSelectTokenModal} />
+				<SelectTokenModal
+					setShowModal={setShowSelectTokenModal}
+					tokens={erc20List}
+				/>
 			)}
 		</MainContainer>
 	);
