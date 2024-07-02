@@ -1,7 +1,11 @@
 import { useCallback, useEffect, useState } from 'react';
 import { useAccount } from 'wagmi';
 import { getPassports } from '@/helpers/passport';
-import { connectPassport, fetchPassportScore } from '@/services/passport';
+import {
+	connectPassport,
+	fetchPassportScore,
+	fecthMBDScore,
+} from '@/services/passport';
 import { IPassportInfo, IQFRound } from '@/apollo/types/types';
 import { getNowUnixMS } from '@/helpers/time';
 import { useIsSafeEnvironment } from '@/hooks/useSafeAutoConnect';
@@ -99,6 +103,24 @@ export const usePassport = () => {
 						currentRound: activeQFRound,
 					});
 				}
+				if (refreshUserScores.addressMBDScore == null) {
+					return setInfo({
+						passportState: EPassportState.NOT_ELIGIBLE,
+						passportScore: null,
+						currentRound: activeQFRound,
+					});
+				}
+				if (
+					activeQFRound.minimumUserAnalysisScore != null &&
+					refreshUserScores.addressMBDScore >=
+						activeQFRound.minimumUserAnalysisScore
+				) {
+					return setInfo({
+						passportState: EPassportState.ELIGIBLE,
+						passportScore: null,
+						currentRound: activeQFRound,
+					});
+				}
 				if (refreshUserScores.passportScore === null) {
 					return setInfo({
 						passportState: EPassportState.NOT_CREATED,
@@ -132,6 +154,22 @@ export const usePassport = () => {
 		},
 		[activeQFRound],
 	);
+
+	const fetchUserMBDScore = useCallback(async () => {
+		if (!address) return;
+		try {
+			const { fetchUserMBDScore } = await fecthMBDScore(address);
+			if (user) {
+				await updateState({
+					...user,
+					passportScore: fetchUserMBDScore,
+				});
+			}
+		} catch (error) {
+			console.log(error);
+			user && updateState(user);
+		}
+	}, [address, updateState, user]);
 
 	const refreshScore = useCallback(async () => {
 		if (!address) return;
@@ -200,6 +238,7 @@ export const usePassport = () => {
 				currentRound: null,
 			});
 		}
+
 		if (!address) {
 			console.log('******1', address, isUserFullFilled, user);
 			return setInfo({
@@ -212,7 +251,22 @@ export const usePassport = () => {
 		if (!isUserFullFilled) return;
 		console.log('******3', address, isUserFullFilled, user);
 		const fetchData = async () => {
-			if (!user || user.passportScore === null) {
+			const { fetchUserMBDScore } = await fecthMBDScore(address);
+			if (
+				!isArchivedQF &&
+				activeQFRound?.minimumUserAnalysisScore &&
+				fetchUserMBDScore >= activeQFRound?.minimumUserAnalysisScore
+			) {
+				return setInfo({
+					passportState: EPassportState.ELIGIBLE,
+					passportScore: fetchUserMBDScore,
+					currentRound: activeQFRound,
+				});
+			}
+			if (
+				!user ||
+				(user.activeQFMBDScore === null && user.passportScore === null)
+			) {
 				console.log('******4', address, isUserFullFilled, user);
 				console.log('Passport score is null in our database');
 				const passports = getPassports();
@@ -236,5 +290,5 @@ export const usePassport = () => {
 		fetchData();
 	}, [address, isUserFullFilled, updateState, user, isSafeEnv]);
 
-	return { info, handleSign, refreshScore };
+	return { info, handleSign, refreshScore, fetchUserMBDScore };
 };
