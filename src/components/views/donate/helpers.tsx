@@ -61,6 +61,7 @@ export interface ICreateDonation {
 	symbol: string;
 	draftDonationId?: number;
 	setFailedModalType: (type: EDonationFailedType) => void;
+	useDonationBox: boolean;
 }
 
 export const calcDonationShare = (
