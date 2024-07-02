@@ -100,7 +100,6 @@ const DonateModal: FC<IDonateModalProps> = props => {
 				const { data } = await client.query({
 					query: FETCH_GIVETH_PROJECT_BY_ID,
 					variables: { id: config.GIVETH_PROJECT_ID },
-					fetchPolicy: 'cache-first',
 				});
 				setGivethProject(data.projectById);
 				setIsLoadingGivethAddress(false);
