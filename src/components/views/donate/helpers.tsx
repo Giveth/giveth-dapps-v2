@@ -6,13 +6,8 @@ import { truncateToDecimalPlaces } from '@/lib/helpers';
 import { INetworkIdWithChain } from './common.types';
 import { getChainName } from '@/lib/network';
 
-export interface ISelectedToken extends IProjectAcceptedToken {
-	value?: IProjectAcceptedToken;
-	label?: string;
-}
-
 export const prepareTokenList = (tokens: IProjectAcceptedToken[]) => {
-	const _tokens: ISelectedToken[] = [...tokens];
+	const _tokens = [...tokens];
 	_tokens.sort((t1, t2) => {
 		const t1Order = t1.order || MAX_TOKEN_ORDER;
 		const t2Order = t2.order || MAX_TOKEN_ORDER;
@@ -22,13 +17,6 @@ export const prepareTokenList = (tokens: IProjectAcceptedToken[]) => {
 			return t2Name > t1Name ? -1 : 1;
 		}
 		return t2Order > t1Order ? -1 : 1;
-	});
-	_tokens.forEach((token: IProjectAcceptedToken, index: number) => {
-		_tokens[index] = {
-			...token,
-			value: token,
-			label: token.symbol,
-		};
 	});
 	return _tokens;
 };

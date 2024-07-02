@@ -87,12 +87,12 @@ export interface IMeGQL {
 
 export interface IProjectAcceptedToken {
 	id?: string;
+	name: string;
 	symbol: string;
+	decimals: number;
 	networkId: number;
 	address: Address;
 	mainnetAddress?: Address;
-	name: string;
-	decimals: number;
 	isGivbackEligible?: boolean;
 	order: number;
 	chainType?: ChainType;

@@ -18,10 +18,10 @@ import { AmountInput } from '@/components/AmountInput/AmountInput';
 import { FlowRateTooltip } from '@/components/GIVeconomyPages/GIVstream.sc';
 import { IconWithTooltip } from '@/components/IconWithToolTip';
 import { Spinner } from '@/components/Spinner';
-import { TokenIcon } from '../TokenIcon/TokenIcon';
 import { IToken } from '@/types/superFluid';
 import { truncateToDecimalPlaces } from '@/lib/helpers';
 import { findTokenByAddress } from '@/helpers/superfluid';
+import { TokenIcon } from '../../TokenIcon/TokenIcon';
 
 export enum EModifySectionPlace {
 	DEPOSIT = 'deposit',

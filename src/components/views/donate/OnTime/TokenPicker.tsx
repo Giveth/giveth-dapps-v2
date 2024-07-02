@@ -28,7 +28,7 @@ import Select, {
 import { IProjectAcceptedToken } from '@/apollo/types/gqlTypes';
 import { Shadow } from '@/components/styled-components/Shadow';
 import useDetectDevice from '@/hooks/useDetectDevice';
-import { TokenIcon } from './TokenIcon/TokenIcon';
+import { TokenIcon } from '../TokenIcon/TokenIcon';
 
 declare module 'react-select/dist/declarations/src/Select' {
 	export interface Props<

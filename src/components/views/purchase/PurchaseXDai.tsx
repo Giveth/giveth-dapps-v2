@@ -5,10 +5,8 @@ import { useIntl } from 'react-intl';
 import { BigArc } from '@/components/styled-components/Arc';
 import { mediaQueries } from '@/lib/constants/constants';
 import MtpelerinBanner from './MtpelerinBanner';
-import useDetectDevice from '@/hooks/useDetectDevice';
 
 const PurchaseXDai: FC = () => {
-	const { isMobile } = useDetectDevice();
 	const { formatMessage, locale } = useIntl();
 	return (
 		<>

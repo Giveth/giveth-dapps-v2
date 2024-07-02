@@ -1,24 +1,42 @@
 import { Caption, neutralColors, Flex } from '@giveth/ui-design-system';
 import styled from 'styled-components';
-import { type FC } from 'react';
-import { formatUnits } from 'viem';
-import { IToken } from '@/types/superFluid';
+import { useState, type FC } from 'react';
+import { formatUnits, zeroAddress } from 'viem';
+import { useAccount, useBalance } from 'wagmi';
 import { limitFraction } from '@/helpers/number';
-import { TokenIconWithGIVBack } from '../TokenIcon/TokenIconWithGIVBack';
+import { TokenIconWithGIVBack } from '../../TokenIcon/TokenIconWithGIVBack';
+import { IProjectAcceptedToken } from '@/apollo/types/gqlTypes';
+import { useIntersectionObserver } from '@/hooks/useIntersectionObserver';
 
 interface ITokenInfoProps {
-	token: IToken;
-	balance: bigint;
-	disable: boolean;
+	token: IProjectAcceptedToken;
+	hideZeroBalance: boolean;
 	onClick: () => void;
 }
 
 export const TokenInfo: FC<ITokenInfoProps> = ({
 	token,
-	balance,
-	disable,
+	hideZeroBalance,
 	onClick,
 }) => {
+	const [visible, setVisible] = useState(false);
+	const { address } = useAccount();
+	const onVisible = () => {
+		if (!visible) setVisible(true);
+	};
+	const ref = useIntersectionObserver(onVisible, {
+		threshold: 0.1,
+	});
+	const { data: balance } = useBalance({
+		token: token?.address === zeroAddress ? undefined : token?.address,
+		address: address,
+		query: {
+			enabled: visible,
+		},
+	});
+	const disable = balance?.value === 0n;
+
+	if (hideZeroBalance && disable) return;
 	return (
 		<Wrapper
 			gap='16px'
@@ -28,16 +46,12 @@ export const TokenInfo: FC<ITokenInfoProps> = ({
 				if (disable) return;
 				onClick();
 			}}
+			ref={ref}
 		>
 			<TokenIconWithGIVBack
 				showGiveBack
-				symbol={
-					token.isSuperToken
-						? token.underlyingToken?.symbol
-						: token.symbol
-				}
+				symbol={token.symbol}
 				size={32}
-				isSuperToken={!!token.isSuperToken}
 			/>
 			<InfoWrapper $flexDirection='column' $alignItems='flex-start'>
 				<TopRow $justifyContent='space-between'>
@@ -49,14 +63,14 @@ export const TokenInfo: FC<ITokenInfoProps> = ({
 						<Caption $medium>
 							{balance !== undefined
 								? limitFraction(
-										formatUnits(balance, token.decimals),
+										formatUnits(
+											balance.value,
+											token.decimals,
+										),
 										6,
 									)
 								: '--'}
 						</Caption>
-						{token.isSuperToken && (
-							<GrayCaption $medium>{token.symbol}</GrayCaption>
-						)}
 					</Balance>
 				</TopRow>
 			</InfoWrapper>

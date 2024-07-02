@@ -28,12 +28,12 @@ import { AddressZero, ONE_MONTH_SECONDS } from '@/lib/constants/constants';
 import { FlowRateTooltip } from '@/components/GIVeconomyPages/GIVstream.sc';
 import { IconWithTooltip } from '@/components/IconWithToolTip';
 import { SelectTokenModal } from './SelectTokenModal/SelectTokenModal';
-import { TokenIcon } from './TokenIcon/TokenIcon';
+import { TokenIcon } from '../TokenIcon/TokenIcon';
 import { useDonateData } from '@/context/donate.context';
 import { RecurringDonationModal } from './RecurringDonationModal/RecurringDonationModal';
 import { AmountInput } from '@/components/AmountInput/AmountInput';
 import 'rc-slider/assets/index.css';
-import DonateToGiveth from './DonateToGiveth';
+import DonateToGiveth from '../DonateToGiveth';
 import { Spinner } from '@/components/Spinner';
 import InlineToast, { EToastType } from '@/components/toasts/InlineToast';
 import {
@@ -43,18 +43,18 @@ import {
 import { ISuperfluidStream } from '@/types/superFluid';
 import { showToastError, truncateToDecimalPlaces } from '@/lib/helpers';
 import config from '@/configuration';
-import { WrongNetworkLayer } from './WrongNetworkLayer';
+import { WrongNetworkLayer } from '../WrongNetworkLayer';
 import { ModifySuperTokenModal } from './ModifySuperToken/ModifySuperTokenModal';
 import { limitFraction } from '@/helpers/number';
 import CheckBox from '@/components/Checkbox';
-import { CheckBoxContainer } from './CryptoDonation';
+import { CheckBoxContainer } from '../OnTime/OneTimeDonationCard';
 import AlloProtocolFirstDonationModal from './AlloProtocolFirstDonationModal';
 import links from '@/lib/constants/links';
 import Routes from '@/lib/constants/Routes';
 import { useModalCallback } from '@/hooks/useModalCallback';
 import { useAppSelector } from '@/features/hooks';
 import { findAnchorContractAddress } from '@/helpers/superfluid';
-import GIVBackToast from './GIVBackToast';
+import GIVBackToast from '../GIVBackToast';
 
 // These two functions are used to make the slider more user friendly by mapping the slider's value to a new range.
 /**
@@ -87,7 +87,7 @@ export function mapValueInverse(value: number) {
 }
 
 export const RecurringDonationCard = () => {
-	const { project, selectedToken, tokenStreams } = useDonateData();
+	const { project, selectedRecurringToken, tokenStreams } = useDonateData();
 	const isGivethProject = Number(project.id!) === config.GIVETH_PROJECT_ID;
 	const [amount, setAmount] = useState(0n);
 	const [perMonthAmount, setPerMonthAmount] = useState(0n);
@@ -121,20 +121,20 @@ export const RecurringDonationCard = () => {
 		isRefetching,
 	} = useBalance({
 		token:
-			selectedToken?.token.id === AddressZero
+			selectedRecurringToken?.token.id === AddressZero
 				? undefined
-				: selectedToken?.token.id,
+				: selectedRecurringToken?.token.id,
 		address: address,
 	});
 
 	useEffect(() => {
-		if (!selectedToken || !balance) return;
-		if (selectedToken.token.isSuperToken) {
+		if (!selectedRecurringToken || !balance) return;
+		if (selectedRecurringToken.token.isSuperToken) {
 			setAmount(balance.value || 0n);
 		}
-	}, [selectedToken, balance]);
+	}, [selectedRecurringToken, balance]);
 
-	const underlyingToken = selectedToken?.token.underlyingToken;
+	const underlyingToken = selectedRecurringToken?.token.underlyingToken;
 
 	// total means project + giveth
 	const totalPerSec = perMonthAmount / ONE_MONTH_SECONDS;
@@ -142,7 +142,7 @@ export const RecurringDonationCard = () => {
 		(perMonthAmount * BigInt(100 - donationToGiveth)) / 100n;
 	const givethPerMonth = perMonthAmount - projectPerMonth;
 	const tokenBalance = balance?.value;
-	const tokenStream = tokenStreams[selectedToken?.token.id || ''];
+	const tokenStream = tokenStreams[selectedRecurringToken?.token.id || ''];
 
 	const anchorContractAddress = useMemo(
 		() => findAnchorContractAddress(project.anchorContracts),
@@ -188,8 +188,8 @@ export const RecurringDonationCard = () => {
 	useEffect(() => {
 		try {
 			if (
-				!selectedToken ||
-				!selectedToken.balance ||
+				!selectedRecurringToken ||
+				!selectedRecurringToken.balance ||
 				!anchorContractAddress
 			)
 				return;
@@ -199,7 +199,7 @@ export const RecurringDonationCard = () => {
 					address,
 					anchorContractAddress,
 					tokenStreams,
-					selectedToken.token,
+					selectedRecurringToken.token,
 				);
 
 			if (_userStreamOnSelectedToken) {
@@ -214,10 +214,10 @@ export const RecurringDonationCard = () => {
 		} catch (error) {
 			showToastError(error);
 		}
-	}, [selectedToken, address, tokenStreams, anchorContractAddress]);
+	}, [selectedRecurringToken, address, tokenStreams, anchorContractAddress]);
 
 	const isFormInvalid =
-		selectedToken === undefined ||
+		selectedRecurringToken === undefined ||
 		tokenBalance === undefined ||
 		amount === 0n ||
 		perMonthAmount === 0n ||
@@ -279,17 +279,18 @@ export const RecurringDonationCard = () => {
 							$justifyContent='space-between'
 							onClick={() => setShowSelectTokenModal(true)}
 						>
-							{selectedToken ? (
+							{selectedRecurringToken ? (
 								<Flex gap='8px' $alignItems='center'>
 									<TokenIcon
 										symbol={
 											underlyingToken
 												? underlyingToken.symbol
-												: selectedToken.token.symbol
+												: selectedRecurringToken.token
+														.symbol
 										}
 										size={24}
 									/>
-									<B>{selectedToken.token.symbol}</B>
+									<B>{selectedRecurringToken.token.symbol}</B>
 								</Flex>
 							) : (
 								<SelectTokenPlaceHolder>
@@ -300,12 +301,12 @@ export const RecurringDonationCard = () => {
 							)}
 							<IconCaretDown16 />
 						</SelectTokenWrapper>
-						{selectedToken?.token.isSuperToken ? (
+						{selectedRecurringToken?.token.isSuperToken ? (
 							<p>
 								{limitFraction(
 									formatUnits(
 										balance?.value || 0n,
-										selectedToken.token.decimals,
+										selectedRecurringToken.token.decimals,
 									),
 								)}
 							</p>
@@ -313,13 +314,15 @@ export const RecurringDonationCard = () => {
 							<Input
 								amount={amount}
 								setAmount={setAmount}
-								disabled={selectedToken === undefined}
-								decimals={selectedToken?.token.decimals}
+								disabled={selectedRecurringToken === undefined}
+								decimals={
+									selectedRecurringToken?.token.decimals
+								}
 							/>
 						)}
 					</InputWrapper>
-					{!selectedToken?.token.isSuperToken &&
-						selectedToken !== undefined &&
+					{!selectedRecurringToken?.token.isSuperToken &&
+						selectedRecurringToken !== undefined &&
 						balance !== undefined && (
 							<Flex gap='4px'>
 								<GLinkStyled
@@ -402,8 +405,10 @@ export const RecurringDonationCard = () => {
 								amount={perMonthAmount}
 								setAmount={setPerMonthAmount}
 								maxAmount={amount}
-								decimals={selectedToken?.token.decimals || 18}
-								disabled={selectedToken === undefined}
+								decimals={
+									selectedRecurringToken?.token.decimals || 18
+								}
+								disabled={selectedRecurringToken === undefined}
 								className={
 									perMonthAmount > amount ? 'error' : ''
 								}
@@ -431,14 +436,14 @@ export const RecurringDonationCard = () => {
 										? limitFraction(
 												formatUnits(
 													perMonthAmount,
-													selectedToken?.token
-														.decimals || 18,
+													selectedRecurringToken
+														?.token.decimals || 18,
 												),
 											)
 										: 0}
 								</Caption>
 								<Caption $medium>
-									{selectedToken?.token.symbol}
+									{selectedRecurringToken?.token.symbol}
 								</Caption>
 								<Caption>
 									{formatMessage({ id: 'label.per_month' })}
@@ -460,7 +465,8 @@ export const RecurringDonationCard = () => {
 												id: 'label.top_up_your_stream_balance_within',
 											})}
 										</Caption>
-										{selectedToken?.token.isSuperToken && (
+										{selectedRecurringToken?.token
+											.isSuperToken && (
 											<Flex gap='4px'>
 												<Caption $medium>
 													{streamRunOutInMonth.toString()}
@@ -478,7 +484,7 @@ export const RecurringDonationCard = () => {
 									</>
 								)}
 							</Flex>
-							{selectedToken?.token.isSuperToken ? (
+							{selectedRecurringToken?.token.isSuperToken ? (
 								<TopUpStream
 									gap='4px'
 									$alignItems='center'
@@ -547,11 +553,14 @@ export const RecurringDonationCard = () => {
 												formatUnits(
 													totalStreamPerSec *
 														ONE_MONTH_SECONDS,
-													selectedToken?.token
-														.decimals || 18,
+													selectedRecurringToken
+														?.token.decimals || 18,
 												),
 											)}{' '}
-											{selectedToken?.token.symbol}
+											{
+												selectedRecurringToken?.token
+													.symbol
+											}
 										</TotalMonthlyStream>{' '}
 										{formatMessage({
 											id: 'label.monthly_across_all_projects',
@@ -563,7 +572,7 @@ export const RecurringDonationCard = () => {
 					</Flex>
 				)}
 			</RecurringSection>
-			{selectedToken && (
+			{selectedRecurringToken && (
 				<GIVBackToastStyled
 					projectEligible={projectIsGivBackEligible}
 					tokenEligible={true}
@@ -614,14 +623,15 @@ export const RecurringDonationCard = () => {
 											? limitFraction(
 													formatUnits(
 														projectPerMonth,
-														selectedToken?.token
-															.decimals || 18,
+														selectedRecurringToken
+															?.token.decimals ||
+															18,
 													),
 												)
 											: 0}
 									</Caption>
 									<Caption>
-										{selectedToken?.token.symbol}
+										{selectedRecurringToken?.token.symbol}
 									</Caption>
 									<Caption>
 										{formatMessage({ id: 'label.monthly' })}
@@ -650,14 +660,18 @@ export const RecurringDonationCard = () => {
 												? limitFraction(
 														formatUnits(
 															givethPerMonth,
-															selectedToken?.token
+															selectedRecurringToken
+																?.token
 																.decimals || 18,
 														),
 													)
 												: 0}
 										</Caption>
 										<Caption>
-											{selectedToken?.token.symbol}
+											{
+												selectedRecurringToken?.token
+													.symbol
+											}
 										</Caption>
 										<Caption>
 											{formatMessage({
@@ -679,14 +693,15 @@ export const RecurringDonationCard = () => {
 											? limitFraction(
 													formatUnits(
 														perMonthAmount,
-														selectedToken?.token
-															.decimals || 18,
+														selectedRecurringToken
+															?.token.decimals ||
+															18,
 													),
 												)
 											: 0}
 									</Caption>
 									<Caption $medium>
-										{selectedToken?.token.symbol}
+										{selectedRecurringToken?.token.symbol}
 									</Caption>
 									<Caption $medium>
 										{formatMessage({ id: 'label.monthly' })}
@@ -744,11 +759,13 @@ export const RecurringDonationCard = () => {
 					anonymous={anonymous}
 				/>
 			)}
-			{showTopUpModal && selectedToken && (
+			{showTopUpModal && selectedRecurringToken && (
 				<ModifySuperTokenModal
-					tokenStreams={tokenStreams[selectedToken?.token.id || '']}
+					tokenStreams={
+						tokenStreams[selectedRecurringToken?.token.id || '']
+					}
 					setShowModal={setShowTopUpModal}
-					selectedToken={selectedToken?.token!}
+					selectedToken={selectedRecurringToken?.token!}
 					refreshBalance={refetch}
 				/>
 			)}
@@ -804,14 +821,13 @@ export const SelectTokenPlaceHolder = styled(B)`
 export const InputWrapper = styled(Flex)`
 	border: 2px solid ${neutralColors.gray[300]};
 	border-radius: 8px;
-	overflow: hidden;
 	& > * {
 		padding: 13px 16px;
 	}
 	align-items: center;
 `;
 
-const Input = styled(AmountInput)`
+export const Input = styled(AmountInput)`
 	width: 100%;
 	border-left: 2px solid ${neutralColors.gray[300]};
 	#amount-input {
@@ -839,7 +855,7 @@ export const IconWrapper = styled.div`
 	color: ${brandColors.giv[500]};
 `;
 
-const GLinkStyled = styled(GLink)`
+export const GLinkStyled = styled(GLink)`
 	&&:hover {
 		cursor: pointer;
 		text-decoration: underline;

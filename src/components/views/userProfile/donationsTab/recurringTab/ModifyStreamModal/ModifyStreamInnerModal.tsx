@@ -26,7 +26,7 @@ import { ONE_MONTH_SECONDS } from '@/lib/constants/constants';
 import {
 	mapValue,
 	mapValueInverse,
-} from '@/components/views/donate/RecurringDonationCard';
+} from '@/components/views/donate/Recurring/RecurringDonationCard';
 import InlineToast, { EToastType } from '@/components/toasts/InlineToast';
 import { ISuperfluidStream, IToken } from '@/types/superFluid';
 import { ITokenStreams } from '@/context/donate.context';

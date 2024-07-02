@@ -55,7 +55,8 @@ const SelectTokenInnerModal: FC<ISelectTokenModalProps> = ({
 
 	const { formatMessage } = useIntl();
 	const { address } = useAccount();
-	const { tokenStreams, setSelectedToken, project } = useDonateData();
+	const { tokenStreams, setSelectedRecurringToken, project } =
+		useDonateData();
 
 	useEffect(() => {
 		// Ensure we have an address before proceeding
@@ -157,7 +158,7 @@ const SelectTokenInnerModal: FC<ISelectTokenModalProps> = ({
 										balances[token.symbol] === 0n
 									}
 									onClick={() => {
-										setSelectedToken({
+										setSelectedRecurringToken({
 											token,
 											balance: balances[token.symbol],
 										});
@@ -179,7 +180,7 @@ const SelectTokenInnerModal: FC<ISelectTokenModalProps> = ({
 										balances[token.symbol] === 0n
 									}
 									onClick={() => {
-										setSelectedToken({
+										setSelectedRecurringToken({
 											token,
 											balance: balances[token.symbol],
 										});
@@ -220,7 +221,7 @@ const SelectTokenInnerModal: FC<ISelectTokenModalProps> = ({
 										] === 0n
 									}
 									onClick={() => {
-										setSelectedToken({
+										setSelectedRecurringToken({
 											token: token.underlyingToken,
 											balance:
 												balances[

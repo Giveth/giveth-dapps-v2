@@ -5,7 +5,7 @@ import styled from 'styled-components';
 
 import { mediaQueries } from '@/lib/constants/constants';
 // We need to add icon customization on the design system
-import { Button } from '../../styled-components/Button';
+import { Button } from '../../../styled-components/Button';
 import { isSSRMode } from '@/lib/helpers';
 import { Modal } from '@/components/modals/Modal';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
