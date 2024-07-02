@@ -1,5 +1,12 @@
 import styled from 'styled-components';
-import { mediaQueries, neutralColors, Flex } from '@giveth/ui-design-system';
+import {
+	SublineBold,
+	brandColors,
+	mediaQueries,
+	neutralColors,
+	Flex,
+	IconGIVBack24,
+} from '@giveth/ui-design-system';
 import { useState, type FC } from 'react';
 import { useIntl } from 'react-intl';
 import { IModal } from '@/types/common';
@@ -22,6 +29,18 @@ export const SelectTokenModal: FC<ISelectTokenModalProps> = props => {
 			isAnimating={isAnimating}
 			headerTitle='Select a Token'
 			headerTitlePosition='left'
+			footer={
+				<GIVbackWrapper>
+					<Flex gap='8px' $alignItems='center'>
+						<IconGIVBack24 color={brandColors.giv[500]} />
+						<SublineBold>
+							{formatMessage({
+								id: 'label.givbacks_eligible_tokens',
+							})}
+						</SublineBold>
+					</Flex>
+				</GIVbackWrapper>
+			}
 		>
 			<SelectTokenInnerModal {...props} />
 		</Modal>
