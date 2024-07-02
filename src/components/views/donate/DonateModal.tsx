@@ -225,7 +225,7 @@ const DonateModal: FC<IDonateModalProps> = props => {
 						projectId: config.GIVETH_PROJECT_ID,
 						setFailedModalType,
 						symbol: token.symbol,
-						useDonationBox: true
+						useDonationBox: true,
 					})
 						.then(({ txHash: secondHash }) => {
 							if (!secondHash) {
