@@ -67,6 +67,7 @@ import {
 	SelectTokenWrapper,
 } from '../Recurring/RecurringDonationCard';
 import { TokenIcon } from '../TokenIcon/TokenIcon';
+import { SelectTokenModal } from './SelectTokenModal/SelectTokenModal';
 
 const POLL_DELAY_TOKENS = config.SUBGRAPH_POLLING_INTERVAL;
 
@@ -209,6 +210,7 @@ const CryptoDonation: FC = () => {
 				setShowChangeNetworkModal(true);
 			}
 			const tokens = prepareTokenList(filteredTokens);
+			console.log('tokens', tokens.length);
 			setErc20OriginalList(tokens);
 			setErc20List(tokens);
 			setSelectedToken(tokens[0]);
@@ -611,6 +613,9 @@ const CryptoDonation: FC = () => {
 					})}
 				</div>
 			</CheckBoxContainer>
+			{showSelectTokenModal && (
+				<SelectTokenModal setShowModal={setShowSelectTokenModal} />
+			)}
 		</MainContainer>
 	);
 };
