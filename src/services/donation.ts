@@ -72,6 +72,7 @@ const createDonation = async (props: IOnTxHash) => {
 		chainvineReferred,
 		safeTransactionId,
 		draftDonationId,
+		useDonationBox,
 	} = props;
 	const { address, symbol } = token;
 	let donationId = 0;
@@ -91,6 +92,7 @@ const createDonation = async (props: IOnTxHash) => {
 				referrerId: chainvineReferred,
 				safeTransactionId,
 				draftDonationId,
+				useDonationBox,
 			},
 		});
 		donationId = data.createDonation;
