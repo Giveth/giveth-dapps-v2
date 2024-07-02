@@ -225,8 +225,6 @@ const CryptoDonation: FC = () => {
 				setShowChangeNetworkModal(true);
 			}
 			const tokens = prepareTokenList(filteredTokens);
-			console.log('tokens', tokens);
-			console.log('tokens', tokens.length);
 			setErc20OriginalList(tokens);
 			setErc20List(tokens);
 			setTokenIsGivBackEligible(tokens[0]?.isGivbackEligible);
@@ -266,11 +264,8 @@ const CryptoDonation: FC = () => {
 	}, [selectedOneTimeToken, isConnected, address, networkId]);
 
 	const checkGIVTokenAvailability = () => {
-		console.log('cheking1');
 		if (orgLabel !== ORGANIZATION.givingBlock) return true;
-		console.log('cheking2');
 		if (selectedOneTimeToken?.symbol === 'GIV') {
-			console.log('cheking3');
 			setGeminiModal(true);
 			return false;
 		} else {
