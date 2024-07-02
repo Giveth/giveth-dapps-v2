@@ -15,6 +15,7 @@ import { useModalAnimation } from '@/hooks/useModalAnimation';
 import { TokenInfo } from './TokenInfo';
 import { IProjectAcceptedToken } from '@/apollo/types/gqlTypes';
 import CheckBox from '@/components/Checkbox';
+import { useDonateData } from '@/context/donate.context';
 
 export interface ISelectTokenModalProps extends IModal {
 	tokens?: IProjectAcceptedToken[];
@@ -52,6 +53,7 @@ const SelectTokenInnerModal: FC<ISelectTokenModalProps> = ({
 	setShowModal,
 }) => {
 	const [hideZeroBalance, setHideZeroBalance] = useState(false);
+	const { setSelectedOneTimeToken } = useDonateData();
 
 	return (
 		<>
@@ -71,11 +73,7 @@ const SelectTokenInnerModal: FC<ISelectTokenModalProps> = ({
 							token={token}
 							hideZeroBalance={hideZeroBalance}
 							onClick={() => {
-								// setSelectedToken({
-								// 	token: token.underlyingToken,
-								// 	balance:
-								// 		balances[token.underlyingToken.symbol],
-								// });
+								setSelectedOneTimeToken(token);
 								setShowModal(false);
 							}}
 						/>

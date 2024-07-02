@@ -62,8 +62,6 @@ import {
 import { TokenIcon } from '../TokenIcon/TokenIcon';
 import { SelectTokenModal } from './SelectTokenModal/SelectTokenModal';
 
-const POLL_DELAY_TOKENS = config.SUBGRAPH_POLLING_INTERVAL;
-
 const CryptoDonation: FC = () => {
 	const {
 		chain,
@@ -76,7 +74,12 @@ const CryptoDonation: FC = () => {
 	const { formatMessage } = useIntl();
 	const { isSignedIn } = useAppSelector(state => state.user);
 
-	const { project, hasActiveQFRound } = useDonateData();
+	const {
+		project,
+		hasActiveQFRound,
+		selectedOneTimeToken,
+		setSelectedOneTimeToken,
+	} = useDonateData();
 	const dispatch = useAppDispatch();
 
 	const {
@@ -92,8 +95,6 @@ const CryptoDonation: FC = () => {
 	const isActive = status?.name === EProjectStatus.ACTIVE;
 	const noDonationSplit = Number(projectId!) === config.GIVETH_PROJECT_ID;
 
-	const [selectedToken, setSelectedToken] = useState<IProjectAcceptedToken>();
-	const [selectedTokenBalance, setSelectedTokenBalance] = useState(0n);
 	const [customInput, setCustomInput] = useState<any>();
 	const [amountTyped, setAmountTyped] = useState<number>();
 	const [amount, setAmount] = useState(0n);
@@ -123,8 +124,8 @@ const CryptoDonation: FC = () => {
 		setShowDonateModal(true),
 	);
 	const stopPolling = useRef<any>(null);
-	const tokenSymbol = selectedToken?.symbol;
-	const tokenDecimals = selectedToken?.decimals || 18;
+	const tokenSymbol = selectedOneTimeToken?.symbol;
+	const tokenDecimals = selectedOneTimeToken?.decimals || 18;
 	const projectIsGivBackEligible = !!verified;
 	const { activeStartedRound } = getActiveRound(project.qfRounds);
 	const networkId = (chain as Chain)?.id;
@@ -207,7 +208,6 @@ const CryptoDonation: FC = () => {
 			console.log('tokens', tokens.length);
 			setErc20OriginalList(tokens);
 			setErc20List(tokens);
-			setSelectedToken(tokens[0]);
 			setTokenIsGivBackEligible(tokens[0]?.isGivbackEligible);
 		}
 	}, [networkId, acceptedTokens, walletChainType, addresses]);
@@ -215,10 +215,10 @@ const CryptoDonation: FC = () => {
 	// useEffect(() => {
 	// 	if (isConnected || address) pollToken();
 	// 	else {
-	// 		setSelectedToken(undefined);
+	// 		setSelectedOneTimeToken(undefined);
 	// 	}
 	// 	return () => clearPoll();
-	// }, [selectedToken, isConnected, address, balance]);
+	// }, [selectedOneTimeToken, isConnected, address, balance]);
 
 	useEffect(() => {
 		client
@@ -242,13 +242,13 @@ const CryptoDonation: FC = () => {
 
 	useEffect(() => {
 		setAmountTyped(undefined);
-	}, [selectedToken, isConnected, address, networkId]);
+	}, [selectedOneTimeToken, isConnected, address, networkId]);
 
 	const checkGIVTokenAvailability = () => {
 		console.log('cheking1');
 		if (orgLabel !== ORGANIZATION.givingBlock) return true;
 		console.log('cheking2');
-		if (selectedToken?.symbol === 'GIV') {
+		if (selectedOneTimeToken?.symbol === 'GIV') {
 			console.log('cheking3');
 			setGeminiModal(true);
 			return false;
@@ -257,21 +257,23 @@ const CryptoDonation: FC = () => {
 		}
 	};
 
-	const clearPoll = () => {
-		if (stopPolling.current) {
-			stopPolling.current();
-			stopPolling.current = undefined;
-		}
-	};
+	const selectedTokenBalance = walletChainType == ChainType.EVM ? 0n : 0n;
+
+	// const clearPoll = () => {
+	// 	if (stopPolling.current) {
+	// 		stopPolling.current();
+	// 		stopPolling.current = undefined;
+	// 	}
+	// };
 
 	// const pollToken = useCallback(async () => {
 	// 	clearPoll();
 
-	// 	if (!selectedToken) {
+	// 	if (!selectedOneTimeToken) {
 	// 		return setSelectedTokenBalance(0n);
 	// 	}
 	// 	// Native token balance is provided by the Web3Provider
-	// 	const _selectedTokenSymbol = selectedToken.symbol.toUpperCase();
+	// 	const _selectedTokenSymbol = selectedOneTimeToken.symbol.toUpperCase();
 	// 	const nativeCurrency =
 	// 		config.NETWORKS_CONFIG[
 	// 			!walletChainType || walletChainType == ChainType.EVM
@@ -290,7 +292,7 @@ const CryptoDonation: FC = () => {
 	// 				try {
 	// 					if (walletChainType === ChainType.SOLANA) {
 	// 						const splTokenMintAddress = new PublicKey(
-	// 							selectedToken.address,
+	// 							selectedOneTimeToken.address,
 	// 						);
 	// 						const tokenAccounts =
 	// 							await solanaConnection.getParsedTokenAccountsByOwner(
@@ -305,7 +307,7 @@ const CryptoDonation: FC = () => {
 	// 					}
 
 	// 					const _balance = await readContract(wagmiConfig, {
-	// 						address: selectedToken.address! as Address,
+	// 						address: selectedOneTimeToken.address! as Address,
 	// 						abi: erc20Abi,
 	// 						functionName: 'balanceOf',
 	// 						args: [address as Address],
@@ -377,7 +379,7 @@ const CryptoDonation: FC = () => {
 		if (
 			hasActiveQFRound &&
 			!isOnEligibleNetworks &&
-			selectedToken?.chainType === ChainType.EVM
+			selectedOneTimeToken?.chainType === ChainType.EVM
 		) {
 			setShowQFModal(true);
 		} else if (!isSignedIn) {
@@ -394,7 +396,7 @@ const CryptoDonation: FC = () => {
 	const setMaxDonation = () => setAmountTyped(userBalance);
 
 	const donationDisabled =
-		!isActive || !amountTyped || !selectedToken || amountError;
+		!isActive || !amountTyped || !selectedOneTimeToken || amountError;
 
 	const donateWithoutMatching = () => {
 		if (isSignedIn) {
@@ -424,10 +426,10 @@ const CryptoDonation: FC = () => {
 					setShowModal={setShowInsufficientModal}
 				/>
 			)}
-			{showDonateModal && selectedToken && amountTyped && (
+			{showDonateModal && selectedOneTimeToken && amountTyped && (
 				<DonateModal
 					setShowModal={setShowDonateModal}
-					token={selectedToken}
+					token={selectedOneTimeToken}
 					amount={amountTyped}
 					donationToGiveth={donationToGiveth}
 					anonymous={anonymous}
@@ -451,10 +453,10 @@ const CryptoDonation: FC = () => {
 					<DropdownContainer>
 						<TokenPicker
 							tokenList={erc20List}
-							selectedToken={selectedToken}
+							selectedOneTimeToken={selectedOneTimeToken}
 							inputValue={customInput}
 							onChange={(i: IProjectAcceptedToken) => {
-								setSelectedToken(i);
+								setSelectedOneTimeToken(i);
 								setCustomInput('');
 								setErc20List(erc20OriginalList);
 								setTokenIsGivBackEligible(i.isGivbackEligible);
@@ -492,7 +494,7 @@ const CryptoDonation: FC = () => {
 						disabled={!isConnected}
 					/>
 				</SearchContainer>
-				{selectedToken && (
+				{selectedOneTimeToken && (
 					<AvText onClick={setMaxDonation}>
 						{formatMessage({ id: 'label.available' })}:{' '}
 						{userBalance} {tokenSymbol}
@@ -505,13 +507,13 @@ const CryptoDonation: FC = () => {
 					$justifyContent='space-between'
 					onClick={() => setShowSelectTokenModal(true)}
 				>
-					{selectedToken ? (
+					{selectedOneTimeToken ? (
 						<Flex gap='8px' $alignItems='center'>
 							<TokenIcon
-								symbol={selectedToken.symbol}
+								symbol={selectedOneTimeToken.symbol}
 								size={24}
 							/>
-							<B>{selectedToken.symbol}</B>
+							<B>{selectedOneTimeToken.symbol}</B>
 						</Flex>
 					) : (
 						<SelectTokenPlaceHolder>
@@ -525,8 +527,8 @@ const CryptoDonation: FC = () => {
 				<Input
 					amount={amount}
 					setAmount={setAmount}
-					disabled={selectedToken === undefined}
-					decimals={selectedToken?.decimals}
+					disabled={selectedOneTimeToken === undefined}
+					decimals={selectedOneTimeToken?.decimals}
 				/>
 			</InputWrapper>
 			{hasActiveQFRound && !isOnEligibleNetworks && walletChainType && (
@@ -535,7 +537,7 @@ const CryptoDonation: FC = () => {
 			{hasActiveQFRound && isOnEligibleNetworks && (
 				<EstimatedMatchingToast
 					projectData={project}
-					token={selectedToken}
+					token={selectedOneTimeToken}
 					amountTyped={amountTyped}
 				/>
 			)}
@@ -550,7 +552,7 @@ const CryptoDonation: FC = () => {
 			) : (
 				<br />
 			)}
-			{selectedToken && (
+			{selectedOneTimeToken && (
 				<GIVBackToast
 					projectEligible={projectIsGivBackEligible}
 					tokenEligible={tokenIsGivBackEligible}
@@ -561,7 +563,7 @@ const CryptoDonation: FC = () => {
 					donationToGiveth={donationToGiveth}
 					totalDonation={amountTyped}
 					projectTitle={projectTitle}
-					token={selectedToken}
+					token={selectedOneTimeToken}
 					isActive={!donationDisabled}
 				/>
 			) : (
