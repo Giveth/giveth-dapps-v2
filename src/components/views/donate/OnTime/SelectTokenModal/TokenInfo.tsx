@@ -1,11 +1,12 @@
 import { Caption, neutralColors, Flex } from '@giveth/ui-design-system';
 import styled from 'styled-components';
-import { type FC } from 'react';
+import { useState, type FC } from 'react';
 import { formatUnits, zeroAddress } from 'viem';
 import { useAccount, useBalance } from 'wagmi';
 import { limitFraction } from '@/helpers/number';
 import { TokenIconWithGIVBack } from '../../TokenIcon/TokenIconWithGIVBack';
 import { IProjectAcceptedToken } from '@/apollo/types/gqlTypes';
+import { useIntersectionObserver } from '@/hooks/useIntersectionObserver';
 
 interface ITokenInfoProps {
 	token: IProjectAcceptedToken;
@@ -13,12 +14,23 @@ interface ITokenInfoProps {
 }
 
 export const TokenInfo: FC<ITokenInfoProps> = ({ token, onClick }) => {
+	const [visible, setVisible] = useState(false);
 	const { address } = useAccount();
+	const onVisible = () => {
+		if (!visible) setVisible(true);
+	};
+	const ref = useIntersectionObserver(onVisible, {
+		threshold: 0.1,
+	});
 	const { data: balance } = useBalance({
 		token: token?.address === zeroAddress ? undefined : token?.address,
 		address: address,
+		query: {
+			enabled: visible,
+		},
 	});
 	const disable = balance?.value === 0n;
+
 	return (
 		<Wrapper
 			gap='16px'
@@ -28,6 +40,7 @@ export const TokenInfo: FC<ITokenInfoProps> = ({ token, onClick }) => {
 				if (disable) return;
 				onClick();
 			}}
+			ref={ref}
 		>
 			<TokenIconWithGIVBack
 				showGiveBack
