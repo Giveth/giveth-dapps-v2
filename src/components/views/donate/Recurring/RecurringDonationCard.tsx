@@ -855,7 +855,7 @@ export const IconWrapper = styled.div`
 	color: ${brandColors.giv[500]};
 `;
 
-const GLinkStyled = styled(GLink)`
+export const GLinkStyled = styled(GLink)`
 	&&:hover {
 		cursor: pointer;
 		text-decoration: underline;

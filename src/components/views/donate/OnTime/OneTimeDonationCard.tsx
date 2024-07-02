@@ -8,13 +8,15 @@ import {
 	Flex,
 	GLink,
 	IconCaretDown16,
+	IconRefresh16,
 	neutralColors,
 	semanticColors,
 } from '@giveth/ui-design-system';
 // @ts-ignore
 import { captureException } from '@sentry/nextjs';
-import { Address, Chain, formatUnits, parseUnits } from 'viem';
+import { Address, Chain, formatUnits, parseUnits, zeroAddress } from 'viem';
 import { useConnection } from '@solana/wallet-adapter-react';
+import { useBalance } from 'wagmi';
 import { setShowWelcomeModal } from '@/features/modal/modal.slice';
 import { Shadow } from '@/components/styled-components/Shadow';
 import CheckBox from '@/components/Checkbox';
@@ -54,6 +56,8 @@ import QFModal from './QFModal';
 import EstimatedMatchingToast from '@/components/views/donate/OnTime/EstimatedMatchingToast';
 import TotalDonation from './TotalDonation';
 import {
+	GLinkStyled,
+	IconWrapper,
 	Input,
 	InputWrapper,
 	SelectTokenPlaceHolder,
@@ -61,6 +65,7 @@ import {
 } from '../Recurring/RecurringDonationCard';
 import { TokenIcon } from '../TokenIcon/TokenIcon';
 import { SelectTokenModal } from './SelectTokenModal/SelectTokenModal';
+import { Spinner } from '@/components/Spinner';
 
 const CryptoDonation: FC = () => {
 	const {
@@ -123,6 +128,22 @@ const CryptoDonation: FC = () => {
 	const { modalCallback: signInThenDonate } = useModalCallback(() =>
 		setShowDonateModal(true),
 	);
+
+	const {
+		data: evmBalance,
+		refetch,
+		isRefetching,
+	} = useBalance({
+		token:
+			selectedOneTimeToken?.address === zeroAddress
+				? undefined
+				: selectedOneTimeToken?.address,
+		address:
+			walletChainType === ChainType.EVM
+				? (address as Address)
+				: undefined,
+	});
+
 	const stopPolling = useRef<any>(null);
 	const tokenSymbol = selectedOneTimeToken?.symbol;
 	const tokenDecimals = selectedOneTimeToken?.decimals || 18;
@@ -257,7 +278,8 @@ const CryptoDonation: FC = () => {
 		}
 	};
 
-	const selectedTokenBalance = walletChainType == ChainType.EVM ? 0n : 0n;
+	const selectedTokenBalance =
+		(walletChainType == ChainType.EVM ? evmBalance?.value : 0n) || 0n;
 
 	// const clearPoll = () => {
 	// 	if (stopPolling.current) {
@@ -501,36 +523,60 @@ const CryptoDonation: FC = () => {
 					</AvText>
 				)}
 			</InputContainer> */}
-			<InputWrapper>
-				<SelectTokenWrapper
-					$alignItems='center'
-					$justifyContent='space-between'
-					onClick={() => setShowSelectTokenModal(true)}
-				>
-					{selectedOneTimeToken ? (
-						<Flex gap='8px' $alignItems='center'>
-							<TokenIcon
-								symbol={selectedOneTimeToken.symbol}
-								size={24}
-							/>
-							<B>{selectedOneTimeToken.symbol}</B>
-						</Flex>
-					) : (
-						<SelectTokenPlaceHolder>
-							{formatMessage({
-								id: 'label.select_token',
-							})}
-						</SelectTokenPlaceHolder>
-					)}
-					<IconCaretDown16 />
-				</SelectTokenWrapper>
-				<Input
-					amount={amount}
-					setAmount={setAmount}
-					disabled={selectedOneTimeToken === undefined}
-					decimals={selectedOneTimeToken?.decimals}
-				/>
-			</InputWrapper>
+			<Flex $flexDirection='column' gap='8px'>
+				<InputWrapper>
+					<SelectTokenWrapper
+						$alignItems='center'
+						$justifyContent='space-between'
+						onClick={() => setShowSelectTokenModal(true)}
+					>
+						{selectedOneTimeToken ? (
+							<Flex gap='8px' $alignItems='center'>
+								<TokenIcon
+									symbol={selectedOneTimeToken.symbol}
+									size={24}
+								/>
+								<B>{selectedOneTimeToken.symbol}</B>
+							</Flex>
+						) : (
+							<SelectTokenPlaceHolder>
+								{formatMessage({
+									id: 'label.select_token',
+								})}
+							</SelectTokenPlaceHolder>
+						)}
+						<IconCaretDown16 />
+					</SelectTokenWrapper>
+					<Input
+						amount={amount}
+						setAmount={setAmount}
+						disabled={selectedOneTimeToken === undefined}
+						decimals={selectedOneTimeToken?.decimals}
+					/>
+				</InputWrapper>
+				<Flex gap='4px'>
+					<GLinkStyled
+						size='Small'
+						onClick={() => setAmount(selectedTokenBalance)}
+					>
+						{formatMessage({
+							id: 'label.available',
+						})}
+						:{' '}
+						{truncateToDecimalPlaces(
+							formatUnits(selectedTokenBalance, tokenDecimals),
+							tokenDecimals / 3,
+						)}
+					</GLinkStyled>
+					<IconWrapper onClick={() => !isRefetching && refetch()}>
+						{isRefetching ? (
+							<Spinner size={16} />
+						) : (
+							<IconRefresh16 />
+						)}
+					</IconWrapper>
+				</Flex>
+			</Flex>
 			{hasActiveQFRound && !isOnEligibleNetworks && walletChainType && (
 				<DonateQFEligibleNetworks />
 			)}
