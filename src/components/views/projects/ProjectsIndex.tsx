@@ -115,7 +115,6 @@ const ProjectsIndex = (props: IProjectsView) => {
 							: getMainCategorySlug(selectedMainCategory),
 						qfRoundSlug: isArchivedQF ? router.query.slug : null,
 					},
-					fetchPolicy: 'no-cache',
 				})
 				.then((res: { data: { allProjects: IFetchAllProjects } }) => {
 					const data = res.data?.allProjects?.projects;

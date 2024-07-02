@@ -22,7 +22,6 @@ export const useAlreadyDonatedToProject = (project?: IProject) => {
 						qfRoundId: Number(activeStartedRound.id),
 						userId: Number(userData.id),
 					},
-					fetchPolicy: 'no-cache',
 				});
 				setAlreadyDonated(
 					data.doesDonatedToProjectInQfRound as boolean,

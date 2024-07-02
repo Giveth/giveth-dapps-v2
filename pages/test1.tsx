@@ -71,7 +71,7 @@ const TestIndex = () => {
 	const fetchProjects = async () => {
 		const res = await client.query({
 			query: FETCH_ALL_PROJECTS,
-			fetchPolicy: 'network-only',
+			fetchPolicy: 'no-cache',
 		});
 	};
 

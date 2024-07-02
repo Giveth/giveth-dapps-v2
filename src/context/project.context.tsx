@@ -118,7 +118,6 @@ export const ProjectProvider = ({
 			.query({
 				query: FETCH_PROJECT_BY_SLUG_SINGLE_PROJECT,
 				variables: { slug, connectedWalletUserId: Number(user?.id) },
-				fetchPolicy: 'network-only',
 			})
 			.then((res: { data: { projectBySlug: IProject } }) => {
 				const _project = res.data.projectBySlug;
