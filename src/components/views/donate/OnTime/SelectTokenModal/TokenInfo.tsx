@@ -10,10 +10,15 @@ import { useIntersectionObserver } from '@/hooks/useIntersectionObserver';
 
 interface ITokenInfoProps {
 	token: IProjectAcceptedToken;
+	hideZeroBalance: boolean;
 	onClick: () => void;
 }
 
-export const TokenInfo: FC<ITokenInfoProps> = ({ token, onClick }) => {
+export const TokenInfo: FC<ITokenInfoProps> = ({
+	token,
+	hideZeroBalance,
+	onClick,
+}) => {
 	const [visible, setVisible] = useState(false);
 	const { address } = useAccount();
 	const onVisible = () => {
@@ -31,6 +36,7 @@ export const TokenInfo: FC<ITokenInfoProps> = ({ token, onClick }) => {
 	});
 	const disable = balance?.value === 0n;
 
+	if (hideZeroBalance && disable) return;
 	return (
 		<Wrapper
 			gap='16px'
