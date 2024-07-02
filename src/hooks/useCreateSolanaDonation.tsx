@@ -59,7 +59,7 @@ export const useCreateSolanaDonation = () => {
 				amount,
 				token,
 				setFailedModalType,
-				useDonationBox
+				useDonationBox,
 			} = props;
 
 			let donationData: IOnTxHash;
