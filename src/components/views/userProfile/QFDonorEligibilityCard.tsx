@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import { useAccount } from 'wagmi';
 import {
@@ -12,9 +12,10 @@ import {
 import { useIntl } from 'react-intl';
 import { ContributeCardBox } from '@/components/ContributeCard.sc';
 import { scoreUserAddress } from '@/services/passport';
+import { usePassport } from '@/hooks/usePassport';
 
 type TQFEligibilityData = {
-	[key in 'NOT_ELIGIBLE' | 'ELIGIBLE']: {
+	[key in QFEligibilityState]: {
 		bgColor: string;
 		color: string;
 		text: string;
@@ -41,11 +42,11 @@ const VerifiedIcon = () => {
 };
 
 enum QFEligibilityState {
-	NOT_ELIGIBLE = 'NOT_ELIGIBLE',
-	ELIGIBLE = 'ELIGIBLE',
+	NOT_ELIGIBLE,
+	ELIGIBLE,
+	NO_ACTIVE,
+	ENDED,
 }
-
-const QFEligibilityCurrentState = QFEligibilityState.NOT_ELIGIBLE;
 
 const QFEligibilityData: TQFEligibilityData = {
 	[QFEligibilityState.NOT_ELIGIBLE]: {
@@ -59,11 +60,27 @@ const QFEligibilityData: TQFEligibilityData = {
 		text: 'QF Eligible',
 		icon: <VerifiedIcon />,
 	},
+	[QFEligibilityState.NO_ACTIVE]: {
+		bgColor: semanticColors.golden[300],
+		color: semanticColors.golden[700],
+		text: 'No Active Round',
+	},
+	[QFEligibilityState.ENDED]: {
+		bgColor: semanticColors.golden[300],
+		color: semanticColors.golden[700],
+		text: 'Round Ended',
+	},
 };
 
 export const QFDonorEligibilityCard = () => {
 	const { formatMessage } = useIntl();
 	const { address } = useAccount();
+	const { info, handleSign, refreshScore, fetchUserMBDScore } = usePassport();
+	const { passportState, passportScore } = info;
+
+	const [QFEligibilityCurrentState, setQFEligibilityCurrentState] = useState(
+		QFEligibilityState.NOT_ELIGIBLE,
+	);
 
 	const checkEligibility = () => {
 		console.log('Check Eligibility');

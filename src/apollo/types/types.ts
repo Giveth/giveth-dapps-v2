@@ -226,11 +226,13 @@ export interface IUser {
 	wasReferred?: boolean;
 	isReferrer?: boolean;
 	chainvineId?: string;
+	activeQFMBDScore?: number;
 }
 
 export interface IPassportInfo {
 	passportScore: number;
 	passportStamps: any;
+	addressMBDScore?: number | null;
 }
 
 export interface IUserWithPassport extends IUser, IPassportInfo {}
@@ -475,6 +477,7 @@ export interface IQFRound {
 	allocatedTokenSymbol: string;
 	allocatedTokenChainId: number;
 	minimumValidUsdValue?: number;
+	minimumUserAnalysisScore?: number;
 }
 
 export interface IArchivedQFRound extends IQFRound {

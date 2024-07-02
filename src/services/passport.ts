@@ -97,7 +97,7 @@ export const scoreUserAddress = async (address: `0x${string}` | undefined) => {
 };
 
 // fetch user's score stored on DB
-export const fecthMBDScore = async (address: string) => {
+export const fecthMBDScore = async (address: `0x${string}` | undefined) => {
 	try {
 		const { data } = await client.query({
 			query: FETCH_MBD_USER_SCORE,
@@ -109,5 +109,6 @@ export const fecthMBDScore = async (address: string) => {
 		return data;
 	} catch (error) {
 		console.log('error', error);
+		return null;
 	}
 };

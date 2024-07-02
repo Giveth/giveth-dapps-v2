@@ -18,6 +18,7 @@ export const REFRESH_USER_SCORES = gql`
 			projectsCount
 			passportScore
 			passportStamps
+			activeQFMBDScore
 		}
 	}
 `;
