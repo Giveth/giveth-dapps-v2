@@ -99,6 +99,7 @@ const Wrapper = styled(Flex)`
 `;
 
 const GIVbackWrapper = styled.div`
+	margin-top: 4px;
 	padding: 12px 24px;
 	background: ${neutralColors.gray[200]};
 `;
