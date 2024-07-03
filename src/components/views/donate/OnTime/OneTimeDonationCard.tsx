@@ -19,7 +19,6 @@ import CheckBox from '@/components/Checkbox';
 
 import { donationDecimals } from '@/lib/constants/constants';
 import { InsufficientFundModal } from '@/components/modals/InsufficientFund';
-import GeminiModal from './GeminiModal';
 import config from '@/configuration';
 
 import InlineToast, { EToastType } from '@/components/toasts/InlineToast';
@@ -32,7 +31,6 @@ import {
 	IProjectAcceptedTokensGQL,
 } from '@/apollo/types/gqlTypes';
 import { prepareTokenList } from '@/components/views/donate/helpers';
-import { ORGANIZATION } from '@/lib/constants/organizations';
 import { getERC20Info } from '@/lib/contracts';
 import GIVBackToast from '@/components/views/donate/GIVBackToast';
 import { DonateWrongNetwork } from '@/components/modals/DonateWrongNetwork';
@@ -101,7 +99,6 @@ const CryptoDonation: FC = () => {
 	const [amountTyped, setAmountTyped] = useState<number>();
 	const [amount, setAmount] = useState(0n);
 	const [inputBoxFocused, setInputBoxFocused] = useState(false);
-	const [geminiModal, setGeminiModal] = useState(false);
 	const [erc20List, setErc20List] = useState<IProjectAcceptedToken[]>();
 	const [erc20OriginalList, setErc20OriginalList] = useState<any>();
 	const [anonymous, setAnonymous] = useState<boolean>(false);
@@ -271,16 +268,6 @@ const CryptoDonation: FC = () => {
 		setAmountTyped(undefined);
 	}, [selectedOneTimeToken, isConnected, address, networkId]);
 
-	const checkGIVTokenAvailability = () => {
-		if (orgLabel !== ORGANIZATION.givingBlock) return true;
-		if (selectedOneTimeToken?.symbol === 'GIV') {
-			setGeminiModal(true);
-			return false;
-		} else {
-			return true;
-		}
-	};
-
 	const selectedTokenBalance =
 		(walletChainType == ChainType.EVM
 			? evmBalance?.value
@@ -373,7 +360,6 @@ const CryptoDonation: FC = () => {
 					setShowModal={setShowQFModal}
 				/>
 			)}
-			{geminiModal && <GeminiModal setShowModal={setGeminiModal} />}
 			{showChangeNetworkModal && acceptedChains && (
 				<DonateWrongNetwork
 					setShowModal={setShowChangeNetworkModal}
