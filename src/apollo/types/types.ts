@@ -226,13 +226,12 @@ export interface IUser {
 	wasReferred?: boolean;
 	isReferrer?: boolean;
 	chainvineId?: string;
-	activeQFMBDScore?: number;
 }
 
 export interface IPassportInfo {
 	passportScore: number;
 	passportStamps: any;
-	addressMBDScore?: number | null;
+	activeQFMBDScore?: number | null;
 }
 
 export interface IUserWithPassport extends IUser, IPassportInfo {}

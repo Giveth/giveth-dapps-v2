@@ -1,21 +1,24 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
-import { useAccount } from 'wagmi';
 import {
 	Flex,
 	P,
-	neutralColors,
 	semanticColors,
 	H5,
 	Button,
+	IconPassport16,
+	ButtonText,
+	neutralColors,
+	FlexCenter,
+	IconInfoOutline,
 } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
 import { ContributeCardBox } from '@/components/ContributeCard.sc';
-import { scoreUserAddress } from '@/services/passport';
-import { usePassport } from '@/hooks/usePassport';
+import { usePassport, EPassportState } from '@/hooks/usePassport';
+import { Shadow } from '@/components/styled-components/Shadow';
 
 type TQFEligibilityData = {
-	[key in QFEligibilityState]: {
+	[key: string]: {
 		bgColor: string;
 		color: string;
 		text: string;
@@ -41,51 +44,76 @@ const VerifiedIcon = () => {
 	);
 };
 
-enum QFEligibilityState {
-	NOT_ELIGIBLE,
-	ELIGIBLE,
-	NO_ACTIVE,
-	ENDED,
-}
-
 const QFEligibilityData: TQFEligibilityData = {
-	[QFEligibilityState.NOT_ELIGIBLE]: {
+	[EPassportState.NOT_ELIGIBLE]: {
 		bgColor: semanticColors.golden[300],
 		color: semanticColors.golden[700],
 		text: 'Not Eligible',
 	},
-	[QFEligibilityState.ELIGIBLE]: {
+	[EPassportState.ELIGIBLE]: {
 		bgColor: semanticColors.jade[500],
 		color: neutralColors.gray[100],
 		text: 'QF Eligible',
 		icon: <VerifiedIcon />,
 	},
-	[QFEligibilityState.NO_ACTIVE]: {
+	[EPassportState.NOT_STARTED]: {
 		bgColor: semanticColors.golden[300],
 		color: semanticColors.golden[700],
-		text: 'No Active Round',
-	},
-	[QFEligibilityState.ENDED]: {
-		bgColor: semanticColors.golden[300],
-		color: semanticColors.golden[700],
-		text: 'Round Ended',
+		text: 'Not Eligible',
 	},
 };
 
 export const QFDonorEligibilityCard = () => {
 	const { formatMessage } = useIntl();
-	const { address } = useAccount();
 	const { info, handleSign, refreshScore, fetchUserMBDScore } = usePassport();
-	const { passportState, passportScore } = info;
+	const { passportState, passportScore, activeQFMBDScore, currentRound } =
+		info;
 
-	const [QFEligibilityCurrentState, setQFEligibilityCurrentState] = useState(
-		QFEligibilityState.NOT_ELIGIBLE,
-	);
+	// console.log(' activeQFMBDScore ==> 💜 ', activeQFMBDScore);
+	// console.log(' currentRound ==> 🦊 ', currentRound);
+	const [QFEligibilityCurrentState, setQFEligibilityCurrentState] =
+		useState<EPassportState>(EPassportState.NOT_ELIGIBLE);
 
-	const checkEligibility = () => {
-		console.log('Check Eligibility');
-		scoreUserAddress(address);
+	const checkEligibilityDisabled: boolean =
+		passportState === EPassportState.LOADING ||
+		(activeQFMBDScore !== null &&
+			currentRound?.minimumUserAnalysisScore != null &&
+			activeQFMBDScore >= currentRound?.minimumUserAnalysisScore);
+
+	const actionDescription = () => {
+		if (activeQFMBDScore === null) {
+			return formatMessage({
+				id: 'It won’t take long!',
+			});
+		} else if (
+			currentRound?.minimumUserAnalysisScore != null &&
+			activeQFMBDScore >= currentRound?.minimumUserAnalysisScore
+		) {
+			return formatMessage({
+				id: 'You’re all set!',
+			});
+		} else if (passportState === EPassportState.NOT_SIGNED) {
+			return formatMessage({
+				id: 'We need a bit more info!',
+			});
+		} else {
+			return formatMessage({
+				id: 'Passport connected',
+			});
+		}
 	};
+
+	useEffect(() => {
+		if (
+			[EPassportState.ELIGIBLE, EPassportState.NOT_ELIGIBLE].includes(
+				passportState,
+			)
+		) {
+			setQFEligibilityCurrentState(passportState);
+		} else {
+			setQFEligibilityCurrentState(EPassportState.NOT_ELIGIBLE);
+		}
+	}, [passportState]);
 
 	return (
 		<StyledContributeCardBox>
@@ -112,15 +140,62 @@ export const QFDonorEligibilityCard = () => {
 					})}
 				</P>
 			</EligibilityCardDesc>
+			{passportState !== EPassportState.NOT_SIGNED &&
+				passportScore !== null &&
+				activeQFMBDScore !== null &&
+				currentRound?.minimumUserAnalysisScore != null &&
+				activeQFMBDScore < currentRound?.minimumUserAnalysisScore && (
+					<PassportSection>
+						<StyledNote>
+							<IconInfoOutline />{' '}
+							{formatMessage({
+								id: 'Required Passport score to be eligible',
+							})}
+							<QFMinScore>
+								{`>  ${currentRound?.minimumPassportScore}`}
+							</QFMinScore>
+						</StyledNote>
+						<ScoreCard>
+							Your Paaaport Score
+							<Score>{passportScore}</Score>
+						</ScoreCard>
+					</PassportSection>
+				)}
 			<Hr />
 			<EligibilityCardBottom>
-				<P>{formatMessage({ id: 'It won’t take long!' })}</P>
-				<Button
-					label='Check Eligibility'
-					size='small'
-					buttonType='primary'
-					onClick={checkEligibility}
-				/>
+				<P>{actionDescription()}</P>
+				{activeQFMBDScore == null ? (
+					<Button
+						label='Check Eligibility'
+						loading={passportState === EPassportState.LOADING}
+						size='small'
+						buttonType='primary'
+						onClick={fetchUserMBDScore}
+						disabled={checkEligibilityDisabled}
+					/>
+				) : currentRound?.minimumUserAnalysisScore != null &&
+				  activeQFMBDScore < currentRound?.minimumUserAnalysisScore &&
+				  passportState === EPassportState.NOT_SIGNED ? (
+					<Button
+						label='Connect Gitcoin Passport'
+						size='small'
+						buttonType='primary'
+						onClick={handleSign}
+					/>
+				) : (
+					<RefreshButton
+						onClick={() => {
+							refreshScore();
+						}}
+					>
+						<FlexCenter gap='8px'>
+							<IconPassport16 />
+							<ButtonText>
+								{formatMessage({ id: 'label.refresh_score' })}
+							</ButtonText>
+						</FlexCenter>
+					</RefreshButton>
+				)}
 			</EligibilityCardBottom>
 		</StyledContributeCardBox>
 	);
@@ -176,4 +251,58 @@ const Hr = styled.div`
 	height: 1px;
 	background-color: ${neutralColors.gray[300]};
 	width: 100%;
+`;
+
+const BaseButton = styled.button`
+	padding: 16px 32px;
+	background-color: ${neutralColors.gray[100]};
+	border: none;
+	border-radius: 48px;
+	box-shadow: ${Shadow.Giv[400]};
+	transition: color 0.2s ease-in-out;
+	cursor: pointer;
+`;
+
+const RefreshButton = styled(BaseButton)`
+	&:hover {
+		color: ${neutralColors.gray[800]};
+	}
+`;
+
+const PassportSection = styled.div`
+	display: flex;
+	flex-direction: column;
+	gap: 16px;
+	border: 1px solid ${neutralColors.gray[300]};
+	padding: 16px;
+	border-radius: 8px;
+`;
+
+const StyledNote = styled(P)`
+	display: flex;
+	align-items: center;
+	gap: 8px;
+`;
+
+const QFMinScore = styled(P)`
+	color: ${neutralColors.gray[900]};
+	margin-left: 10px;
+	font-weight: 700;
+`;
+
+const ScoreCard = styled(P)`
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	border-top: 1px solid ${neutralColors.gray[200]};
+	padding: 16px;
+	background-color: ${neutralColors.gray[200]};
+	border-radius: 8px;
+`;
+
+const Score = styled(P)`
+	color: ${neutralColors.gray[100]};
+	background-color: black;
+	padding: 8px 16px;
+	border-radius: 25px;
 `;

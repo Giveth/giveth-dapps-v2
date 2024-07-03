@@ -2,7 +2,6 @@ import { signMessage } from '@wagmi/core';
 import { client } from '@/apollo/apolloClient';
 import {
 	REFRESH_USER_SCORES,
-	FETCH_MBD_USER_SCORE,
 	SCORE_ACTIVE_QF_DONOR_ADDRESS,
 } from '@/apollo/gql/gqlPassport';
 import config from '@/configuration';
@@ -89,24 +88,7 @@ export const scoreUserAddress = async (address: `0x${string}` | undefined) => {
 			fetchPolicy: 'no-cache',
 		});
 
-		console.log('data', data);
-		return data;
-	} catch (error) {
-		console.log('error', error);
-	}
-};
-
-// fetch user's score stored on DB
-export const fecthMBDScore = async (address: `0x${string}` | undefined) => {
-	try {
-		const { data } = await client.query({
-			query: FETCH_MBD_USER_SCORE,
-			variables: {
-				address: address?.toLowerCase(),
-			},
-			fetchPolicy: 'no-cache',
-		});
-		return data;
+		return data.scoreUserAddress;
 	} catch (error) {
 		console.log('error', error);
 		return null;
