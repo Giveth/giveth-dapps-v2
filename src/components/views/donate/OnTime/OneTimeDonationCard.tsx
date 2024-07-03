@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import React, { FC, useEffect, useRef, useState } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
 import {
 	B,
@@ -15,7 +15,6 @@ import {
 // @ts-ignore
 import { captureException } from '@sentry/nextjs';
 import { Address, Chain, formatUnits, parseUnits, zeroAddress } from 'viem';
-import { useConnection } from '@solana/wallet-adapter-react';
 import { useBalance } from 'wagmi';
 import { setShowWelcomeModal } from '@/features/modal/modal.slice';
 import { Shadow } from '@/components/styled-components/Shadow';
@@ -66,6 +65,7 @@ import {
 import { TokenIcon } from '../TokenIcon/TokenIcon';
 import { SelectTokenModal } from './SelectTokenModal/SelectTokenModal';
 import { Spinner } from '@/components/Spinner';
+import { useSolanaBalance } from '@/hooks/useSolanaBalance';
 
 const CryptoDonation: FC = () => {
 	const {
@@ -75,7 +75,7 @@ const CryptoDonation: FC = () => {
 		isConnected,
 		balance,
 	} = useGeneralWallet();
-	const { connection: solanaConnection } = useConnection();
+
 	const { formatMessage } = useIntl();
 	const { isSignedIn } = useAppSelector(state => state.user);
 
@@ -131,8 +131,8 @@ const CryptoDonation: FC = () => {
 
 	const {
 		data: evmBalance,
-		refetch,
-		isRefetching,
+		refetch: evmRefetch,
+		isRefetching: evmIsRefetching,
 	} = useBalance({
 		token:
 			selectedOneTimeToken?.address === zeroAddress
@@ -144,7 +144,18 @@ const CryptoDonation: FC = () => {
 				: undefined,
 	});
 
-	const stopPolling = useRef<any>(null);
+	const {
+		data: solanaBalance,
+		refetch: solanaRefetch,
+		isRefetching: solanaIsRefetching,
+	} = useSolanaBalance({
+		token: selectedOneTimeToken?.address,
+		address:
+			walletChainType === ChainType.SOLANA
+				? (address as Address)
+				: undefined,
+	});
+
 	const tokenSymbol = selectedOneTimeToken?.symbol;
 	const tokenDecimals = selectedOneTimeToken?.decimals || 18;
 	const projectIsGivBackEligible = !!verified;
@@ -274,81 +285,15 @@ const CryptoDonation: FC = () => {
 	};
 
 	const selectedTokenBalance =
-		(walletChainType == ChainType.EVM ? evmBalance?.value : 0n) || 0n;
-
-	// const clearPoll = () => {
-	// 	if (stopPolling.current) {
-	// 		stopPolling.current();
-	// 		stopPolling.current = undefined;
-	// 	}
-	// };
-
-	// const pollToken = useCallback(async () => {
-	// 	clearPoll();
-
-	// 	if (!selectedOneTimeToken) {
-	// 		return setSelectedTokenBalance(0n);
-	// 	}
-	// 	// Native token balance is provided by the Web3Provider
-	// 	const _selectedTokenSymbol = selectedOneTimeToken.symbol.toUpperCase();
-	// 	const nativeCurrency =
-	// 		config.NETWORKS_CONFIG[
-	// 			!walletChainType || walletChainType == ChainType.EVM
-	// 				? networkId
-	// 				: walletChainType
-	// 		]?.nativeCurrency;
-
-	// 	if (_selectedTokenSymbol === nativeCurrency?.symbol?.toUpperCase()) {
-	// 		return setSelectedTokenBalance(
-	// 			parseUnits(balance || '0', nativeCurrency.decimals),
-	// 		);
-	// 	}
-	// 	stopPolling.current = pollEvery(
-	// 		() => ({
-	// 			request: async () => {
-	// 				try {
-	// 					if (walletChainType === ChainType.SOLANA) {
-	// 						const splTokenMintAddress = new PublicKey(
-	// 							selectedOneTimeToken.address,
-	// 						);
-	// 						const tokenAccounts =
-	// 							await solanaConnection.getParsedTokenAccountsByOwner(
-	// 								new PublicKey(address!),
-	// 								{ mint: splTokenMintAddress },
-	// 							);
-	// 						const accountInfo =
-	// 							tokenAccounts.value[0].account.data;
-	// 						const splBalance =
-	// 							accountInfo.parsed.info.tokenAmount.amount;
-	// 						return setSelectedTokenBalance(BigInt(splBalance));
-	// 					}
-
-	// 					const _balance = await readContract(wagmiConfig, {
-	// 						address: selectedOneTimeToken.address! as Address,
-	// 						abi: erc20Abi,
-	// 						functionName: 'balanceOf',
-	// 						args: [address as Address],
-	// 					});
-	// 					setSelectedTokenBalance(_balance);
-	// 					return _balance;
-	// 				} catch (e) {
-	// 					captureException(e, {
-	// 						tags: {
-	// 							section: 'Polltoken pollEvery',
-	// 						},
-	// 					});
-	// 					return setSelectedTokenBalance(0n);
-	// 				}
-	// 			},
-	// 			onResult: (_balance: bigint) => {
-	// 				if (_balance && _balance !== selectedTokenBalance) {
-	// 					setSelectedTokenBalance(_balance);
-	// 				}
-	// 			},
-	// 		}),
-	// 		POLL_DELAY_TOKENS,
-	// 	)();
-	// }, [address, networkId, tokenSymbol, balance, walletChainType]);
+		(walletChainType == ChainType.EVM
+			? evmBalance?.value
+			: solanaBalance) || 0n;
+	const refetch =
+		walletChainType === ChainType.EVM ? evmRefetch : solanaRefetch;
+	const isRefetching =
+		walletChainType === ChainType.EVM
+			? evmIsRefetching
+			: solanaIsRefetching;
 
 	const handleCustomToken = (i: Address) => {
 		if (!supportCustomTokens) return;
