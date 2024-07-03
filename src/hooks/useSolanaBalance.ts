@@ -13,7 +13,6 @@ export const useSolanaBalance = ({ address, token }: ISolanaBalance) => {
 
 	const fetchSolanaBalance = async () => {
 		try {
-			console.log('****fetching solana balance');
 			if (!address) {
 				console.error('No address provided');
 				return 0n;
@@ -31,7 +30,7 @@ export const useSolanaBalance = ({ address, token }: ISolanaBalance) => {
 			if (!token || token === solanaNativeAddress) {
 				const solBalance =
 					await solanaConnection.getBalance(ownerAddress);
-				console.log('*****SOL balance', solBalance);
+
 				return solBalance;
 			}
 
@@ -44,14 +43,11 @@ export const useSolanaBalance = ({ address, token }: ISolanaBalance) => {
 				return 0n;
 			}
 
-			console.log('*****splTokenMintAddress', splTokenMintAddress);
-
 			const tokenAccounts =
 				await solanaConnection.getParsedTokenAccountsByOwner(
 					ownerAddress,
 					{ mint: splTokenMintAddress },
 				);
-			console.log('*****tokenAccounts', tokenAccounts);
 
 			if (tokenAccounts.value.length === 0) {
 				console.error('No token accounts found');
@@ -59,9 +55,7 @@ export const useSolanaBalance = ({ address, token }: ISolanaBalance) => {
 			}
 
 			const accountInfo = tokenAccounts.value[0].account.data;
-			console.log('*****accountInfo', accountInfo);
 			const balance = accountInfo.parsed.info.tokenAmount.amount;
-			console.log('*****balance', balance);
 			return balance;
 		} catch (error) {
 			console.error('Error fetching Solana balance:', error);
