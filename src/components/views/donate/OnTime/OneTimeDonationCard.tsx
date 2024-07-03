@@ -6,7 +6,6 @@ import {
 	brandColors,
 	Button,
 	Flex,
-	GLink,
 	IconCaretDown16,
 	IconRefresh16,
 	neutralColors,
@@ -418,7 +417,9 @@ const CryptoDonation: FC = () => {
 									symbol={selectedOneTimeToken.symbol}
 									size={24}
 								/>
-								<B>{selectedOneTimeToken.symbol}</B>
+								<TokenSymbol>
+									{selectedOneTimeToken.symbol}
+								</TokenSymbol>
 							</Flex>
 						) : (
 							<SelectTokenPlaceHolder>
@@ -559,19 +560,8 @@ const MainContainer = styled.div`
 	text-align: left;
 `;
 
-const InputContainer = styled.div`
-	display: flex;
-	flex-direction: column;
-	margin-top: 18px;
-`;
-
-const AvText = styled(GLink)`
-	color: ${brandColors.deep[500]};
-	padding: 4px 0 0 5px;
-	&:hover {
-		cursor: pointer;
-		text-decoration: underline;
-	}
+const TokenSymbol = styled(B)`
+	white-space: nowrap;
 `;
 
 interface IInputBox {
