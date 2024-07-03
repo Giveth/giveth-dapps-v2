@@ -12,12 +12,11 @@ import {
 } from '@giveth/ui-design-system';
 // @ts-ignore
 import { captureException } from '@sentry/nextjs';
-import { Address, Chain, formatUnits, parseUnits, zeroAddress } from 'viem';
+import { Address, Chain, formatUnits, zeroAddress } from 'viem';
 import { useBalance } from 'wagmi';
 import { setShowWelcomeModal } from '@/features/modal/modal.slice';
 import CheckBox from '@/components/Checkbox';
 
-import { donationDecimals } from '@/lib/constants/constants';
 import { InsufficientFundModal } from '@/components/modals/InsufficientFund';
 import config from '@/configuration';
 
@@ -85,7 +84,6 @@ const CryptoDonation: FC = () => {
 
 	const isActive = status?.name === EProjectStatus.ACTIVE;
 	const noDonationSplit = Number(projectId!) === config.GIVETH_PROJECT_ID;
-	const [amountTyped, setAmountTyped] = useState<number>();
 	const [amount, setAmount] = useState(0n);
 	const [erc20List, setErc20List] = useState<IProjectAcceptedToken[]>();
 	const [anonymous, setAnonymous] = useState<boolean>(false);
@@ -239,7 +237,7 @@ const CryptoDonation: FC = () => {
 	}, []);
 
 	useEffect(() => {
-		setAmountTyped(undefined);
+		setAmount(0n);
 	}, [selectedOneTimeToken, isConnected, address, networkId]);
 
 	const selectedTokenBalance =
@@ -254,10 +252,7 @@ const CryptoDonation: FC = () => {
 			: solanaIsRefetching;
 
 	const handleDonate = () => {
-		if (
-			parseUnits(String(amountTyped), tokenDecimals) >
-			selectedTokenBalance
-		) {
+		if (amount > selectedTokenBalance) {
 			return setShowInsufficientModal(true);
 		}
 		if (
@@ -273,14 +268,8 @@ const CryptoDonation: FC = () => {
 		}
 	};
 
-	const userBalance = truncateToDecimalPlaces(
-		formatUnits(selectedTokenBalance, tokenDecimals),
-		donationDecimals,
-	);
-	const setMaxDonation = () => setAmountTyped(userBalance);
-
 	const donationDisabled =
-		!isActive || !amountTyped || !selectedOneTimeToken || amountError;
+		!isActive || !amount || !selectedOneTimeToken || amountError;
 
 	const donateWithoutMatching = () => {
 		if (isSignedIn) {
@@ -309,11 +298,11 @@ const CryptoDonation: FC = () => {
 					setShowModal={setShowInsufficientModal}
 				/>
 			)}
-			{showDonateModal && selectedOneTimeToken && amountTyped && (
+			{showDonateModal && selectedOneTimeToken && amount && (
 				<DonateModal
 					setShowModal={setShowDonateModal}
 					token={selectedOneTimeToken}
-					amount={amountTyped}
+					amount={amount}
 					donationToGiveth={donationToGiveth}
 					anonymous={anonymous}
 					givBackEligible={
@@ -392,7 +381,7 @@ const CryptoDonation: FC = () => {
 				<EstimatedMatchingToast
 					projectData={project}
 					token={selectedOneTimeToken}
-					amountTyped={amountTyped}
+					amount={amount}
 				/>
 			)}
 			{!noDonationSplit ? (
@@ -415,7 +404,7 @@ const CryptoDonation: FC = () => {
 			{!noDonationSplit ? (
 				<TotalDonation
 					donationToGiveth={donationToGiveth}
-					totalDonation={amountTyped}
+					totalDonation={amount}
 					projectTitle={projectTitle}
 					token={selectedOneTimeToken}
 					isActive={!donationDisabled}
