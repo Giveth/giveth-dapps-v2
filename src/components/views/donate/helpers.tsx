@@ -1,10 +1,10 @@
+import { parseUnits } from 'viem';
 import { IProjectAcceptedToken } from '@/apollo/types/gqlTypes';
 import { MAX_TOKEN_ORDER } from '@/lib/constants/tokens';
 import { EDonationFailedType } from '@/components/modals/FailedDonation';
-import { minDonationAmount } from '@/lib/constants/constants';
-import { truncateToDecimalPlaces } from '@/lib/helpers';
 import { INetworkIdWithChain } from './common.types';
 import { getChainName } from '@/lib/network';
+import { formatCrypto } from '@/helpers/number';
 
 export const prepareTokenList = (tokens: IProjectAcceptedToken[]) => {
 	const _tokens = [...tokens];
@@ -52,11 +52,12 @@ export interface ICreateDonation {
 }
 
 export const calcDonationShare = (
-	totalDonation: number,
+	totalDonation: bigint,
 	givethDonationPercent: number,
-	decimals = 6,
+	decimals = 18,
 ) => {
-	let givethDonation = totalDonation * (givethDonationPercent / 100);
+	let givethDonation = (totalDonation * BigInt(givethDonationPercent)) / 100n;
+	const minDonationAmount = parseUnits('1', decimals - decimals / 3);
 	if (givethDonation < minDonationAmount && givethDonationPercent !== 0) {
 		givethDonation = minDonationAmount;
 	}
@@ -65,13 +66,8 @@ export const calcDonationShare = (
 		projectDonation = minDonationAmount;
 	}
 	return {
-		projectDonation: truncateToDecimalPlaces(
-			String(projectDonation),
-			decimals,
-		),
-		givethDonation: truncateToDecimalPlaces(
-			String(givethDonation),
-			decimals,
-		),
+		projectDonation: formatCrypto(projectDonation, decimals),
+
+		givethDonation: formatCrypto(givethDonation, decimals),
 	};
 };
