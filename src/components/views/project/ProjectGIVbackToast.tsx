@@ -113,7 +113,10 @@ const ProjectGIVbackToast = () => {
 			/>
 		);
 	} else if (isOwnerNotVerified) {
-		if (verStatus === EVerificationStatus.SUBMITTED) {
+		if (
+			verStatus === EVerificationStatus.SUBMITTED ||
+			verStatus === EVerificationStatus.VERIFIED
+		) {
 			title = formatMessage({
 				id: `${useIntlTitle}non_verified_owner_submitted`,
 			});
