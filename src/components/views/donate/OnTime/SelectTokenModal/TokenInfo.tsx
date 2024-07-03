@@ -1,12 +1,15 @@
 import { Caption, neutralColors, Flex } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import { useState, type FC } from 'react';
-import { formatUnits, zeroAddress } from 'viem';
-import { useAccount, useBalance } from 'wagmi';
+import { Address, formatUnits, zeroAddress } from 'viem';
+import { useBalance } from 'wagmi';
 import { limitFraction } from '@/helpers/number';
 import { TokenIconWithGIVBack } from '../../TokenIcon/TokenIconWithGIVBack';
 import { IProjectAcceptedToken } from '@/apollo/types/gqlTypes';
 import { useIntersectionObserver } from '@/hooks/useIntersectionObserver';
+import { useSolanaBalance } from '@/hooks/useSolanaBalance';
+import { ChainType } from '@/types/config';
+import { useGeneralWallet } from '@/providers/generalWalletProvider';
 
 interface ITokenInfoProps {
 	token: IProjectAcceptedToken;
@@ -20,21 +23,31 @@ export const TokenInfo: FC<ITokenInfoProps> = ({
 	onClick,
 }) => {
 	const [visible, setVisible] = useState(false);
-	const { address } = useAccount();
+	const { walletAddress: address } = useGeneralWallet();
 	const onVisible = () => {
 		if (!visible) setVisible(true);
 	};
 	const ref = useIntersectionObserver(onVisible, {
 		threshold: 0.1,
 	});
-	const { data: balance } = useBalance({
+
+	const isEvm = token.chainType === ChainType.EVM;
+	const { data: evmBalance } = useBalance({
 		token: token?.address === zeroAddress ? undefined : token?.address,
-		address: address,
+		address: (address as Address) || undefined,
 		query: {
-			enabled: visible,
+			enabled: isEvm && visible,
 		},
 	});
-	const disable = balance?.value === 0n;
+
+	const { data: solanaBalance } = useSolanaBalance({
+		token: token?.address,
+		address: !isEvm && visible ? address || undefined : undefined,
+	});
+
+	const balance = isEvm ? evmBalance?.value : solanaBalance;
+
+	const disable = balance === 0n;
 
 	if (hideZeroBalance && disable) return;
 	return (
@@ -63,11 +76,8 @@ export const TokenInfo: FC<ITokenInfoProps> = ({
 						<Caption $medium>
 							{balance !== undefined
 								? limitFraction(
-										formatUnits(
-											balance.value,
-											token.decimals,
-										),
-										6,
+										formatUnits(balance, token.decimals),
+										token.decimals / 6,
 									)
 								: '--'}
 						</Caption>
