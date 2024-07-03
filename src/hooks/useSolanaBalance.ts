@@ -31,7 +31,7 @@ export const useSolanaBalance = ({ address, token }: ISolanaBalance) => {
 				const solBalance =
 					await solanaConnection.getBalance(ownerAddress);
 
-				return solBalance;
+				return BigInt(solBalance);
 			}
 
 			// Fetch SPL token balance
@@ -55,7 +55,8 @@ export const useSolanaBalance = ({ address, token }: ISolanaBalance) => {
 			}
 
 			const accountInfo = tokenAccounts.value[0].account.data;
-			const balance = accountInfo.parsed.info.tokenAmount.amount;
+			const balance = accountInfo.parsed.info.tokenAmount
+				.amount as bigint;
 			return balance;
 		} catch (error) {
 			console.error('Error fetching Solana balance:', error);
