@@ -35,7 +35,7 @@ export const ProjectPublicActions = () => {
 	const [showModal, setShowShareModal] = useState<boolean>(false);
 	const { projectData, isActive } = useProjectContext();
 	const project = projectData!;
-	const { slug, id: projectId, verified } = project;
+	const { slug, id: projectId } = project;
 	const [reaction, setReaction] = useState(project.reaction);
 	const { isMobile } = useDetectDevice();
 	const [likeLoading, setLikeLoading] = useState(false);
