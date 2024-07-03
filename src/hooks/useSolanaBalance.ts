@@ -1,6 +1,7 @@
 import { useConnection } from '@solana/wallet-adapter-react';
 import { PublicKey } from '@solana/web3.js';
 import { useQuery } from '@tanstack/react-query';
+import { solanaNativeAddress } from '@/lib/constants/constants';
 
 interface ISolanaBalance {
 	token?: string;
@@ -27,7 +28,7 @@ export const useSolanaBalance = ({ address, token }: ISolanaBalance) => {
 			}
 
 			// Fetch native SOL balance if no token is provided
-			if (token === '11111111111111111111111111111111') {
+			if (!token || token === solanaNativeAddress) {
 				const solBalance =
 					await solanaConnection.getBalance(ownerAddress);
 				console.log('*****SOL balance', solBalance);
@@ -68,14 +69,14 @@ export const useSolanaBalance = ({ address, token }: ISolanaBalance) => {
 		}
 	};
 
-	const { data, error, isLoading } = useQuery({
+	const data = useQuery({
 		queryKey: ['solanaBalance', address, token],
 		queryFn: fetchSolanaBalance,
 		enabled: !!address,
 	});
 
-	if (error) {
-		console.error('Query error:', error);
+	if (data.error) {
+		console.error('Query error:', data.error);
 	}
 
 	return data;
