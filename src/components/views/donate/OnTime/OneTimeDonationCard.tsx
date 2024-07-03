@@ -150,7 +150,7 @@ const CryptoDonation: FC = () => {
 		token: selectedOneTimeToken?.address,
 		address:
 			walletChainType === ChainType.SOLANA
-				? (address as Address)
+				? address || undefined
 				: undefined,
 	});
 
