@@ -31,7 +31,6 @@ import {
 	IProjectAcceptedTokensGQL,
 } from '@/apollo/types/gqlTypes';
 import { prepareTokenList } from '@/components/views/donate/helpers';
-import { getERC20Info } from '@/lib/contracts';
 import GIVBackToast from '@/components/views/donate/GIVBackToast';
 import { DonateWrongNetwork } from '@/components/modals/DonateWrongNetwork';
 import { useAppDispatch, useAppSelector } from '@/features/hooks';
@@ -68,22 +67,15 @@ const CryptoDonation: FC = () => {
 		walletChainType,
 		walletAddress: address,
 		isConnected,
-		balance,
 	} = useGeneralWallet();
 
 	const { formatMessage } = useIntl();
 	const { isSignedIn } = useAppSelector(state => state.user);
 
-	const {
-		project,
-		hasActiveQFRound,
-		selectedOneTimeToken,
-		setSelectedOneTimeToken,
-	} = useDonateData();
+	const { project, hasActiveQFRound, selectedOneTimeToken } = useDonateData();
 	const dispatch = useAppDispatch();
 
 	const {
-		organization,
 		verified,
 		id: projectId,
 		status,
@@ -91,20 +83,13 @@ const CryptoDonation: FC = () => {
 		title: projectTitle,
 	} = project;
 
-	const { supportCustomTokens, label: orgLabel } = organization || {};
 	const isActive = status?.name === EProjectStatus.ACTIVE;
 	const noDonationSplit = Number(projectId!) === config.GIVETH_PROJECT_ID;
-
-	const [customInput, setCustomInput] = useState<any>();
 	const [amountTyped, setAmountTyped] = useState<number>();
 	const [amount, setAmount] = useState(0n);
-	const [inputBoxFocused, setInputBoxFocused] = useState(false);
 	const [erc20List, setErc20List] = useState<IProjectAcceptedToken[]>();
-	const [erc20OriginalList, setErc20OriginalList] = useState<any>();
 	const [anonymous, setAnonymous] = useState<boolean>(false);
 	const [amountError, setAmountError] = useState<boolean>(false);
-	const [tokenIsGivBackEligible, setTokenIsGivBackEligible] =
-		useState<boolean>();
 	const [showDonateModal, setShowDonateModal] = useState(false);
 	const [showInsufficientModal, setShowInsufficientModal] = useState(false);
 	const [showChangeNetworkModal, setShowChangeNetworkModal] = useState(false);
@@ -150,7 +135,6 @@ const CryptoDonation: FC = () => {
 				: undefined,
 	});
 
-	const tokenSymbol = selectedOneTimeToken?.symbol;
 	const tokenDecimals = selectedOneTimeToken?.decimals || 18;
 	const projectIsGivBackEligible = !!verified;
 	const { activeStartedRound } = getActiveRound(project.qfRounds);
@@ -230,19 +214,9 @@ const CryptoDonation: FC = () => {
 				setShowChangeNetworkModal(true);
 			}
 			const tokens = prepareTokenList(filteredTokens);
-			setErc20OriginalList(tokens);
 			setErc20List(tokens);
-			setTokenIsGivBackEligible(tokens[0]?.isGivbackEligible);
 		}
 	}, [networkId, acceptedTokens, walletChainType, addresses]);
-
-	// useEffect(() => {
-	// 	if (isConnected || address) pollToken();
-	// 	else {
-	// 		setSelectedOneTimeToken(undefined);
-	// 	}
-	// 	return () => clearPoll();
-	// }, [selectedOneTimeToken, isConnected, address, balance]);
 
 	useEffect(() => {
 		client
@@ -278,42 +252,6 @@ const CryptoDonation: FC = () => {
 		walletChainType === ChainType.EVM
 			? evmIsRefetching
 			: solanaIsRefetching;
-
-	const handleCustomToken = (i: Address) => {
-		if (!supportCustomTokens) return;
-		// It's a contract
-		if (i?.length === 42) {
-			try {
-				// setSelectLoading(true);
-				getERC20Info({
-					contractAddress: i,
-					networkId: networkId as number,
-				}).then(pastedToken => {
-					if (!pastedToken) return;
-					const found = erc20List?.find(
-						(t: IProjectAcceptedToken) =>
-							t.symbol === pastedToken.symbol,
-					);
-					!found &&
-						erc20List &&
-						setErc20List([...erc20List, pastedToken]);
-					setCustomInput(pastedToken?.address);
-					// setSelectLoading(false);
-				});
-			} catch (error) {
-				// setSelectLoading(false);
-				showToastError(error);
-				captureException(error, {
-					tags: {
-						section: 'handleCustomToken',
-					},
-				});
-			}
-		} else {
-			setCustomInput(i);
-			setErc20List(erc20OriginalList);
-		}
-	};
 
 	const handleDonate = () => {
 		if (
@@ -379,7 +317,8 @@ const CryptoDonation: FC = () => {
 					donationToGiveth={donationToGiveth}
 					anonymous={anonymous}
 					givBackEligible={
-						projectIsGivBackEligible && tokenIsGivBackEligible
+						projectIsGivBackEligible &&
+						selectedOneTimeToken.isGivbackEligible
 					}
 				/>
 			)}
@@ -470,7 +409,7 @@ const CryptoDonation: FC = () => {
 			{selectedOneTimeToken && (
 				<GIVBackToast
 					projectEligible={projectIsGivBackEligible}
-					tokenEligible={tokenIsGivBackEligible}
+					tokenEligible={selectedOneTimeToken.isGivbackEligible}
 				/>
 			)}
 			{!noDonationSplit ? (
