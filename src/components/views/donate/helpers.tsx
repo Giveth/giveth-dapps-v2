@@ -62,6 +62,7 @@ export interface ICreateDonation {
 	draftDonationId?: number;
 	setFailedModalType: (type: EDonationFailedType) => void;
 	useDonationBox: boolean;
+	relevantDonationTxHash?: string;
 }
 
 export const calcDonationShare = (

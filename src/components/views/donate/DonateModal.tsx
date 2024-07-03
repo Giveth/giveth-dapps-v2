@@ -226,6 +226,7 @@ const DonateModal: FC<IDonateModalProps> = props => {
 						setFailedModalType,
 						symbol: token.symbol,
 						useDonationBox: true,
+						relevantDonationTxHash: firstHash,
 					})
 						.then(({ txHash: secondHash }) => {
 							if (!secondHash) {

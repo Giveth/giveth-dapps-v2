@@ -60,6 +60,7 @@ export const useCreateSolanaDonation = () => {
 				token,
 				setFailedModalType,
 				useDonationBox,
+				relevantDonationTxHash,
 			} = props;
 
 			let donationData: IOnTxHash;
@@ -79,6 +80,7 @@ export const useCreateSolanaDonation = () => {
 					setFailedModalType,
 					safeTransactionId: null,
 					useDonationBox,
+					relevantDonationTxHash,
 				};
 			} else return;
 
@@ -104,6 +106,7 @@ export const useCreateSolanaDonation = () => {
 					symbol: token.symbol,
 					error: e.message,
 					useDonationBox,
+					relevantDonationTxHash,
 				});
 				setFailedModalType(EDonationFailedType.NOT_SAVED);
 			}

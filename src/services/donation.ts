@@ -73,6 +73,7 @@ const createDonation = async (props: IOnTxHash) => {
 		safeTransactionId,
 		draftDonationId,
 		useDonationBox,
+		relevantDonationTxHash,
 	} = props;
 	const { address, symbol } = token;
 	let donationId = 0;
@@ -93,6 +94,7 @@ const createDonation = async (props: IOnTxHash) => {
 				safeTransactionId,
 				draftDonationId,
 				useDonationBox,
+				relevantDonationTxHash,
 			},
 		});
 		donationId = data.createDonation;
