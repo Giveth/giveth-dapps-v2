@@ -10,17 +10,15 @@ import {
 	IconCaretDown16,
 	IconRefresh16,
 	neutralColors,
-	semanticColors,
 } from '@giveth/ui-design-system';
 // @ts-ignore
 import { captureException } from '@sentry/nextjs';
 import { Address, Chain, formatUnits, parseUnits, zeroAddress } from 'viem';
 import { useBalance } from 'wagmi';
 import { setShowWelcomeModal } from '@/features/modal/modal.slice';
-import { Shadow } from '@/components/styled-components/Shadow';
 import CheckBox from '@/components/Checkbox';
 
-import { donationDecimals, mediaQueries } from '@/lib/constants/constants';
+import { donationDecimals } from '@/lib/constants/constants';
 import { InsufficientFundModal } from '@/components/modals/InsufficientFund';
 import GeminiModal from './GeminiModal';
 import config from '@/configuration';
@@ -407,62 +405,6 @@ const CryptoDonation: FC = () => {
 				/>
 			)}
 			<SaveGasFees acceptedChains={acceptedChains} />
-			{/* <InputContainer>
-				<SearchContainer
-					$error={amountError}
-					$focused={inputBoxFocused}
-				>
-					<DropdownContainer>
-						<TokenPicker
-							tokenList={erc20List}
-							selectedOneTimeToken={selectedOneTimeToken}
-							inputValue={customInput}
-							onChange={(i: IProjectAcceptedToken) => {
-								setSelectedOneTimeToken(i);
-								setCustomInput('');
-								setErc20List(erc20OriginalList);
-								setTokenIsGivBackEligible(i.isGivbackEligible);
-							}}
-							onInputChange={handleCustomToken}
-							placeholder={
-								supportCustomTokens
-									? formatMessage({
-											id: 'component.input.search_or_paste',
-										})
-									: formatMessage({
-											id: 'component.input.search_name',
-										})
-							}
-							projectVerified={project?.verified!}
-							disabled={!isConnected}
-						/>
-					</DropdownContainer>
-
-					<InputBox
-						value={amountTyped}
-						error={amountError}
-						onChange={val => {
-							const checkGIV = checkGIVTokenAvailability();
-							if (/^0+(?=\d)/.test(String(val))) return;
-							console.log;
-							setAmountError(
-								val !== undefined
-									? val < minDonationAmount
-									: false,
-							);
-							if (checkGIV) setAmountTyped(val);
-						}}
-						onFocus={setInputBoxFocused}
-						disabled={!isConnected}
-					/>
-				</SearchContainer>
-				{selectedOneTimeToken && (
-					<AvText onClick={setMaxDonation}>
-						{formatMessage({ id: 'label.available' })}:{' '}
-						{userBalance} {tokenSymbol}
-					</AvText>
-				)}
-			</InputContainer> */}
 			<Flex $flexDirection='column' gap='8px'>
 				<InputWrapper>
 					<SelectTokenWrapper
@@ -636,29 +578,6 @@ interface IInputBox {
 	$error: boolean;
 	$focused: boolean;
 }
-
-const SearchContainer = styled.div<IInputBox>`
-	display: flex;
-	border: 2px solid
-		${props =>
-			props.$error === true
-				? semanticColors.punch[500]
-				: neutralColors.gray[300]};
-	border-radius: 8px;
-	box-shadow: ${props => props.$focused && Shadow.Neutral[500]};
-	&:hover {
-		box-shadow: ${Shadow.Neutral[500]};
-	}
-`;
-
-const DropdownContainer = styled.div`
-	width: 35%;
-	height: 54px;
-	min-width: 140px;
-	${mediaQueries.mobileL} {
-		width: 50%;
-	}
-`;
 
 const MainButton = styled(Button)`
 	width: 100%;
