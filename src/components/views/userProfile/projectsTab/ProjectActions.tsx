@@ -165,7 +165,7 @@ const ProjectActions: FC<IProjectActions> = ({
 	// Add action if project need verification or verification is partially done
 	if (
 		project.projectVerificationForm?.status === EVerificationStatus.DRAFT ||
-		!project.verified
+		(!project.verified && project.projectVerificationForm === null)
 	) {
 		options.push({
 			label: formatMessage({
