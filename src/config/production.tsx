@@ -45,7 +45,7 @@ const BASE_NETWORK_NUMBER = 8453;
 const ZKEVM_NETWORK_NUMBER = 1101;
 const CLASSIC_NETWORK_NUMBER = 61;
 const SOLANA_NETWORK: NonEVMChain = {
-	id: 0,
+	id: 101,
 	networkId: 101,
 	chainType: ChainType.SOLANA,
 	adapterNetwork: WalletAdapterNetwork.Mainnet,
