@@ -75,6 +75,16 @@ export const AmountInput: FC<IAmountInput> = ({
 			setActiveStep(0);
 
 			try {
+				if (parseFloat(value) === 0 && !value.includes('.')) {
+					setAmount(0n);
+					setDisplayAmount('0');
+					return;
+				}
+			} catch (error) {
+				console.error('Failed to parse input amount:', error);
+			}
+
+			try {
 				let valueBn = parseUnits(value, decimals);
 				setAmount(valueBn);
 			} catch (error) {
