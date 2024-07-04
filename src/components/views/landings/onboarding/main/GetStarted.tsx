@@ -5,95 +5,68 @@ import {
 	H5,
 	neutralColors,
 } from '@giveth/ui-design-system';
+import React from 'react';
+import { useForm } from 'react-hook-form';
 import { OnboardingHeaderWrapper } from '@/components/views/landings/onboarding/common/common.styled';
-import Input from '@/components/styled-components/Input';
+import Input, { InputSize } from '@/components/Input';
+import { requiredOptions } from '@/lib/constants/regex';
+import { client } from '@/apollo/apolloClient';
+import { SUBSCRIBE_ONBOARDING } from '@/apollo/gql/gqlSubscribeOnboarding';
+import { showToastError } from '@/lib/helpers';
+import { gToast, ToastType } from '@/components/toasts';
+
+type Inputs = {
+	email: string;
+};
 
 const GetStarted = () => {
+	const {
+		register,
+		handleSubmit,
+		formState: { errors },
+		reset,
+	} = useForm<Inputs>();
+
+	const onSubmit = async (formData: Inputs) => {
+		try {
+			const { email } = formData;
+			const { data } = await client.query({
+				query: SUBSCRIBE_ONBOARDING,
+				variables: { email },
+				fetchPolicy: 'no-cache',
+			});
+			if (data?.subscribeOnboarding) {
+				gToast('You have successfully subscribed.', {
+					type: ToastType.SUCCESS,
+					title: 'Success',
+					position: 'top-center',
+				});
+				reset();
+			} else {
+				await Promise.reject();
+			}
+		} catch (e) {
+			showToastError('Something went wrong, please try again later');
+			reset();
+		}
+	};
+
 	return (
 		<OnboardingHeaderWrapperStyled>
 			<H5 weight={700}>Get started with our Giveth onboarding guide</H5>
-			<div id='646b4736a2882bf86587185d'>
-				<div
-					id='646b4736a2882bf86587185d-form'
-					className='646b4736a2882bf86587185d-template'
-				>
-					<div
-						id='selected-_holfg9jol'
-						className='ap3w-embeddable-form-646b4736a2882bf86587185d ap3w-embeddable-form-646b4736a2882bf86587185d-full ap3w-embeddable-form-646b4736a2882bf86587185d-solid'
-						data-select='true'
-					>
-						<form
-							id='ap3w-embeddable-form-646b4736a2882bf86587185d'
-							className='ap3w-embeddable-form-content'
-						>
-							<div
-								id='selected-_18s7trjp5'
-								className='ap3w-form-input ap3w-form-input-646b4736a2882bf86587185d'
-								data-select='true'
-								data-field-id='str::email'
-								data-merge-strategy='override'
-							>
-								<InputStyled
-									type='email'
-									id='ap3w-form-input-email-646b4736a2882bf86587185d'
-									step='1'
-									name='email'
-									required
-									placeholder='Your email address'
-								/>
-							</div>
-							<div
-								id='selected-_45j87ga41'
-								className='ap3w-form-button ap3w-form-button-646b4736a2882bf86587185d'
-							>
-								<StyledButton
-									id='ap3w-form-button-646b4736a2882bf86587185d'
-									type='submit'
-									data-select='true'
-									data-button-on-click='thank-you'
-								>
-									Discover the Future of Giving
-								</StyledButton>
-							</div>
-						</form>
-					</div>
-				</div>
-				<div
-					id='646b4736a2882bf86587185d-thank-you'
-					className='646b4736a2882bf86587185d-template'
-					style={{
-						position: 'relative',
-						display: 'none',
-						height: '100%',
-						alignItems: 'center',
-						justifyContent: 'center',
-					}}
-				>
-					<div
-						id='selected-_qihyqwtgi'
-						className='ap3w-embeddable-form-646b4736a2882bf86587185d ap3w-embeddable-form-646b4736a2882bf86587185d-full ap3w-embeddable-form-646b4736a2882bf86587185d-solid'
-						data-select='true'
-					>
-						<form
-							id='ap3w-embeddable-form-646b4736a2882bf86587185d'
-							className='ap3w-embeddable-form-content'
-						>
-							<div
-								id='selected-_zlfr6oqkd'
-								className='ap3w-text ap3w-text-646b4736a2882bf86587185d ap3w-text--first ap3w-text--last'
-							>
-								<div data-select='true'>
-									<p data-size='h2'>
-										Your journey into the Future of Giving
-										has just begun! Check your email for our
-										special onboarding guide.
-									</p>
-								</div>
-							</div>
-						</form>
-					</div>
-				</div>
-			</div>
+			<form onSubmit={handleSubmit(onSubmit)}>
+				<Input
+					registerName={'email'}
+					placeholder={'Your email address'}
+					size={InputSize.MEDIUM}
+					register={register}
+					error={errors.email}
+					registerOptions={requiredOptions.email}
+				/>
+				<StyledButton type='submit'>
+					Discover the Future of Giving
+				</StyledButton>
+			</form>
 		</OnboardingHeaderWrapperStyled>
 	);
 };
@@ -117,13 +90,9 @@ const StyledButton = styled.button`
 	line-height: 18px;
 	letter-spacing: 0.48px;
 	text-transform: uppercase;
-	margin-top: 15px;
+	margin-top: 8px;
 	border: none;
 	cursor: pointer;
-`;
-
-const InputStyled = styled(Input)`
-	max-width: 685px;
 `;
 
 const OnboardingHeaderWrapperStyled = styled(OnboardingHeaderWrapper)`
