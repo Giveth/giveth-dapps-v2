@@ -325,9 +325,7 @@ const DonationSectionWrapper = styled(Flex)`
 	}
 `;
 
-const DonateInfo = styled.div`
-	height: 90px;
-`;
+const DonateInfo = styled.div``;
 
 const NoFund = styled(H4)`
 	color: ${neutralColors.gray[800]};
