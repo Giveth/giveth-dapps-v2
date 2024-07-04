@@ -33,7 +33,6 @@ const GetStarted = () => {
 			const { data } = await client.query({
 				query: SUBSCRIBE_ONBOARDING,
 				variables: { email },
-				fetchPolicy: 'no-cache',
 			});
 			if (data?.subscribeOnboarding) {
 				gToast('You have successfully subscribed.', {
@@ -55,14 +54,16 @@ const GetStarted = () => {
 		<OnboardingHeaderWrapperStyled>
 			<H5 weight={700}>Get started with our Giveth onboarding guide</H5>
 			<form onSubmit={handleSubmit(onSubmit)}>
-				<Input
-					registerName={'email'}
-					placeholder={'Your email address'}
-					size={InputSize.MEDIUM}
-					register={register}
-					error={errors.email}
-					registerOptions={requiredOptions.email}
-				/>
+				<InputWrapper>
+					<Input
+						registerName={'email'}
+						placeholder={'Your email address'}
+						size={InputSize.MEDIUM}
+						register={register}
+						error={errors.email}
+						registerOptions={requiredOptions.email}
+					/>
+				</InputWrapper>
 				<StyledButton type='submit'>
 					Discover the Future of Giving
 				</StyledButton>
@@ -70,6 +71,11 @@ const GetStarted = () => {
 		</OnboardingHeaderWrapperStyled>
 	);
 };
+
+const InputWrapper = styled.div`
+	max-width: 700px;
+	margin-top: 25px;
+`;
 
 const StyledButton = styled.button`
 	display: flex;
