@@ -10,8 +10,9 @@ import {
 } from '@giveth/ui-design-system';
 import { useState, type FC, useEffect } from 'react';
 import { useIntl } from 'react-intl';
-import { isAddress } from 'viem'; // Assuming `isAddress` is a function from the `viem` library to validate Ethereum addresses
+import { erc20Abi, isAddress } from 'viem'; // Assuming `isAddress` is a function from the `viem` library to validate Ethereum addresses
 import { useAccount } from 'wagmi';
+import { readContracts } from 'wagmi/actions';
 import { IModal } from '@/types/common';
 import { Modal } from '@/components/modals/Modal';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
@@ -19,8 +20,9 @@ import { TokenInfo } from './TokenInfo';
 import { IProjectAcceptedToken } from '@/apollo/types/gqlTypes';
 import CheckBox from '@/components/Checkbox';
 import { useDonateData } from '@/context/donate.context';
-import { shortenAddress } from '@/lib/helpers';
+import { shortenAddress, showToastError } from '@/lib/helpers';
 import { useGeneralWallet } from '@/providers/generalWalletProvider';
+import { wagmiConfig } from '@/wagmiConfigs';
 
 export interface ISelectTokenModalProps extends IModal {
 	tokens?: IProjectAcceptedToken[];
@@ -79,7 +81,7 @@ const SelectTokenInnerModal: FC<ISelectTokenModalProps> = ({
 					setCustomToken(undefined);
 					setFilteredTokens([existingToken]);
 				} else if (isOnEVM) {
-					setCustomToken({
+					const initialToken = {
 						address: searchQuery,
 						decimals: 18,
 						name: shortenAddress(searchQuery),
@@ -87,23 +89,42 @@ const SelectTokenInnerModal: FC<ISelectTokenModalProps> = ({
 						networkId: evmChain?.id || 1,
 						isGivbackEligible: false,
 						order: 1,
-					});
-					// getToken(searchQuery)
-					// 	.then(tokenData => {
-					// 		const customTokenData = {
-					// 			address: searchQuery,
-					// 			name: tokenData.name,
-					// 			symbol: tokenData.symbol,
-					// 			balance: 0, // Assuming balance fetching is handled elsewhere
-					// 		};
-					// 		setCustomToken(customTokenData);
-					// 		setFilteredTokens([]);
-					// 	})
-					// 	.catch(error => {
-					// 		console.error('Failed to fetch token data', error);
-					// 		setCustomToken(null);
-					// 		setFilteredTokens([]);
-					// 	});
+					};
+					setCustomToken(initialToken);
+					try {
+						readContracts(wagmiConfig, {
+							allowFailure: false,
+							contracts: [
+								{
+									address: searchQuery,
+									abi: erc20Abi,
+									functionName: 'decimals',
+								},
+								{
+									address: searchQuery,
+									abi: erc20Abi,
+									functionName: 'name',
+								},
+								{
+									address: searchQuery,
+									abi: erc20Abi,
+									functionName: 'symbol',
+								},
+							],
+						}).then(results => {
+							console.log('results', results);
+							const _customTokenData = {
+								...initialToken,
+								address: searchQuery,
+								decimals: results[0],
+								name: results[1],
+								symbol: results[2],
+							};
+							setCustomToken(_customTokenData);
+						});
+					} catch (error) {
+						showToastError('Failed to fetch token data');
+					}
 				}
 			} else {
 				setCustomToken(undefined);
