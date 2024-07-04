@@ -8,7 +8,7 @@ import {
 	IconGIVBack24,
 	IconSearch16,
 } from '@giveth/ui-design-system';
-import { useState, type FC } from 'react';
+import { useState, type FC, useEffect } from 'react';
 import { useIntl } from 'react-intl';
 import { IModal } from '@/types/common';
 import { Modal } from '@/components/modals/Modal';
@@ -54,27 +54,46 @@ const SelectTokenInnerModal: FC<ISelectTokenModalProps> = ({
 	setShowModal,
 }) => {
 	const [hideZeroBalance, setHideZeroBalance] = useState(false);
+	const [searchQuery, setSearchQuery] = useState('');
 	const { setSelectedOneTimeToken } = useDonateData();
+	const [filteredTokens, setFilteredTokens] = useState(tokens || []);
+
+	useEffect(() => {
+		if (tokens) {
+			const filtered = tokens.filter(
+				token =>
+					token.symbol
+						.toLowerCase()
+						.includes(searchQuery.toLowerCase()) ||
+					token.name
+						.toLowerCase()
+						.includes(searchQuery.toLowerCase()),
+			);
+			setFilteredTokens(filtered);
+		}
+	}, [searchQuery, tokens]);
 
 	return (
 		<>
 			<Wrapper>
 				<InputWrapper>
-					<Input placeholder='Search name or paste an address'></Input>
+					<Input
+						placeholder='Search name or paste an address'
+						value={searchQuery}
+						onChange={e => setSearchQuery(e.target.value)}
+					/>
 					<SearchIconWrapper>
 						<IconSearch16 color={neutralColors.gray[400]} />
 					</SearchIconWrapper>
 				</InputWrapper>
 				<CheckBox
 					label='Hide 0 balance tokens'
-					onChange={e => {
-						setHideZeroBalance(!hideZeroBalance);
-					}}
+					onChange={() => setHideZeroBalance(!hideZeroBalance)}
 					checked={hideZeroBalance}
 					size={14}
 				/>
-				{tokens !== undefined && tokens.length > 0 ? (
-					tokens.map(token => (
+				{filteredTokens.length > 0 ? (
+					filteredTokens.map(token => (
 						<TokenInfo
 							key={token.symbol}
 							token={token}
