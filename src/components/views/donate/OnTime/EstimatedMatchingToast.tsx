@@ -11,6 +11,7 @@ import {
 } from '@giveth/ui-design-system';
 import React from 'react';
 import { useIntl } from 'react-intl';
+import { formatUnits } from 'viem';
 import Divider from '@/components/Divider';
 import { TooltipContent } from '@/components/modals/HarvestAll.sc';
 import { IconWithTooltip } from '@/components/IconWithToolTip';
@@ -22,18 +23,18 @@ import {
 import { IProjectAcceptedToken } from '@/apollo/types/gqlTypes';
 import { useTokenPrice } from '@/hooks/useTokenPrice';
 import { formatDonation } from '@/helpers/number';
-import { formatBalance } from '@/lib/helpers';
+import { formatBalance, truncateToDecimalPlaces } from '@/lib/helpers';
 
 interface IEstimatedMatchingToast {
 	projectData: IProject;
+	amount: bigint;
 	token?: IProjectAcceptedToken;
-	amountTyped?: number;
 }
 
 const EstimatedMatchingToast: React.FC<IEstimatedMatchingToast> = ({
 	projectData,
 	token,
-	amountTyped,
+	amount,
 }) => {
 	const { formatMessage, locale } = useIntl();
 	const { estimatedMatching, qfRounds } = projectData || {};
@@ -51,7 +52,11 @@ const EstimatedMatchingToast: React.FC<IEstimatedMatchingToast> = ({
 		maximumReward,
 	} = activeStartedRound || {};
 
-	const amountInUsd = (tokenPrice || 0) * (amountTyped || 0);
+	const decimals = token?.decimals || 18;
+
+	const amountInUsd =
+		(tokenPrice || 0) *
+		(truncateToDecimalPlaces(formatUnits(amount, decimals), decimals) || 0);
 
 	const esMatching = calculateEstimatedMatchingWithDonationAmount(
 		amountInUsd,
