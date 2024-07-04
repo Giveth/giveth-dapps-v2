@@ -6,6 +6,7 @@ import {
 	neutralColors,
 	Flex,
 	IconGIVBack24,
+	IconSearch16,
 } from '@giveth/ui-design-system';
 import { useState, type FC } from 'react';
 import { useIntl } from 'react-intl';
@@ -58,6 +59,12 @@ const SelectTokenInnerModal: FC<ISelectTokenModalProps> = ({
 	return (
 		<>
 			<Wrapper>
+				<InputWrapper>
+					<Input placeholder='Search name or paste an address'></Input>
+					<SearchIconWrapper>
+						<IconSearch16 color={neutralColors.gray[400]} />
+					</SearchIconWrapper>
+				</InputWrapper>
 				<CheckBox
 					label='Hide 0 balance tokens'
 					onChange={e => {
@@ -100,4 +107,30 @@ const GIVbackWrapper = styled.div`
 	margin-top: 4px;
 	padding: 12px 24px;
 	background: ${neutralColors.gray[200]};
+`;
+
+const InputWrapper = styled.div`
+	border-radius: 8px;
+	border: 2px solid ${neutralColors.gray[300]};
+	position: relative;
+`;
+
+const Input = styled.input`
+	padding: 8px 16px;
+	padding-right: 48px;
+	width: 100%;
+	border: none;
+	outline: none;
+	font-size: 16px;
+	background: transparent;
+	line-height: 24px;
+`;
+
+const SearchIconWrapper = styled.div`
+	position: absolute;
+	top: 8px;
+	right: 12px;
+	border-left: 1px solid ${neutralColors.gray[300]};
+	padding: 2px;
+	padding-left: 8px;
 `;
