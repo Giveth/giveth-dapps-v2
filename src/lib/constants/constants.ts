@@ -124,5 +124,4 @@ export const WeiPerEther = 1e18;
 
 export const PROFILE_PHOTO_PLACEHOLDER = '/images/placeholders/profile.svg';
 
-// Deprecated: maximumRewards coming from backend for each qfRound
-// export const QF_MATCHING_CAP_PERCENTAGE = 4;
+export const solanaNativeAddress = '11111111111111111111111111111111';

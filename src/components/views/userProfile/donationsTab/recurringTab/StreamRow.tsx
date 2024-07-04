@@ -9,10 +9,10 @@ import { TableCell } from './ActiveStreamsSection';
 import { ISuperfluidStream } from '@/types/superFluid';
 import { ONE_MONTH_SECONDS } from '@/lib/constants/constants';
 import { limitFraction } from '@/helpers/number';
-import { ModifySuperTokenModal } from '@/components/views/donate/ModifySuperToken/ModifySuperTokenModal';
 import config from '@/configuration';
 import { countActiveStreams } from '@/helpers/donate';
 import { findTokenByAddress } from '@/helpers/superfluid';
+import { ModifySuperTokenModal } from '@/components/views/donate/Recurring/ModifySuperToken/ModifySuperTokenModal';
 
 interface IStreamRowProps {
 	tokenStream: ISuperfluidStream[];

@@ -8,9 +8,7 @@ import { AddressZero } from '@/lib/constants/constants';
 import { ModifyInfoToast } from './ModifyInfoToast';
 import { IModifySuperTokenInnerModalProps } from './ModifySuperTokenModal';
 import { DepositSteps } from './DepositSuperTokenSteps';
-import { Item } from '../RecurringDonationModal/Item';
 import { useTokenPrice } from '@/hooks/useTokenPrice';
-import { RunOutInfo } from '../RunOutInfo';
 import { approveERC20tokenTransfer } from '@/lib/stakingPool';
 import config, { isProduction } from '@/configuration';
 import { showToastError } from '@/lib/helpers';
@@ -23,6 +21,8 @@ import { wagmiConfig } from '@/wagmiConfigs';
 import { getEthersProvider, getEthersSigner } from '@/helpers/ethers';
 import { EToastType } from '@/components/toasts/InlineToast';
 import { ensureCorrectNetwork } from '@/helpers/network';
+import { Item } from '../RecurringDonationModal/Item';
+import { RunOutInfo } from '../RunOutInfo';
 
 interface IDepositSuperTokenProps extends IModifySuperTokenInnerModalProps {
 	token?: IToken;
