@@ -62,7 +62,7 @@ export const TokenInfo: FC<ITokenInfoProps> = ({
 			ref={ref}
 		>
 			<TokenIconWithGIVBack
-				showGiveBack
+				showGiveBack={token.isGivbackEligible}
 				symbol={token.symbol}
 				size={32}
 			/>
