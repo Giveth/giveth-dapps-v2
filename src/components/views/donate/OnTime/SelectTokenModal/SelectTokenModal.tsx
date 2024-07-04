@@ -10,6 +10,8 @@ import {
 } from '@giveth/ui-design-system';
 import { useState, type FC, useEffect } from 'react';
 import { useIntl } from 'react-intl';
+import { isAddress } from 'viem'; // Assuming `isAddress` is a function from the `viem` library to validate Ethereum addresses
+import { useAccount } from 'wagmi';
 import { IModal } from '@/types/common';
 import { Modal } from '@/components/modals/Modal';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
@@ -17,6 +19,8 @@ import { TokenInfo } from './TokenInfo';
 import { IProjectAcceptedToken } from '@/apollo/types/gqlTypes';
 import CheckBox from '@/components/Checkbox';
 import { useDonateData } from '@/context/donate.context';
+import { shortenAddress } from '@/lib/helpers';
+import { useGeneralWallet } from '@/providers/generalWalletProvider';
 
 export interface ISelectTokenModalProps extends IModal {
 	tokens?: IProjectAcceptedToken[];
@@ -55,21 +59,65 @@ const SelectTokenInnerModal: FC<ISelectTokenModalProps> = ({
 }) => {
 	const [hideZeroBalance, setHideZeroBalance] = useState(false);
 	const [searchQuery, setSearchQuery] = useState('');
-	const { setSelectedOneTimeToken } = useDonateData();
 	const [filteredTokens, setFilteredTokens] = useState(tokens || []);
+	const [customToken, setCustomToken] = useState<
+		IProjectAcceptedToken | undefined
+	>();
+	const { setSelectedOneTimeToken } = useDonateData();
+	const { isOnEVM } = useGeneralWallet();
+	const { chain: evmChain } = useAccount();
 
 	useEffect(() => {
 		if (tokens) {
-			const filtered = tokens.filter(
-				token =>
-					token.symbol
-						.toLowerCase()
-						.includes(searchQuery.toLowerCase()) ||
-					token.name
-						.toLowerCase()
-						.includes(searchQuery.toLowerCase()),
-			);
-			setFilteredTokens(filtered);
+			if (isAddress(searchQuery)) {
+				const existingToken = tokens.find(
+					token =>
+						token.address.toLowerCase() ===
+						searchQuery.toLowerCase(),
+				);
+				if (existingToken) {
+					setCustomToken(undefined);
+					setFilteredTokens([existingToken]);
+				} else if (isOnEVM) {
+					setCustomToken({
+						address: searchQuery,
+						decimals: 18,
+						name: shortenAddress(searchQuery),
+						symbol: shortenAddress(searchQuery),
+						networkId: evmChain?.id || 1,
+						isGivbackEligible: false,
+						order: 1,
+					});
+					// getToken(searchQuery)
+					// 	.then(tokenData => {
+					// 		const customTokenData = {
+					// 			address: searchQuery,
+					// 			name: tokenData.name,
+					// 			symbol: tokenData.symbol,
+					// 			balance: 0, // Assuming balance fetching is handled elsewhere
+					// 		};
+					// 		setCustomToken(customTokenData);
+					// 		setFilteredTokens([]);
+					// 	})
+					// 	.catch(error => {
+					// 		console.error('Failed to fetch token data', error);
+					// 		setCustomToken(null);
+					// 		setFilteredTokens([]);
+					// 	});
+				}
+			} else {
+				setCustomToken(undefined);
+				const filtered = tokens.filter(
+					token =>
+						token.symbol
+							.toLowerCase()
+							.includes(searchQuery.toLowerCase()) ||
+						token.name
+							.toLowerCase()
+							.includes(searchQuery.toLowerCase()),
+				);
+				setFilteredTokens(filtered);
+			}
 		}
 	}, [searchQuery, tokens]);
 
@@ -92,7 +140,16 @@ const SelectTokenInnerModal: FC<ISelectTokenModalProps> = ({
 					checked={hideZeroBalance}
 					size={14}
 				/>
-				{filteredTokens.length > 0 ? (
+				{customToken ? (
+					<TokenInfo
+						token={customToken}
+						hideZeroBalance={hideZeroBalance}
+						onClick={() => {
+							setSelectedOneTimeToken(customToken);
+							setShowModal(false);
+						}}
+					/>
+				) : filteredTokens.length > 0 ? (
 					filteredTokens.map(token => (
 						<TokenInfo
 							key={token.symbol}
