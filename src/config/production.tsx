@@ -7,6 +7,7 @@ import {
 	polygon,
 	arbitrum,
 	base,
+	polygonZkEvm,
 } from '@wagmi/core/chains';
 import { WalletAdapterNetwork } from '@solana/wallet-adapter-base';
 import React from 'react';
@@ -28,6 +29,7 @@ import { IconClassic } from '@/components/Icons/Classic';
 import IconBase from '@/components/Icons/Base';
 import IconSolana from '@/components/Icons/Solana';
 import IconArbitrum from '@/components/Icons/Arbitrum';
+import IconZKEVM from '@/components/Icons/ZKEVM';
 
 const GNOSIS_GIV_TOKEN_ADDRESS = '0x4f4F9b8D5B4d0Dc10506e5551B0513B61fD59e75';
 const OPTIMISM_GIV_TOKEN_ADDRESS = '0x528CDc92eAB044E1E39FE43B9514bfdAB4412B98';
@@ -40,6 +42,7 @@ const OPTIMISM_NETWORK_NUMBER = 10;
 const CELO_NETWORK_NUMBER = 42220;
 const ARBITRUM_NETWORK_NUMBER = 42161;
 const BASE_NETWORK_NUMBER = 8453;
+const ZKEVM_NETWORK_NUMBER = 1101;
 const CLASSIC_NETWORK_NUMBER = 61;
 const SOLANA_NETWORK: NonEVMChain = {
 	id: 0,
@@ -64,6 +67,7 @@ const EVM_CHAINS = [
 	arbitrum,
 	classic,
 	base,
+	polygonZkEvm,
 ] as readonly [Chain, ...Chain[]];
 
 const NON_EVM_CHAINS: NonEVMChain[] = [SOLANA_NETWORK];
@@ -98,6 +102,7 @@ const config: EnvConfig = {
 	CELO_NETWORK_NUMBER: CELO_NETWORK_NUMBER,
 	ARBITRUM_NETWORK_NUMBER: ARBITRUM_NETWORK_NUMBER,
 	BASE_NETWORK_NUMBER: BASE_NETWORK_NUMBER,
+	ZKEVM_NETWORK_NUMBER: ZKEVM_NETWORK_NUMBER,
 	CLASSIC_NETWORK_NUMBER: CLASSIC_NETWORK_NUMBER,
 
 	RARIBLE_ADDRESS: 'https://rarible.com/',
@@ -113,7 +118,7 @@ const config: EnvConfig = {
 
 		subgraphAddress:
 			process.env.NEXT_PUBLIC_SUBGRAPH_MAINNET ||
-			'https://api.thegraph.com/subgraphs/name/giveth/giveth-economy-second-mainnet?source=giveth',
+			'https://gateway-arbitrum.network.thegraph.com/api/720ca27934ee17d259dc2975d9a6d714/subgraphs/id/9QK3vLoWF69TXSenUzQkkLhessaViu4naE58gRyKCxU7',
 		coingeckoChainName: 'ethereum',
 		chainLogo: (logoSize = 24) => <IconEthereum size={logoSize} />,
 
@@ -231,7 +236,8 @@ const config: EnvConfig = {
 			},
 		],
 		uniswapV2Subgraph:
-			'https://api.thegraph.com/subgraphs/name/uniswap/uniswap-v2?source=giveth',
+			process.env.NEXT_PUBLIC_SUBGRAPH_UNISWAP_V2 ||
+			'https://gateway-arbitrum.network.thegraph.com/api/49102048d5822209c7cd189f8e4a51a9/subgraphs/id/EYCKATKGBKLWvSfwvBjzfCBmGwYNdVkduYXVivCsLRFu',
 		regenStreams: [
 			{
 				network: MAINNET_NETWORK_NUMBER,
@@ -258,7 +264,7 @@ const config: EnvConfig = {
 
 		subgraphAddress:
 			process.env.NEXT_PUBLIC_SUBGRAPH_GNOSIS ||
-			'https://api.thegraph.com/subgraphs/name/giveth/giveth-economy-second-xdai?source=giveth',
+			'https://gateway-arbitrum.network.thegraph.com/api/720ca27934ee17d259dc2975d9a6d714/subgraphs/id/Bbz1imi78Set7VYKxqwNGZ4dwqJpEUBNYqGsbPPZPh4q',
 		coingeckoChainName: 'xdai',
 		chainLogo: (logoSize = 24) => <IconGnosisChain size={logoSize} />,
 
@@ -368,7 +374,8 @@ const config: EnvConfig = {
 		],
 
 		uniswapV2Subgraph:
-			'https://api.thegraph.com/subgraphs/name/1hive/honeyswap-v2?source=giveth',
+			process.env.NEXT_PUBLIC_SUBGRAPH_HONEYSWAP_V2 ||
+			'https://api.studio.thegraph.com/proxy/40931/honeyswap-gnosis/version/latest',
 
 		regenStreams: [
 			{
@@ -406,7 +413,7 @@ const config: EnvConfig = {
 		anchorRegistryAddress: '0x4AAcca72145e1dF2aeC137E1f3C5E3D75DB8b5f3',
 		subgraphAddress:
 			process.env.NEXT_PUBLIC_SUBGRAPH_OPTIMISM ||
-			'https://api.thegraph.com/subgraphs/name/giveth/giveconomy-optimism-mainnet?source=giveth',
+			'https://gateway-arbitrum.network.thegraph.com/api/720ca27934ee17d259dc2975d9a6d714/subgraphs/id/zyoJAUh2eGLEbEkBqESDD497qHLGH1YcKH9PBEMnWjM',
 		GIV_TOKEN_ADDRESS: OPTIMISM_GIV_TOKEN_ADDRESS,
 		GIV_BUY_LINK:
 			'https://velodrome.finance/swap?from=eth&to=0x528cdc92eab044e1e39fe43b9514bfdab4412b98',
@@ -428,7 +435,8 @@ const config: EnvConfig = {
 		GIVETH_ANCHOR_CONTRACT_ADDRESS:
 			'0x5430757bc19c87ec562e4660e56af6cac324b50a',
 		superFluidSubgraph:
-			'https://api.thegraph.com/subgraphs/name/superfluid-finance/protocol-v1-optimism-mainnet?source=giveth',
+			process.env.NEXT_PUBLIC_SUBGRAPH_SUPER_FLUID ||
+			'https://subgraph-endpoints.superfluid.dev/optimism-mainnet/protocol-v1',
 		SUPER_FLUID_TOKENS: [
 			{
 				underlyingToken: {
@@ -537,6 +545,16 @@ const config: EnvConfig = {
 		subgraphAddress: '',
 		coingeckoChainName: 'base',
 		chainLogo: (logoSize = 24) => <IconBase size={logoSize} />,
+	},
+
+	ZKEVM_CONFIG: {
+		...polygonZkEvm,
+		chainType: ChainType.EVM,
+		coingeckoChainName: 'polygon-zkevm',
+		gasPreference: {
+			// Keep it empty for automatic configuration
+		},
+		chainLogo: (logoSize?: number) => <IconZKEVM size={logoSize} />,
 	},
 	CLASSIC_CONFIG: {
 		...classic,

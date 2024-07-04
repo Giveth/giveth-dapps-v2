@@ -12,7 +12,6 @@ import {
 import React, { FC, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { useIntl } from 'react-intl';
-import { useAccount } from 'wagmi';
 import ExternalLink from '@/components/ExternalLink';
 import { client } from '@/apollo/apolloClient';
 import { FETCH_GIVETH_PROJECT_BY_ID } from '@/apollo/gql/gqlProjects';
@@ -30,7 +29,7 @@ import links from '@/lib/constants/links';
 import { EContentType } from '@/lib/constants/shareContent';
 import QFToast from './QFToast';
 import { DonationInfo } from './DonationInfo';
-import { ManageRecurringDonation } from './ManageRecurringDonation';
+import { ManageRecurringDonation } from './Recurring/ManageRecurringDonation';
 
 export const SuccessView: FC = () => {
 	const { formatMessage } = useIntl();
@@ -38,6 +37,7 @@ export const SuccessView: FC = () => {
 	const {
 		givBackEligible,
 		txHash = [],
+		chainId,
 		excludeFromQF,
 		isRecurring,
 	} = successDonation || {};
@@ -48,9 +48,6 @@ export const SuccessView: FC = () => {
 	const {
 		info: { passportState },
 	} = usePassport();
-
-	const { chain } = useAccount();
-	const networkId = chain?.id;
 
 	const message = hasMultipleTxs ? (
 		<>
@@ -70,7 +67,7 @@ export const SuccessView: FC = () => {
 	const { activeStartedRound } = getActiveRound(project.qfRounds);
 
 	const isOnEligibleNetworks =
-		networkId && activeStartedRound?.eligibleNetworks?.includes(networkId);
+		chainId && activeStartedRound?.eligibleNetworks?.includes(chainId);
 
 	useEffect(() => {
 		if (!hasMultipleTxs) return;
@@ -78,7 +75,6 @@ export const SuccessView: FC = () => {
 			.query({
 				query: FETCH_GIVETH_PROJECT_BY_ID,
 				variables: { id: config.GIVETH_PROJECT_ID },
-				fetchPolicy: 'cache-first',
 			})
 			.then((res: IFetchGivethProjectGQL) =>
 				setGivethSlug(res.data.projectById.slug),

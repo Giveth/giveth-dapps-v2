@@ -145,8 +145,8 @@
 	"label.you_can_view_them_on_a_blockchain_explorer_here": "Pots veure-les en un explorador de blocs aquí:",
 	"other": "Altres",
 	"other_desc": " ",
-	"page.donate.matching_toast.bottom": "Els fons de coincidència es enviaran al projecte seleccionat quan acabi la ronda.",
-	"page.donate.matching_toast.upper": "Coincidència estimada",
+	"page.donate.matching_toast.bottom_valid": "Els fons de finançament es destinaran al projecte seleccionat després que acabi la ronda. Dona a més projectes per rebre més finançament!",
+	"page.donate.matching_toast.upper_valid": "Coincidència estimada",
 	"page.donate.passport_toast.description.eligible": "La teva donació és elegible per ser coincidida! Després de la",
 	"page.donate.passport_toast.description.eligible_2": ", totes les donacions seran revisades per a la protecció contra el frau i els fons de coincidència es enviaran als projectes. Estigueu atents a les notificacions :)",
 	"page.donate.passport_toast.description.non_eligible": "Fes que la teva donació coincideixi amb el finançament quadràtic!\nAugmenta la teva puntuació de Passaport Gitcoin abans",
@@ -170,5 +170,5 @@
 	"project.givback_toast.title.verified_public_2": " del valor de la teva donació!",
 	"refi": "Refi",
 	"testfilter": "testfilter",
-	"tooltip.donation.matching": "Aquesta estimació es basa en les donacions fetes fins ara aquesta ronda de finançament quadràtic i no està considerant l'anàlisi de frau. La quantitat real de coincidència pot variar.",
+	"tooltip.donation.matching": "Aquesta estimació es basa en les donacions fetes fins ara aquesta ronda de finançament quadràtic i no està considerant l'anàlisi de frau. La quantitat real de coincidència pot variar."
 }

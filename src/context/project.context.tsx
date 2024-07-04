@@ -101,7 +101,9 @@ export const ProjectProvider = ({
 	const { isSignedIn, userData: user } = useAppSelector(state => state.user);
 	const dispatch = useAppDispatch();
 	const router = useRouter();
-	const slug = router.query.projectIdSlug as string;
+	const slug = (router.query.projectIdSlug as string)
+		? router.query.projectIdSlug
+		: project?.slug;
 
 	const isAdmin = compareAddresses(
 		projectData?.adminUser?.walletAddress,
@@ -116,7 +118,6 @@ export const ProjectProvider = ({
 			.query({
 				query: FETCH_PROJECT_BY_SLUG_SINGLE_PROJECT,
 				variables: { slug, connectedWalletUserId: Number(user?.id) },
-				fetchPolicy: 'network-only',
 			})
 			.then((res: { data: { projectBySlug: IProject } }) => {
 				const _project = res.data.projectBySlug;

@@ -10,7 +10,7 @@ import {
 } from '@giveth/ui-design-system';
 import Link from 'next/link';
 import { IArchivedQFRound } from '@/apollo/types/types';
-import { formatDate } from '@/lib/helpers';
+import { formatDate, formatPrice } from '@/lib/helpers';
 import { Shadow } from '@/components/styled-components/Shadow';
 import Routes from '@/lib/constants/Routes';
 import { formatDonation } from '@/helpers/number';
@@ -33,20 +33,26 @@ export const ArchivedQFRoundsTable: FC<ArchivedQFRoundsTableProps> = ({
 					<StyledGLink size='Big'>Round Duration</StyledGLink>
 					<StyledGLink size='Big'></StyledGLink>
 				</TH>
-				{archivedQFRounds.map((round, index) => (
+				{archivedQFRounds.map(round => (
 					<TR key={round.id}>
 						<P>{round.name}</P>
 						<P>
 							<Flex gap='1px'>
 								{!round.allocatedTokenSymbol && <span>$</span>}
-								<span>{round.allocatedFund}</span>
+								<span>{formatPrice(round.allocatedFund)}</span>
 								{round.allocatedTokenSymbol && (
 									<span>{round.allocatedTokenSymbol}</span>
 								)}
 							</Flex>
 						</P>
 						<P>{formatDonation(round.totalDonations, '$') || 0}</P>
-						<P>{round.uniqueDonors}</P>
+						<P>
+							{round.isDataAnalysisDone ? (
+								round.uniqueDonors
+							) : (
+								<AnalysisStatus>Pending</AnalysisStatus>
+							)}
+						</P>
 						<Flex $flexDirection='column'>
 							<P>{formatDate(new Date(round.beginDate))}</P>
 							<P>{formatDate(new Date(round.endDate))}</P>
@@ -131,4 +137,8 @@ const StyledGLink = styled(GLink)`
 	white-space: nowrap;
 	text-overflow: ellipsis;
 	overflow: hidden;
+`;
+
+const AnalysisStatus = styled(P)`
+	color: ${neutralColors.gray[600]};
 `;

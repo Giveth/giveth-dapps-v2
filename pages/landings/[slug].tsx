@@ -9,7 +9,6 @@ export const getServerSideProps: GetServerSideProps = async context => {
 	const { query } = context;
 	const slug = query.slug as string;
 	const newSlug = slug.toLowerCase();
-	const newURL = '/landings/' + newSlug;
 
 	let rules: any = {};
 	if (slug && newSlug !== slug) {
