@@ -95,27 +95,29 @@ const SelectTokenInnerModal: FC<ISelectTokenModalProps> = ({
 						order: 1,
 					};
 					setCustomToken(initialToken);
-					try {
-						readContracts(wagmiConfig, {
-							allowFailure: false,
-							contracts: [
-								{
-									address: searchQuery,
-									abi: erc20Abi,
-									functionName: 'decimals',
-								},
-								{
-									address: searchQuery,
-									abi: erc20Abi,
-									functionName: 'name',
-								},
-								{
-									address: searchQuery,
-									abi: erc20Abi,
-									functionName: 'symbol',
-								},
-							],
-						}).then(results => {
+
+					// Fetch token data
+					readContracts(wagmiConfig, {
+						allowFailure: false,
+						contracts: [
+							{
+								address: searchQuery,
+								abi: erc20Abi,
+								functionName: 'decimals',
+							},
+							{
+								address: searchQuery,
+								abi: erc20Abi,
+								functionName: 'name',
+							},
+							{
+								address: searchQuery,
+								abi: erc20Abi,
+								functionName: 'symbol',
+							},
+						],
+					})
+						.then(results => {
 							console.log('results', results);
 							const _customTokenData = {
 								...initialToken,
@@ -125,10 +127,10 @@ const SelectTokenInnerModal: FC<ISelectTokenModalProps> = ({
 								symbol: results[2],
 							};
 							setCustomToken(_customTokenData);
+						})
+						.catch(() => {
+							showToastError('Failed to fetch token data');
 						});
-					} catch (error) {
-						showToastError('Failed to fetch token data');
-					}
 				}
 			} else {
 				setCustomToken(undefined);
