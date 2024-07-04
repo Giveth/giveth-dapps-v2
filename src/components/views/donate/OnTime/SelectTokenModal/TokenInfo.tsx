@@ -1,4 +1,9 @@
-import { Caption, neutralColors, Flex } from '@giveth/ui-design-system';
+import {
+	Caption,
+	neutralColors,
+	Flex,
+	IconCheckCircleFilled16,
+} from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import { useState, type FC } from 'react';
 import { Address, formatUnits, zeroAddress } from 'viem';
@@ -10,6 +15,7 @@ import { useIntersectionObserver } from '@/hooks/useIntersectionObserver';
 import { useSolanaBalance } from '@/hooks/useSolanaBalance';
 import { ChainType } from '@/types/config';
 import { useGeneralWallet } from '@/providers/generalWalletProvider';
+import { useDonateData } from '@/context/donate.context';
 
 interface ITokenInfoProps {
 	token: IProjectAcceptedToken;
@@ -23,6 +29,7 @@ export const TokenInfo: FC<ITokenInfoProps> = ({
 	onClick,
 }) => {
 	const [visible, setVisible] = useState(false);
+	const { selectedOneTimeToken } = useDonateData();
 	const { walletAddress: address } = useGeneralWallet();
 	const onVisible = () => {
 		if (!visible) setVisible(true);
@@ -48,6 +55,9 @@ export const TokenInfo: FC<ITokenInfoProps> = ({
 	const balance = isEvm ? evmBalance?.value : solanaBalance;
 
 	const disable = balance === 0n;
+	const isSelected =
+		selectedOneTimeToken?.address.toLowerCase() ===
+		token.address.toLowerCase();
 
 	if (hideZeroBalance && disable) return;
 	return (
@@ -72,16 +82,22 @@ export const TokenInfo: FC<ITokenInfoProps> = ({
 						<Caption $medium>{token.symbol}</Caption>
 						<GrayCaption>{token.name}</GrayCaption>
 					</Flex>
-					<Balance gap='4px'>
-						<Caption $medium>
-							{balance !== undefined
-								? limitFraction(
-										formatUnits(balance, token.decimals),
-										token.decimals / 3,
-									)
-								: '--'}
-						</Caption>
-					</Balance>
+					<Flex gap='4px' $alignItems='center'>
+						<Balance>
+							<Caption $medium>
+								{balance !== undefined
+									? limitFraction(
+											formatUnits(
+												balance,
+												token.decimals,
+											),
+											token.decimals / 3,
+										)
+									: '--'}
+							</Caption>
+						</Balance>
+						{isSelected && <IconCheckCircleFilled16 />}
+					</Flex>
 				</TopRow>
 			</InfoWrapper>
 		</Wrapper>
