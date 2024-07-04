@@ -23,6 +23,7 @@ import { useDonateData } from '@/context/donate.context';
 import { shortenAddress, showToastError } from '@/lib/helpers';
 import { useGeneralWallet } from '@/providers/generalWalletProvider';
 import { wagmiConfig } from '@/wagmiConfigs';
+import { ChainType } from '@/types/config';
 
 export interface ISelectTokenModalProps extends IModal {
 	tokens?: IProjectAcceptedToken[];
@@ -87,6 +88,7 @@ const SelectTokenInnerModal: FC<ISelectTokenModalProps> = ({
 						name: shortenAddress(searchQuery),
 						symbol: shortenAddress(searchQuery),
 						networkId: evmChain?.id || 1,
+						chainType: ChainType.EVM,
 						isGivbackEligible: false,
 						order: 1,
 					};
