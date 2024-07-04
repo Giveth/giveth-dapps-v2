@@ -27,6 +27,7 @@ import { ChainType } from '@/types/config';
 
 export interface ISelectTokenModalProps extends IModal {
 	tokens?: IProjectAcceptedToken[];
+	acceptCustomToken?: boolean;
 }
 
 export const SelectTokenModal: FC<ISelectTokenModalProps> = props => {
@@ -58,6 +59,7 @@ export const SelectTokenModal: FC<ISelectTokenModalProps> = props => {
 
 const SelectTokenInnerModal: FC<ISelectTokenModalProps> = ({
 	tokens,
+	acceptCustomToken,
 	setShowModal,
 }) => {
 	const [hideZeroBalance, setHideZeroBalance] = useState(false);
@@ -81,7 +83,7 @@ const SelectTokenInnerModal: FC<ISelectTokenModalProps> = ({
 				if (existingToken) {
 					setCustomToken(undefined);
 					setFilteredTokens([existingToken]);
-				} else if (isOnEVM) {
+				} else if (isOnEVM && acceptCustomToken) {
 					const initialToken = {
 						address: searchQuery,
 						decimals: 18,

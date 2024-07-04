@@ -456,6 +456,9 @@ const CryptoDonation: FC = () => {
 				<SelectTokenModal
 					setShowModal={setShowSelectTokenModal}
 					tokens={erc20List}
+					acceptCustomToken={
+						project.organization?.supportCustomTokens
+					}
 				/>
 			)}
 		</MainContainer>
