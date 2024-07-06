@@ -37,9 +37,18 @@ export const QfRoundSelector: FC<IQfRoundSelectorProps> = ({
 	const navigationNextRef = useRef(null);
 
 	const sortedRounds =
-		projectData?.qfRounds?.sort(
-			(a, b) => Number(b.isActive) - Number(a.isActive),
-		) || [];
+		projectData?.qfRounds?.sort((a, b) => {
+			// First, compare by isActive
+			const isActiveComparison = Number(b.isActive) - Number(a.isActive);
+
+			// If isActive values are the same, compare by name
+			if (isActiveComparison === 0) {
+				return a.name.localeCompare(b.name);
+			}
+
+			// Otherwise, return the comparison result of isActive
+			return isActiveComparison;
+		}) || [];
 
 	const isRecurringSelected = projectDonationSwiperState.isRecurringSelected;
 	const selectedQF = projectDonationSwiperState.selectedQF;
@@ -103,11 +112,18 @@ export const QfRoundSelector: FC<IQfRoundSelectorProps> = ({
 						}}
 						$isSelected={isRecurringSelected === true}
 					>
-						{(projectDonationSwiperState.selectedQF === null) ===
-						null ? (
-							<B>Recurring Donations</B>
+						{projectDonationSwiperState.selectedQF === null ? (
+							<B>
+								{formatMessage({
+									id: 'label.recurring_donation',
+								})}
+							</B>
 						) : (
-							<P>Recurring Donations</P>
+							<P>
+								{formatMessage({
+									id: 'label.recurring_donation',
+								})}
+							</P>
 						)}
 					</TabItem>
 				</SwiperSlide>
