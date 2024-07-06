@@ -19,9 +19,10 @@ export const ArchiveAndNetworkCover: FC<IArchiveAndNetworkCoverProps> = ({
 	const { chain } = useAccount();
 	const chainId = chain?.id;
 
-	return chainId === undefined || chainId !== targetNetwork ? (
-		<WrongNetworkCover targetNetwork={targetNetwork} />
-	) : isArchived || isExploited ? (
+	if (chainId === undefined || chainId !== targetNetwork)
+		return <WrongNetworkCover targetNetwork={targetNetwork} />;
+
+	return isArchived || isExploited ? (
 		<ArchiveCover isStream={isStream} isExploited={isExploited} />
 	) : null;
 };

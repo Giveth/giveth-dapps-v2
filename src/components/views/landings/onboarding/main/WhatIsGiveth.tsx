@@ -19,8 +19,8 @@ const WhatIsGiveth = () => {
 				the ground.
 			</Lead>
 			<Lead size='large'>
-				We've been around since 2016, and we're only getting started.
-				The benefits of our crypto native platform include:
+				We&apos;ve been around since 2016, and we&apos;re only getting
+				started. The benefits of our crypto native platform include:
 			</Lead>
 			<Bullets>
 				<li>
