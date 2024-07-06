@@ -5,8 +5,31 @@ import { Connection } from '@solana/web3.js';
 import { wagmiConfig } from '@/wagmiConfigs';
 
 const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
-const maxAttempts = 200; // keeping it high as gnosis safe takes a while to confirm and processing
-const attemptDelay = 5000;
+
+const MAX_ATTEMPTS = 200; // keeping it high as gnosis safe takes a while to confirm and processing
+const DELAY_MS = 5000;
+const MAX_RETRIES = 10;
+const RETRY_DELAY = 5000; // 5 seconds
+
+const retryFetchTransaction = async <T>(
+	fetchFunction: () => Promise<T>,
+	maxRetries: number = MAX_RETRIES,
+	retryDelay: number = RETRY_DELAY,
+): Promise<T> => {
+	for (let i = 0; i < maxRetries; i++) {
+		try {
+			const result = await fetchFunction();
+			if (result) return result;
+		} catch (error) {
+			console.error(
+				`Attempt ${i + 1} - Fetching Transaction Error:`,
+				error,
+			);
+		}
+		await delay(retryDelay);
+	}
+	throw new Error('Transaction not found after maximum retries');
+};
 
 export const waitForTransaction = async (
 	hash: `0x${string}`,
@@ -20,7 +43,7 @@ export const waitForTransaction = async (
 			debug: false,
 		});
 
-		for (let attempts = 0; attempts < maxAttempts; attempts++) {
+		for (let attempts = 0; attempts < MAX_ATTEMPTS; attempts++) {
 			try {
 				const queued = await sdk.txs.getBySafeTxHash(hash);
 				console.log(
@@ -37,7 +60,7 @@ export const waitForTransaction = async (
 						hash: queued.txHash as `0x${string}`,
 					});
 				}
-				await delay(attemptDelay);
+				await delay(DELAY_MS);
 			} catch (error) {
 				console.error('Error while waiting for transaction:', error);
 				throw error;
@@ -48,63 +71,19 @@ export const waitForTransaction = async (
 	}
 };
 
-const MAX_RETRIES = 10;
-const RETRY_DELAY = 5000; // 5 seconds
-
-export const retryFetchEVMTransaction = async (
-	txHash: Address,
-	retries: number = MAX_RETRIES,
-) => {
-	for (let i = 0; i < retries; i++) {
-		const transaction = await getTransaction(wagmiConfig, {
-			hash: txHash,
-		}).catch(error => {
-			console.log(
-				'Attempt',
-				i,
-				'Fetching Transaction Error:',
-				error,
-				txHash,
-			);
-			return null;
-		});
-
-		if (transaction) return transaction;
-
-		// If not found, wait for the delay time and try again
-		await new Promise(resolve => setTimeout(resolve, RETRY_DELAY));
-	}
-	// Return null if the transaction is still not found after all retries
-	throw new Error('Transaction not found');
+export const retryFetchEVMTransaction = async (txHash: Address) => {
+	return retryFetchTransaction(() =>
+		getTransaction(wagmiConfig, { hash: txHash }),
+	);
 };
 
 export const retryFetchSolanaTransaction = async (
 	solanaConnection: Connection,
 	txHash: string,
-	retries: number = MAX_RETRIES,
 ) => {
-	for (let i = 0; i < retries; i++) {
-		const transaction = await fetchSolanaTransaction(
-			solanaConnection,
-			txHash,
-		).catch(error => {
-			console.log(
-				'Attempt',
-				i,
-				'Fetching Transaction Error:',
-				error,
-				txHash,
-			);
-			return null;
-		});
-
-		if (transaction) return transaction;
-
-		// If not found, wait for the delay time and try again
-		await new Promise(resolve => setTimeout(resolve, RETRY_DELAY));
-	}
-	// Return null if the transaction is still not found after all retries
-	throw new Error('Transaction not found');
+	return retryFetchTransaction(() =>
+		fetchSolanaTransaction(solanaConnection, txHash),
+	);
 };
 
 const fetchSolanaTransaction = async (

@@ -12,7 +12,6 @@ import { useModalAnimation } from '@/hooks/useModalAnimation';
 import { IModal } from '@/types/common';
 import { Modal } from '../Modal';
 import { mediaQueries } from '@/lib/constants/constants';
-import { useAppDispatch } from '@/features/hooks';
 import Routes from '@/lib/constants/Routes';
 
 interface IDeletePowerBoostModal extends IModal {
@@ -29,7 +28,6 @@ export const DeletePowerBoostModal: FC<IDeletePowerBoostModal> = ({
 }) => {
 	const { formatMessage } = useIntl();
 	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
-	const dispatch = useAppDispatch();
 	const router = useRouter();
 	const onDelete = async () => {
 		deleteBoost(boostId);

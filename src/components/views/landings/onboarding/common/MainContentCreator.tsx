@@ -74,8 +74,8 @@ const MainContentCreator: FC<IMainContentCreator> = props => {
 
 const ArcWrapper = styled.div`
 	position: absolute;
-	right: 50px;
-	bottom: 200px;
+	right: 3.125rem;
+	bottom: 12.5rem;
 `;
 
 const Wrapper = styled.div`
@@ -85,35 +85,35 @@ const Wrapper = styled.div`
 
 const Wave2Wrapper = styled.div`
 	position: absolute;
-	bottom: 300px;
+	bottom: 18.75rem;
 	right: -70px;
 `;
 
 const ButtonWrapper = styled(FlexCenter)`
 	button {
-		padding-right: 60px;
-		padding-left: 60px;
+		padding-right: 3.75rem;
+		padding-left: 3.75rem;
 	}
 `;
 
 const StepsWrapper = styled.div`
-	margin: 64px 0;
+	margin: 4rem 0;
 	${mediaQueries.laptopS} {
-		margin: 64px;
+		margin: 4rem;
 	}
 `;
 
 const WaveWrapper = styled.div`
 	position: absolute;
-	top: 240px;
+	top: 15rem;
 	left: 0;
 	opacity: 0.4;
 `;
 
 const PlusWrapper = styled.div`
 	position: absolute;
-	top: 90px;
-	right: 60px;
+	top: 5.625rem;
+	right: 3.75rem;
 	display: none;
 	${mediaQueries.desktop} {
 		display: block;
@@ -121,11 +121,11 @@ const PlusWrapper = styled.div`
 `;
 
 const OnboardingWrapperStyled = styled(OnboardingWrapper)`
-	margin: 60px auto 25px;
+	margin: 3.75rem auto 25px;
 	position: relative;
 	z-index: 1;
 	> h3:first-child {
-		margin-bottom: 40px;
+		margin-bottom: 2.5rem;
 	}
 `;
 
