@@ -41,9 +41,12 @@ export const QfRoundSelector: FC<IQfRoundSelectorProps> = ({
 			// First, compare by isActive
 			const isActiveComparison = Number(b.isActive) - Number(a.isActive);
 
-			// If isActive values are the same, compare by name
+			// If isActive values are the same, compare by beginDate (most recent first)
 			if (isActiveComparison === 0) {
-				return a.name.localeCompare(b.name);
+				return (
+					new Date(b.beginDate).getTime() -
+					new Date(a.beginDate).getTime()
+				);
 			}
 
 			// Otherwise, return the comparison result of isActive
