@@ -10,7 +10,7 @@ import {
 import styled from 'styled-components';
 import { useIntl } from 'react-intl';
 import { captureException } from '@sentry/nextjs';
-
+import { useInfiniteQuery } from '@tanstack/react-query';
 import ProjectCard from '@/components/project-card/ProjectCard';
 import Routes from '@/lib/constants/Routes';
 import { isUserRegistered, showToastError } from '@/lib/helpers';
@@ -53,6 +53,30 @@ interface IQueries {
 	connectedWalletUserId?: number;
 }
 
+interface FetchProjectsParams {
+	pageParam?: number;
+	queryKey: [
+		string,
+		{
+			isLoadMore: boolean;
+			loadNum: number;
+			userIdChanged: boolean;
+		},
+	];
+}
+
+interface FetchProjectsResponse {
+	projects: IProject[];
+	totalCount: number;
+	nextPage: number | undefined;
+}
+
+interface FetchProjectsResponse {
+	projects: IProject[];
+	totalCount: number;
+	nextPage: number | undefined;
+}
+
 const ProjectsIndex = (props: IProjectsView) => {
 	const { formatMessage } = useIntl();
 	const { projects, totalCount: _totalCount } = props;
@@ -84,7 +108,20 @@ const ProjectsIndex = (props: IProjectsView) => {
 	router?.events?.on('routeChangeStart', () => setIsLoading(true));
 
 	const fetchProjects = useCallback(
-		(isLoadMore?: boolean, loadNum?: number, userIdChanged = false) => {
+		async ({
+			pageParam = 0,
+			queryKey,
+		}: FetchProjectsParams): Promise<FetchProjectsResponse | undefined> => {
+			const [_key, { isLoadMore, loadNum, userIdChanged }] = queryKey;
+
+			console.log(
+				'fetchProjects functions',
+				isLoadMore,
+				loadNum,
+				userIdChanged,
+				pageParam,
+			);
+
 			const variables: IQueries = {
 				limit: userIdChanged
 					? filteredProjects.length > 50
@@ -137,6 +174,7 @@ const ProjectsIndex = (props: IProjectsView) => {
 						},
 					});
 				});
+			return undefined;
 		},
 		[
 			contextVariables,
@@ -149,21 +187,44 @@ const ProjectsIndex = (props: IProjectsView) => {
 		],
 	);
 
+	const [isLoadMore, setIsLoadMore] = useState(false);
+	const [loadNum, setLoadNum] = useState(0);
+	const [userIdChanged, setUserIdChanged] = useState(false);
+
+	const {
+		data,
+		error,
+		fetchNextPage,
+		hasNextPage,
+		isError,
+		isFetching,
+		isFetchingNextPage,
+	} = useInfiniteQuery<FetchProjectsResponse, Error>({
+		queryKey: ['projects', { isLoadMore, loadNum, userIdChanged }],
+		queryFn: fetchProjects,
+		getNextPageParam: lastPage => lastPage?.nextPage,
+		initialPageParam: 0,
+	});
+
 	useEffect(() => {
+		console.log('fetchProjects functions call 1');
 		pageNum.current = 0;
-		fetchProjects(false, 0, true);
+		// fetchProjects(false, 0, true);
 	}, [user?.id]);
 
 	useEffect(() => {
+		console.log('fetchProjects functions call 2');
 		pageNum.current = 0;
-		fetchProjects(false, 0);
+		// fetchProjects(false, 0);
+		fetchNextPage();
 	}, [contextVariables]);
 
 	const loadMore = useCallback(() => {
-		if (isLoading) return;
-		fetchProjects(true, pageNum.current + 1);
+		if (isFetching) return;
+		// fetchProjects(true, pageNum.current + 1);
+		fetchNextPage();
 		pageNum.current = pageNum.current + 1;
-	}, [fetchProjects, isLoading]);
+	}, [isFetching]);
 
 	const handleCreateButton = () => {
 		if (isUserRegistered(user)) {
@@ -209,7 +270,7 @@ const ProjectsIndex = (props: IProjectsView) => {
 		) {
 			setIsNotFound(true);
 		}
-	}, [selectedMainCategory, mainCategories.length]);
+	}, [selectedMainCategory, mainCategories.length, isArchivedQF]);
 
 	if (isNotFound)
 		return <NotAvailable description='Oops! Page Not Found...' />;
@@ -251,7 +312,7 @@ const ProjectsIndex = (props: IProjectsView) => {
 						<SortContainer totalCount={totalCount} />
 					</SortingContainer>
 				)}
-				{isLoading && <Loader className='dot-flashing' />}
+				{isFetching && <Loader className='dot-flashing' />}
 				{filteredProjects?.length > 0 ? (
 					<ProjectsWrapper>
 						<ProjectsContainer>
@@ -283,14 +344,14 @@ const ProjectsIndex = (props: IProjectsView) => {
 						<StyledButton
 							onClick={loadMore}
 							label={
-								isLoading
+								isFetching
 									? ''
 									: formatMessage({
 											id: 'component.button.load_more',
 										})
 							}
 							icon={
-								isLoading && (
+								isFetching && (
 									<LoadingDotIcon>
 										<div className='dot-flashing' />
 									</LoadingDotIcon>
