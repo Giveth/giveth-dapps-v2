@@ -42,7 +42,7 @@ import { FETCH_GIVETH_PROJECT_BY_ID } from '@/apollo/gql/gqlProjects';
 
 interface IDonateModalProps extends IModal {
 	token: IProjectAcceptedToken;
-	amount: number;
+	amount: bigint;
 	donationToGiveth: number;
 	tokenPrice?: number;
 	anonymous?: boolean;
@@ -100,7 +100,6 @@ const DonateModal: FC<IDonateModalProps> = props => {
 				const { data } = await client.query({
 					query: FETCH_GIVETH_PROJECT_BY_ID,
 					variables: { id: config.GIVETH_PROJECT_ID },
-					fetchPolicy: 'cache-first',
 				});
 				setGivethProject(data.projectById);
 				setIsLoadingGivethAddress(false);

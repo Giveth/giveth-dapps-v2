@@ -59,7 +59,7 @@ const BASE_NETWORK_NUMBER = 84532;
 const ZKEVM_NETWORK_NUMBER = 2442;
 
 const SOLANA_NETWORK: NonEVMChain = {
-	id: 0,
+	id: 103,
 	networkId: 103,
 	chainType: ChainType.SOLANA,
 	name: 'Solana Devnet',

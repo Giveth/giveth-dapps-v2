@@ -29,7 +29,7 @@ import links from '@/lib/constants/links';
 import { EContentType } from '@/lib/constants/shareContent';
 import QFToast from './QFToast';
 import { DonationInfo } from './DonationInfo';
-import { ManageRecurringDonation } from './ManageRecurringDonation';
+import { ManageRecurringDonation } from './Recurring/ManageRecurringDonation';
 
 export const SuccessView: FC = () => {
 	const { formatMessage } = useIntl();
@@ -75,7 +75,6 @@ export const SuccessView: FC = () => {
 			.query({
 				query: FETCH_GIVETH_PROJECT_BY_ID,
 				variables: { id: config.GIVETH_PROJECT_ID },
-				fetchPolicy: 'cache-first',
 			})
 			.then((res: IFetchGivethProjectGQL) =>
 				setGivethSlug(res.data.projectById.slug),

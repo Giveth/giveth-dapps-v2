@@ -15,7 +15,6 @@ import { useRouter } from 'next/router';
 import { useAccount } from 'wagmi';
 import SocialBox from '../../DonateSocialBox';
 import NiceBanner from './NiceBanner';
-// import PurchaseXDAI from './PurchaseXDAIBanner';
 import useDetectDevice from '@/hooks/useDetectDevice';
 import { useIsSafeEnvironment } from '@/hooks/useSafeAutoConnect';
 import { useDonateData } from '@/context/donate.context';
@@ -68,8 +67,7 @@ const DonateIndex: FC = () => {
 		<>
 			<DonateHeader />
 			<DonateContainer>
-				{/* <PurchaseXDAI /> */}
-				{alreadyDonated && !isRecurringTab && (
+				{alreadyDonated && (
 					<AlreadyDonatedWrapper>
 						<IconDonation24 />
 						<SublineBold>
