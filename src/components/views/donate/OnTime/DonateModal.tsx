@@ -208,6 +208,7 @@ const DonateModal: FC<IDonateModalProps> = props => {
 			chainvineReferred,
 			setFailedModalType,
 			symbol: token.symbol,
+			useDonationBox: isDonatingToGiveth,
 		})
 			.then(({ isSaved, txHash: firstHash }) => {
 				if (!firstHash) {
@@ -223,6 +224,8 @@ const DonateModal: FC<IDonateModalProps> = props => {
 						projectId: config.GIVETH_PROJECT_ID,
 						setFailedModalType,
 						symbol: token.symbol,
+						useDonationBox: true,
+						relevantDonationTxHash: firstHash,
 					})
 						.then(({ txHash: secondHash }) => {
 							if (!secondHash) {
