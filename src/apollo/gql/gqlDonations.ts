@@ -125,6 +125,8 @@ export const CREATE_DONATION = gql`
 		$referrerId: String
 		$safeTransactionId: String
 		$draftDonationId: Float
+		$useDonationBox: Boolean
+		$relevantDonationTxHash: String
 	) {
 		createDonation(
 			transactionId: $transactionId
@@ -139,6 +141,8 @@ export const CREATE_DONATION = gql`
 			referrerId: $referrerId
 			safeTransactionId: $safeTransactionId
 			draftDonationId: $draftDonationId
+			useDonationBox: $useDonationBox
+			relevantDonationTxHash: $relevantDonationTxHash
 		)
 	}
 `;
@@ -182,6 +186,8 @@ export const CREATE_DRAFT_DONATION = gql`
 		$anonymous: Boolean
 		$referrerId: String
 		$safeTransactionId: String
+		$useDonationBox: Boolean
+		$relevantDonationTxHash: String
 	) {
 		createDraftDonation(
 			networkId: $networkId
@@ -193,6 +199,8 @@ export const CREATE_DRAFT_DONATION = gql`
 			anonymous: $anonymous
 			referrerId: $referrerId
 			safeTransactionId: $safeTransactionId
+			useDonationBox: $useDonationBox
+			relevantDonationTxHash: $relevantDonationTxHash
 		)
 	}
 `;

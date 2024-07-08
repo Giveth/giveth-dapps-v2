@@ -77,6 +77,8 @@ export const useCreateEvmDonation = () => {
 				token,
 				draftDonationId,
 				setFailedModalType,
+				useDonationBox,
+				relevantDonationTxHash,
 			} = props;
 
 			if (isSafeEnv) {
@@ -94,6 +96,8 @@ export const useCreateEvmDonation = () => {
 						setFailedModalType,
 						safeTransactionId: txHash,
 						draftDonationId,
+						useDonationBox,
+						relevantDonationTxHash,
 					};
 				} else {
 					return null;
@@ -115,6 +119,8 @@ export const useCreateEvmDonation = () => {
 						setFailedModalType,
 						safeTransactionId: null,
 						draftDonationId,
+						useDonationBox,
+						relevantDonationTxHash,
 					};
 				} else {
 					return null;
@@ -142,6 +148,8 @@ export const useCreateEvmDonation = () => {
 					walletAddress: transaction?.from,
 					symbol: token.symbol,
 					error: e.message,
+					useDonationBox,
+					relevantDonationTxHash,
 				});
 				setFailedModalType(EDonationFailedType.NOT_SAVED);
 			}
@@ -199,6 +207,8 @@ export const useCreateEvmDonation = () => {
 					tokenAddress: token.address,
 					anonymous: props.anonymous,
 					referrerId: props.chainvineReferred,
+					usingDonationBox: props.useDonationBox,
+					relevantDonationTxHash: props.relevantDonationTxHash,
 					// safeTransactionId: safeTransactionId, // Not supported yet
 				},
 			});
