@@ -12,9 +12,9 @@ import {
 } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
 import { useRouter } from 'next/router';
+import { useAccount } from 'wagmi';
 import SocialBox from '../../DonateSocialBox';
 import NiceBanner from './NiceBanner';
-// import PurchaseXDAI from './PurchaseXDAIBanner';
 import useDetectDevice from '@/hooks/useDetectDevice';
 import { useIsSafeEnvironment } from '@/hooks/useSafeAutoConnect';
 import { useDonateData } from '@/context/donate.context';
@@ -31,6 +31,7 @@ import QFSection from '../project/projectActionCard/QFSection';
 import ProjectCardImage from '@/components/project-card/ProjectCardImage';
 import { useGeneralWallet } from '@/providers/generalWalletProvider';
 import { DonatePageProjectDescription } from './DonatePageProjectDescription';
+import { getActiveRound } from '@/helpers/qf';
 
 const DonateIndex: FC = () => {
 	const { formatMessage } = useIntl();
@@ -41,6 +42,7 @@ const DonateIndex: FC = () => {
 	const isSafeEnv = useIsSafeEnvironment();
 	const { isOnSolana } = useGeneralWallet();
 	const router = useRouter();
+	const { chainId } = useAccount();
 
 	useEffect(() => {
 		dispatch(setShowHeader(false));
@@ -50,6 +52,9 @@ const DonateIndex: FC = () => {
 	}, [dispatch]);
 
 	const isRecurringTab = router.query.tab?.toString() === ETabs.RECURRING;
+	const { activeStartedRound } = getActiveRound(project.qfRounds);
+	const isOnEligibleNetworks =
+		chainId && activeStartedRound?.eligibleNetworks?.includes(chainId);
 
 	return successDonation ? (
 		<>
@@ -62,8 +67,7 @@ const DonateIndex: FC = () => {
 		<>
 			<DonateHeader />
 			<DonateContainer>
-				{/* <PurchaseXDAI /> */}
-				{alreadyDonated && !isRecurringTab && (
+				{alreadyDonated && (
 					<AlreadyDonatedWrapper>
 						<IconDonation24 />
 						<SublineBold>
@@ -86,15 +90,16 @@ const DonateIndex: FC = () => {
 							<ImageWrapper>
 								<ProjectCardImage image={project.image} />
 							</ImageWrapper>
-							{!isMobile &&
-							!isRecurringTab &&
-							hasActiveQFRound ? (
-								<QFSection projectData={project} />
-							) : (
-								<DonatePageProjectDescription
-									projectData={project}
-								/>
-							)}
+							{!isMobile ? (
+								(!isRecurringTab && hasActiveQFRound) ||
+								(isRecurringTab && isOnEligibleNetworks) ? (
+									<QFSection projectData={project} />
+								) : (
+									<DonatePageProjectDescription
+										projectData={project}
+									/>
+								)
+							) : null}
 						</InfoWrapper>
 					</Col>
 				</Row>
@@ -109,10 +114,6 @@ const DonateIndex: FC = () => {
 		</>
 	);
 };
-
-const PassportWrapper = styled.div`
-	margin-top: 100px;
-`;
 
 const AlreadyDonatedWrapper = styled(Flex)`
 	margin-bottom: 16px;

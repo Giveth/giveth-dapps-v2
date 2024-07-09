@@ -37,6 +37,7 @@ interface IModal {
 	children: ReactNode;
 	doNotCloseOnClickOutside?: boolean;
 	className?: string;
+	footer?: ReactNode;
 }
 
 export const Modal: FC<IModal> = ({
@@ -53,6 +54,7 @@ export const Modal: FC<IModal> = ({
 	fullScreen = false,
 	headerColor,
 	doNotCloseOnClickOutside,
+	footer,
 	className,
 }) => {
 	const theme = useAppSelector(state => state.general.theme);
@@ -118,6 +120,7 @@ export const Modal: FC<IModal> = ({
 				>
 					{children}
 				</Scrollbars>
+				{footer && <div>{footer}</div>}
 			</ModalWrapper>
 		</Background>,
 		el.current,

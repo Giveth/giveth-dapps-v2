@@ -33,23 +33,6 @@ const ProfileProjectsTab: FC<IUserProfileView> = () => {
 	const { formatMessage } = useIntl();
 	const userName = getUserName(user);
 
-	const changeOrder = (orderBy: EOrderBy) => {
-		if (orderBy === order.by) {
-			setOrder({
-				by: orderBy,
-				direction:
-					order.direction === EDirection.ASC
-						? EDirection.DESC
-						: EDirection.ASC,
-			});
-		} else {
-			setOrder({
-				by: orderBy,
-				direction: EDirection.DESC,
-			});
-		}
-	};
-
 	useEffect(() => {
 		if (!user) return;
 		const fetchUserProjects = async () => {
@@ -63,7 +46,6 @@ const ProfileProjectsTab: FC<IUserProfileView> = () => {
 					orderBy: order.by,
 					direction: order.direction,
 				},
-				fetchPolicy: 'no-cache',
 			});
 			setLoading(false);
 			if (userProjects?.projectsByUserId) {
@@ -115,11 +97,7 @@ const ProfileProjectsTab: FC<IUserProfileView> = () => {
 				) : myAccount ? (
 					<Flex $flexDirection='column' gap='18px'>
 						{projects.map(project => (
-							<ProjectItem
-								key={project.id}
-								project={project}
-								setProjects={setProjects}
-							/>
+							<ProjectItem project={project} key={project.id} />
 						))}
 					</Flex>
 				) : (
@@ -142,10 +120,6 @@ const ProfileProjectsTab: FC<IUserProfileView> = () => {
 		</UserProfileTab>
 	);
 };
-
-const ProjectsTableWrapper = styled.div`
-	overflow: auto;
-`;
 
 export const ProjectsContainer = styled.div`
 	margin-bottom: 40px;

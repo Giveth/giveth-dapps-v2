@@ -29,7 +29,6 @@ const WhyContent = ({
 			styles={selectCustomStyles}
 			value={selectedOption}
 			onChange={e => handleSelect(e)}
-			isMobile={false}
 		/>
 		<AnimatePresence>
 			{String(selectedOption?.value) === '5' && (

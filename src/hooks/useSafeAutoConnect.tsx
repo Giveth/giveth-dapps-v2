@@ -1,37 +1,54 @@
-import { useConnect } from 'wagmi';
+import { useAccount, useConnect } from 'wagmi';
 import { useEffect, useState } from 'react';
 
-const AUTOCONNECTED_CONNECTOR_IDS = ['safe'];
-
-function checkForSafeConnector(connectors: any) {
-	return AUTOCONNECTED_CONNECTOR_IDS.some(connector => {
-		return connectors.find((c: any) => c.id === connector && c.ready);
-	});
-}
-
 function useSafeAutoConnect() {
+	const { address } = useAccount();
 	const { connect, connectors } = useConnect();
-	const isSafeEnv = useIsSafeEnvironment();
 
 	useEffect(() => {
-		if (checkForSafeConnector(connectors)) {
-			const connectorInstance = connectors.find(
-				c => c.id === AUTOCONNECTED_CONNECTOR_IDS[0], // TODO:Migrate && c.ready,
+		const autoConnect = async () => {
+			const safeConnector = connectors.find(
+				connector => connector.id === 'safe',
 			);
-			if (connectorInstance) connect({ connector: connectorInstance });
-		}
-	}, [connect, connectors, isSafeEnv]);
+			if (safeConnector) {
+				try {
+					await connect({ connector: safeConnector });
+				} catch (error) {
+					console.error('Failed to connect with Gnosis Safe:', error);
+				}
+			}
+		};
+
+		autoConnect();
+	}, [address]);
 }
 
 function useIsSafeEnvironment() {
-	const { connectors } = useConnect();
-	const [isSafe, setIsSafe] = useState<null | Boolean>(null);
+	const { connect, connectors } = useConnect();
+	const [isSafe, setIsSafe] = useState(false);
 
 	useEffect(() => {
-		setIsSafe(checkForSafeConnector(connectors));
+		const checkForSafeConnector = async () => {
+			const safeConnector = connectors.find(
+				connector => connector.id === 'safe',
+			);
+			if (safeConnector) {
+				try {
+					const connection: any = await connect({
+						connector: safeConnector,
+					});
+					setIsSafe(!!connection);
+				} catch (error) {
+					console.error('Failed to connect with Gnosis Safe:', error);
+					setIsSafe(false);
+				}
+			}
+		};
+
+		checkForSafeConnector();
 	}, [connectors]);
 
-	return !!isSafe;
+	return isSafe;
 }
 
 export { useSafeAutoConnect, useIsSafeEnvironment };

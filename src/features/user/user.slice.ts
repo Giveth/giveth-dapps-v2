@@ -55,18 +55,6 @@ export const userSlice = createSlice({
 		setToken: (state, action: PayloadAction<string>) => {
 			state.token = action.payload;
 		},
-		incrementLikedProjectsCount: state => {
-			if (state.userData) {
-				state.userData.likedProjectsCount =
-					(state.userData.likedProjectsCount || 0) + 1;
-			}
-		},
-		decrementLikedProjectsCount: state => {
-			if (state.userData) {
-				state.userData.likedProjectsCount =
-					(state.userData.likedProjectsCount || 1) - 1;
-			}
-		},
 		setBoostedProjectsCount: (state, action: PayloadAction<number>) => {
 			if (state.userData) {
 				state.userData.boostedProjectsCount = action.payload;
@@ -151,8 +139,6 @@ export const {
 	setIsEnabled,
 	setIsSignedIn,
 	setToken,
-	incrementLikedProjectsCount,
-	decrementLikedProjectsCount,
 	setBoostedProjectsCount,
 	setIsLoading,
 } = userSlice.actions;

@@ -19,10 +19,10 @@ import Link from 'next/link';
 import { useIntl } from 'react-intl';
 import { useRouter } from 'next/router';
 import { Shadow } from '@/components/styled-components/Shadow';
-import ProjectCardBadges from './ProjectCardLikeAndShareButtons';
+import ProjectCardBadges from './ProjectCardBadgeButtons';
 import ProjectCardOrgBadge from './ProjectCardOrgBadge';
 import { IProject } from '@/apollo/types/types';
-import { thousandsSeparator, timeFromNow } from '@/lib/helpers';
+import { timeFromNow } from '@/lib/helpers';
 import ProjectCardImage from './ProjectCardImage';
 import { slugToProjectDonate, slugToProjectView } from '@/lib/routeCreators';
 import { ORGANIZATION } from '@/lib/constants/organizations';
@@ -235,26 +235,22 @@ const ProjectCard = (props: IProjectCard) => {
 						{activeStartedRound && (
 							<Flex $flexDirection='column' gap='6px'>
 								<EstimatedMatchingPrice>
-									+
-									{thousandsSeparator(
-										formatDonation(
-											calculateTotalEstimatedMatching(
-												projectDonationsSqrtRootSum,
-												allProjectsSum,
-												allocatedFundUSDPreferred
-													? allocatedFundUSD
-													: matchingPool,
-												activeStartedRound?.maximumReward,
-											),
+									{formatDonation(
+										calculateTotalEstimatedMatching(
+											projectDonationsSqrtRootSum,
+											allProjectsSum,
 											allocatedFundUSDPreferred
-												? '$'
-												: '',
-											locale,
-											true,
+												? allocatedFundUSD
+												: matchingPool,
+											activeStartedRound?.maximumReward,
 										),
-									)}{' '}
-									{!allocatedFundUSDPreferred &&
-										allocatedTokenSymbol}
+										allocatedFundUSDPreferred ? '$' : '',
+										locale,
+										true,
+									)}
+									{allocatedFundUSDPreferred
+										? ''
+										: ` ${allocatedTokenSymbol}`}
 								</EstimatedMatchingPrice>
 								<EstimatedMatching>
 									<span>
@@ -311,6 +307,7 @@ const ProjectCard = (props: IProjectCard) => {
 				)}
 				<ActionButtons>
 					<Link
+						id='Donate_Card'
 						href={donateLink}
 						onClick={e => {
 							setDestination(donateLink);

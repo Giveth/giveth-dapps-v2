@@ -1,18 +1,13 @@
+import { parseUnits } from 'viem';
 import { IProjectAcceptedToken } from '@/apollo/types/gqlTypes';
 import { MAX_TOKEN_ORDER } from '@/lib/constants/tokens';
 import { EDonationFailedType } from '@/components/modals/FailedDonation';
-import { minDonationAmount } from '@/lib/constants/constants';
-import { truncateToDecimalPlaces } from '@/lib/helpers';
 import { INetworkIdWithChain } from './common.types';
 import { getChainName } from '@/lib/network';
-
-export interface ISelectedToken extends IProjectAcceptedToken {
-	value?: IProjectAcceptedToken;
-	label?: string;
-}
+import { formatCrypto } from '@/helpers/number';
 
 export const prepareTokenList = (tokens: IProjectAcceptedToken[]) => {
-	const _tokens: ISelectedToken[] = [...tokens];
+	const _tokens = [...tokens];
 	_tokens.sort((t1, t2) => {
 		const t1Order = t1.order || MAX_TOKEN_ORDER;
 		const t2Order = t2.order || MAX_TOKEN_ORDER;
@@ -22,13 +17,6 @@ export const prepareTokenList = (tokens: IProjectAcceptedToken[]) => {
 			return t2Name > t1Name ? -1 : 1;
 		}
 		return t2Order > t1Order ? -1 : 1;
-	});
-	_tokens.forEach((token: IProjectAcceptedToken, index: number) => {
-		_tokens[index] = {
-			...token,
-			value: token,
-			label: token.symbol,
-		};
 	});
 	return _tokens;
 };
@@ -61,14 +49,17 @@ export interface ICreateDonation {
 	symbol: string;
 	draftDonationId?: number;
 	setFailedModalType: (type: EDonationFailedType) => void;
+	useDonationBox: boolean;
+	relevantDonationTxHash?: string;
 }
 
 export const calcDonationShare = (
-	totalDonation: number,
+	totalDonation: bigint,
 	givethDonationPercent: number,
-	decimals = 6,
+	decimals = 18,
 ) => {
-	let givethDonation = totalDonation * (givethDonationPercent / 100);
+	let givethDonation = (totalDonation * BigInt(givethDonationPercent)) / 100n;
+	const minDonationAmount = parseUnits('1', decimals - decimals / 3);
 	if (givethDonation < minDonationAmount && givethDonationPercent !== 0) {
 		givethDonation = minDonationAmount;
 	}
@@ -77,13 +68,8 @@ export const calcDonationShare = (
 		projectDonation = minDonationAmount;
 	}
 	return {
-		projectDonation: truncateToDecimalPlaces(
-			String(projectDonation),
-			decimals,
-		),
-		givethDonation: truncateToDecimalPlaces(
-			String(givethDonation),
-			decimals,
-		),
+		projectDonation: formatCrypto(projectDonation, decimals),
+
+		givethDonation: formatCrypto(givethDonation, decimals),
 	};
 };

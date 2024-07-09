@@ -1,9 +1,13 @@
 import BigNumber from 'bignumber.js';
-import { formatEther } from 'viem';
+import { formatEther, formatUnits } from 'viem';
 import config from '@/configuration';
 import { truncateToDecimalPlaces } from '@/lib/helpers';
 
 export const Zero = new BigNumber(0);
+
+export const formatCrypto = (amount: bigint, decimals: number) => {
+	return truncateToDecimalPlaces(formatUnits(amount, decimals), decimals / 3);
+};
 
 export const formatEthHelper = (
 	amount: BigNumber.Value,
@@ -60,7 +64,7 @@ export const formatDonation = (
 	if (num < threshold) return `< ${symbol}${threshold}`;
 	return !rounded
 		? symbol + num.toLocaleString(local, { maximumFractionDigits })
-		: symbol + Math.round(num);
+		: symbol + Math.round(num).toLocaleString(local);
 };
 
 export function limitFraction(

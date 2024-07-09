@@ -1,6 +1,12 @@
 import { captureException } from '@sentry/nextjs';
 import { signTypedData } from 'wagmi/actions';
-import { Abi, erc20Abi, WriteContractReturnType, hexToSignature } from 'viem';
+import {
+	Abi,
+	erc20Abi,
+	WriteContractReturnType,
+	parseSignature,
+	encodeFunctionData,
+} from 'viem';
 import { type Address } from 'viem';
 import BigNumber from 'bignumber.js';
 import { readContract, readContracts, writeContract } from '@wagmi/core';
@@ -405,82 +411,89 @@ export const getUserStakeInfo = (
 	};
 };
 
-const permitTokens = async (
+export const permitTokens = async (
 	chainId: number,
 	walletAddress: Address,
 	poolAddress: Address,
-	lmAddress: string,
+	lmAddress: Address,
 	amount: bigint,
 ) => {
-	const poolContractInfo = {
-		address: poolAddress,
-		abi: UNI_ABI as Abi,
-		chainId,
-	};
+	try {
+		const poolContractInfo = {
+			address: poolAddress,
+			abi: UNI_ABI as Abi,
+			chainId,
+		};
 
-	const results = await readContracts(wagmiConfig, {
-		contracts: [
-			{ ...poolContractInfo, functionName: 'name' },
-			{
-				...poolContractInfo,
-				functionName: 'nonces',
-				args: [walletAddress],
+		const results = await readContracts(wagmiConfig, {
+			contracts: [
+				{ ...poolContractInfo, functionName: 'name' },
+				{
+					...poolContractInfo,
+					functionName: 'nonces',
+					args: [walletAddress],
+				},
+			],
+		});
+
+		const [name, nonce] = results.map(res => getReadContractResult(res));
+
+		const domain = {
+			name,
+			version: '1',
+			chainId: chainId,
+			verifyingContract: poolAddress,
+		} as const;
+
+		// The named list of all type definitions
+		const types = {
+			Permit: [
+				{ name: 'owner', type: 'address' },
+				{ name: 'spender', type: 'address' },
+				{ name: 'value', type: 'uint256' },
+				{ name: 'nonce', type: 'uint256' },
+				{ name: 'deadline', type: 'uint256' },
+			],
+		};
+
+		// The data to sign
+		const message = {
+			owner: walletAddress,
+			spender: lmAddress,
+			value: amount,
+			nonce,
+			deadline: MaxUint256,
+		} as const;
+
+		const hexSignature = await signTypedData(wagmiConfig, {
+			domain,
+			message,
+			primaryType: 'Permit',
+			types,
+		});
+		const signature = parseSignature(hexSignature);
+		const data = encodeFunctionData({
+			abi: UNI_ABI,
+			functionName: 'permit',
+			args: [
+				walletAddress,
+				lmAddress,
+				amount,
+				MaxUint256,
+				signature.v,
+				signature.r,
+				signature.s,
+			],
+		});
+		return data;
+	} catch (error) {
+		console.error('Error on permitTokens:', error);
+		captureException(error, {
+			tags: {
+				section: 'permitTokens',
 			},
-		],
-	});
-
-	const [name, nonce] = results.map(res => getReadContractResult(res));
-
-	const domain = {
-		name,
-		version: '1',
-		chainId: chainId,
-		verifyingContract: poolAddress,
-	} as const;
-
-	// The named list of all type definitions
-	const types = {
-		Permit: [
-			{ name: 'owner', type: 'address' },
-			{ name: 'spender', type: 'address' },
-			{ name: 'value', type: 'uint256' },
-			{ name: 'nonce', type: 'uint256' },
-			{ name: 'deadline', type: 'uint256' },
-		],
-	};
-
-	// The data to sign
-	const message = {
-		owner: walletAddress,
-		spender: lmAddress,
-		value: amount,
-		nonce,
-		deadline: MaxUint256,
-	} as const;
-
-	const hexSignature = await signTypedData(wagmiConfig, {
-		domain,
-		message,
-		primaryType: 'Permit',
-		types,
-	});
-
-	const signature = hexToSignature(hexSignature);
-	return await writeContract(wagmiConfig, {
-		address: poolAddress,
-		abi: UNI_ABI,
-		functionName: 'permit',
-		args: [
-			walletAddress,
-			lmAddress,
-			amount,
-			MaxUint256,
-			signature.v,
-			signature.r,
-			signature.s,
-		],
-		value: 0n,
-	});
+		});
+	}
 };
 
 export const approveERC20tokenTransfer = async (
@@ -571,17 +584,27 @@ export const stakeGIV = async (
 	amount: bigint,
 	lmAddress: Address,
 	chainId: number,
+	permitSignature?: Address,
 ): Promise<WriteContractReturnType | undefined> => {
 	if (amount === 0n) return;
 	try {
-		return await writeContract(wagmiConfig, {
-			address: lmAddress,
-			abi: UNIPOOL_GIVPOWER_ABI,
-			chainId,
-			functionName: 'stake',
-			args: [amount],
-			value: 0n,
-		});
+		return permitSignature
+			? await writeContract(wagmiConfig, {
+					address: lmAddress,
+					abi: UNIPOOL_GIVPOWER_ABI,
+					functionName: 'stakeWithPermit',
+					args: [amount, permitSignature],
+					value: 0n,
+					chainId,
+				})
+			: await writeContract(wagmiConfig, {
+					address: lmAddress,
+					abi: UNIPOOL_GIVPOWER_ABI,
+					chainId,
+					functionName: 'stake',
+					args: [amount],
+					value: 0n,
+				});
 	} catch (error) {
 		console.error('Error on stake token:', error);
 		captureException(error, {
@@ -619,40 +642,31 @@ export const unwrapToken = async (
 };
 
 export const stakeTokens = async (
-	walletAddress: Address,
 	amount: bigint,
-	poolAddress: Address,
 	lmAddress: Address,
 	chainId: number,
-	permit: boolean,
+	permitSignature?: Address,
 ): Promise<WriteContractReturnType | undefined> => {
 	if (amount === 0n) return;
 
 	try {
-		if (permit) {
-			const rawPermitCall = await permitTokens(
-				chainId,
-				walletAddress,
-				poolAddress,
-				lmAddress,
-				amount,
-			);
-			return await writeContract(wagmiConfig, {
-				address: lmAddress,
-				abi: LM_ABI,
-				functionName: 'stakeWithPermit',
-				args: [amount, rawPermitCall],
-				value: 0n,
-			});
-		} else {
-			return await writeContract(wagmiConfig, {
-				address: lmAddress,
-				abi: LM_ABI,
-				functionName: 'stake',
-				args: [amount],
-				value: 0n,
-			});
-		}
+		return permitSignature
+			? await writeContract(wagmiConfig, {
+					address: lmAddress,
+					abi: LM_ABI,
+					functionName: 'stakeWithPermit',
+					args: [amount, permitSignature],
+					value: 0n,
+					chainId,
+				})
+			: await writeContract(wagmiConfig, {
+					address: lmAddress,
+					chainId,
+					abi: LM_ABI,
+					functionName: 'stake',
+					args: [amount],
+					value: 0n,
+				});
 	} catch (e) {
 		console.error('Error on staking:', e);
 		captureException(e, {

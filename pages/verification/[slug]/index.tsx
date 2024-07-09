@@ -50,7 +50,7 @@ const VerificationRoute = () => {
 					slug,
 					connectedWalletUserId: Number(userData?.id),
 				},
-				fetchPolicy: 'network-only',
+				fetchPolicy: 'no-cache',
 			})
 			.then((res: { data: { projectBySlug: IProject } }) => {
 				const _project = res.data.projectBySlug;
