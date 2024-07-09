@@ -81,7 +81,7 @@ const EditIndex = () => {
 				})
 				.catch((error: unknown) => {
 					setIsLoadingProject(false);
-					console.log(error);
+					console.error(error);
 					captureException(error, {
 						tags: {
 							section: 'EditIndex',

@@ -18,7 +18,7 @@ export const fetchPassportScore = async (account: string) => {
 		});
 		return data;
 	} catch (error) {
-		console.log('error', error);
+		console.error('error', error);
 		//remove user's info from local storage
 		const passports = getPassports();
 		delete passports[account.toLowerCase()];
@@ -63,7 +63,7 @@ export const connectPassport = async (account: string, singin: boolean) => {
 		}
 		return true;
 	} catch (error: any) {
-		console.log('error', error);
+		console.error('error', error);
 		if (error.code === 'ACTION_REJECTED') {
 			showToastError('Rejected By User');
 		} else {

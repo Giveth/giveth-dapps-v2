@@ -151,7 +151,7 @@ export const usePassport = () => {
 			const { refreshUserScores } = await fetchPassportScore(address);
 			await updateState(refreshUserScores);
 		} catch (error) {
-			console.log(error);
+			console.error(error);
 			setInfo({
 				passportState: EPassportState.ERROR,
 				passportScore: null,
