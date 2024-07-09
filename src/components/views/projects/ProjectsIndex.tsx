@@ -107,85 +107,72 @@ const ProjectsIndex = (props: IProjectsView) => {
 
 	router?.events?.on('routeChangeStart', () => setIsLoading(true));
 
-	const fetchProjects = useCallback(
-		async ({
-			pageParam = 0,
-			queryKey,
-		}: FetchProjectsParams): Promise<FetchProjectsResponse | undefined> => {
-			const [_key, { isLoadMore, loadNum, userIdChanged }] = queryKey;
+	const fetchProjects = async ({
+		pageParam = 0,
+		queryKey,
+	}: FetchProjectsParams): Promise<FetchProjectsResponse | undefined> => {
+		const [_key, { isLoadMore, loadNum, userIdChanged }] = queryKey;
 
-			console.log(
-				'fetchProjects functions',
-				isLoadMore,
-				loadNum,
-				userIdChanged,
-				pageParam,
-			);
+		console.log(
+			'fetchProjects functions',
+			isLoadMore,
+			loadNum,
+			userIdChanged,
+			pageParam,
+		);
 
-			const variables: IQueries = {
-				limit: userIdChanged
-					? filteredProjects.length > 50
-						? BACKEND_QUERY_LIMIT
-						: filteredProjects.length
-					: projects.length,
-				skip: userIdChanged ? 0 : projects.length * (loadNum || 0),
-			};
+		const variables: IQueries = {
+			limit: userIdChanged
+				? filteredProjects.length > 50
+					? BACKEND_QUERY_LIMIT
+					: filteredProjects.length
+				: projects.length,
+			skip: userIdChanged ? 0 : projects.length * (loadNum || 0),
+		};
 
-			if (user?.id) {
-				variables.connectedWalletUserId = Number(user?.id);
-			}
+		if (user?.id) {
+			variables.connectedWalletUserId = Number(user?.id);
+		}
 
-			setIsLoading(true);
-			if (
-				contextVariables.mainCategory !== router.query?.slug?.toString()
-			)
-				return;
+		setIsLoading(true);
+		if (contextVariables.mainCategory !== router.query?.slug?.toString())
+			return;
 
-			client
-				.query({
-					query: FETCH_ALL_PROJECTS,
-					variables: {
-						...variables,
-						...contextVariables,
-						mainCategory: isArchivedQF
-							? undefined
-							: getMainCategorySlug(selectedMainCategory),
-						qfRoundSlug: isArchivedQF ? router.query.slug : null,
-					},
-				})
-				.then((res: { data: { allProjects: IFetchAllProjects } }) => {
-					const data = res.data?.allProjects?.projects;
-					const count = res.data?.allProjects?.totalCount;
-					setTotalCount(count);
+		client
+			.query({
+				query: FETCH_ALL_PROJECTS,
+				variables: {
+					...variables,
+					...contextVariables,
+					mainCategory: isArchivedQF
+						? undefined
+						: getMainCategorySlug(selectedMainCategory),
+					qfRoundSlug: isArchivedQF ? router.query.slug : null,
+				},
+			})
+			.then((res: { data: { allProjects: IFetchAllProjects } }) => {
+				const data = res.data?.allProjects?.projects;
+				const count = res.data?.allProjects?.totalCount;
+				setTotalCount(count);
 
-					setFilteredProjects(prevProjects => {
-						isInfiniteScrolling.current =
-							(data.length + prevProjects.length) % 45 !== 0;
-						return isLoadMore ? [...prevProjects, ...data] : data;
-					});
-					setIsLoading(false);
-				})
-				.catch((err: any) => {
-					setIsLoading(false);
-					showToastError(err);
-					captureException(err, {
-						tags: {
-							section: 'fetchAllProjects',
-						},
-					});
+				setFilteredProjects(prevProjects => {
+					isInfiniteScrolling.current =
+						(data.length + prevProjects.length) % 45 !== 0;
+					return isLoadMore ? [...prevProjects, ...data] : data;
 				});
-			return undefined;
-		},
-		[
-			contextVariables,
-			filteredProjects.length,
-			isArchivedQF,
-			projects.length,
-			router.query.slug,
-			selectedMainCategory,
-			user?.id,
-		],
-	);
+				setIsLoading(false);
+			})
+			.catch((err: any) => {
+				setIsLoading(false);
+				showToastError(err);
+				captureException(err, {
+					tags: {
+						section: 'fetchAllProjects',
+					},
+				});
+			});
+		return undefined;
+	};
 
 	const [isLoadMore, setIsLoadMore] = useState(false);
 	const [loadNum, setLoadNum] = useState(0);
