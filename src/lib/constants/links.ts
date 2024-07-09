@@ -29,6 +29,7 @@ const links = {
 	REDDIT: 'https://reddit.com/r/giveth',
 	INSTAGRAM: 'https://www.instagram.com/giveth.io/',
 	LINKEDIN: 'https://www.linkedin.com/company/givethio/',
+	FARCASTER: 'https://warpcast.com/~/channel/giveth',
 	DOCS,
 	GIVFARM_DOCS: DOCS + 'giveconomy/givfarm',
 	GIVSTREAM_DOCS: DOCS + 'giveconomy/givstream',

@@ -159,6 +159,9 @@ const Footer = () => {
 						<ExternalLink href={links.TWITTER}>
 							<IconXSocial size={24} color={textColor} />
 						</ExternalLink>
+						<ExternalLink href={links.FARCASTER}>
+							<IconXSocial size={24} color={textColor} />
+						</ExternalLink>
 						<ExternalLink href={links.YOUTUBE}>
 							<IconYoutube size={24} color={textColor} />
 						</ExternalLink>
