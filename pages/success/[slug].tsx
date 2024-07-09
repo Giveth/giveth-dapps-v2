@@ -26,7 +26,7 @@ const SuccessRoute = () => {
 				setProject(data.projectBySlug);
 				setIsLoading(false);
 			} catch (error) {
-				console.log('fetchProjectBySlug error: ', error);
+				console.error('fetchProjectBySlug error: ', error);
 				setIsLoading(false);
 				captureException(error, {
 					tags: {

@@ -79,7 +79,7 @@ const EditUserModal = ({
 				type: ToastType.DANGER,
 				title: error.message,
 			});
-			console.log(error);
+			console.error(error);
 			captureException(error, {
 				tags: {
 					section: 'onSaveAvatar',

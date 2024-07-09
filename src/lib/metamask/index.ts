@@ -157,7 +157,7 @@ export async function addToken_old(
 			console.log('Your loss!');
 		}
 	} catch (error) {
-		console.log(error);
+		console.error(error);
 		captureException(error, {
 			tags: {
 				section: 'addToken',

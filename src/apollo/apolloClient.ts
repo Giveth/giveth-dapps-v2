@@ -122,7 +122,7 @@ function createApolloClient() {
 		if (graphQLErrors) {
 			console.log('operation', operation);
 			graphQLErrors.forEach(err => {
-				console.log('err', JSON.stringify(err));
+				console.error('err', JSON.stringify(err));
 				const { message, locations, path } = err;
 				if (message.toLowerCase().includes('authentication required')) {
 					console.log(Date.now(), 'sign out from graphQL');
@@ -134,7 +134,7 @@ function createApolloClient() {
 				}
 			});
 		}
-		if (networkError) console.log(`[Network error]: ${networkError}`);
+		if (networkError) console.error(`[Network error]: ${networkError}`);
 		const { response } = operation.getContext();
 
 		if (
@@ -157,11 +157,11 @@ function createApolloClient() {
 		}),
 		defaultOptions: {
 			watchQuery: {
-				fetchPolicy: 'cache-and-network',
+				fetchPolicy: 'cache-first',
 			},
 			query: {
-				fetchPolicy: 'network-only',
-				// nextFetchPolicy: 'network-only',
+				fetchPolicy: 'cache-first',
+				// nextFetchPolicy: 'cache-first',
 			},
 		},
 		typeDefs: gql`

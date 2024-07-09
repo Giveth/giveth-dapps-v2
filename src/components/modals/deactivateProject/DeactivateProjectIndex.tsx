@@ -58,7 +58,6 @@ const DeactivateProjectModal: FC<IDeactivateProjectModal> = ({
 	const fetchReasons = async () => {
 		const { data } = await client.query({
 			query: GET_STATUS_REASONS,
-			fetchPolicy: 'no-cache',
 		});
 		const fetchedReasons = data.getStatusReasons.map((elem: any) => ({
 			label: elem.description,
@@ -94,7 +93,7 @@ const DeactivateProjectModal: FC<IDeactivateProjectModal> = ({
 			setIsLoading(false);
 		} catch (error) {
 			setIsLoading(false);
-			console.log('deactivation error', { error });
+			console.error('deactivation error', { error });
 		}
 	};
 

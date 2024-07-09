@@ -70,7 +70,6 @@ export const ArchivedQFRoundsView = () => {
 					data: { qfArchivedRounds },
 				} = await client.query({
 					query: FETCH_ARCHIVED_QF_ROUNDS,
-					fetchPolicy: 'network-only',
 					variables: {
 						limit: ITEMS_PER_PAGE,
 						skip,

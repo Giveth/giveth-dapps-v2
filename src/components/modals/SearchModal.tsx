@@ -119,12 +119,11 @@ export const SearchModal: FC<IModal> = ({ setShowModal }) => {
 				const { data } = await client.query({
 					query: FETCH_CAMPAIGN_BY_SLUG,
 					variables: {},
-					fetchPolicy: 'no-cache',
 				});
 				const campaign: ICampaign = data.findCampaignBySlug;
 				setProjects(campaign.relatedProjects);
 			} catch (error) {
-				console.log('error', error);
+				console.error('error', error);
 			}
 		}
 		fetchFeaturedCampaign();
