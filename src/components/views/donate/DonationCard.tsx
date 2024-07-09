@@ -40,7 +40,7 @@ export const DonationCard = () => {
 
 	return (
 		<DonationCardWrapper>
-			<Title>
+			<Title id='donation-visit'>
 				{formatMessage({ id: 'label.how_do_you_want_to_donate' })}
 			</Title>
 			<Flex>
