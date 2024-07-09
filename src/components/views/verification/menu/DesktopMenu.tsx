@@ -30,11 +30,11 @@ const DesktopMenu = () => {
 			<MenuTitle $isActive>{title}</MenuTitle>
 			<StepsProgressBar />
 			{menuList.map((item, index) => {
-				let isClickable = index != 8; // Do not enable click on last step "Done"
+				let isClickable = index !== 8; // Do not enable click on last step "Done"
 				isClickable = !isDraft ? false : isClickable; // user first time came to verification steps
 				const IconCheck =
 					checkVerificationStep(item.slug, verificationData) ||
-					(allCheckedSteps && index == 8 && step == 8) ? (
+					(allCheckedSteps && index === 8 && step === 8) ? (
 						<CheckCircle />
 					) : (
 						<WarningCircle />
@@ -43,7 +43,7 @@ const DesktopMenu = () => {
 				return (
 					<MenuTitle
 						$hover={isClickable}
-						$isActive={index == step}
+						$isActive={index === step}
 						key={item.slug}
 						onClick={() => isClickable && setStep(index)}
 					>
