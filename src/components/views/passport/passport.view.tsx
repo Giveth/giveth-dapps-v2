@@ -20,7 +20,11 @@ import React from 'react';
 import styled from 'styled-components';
 import { useIntl } from 'react-intl';
 import ExternalLink from '@/components/ExternalLink';
-import { EPassportState, usePassport } from '@/hooks/usePassport';
+import {
+	EPassportState,
+	EQFElegibilityState,
+	usePassport,
+} from '@/hooks/usePassport';
 import {
 	PassportBannerData,
 	PassportBannerWrapper,
@@ -34,7 +38,8 @@ export const PassportView = () => {
 	const { info, handleSign, refreshScore } = usePassport();
 	const { isOnSolana, handleSingOutAndSignInWithEVM } = useGeneralWallet();
 
-	const { passportScore, passportState, currentRound } = info;
+	const { passportScore, passportState, qfEligibilityState, currentRound } =
+		info;
 
 	const isScoreReady =
 		passportState !== EPassportState.NOT_CONNECTED &&
@@ -129,19 +134,22 @@ export const PassportView = () => {
 								</>
 							)}
 							<StyledPassportBannerWrapper
-								$bgColor={PassportBannerData[passportState].bg}
+								$bgColor={
+									PassportBannerData[qfEligibilityState].bg
+								}
 							>
-								{PassportBannerData[passportState].icon}
+								{PassportBannerData[qfEligibilityState].icon}
 								<P>
 									{formatMessage({
-										id: PassportBannerData[passportState]
-											.content,
+										id: PassportBannerData[
+											qfEligibilityState
+										].content,
 									})}
 									{currentRound &&
 										(passportState ===
 											EPassportState.NOT_CREATED ||
-											passportState ===
-												EPassportState.NOT_ELIGIBLE) && (
+											qfEligibilityState ===
+												EQFElegibilityState.RECHECK_ELIGIBILITY) && (
 											<strong>
 												{new Date(currentRound.endDate)
 													.toLocaleString(

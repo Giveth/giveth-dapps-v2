@@ -13,7 +13,7 @@ import { EPassportState } from '@/hooks/usePassport';
 import { Shadow } from './styled-components/Shadow';
 
 interface IButtonProps {
-	state: EPassportState;
+	state: EPassportState | null;
 	handleSign: () => Promise<void>;
 	refreshScore: () => Promise<void>;
 	className?: string;

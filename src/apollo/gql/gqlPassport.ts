@@ -24,7 +24,7 @@ export const REFRESH_USER_SCORES = gql`
 `;
 
 export const SCORE_ACTIVE_QF_DONOR_ADDRESS = gql`
-	query ($address: String!) {
+	query ScoreActiveQFDonorAddress($address: String!) {
 		scoreUserAddress(address: $address) {
 			id
 			firstName

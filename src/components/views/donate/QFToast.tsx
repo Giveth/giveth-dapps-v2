@@ -10,16 +10,24 @@ import {
 	FlexCenter,
 } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
-import { EPassportState, usePassport } from '@/hooks/usePassport';
+import {
+	EPassportState,
+	EQFElegibilityState,
+	usePassport,
+} from '@/hooks/usePassport';
 import Routes from '@/lib/constants/Routes';
 import InternalLink from '@/components/InternalLink';
 
 const QFToast = () => {
 	const { info } = usePassport();
-	const { passportState, currentRound } = info;
+	const { passportState, qfEligibilityState, currentRound } = info;
 
-	const isEligible = passportState === EPassportState.ELIGIBLE;
-	const isNotEligible = passportState === EPassportState.NOT_ELIGIBLE;
+	const isEligible = qfEligibilityState === EQFElegibilityState.ELIGIBLE;
+	const isNotEligible =
+		qfEligibilityState === EQFElegibilityState.CHECK_ELIGIBILITY ||
+		qfEligibilityState === EQFElegibilityState.MORE_INFO_NEEDED ||
+		qfEligibilityState === EQFElegibilityState.RECHECK_ELIGIBILITY;
+
 	const { formatMessage, locale } = useIntl();
 
 	if (passportState === EPassportState.LOADING) return null;

@@ -90,7 +90,6 @@ export const scoreUserAddress = async (address: `0x${string}` | undefined) => {
 
 		return data.scoreUserAddress;
 	} catch (error) {
-		console.log('error', error);
 		return null;
 	}
 };
