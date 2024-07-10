@@ -1625,5 +1625,10 @@
 	"tooltip.flowrate": "Recurring donations are taken out of your Stream Balance. Deposit tokens & maintain your balance to enable recurring donations.",
 	"tooltip.withdraw_stream_balance": "If you have active recurring donations your available stream balance to withdraw will be slightly less than your actual balance.",
 	"ubi": "UBI",
-	"water-and-sanitation": "Water & Sanitation"
+	"water-and-sanitation": "Water & Sanitation",
+	"label.uncompleted_multisig_tx": "Uncompleted Multisig Tx",
+	"label.sign_gnosis_safe": "Sign Gnosis Safe",
+	"label.you_need_to_execute_the_pending_multisig": "You'll need to execute the pending Multisig transaction to complete your log-in to Giveth & proceed to this area",
+	"label.sign_a_message_with_your_safe_signer": "Sign a message with your Safe signer address to continue the log in process",
+	"label.this_is_necessary_to_create_projects": "This is necessary to be able to create projects, manage your profile or use GIVpower."
 }

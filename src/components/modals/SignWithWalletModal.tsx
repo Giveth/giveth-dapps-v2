@@ -49,6 +49,7 @@ export const SignWithWalletModal: FC<IProps> = ({
 	isGSafeConnector,
 	callback,
 }) => {
+	const { connectors } = useConnect();
 	const [loading, setLoading] = useState(false);
 	const [expiration, setExpiration] = useState(0);
 	const [multisigAddress, setMultisigAddress] = useState('');
@@ -56,12 +57,13 @@ export const SignWithWalletModal: FC<IProps> = ({
 	const [safeSecondaryConnection, setSafeSecondaryConnection] =
 		useState(false);
 	const [multisigLastStep, setMultisigLastStep] = useState(false);
-	const [secondaryConnector, setSecondaryConnnector] = useState<any>(null);
+	const [secondaryConnector, setSecondaryConnnector] = useState<any>(
+		connectors[connectors?.length - 1],
+	);
 	const theme = useAppSelector(state => state.general.theme);
 	const { formatMessage } = useIntl();
 
 	const { address, connector, isConnected } = useAccount();
-	const { connectors } = useConnect();
 	const { chain } = useAccount();
 	const { open } = useWeb3Modal();
 	const isSafeEnv = useIsSafeEnvironment();
@@ -72,11 +74,11 @@ export const SignWithWalletModal: FC<IProps> = ({
 	const { isAnimating, closeModal: _closeModal } =
 		useModalAnimation(setShowModal);
 	const dispatch = useAppDispatch();
+
 	useEffect(() => {
 		const multisigConnection = async () => {
 			if (loading) return;
 			if (safeSecondaryConnection && address && isConnected) {
-				setSecondaryConnnector(connector);
 				// Check session before calling a new one
 				const { status } = await checkMultisigSession({
 					safeAddress: multisigAddress,
@@ -84,7 +86,7 @@ export const SignWithWalletModal: FC<IProps> = ({
 				});
 				if (status === 'successful') {
 					// close modal and move directly to fetch the token
-					await startSignature(connector, true);
+					await startSignature(secondaryConnector, true);
 				} else if (status === 'pending') {
 					setCurrentMultisigSession(true);
 					setMultisigLastStep(true);
@@ -96,16 +98,22 @@ export const SignWithWalletModal: FC<IProps> = ({
 		multisigConnection();
 	}, [address, isConnected]);
 
+	const checkSecondaryConnection = async () => {
+		if (safeSecondaryConnection) {
+			setMultisigAddress(address as Address);
+			open({ view: 'Connect' });
+		}
+	};
+
 	useEffect(() => {
-		const checkSecondaryConnection = async () => {
-			if (safeSecondaryConnection) {
-				setMultisigAddress(address as Address);
-				open({ view: 'Connect' });
-			}
-		};
 		checkSecondaryConnection();
 	}, [safeSecondaryConnection]);
 
+	useEffect(() => {
+		if (connector?.type === 'safe') return;
+		setSecondaryConnnector(connector);
+	}, [connector?.type]);
+	console.log({ connector, secondaryConnector });
 	const reset = () => {
 		setMultisigLastStep(false);
 		setCurrentMultisigSession(false);
@@ -170,8 +178,8 @@ export const SignWithWalletModal: FC<IProps> = ({
 				id:
 					isGSafeConnector || isSafeEnv
 						? currentMultisigSession
-							? 'Uncompleted Multisig Tx'
-							: 'Sign Gnosis Safe'
+							? 'label.uncompleted_multisig_tx'
+							: 'label.sign_gnosis_safe'
 						: 'label.sign_wallet',
 			})}
 			headerTitlePosition='left'
@@ -182,8 +190,8 @@ export const SignWithWalletModal: FC<IProps> = ({
 						{formatMessage({
 							id: isGSafeConnector
 								? currentMultisigSession
-									? "You'll need to execute the pending Multisig transaction to complete your log-in to Giveth & proceed to this area"
-									: 'Sign a message with your Safe signer address to continue the log in process'
+									? 'label.you_need_to_execute_the_pending_multisig'
+									: 'label.sign_a_message_with_your_safe_signer'
 								: 'label.you_need_to_authorize_your_wallet',
 						})}
 					</Description>
@@ -192,7 +200,7 @@ export const SignWithWalletModal: FC<IProps> = ({
 					<NoteDescription color='red'>
 						{formatMessage({
 							id: isGSafeConnector
-								? 'This is necessary to be able to create projects, manage your profile or use GIVpower.'
+								? 'label.this_is_necessary_to_create_projects'
 								: 'label.note:this_is_necessary_to_donate_to_projects_or_receive_funding',
 						})}
 					</NoteDescription>
@@ -243,8 +251,8 @@ export const SignWithWalletModal: FC<IProps> = ({
 					label={formatMessage({
 						id: multisigLastStep
 							? currentMultisigSession
-								? 'Okay, got it'
-								: "okay let's go"
+								? 'label.got_it'
+								: 'label.lets_do_it'
 							: 'component.button.sign_in',
 					})}
 					loading={loading}
@@ -270,7 +278,6 @@ export const SignWithWalletModal: FC<IProps> = ({
 										nonce,
 									} as ISolanaSignToGetToken),
 								);
-								setLoading(false);
 								if (
 									signature &&
 									signature.type ===
