@@ -63,6 +63,7 @@ export interface IProject {
 		name?: EProjectStatus;
 	};
 	updatedAt: string;
+	latestUpdateCreationDate: string;
 	organization?: {
 		name: string;
 		label: string;
