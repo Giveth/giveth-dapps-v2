@@ -46,7 +46,7 @@ const ProjectsCampaignBlock: FC<IProjectsCampaignBlockProps> = ({
 		<>
 			<TopContainer>
 				<BlockHeader>
-					<BlockTitle weight={700}>
+					<BlockTitle id='feature-projects-carousel' weight={700}>
 						{campaign.hashtags && campaign.hashtags.length > 0
 							? campaign.hashtags.map(hashtag => `#${hashtag} `)
 							: ''}
