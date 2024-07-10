@@ -58,4 +58,4 @@ const createGoogleTagEvent = ({
 	});
 };
 
-export default createGooglelTagEvent;
+export default createGoogleTagEvent;
