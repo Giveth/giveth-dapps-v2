@@ -11,6 +11,7 @@ import {
 	FlexCenter,
 	IconInfoOutline,
 	IconVerifiedBadge,
+	brandColors,
 } from '@giveth/ui-design-system';
 import { Modal } from '@/components/modals/Modal';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
@@ -37,7 +38,7 @@ export const VerifiedIcon = () => (
 	>
 		<path
 			d='M12 1.99951C6.48606 1.99951 2 6.48557 2 11.9995C2 17.5135 6.48606 21.9995 12 21.9995C17.5139 21.9995 22 17.5135 22 11.9995C22 6.48557 17.5139 1.99951 12 1.99951ZM17.2043 8.64807L10.7428 16.3404C10.6719 16.4248 10.5837 16.493 10.4842 16.5404C10.3846 16.5877 10.2761 16.6131 10.1659 16.6149H10.1529C10.0451 16.6149 9.93846 16.5922 9.83998 16.5483C9.7415 16.5044 9.65335 16.4403 9.58125 16.3601L6.81202 13.2832C6.74169 13.2086 6.68698 13.1207 6.65111 13.0246C6.61524 12.9286 6.59892 12.8264 6.60313 12.7239C6.60733 12.6215 6.63197 12.5209 6.67559 12.4282C6.71922 12.3354 6.78094 12.2523 6.85715 12.1837C6.93336 12.1151 7.0225 12.0625 7.11935 12.0288C7.21619 11.9952 7.31878 11.9812 7.42109 11.9878C7.5234 11.9944 7.62336 12.0214 7.7151 12.0671C7.80683 12.1129 7.8885 12.1765 7.95529 12.2543L10.1327 14.6736L16.0264 7.65865C16.1586 7.5058 16.3457 7.41112 16.5471 7.39506C16.7486 7.37901 16.9483 7.44288 17.103 7.57286C17.2577 7.70284 17.3551 7.8885 17.3741 8.08969C17.393 8.29089 17.3321 8.49147 17.2043 8.64807Z'
-			fill='white'
+			fill='currentColor'
 		/>
 	</svg>
 );
@@ -216,8 +217,7 @@ const PassportModal: FC<PassportModalProps> = props => {
 						<RefreshButton onClick={refreshScore}>
 							<FlexCenter gap='8px'>
 								<IconPassport16 />
-								{/* add #E1458D to @giveth/ui-design-system */}
-								<ButtonText color='#E1458D'>
+								<ButtonText color={brandColors.pinky[500]}>
 									{formatMessage({
 										id: 'label.refresh_score',
 									})}
