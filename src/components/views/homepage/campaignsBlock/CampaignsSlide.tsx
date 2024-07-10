@@ -47,16 +47,12 @@ export const CampaignsSlide: FC<ICampaignsSlideProps> = ({ campaign }) => {
 			<ContentCol sm={12} md={5}>
 				<H2 weight={700}>{campaign.title}</H2>
 				<Desc>{campaign.description}</Desc>
-				<div id='feature-campaigns-button'>
-					<Link href={campaignLinkGenerator(campaign) || ''}>
-						<ExploreLink id='feature-campaigns-text'>
-							{formatMessage({
-								id: 'page.projects.title.explore',
-							})}{' '}
-							<IconChevronRight32 />
-						</ExploreLink>
-					</Link>
-				</div>
+				<Link href={campaignLinkGenerator(campaign) || ''}>
+					<ExploreLink id='feature-campaigns-button'>
+						{formatMessage({ id: 'page.projects.title.explore' })}{' '}
+						<IconChevronRight32 />
+					</ExploreLink>
+				</Link>
 			</ContentCol>
 			<Col sm={12} md={7}>
 				{campaign.video ? (
