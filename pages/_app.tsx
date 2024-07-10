@@ -225,8 +225,12 @@ function MyApp({ Component, pageProps }: AppProps) {
 														pageProps={pageProps}
 													/>
 												)}
-												{process.env.NEXT_PUBLIC_ENV ===
-													'production' && (
+												{(process.env
+													.NEXT_PUBLIC_ENV ===
+													'production' ||
+													process.env
+														.NEXT_PUBLIC_ENV ===
+														'develop') && (
 													<Script
 														id='segment-script'
 														strategy='afterInteractive'
