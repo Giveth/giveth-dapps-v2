@@ -24,7 +24,7 @@ interface ICreateGoogleTagEvent {
  * The 'purchase' event includes the transaction details and the purchased item's details.
  * If categories are provided, up to 5 category levels are dynamically added to the item.
  */
-const createGooglelTagEvent = ({
+const createGoogleTagEvent = ({
 	txHash,
 	chainName,
 	amount,

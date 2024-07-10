@@ -39,7 +39,7 @@ import { useTokenPrice } from '@/hooks/useTokenPrice';
 import { calcDonationShare } from '@/components/views/donate/helpers';
 import { Spinner } from '@/components/Spinner';
 import { FETCH_GIVETH_PROJECT_BY_ID } from '@/apollo/gql/gqlProjects';
-import createGooglelTagEvent from '@/helpers/googleAnalytics';
+import createGoogleTagEvent from '@/helpers/googleAnalytics';
 
 interface IDonateModalProps extends IModal {
 	token: IProjectAcceptedToken;
@@ -221,7 +221,7 @@ const DonateModal: FC<IDonateModalProps> = props => {
 				}
 
 				// Send google tag event using segement
-				createGooglelTagEvent({
+				createGoogleTagEvent({
 					txHash: firstHash,
 					chainName: chainName,
 					amount: projectDonationPrice,
