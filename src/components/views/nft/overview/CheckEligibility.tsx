@@ -45,7 +45,7 @@ const CheckEligibility = () => {
 			setShowModal(true);
 		} catch (error) {
 			setError('Cannot get data');
-			console.log('ErrorRRR', error);
+			console.error('ErrorRRR', error);
 		}
 	};
 
@@ -73,7 +73,7 @@ const CheckEligibility = () => {
 			}
 		} catch (error) {
 			setError('Please connect your wallet');
-			console.log('Error', error);
+			console.error('Error', error);
 		}
 	};
 

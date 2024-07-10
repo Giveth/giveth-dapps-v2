@@ -111,7 +111,7 @@ export const WithDrawSuperToken: FC<IWithDrawSuperTokenProps> = ({
 				showToastError(error);
 				setStep(EModifySuperTokenSteps.WITHDRAW);
 			}
-			console.log('error', error);
+			console.error('error', error);
 		}
 	};
 

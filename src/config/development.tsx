@@ -59,7 +59,7 @@ const BASE_NETWORK_NUMBER = 84532;
 const ZKEVM_NETWORK_NUMBER = 2442;
 
 const SOLANA_NETWORK: NonEVMChain = {
-	id: 0,
+	id: 103,
 	networkId: 103,
 	chainType: ChainType.SOLANA,
 	name: 'Solana Devnet',
@@ -190,7 +190,7 @@ const config: EnvConfig = {
 		regenPools: [],
 		uniswapV2Subgraph:
 			process.env.NEXT_PUBLIC_SUBGRAPH_UNISWAP_V2 ||
-			'https://api.thegraph.com/subgraphs/name/uniswap/uniswap-v2?source=giveth',
+			'https://gateway-arbitrum.network.thegraph.com/api/49102048d5822209c7cd189f8e4a51a9/subgraphs/id/EYCKATKGBKLWvSfwvBjzfCBmGwYNdVkduYXVivCsLRFu',
 		regenStreams: [],
 	},
 
@@ -204,7 +204,7 @@ const config: EnvConfig = {
 
 		subgraphAddress:
 			process.env.NEXT_PUBLIC_SUBGRAPH_GNOSIS ||
-			'https://api.studio.thegraph.com/query/40764/giveconomy-staging-gnosischain/1.5.1?source=giveth',
+			'https://api.studio.thegraph.com/query/76292/giveconomy-staging-gnosischain/version/latest',
 		coingeckoChainName: 'xdai',
 		chainLogo: (logoSize?: number) => <IconGnosisChain size={logoSize} />,
 
@@ -305,7 +305,7 @@ const config: EnvConfig = {
 				unit: 'LP',
 				regenStreamType: StreamType.FOX,
 				farmStartTimeMS: 1685460000000,
-				farmEndTimeMS: 1701302400000,
+				farmEndTimeMS: 1721739750000,
 				introCard: {
 					title: 'ShapeShift DAO',
 					description:
@@ -317,7 +317,7 @@ const config: EnvConfig = {
 
 		uniswapV2Subgraph:
 			process.env.NEXT_PUBLIC_SUBGRAPH_HONEYSWAP_V2 ||
-			'https://api.thegraph.com/subgraphs/name/1hive/honeyswap-v2?source=giveth',
+			'https://api.studio.thegraph.com/proxy/40931/honeyswap-gnosis/version/latest',
 
 		regenStreams: [
 			{
@@ -368,7 +368,7 @@ const config: EnvConfig = {
 		anchorRegistryAddress: '0x4AAcca72145e1dF2aeC137E1f3C5E3D75DB8b5f3',
 		subgraphAddress:
 			process.env.NEXT_PUBLIC_SUBGRAPH_OPTIMISM ||
-			'https://api.thegraph.com/subgraphs/name/giveth/giveth-economy-optim-sepolia?source=giveth',
+			'https://api.studio.thegraph.com/query/76292/giveconomy-staging-op-sepolia/version/latest',
 		GIV_TOKEN_ADDRESS: OPTIMISM_GIV_TOKEN_ADDRESS,
 		GIV_BUY_LINK:
 			'https://app.uniswap.org/#/swap?chain=optimism&outputCurrency=0xc916Ce4025Cb479d9BA9D798A80094a449667F5D',

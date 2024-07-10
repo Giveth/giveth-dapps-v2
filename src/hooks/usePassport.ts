@@ -249,6 +249,7 @@ export const usePassport = () => {
 			const { refreshUserScores } = await fetchPassportScore(address);
 			await updateState(refreshUserScores);
 		} catch (error) {
+			console.error(error);
 			setInfo({
 				qfEligibilityState: EQFElegibilityState.ERROR,
 				passportState: EPassportState.ERROR,
