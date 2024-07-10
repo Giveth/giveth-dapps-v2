@@ -136,7 +136,7 @@ const ProjectCard = (props: IProjectCard) => {
 					<LastUpdatedContainer $isHover={isHover}>
 						{formatMessage({ id: 'label.last_updated' })}:
 						{timeFromNow(
-							latestUpdateCreationDate,
+							latestUpdateCreationDate || '',
 							formatRelativeTime,
 							formatMessage({ id: 'label.just_now' }),
 						)}
