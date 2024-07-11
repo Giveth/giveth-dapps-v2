@@ -102,7 +102,7 @@ export const useCreateEvmDonation = () => {
 				transaction = await retryFetchEVMTransaction(txHash);
 				if (transaction) {
 					donationData = {
-						chainId: transaction.chainId!,
+						chainId: chainId || token.networkId,
 						txHash: transaction.hash,
 						amount: amount,
 						token,
@@ -131,7 +131,7 @@ export const useCreateEvmDonation = () => {
 				return id;
 			} catch (e: any) {
 				await postRequest('/api/donation-backup', true, {
-					chainId: transaction?.chainId!,
+					chainId: chainId || token.networkId,
 					txHash: transaction?.hash,
 					amount: amount,
 					token,
