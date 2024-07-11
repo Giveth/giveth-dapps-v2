@@ -46,6 +46,7 @@ export const signToGetToken = createAsyncThunk(
 			safeAddress,
 			chainId,
 			connectors,
+			connector,
 			isGSafeConnector,
 			expiration,
 		} = signToGetToken;
@@ -57,7 +58,8 @@ export const signToGetToken = createAsyncThunk(
 		let siweMessage,
 			safeMessage: any = null;
 		if (isSAFE) {
-			siweMessage = (await signWithEvm(address, chainId!)) || {};
+			siweMessage =
+				(await signWithEvm(address, chainId!, connector)) || {};
 			safeMessage = await createSiweMessage(
 				safeAddress!,
 				chainId!,
