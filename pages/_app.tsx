@@ -56,7 +56,6 @@ declare global {
 	}
 }
 
-const DEFAULT_WRITE_KEY = 'MHK95b7o6FRNHt0ZZJU9bNGUT5MNCEyB';
 const queryClient = new QueryClient();
 
 export const IntlMessages = {
