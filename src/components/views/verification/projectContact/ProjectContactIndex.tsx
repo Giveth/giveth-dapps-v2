@@ -25,8 +25,16 @@ import { EVerificationSteps, IProjectContact } from '@/apollo/types/types';
 // import AddSocialModal from '@/components/views/verification/projectContact/AddSocialModal';
 import { EMainSocials, IMainSocials } from './common.types';
 import { OtherInput } from '@/components/views/verification/projectContact/common';
+import ShareLikeBadge from '@/components/badges/ShareLikeBadge';
+import useDetectDevice from '@/hooks/useDetectDevice';
+import ShareModal from '@/components/modals/ShareModal';
+import { EContentType } from '@/lib/constants/shareContent';
 
 export default function ProjectContactIndex() {
+	const [showModal, setShowShareModal] = useState<boolean>(false);
+
+	const { isMobile } = useDetectDevice();
+
 	const { verificationData, setVerificationData, setStep, isDraft } =
 		useVerificationData();
 
@@ -40,6 +48,8 @@ export default function ProjectContactIndex() {
 	const { formatMessage } = useIntl();
 
 	const socials = verificationData?.projectContacts || [];
+
+	const slug = verificationData?.project.slug || '';
 
 	const findOtherSocials = () => {
 		return socials.filter(
@@ -182,6 +192,10 @@ export default function ProjectContactIndex() {
 						registerOptions={isDraft ? requiredOptions.website : {}}
 						disabled={!isDraft}
 					/>
+					<ShareLikeBadge
+						onClick={() => setShowShareModal(true)}
+						isSimple={isMobile}
+					/>
 					<div>
 						<ContentSeparator />
 						<BtnContainer>
@@ -201,6 +215,15 @@ export default function ProjectContactIndex() {
 					</div>
 				</FormContainer>
 			</div>
+			{showModal && slug && (
+				<ShareModal
+					contentType={EContentType.verifyProject}
+					setShowModal={setShowShareModal}
+					projectHref={slug}
+					shareTitle='label.share_your'
+					shareDescription='label.share_your_desc'
+				/>
+			)}
 		</>
 	);
 }

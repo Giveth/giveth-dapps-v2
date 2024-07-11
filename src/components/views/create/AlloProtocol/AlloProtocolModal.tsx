@@ -21,7 +21,7 @@ import { slugToSuccessView, slugToProjectView } from '@/lib/routeCreators';
 import { EProjectStatus } from '@/apollo/types/gqlEnums';
 import { CREATE_ANCHOR_CONTRACT_ADDRESS_QUERY } from '@/apollo/gql/gqlSuperfluid';
 import { client } from '@/apollo/apolloClient';
-import { extractContractAddressFromString } from '../../donate/AlloProtocolFirstDonationModal';
+import { extractContractAddressFromString } from '../../donate/Recurring/AlloProtocolFirstDonationModal';
 import { wagmiConfig } from '@/wagmiConfigs';
 import createProfileABI from '@/artifacts/createProfile.json';
 import { generateRandomNonce } from '@/lib/helpers';
@@ -120,7 +120,7 @@ const AlloProtocolModal: FC<IAlloProtocolModal> = ({
 				}
 				setShowModal(false); // Close the modal
 			} catch (error) {
-				console.log('Error Contract', error);
+				console.error('Error Contract', error);
 			} finally {
 				setIsLoading(false);
 			}

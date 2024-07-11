@@ -72,6 +72,8 @@ const createDonation = async (props: IOnTxHash) => {
 		chainvineReferred,
 		safeTransactionId,
 		draftDonationId,
+		useDonationBox,
+		relevantDonationTxHash,
 	} = props;
 	const { address, symbol } = token;
 	let donationId = 0;
@@ -91,6 +93,8 @@ const createDonation = async (props: IOnTxHash) => {
 				referrerId: chainvineReferred,
 				safeTransactionId,
 				draftDonationId,
+				useDonationBox,
+				relevantDonationTxHash,
 			},
 		});
 		donationId = data.createDonation;
@@ -100,7 +104,7 @@ const createDonation = async (props: IOnTxHash) => {
 				section: SENTRY_URGENT,
 			},
 		});
-		console.log('createDonation error: ', error);
+		console.error('createDonation error: ', error);
 		throw error;
 	}
 
@@ -174,7 +178,7 @@ export const createDraftRecurringDonation = async ({
 				section: SENTRY_URGENT,
 			},
 		});
-		console.log('createDraftRecurringDonation error: ', error);
+		console.error('createDraftRecurringDonation error: ', error);
 		throw error;
 	}
 };
@@ -216,7 +220,7 @@ export const createRecurringDonation = async ({
 				section: SENTRY_URGENT,
 			},
 		});
-		console.log('createRecurringDonation error: ', error);
+		console.error('createRecurringDonation error: ', error);
 		throw error;
 	}
 };
@@ -272,7 +276,7 @@ export const updateRecurringDonation = async (
 				section: SENTRY_URGENT,
 			},
 		});
-		console.log('updateRecurringDonation error: ', error);
+		console.error('updateRecurringDonation error: ', error);
 		throw error;
 	}
 };
@@ -313,7 +317,7 @@ export const endRecurringDonation = async ({
 				section: SENTRY_URGENT,
 			},
 		});
-		console.log('endRecurringDonation error: ', error);
+		console.error('endRecurringDonation error: ', error);
 		throw error;
 	}
 };
@@ -337,7 +341,7 @@ export const updateRecurringDonationStatus = async (
 				section: SENTRY_URGENT,
 			},
 		});
-		console.log('updateRecurringDonationStatus error: ', error);
+		console.error('updateRecurringDonationStatus error: ', error);
 		throw error;
 	}
 };

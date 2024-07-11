@@ -3,6 +3,8 @@ import production from './config/production';
 import { ChainType, GlobalConfig, NonEVMNetworkConfig } from './types/config';
 
 export const isProduction = process.env.NEXT_PUBLIC_ENV === 'production';
+export const isDeleteProjectEnabled =
+	process.env.NEXT_PUBLIC_DELETE_PROJECT_ENABLED === 'true';
 
 const envConfig = isProduction ? production : development;
 
@@ -19,6 +21,7 @@ const EVM_NETWORKS_CONFIG = {
 	[envConfig.ARBITRUM_NETWORK_NUMBER]: envConfig.ARBITRUM_CONFIG,
 	[envConfig.BASE_NETWORK_NUMBER]: envConfig.BASE_CONFIG,
 	[envConfig.CLASSIC_NETWORK_NUMBER]: envConfig.CLASSIC_CONFIG,
+	[envConfig.ZKEVM_NETWORK_NUMBER]: envConfig.ZKEVM_CONFIG,
 };
 
 const NON_EVM_NETWORKS_CONFIG: { [key: string]: NonEVMNetworkConfig } = {};

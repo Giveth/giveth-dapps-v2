@@ -28,17 +28,13 @@ export const PROJECT_CARD_FIELDS = gql`
 	fragment ProjectCardFields on Project {
 		...ProjectCoreFields
 		descriptionSummary
-		totalReactions
-		reaction {
-			id
-			userId
-		}
 		adminUser {
 			name
 			walletAddress
 			avatar
 		}
 		updatedAt
+		latestUpdateCreationDate
 		organization {
 			label
 		}
@@ -146,6 +142,7 @@ export const FETCH_PROJECT_BY_SLUG_DONATION = gql`
 			slug
 			descriptionSummary
 			verified
+			totalDonations
 			sumDonationValueUsdForActiveQfRound
 			countUniqueDonorsForActiveQfRound
 			adminUser {
@@ -183,6 +180,7 @@ export const FETCH_PROJECT_BY_SLUG_DONATION = gql`
 				allocatedTokenSymbol
 				allocatedFundUSDPreferred
 				allocatedFundUSD
+				minimumValidUsdValue
 			}
 			anchorContracts {
 				address
@@ -222,7 +220,6 @@ export const FETCH_PROJECT_BY_SLUG_SINGLE_PROJECT = gql`
 				id
 				userId
 			}
-			totalReactions
 			categories {
 				name
 				value
@@ -349,7 +346,6 @@ export const FETCH_PROJECT_REACTION_BY_ID = gql`
 				id
 				userId
 			}
-			totalReactions
 		}
 	}
 `;
@@ -376,7 +372,6 @@ export const FETCH_PROJECT_UPDATES = gql`
 			userId
 			content
 			isMain
-			totalReactions
 			reaction {
 				projectUpdateId
 				userId
@@ -414,7 +409,6 @@ export const FETCH_FEATURED_PROJECT_UPDATES = gql`
 			userId
 			content
 			isMain
-			totalReactions
 			createdAt
 		}
 	}

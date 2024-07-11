@@ -46,7 +46,7 @@ export async function getERC20Info({ contractAddress, networkId }: IERC20Info) {
 
 		return ERC20Info;
 	} catch (error) {
-		console.log({ error });
+		console.error({ error });
 		captureException(error, {
 			tags: {
 				section: 'getERC20Info',

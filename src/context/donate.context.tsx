@@ -5,9 +5,9 @@ import {
 	type SetStateAction,
 	useContext,
 	useState,
+	useCallback,
 	type Dispatch,
 } from 'react';
-import { useCallback } from 'react';
 import { IProject } from '@/apollo/types/types';
 import { hasActiveRound } from '@/helpers/qf';
 import { ISuperfluidStream, IToken } from '@/types/superFluid';
@@ -15,6 +15,7 @@ import { ChainType } from '@/types/config';
 import { useUserStreams } from '@/hooks/useUserStreams';
 import { client } from '@/apollo/apolloClient';
 import { FETCH_PROJECT_BY_SLUG_DONATION } from '@/apollo/gql/gqlProjects';
+import { IProjectAcceptedToken } from '@/apollo/types/gqlTypes';
 
 export interface TxHashWithChainType {
 	txHash: string;
@@ -22,6 +23,7 @@ export interface TxHashWithChainType {
 }
 interface ISuccessDonation {
 	txHash: TxHashWithChainType[];
+	chainId: number;
 	givBackEligible?: boolean;
 	excludeFromQF?: boolean;
 	isRecurring?: boolean;
@@ -33,8 +35,12 @@ interface IDonateContext {
 	successDonation?: ISuccessDonation;
 	tokenStreams: ITokenStreams;
 	setSuccessDonation: (successDonation?: ISuccessDonation) => void;
-	selectedToken?: ISelectTokenWithBalance;
-	setSelectedToken: Dispatch<
+	selectedOneTimeToken?: IProjectAcceptedToken;
+	selectedRecurringToken?: ISelectTokenWithBalance;
+	setSelectedOneTimeToken: Dispatch<
+		SetStateAction<IProjectAcceptedToken | undefined>
+	>;
+	setSelectedRecurringToken: Dispatch<
 		SetStateAction<ISelectTokenWithBalance | undefined>
 	>;
 	fetchProject: () => Promise<void>;
@@ -47,7 +53,8 @@ interface IProviderProps {
 
 const DonateContext = createContext<IDonateContext>({
 	setSuccessDonation: () => {},
-	setSelectedToken: () => {},
+	setSelectedOneTimeToken: () => {},
+	setSelectedRecurringToken: () => {},
 	project: {} as IProject,
 	tokenStreams: {},
 	fetchProject: async () => {},
@@ -67,9 +74,13 @@ export interface ITokenStreams {
 }
 
 export const DonateProvider: FC<IProviderProps> = ({ children, project }) => {
-	const [selectedToken, setSelectedToken] = useState<
+	const [selectedOneTimeToken, setSelectedOneTimeToken] = useState<
+		IProjectAcceptedToken | undefined
+	>();
+	const [selectedRecurringToken, setSelectedRecurringToken] = useState<
 		ISelectTokenWithBalance | undefined
 	>();
+
 	const [successDonation, setSuccessDonation] = useState<ISuccessDonation>();
 	const [projectData, setProjectData] = useState<IProject>(project);
 
@@ -94,8 +105,10 @@ export const DonateProvider: FC<IProviderProps> = ({ children, project }) => {
 				project: projectData,
 				successDonation,
 				setSuccessDonation,
-				selectedToken,
-				setSelectedToken,
+				selectedOneTimeToken,
+				selectedRecurringToken,
+				setSelectedOneTimeToken,
+				setSelectedRecurringToken,
 				tokenStreams,
 				fetchProject,
 			}}

@@ -54,7 +54,6 @@ export const FETCH_HOMEPAGE_DATA = gql`
 				userId
 				contentSummary
 				isMain
-				totalReactions
 				createdAt
 				reaction {
 					id

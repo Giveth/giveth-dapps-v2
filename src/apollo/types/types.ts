@@ -52,7 +52,6 @@ export interface IProject {
 	listed?: boolean | null;
 	categories: ICategory[];
 	reaction?: IReaction;
-	totalReactions: number;
 	adminUser: IAdminUser;
 	donations: {
 		id?: string;
@@ -64,6 +63,7 @@ export interface IProject {
 		name?: EProjectStatus;
 	};
 	updatedAt: string;
+	latestUpdateCreationDate?: string;
 	organization?: {
 		name: string;
 		label: string;
@@ -98,6 +98,7 @@ export enum EProjectsFilter {
 	ACCEPT_FUND_ON_OPTIMISM = 'AcceptFundOnOptimism',
 	ACCEPT_FUND_ON_ETC = 'AcceptFundOnETC',
 	ACCEPT_FUND_ON_SOLANA = 'AcceptFundOnSolana',
+	ACCEPT_FUND_ON_ZKEVM = 'AcceptFundOnZKEVM',
 	ACTIVE_QF_ROUND = 'ActiveQfRound',
 }
 
@@ -121,6 +122,7 @@ export enum ECampaignFilterField {
 	AcceptFundOnBase = 'acceptFundOnBase',
 	AcceptFundOnOptimism = 'acceptFundOnOptimism',
 	AcceptFundOnSolana = 'acceptFundOnSolana',
+	AcceptFundOnZKEVM = 'acceptFundOnZKEVM',
 }
 
 export interface ICampaign {
@@ -482,6 +484,7 @@ export interface IQFRound {
 	allocatedFundUSDPreferred: boolean;
 	allocatedTokenSymbol: string;
 	allocatedTokenChainId: number;
+	minimumValidUsdValue?: number;
 }
 
 export interface IArchivedQFRound extends IQFRound {

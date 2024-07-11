@@ -4,12 +4,14 @@ import { StakeState } from '@/lib/staking';
 
 interface IStakeStepsProps {
 	stakeState: StakeState;
+	permit?: boolean;
 }
 
-const steps = ['label.approve', 'label.stake'];
-
-export const StakeSteps: FC<IStakeStepsProps> = ({ stakeState }) => {
+export const StakeSteps: FC<IStakeStepsProps> = ({ stakeState, permit }) => {
 	let activeStep = 0;
+	const steps = permit
+		? ['label.permit', 'label.stake']
+		: ['label.approve', 'label.stake'];
 	if (
 		stakeState === StakeState.WRAP ||
 		stakeState === StakeState.WRAPPING ||

@@ -59,6 +59,8 @@ export const useCreateSolanaDonation = () => {
 				amount,
 				token,
 				setFailedModalType,
+				useDonationBox,
+				relevantDonationTxHash,
 			} = props;
 
 			let donationData: IOnTxHash;
@@ -77,6 +79,8 @@ export const useCreateSolanaDonation = () => {
 					symbol: token.symbol,
 					setFailedModalType,
 					safeTransactionId: null,
+					useDonationBox,
+					relevantDonationTxHash,
 				};
 			} else return;
 
@@ -101,11 +105,13 @@ export const useCreateSolanaDonation = () => {
 					walletAddress: transaction?.from,
 					symbol: token.symbol,
 					error: e.message,
+					useDonationBox,
+					relevantDonationTxHash,
 				});
 				setFailedModalType(EDonationFailedType.NOT_SAVED);
 			}
 		} catch (error) {
-			console.log('Error sending transaction', { error });
+			console.error('Error sending transaction', { error });
 		}
 	};
 
