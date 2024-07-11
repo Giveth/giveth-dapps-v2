@@ -60,7 +60,7 @@ export enum EProjectPageTabs {
 	UPDATES = 'updates',
 	GIVPOWER = 'givpower',
 }
- 
+
 const ProjectIndex: FC<IProjectBySlug> = () => {
 	const { formatMessage } = useIntl();
 	const [activeTab, setActiveTab] = useState(0);
