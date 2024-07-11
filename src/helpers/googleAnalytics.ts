@@ -1,5 +1,13 @@
 import { ICategory } from '@/apollo/types/types';
 
+// Function to track pageviews in Google Analytics using gtag.js
+// The function takes a URL as an argument and sends a pageview event to Google Analytics
+export const pageview = (url: string) => {
+	window.gtag('config', process.env.NEXT_PUBLIC_ANALYTICS_WRITE_KEY, {
+		page_path: url,
+	});
+};
+
 interface ICreateGoogleTagEvent {
 	txHash: string;
 	chainName: string;
@@ -24,7 +32,7 @@ interface ICreateGoogleTagEvent {
  * The 'purchase' event includes the transaction details and the purchased item's details.
  * If categories are provided, up to 5 category levels are dynamically added to the item.
  */
-const createGoogleTagEvent = ({
+const createGoogleTagEventPurchase = ({
 	txHash,
 	chainName,
 	amount,
@@ -49,7 +57,7 @@ const createGoogleTagEvent = ({
 	const items = [item];
 
 	// Send event data to tag manager
-	window.analytics.track('purchase', {
+	window.gtag('event', 'purchase', {
 		transaction_id: txHash,
 		value: amount,
 		currency: 'USD',
@@ -58,4 +66,4 @@ const createGoogleTagEvent = ({
 	});
 };
 
-export default createGoogleTagEvent;
+export default createGoogleTagEventPurchase;

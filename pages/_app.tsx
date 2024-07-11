@@ -6,7 +6,6 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { Toaster } from 'react-hot-toast';
 import { ApolloProvider } from '@apollo/client';
 import NProgress from 'nprogress';
-import * as snippet from '@segment/snippet';
 import { useRouter } from 'next/router';
 import { Provider as ReduxProvider } from 'react-redux';
 import { SpeedInsights } from '@vercel/speed-insights/next';
@@ -41,6 +40,7 @@ import { zIndex } from '@/lib/constants/constants';
 import configuration, { isProduction } from '@/configuration';
 import MaintenanceIndex from '@/components/views/Errors/MaintenanceIndex';
 import { SolanaProvider } from '@/providers/solanaWalletProvider';
+import { pageview } from '@/helpers/googleAnalytics';
 import type { AppProps } from 'next/app';
 
 if (!isProduction) {
@@ -52,6 +52,7 @@ if (!isProduction) {
 declare global {
 	interface Window {
 		analytics: any;
+		gtag: any;
 	}
 }
 
@@ -65,25 +66,6 @@ export const IntlMessages = {
 };
 
 const defaultLocale = process.env.defaultLocale;
-
-function renderSnippet() {
-	const opts = {
-		apiKey:
-			process.env.NEXT_PUBLIC_ANALYTICS_WRITE_KEY || DEFAULT_WRITE_KEY,
-		// note: the page option only covers SSR tracking.
-		// Page.js is used to track other events using `window.analytics.page()`
-		page: true,
-	};
-
-	if (process.env.NEXT_PUBLIC_ENV === 'development') {
-		return snippet.max(opts);
-	}
-	if (process.env.NEXT_PUBLIC_ENV === 'production') {
-		console.log = function () {};
-	}
-
-	return snippet.min(opts);
-}
 
 const RenderComponent = ({ Component, pageProps }: any) => {
 	useSafeAutoConnect();
@@ -179,6 +161,17 @@ function MyApp({ Component, pageProps }: AppProps) {
 		asyncFunc();
 	}, []);
 
+	// Google Tag Manager Page view track
+	useEffect(() => {
+		const handleRouteChange = (url: string) => {
+			pageview(url);
+		};
+		router.events.on('routeChangeComplete', handleRouteChange);
+		return () => {
+			router.events.off('routeChangeComplete', handleRouteChange);
+		};
+	}, [router.events]);
+
 	return (
 		<>
 			<Head>
@@ -225,20 +218,22 @@ function MyApp({ Component, pageProps }: AppProps) {
 														pageProps={pageProps}
 													/>
 												)}
-												{(process.env
-													.NEXT_PUBLIC_ENV ===
-													'production' ||
-													process.env
-														.NEXT_PUBLIC_ENV ===
-														'develop') && (
-													<Script
-														id='segment-script'
-														strategy='afterInteractive'
-														dangerouslySetInnerHTML={{
-															__html: renderSnippet(),
-														}}
-													/>
-												)}
+												<Script
+													strategy='afterInteractive'
+													src={`https://www.googletagmanager.com/gtag/js?id=${process.env.NEXT_PUBLIC_ANALYTICS_WRITE_KEY}`}
+												/>
+												<Script
+													id='gtag-script'
+													strategy='afterInteractive'
+													dangerouslySetInnerHTML={{
+														__html: `
+															window.dataLayer = window.dataLayer || [];
+															function gtag(){dataLayer.push(arguments);}
+															gtag('js', new Date());
+															gtag('config', '${process.env.NEXT_PUBLIC_ANALYTICS_WRITE_KEY}');
+														`,
+													}}
+												/>
 												{/* {process.env.NEXT_PUBLIC_ENV !==
 												'production' && (
 												<Script
