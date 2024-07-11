@@ -63,6 +63,7 @@ export interface IProject {
 		name?: EProjectStatus;
 	};
 	updatedAt: string;
+	latestUpdateCreationDate?: string;
 	organization?: {
 		name: string;
 		label: string;
@@ -379,6 +380,12 @@ export interface ISocialProfile {
 	name: string;
 }
 
+export interface IPersonalInfo {
+	email: string;
+	walletAddress: string;
+	fullName: string;
+}
+
 export interface IProjectVerification {
 	id: string;
 	isTermAndConditionsAccepted: boolean;
@@ -398,6 +405,7 @@ export interface IProjectVerification {
 	socialProfiles?: ISocialProfile[];
 	status: EVerificationStatus;
 	lastStep: EVerificationSteps;
+	personalInfo?: IPersonalInfo;
 }
 
 export enum EVerificationStatus {
@@ -418,7 +426,9 @@ export interface IProjectVerificationUpdateInput {
 }
 
 export enum EVerificationSteps {
+	BEFORE_START = 'beforeStart',
 	PERSONAL_INFO = 'personalInfo',
+	SOCIAL_PROFILES = 'socialProfiles',
 	PROJECT_REGISTRY = 'projectRegistry',
 	PROJECT_CONTACTS = 'projectContacts',
 	MANAGING_FUNDS = 'managingFunds',
