@@ -113,7 +113,7 @@ export const SignWithWalletModal: FC<IProps> = ({
 		if (connector?.type === 'safe') return;
 		setSecondaryConnnector(connector);
 	}, [connector?.type]);
-	console.log({ connector, secondaryConnector });
+
 	const reset = () => {
 		setMultisigLastStep(false);
 		setCurrentMultisigSession(false);
