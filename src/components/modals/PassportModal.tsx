@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useState } from 'react';
+import React, { FC, useEffect } from 'react';
 import styled from 'styled-components';
 import { useIntl } from 'react-intl';
 import {
@@ -12,6 +12,7 @@ import {
 	IconInfoOutline,
 	IconVerifiedBadge,
 	brandColors,
+	IconVerified24,
 } from '@giveth/ui-design-system';
 import { Modal } from '@/components/modals/Modal';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
@@ -27,21 +28,8 @@ import {
 	Hr,
 	RefreshButton,
 } from '@/components/views/userProfile/common.sc';
-
-export const VerifiedIcon = () => (
-	<svg
-		width='24'
-		height='24'
-		viewBox='0 0 24 24'
-		fill='none'
-		xmlns='http://www.w3.org/2000/svg'
-	>
-		<path
-			d='M12 1.99951C6.48606 1.99951 2 6.48557 2 11.9995C2 17.5135 6.48606 21.9995 12 21.9995C17.5139 21.9995 22 17.5135 22 11.9995C22 6.48557 17.5139 1.99951 12 1.99951ZM17.2043 8.64807L10.7428 16.3404C10.6719 16.4248 10.5837 16.493 10.4842 16.5404C10.3846 16.5877 10.2761 16.6131 10.1659 16.6149H10.1529C10.0451 16.6149 9.93846 16.5922 9.83998 16.5483C9.7415 16.5044 9.65335 16.4403 9.58125 16.3601L6.81202 13.2832C6.74169 13.2086 6.68698 13.1207 6.65111 13.0246C6.61524 12.9286 6.59892 12.8264 6.60313 12.7239C6.60733 12.6215 6.63197 12.5209 6.67559 12.4282C6.71922 12.3354 6.78094 12.2523 6.85715 12.1837C6.93336 12.1151 7.0225 12.0625 7.11935 12.0288C7.21619 11.9952 7.31878 11.9812 7.42109 11.9878C7.5234 11.9944 7.62336 12.0214 7.7151 12.0671C7.80683 12.1129 7.8885 12.1765 7.95529 12.2543L10.1327 14.6736L16.0264 7.65865C16.1586 7.5058 16.3457 7.41112 16.5471 7.39506C16.7486 7.37901 16.9483 7.44288 17.103 7.57286C17.2577 7.70284 17.3551 7.8885 17.3741 8.08969C17.393 8.29089 17.3321 8.49147 17.2043 8.64807Z'
-			fill='currentColor'
-		/>
-	</svg>
-);
+import InlineToast, { EToastType } from '@/components/toasts/InlineToast';
+import links from '@/lib/constants/links';
 
 interface PassportModalProps extends IModal {
 	qfEligibilityState: EQFElegibilityState;
@@ -63,6 +51,7 @@ export type TQFEligibilityData = {
 		color: string;
 		text: string;
 		icon?: JSX.Element;
+		desc: string;
 	};
 };
 
@@ -71,12 +60,14 @@ export const QFEligibilityData: TQFEligibilityData = {
 		bgColor: semanticColors.golden[300],
 		color: semanticColors.golden[700],
 		text: 'profile.qf_donor_eligibility.tag.not_eligible',
+		desc: 'profile.qf_donor_eligibility.not_eligible_desc',
 	},
 	[EQFElegibilityTagState.ELIGIBLE]: {
 		bgColor: semanticColors.jade[500],
 		color: neutralColors.gray[100],
 		text: 'profile.qf_donor_eligibility.tag.eligible',
-		icon: <VerifiedIcon />,
+		icon: <IconVerified24 />,
+		desc: 'profile.qf_donor_eligibility.eligible_desc',
 	},
 };
 
@@ -94,19 +85,29 @@ const PassportModal: FC<PassportModalProps> = props => {
 	const { locale, formatMessage } = useIntl();
 	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
 
-	const [QFEligibilityCurrentState, setQFEligibilityCurrentState] =
-		useState<EQFElegibilityTagState>(EQFElegibilityTagState.NOT_ELIGIBLE);
+	const QFEligibilityCurrentState =
+		qfEligibilityState === EQFElegibilityState.ELIGIBLE
+			? EQFElegibilityTagState.ELIGIBLE
+			: EQFElegibilityTagState.NOT_ELIGIBLE;
+
+	const showPassportScoreSection =
+		![EPassportState.NOT_SIGNED, EPassportState.INVALID, null].includes(
+			passportState,
+		) &&
+		![
+			EQFElegibilityState.CHECK_ELIGIBILITY,
+			EQFElegibilityState.PROCESSING,
+			EQFElegibilityState.ERROR,
+		].includes(qfEligibilityState);
 
 	useEffect(() => {
-		if (qfEligibilityState === EQFElegibilityState.ELIGIBLE) {
-			setQFEligibilityCurrentState(EQFElegibilityTagState.ELIGIBLE);
-			setTimeout(() => {
-				closeModal();
-			}, 3000);
-		} else {
-			setQFEligibilityCurrentState(EQFElegibilityTagState.NOT_ELIGIBLE);
+		if (
+			passportState === EPassportState.ERROR ||
+			qfEligibilityState === EQFElegibilityState.ELIGIBLE
+		) {
+			setShowModal(false);
 		}
-	}, [qfEligibilityState, closeModal]);
+	}, [passportState, qfEligibilityState, setShowModal]);
 
 	return (
 		<Modal
@@ -122,7 +123,7 @@ const PassportModal: FC<PassportModalProps> = props => {
 				<PassportInfoBox>
 					<P>
 						{formatMessage({
-							id: `profile.qf_donor_eligibility.passport.${qfEligibilityState === EQFElegibilityState.ELIGIBLE ? 'eligible' : 'not_eligible.p1'}`,
+							id: `profile.qf_donor_eligibility.${qfEligibilityState === EQFElegibilityState.ELIGIBLE ? 'eligible_desc' : 'passport.not_eligible.p1'}`,
 						})}{' '}
 						{qfEligibilityState !==
 							EQFElegibilityState.ELIGIBLE && (
@@ -174,20 +175,18 @@ const PassportModal: FC<PassportModalProps> = props => {
 						{QFEligibilityData[QFEligibilityCurrentState].icon}
 					</QFEligibilityStatus>
 				</EligibilityStatusSection>
-				{passportState === EPassportState.SUCCESS ||
-				(passportState === EPassportState.LOADING &&
-					passportScore != null) ? (
+				{showPassportScoreSection && (
 					<PassportSection>
 						<StyledNote>
 							<IconInfoOutline />
 							{formatMessage({
 								id: 'profile.qf_donor_eligibility.required_score',
 							})}
-							<QFMinScore>{`>  ${currentRound?.minimumPassportScore}`}</QFMinScore>
+							<QFMinScore>{`>  ${currentRound?.minimumPassportScore ?? '--'}`}</QFMinScore>
 						</StyledNote>
 						<ScoreCard>
 							{formatMessage({
-								id: 'profile.qf_donor_eligibility.your_paaaport_score',
+								id: 'profile.qf_donor_eligibility.your_passport_score',
 							})}
 							<ScoreBox>
 								{passportState === EPassportState.LOADING ? (
@@ -196,15 +195,34 @@ const PassportModal: FC<PassportModalProps> = props => {
 										size={10}
 									/>
 								) : (
-									passportScore
+									passportScore ?? '--'
 								)}
 							</ScoreBox>
 						</ScoreCard>
 					</PassportSection>
-				) : null}
+				)}
+				{passportState === EPassportState.INVALID && (
+					<StyledToast
+						type={EToastType.Error}
+						message={formatMessage({
+							id: 'label.passport.invalid',
+						})}
+					/>
+				)}
 				<Hr />
 				<EligibilityCardBottom>
-					{passportState === EPassportState.NOT_SIGNED ? (
+					{passportState === EPassportState.INVALID ? (
+						<Button
+							label={formatMessage({
+								id: 'label.go_to_passport',
+							})}
+							size='small'
+							buttonType='primary'
+							onClick={() =>
+								window.open(links.PASSPORT, '_blank')
+							}
+						/>
+					) : passportState === EPassportState.NOT_SIGNED ? (
 						<Button
 							label={formatMessage({
 								id: 'profile.qf_donor_eligibility.label.connect_gitcoin_passport',
@@ -283,6 +301,10 @@ const EligibilityCardBottom = styled.div`
 	justify-content: center;
 	align-items: center;
 	margin-block-end: 16px;
+`;
+
+const StyledToast = styled(InlineToast)`
+	margin-inline: 16px;
 `;
 
 export default PassportModal;

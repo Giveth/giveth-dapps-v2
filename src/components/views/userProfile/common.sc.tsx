@@ -43,7 +43,7 @@ export const ScoreCard = styled(P)`
 `;
 
 export const ScoreBox = styled(P)`
-	color: ${neutralColors.gray[100]};
+	color: ${neutralColors.gray[100]} !important;
 	background-color: black;
 	padding: 8px 16px;
 	border-radius: 25px;

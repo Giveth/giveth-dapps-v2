@@ -46,8 +46,8 @@ export const QFEligibilityBGInner = styled(ContributeCardBox)`
 	flex-direction: column;
 	gap: 16px;
 	z-index: 1;
-	width: 65%;
-	margin-block: 36px;
+	width: 50%;
+	margin-block: auto;
 `;
 
 export const EligibilityTop = styled(Flex)`
@@ -84,10 +84,12 @@ export const EligibilityCardDesc = styled(P)`
 	border-radius: 8px;
 `;
 
-export const QFEligibilityState = styled(P)`
+export const QFEligibilityStateSection = styled(P)`
 	display: flex;
 	align-items: center;
 	justify-content: center;
+	margin-block: 30px;
+	gap: 16px;
 `;
 
 export const EligibilityCardBottom = styled.div<{ $justify?: string }>`

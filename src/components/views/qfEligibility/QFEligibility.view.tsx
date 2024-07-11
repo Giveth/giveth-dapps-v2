@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import {
 	brandColors,
 	H5,
@@ -9,6 +9,7 @@ import {
 	neutralColors,
 	FlexCenter,
 	IconInfoOutline,
+	IconVerifiedBadge,
 } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
 import {
@@ -18,7 +19,7 @@ import {
 	EligibilityTop,
 	QFEligibilityStatus,
 	EligibilityCardDesc,
-	QFEligibilityState,
+	QFEligibilityStateSection,
 	EligibilityCardBottom,
 } from './Common.sc';
 import {
@@ -40,30 +41,131 @@ import {
 	Hr,
 	RefreshButton,
 } from '@/components/views/userProfile/common.sc';
+import InlineToast, { EToastType } from '@/components/toasts/InlineToast';
+import links from '@/lib/constants/links';
 
 export const QFEligibilityView = () => {
 	const { formatMessage } = useIntl();
 	const { info, handleSign, refreshScore, fetchUserMBDScore } = usePassport();
 	const { passportState, passportScore, qfEligibilityState, currentRound } =
 		info;
-	console.log('passportState', info);
 
-	const [QFEligibilityCurrentState, setQFEligibilityCurrentState] =
-		useState<EQFElegibilityTagState>(EQFElegibilityTagState.ELIGIBLE);
+	const QFEligibilityCurrentState =
+		qfEligibilityState === EQFElegibilityState.ELIGIBLE
+			? EQFElegibilityTagState.ELIGIBLE
+			: EQFElegibilityTagState.NOT_ELIGIBLE;
 
-	const checkEligibilityDisabled: boolean =
-		qfEligibilityState === EQFElegibilityState.LOADING ||
-		qfEligibilityState === EQFElegibilityState.PROCESSING ||
-		qfEligibilityState === EQFElegibilityState.ELIGIBLE ||
-		qfEligibilityState === EQFElegibilityState.MORE_INFO_NEEDED;
+	const showPassportScoreSection =
+		passportState !== EPassportState.NOT_SIGNED &&
+		![
+			EQFElegibilityState.CHECK_ELIGIBILITY,
+			EQFElegibilityState.PROCESSING,
+			EQFElegibilityState.ERROR,
+		].includes(qfEligibilityState) &&
+		!(
+			qfEligibilityState === EQFElegibilityState.ELIGIBLE &&
+			passportState !== EPassportState.SUCCESS
+		);
 
-	useEffect(() => {
-		if (qfEligibilityState === EQFElegibilityState.ELIGIBLE) {
-			setQFEligibilityCurrentState(EQFElegibilityTagState.ELIGIBLE);
-		} else {
-			setQFEligibilityCurrentState(EQFElegibilityTagState.NOT_ELIGIBLE);
+	const showQFStateSection =
+		passportState === EPassportState.NOT_SIGNED ||
+		[
+			EQFElegibilityState.CHECK_ELIGIBILITY,
+			EQFElegibilityState.PROCESSING,
+		].includes(qfEligibilityState) ||
+		(qfEligibilityState === EQFElegibilityState.ELIGIBLE &&
+			passportState !== EPassportState.SUCCESS);
+
+	const checkEligibilityDisabled = [
+		EQFElegibilityState.LOADING,
+		EQFElegibilityState.PROCESSING,
+		EQFElegibilityState.ELIGIBLE,
+		EQFElegibilityState.MORE_INFO_NEEDED,
+	].includes(qfEligibilityState);
+
+	const renderQFEligibilityState = () => {
+		switch (qfEligibilityState) {
+			case EQFElegibilityState.PROCESSING:
+				return (
+					<>
+						<Spinner size={10} color={brandColors.mustard[600]} />
+						{formatMessage({ id: 'label.processing' })}
+					</>
+				);
+			case EQFElegibilityState.CHECK_ELIGIBILITY:
+				return formatMessage({ id: 'label.it_wont_take_long' });
+			case EQFElegibilityState.ELIGIBLE:
+				return (
+					<>
+						{formatMessage({ id: 'label.you_are_all_set' })}
+						<IconVerifiedBadge size={24} />
+					</>
+				);
+			case EQFElegibilityState.MORE_INFO_NEEDED:
+				return formatMessage({ id: 'label.we_need_a_bit_more_info' });
+			default:
+				return null;
 		}
-	}, [qfEligibilityState]);
+	};
+
+	const renderBottomSection = () => {
+		if (
+			[
+				EQFElegibilityState.CHECK_ELIGIBILITY,
+				EQFElegibilityState.PROCESSING,
+			].includes(qfEligibilityState) ||
+			(qfEligibilityState === EQFElegibilityState.ELIGIBLE &&
+				passportState !== EPassportState.SUCCESS)
+		) {
+			return (
+				<EligibilityCardBottom $justify='center'>
+					<Button
+						label={formatMessage({
+							id: 'profile.qf_donor_eligibility.label.check_eligibility',
+						})}
+						loading={
+							qfEligibilityState ===
+							EQFElegibilityState.PROCESSING
+						}
+						size='small'
+						buttonType='primary'
+						onClick={fetchUserMBDScore}
+						disabled={checkEligibilityDisabled}
+					/>
+				</EligibilityCardBottom>
+			);
+		} else if (
+			qfEligibilityState === EQFElegibilityState.MORE_INFO_NEEDED &&
+			passportState === EPassportState.NOT_SIGNED
+		) {
+			return (
+				<EligibilityCardBottom $justify='center'>
+					<Button
+						label={formatMessage({
+							id: 'profile.qf_donor_eligibility.label.connect_gitcoin_passport',
+						})}
+						size='small'
+						buttonType='primary'
+						onClick={handleSign}
+					/>
+				</EligibilityCardBottom>
+			);
+		} else {
+			return (
+				<EligibilityCardBottom $justify='space-between'>
+					<P>{formatMessage({ id: 'label.passport_connected' })}</P>
+					<RefreshButton onClick={refreshScore}>
+						<FlexCenter gap='8px'>
+							<IconPassport16 />
+							<ButtonText>
+								{formatMessage({ id: 'label.refresh_score' })}
+							</ButtonText>
+						</FlexCenter>
+					</RefreshButton>
+				</EligibilityCardBottom>
+			);
+		}
+	};
 
 	return (
 		<Wrapper>
@@ -94,55 +196,27 @@ export const QFEligibilityView = () => {
 					</EligibilityTop>
 					<EligibilityCardDesc>
 						{formatMessage({
-							id: 'profile.qf_donor_eligibility.desc',
+							id: QFEligibilityData[QFEligibilityCurrentState]
+								.desc,
 						})}
 					</EligibilityCardDesc>
-					{passportState !== EPassportState.SUCCESS && (
-						<QFEligibilityState>
-							{qfEligibilityState ===
-								EQFElegibilityState.PROCESSING && (
-								<>
-									<Spinner
-										size={10}
-										color={brandColors.mustard[600]}
-									/>
-									{formatMessage({ id: 'label.processing' })}
-								</>
-							)}
-							{qfEligibilityState ===
-								EQFElegibilityState.CHECK_ELIGIBILITY &&
-								formatMessage({
-									id: 'label.check_eligibility',
-								})}
-							{qfEligibilityState ===
-								EQFElegibilityState.ELIGIBLE && (
-								<>
-									{formatMessage({
-										id: 'label.you_are_all_set',
-									})}
-								</>
-							)}
-							{qfEligibilityState ===
-								EQFElegibilityState.MORE_INFO_NEEDED &&
-								formatMessage({
-									id: 'label.we_need_a_bit_more_info',
-								})}
-						</QFEligibilityState>
+					{showQFStateSection && (
+						<QFEligibilityStateSection>
+							{renderQFEligibilityState()}
+						</QFEligibilityStateSection>
 					)}
-					{passportState === EPassportState.SUCCESS ||
-					(passportState === EPassportState.LOADING &&
-						passportScore != null) ? (
+					{showPassportScoreSection && (
 						<PassportSection>
 							<StyledNote>
 								<IconInfoOutline />
 								{formatMessage({
 									id: 'profile.qf_donor_eligibility.required_score',
 								})}
-								<QFMinScore>{`>  ${currentRound?.minimumPassportScore}`}</QFMinScore>
+								<QFMinScore>{`>  ${currentRound?.minimumPassportScore ?? '--'}`}</QFMinScore>
 							</StyledNote>
 							<ScoreCard>
 								{formatMessage({
-									id: 'profile.qf_donor_eligibility.your_paaaport_score',
+									id: 'profile.qf_donor_eligibility.your_passport_score',
 								})}
 								<ScoreBox>
 									{passportState ===
@@ -152,62 +226,51 @@ export const QFEligibilityView = () => {
 											size={10}
 										/>
 									) : (
-										passportScore
+										passportScore ?? '--'
 									)}
 								</ScoreBox>
 							</ScoreCard>
 						</PassportSection>
-					) : null}
-					<Hr />
-					<EligibilityCardBottom>
-						{qfEligibilityState ===
-							EQFElegibilityState.CHECK_ELIGIBILITY ||
-						qfEligibilityState ===
-							EQFElegibilityState.PROCESSING ? (
-							<Button
-								label={formatMessage({
-									id: 'profile.qf_donor_eligibility.label.check_eligibility',
-								})}
-								loading={
-									qfEligibilityState ===
-									EQFElegibilityState.PROCESSING
-								}
-								size='small'
-								buttonType='primary'
-								onClick={fetchUserMBDScore}
-								disabled={checkEligibilityDisabled}
-							/>
-						) : qfEligibilityState ===
-								EQFElegibilityState.MORE_INFO_NEEDED &&
-						  passportState === EPassportState.NOT_SIGNED ? (
-							<Button
-								label={formatMessage({
-									id: 'profile.qf_donor_eligibility.label.connect_gitcoin_passport',
-								})}
-								size='small'
-								buttonType='primary'
-								onClick={handleSign}
-							/>
-						) : (
+					)}
+					{qfEligibilityState === EQFElegibilityState.ERROR && (
+						<InlineToast
+							type={EToastType.Error}
+							message={formatMessage({
+								id: 'label.passport.error',
+							})}
+						/>
+					)}
+					{passportState === EPassportState.INVALID && (
+						<InlineToast
+							type={EToastType.Error}
+							message={formatMessage({
+								id: 'label.passport.invalid',
+							})}
+						/>
+					)}
+					{qfEligibilityState !== EQFElegibilityState.ERROR &&
+						passportState !== EPassportState.ERROR &&
+						passportState !== EPassportState.INVALID && (
 							<>
-								<P>
-									{formatMessage({
-										id: 'label.passport_connected',
-									})}
-								</P>
-								<RefreshButton onClick={refreshScore}>
-									<FlexCenter gap='8px'>
-										<IconPassport16 />
-										<ButtonText>
-											{formatMessage({
-												id: 'label.refresh_score',
-											})}
-										</ButtonText>
-									</FlexCenter>
-								</RefreshButton>
+								<Hr />
+								{renderBottomSection()}
 							</>
 						)}
-					</EligibilityCardBottom>
+					{passportState === EPassportState.INVALID && (
+						<>
+							<Hr />
+							<Button
+								label={formatMessage({
+									id: 'label.go_to_passport',
+								})}
+								size='small'
+								buttonType='primary'
+								onClick={() =>
+									window.open(links.PASSPORT, '_blank')
+								}
+							/>
+						</>
+					)}
 				</QFEligibilityBGInner>
 			</QFEligibilityBG>
 		</Wrapper>
