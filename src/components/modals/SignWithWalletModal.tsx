@@ -100,7 +100,6 @@ export const SignWithWalletModal: FC<IProps> = ({
 				}
 			} catch (error) {
 				console.error('Error checking multisig session:', error);
-				// Handle error (e.g., show error message to user)
 			}
 		}
 	}, [
@@ -171,7 +170,6 @@ export const SignWithWalletModal: FC<IProps> = ({
 			}
 		} catch (error) {
 			console.error('Error closing modal:', error);
-			// Consider adding user-facing error message here
 		} finally {
 			_closeModal();
 			reset();
@@ -214,7 +212,6 @@ export const SignWithWalletModal: FC<IProps> = ({
 			}
 		} catch (error) {
 			console.error('Error during signature:', error);
-			// Handle error (e.g., show error message to user)
 		} finally {
 			setLoading(false);
 		}
