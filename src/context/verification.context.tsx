@@ -14,6 +14,8 @@ import {
 import { client } from '@/apollo/apolloClient';
 import { FETCH_PROJECT_VERIFICATION } from '@/apollo/gql/gqlVerification';
 import { findStepByName } from '@/lib/verification';
+import { findFirstIncompleteStep } from '@/helpers/projects';
+import menuList from '@/components/views/verification/menu/menuList';
 import type { Dispatch, SetStateAction } from 'react';
 
 interface IVerificationContext {
@@ -58,8 +60,25 @@ export const VerificationProvider = ({ children }: { children: ReactNode }) => {
 				const projectVerification: IProjectVerification =
 					verificationRes.data.getCurrentProjectVerificationForm;
 				setVerificationData(projectVerification);
+
+				const firstIncompleteStep = findFirstIncompleteStep(
+					menuList,
+					projectVerification,
+				);
+
 				if (!projectVerification.emailConfirmed) {
 					setStep(1);
+				}
+				// return to first incomplete step
+				else if (firstIncompleteStep > 0) {
+					setStep(firstIncompleteStep);
+				}
+				// all steps finished but user didn't submited project, return her to penultimate step
+				else if (
+					firstIncompleteStep == -1 &&
+					projectVerification?.status == EVerificationStatus.DRAFT
+				) {
+					setStep(7);
 				} else {
 					setStep(findStepByName(projectVerification.lastStep) + 1);
 				}
