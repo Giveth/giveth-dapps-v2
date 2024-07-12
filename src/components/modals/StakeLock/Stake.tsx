@@ -123,8 +123,11 @@ const StakeInnerModal: FC<IStakeModalProps> = ({
 		if (!chainId || !address) return;
 		setStakeState(StakeState.STAKING);
 		try {
+			// Setup scope variable to handle signature
+			let _permitSignature = permitSignature;
+
 			if (permit) {
-				const _permitSignature = await permitTokens(
+				_permitSignature = await permitTokens(
 					chainId,
 					address,
 					poolStakingConfig.POOL_ADDRESS,
@@ -135,12 +138,14 @@ const StakeInnerModal: FC<IStakeModalProps> = ({
 					throw new Error('Permit signature failed');
 				setPermitSignature(_permitSignature);
 			}
+
 			const txResponse = await stakeTokens(
 				amount,
 				LM_ADDRESS,
 				chainId,
-				permitSignature,
+				_permitSignature,
 			);
+
 			if (txResponse) {
 				setTxHash(txResponse);
 				setStakeState(StakeState.CONFIRMING);
