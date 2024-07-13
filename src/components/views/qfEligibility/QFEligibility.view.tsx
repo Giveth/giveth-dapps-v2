@@ -45,7 +45,7 @@ import InlineToast, { EToastType } from '@/components/toasts/InlineToast';
 import links from '@/lib/constants/links';
 
 export const QFEligibilityView = () => {
-	const { formatMessage } = useIntl();
+	const { locale, formatMessage } = useIntl();
 	const { info, handleSign, refreshScore, fetchUserMBDScore } = usePassport();
 	const { passportState, passportScore, qfEligibilityState, currentRound } =
 		info;
@@ -57,14 +57,19 @@ export const QFEligibilityView = () => {
 
 	const showPassportScoreSection =
 		passportState !== EPassportState.NOT_SIGNED &&
+		passportState !== EPassportState.NOT_CREATED &&
+		passportState !== EPassportState.CONNECTING &&
+		passportState !== EPassportState.NOT_CONNECTED &&
+		passportState !== EPassportState.INVALID &&
 		![
 			EQFElegibilityState.CHECK_ELIGIBILITY,
 			EQFElegibilityState.PROCESSING,
 			EQFElegibilityState.ERROR,
+			EQFElegibilityState.LOADING,
 		].includes(qfEligibilityState) &&
 		!(
 			qfEligibilityState === EQFElegibilityState.ELIGIBLE &&
-			passportState !== EPassportState.SUCCESS
+			passportState !== EPassportState.SIGNED
 		);
 
 	const showQFStateSection =
@@ -74,7 +79,7 @@ export const QFEligibilityView = () => {
 			EQFElegibilityState.PROCESSING,
 		].includes(qfEligibilityState) ||
 		(qfEligibilityState === EQFElegibilityState.ELIGIBLE &&
-			passportState !== EPassportState.SUCCESS);
+			passportState !== EPassportState.SIGNED);
 
 	const checkEligibilityDisabled = [
 		EQFElegibilityState.LOADING,
@@ -83,8 +88,40 @@ export const QFEligibilityView = () => {
 		EQFElegibilityState.MORE_INFO_NEEDED,
 	].includes(qfEligibilityState);
 
+	const qfRoundEndDate = currentRound?.endDate
+		? new Date(currentRound.endDate)
+				.toLocaleString(locale || 'en-US', {
+					day: 'numeric',
+					month: 'short',
+				})
+				.replace(/,/g, '')
+		: '';
+
+	const eligibilityDesc = () => {
+		if (qfEligibilityState === EQFElegibilityState.ELIGIBLE) {
+			return formatMessage({
+				id: 'profile.qf_donor_eligibility.eligible_desc',
+			});
+		} else if (
+			passportState === EPassportState.SIGNED ||
+			passportState === EPassportState.LOADING_SCORE
+		) {
+			return `${formatMessage({
+				id: 'profile.qf_donor_eligibility.passport.not_eligible.p1',
+			})} ${qfRoundEndDate} ${formatMessage({
+				id: 'profile.qf_donor_eligibility.passport.not_eligible.p2',
+			})}`;
+		} else {
+			return formatMessage({
+				id: 'profile.qf_donor_eligibility.not_eligible_desc',
+			});
+		}
+	};
+
 	const renderQFEligibilityState = () => {
 		switch (qfEligibilityState) {
+			case EQFElegibilityState.CHECK_ELIGIBILITY:
+				return formatMessage({ id: 'label.it_wont_take_long' });
 			case EQFElegibilityState.PROCESSING:
 				return (
 					<>
@@ -92,19 +129,24 @@ export const QFEligibilityView = () => {
 						{formatMessage({ id: 'label.processing' })}
 					</>
 				);
-			case EQFElegibilityState.CHECK_ELIGIBILITY:
-				return formatMessage({ id: 'label.it_wont_take_long' });
 			case EQFElegibilityState.ELIGIBLE:
-				return (
+				return passportState !== EPassportState.SIGNED &&
+					passportState !== EPassportState.LOADING_SCORE ? (
 					<>
 						{formatMessage({ id: 'label.you_are_all_set' })}
 						<IconVerifiedBadge size={24} />
 					</>
+				) : (
+					formatMessage({ id: 'label.passport_connected' })
 				);
 			case EQFElegibilityState.MORE_INFO_NEEDED:
-				return formatMessage({ id: 'label.we_need_a_bit_more_info' });
+				return passportState === EPassportState.NOT_SIGNED
+					? formatMessage({
+							id: 'label.we_need_a_bit_more_info',
+						})
+					: formatMessage({ id: 'label.passport_connected' });
 			default:
-				return null;
+				return formatMessage({ id: 'label.passport_connected' });
 		}
 	};
 
@@ -113,9 +155,11 @@ export const QFEligibilityView = () => {
 			[
 				EQFElegibilityState.CHECK_ELIGIBILITY,
 				EQFElegibilityState.PROCESSING,
+				EQFElegibilityState.LOADING,
+				EQFElegibilityState.NOT_CONNECTED,
 			].includes(qfEligibilityState) ||
 			(qfEligibilityState === EQFElegibilityState.ELIGIBLE &&
-				passportState !== EPassportState.SUCCESS)
+				passportState !== EPassportState.SIGNED)
 		) {
 			return (
 				<EligibilityCardBottom $justify='center'>
@@ -136,7 +180,9 @@ export const QFEligibilityView = () => {
 			);
 		} else if (
 			qfEligibilityState === EQFElegibilityState.MORE_INFO_NEEDED &&
-			passportState === EPassportState.NOT_SIGNED
+			(passportState === EPassportState.NOT_SIGNED ||
+				passportState === EPassportState.NOT_CREATED ||
+				passportState === EPassportState.CONNECTING)
 		) {
 			return (
 				<EligibilityCardBottom $justify='center'>
@@ -147,6 +193,7 @@ export const QFEligibilityView = () => {
 						size='small'
 						buttonType='primary'
 						onClick={handleSign}
+						loading={passportState === EPassportState.CONNECTING}
 					/>
 				</EligibilityCardBottom>
 			);
@@ -194,12 +241,12 @@ export const QFEligibilityView = () => {
 							{QFEligibilityData[QFEligibilityCurrentState].icon}
 						</QFEligibilityStatus>
 					</EligibilityTop>
-					<EligibilityCardDesc>
-						{formatMessage({
-							id: QFEligibilityData[QFEligibilityCurrentState]
-								.desc,
-						})}
-					</EligibilityCardDesc>
+					{(qfEligibilityState !== EQFElegibilityState.ELIGIBLE ||
+						passportState === EPassportState.SIGNED) && (
+						<EligibilityCardDesc>
+							{eligibilityDesc()}
+						</EligibilityCardDesc>
+					)}
 					{showQFStateSection && (
 						<QFEligibilityStateSection>
 							{renderQFEligibilityState()}
@@ -220,7 +267,7 @@ export const QFEligibilityView = () => {
 								})}
 								<ScoreBox>
 									{passportState ===
-									EPassportState.LOADING ? (
+									EPassportState.LOADING_SCORE ? (
 										<Spinner
 											color={neutralColors.gray[100]}
 											size={10}

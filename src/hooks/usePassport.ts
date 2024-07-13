@@ -17,9 +17,10 @@ export enum EPassportState {
 	NOT_SIGNED,
 	NOT_CREATED,
 	INVALID,
-	LOADING,
+	LOADING_SCORE, // when fetching passport score or refreshing it
+	CONNECTING, // connecting to gitcoin passport
 	ERROR,
-	SUCCESS, // passport is created and connected (does not mean eligible)
+	SIGNED,
 }
 
 export enum EQFElegibilityState {
@@ -47,7 +48,7 @@ export interface IPassportAndStateInfo {
 
 const initialInfo: IPassportAndStateInfo = {
 	qfEligibilityState: EQFElegibilityState.LOADING,
-	passportState: EPassportState.LOADING,
+	passportState: null,
 	activeQFMBDScore: null,
 	passportScore: null,
 	currentRound: null,
@@ -90,7 +91,7 @@ export const usePassport = () => {
 
 			setInfo({
 				qfEligibilityState: EQFElegibilityState.LOADING,
-				passportState: EPassportState.LOADING,
+				passportState: null,
 				activeQFMBDScore: null,
 				passportScore: null,
 				currentRound: null,
@@ -182,7 +183,7 @@ export const usePassport = () => {
 					return setInfo({
 						qfEligibilityState:
 							EQFElegibilityState.RECHECK_ELIGIBILITY,
-						passportState: EPassportState.SUCCESS,
+						passportState: EPassportState.SIGNED,
 						passportScore: refreshUserScores.passportScore,
 						activeQFMBDScore: refreshUserScores.activeQFMBDScore,
 						currentRound: activeQFRound,
@@ -190,7 +191,7 @@ export const usePassport = () => {
 				} else {
 					return setInfo({
 						qfEligibilityState: EQFElegibilityState.ELIGIBLE,
-						passportState: EPassportState.SUCCESS,
+						passportState: EPassportState.SIGNED,
 						activeQFMBDScore: refreshUserScores.activeQFMBDScore,
 						passportScore: refreshUserScores.passportScore,
 						currentRound: activeQFRound,
@@ -231,6 +232,7 @@ export const usePassport = () => {
 			const userAddressScore = await scoreUserAddress(address);
 			await updateState(userAddressScore);
 		} catch (error) {
+			console.error('Failed to fetch user address score:', error);
 			user && updateState(user);
 		}
 	}, [address, updateState, user, isSafeEnv, setNotAvailableForGSafe]);
@@ -241,7 +243,7 @@ export const usePassport = () => {
 
 		setInfo(prevInfo => ({
 			...prevInfo,
-			passportState: EPassportState.LOADING,
+			passportState: EPassportState.LOADING_SCORE,
 		}));
 
 		try {
@@ -263,7 +265,7 @@ export const usePassport = () => {
 
 		setInfo({
 			qfEligibilityState: EQFElegibilityState.MORE_INFO_NEEDED,
-			passportState: EPassportState.LOADING,
+			passportState: EPassportState.CONNECTING,
 			passportScore: null,
 			activeQFMBDScore: null,
 			currentRound: null,
@@ -305,15 +307,20 @@ export const usePassport = () => {
 		if (!isUserFullFilled) return;
 		console.log('******3', address, isUserFullFilled, user);
 		const fetchData = async () => {
-			if (
-				!user ||
-				(user.activeQFMBDScore === null && user.passportScore === null)
-			) {
+			if (!user || user.passportScore === null) {
 				console.log('******4', address, isUserFullFilled, user);
 				console.log('Passport score is null in our database');
 				const passports = getPassports();
 				//user has not passport address
-				if (passports[address.toLowerCase()] && user) {
+				if (
+					user &&
+					(passports[address.toLowerCase()] ||
+						user.activeQFMBDScore == null ||
+						(user.activeQFMBDScore != null &&
+							activeQFRound &&
+							user.activeQFMBDScore >=
+								activeQFRound.minimumUserAnalysisScore))
+				) {
 					console.log('******5', address, isUserFullFilled, user);
 					await updateState(user);
 				} else {
@@ -340,6 +347,7 @@ export const usePassport = () => {
 		user,
 		isSafeEnv,
 		setNotAvailableForGSafe,
+		activeQFRound,
 	]);
 
 	return { info, handleSign, refreshScore, fetchUserMBDScore };
