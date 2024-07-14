@@ -11,6 +11,7 @@ import styled from 'styled-components';
 import { useIntl } from 'react-intl';
 import { captureException } from '@sentry/nextjs';
 
+import { QueryFunctionContext, useInfiniteQuery } from '@tanstack/react-query';
 import ProjectCard from '@/components/project-card/ProjectCard';
 import Routes from '@/lib/constants/Routes';
 import { isUserRegistered, showToastError } from '@/lib/helpers';
@@ -53,6 +54,24 @@ interface IQueries {
 	connectedWalletUserId?: number;
 }
 
+interface FetchProjectsResponse {
+	projects: IProject[];
+	totalCount: number;
+	nextPage: number;
+}
+
+interface FetchProjectsParams {
+	queryKey: [
+		string,
+		{
+			isLoadMore: boolean;
+			loadNum: number;
+			userIdChanged: boolean;
+		},
+	];
+	pageParam?: number;
+}
+
 const ProjectsIndex = (props: IProjectsView) => {
 	const { formatMessage } = useIntl();
 	const { projects, totalCount: _totalCount } = props;
@@ -83,8 +102,15 @@ const ProjectsIndex = (props: IProjectsView) => {
 
 	router?.events?.on('routeChangeStart', () => setIsLoading(true));
 
+	// Default values for queryKey
+	const [isLoadMore, setIsLoadMore] = useState(false);
+	const [loadNum, setLoadNum] = useState(0);
+	const [userIdChanged, setUserIdChanged] = useState(false);
+
 	const fetchProjects = useCallback(
-		(isLoadMore?: boolean, loadNum?: number, userIdChanged = false) => {
+		async (pageParam: number | unknown): Promise<FetchProjectsResponse> => {
+			console.log('fetchProjects', pageParam);
+
 			const variables: IQueries = {
 				limit: userIdChanged
 					? filteredProjects.length > 50
@@ -101,8 +127,9 @@ const ProjectsIndex = (props: IProjectsView) => {
 			setIsLoading(true);
 			if (
 				contextVariables.mainCategory !== router.query?.slug?.toString()
-			)
-				return;
+			) {
+				return { projects: [], totalCount: 0, nextPage: 1 };
+			}
 
 			client
 				.query({
@@ -127,6 +154,17 @@ const ProjectsIndex = (props: IProjectsView) => {
 						return isLoadMore ? [...prevProjects, ...data] : data;
 					});
 					setIsLoading(false);
+
+					const result = {
+						projects: isLoadMore
+							? [...filteredProjects, ...data]
+							: data,
+						nextPage: pageParam ? pageParam + 1 : 1,
+						totalCount: count,
+					};
+
+					console.log('fetchProjects result', result);
+					return result;
 				})
 				.catch((err: any) => {
 					setIsLoading(false);
@@ -137,6 +175,8 @@ const ProjectsIndex = (props: IProjectsView) => {
 						},
 					});
 				});
+
+			return { projects: [], totalCount: 0, nextPage: 1 };
 		},
 		[
 			contextVariables,
@@ -149,21 +189,48 @@ const ProjectsIndex = (props: IProjectsView) => {
 		],
 	);
 
-	useEffect(() => {
-		pageNum.current = 0;
-		fetchProjects(false, 0, true);
-	}, [user?.id]);
+	const {
+		data,
+		error,
+		fetchNextPage,
+		hasNextPage,
+		isError,
+		isFetching,
+		isFetchingNextPage,
+	} = useInfiniteQuery<FetchProjectsResponse, Error>({
+		queryKey: ['projects'],
+		queryFn: ({ pageParam = 0 }: QueryFunctionContext) =>
+			fetchProjects(pageParam),
+		// queryFn: ({ pageParam }) => fetchProjects(pageParam),
+		// queryFn: ({ pageParam = 0 }: { pageParam: number }) =>
+		// 	fetchProjects(pageParam),
 
-	useEffect(() => {
-		pageNum.current = 0;
-		fetchProjects(false, 0);
-	}, [contextVariables]);
+		// getNextPageParam: lastPage => lastPage?.nextPage,
+		getNextPageParam: (lastPage, pages) => {
+			console.log('getNextPageParam called', lastPage, pages);
+			return lastPage?.nextPage ?? false;
+		},
+		initialPageParam: 0,
+	});
+
+	// useEffect(() => {
+	// 	pageNum.current = 0;
+	// 	fetchProjects(false, 0, true);
+	// }, [user?.id]);
+
+	// useEffect(() => {
+	// 	pageNum.current = 0;
+	// 	fetchProjects(false, 0);
+	// }, [contextVariables]);
 
 	const loadMore = useCallback(() => {
-		if (isLoading) return;
-		fetchProjects(true, pageNum.current + 1);
-		pageNum.current = pageNum.current + 1;
-	}, [fetchProjects, isLoading]);
+		// if (isLoading) return;
+		// fetchProjects(true, pageNum.current + 1);
+		// pageNum.current = pageNum.current + 1;
+		console.log('LOAD MORE');
+		fetchNextPage();
+		// }, [fetchProjects, isLoading]);
+	}, [fetchNextPage]);
 
 	const handleCreateButton = () => {
 		if (isUserRegistered(user)) {
