@@ -139,7 +139,8 @@ export const SuccessView: FC = () => {
 						{!excludeFromQF &&
 							!isSafeEnv &&
 							hasActiveQFRound &&
-							passportState !== EPassportState.LOADING &&
+							passportState !== EPassportState.LOADING_SCORE &&
+							passportState !== EPassportState.CONNECTING &&
 							qfEligibilityState !==
 								EQFElegibilityState.LOADING &&
 							qfEligibilityState !==

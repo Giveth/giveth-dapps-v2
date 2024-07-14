@@ -44,7 +44,9 @@ export const PassportView = () => {
 	const isScoreReady =
 		passportState !== EPassportState.NOT_CONNECTED &&
 		passportState !== EPassportState.NOT_SIGNED &&
-		passportState !== EPassportState.LOADING;
+		passportState !== EPassportState.CONNECTING &&
+		passportState !== EPassportState.LOADING_SCORE &&
+		passportState !== EPassportState.INVALID;
 
 	if (isOnSolana) {
 		return (

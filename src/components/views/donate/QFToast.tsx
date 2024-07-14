@@ -10,17 +10,13 @@ import {
 	FlexCenter,
 } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
-import {
-	EPassportState,
-	EQFElegibilityState,
-	usePassport,
-} from '@/hooks/usePassport';
+import { EQFElegibilityState, usePassport } from '@/hooks/usePassport';
 import Routes from '@/lib/constants/Routes';
 import InternalLink from '@/components/InternalLink';
 
 const QFToast = () => {
 	const { info } = usePassport();
-	const { passportState, qfEligibilityState, currentRound } = info;
+	const { qfEligibilityState, currentRound } = info;
 
 	const isEligible = qfEligibilityState === EQFElegibilityState.ELIGIBLE;
 	const isNotEligible =
@@ -29,8 +25,6 @@ const QFToast = () => {
 		qfEligibilityState === EQFElegibilityState.RECHECK_ELIGIBILITY;
 
 	const { formatMessage, locale } = useIntl();
-
-	if (passportState === EPassportState.LOADING) return null;
 
 	const color = isEligible
 		? semanticColors.jade['500']

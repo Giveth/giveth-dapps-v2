@@ -46,7 +46,8 @@ export const PassportButton: FC<IButtonProps> = ({
 				</ButtonText>
 			</FlexCenter>
 		</Button>
-	) : state === EPassportState.LOADING ? (
+	) : state === EPassportState.LOADING_SCORE ||
+	  state === EPassportState.CONNECTING ? (
 		<BaseButton className={className}>
 			<FlexCenter gap='8px'>
 				<IconPassport16 />
