@@ -44,6 +44,7 @@ export const signToGetToken = createAsyncThunk(
 		const {
 			address,
 			safeAddress,
+			secondarySignerAddress,
 			chainId,
 			connectors,
 			connector,
@@ -57,9 +58,13 @@ export const signToGetToken = createAsyncThunk(
 		const isSAFE = isGSafeConnector;
 		let siweMessage,
 			safeMessage: any = null;
-		if (isSAFE) {
+		if (isSAFE && secondarySignerAddress) {
 			siweMessage =
-				(await signWithEvm(address, chainId!, connector)) || {};
+				(await signWithEvm(
+					secondarySignerAddress,
+					chainId!,
+					connector,
+				)) || {};
 			safeMessage = await createSiweMessage(
 				safeAddress!,
 				chainId!,
@@ -96,7 +101,6 @@ export const signToGetToken = createAsyncThunk(
 					message,
 					nonce,
 				};
-
 				if (isSolana) {
 					data.address = address;
 				}
@@ -133,11 +137,6 @@ export const signToGetToken = createAsyncThunk(
 					} catch (error) {
 						console.error({ error });
 					}
-					console.log({
-						activeSafeToken,
-						sessionPending,
-						connectors,
-					});
 
 					if (sessionPending)
 						return Promise.reject('Gnosis Safe Session pending');
@@ -194,11 +193,11 @@ export const signToGetToken = createAsyncThunk(
 						//save to localstorage if token is created
 						saveTokenToLocalstorage(safeAddress!, safeToken?.jwt);
 						await dispatch(fetchUserByAddress(safeAddress!));
-						return currentUserToken;
+						return safeToken?.jwt;
 					} else {
 						return Promise.reject('Signing pending');
 					}
-				} else {
+				} else if (!isSAFE) {
 					return currentUserToken;
 				}
 			} else {
