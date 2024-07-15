@@ -84,11 +84,11 @@ export const scoreUserAddress = async (address: `0x${string}` | undefined) => {
 			variables: {
 				address: address?.toLowerCase(),
 			},
-			fetchPolicy: 'no-cache',
 		});
 
 		return data.scoreUserAddress;
 	} catch (error) {
+		console.error('Failed to fetch user address score:', error);
 		return null;
 	}
 };
