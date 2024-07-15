@@ -6,6 +6,7 @@ export interface ISignToGetToken {
 	connectors?: any; // TODO: CHANGE THIS
 	isGSafeConnector?: boolean;
 	connector?: any; // TODO: CHANGE THIS TYPE
+	secondarySignerAddress?: string | null;
 	expiration?: number;
 }
 

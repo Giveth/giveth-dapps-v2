@@ -34,6 +34,7 @@ export const PROJECT_CARD_FIELDS = gql`
 			avatar
 		}
 		updatedAt
+		latestUpdateCreationDate
 		organization {
 			label
 		}
