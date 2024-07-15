@@ -1627,5 +1627,10 @@
 	"tooltip.flowrate": "Las donaciones recurrentes se toman de tu Saldo de Transmisión. Deposita tokens y mantén tu saldo para habilitar las donaciones recurrentes.",
 	"tooltip.withdraw_stream_balance": "Si tiene donaciones recurrentes activas, su saldo disponible para retirar será ligeramente menor que su saldo actual.",
 	"ubi": "RBI",
-	"water-and-sanitation": "Agua & Saneamiento"
+	"water-and-sanitation": "Agua & Saneamiento",
+	"label.uncompleted_multisig_tx": "Transacción Multisig incompleta",
+	"label.sign_gnosis_safe": "Firmar Gnosis Safe",
+	"label.you_need_to_execute_the_pending_multisig": "Debes ejecutar la transacción Multisig pendiente para completar tu inicio de sesión en Giveth y proceder a esta área",
+	"label.sign_a_message_with_your_safe_signer": "Firma un mensaje con la dirección de tu firma segura (Safe signer) para continuar el proceso de inicio de sesión",
+	"label.this_is_necessary_to_create_projects": "Esto es necesario para poder crear proyectos, gestionar tu perfil o usar GIVpower."
 }
