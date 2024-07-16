@@ -1,7 +1,11 @@
 import { useCallback, useEffect, useState } from 'react';
 import { useAccount } from 'wagmi';
 import { getPassports } from '@/helpers/passport';
-import { connectPassport, fetchPassportScore } from '@/services/passport';
+import {
+	connectPassport,
+	fetchPassportScore,
+	scoreUserAddress,
+} from '@/services/passport';
 import { IPassportInfo, IQFRound } from '@/apollo/types/types';
 import { getNowUnixMS } from '@/helpers/time';
 import { useIsSafeEnvironment } from '@/hooks/useSafeAutoConnect';
@@ -9,28 +13,43 @@ import { useAppSelector } from '@/features/hooks';
 import { useProjectsContext } from '@/context/projects.context';
 
 export enum EPassportState {
-	LOADING,
 	NOT_CONNECTED,
 	NOT_SIGNED,
 	NOT_CREATED,
-	NOT_ELIGIBLE,
+	INVALID,
+	LOADING_SCORE, // when fetching passport score or refreshing it
+	CONNECTING, // connecting to gitcoin passport
+	ERROR,
+	SIGNED,
+}
+
+export enum EQFElegibilityState {
+	LOADING,
+	PROCESSING,
+	NOT_CONNECTED,
 	NOT_STARTED,
 	NOT_ACTIVE_ROUND,
 	ELIGIBLE,
 	ENDED,
-	INVALID,
 	ERROR,
 	NOT_AVAILABLE_FOR_GSAFE,
+	CHECK_ELIGIBILITY,
+	MORE_INFO_NEEDED,
+	RECHECK_ELIGIBILITY,
 }
 
 export interface IPassportAndStateInfo {
-	passportState: EPassportState;
+	qfEligibilityState: EQFElegibilityState;
+	passportState: EPassportState | null;
 	passportScore: number | null;
+	activeQFMBDScore: number | null;
 	currentRound: IQFRound | null;
 }
 
-const initialInfo = {
-	passportState: EPassportState.LOADING,
+const initialInfo: IPassportAndStateInfo = {
+	qfEligibilityState: EQFElegibilityState.LOADING,
+	passportState: null,
+	activeQFMBDScore: null,
 	passportScore: null,
 	currentRound: null,
 };
@@ -38,7 +57,6 @@ const initialInfo = {
 export const usePassport = () => {
 	const { address } = useAccount();
 	const { isArchivedQF } = useProjectsContext();
-
 	const [info, setInfo] = useState<IPassportAndStateInfo>(initialInfo);
 	const { userData: user, isUserFullFilled } = useAppSelector(
 		state => state.user,
@@ -46,134 +64,213 @@ export const usePassport = () => {
 	const { activeQFRound } = useAppSelector(state => state.general);
 	const isSafeEnv = useIsSafeEnvironment();
 
+	const setNotAvailableForGSafe = useCallback(() => {
+		setInfo({
+			qfEligibilityState: EQFElegibilityState.NOT_AVAILABLE_FOR_GSAFE,
+			passportState: null,
+			passportScore: null,
+			activeQFMBDScore: null,
+			currentRound: null,
+		});
+	}, []);
+
+	const setEndedState = useCallback(() => {
+		setInfo({
+			qfEligibilityState: EQFElegibilityState.ENDED,
+			passportState: null,
+			passportScore: null,
+			activeQFMBDScore: null,
+			currentRound: null,
+		});
+	}, []);
+
 	const updateState = useCallback(
 		async (refreshUserScores: IPassportInfo) => {
-			if (isSafeEnv) {
-				return setInfo({
-					passportState: EPassportState.NOT_AVAILABLE_FOR_GSAFE,
-					passportScore: null,
-					currentRound: null,
-				});
-			}
-			if (isArchivedQF) {
-				return setInfo({
-					passportState: EPassportState.ENDED,
-					passportScore: null,
-					currentRound: null,
-				});
-			}
+			if (isSafeEnv) return setNotAvailableForGSafe();
+			if (isArchivedQF) return setEndedState();
+
 			setInfo({
-				passportState: EPassportState.LOADING,
+				qfEligibilityState: EQFElegibilityState.LOADING,
+				passportState: null,
+				activeQFMBDScore: null,
 				passportScore: null,
 				currentRound: null,
 			});
+
 			try {
-				// setScore(refreshUserScores);
 				if (!refreshUserScores) {
 					return setInfo({
+						qfEligibilityState:
+							EQFElegibilityState.MORE_INFO_NEEDED,
 						passportState: EPassportState.INVALID,
+						activeQFMBDScore: null,
 						passportScore: null,
 						currentRound: null,
 					});
 				}
 				if (!activeQFRound) {
 					return setInfo({
-						passportState: EPassportState.NOT_ACTIVE_ROUND,
+						qfEligibilityState:
+							EQFElegibilityState.NOT_ACTIVE_ROUND,
+						passportState: null,
+						activeQFMBDScore: null,
 						passportScore: refreshUserScores.passportScore,
 						currentRound: null,
 					});
-				} else if (
-					getNowUnixMS() < new Date(activeQFRound.beginDate).getTime()
-				) {
+				}
+
+				const now = getNowUnixMS();
+				if (now < new Date(activeQFRound.beginDate).getTime()) {
 					return setInfo({
-						passportState: EPassportState.NOT_STARTED,
-						passportScore: refreshUserScores.passportScore,
-						currentRound: activeQFRound,
-					});
-				} else if (
-					getNowUnixMS() > new Date(activeQFRound.endDate).getTime()
-				) {
-					return setInfo({
-						passportState: EPassportState.ENDED,
+						qfEligibilityState: EQFElegibilityState.NOT_STARTED,
+						passportState: null,
+						activeQFMBDScore: null,
 						passportScore: refreshUserScores.passportScore,
 						currentRound: activeQFRound,
 					});
 				}
-				if (refreshUserScores.passportScore === null) {
+
+				if (now > new Date(activeQFRound.endDate).getTime()) {
 					return setInfo({
-						passportState: EPassportState.NOT_CREATED,
+						qfEligibilityState: EQFElegibilityState.ENDED,
+						passportState: null,
+						activeQFMBDScore: null,
+						passportScore: refreshUserScores.passportScore,
+						currentRound: activeQFRound,
+					});
+				}
+
+				if (refreshUserScores.activeQFMBDScore == null) {
+					return setInfo({
+						qfEligibilityState:
+							EQFElegibilityState.CHECK_ELIGIBILITY,
+						passportState: null,
+						activeQFMBDScore: null,
 						passportScore: null,
 						currentRound: activeQFRound,
 					});
 				}
+
+				if (
+					activeQFRound.minimumUserAnalysisScore != null &&
+					refreshUserScores.activeQFMBDScore >=
+						activeQFRound.minimumUserAnalysisScore
+				) {
+					return setInfo({
+						qfEligibilityState: EQFElegibilityState.ELIGIBLE,
+						passportState: null,
+						activeQFMBDScore: refreshUserScores.activeQFMBDScore,
+						passportScore: null,
+						currentRound: activeQFRound,
+					});
+				}
+
+				if (refreshUserScores.passportScore === null) {
+					return setInfo({
+						qfEligibilityState:
+							EQFElegibilityState.MORE_INFO_NEEDED,
+						passportState: EPassportState.NOT_CREATED,
+						passportScore: null,
+						activeQFMBDScore: refreshUserScores.activeQFMBDScore,
+						currentRound: activeQFRound,
+					});
+				}
+
 				if (
 					refreshUserScores.passportScore <
 					activeQFRound.minimumPassportScore
 				) {
 					return setInfo({
-						passportState: EPassportState.NOT_ELIGIBLE,
+						qfEligibilityState:
+							EQFElegibilityState.RECHECK_ELIGIBILITY,
+						passportState: EPassportState.SIGNED,
 						passportScore: refreshUserScores.passportScore,
+						activeQFMBDScore: refreshUserScores.activeQFMBDScore,
 						currentRound: activeQFRound,
 					});
 				} else {
 					return setInfo({
-						passportState: EPassportState.ELIGIBLE,
+						qfEligibilityState: EQFElegibilityState.ELIGIBLE,
+						passportState: EPassportState.SIGNED,
+						activeQFMBDScore: refreshUserScores.activeQFMBDScore,
 						passportScore: refreshUserScores.passportScore,
 						currentRound: activeQFRound,
 					});
 				}
 			} catch (error) {
 				return setInfo({
+					qfEligibilityState: EQFElegibilityState.ERROR,
 					passportState: EPassportState.ERROR,
+					activeQFMBDScore: null,
 					passportScore: null,
 					currentRound: null,
 				});
 			}
 		},
-		[activeQFRound],
+		[
+			activeQFRound,
+			isArchivedQF,
+			isSafeEnv,
+			setEndedState,
+			setNotAvailableForGSafe,
+		],
 	);
+
+	const fetchUserMBDScore = useCallback(async () => {
+		if (!address) return;
+		if (isSafeEnv) return setNotAvailableForGSafe();
+
+		setInfo({
+			qfEligibilityState: EQFElegibilityState.PROCESSING,
+			passportState: null,
+			passportScore: null,
+			activeQFMBDScore: null,
+			currentRound: null,
+		});
+
+		try {
+			const userAddressScore = await scoreUserAddress(address);
+			await updateState(userAddressScore);
+		} catch (error) {
+			console.error('Failed to fetch user address score:', error);
+			user && updateState(user);
+		}
+	}, [address, updateState, user, isSafeEnv, setNotAvailableForGSafe]);
 
 	const refreshScore = useCallback(async () => {
 		if (!address) return;
-		if (isSafeEnv) {
-			return setInfo({
-				passportState: EPassportState.NOT_AVAILABLE_FOR_GSAFE,
-				passportScore: null,
-				currentRound: null,
-			});
-		}
-		setInfo({
-			passportState: EPassportState.LOADING,
-			passportScore: null,
-			currentRound: null,
-		});
+		if (isSafeEnv) return setNotAvailableForGSafe();
+
+		setInfo(prevInfo => ({
+			...prevInfo,
+			passportState: EPassportState.LOADING_SCORE,
+		}));
+
 		try {
 			const { refreshUserScores } = await fetchPassportScore(address);
 			await updateState(refreshUserScores);
 		} catch (error) {
 			console.error(error);
 			setInfo({
+				...info,
 				passportState: EPassportState.ERROR,
 				passportScore: null,
-				currentRound: null,
 			});
 		}
-	}, [address, updateState, isSafeEnv]);
+	}, [address, updateState, isSafeEnv, setNotAvailableForGSafe, info]);
 
-	const handleSign = async () => {
+	const handleSign = useCallback(async () => {
 		if (!address) return;
-		if (isSafeEnv) {
-			return setInfo({
-				passportState: EPassportState.NOT_AVAILABLE_FOR_GSAFE,
-				passportScore: null,
-				currentRound: null,
-			});
-		}
+		if (isSafeEnv) return setNotAvailableForGSafe();
+
 		setInfo({
-			passportState: EPassportState.LOADING,
+			qfEligibilityState: EQFElegibilityState.MORE_INFO_NEEDED,
+			passportState: EPassportState.CONNECTING,
 			passportScore: null,
+			activeQFMBDScore: null,
 			currentRound: null,
 		});
+
 		const passports = getPassports();
 		if (passports[address.toLowerCase()]) {
 			await refreshScore();
@@ -183,28 +280,26 @@ export const usePassport = () => {
 				await refreshScore();
 			} else {
 				setInfo({
+					qfEligibilityState: EQFElegibilityState.MORE_INFO_NEEDED,
 					passportState: EPassportState.NOT_SIGNED,
 					passportScore: null,
+					activeQFMBDScore: null,
 					currentRound: null,
 				});
 			}
 		}
-	};
+	}, [address, isSafeEnv, refreshScore, setNotAvailableForGSafe, user]);
 
 	useEffect(() => {
 		console.log('******0', address, isUserFullFilled, user);
-		if (isSafeEnv) {
-			return setInfo({
-				passportState: EPassportState.NOT_AVAILABLE_FOR_GSAFE,
-				passportScore: null,
-				currentRound: null,
-			});
-		}
+		if (isSafeEnv) return setNotAvailableForGSafe();
 		if (!address) {
 			console.log('******1', address, isUserFullFilled, user);
 			return setInfo({
+				qfEligibilityState: EQFElegibilityState.NOT_CONNECTED,
 				passportState: EPassportState.NOT_CONNECTED,
 				passportScore: null,
+				activeQFMBDScore: null,
 				currentRound: null,
 			});
 		}
@@ -217,14 +312,25 @@ export const usePassport = () => {
 				console.log('Passport score is null in our database');
 				const passports = getPassports();
 				//user has not passport address
-				if (passports[address.toLowerCase()] && user) {
+				if (
+					user &&
+					(passports[address.toLowerCase()] ||
+						user.activeQFMBDScore == null ||
+						(user.activeQFMBDScore != null &&
+							activeQFRound &&
+							user.activeQFMBDScore >=
+								activeQFRound.minimumUserAnalysisScore))
+				) {
 					console.log('******5', address, isUserFullFilled, user);
 					await updateState(user);
 				} else {
 					console.log('******6', address, isUserFullFilled, user);
 					setInfo({
+						qfEligibilityState:
+							EQFElegibilityState.MORE_INFO_NEEDED,
 						passportState: EPassportState.NOT_SIGNED,
 						passportScore: null,
+						activeQFMBDScore: null,
 						currentRound: null,
 					});
 				}
@@ -234,7 +340,15 @@ export const usePassport = () => {
 			}
 		};
 		fetchData();
-	}, [address, isUserFullFilled, updateState, user, isSafeEnv]);
+	}, [
+		address,
+		isUserFullFilled,
+		updateState,
+		user,
+		isSafeEnv,
+		setNotAvailableForGSafe,
+		activeQFRound,
+	]);
 
-	return { info, handleSign, refreshScore };
+	return { info, handleSign, refreshScore, fetchUserMBDScore };
 };

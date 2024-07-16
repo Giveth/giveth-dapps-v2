@@ -13,7 +13,7 @@ import { EPassportState } from '@/hooks/usePassport';
 import { Shadow } from './styled-components/Shadow';
 
 interface IButtonProps {
-	state: EPassportState;
+	state: EPassportState | null;
 	handleSign: () => Promise<void>;
 	refreshScore: () => Promise<void>;
 	className?: string;
@@ -46,7 +46,8 @@ export const PassportButton: FC<IButtonProps> = ({
 				</ButtonText>
 			</FlexCenter>
 		</Button>
-	) : state === EPassportState.LOADING ? (
+	) : state === EPassportState.LOADING_SCORE ||
+	  state === EPassportState.CONNECTING ? (
 		<BaseButton className={className}>
 			<FlexCenter gap='8px'>
 				<IconPassport16 />
