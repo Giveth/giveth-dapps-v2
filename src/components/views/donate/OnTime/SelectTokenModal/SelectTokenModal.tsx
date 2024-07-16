@@ -150,10 +150,16 @@ const SelectTokenInnerModal: FC<ISelectTokenModalProps> = ({
 	}, [searchQuery, tokens]);
 
 	// Fetch balances for filtered tokens
+	const fetchBalance = useFetchBalance;
+
 	const tokenBalances = filteredTokens.map(token => ({
 		token,
-		balance: useFetchBalance(token),
+		balance: fetchBalance(token),
 	}));
+
+	const customTokenBalance = customToken
+		? fetchBalance(customToken)
+		: undefined;
 
 	// Sort tokens by balance
 	const sortedTokens = tokenBalances.sort((a, b) => {
@@ -185,7 +191,7 @@ const SelectTokenInnerModal: FC<ISelectTokenModalProps> = ({
 					<TokenInfo
 						token={customToken}
 						hideZeroBalance={hideZeroBalance}
-						balance={useFetchBalance(customToken)}
+						balance={customTokenBalance}
 						onClick={() => {
 							setSelectedOneTimeToken(customToken);
 							setShowModal(false);

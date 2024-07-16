@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react';
 import { useBalance } from 'wagmi';
+import { Address, zeroAddress } from 'viem';
 import { useSolanaBalance } from '@/hooks/useSolanaBalance';
 import { ChainType } from '@/types/config';
 import { useGeneralWallet } from '@/providers/generalWalletProvider';
 import { IProjectAcceptedToken } from '@/apollo/types/gqlTypes';
-import { Address, zeroAddress } from 'viem';
 
 const useFetchBalance = (token: IProjectAcceptedToken) => {
 	const { walletAddress } = useGeneralWallet();
