@@ -73,7 +73,7 @@ function renderSnippet() {
 		apiKey:
 			process.env.NEXT_PUBLIC_ANALYTICS_WRITE_KEY || DEFAULT_WRITE_KEY,
 		// note: the page option only covers SSR tracking.
-		// Page.js is used to track other events using `window.analytics.page()`
+		// Page.js is used to track other events using `window.analytics.page()` 
 		page: true,
 	};
 
