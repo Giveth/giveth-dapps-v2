@@ -15,6 +15,7 @@ import {
 	IconRedit,
 	Container,
 	Flex,
+	IconFaracaster,
 } from '@giveth/ui-design-system';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -158,6 +159,9 @@ const Footer = () => {
 						</ExternalLink>
 						<ExternalLink href={links.TWITTER}>
 							<IconXSocial size={24} color={textColor} />
+						</ExternalLink>
+						<ExternalLink href={links.FARCASTER}>
+							<IconFaracaster size={24} color={textColor} />
 						</ExternalLink>
 						<ExternalLink href={links.YOUTUBE}>
 							<IconYoutube size={24} color={textColor} />
