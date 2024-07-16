@@ -106,7 +106,7 @@ function MyApp({ Component, pageProps }: AppProps) {
 		}
 	}, []);
 
-	// enable maintenance mode only if it is enabled inside ENV file and user has not bypassed it
+	// enable maintenance mode only if it is enabled inside ENV file and user has not bypassed it A
 	const isMaintenanceMode =
 		process.env.NEXT_PUBLIC_IS_MAINTENANCE === 'true' &&
 		!isBypassingMaintenance;
