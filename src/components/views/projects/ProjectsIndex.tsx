@@ -55,22 +55,22 @@ interface IQueries {
 }
 
 interface FetchProjectsResponse {
-	projects: IProject[];
+	data: IProject[];
 	totalCount: number;
 	lastPage: number;
 }
 
-interface FetchProjectsParams {
-	queryKey: [
-		string,
-		{
-			isLoadMore: boolean;
-			loadNum: number;
-			userIdChanged: boolean;
-		},
-	];
-	pageParam?: number;
-}
+// interface FetchProjectsParams {
+// 	queryKey: [
+// 		string,
+// 		{
+// 			isLoadMore: boolean;
+// 			loadNum: number;
+// 			userIdChanged: boolean;
+// 		},
+// 	];
+// 	pageParam?: number;
+// }
 
 const ProjectsIndex = (props: IProjectsView) => {
 	const { formatMessage } = useIntl();
@@ -109,7 +109,9 @@ const ProjectsIndex = (props: IProjectsView) => {
 
 	const fetchProjects = useCallback(
 		async (pageParam: number | unknown): Promise<FetchProjectsResponse> => {
-			console.log('fetchProjects', pageParam);
+			const currentPage = pageParam === undefined ? pageParam : 0;
+
+			console.log({ currentPage });
 
 			const variables: IQueries = {
 				limit: userIdChanged
@@ -117,7 +119,7 @@ const ProjectsIndex = (props: IProjectsView) => {
 						? BACKEND_QUERY_LIMIT
 						: filteredProjects.length
 					: projects.length,
-				skip: userIdChanged ? 0 : projects.length * (loadNum || 0),
+				skip: userIdChanged ? 0 : projects.length * (currentPage || 0),
 			};
 
 			if (user?.id) {
@@ -128,7 +130,7 @@ const ProjectsIndex = (props: IProjectsView) => {
 			if (
 				contextVariables.mainCategory !== router.query?.slug?.toString()
 			) {
-				return { projects: [], totalCount: 0, lastPage: 0 };
+				return { data: [], totalCount: 0, lastPage: 0 };
 			}
 
 			client
@@ -156,10 +158,8 @@ const ProjectsIndex = (props: IProjectsView) => {
 					setIsLoading(false);
 
 					const result = {
-						projects: isLoadMore
-							? [...filteredProjects, ...data]
-							: data,
-						lastPage: pageParam ? pageParam : 1,
+						data: data,
+						lastPage: currentPage,
 						totalCount: count,
 					};
 
@@ -176,7 +176,7 @@ const ProjectsIndex = (props: IProjectsView) => {
 					});
 				});
 
-			return { projects: [], totalCount: 0, lastPage: 0 };
+			return { data: [], totalCount: 0, lastPage: 0 };
 		},
 		[
 			contextVariables,
@@ -211,12 +211,28 @@ const ProjectsIndex = (props: IProjectsView) => {
 		// 	// return lastPage?.nextPage ?? false;
 		// 	return lastPage.nextPage + 1;
 		// },
-		getNextPageParam: (returnedData: FetchProjectsResponse) => {
-			console.log('getNextPageParam called', returnedData);
-			return returnedData.lastPage + 1;
+		// getNextPageParam: (returnedData: FetchProjectsResponse) => {
+		getNextPageParam: (lastPage, allPages, lastPageParam) => {
+			console.log('getNextPageParam called', lastPage);
+			console.log('getNextPageParam called', allPages);
+			console.log('getNextPageParam called', allPages);
+			console.log('getNextPageParam zadnja stranica', lastPage.lastPage);
+			return lastPage.lastPage + 1;
 		},
 		initialPageParam: 0,
 	});
+
+	useEffect(() => {
+		if (data) {
+			console.log('Data from React Query:', data);
+		}
+		if (hasNextPage !== undefined) {
+			console.log('Has Next Page:', hasNextPage);
+		}
+		if (isFetchingNextPage !== undefined) {
+			console.log('Is Fetching Next Page:', isFetchingNextPage);
+		}
+	}, [data, hasNextPage, isFetchingNextPage]);
 
 	// useEffect(() => {
 	// 	pageNum.current = 0;
