@@ -20,7 +20,11 @@ import { slugToProjectView } from '@/lib/routeCreators';
 import { IFetchGivethProjectGQL } from '@/apollo/types/gqlTypes';
 import { useDonateData } from '@/context/donate.context';
 import { useIsSafeEnvironment } from '@/hooks/useSafeAutoConnect';
-import { EPassportState, usePassport } from '@/hooks/usePassport';
+import {
+	EPassportState,
+	usePassport,
+	EQFElegibilityState,
+} from '@/hooks/usePassport';
 import { getActiveRound } from '@/helpers/qf';
 import ProjectCardImage from '@/components/project-card/ProjectCardImage';
 import { DonatePageProjectDescription } from './DonatePageProjectDescription';
@@ -46,7 +50,7 @@ export const SuccessView: FC = () => {
 	const [givethSlug, setGivethSlug] = useState<string>('');
 
 	const {
-		info: { passportState },
+		info: { passportState, qfEligibilityState },
 	} = usePassport();
 
 	const message = hasMultipleTxs ? (
@@ -135,7 +139,12 @@ export const SuccessView: FC = () => {
 						{!excludeFromQF &&
 							!isSafeEnv &&
 							hasActiveQFRound &&
-							passportState !== EPassportState.LOADING &&
+							passportState !== EPassportState.LOADING_SCORE &&
+							passportState !== EPassportState.CONNECTING &&
+							qfEligibilityState !==
+								EQFElegibilityState.LOADING &&
+							qfEligibilityState !==
+								EQFElegibilityState.PROCESSING &&
 							isOnEligibleNetworks && <QFToast />}
 						{isRecurring && <ManageRecurringDonation />}
 						<SocialBoxWrapper>

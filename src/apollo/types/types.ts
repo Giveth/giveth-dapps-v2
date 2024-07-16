@@ -232,6 +232,7 @@ export interface IUser {
 export interface IPassportInfo {
 	passportScore: number;
 	passportStamps: any;
+	activeQFMBDScore?: number | null;
 }
 
 export interface IUserWithPassport extends IUser, IPassportInfo {}
@@ -485,6 +486,7 @@ export interface IQFRound {
 	allocatedTokenSymbol: string;
 	allocatedTokenChainId: number;
 	minimumValidUsdValue?: number;
+	minimumUserAnalysisScore: number;
 }
 
 export interface IArchivedQFRound extends IQFRound {
