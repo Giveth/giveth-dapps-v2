@@ -223,7 +223,7 @@ function MyApp({ Component, pageProps }: AppProps) {
 													/>
 												)}
 												{/* <Script
-													strategy='afterInteractive'
+													strategy='afterInteractive  '
 													src={`https://www.googletagmanager.com/gtag/js?id=${process.env.NEXT_PUBLIC_ANALYTICS_WRITE_KEY}`}
 												/>
 												<Script
