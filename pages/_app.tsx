@@ -9,7 +9,8 @@ import NProgress from 'nprogress';
 import { useRouter } from 'next/router';
 import { Provider as ReduxProvider } from 'react-redux';
 import { SpeedInsights } from '@vercel/speed-insights/next';
-import Script from 'next/script';
+// import Script from 'next/script';
+import { GoogleAnalytics, GoogleTagManager } from '@next/third-parties/google';
 import { loadErrorMessages, loadDevMessages } from '@apollo/client/dev';
 import { WagmiProvider } from 'wagmi';
 import { projectId, wagmiConfig } from '@/wagmiConfigs';
@@ -160,16 +161,16 @@ function MyApp({ Component, pageProps }: AppProps) {
 		asyncFunc();
 	}, []);
 
-	// Google Tag Manager Page view track
-	useEffect(() => {
-		const handleRouteChange = (url: string) => {
-			pageview(url);
-		};
-		router.events.on('routeChangeComplete', handleRouteChange);
-		return () => {
-			router.events.off('routeChangeComplete', handleRouteChange);
-		};
-	}, [router.events]);
+	// // Google Tag Manager Page view track
+	// useEffect(() => {
+	// 	const handleRouteChange = (url: string) => {
+	// 		pageview(url);
+	// 	};
+	// 	router.events.on('routeChangeComplete', handleRouteChange);
+	// 	return () => {
+	// 		router.events.off('routeChangeComplete', handleRouteChange);
+	// 	};
+	// }, [router.events]);
 
 	return (
 		<>
@@ -178,7 +179,11 @@ function MyApp({ Component, pageProps }: AppProps) {
 					name='viewport'
 					content='width=device-width, initial-scale=1.0'
 				/>
+				<GoogleTagManager gtmId='GTM-KSWSWXTW' />
 			</Head>
+			<GoogleAnalytics
+				gaId={process.env.NEXT_PUBLIC_ANALYTICS_WRITE_KEY || ''}
+			/>
 			<ReduxProvider store={store}>
 				<IntlProvider
 					locale={locale!}
@@ -217,7 +222,7 @@ function MyApp({ Component, pageProps }: AppProps) {
 														pageProps={pageProps}
 													/>
 												)}
-												<Script
+												{/* <Script
 													strategy='afterInteractive'
 													src={`https://www.googletagmanager.com/gtag/js?id=${process.env.NEXT_PUBLIC_ANALYTICS_WRITE_KEY}`}
 												/>
@@ -232,7 +237,7 @@ function MyApp({ Component, pageProps }: AppProps) {
 															gtag('config', '${process.env.NEXT_PUBLIC_ANALYTICS_WRITE_KEY}');
 														`,
 													}}
-												/>
+												/> */}
 												{/* {process.env.NEXT_PUBLIC_ENV !==
 												'production' && (
 												<Script
