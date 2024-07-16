@@ -200,7 +200,6 @@ const ProjectsIndex = (props: IProjectsView) => {
 			}
 		};
 	}, [loadMore]);
-	
 
 	useEffect(() => {
 		if (
