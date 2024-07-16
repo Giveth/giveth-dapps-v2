@@ -10,7 +10,7 @@ import { useRouter } from 'next/router';
 import { Provider as ReduxProvider } from 'react-redux';
 import { SpeedInsights } from '@vercel/speed-insights/next';
 // import Script from 'next/script';
-import { GoogleAnalytics, GoogleTagManager } from '@next/third-parties/google';
+import { GoogleAnalytics } from '@next/third-parties/google';
 import { loadErrorMessages, loadDevMessages } from '@apollo/client/dev';
 import { WagmiProvider } from 'wagmi';
 import { projectId, wagmiConfig } from '@/wagmiConfigs';
