@@ -179,7 +179,6 @@ function MyApp({ Component, pageProps }: AppProps) {
 					name='viewport'
 					content='width=device-width, initial-scale=1.0'
 				/>
-				<GoogleTagManager gtmId='GTM-KSWSWXTW' />
 			</Head>
 			<GoogleAnalytics
 				gaId={process.env.NEXT_PUBLIC_ANALYTICS_WRITE_KEY || ''}
