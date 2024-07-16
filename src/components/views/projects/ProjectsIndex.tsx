@@ -57,7 +57,7 @@ interface IQueries {
 interface FetchProjectsResponse {
 	projects: IProject[];
 	totalCount: number;
-	nextPage: number;
+	lastPage: number;
 }
 
 interface FetchProjectsParams {
@@ -128,7 +128,7 @@ const ProjectsIndex = (props: IProjectsView) => {
 			if (
 				contextVariables.mainCategory !== router.query?.slug?.toString()
 			) {
-				return { projects: [], totalCount: 0, nextPage: 1 };
+				return { projects: [], totalCount: 0, lastPage: 0 };
 			}
 
 			client
@@ -159,7 +159,7 @@ const ProjectsIndex = (props: IProjectsView) => {
 						projects: isLoadMore
 							? [...filteredProjects, ...data]
 							: data,
-						nextPage: pageParam ? pageParam + 1 : 1,
+						lastPage: pageParam ? pageParam : 1,
 						totalCount: count,
 					};
 
@@ -176,7 +176,7 @@ const ProjectsIndex = (props: IProjectsView) => {
 					});
 				});
 
-			return { projects: [], totalCount: 0, nextPage: 1 };
+			return { projects: [], totalCount: 0, lastPage: 0 };
 		},
 		[
 			contextVariables,
@@ -206,9 +206,14 @@ const ProjectsIndex = (props: IProjectsView) => {
 		// 	fetchProjects(pageParam),
 
 		// getNextPageParam: lastPage => lastPage?.nextPage,
-		getNextPageParam: (lastPage, pages) => {
-			console.log('getNextPageParam called', lastPage, pages);
-			return lastPage?.nextPage ?? false;
+		// getNextPageParam: (lastPage, pages: FetchProjectsResponse[]) => {
+		// 	console.log('getNextPageParam called', pages);
+		// 	// return lastPage?.nextPage ?? false;
+		// 	return lastPage.nextPage + 1;
+		// },
+		getNextPageParam: (returnedData: FetchProjectsResponse) => {
+			console.log('getNextPageParam called', returnedData);
+			return returnedData.lastPage + 1;
 		},
 		initialPageParam: 0,
 	});
