@@ -24,6 +24,7 @@ import { shortenAddress, showToastError } from '@/lib/helpers';
 import { useGeneralWallet } from '@/providers/generalWalletProvider';
 import { wagmiConfig } from '@/wagmiConfigs';
 import { ChainType } from '@/types/config';
+import useFetchBalance from './useFetchBalanceHook';
 
 export interface ISelectTokenModalProps extends IModal {
 	tokens?: IProjectAcceptedToken[];
@@ -148,6 +149,19 @@ const SelectTokenInnerModal: FC<ISelectTokenModalProps> = ({
 		}
 	}, [searchQuery, tokens]);
 
+	// Fetch balances for filtered tokens
+	const tokenBalances = filteredTokens.map(token => ({
+		token,
+		balance: useFetchBalance(token),
+	}));
+
+	// Sort tokens by balance
+	const sortedTokens = tokenBalances.sort((a, b) => {
+		if (a.balance === undefined) return 1;
+		if (b.balance === undefined) return -1;
+		return Number(b.balance) - Number(a.balance);
+	});
+
 	return (
 		<>
 			<Wrapper>
@@ -171,17 +185,19 @@ const SelectTokenInnerModal: FC<ISelectTokenModalProps> = ({
 					<TokenInfo
 						token={customToken}
 						hideZeroBalance={hideZeroBalance}
+						balance={useFetchBalance(customToken)}
 						onClick={() => {
 							setSelectedOneTimeToken(customToken);
 							setShowModal(false);
 						}}
 					/>
-				) : filteredTokens.length > 0 ? (
-					filteredTokens.map(token => (
+				) : sortedTokens.length > 0 ? (
+					sortedTokens.map(({ token, balance }) => (
 						<TokenInfo
 							key={token.symbol}
 							token={token}
 							hideZeroBalance={hideZeroBalance}
+							balance={balance}
 							onClick={() => {
 								setSelectedOneTimeToken(token);
 								setShowModal(false);
