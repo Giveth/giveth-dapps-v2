@@ -41,7 +41,7 @@ import { zIndex } from '@/lib/constants/constants';
 import configuration, { isProduction } from '@/configuration';
 import MaintenanceIndex from '@/components/views/Errors/MaintenanceIndex';
 import { SolanaProvider } from '@/providers/solanaWalletProvider';
-import { pageview } from '@/helpers/googleAnalytics';
+// import { pageview } from '@/helpers/googleAnalytics';
 import type { AppProps } from 'next/app';
 
 if (!isProduction) {
