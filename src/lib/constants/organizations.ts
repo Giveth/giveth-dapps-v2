@@ -3,4 +3,5 @@ export const ORGANIZATION = {
 	trace: 'trace',
 	givingBlock: 'givingBlock',
 	change: 'change',
+	endaoment: 'endaoment',
 };
