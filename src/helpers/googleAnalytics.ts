@@ -1,13 +1,5 @@
 import { ICategory } from '@/apollo/types/types';
 
-// Function to track pageviews in Google Analytics using gtag.js
-// The function takes a URL as an argument and sends a pageview event to Google Analytics
-export const pageview = (url: string) => {
-	window.gtag('config', process.env.NEXT_PUBLIC_ANALYTICS_WRITE_KEY, {
-		page_path: url,
-	});
-};
-
 interface ICreateGoogleTagEvent {
 	txHash: string;
 	chainName: string;
@@ -17,8 +9,12 @@ interface ICreateGoogleTagEvent {
 	categories?: ICategory[];
 }
 
+interface ICustomEventParams {
+	[key: string]: any;
+}
+
 /**
- * Tracks a purchase event using Segment's analytics library to send a 'purchase' event to Google Tag Manager.
+ * Tracks a purchase event using Google Tag Manager directly.
  *
  * @param {Object} params - The parameters for the event.
  * @param {string} params.txHash - The transaction hash.
@@ -28,7 +24,7 @@ interface ICreateGoogleTagEvent {
  * @param {string | undefined} params.projectName - The name of the project.
  * @param {ICategory} [params.categories] - An optional array of category objects.
  *
- * This function logs the provided parameters and then sends a 'purchase' event to Segment.
+ * This function logs the provided parameters and then sends a 'purchase' event to GTM.
  * The 'purchase' event includes the transaction details and the purchased item's details.
  * If categories are provided, up to 5 category levels are dynamically added to the item.
  */
@@ -67,3 +63,18 @@ const createGoogleTagEventPurchase = ({
 };
 
 export default createGoogleTagEventPurchase;
+
+/**
+ * Logs a custom event to Google Tag Manager.
+ *
+ * @param {string} eventName - The name of the event to be logged.
+ * @param {ICustomEventParams} params - Additional parameters for the event.
+ *
+ * This function sends a custom event to Google Tag Manager with the specified event name and parameters.
+ */
+export const createCustomEventToGTM = (
+	eventName: string,
+	params: ICustomEventParams,
+) => {
+	window.gtag('event', eventName, params);
+};
