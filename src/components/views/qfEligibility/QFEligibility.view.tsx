@@ -55,22 +55,25 @@ export const QFEligibilityView = () => {
 			? EQFElegibilityTagState.ELIGIBLE
 			: EQFElegibilityTagState.NOT_ELIGIBLE;
 
+	const MBDEligibile =
+		qfEligibilityState === EQFElegibilityState.ELIGIBLE &&
+		passportState !== EPassportState.SIGNED &&
+		passportState !== EPassportState.LOADING_SCORE;
+
 	const showPassportScoreSection =
 		passportState !== EPassportState.NOT_SIGNED &&
 		passportState !== EPassportState.NOT_CREATED &&
 		passportState !== EPassportState.CONNECTING &&
 		passportState !== EPassportState.NOT_CONNECTED &&
 		passportState !== EPassportState.INVALID &&
+		passportState !== EPassportState.ERROR &&
 		![
 			EQFElegibilityState.CHECK_ELIGIBILITY,
 			EQFElegibilityState.PROCESSING,
 			EQFElegibilityState.ERROR,
 			EQFElegibilityState.LOADING,
 		].includes(qfEligibilityState) &&
-		!(
-			qfEligibilityState === EQFElegibilityState.ELIGIBLE &&
-			passportState !== EPassportState.SIGNED
-		);
+		!MBDEligibile;
 
 	const showQFStateSection =
 		passportState === EPassportState.NOT_SIGNED ||
@@ -78,8 +81,7 @@ export const QFEligibilityView = () => {
 			EQFElegibilityState.CHECK_ELIGIBILITY,
 			EQFElegibilityState.PROCESSING,
 		].includes(qfEligibilityState) ||
-		(qfEligibilityState === EQFElegibilityState.ELIGIBLE &&
-			passportState !== EPassportState.SIGNED);
+		MBDEligibile;
 
 	const checkEligibilityDisabled = [
 		EQFElegibilityState.LOADING,
@@ -87,6 +89,12 @@ export const QFEligibilityView = () => {
 		EQFElegibilityState.ELIGIBLE,
 		EQFElegibilityState.MORE_INFO_NEEDED,
 	].includes(qfEligibilityState);
+
+	const gitcoinNotConnected =
+		passportState === EPassportState.NOT_CONNECTED ||
+		passportState === EPassportState.NOT_SIGNED ||
+		passportState === EPassportState.NOT_CREATED ||
+		passportState === EPassportState.CONNECTING;
 
 	const qfRoundEndDate = currentRound?.endDate
 		? new Date(currentRound.endDate)
@@ -130,8 +138,7 @@ export const QFEligibilityView = () => {
 					</>
 				);
 			case EQFElegibilityState.ELIGIBLE:
-				return passportState !== EPassportState.SIGNED &&
-					passportState !== EPassportState.LOADING_SCORE ? (
+				return MBDEligibile ? (
 					<>
 						{formatMessage({ id: 'label.you_are_all_set' })}
 						<IconVerifiedBadge size={24} />
@@ -140,7 +147,7 @@ export const QFEligibilityView = () => {
 					formatMessage({ id: 'label.passport_connected' })
 				);
 			case EQFElegibilityState.MORE_INFO_NEEDED:
-				return passportState === EPassportState.NOT_SIGNED
+				return gitcoinNotConnected
 					? formatMessage({
 							id: 'label.we_need_a_bit_more_info',
 						})
@@ -158,8 +165,7 @@ export const QFEligibilityView = () => {
 				EQFElegibilityState.LOADING,
 				EQFElegibilityState.NOT_CONNECTED,
 			].includes(qfEligibilityState) ||
-			(qfEligibilityState === EQFElegibilityState.ELIGIBLE &&
-				passportState !== EPassportState.SIGNED)
+			MBDEligibile
 		) {
 			return (
 				<EligibilityCardBottom $justify='center'>
@@ -180,9 +186,7 @@ export const QFEligibilityView = () => {
 			);
 		} else if (
 			qfEligibilityState === EQFElegibilityState.MORE_INFO_NEEDED &&
-			(passportState === EPassportState.NOT_SIGNED ||
-				passportState === EPassportState.NOT_CREATED ||
-				passportState === EPassportState.CONNECTING)
+			gitcoinNotConnected
 		) {
 			return (
 				<EligibilityCardBottom $justify='center'>
@@ -241,8 +245,7 @@ export const QFEligibilityView = () => {
 							{QFEligibilityData[QFEligibilityCurrentState].icon}
 						</QFEligibilityStatus>
 					</EligibilityTop>
-					{(qfEligibilityState !== EQFElegibilityState.ELIGIBLE ||
-						passportState === EPassportState.SIGNED) && (
+					{!MBDEligibile && (
 						<EligibilityCardDesc>
 							{eligibilityDesc()}
 						</EligibilityCardDesc>
@@ -279,7 +282,7 @@ export const QFEligibilityView = () => {
 							</ScoreCard>
 						</PassportSection>
 					)}
-					{qfEligibilityState === EQFElegibilityState.ERROR && (
+					{passportState === EPassportState.ERROR && (
 						<InlineToast
 							type={EToastType.Error}
 							message={formatMessage({

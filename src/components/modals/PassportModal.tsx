@@ -82,6 +82,11 @@ const PassportModal: FC<PassportModalProps> = props => {
 	const { locale, formatMessage } = useIntl();
 	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
 
+	const MBDEligibile =
+		qfEligibilityState === EQFElegibilityState.ELIGIBLE &&
+		passportState !== EPassportState.SIGNED &&
+		passportState !== EPassportState.LOADING_SCORE;
+
 	const QFEligibilityCurrentState =
 		qfEligibilityState === EQFElegibilityState.ELIGIBLE
 			? EQFElegibilityTagState.ELIGIBLE
@@ -93,17 +98,22 @@ const PassportModal: FC<PassportModalProps> = props => {
 		passportState !== EPassportState.CONNECTING &&
 		passportState !== EPassportState.NOT_CONNECTED &&
 		passportState !== EPassportState.INVALID &&
+		passportState !== EPassportState.ERROR &&
 		![
 			EQFElegibilityState.CHECK_ELIGIBILITY,
 			EQFElegibilityState.PROCESSING,
 			EQFElegibilityState.ERROR,
 			EQFElegibilityState.LOADING,
 		].includes(qfEligibilityState) &&
-		!(
-			qfEligibilityState === EQFElegibilityState.ELIGIBLE &&
-			passportState !== EPassportState.SIGNED
-		);
+		!MBDEligibile;
 
+	const gitcoinNotConnected =
+		passportState === EPassportState.NOT_CONNECTED ||
+		passportState === EPassportState.NOT_SIGNED ||
+		passportState === EPassportState.NOT_CREATED ||
+		passportState === EPassportState.CONNECTING;
+
+	console.log('endDate == 🦊', currentRound?.endDate);
 	const qfRoundEndDate = currentRound?.endDate
 		? new Date(currentRound.endDate)
 				.toLocaleString(locale || 'en-US', {
@@ -136,7 +146,7 @@ const PassportModal: FC<PassportModalProps> = props => {
 
 	useEffect(() => {
 		if (
-			passportState === EPassportState.ERROR ||
+			qfEligibilityState === EQFElegibilityState.ERROR ||
 			qfEligibilityState === EQFElegibilityState.ELIGIBLE
 		) {
 			setTimeout(() => {
@@ -228,6 +238,14 @@ const PassportModal: FC<PassportModalProps> = props => {
 					/>
 				)}
 				<Hr />
+				{passportState === EPassportState.ERROR && (
+					<InlineToast
+						type={EToastType.Error}
+						message={formatMessage({
+							id: 'label.passport.error',
+						})}
+					/>
+				)}
 				<EligibilityCardBottom>
 					{passportState === EPassportState.INVALID ? (
 						<Button
@@ -240,31 +258,32 @@ const PassportModal: FC<PassportModalProps> = props => {
 								window.open(links.PASSPORT, '_blank')
 							}
 						/>
-					) : passportState === EPassportState.NOT_SIGNED ||
-					  passportState === EPassportState.CONNECTING ? (
-						<Button
-							label={formatMessage({
-								id: 'profile.qf_donor_eligibility.label.connect_gitcoin_passport',
-							})}
-							size='small'
-							buttonType='primary'
-							onClick={handleSign}
-							loading={
-								passportState === EPassportState.CONNECTING
-							}
-						/>
-					) : (
-						<RefreshButton onClick={refreshScore}>
-							<FlexCenter gap='8px'>
-								<IconPassport16 />
-								<ButtonText color={brandColors.pinky[500]}>
-									{formatMessage({
-										id: 'label.refresh_score',
-									})}
-								</ButtonText>
-							</FlexCenter>
-						</RefreshButton>
-					)}
+					) : passportState !== EPassportState.ERROR ? (
+						gitcoinNotConnected ? (
+							<Button
+								label={formatMessage({
+									id: 'profile.qf_donor_eligibility.label.connect_gitcoin_passport',
+								})}
+								size='small'
+								buttonType='primary'
+								onClick={handleSign}
+								loading={
+									passportState === EPassportState.CONNECTING
+								}
+							/>
+						) : (
+							<RefreshButton onClick={refreshScore}>
+								<FlexCenter gap='8px'>
+									<IconPassport16 />
+									<ButtonText color={brandColors.pinky[500]}>
+										{formatMessage({
+											id: 'label.refresh_score',
+										})}
+									</ButtonText>
+								</FlexCenter>
+							</RefreshButton>
+						)
+					) : null}
 				</EligibilityCardBottom>
 			</StyledWrapper>
 		</Modal>
