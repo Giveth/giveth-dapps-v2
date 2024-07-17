@@ -113,7 +113,6 @@ const PassportModal: FC<PassportModalProps> = props => {
 		passportState === EPassportState.NOT_CREATED ||
 		passportState === EPassportState.CONNECTING;
 
-	console.log('endDate == 🦊', currentRound?.endDate);
 	const qfRoundEndDate = currentRound?.endDate
 		? new Date(currentRound.endDate)
 				.toLocaleString(locale || 'en-US', {
