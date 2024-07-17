@@ -113,8 +113,8 @@ const NON_EVM_CHAINS: NonEVMChain[] = [SOLANA_NETWORK];
 
 const config: EnvConfig = {
 	GIVETH_PROJECT_ID: 1,
-	BACKEND_LINK: 'http://127.0.0.1:4000/graphql',
-	FRONTEND_LINK: 'http://127.0.0.1:3000/',
+	BACKEND_LINK: BACKEND_LINK,
+	FRONTEND_LINK: FRONTEND_LINK,
 	MICROSERVICES: {
 		authentication: AUTH_BASE_ROUTE,
 		notification: `${NOTIFICATION_BASE_ROUTE}/v1/notifications`,
