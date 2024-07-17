@@ -19,6 +19,7 @@ export const regexList = {
 	discord:
 		/(?:https?:\/\/)?(?:www\.)?(?:discord\.gg|discord(?:app)?\.com\/invite)\/[\w-]+/,
 	phone: /^(\+\d{1,2}\s?)?\(?\d{3}\)?[\s.-]?\d{3}[\s.-]?\d{4}$/,
+	github: /^(http(s)?:\/\/)?(www\.)?github\.com\/[\w-]+\/?$/,
 };
 
 export const validators = {
@@ -104,6 +105,12 @@ export const validators = {
 		pattern: {
 			value: regexList.phone,
 			message: 'Invalid phone number',
+		},
+	},
+	github: {
+		pattern: {
+			value: regexList.github,
+			message: 'Invalid GitHub URL',
 		},
 	},
 };
