@@ -14,12 +14,11 @@ import Routes from '@/lib/constants/Routes';
 import InternalLink from '@/components/InternalLink';
 
 const QFToast = () => {
+	const { formatMessage, locale } = useIntl();
 	const { info } = usePassport();
 	const { qfEligibilityState, currentRound } = info;
 
 	const isEligible = qfEligibilityState === EQFElegibilityState.ELIGIBLE;
-
-	const { formatMessage, locale } = useIntl();
 
 	const color = isEligible
 		? semanticColors.jade['500']
