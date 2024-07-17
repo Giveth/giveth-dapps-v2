@@ -68,6 +68,7 @@ export interface IProject {
 		name: string;
 		label: string;
 		supportCustomTokens: boolean;
+		disableRecurringDonations?: boolean;
 	};
 	projectVerificationForm?: IProjectVerification;
 	projectPower: IProjectPower;
@@ -89,6 +90,7 @@ export enum EProjectsFilter {
 	VERIFIED = 'Verified',
 	BOOSTED_WITH_GIVPOWER = 'BoostedWithGivPower',
 	GIVING_BLOCK = 'GivingBlock',
+	Endaoment = 'Endaoment',
 	ACCEPT_FUND_ON_MAINNET = 'AcceptFundOnMainnet',
 	ACCEPT_FUND_ON_GNOSIS = 'AcceptFundOnGnosis',
 	ACCEPT_FUND_ON_POLYGON = 'AcceptFundOnPolygon',
@@ -113,6 +115,7 @@ export enum ECampaignFilterField {
 	Verified = 'verified',
 	AcceptGiv = 'givingBlocksId',
 	GivingBlock = 'fromGivingBlock',
+	Endaoment = 'fromEndaoment',
 	BoostedWithGivPower = 'boostedWithGivPower',
 	AcceptFundOnMainnet = 'acceptFundOnMainnet',
 	AcceptFundOnGnosis = 'acceptFundOnGnosis',

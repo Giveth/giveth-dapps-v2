@@ -20,6 +20,7 @@ import The_DAOist from '/public/images/partnerships/The_DAOist.svg';
 import Rainbow_Rolls from '/public/images/partnerships/Rainbow_Rolls.svg';
 import Panvala from '/public/images/partnerships/Panvala.svg';
 import The_Giving_Block from '/public/images/partnerships/The_Giving_Block.svg';
+import ENDAOMENT_LOGO from '/public/images/partnerships/Endaoment.svg';
 import Token_Engineering_Commons from '/public/images/partnerships/Token_Engineering_Commons.svg';
 import OneHive from '/public/images/partnerships/1Hive.svg';
 import SDG_Impact_Fund from '/public/images/partnerships/SDG_Impact_Fund.svg';
@@ -214,6 +215,12 @@ export const PartnershipArray: IPartner[] = [
 		title: 'The Giving Block',
 		description: 'page.partnerships.thegivingblock',
 		link: 'https://thegivingblock.com/',
+	},
+	{
+		icon: ENDAOMENT_LOGO,
+		title: 'Endaoment',
+		description: 'page.partnerships.endaoment',
+		link: 'https://endaoment.org',
 	},
 	{
 		icon: Token_Engineering_Commons,
