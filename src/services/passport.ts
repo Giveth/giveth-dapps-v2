@@ -18,6 +18,7 @@ export const fetchPassportScore = async (account: string) => {
 			variables: {
 				address: account?.toLowerCase(),
 			},
+			fetchPolicy: 'network-only',
 		});
 		return data;
 	} catch (error) {

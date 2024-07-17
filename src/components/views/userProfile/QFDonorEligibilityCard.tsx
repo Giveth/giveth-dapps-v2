@@ -44,6 +44,11 @@ export const QFDonorEligibilityCard = () => {
 	const { passportState, passportScore, qfEligibilityState, currentRound } =
 		info;
 
+	const MBDEligibile =
+		qfEligibilityState === EQFElegibilityState.ELIGIBLE &&
+		passportState !== EPassportState.SIGNED &&
+		passportState !== EPassportState.LOADING_SCORE;
+
 	const QFEligibilityCurrentState =
 		qfEligibilityState === EQFElegibilityState.ELIGIBLE
 			? EQFElegibilityTagState.ELIGIBLE
@@ -55,16 +60,14 @@ export const QFDonorEligibilityCard = () => {
 		passportState !== EPassportState.CONNECTING &&
 		passportState !== EPassportState.NOT_CONNECTED &&
 		passportState !== EPassportState.INVALID &&
+		passportState !== EPassportState.ERROR &&
 		![
 			EQFElegibilityState.CHECK_ELIGIBILITY,
 			EQFElegibilityState.PROCESSING,
 			EQFElegibilityState.ERROR,
 			EQFElegibilityState.LOADING,
 		].includes(qfEligibilityState) &&
-		!(
-			qfEligibilityState === EQFElegibilityState.ELIGIBLE &&
-			passportState !== EPassportState.SIGNED
-		);
+		!MBDEligibile;
 
 	const checkEligibilityDisabled = [
 		EQFElegibilityState.LOADING,
@@ -72,6 +75,12 @@ export const QFDonorEligibilityCard = () => {
 		EQFElegibilityState.ELIGIBLE,
 		EQFElegibilityState.MORE_INFO_NEEDED,
 	].includes(qfEligibilityState);
+
+	const gitcoinNotConnected =
+		passportState === EPassportState.NOT_CONNECTED ||
+		passportState === EPassportState.NOT_SIGNED ||
+		passportState === EPassportState.NOT_CREATED ||
+		passportState === EPassportState.CONNECTING;
 
 	const renderQFEligibilityState = () => {
 		switch (qfEligibilityState) {
@@ -85,8 +94,7 @@ export const QFDonorEligibilityCard = () => {
 					</>
 				);
 			case EQFElegibilityState.ELIGIBLE:
-				return passportState !== EPassportState.SIGNED &&
-					passportState !== EPassportState.LOADING_SCORE ? (
+				return MBDEligibile ? (
 					<>
 						{formatMessage({ id: 'label.you_are_all_set' })}
 						<IconVerifiedBadge size={24} />
@@ -95,7 +103,7 @@ export const QFDonorEligibilityCard = () => {
 					formatMessage({ id: 'label.passport_connected' })
 				);
 			case EQFElegibilityState.MORE_INFO_NEEDED:
-				return passportState === EPassportState.NOT_SIGNED
+				return gitcoinNotConnected
 					? formatMessage({
 							id: 'label.we_need_a_bit_more_info',
 						})
@@ -192,9 +200,7 @@ export const QFDonorEligibilityCard = () => {
 						{[
 							EQFElegibilityState.CHECK_ELIGIBILITY,
 							EQFElegibilityState.PROCESSING,
-						].includes(qfEligibilityState) ||
-						(qfEligibilityState === EQFElegibilityState.ELIGIBLE &&
-							passportState !== EPassportState.SIGNED) ? (
+						].includes(qfEligibilityState) || MBDEligibile ? (
 							<Button
 								label={formatMessage({
 									id: 'profile.qf_donor_eligibility.label.check_eligibility',
@@ -210,7 +216,7 @@ export const QFDonorEligibilityCard = () => {
 							/>
 						) : qfEligibilityState ===
 								EQFElegibilityState.MORE_INFO_NEEDED &&
-						  passportState === EPassportState.NOT_SIGNED ? (
+						  gitcoinNotConnected ? (
 							<Button
 								label={formatMessage({
 									id: 'profile.qf_donor_eligibility.label.connect_gitcoin_passport',
@@ -218,6 +224,9 @@ export const QFDonorEligibilityCard = () => {
 								size='small'
 								buttonType='primary'
 								onClick={handleSign}
+								loading={
+									passportState === EPassportState.CONNECTING
+								}
 							/>
 						) : (
 							<RefreshButton onClick={refreshScore}>
@@ -233,7 +242,7 @@ export const QFDonorEligibilityCard = () => {
 						)}
 					</EligibilityCardBottom>
 				)}
-			{qfEligibilityState === EQFElegibilityState.ERROR && (
+			{passportState === EPassportState.ERROR && (
 				<InlineToast
 					type={EToastType.Error}
 					message={formatMessage({

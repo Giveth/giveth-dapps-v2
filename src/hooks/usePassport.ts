@@ -268,7 +268,7 @@ export const usePassport = () => {
 			passportState: EPassportState.CONNECTING,
 			passportScore: null,
 			activeQFMBDScore: null,
-			currentRound: null,
+			currentRound: info.currentRound,
 		});
 
 		const passports = getPassports();
@@ -284,7 +284,7 @@ export const usePassport = () => {
 					passportState: EPassportState.NOT_SIGNED,
 					passportScore: null,
 					activeQFMBDScore: null,
-					currentRound: null,
+					currentRound: info.currentRound,
 				});
 			}
 		}
@@ -331,7 +331,7 @@ export const usePassport = () => {
 						passportState: EPassportState.NOT_SIGNED,
 						passportScore: null,
 						activeQFMBDScore: null,
-						currentRound: null,
+						currentRound: info.currentRound,
 					});
 				}
 			} else {

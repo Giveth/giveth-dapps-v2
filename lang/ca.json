@@ -1294,7 +1294,7 @@
 	"page.donate.matching_toast.upper_valid": "Emparellament estimat",
 	"page.donate.passport_toast.description.eligible": "La teva donació és elegible per ser emparellada! Després del",
 	"page.donate.passport_toast.description.eligible_2": ", totes les donacions seran revisades per a la protecció contra frau i els fons d'emparellament seran enviats als projectes. Estigues atent a les notificacions :)",
-	"page.donate.passport_toast.description.non_eligible": "Obtén el teu emparellament de donació amb finançament quadràtic!\nAugmenta la teva puntuació de Gitcoin Passport abans de",
+	"page.donate.passport_toast.description.non_eligible": "Obtén el teu emparellament de donació amb finançament quadràtic!\nComproveu la vostra elegibilitat QF abans",
 	"page.donate.passport_toast.description.not_connected": "Obtén el teu emparellament de donació amb finançament quadràtic!\nVerifica el teu Gitcoin Passport abans de",
 	"page.donate.passport_toast.title.eligible": "Finançament Quadràtic",
 	"page.donate.passport_toast.title.non_eligible": "No et perdis l'emparellament!",

@@ -1294,7 +1294,7 @@
 	"page.donate.matching_toast.upper_valid": "Estimado del monto complementado",
 	"page.donate.passport_toast.description.eligible": "¡Tu donación es elegible para ser complementada! Después de la",
 	"page.donate.passport_toast.description.eligible_2": ", todas las donaciones serán revisadas para protección contra fraudes y los fondos de complementarios se enviarán a los proyectos. ¡Mantente atento a las notificaciones! :)",
-	"page.donate.passport_toast.description.non_eligible": "¡Haz que tu donación sea complementada con financiamiento cuadrático! Aumenta tu puntaje de Gitcoin Passport antes de",
+	"page.donate.passport_toast.description.non_eligible": "¡Haz que tu donación sea complementada con financiamiento cuadrático!\nCompruebe su elegibilidad QF antes de",
 	"page.donate.passport_toast.description.not_connected": "¡Haz que tu donación sea complementada con financiamiento cuadrático! Verifica tu Gitcoin Passport antes de",
 	"page.donate.passport_toast.title.eligible": "Financiamiento Cuadrático",
 	"page.donate.passport_toast.title.non_eligible": "¡No te pierdas la oportunidad!",

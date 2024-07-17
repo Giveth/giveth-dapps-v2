@@ -19,10 +19,6 @@ const QFToast = () => {
 	const { qfEligibilityState, currentRound } = info;
 
 	const isEligible = qfEligibilityState === EQFElegibilityState.ELIGIBLE;
-	const isNotEligible =
-		qfEligibilityState === EQFElegibilityState.CHECK_ELIGIBILITY ||
-		qfEligibilityState === EQFElegibilityState.MORE_INFO_NEEDED ||
-		qfEligibilityState === EQFElegibilityState.RECHECK_ELIGIBILITY;
 
 	const { formatMessage, locale } = useIntl();
 
@@ -64,9 +60,7 @@ const QFToast = () => {
 		description = (
 			<>
 				{formatMessage({
-					id: `page.donate.passport_toast.description.${
-						isNotEligible ? 'non_eligible' : 'not_connected'
-					}`,
+					id: 'page.donate.passport_toast.description.non_eligible',
 				})}{' '}
 				<span>{endDate}</span>
 			</>
