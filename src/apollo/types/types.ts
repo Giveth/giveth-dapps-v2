@@ -189,6 +189,7 @@ export enum EProjectSocialMediaType {
 	LENS = 'LENS',
 	WEBSITE = 'WEBSITE',
 	TELEGRAM = 'TELEGRAM',
+	GITHUB = 'GITHUB',
 }
 
 export interface IProjectSocialMedia {
