@@ -152,9 +152,9 @@ export const usePassport = () => {
 				}
 
 				if (
-					activeQFRound.minimumUserAnalysisScore != null &&
+					activeQFRound.minMBDScore != null &&
 					refreshUserScores.activeQFMBDScore >=
-						activeQFRound.minimumUserAnalysisScore
+						activeQFRound.minMBDScore
 				) {
 					return setInfo({
 						qfEligibilityState: EQFElegibilityState.ELIGIBLE,
@@ -318,8 +318,7 @@ export const usePassport = () => {
 						user.activeQFMBDScore == null ||
 						(user.activeQFMBDScore != null &&
 							activeQFRound &&
-							user.activeQFMBDScore >=
-								activeQFRound.minimumUserAnalysisScore))
+							user.activeQFMBDScore >= activeQFRound.minMBDScore))
 				) {
 					console.log('******5', address, isUserFullFilled, user);
 					await updateState(user);

@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import styled from 'styled-components';
 import {
 	Button,
@@ -10,13 +11,14 @@ import {
 } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
 import { EQFElegibilityState, usePassport } from '@/hooks/usePassport';
-import Routes from '@/lib/constants/Routes';
-import InternalLink from '@/components/InternalLink';
+import PassportModal from '@/components/modals/PassportModal';
 
 const QFToast = () => {
 	const { formatMessage, locale } = useIntl();
-	const { info } = usePassport();
-	const { qfEligibilityState, currentRound } = info;
+	const { info, refreshScore, handleSign, fetchUserMBDScore } = usePassport();
+	const { qfEligibilityState, passportState, passportScore, currentRound } =
+		info;
+	const [showModal, setShowModal] = useState<boolean>(false);
 
 	const isEligible = qfEligibilityState === EQFElegibilityState.ELIGIBLE;
 
@@ -66,28 +68,39 @@ const QFToast = () => {
 	}
 
 	return (
-		<Wrapper color={color}>
-			<Title $medium color={color}>
-				{title}
-			</Title>
-			<Description>{description}</Description>
-			<FlexCenter>
-				<InternalLink
-					href={isEligible ? Routes.QFProjects : Routes.QFElegibility}
-				>
-					<Button
-						label={formatMessage({
-							id: isEligible
-								? 'label.go_to_projects'
-								: 'qf_donor_eligibility.banner.link.check_eligibility',
-						})}
-						buttonType='primary'
-						size='small'
-						icon={<IconExternalLink16 />}
-					/>
-				</InternalLink>
-			</FlexCenter>
-		</Wrapper>
+		<>
+			<Wrapper color={color}>
+				<Title $medium color={color}>
+					{title}
+				</Title>
+				<Description>{description}</Description>
+				{!isEligible && (
+					<FlexCenter>
+						<Button
+							label={formatMessage({
+								id: 'qf_donor_eligibility.banner.link.check_eligibility',
+							})}
+							buttonType='primary'
+							size='small'
+							icon={<IconExternalLink16 />}
+							onAbort={() => setShowModal(true)}
+						/>
+					</FlexCenter>
+				)}
+			</Wrapper>
+			{showModal && (
+				<PassportModal
+					qfEligibilityState={qfEligibilityState}
+					passportState={passportState}
+					passportScore={passportScore}
+					currentRound={currentRound}
+					setShowModal={setShowModal}
+					refreshScore={refreshScore}
+					handleSign={handleSign}
+					fetchUserMBDScore={fetchUserMBDScore}
+				/>
+			)}
+		</>
 	);
 };
 
