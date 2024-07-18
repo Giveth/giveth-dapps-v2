@@ -89,6 +89,18 @@ export const SuccessView: FC = () => {
 		? EContentType.justDonatedRecurring
 		: EContentType.justDonated;
 
+	const showQFToast =
+		!excludeFromQF &&
+		!isSafeEnv &&
+		hasActiveQFRound &&
+		isOnEligibleNetworks &&
+		passportState !== EPassportState.CONNECTING &&
+		passportState !== EPassportState.LOADING_SCORE &&
+		qfEligibilityState !== EQFElegibilityState.LOADING &&
+		qfEligibilityState !== EQFElegibilityState.PROCESSING &&
+		qfEligibilityState !== EQFElegibilityState.NOT_CONNECTED &&
+		qfEligibilityState !== EQFElegibilityState.ERROR;
+
 	return (
 		<Wrapper>
 			<Row>
@@ -136,16 +148,7 @@ export const SuccessView: FC = () => {
 								<br />
 							</>
 						)}
-						{!excludeFromQF &&
-							!isSafeEnv &&
-							hasActiveQFRound &&
-							passportState !== EPassportState.LOADING_SCORE &&
-							passportState !== EPassportState.CONNECTING &&
-							qfEligibilityState !==
-								EQFElegibilityState.LOADING &&
-							qfEligibilityState !==
-								EQFElegibilityState.PROCESSING &&
-							isOnEligibleNetworks && <QFToast />}
+						{showQFToast && <QFToast />}
 						{isRecurring && <ManageRecurringDonation />}
 						<SocialBoxWrapper>
 							<SocialBox

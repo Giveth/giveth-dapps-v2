@@ -3,7 +3,6 @@ import {
 	Button,
 	Caption,
 	IconExternalLink16,
-	IconPassport24,
 	neutralColors,
 	P,
 	semanticColors,
@@ -15,12 +14,11 @@ import Routes from '@/lib/constants/Routes';
 import InternalLink from '@/components/InternalLink';
 
 const QFToast = () => {
+	const { formatMessage, locale } = useIntl();
 	const { info } = usePassport();
 	const { qfEligibilityState, currentRound } = info;
 
 	const isEligible = qfEligibilityState === EQFElegibilityState.ELIGIBLE;
-
-	const { formatMessage, locale } = useIntl();
 
 	const color = isEligible
 		? semanticColors.jade['500']
@@ -70,19 +68,18 @@ const QFToast = () => {
 	return (
 		<Wrapper color={color}>
 			<Title $medium color={color}>
-				{!isEligible && <IconPassport24 />}
 				{title}
 			</Title>
 			<Description>{description}</Description>
 			<FlexCenter>
 				<InternalLink
-					href={isEligible ? Routes.QFProjects : Routes.Passport}
+					href={isEligible ? Routes.QFProjects : Routes.QFElegibility}
 				>
 					<Button
 						label={formatMessage({
 							id: isEligible
 								? 'label.go_to_projects'
-								: 'label.passport.link.go_to_passport',
+								: 'qf_donor_eligibility.banner.link.check_eligibility',
 						})}
 						buttonType='primary'
 						size='small'
@@ -96,6 +93,7 @@ const QFToast = () => {
 
 const Description = styled(P)`
 	color: ${neutralColors.gray[800]};
+	white-space: pre-line;
 	margin: 16px 0;
 	> span {
 		font-weight: 500;
@@ -106,7 +104,6 @@ const Title = styled(Caption)<{ color: string }>`
 	color: ${props => props.color};
 	display: flex;
 	align-items: center;
-	gap: 8px;
 `;
 
 const Wrapper = styled.div<{ color: string }>`
