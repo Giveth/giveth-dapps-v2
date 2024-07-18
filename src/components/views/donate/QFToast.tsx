@@ -83,7 +83,7 @@ const QFToast = () => {
 							buttonType='primary'
 							size='small'
 							icon={<IconExternalLink16 />}
-							onAbort={() => setShowModal(true)}
+							onClick={() => setShowModal(true)}
 						/>
 					</FlexCenter>
 				)}
