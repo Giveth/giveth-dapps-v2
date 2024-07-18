@@ -37,6 +37,7 @@ interface PassportModalProps extends IModal {
 	passportScore: number | null;
 	currentRound: any;
 	refreshScore: () => void;
+	fetchUserMBDScore?: () => void;
 	handleSign: () => void;
 }
 
@@ -76,6 +77,7 @@ const PassportModal: FC<PassportModalProps> = props => {
 		currentRound,
 		setShowModal,
 		refreshScore,
+		fetchUserMBDScore,
 		handleSign,
 	} = props;
 
@@ -92,6 +94,9 @@ const PassportModal: FC<PassportModalProps> = props => {
 			? EQFElegibilityTagState.ELIGIBLE
 			: EQFElegibilityTagState.NOT_ELIGIBLE;
 
+	const qfEligibilityProcessing =
+		qfEligibilityState === EQFElegibilityState.PROCESSING;
+
 	const showPassportScoreSection =
 		passportState !== EPassportState.NOT_SIGNED &&
 		passportState !== EPassportState.NOT_CREATED &&
@@ -106,6 +111,13 @@ const PassportModal: FC<PassportModalProps> = props => {
 			EQFElegibilityState.LOADING,
 		].includes(qfEligibilityState) &&
 		!MBDEligibile;
+
+	const checkEligibilityDisabled = [
+		EQFElegibilityState.LOADING,
+		EQFElegibilityState.PROCESSING,
+		EQFElegibilityState.ELIGIBLE,
+		EQFElegibilityState.MORE_INFO_NEEDED,
+	].includes(qfEligibilityState);
 
 	const gitcoinNotConnected =
 		passportState === EPassportState.NOT_CONNECTED ||
@@ -143,6 +155,37 @@ const PassportModal: FC<PassportModalProps> = props => {
 		}
 	};
 
+	const renderQFEligibilityState = () => {
+		switch (qfEligibilityState) {
+			case EQFElegibilityState.CHECK_ELIGIBILITY:
+				return formatMessage({ id: 'label.it_wont_take_long' });
+			case EQFElegibilityState.PROCESSING:
+				return (
+					<>
+						<Spinner size={10} color={brandColors.mustard[600]} />
+						{formatMessage({ id: 'label.processing' })}
+					</>
+				);
+			case EQFElegibilityState.ELIGIBLE:
+				return MBDEligibile ? (
+					<>
+						{formatMessage({ id: 'label.you_are_all_set' })}
+						<IconVerifiedBadge size={24} />
+					</>
+				) : (
+					formatMessage({ id: 'label.passport_connected' })
+				);
+			case EQFElegibilityState.MORE_INFO_NEEDED:
+				return gitcoinNotConnected
+					? formatMessage({
+							id: 'label.we_need_a_bit_more_info',
+						})
+					: formatMessage({ id: 'label.increase_your_score' });
+			default:
+				return null;
+		}
+	};
+
 	useEffect(() => {
 		if (
 			qfEligibilityState === EQFElegibilityState.ERROR ||
@@ -166,40 +209,32 @@ const PassportModal: FC<PassportModalProps> = props => {
 		>
 			<StyledWrapper>
 				<PassportInfoBox>{eligibilityDesc()}</PassportInfoBox>
-				<EligibilityStatusSection>
-					<StyledPElem>
-						{formatMessage({
-							id:
-								qfEligibilityState ===
-								EQFElegibilityState.ELIGIBLE
-									? 'label.you_are_all_set'
-									: passportState === EPassportState.SIGNED ||
-										  passportState ===
-												EPassportState.LOADING_SCORE
-										? 'label.increase_your_score'
-										: 'label.we_need_a_bit_more_info',
-						})}
-						{qfEligibilityState ===
-							EQFElegibilityState.ELIGIBLE && (
-							<StyledVerifIcon>
-								<IconVerifiedBadge size={24} />
-							</StyledVerifIcon>
-						)}
-					</StyledPElem>
-					<QFEligibilityStatus
-						$bgColor={
-							QFEligibilityData[QFEligibilityCurrentState].bgColor
-						}
-						$color={
-							QFEligibilityData[QFEligibilityCurrentState].color
-						}
-					>
-						{formatMessage({
-							id: QFEligibilityData[QFEligibilityCurrentState]
-								.text,
-						})}
-						{QFEligibilityData[QFEligibilityCurrentState].icon}
-					</QFEligibilityStatus>
+				<EligibilityStatusSection
+					$justifyContent={
+						qfEligibilityProcessing ? 'center' : 'space-between'
+					}
+				>
+					<StyledStatusInfo>
+						{renderQFEligibilityState()}
+					</StyledStatusInfo>
+					{!qfEligibilityProcessing && (
+						<QFEligibilityStatus
+							$bgColor={
+								QFEligibilityData[QFEligibilityCurrentState]
+									.bgColor
+							}
+							$color={
+								QFEligibilityData[QFEligibilityCurrentState]
+									.color
+							}
+						>
+							{formatMessage({
+								id: QFEligibilityData[QFEligibilityCurrentState]
+									.text,
+							})}
+							{QFEligibilityData[QFEligibilityCurrentState].icon}
+						</QFEligibilityStatus>
+					)}
 				</EligibilityStatusSection>
 				{showPassportScoreSection && (
 					<PassportSection>
@@ -258,7 +293,26 @@ const PassportModal: FC<PassportModalProps> = props => {
 							}
 						/>
 					) : passportState !== EPassportState.ERROR ? (
-						gitcoinNotConnected ? (
+						[
+							EQFElegibilityState.CHECK_ELIGIBILITY,
+							EQFElegibilityState.PROCESSING,
+						].includes(qfEligibilityState) || MBDEligibile ? (
+							<Button
+								label={formatMessage({
+									id: 'profile.qf_donor_eligibility.label.check_eligibility',
+								})}
+								loading={
+									qfEligibilityState ===
+									EQFElegibilityState.PROCESSING
+								}
+								size='small'
+								buttonType='primary'
+								onClick={fetchUserMBDScore}
+								disabled={checkEligibilityDisabled}
+							/>
+						) : qfEligibilityState ===
+								EQFElegibilityState.MORE_INFO_NEEDED &&
+						  gitcoinNotConnected ? (
 							<Button
 								label={formatMessage({
 									id: 'profile.qf_donor_eligibility.label.connect_gitcoin_passport',
@@ -307,9 +361,9 @@ const PassportInfoBox = styled(P)`
 	text-align: left;
 `;
 
-const EligibilityStatusSection = styled.div`
+const EligibilityStatusSection = styled.div<{ $justifyContent: string }>`
 	display: flex;
-	justify-content: space-between;
+	justify-content: ${props => props.$justifyContent};
 	align-items: center;
 	padding: 16px;
 `;
@@ -326,14 +380,12 @@ const QFEligibilityStatus = styled.div<{ $bgColor: string; $color: string }>`
 	color: ${props => props.$color};
 `;
 
-const StyledVerifIcon = styled.span`
-	margin-left: 10px;
-	margin-top: 6px;
-`;
-
-const StyledPElem = styled(P)`
+const StyledStatusInfo = styled(P)`
 	display: flex;
 	align-items: center;
+	justify-content: center;
+	margin-block: 30px;
+	gap: 16px;
 `;
 
 const EligibilityCardBottom = styled.div`

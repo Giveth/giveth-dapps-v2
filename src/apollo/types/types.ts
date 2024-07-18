@@ -490,7 +490,7 @@ export interface IQFRound {
 	allocatedTokenSymbol: string;
 	allocatedTokenChainId: number;
 	minimumValidUsdValue?: number;
-	minimumUserAnalysisScore: number;
+	minMBDScore: number;
 }
 
 export interface IArchivedQFRound extends IQFRound {
