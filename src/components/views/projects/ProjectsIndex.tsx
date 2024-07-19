@@ -56,8 +56,8 @@ interface IQueries {
 
 interface FetchProjectsResponse {
 	data: IProject[];
-	totalCount: number;
-	lastPage: number;
+	previousCursor?: number;
+	nextCursor?: number;
 }
 
 // interface FetchProjectsParams {
@@ -111,7 +111,7 @@ const ProjectsIndex = (props: IProjectsView) => {
 		async (pageParam: number | unknown): Promise<FetchProjectsResponse> => {
 			const currentPage = pageParam === undefined ? pageParam : 0;
 
-			console.log({ currentPage });
+			console.log('currentPage', currentPage);
 
 			const variables: IQueries = {
 				limit: userIdChanged
@@ -130,7 +130,7 @@ const ProjectsIndex = (props: IProjectsView) => {
 			if (
 				contextVariables.mainCategory !== router.query?.slug?.toString()
 			) {
-				return { data: [], totalCount: 0, lastPage: 0 };
+				return { data: [], previousCursor: 0, nextCursor: 0 };
 			}
 
 			client
@@ -147,6 +147,7 @@ const ProjectsIndex = (props: IProjectsView) => {
 				})
 				.then((res: { data: { allProjects: IFetchAllProjects } }) => {
 					const data = res.data?.allProjects?.projects;
+					console.log({ res });
 					const count = res.data?.allProjects?.totalCount;
 					setTotalCount(count);
 
@@ -159,8 +160,8 @@ const ProjectsIndex = (props: IProjectsView) => {
 
 					const result = {
 						data: data,
-						lastPage: currentPage,
-						totalCount: count,
+						previousCursor: projects.length * (currentPage || 0),
+						nextCursor: projects.length * (currentPage || 0) + 15,
 					};
 
 					console.log('fetchProjects result', result);
@@ -176,7 +177,7 @@ const ProjectsIndex = (props: IProjectsView) => {
 					});
 				});
 
-			return { data: [], totalCount: 0, lastPage: 0 };
+			return { data: [], previousCursor: 0, nextCursor: 0 };
 		},
 		[
 			contextVariables,
@@ -186,6 +187,8 @@ const ProjectsIndex = (props: IProjectsView) => {
 			router.query.slug,
 			selectedMainCategory,
 			user?.id,
+			userIdChanged,
+			isLoadMore,
 		],
 	);
 
@@ -201,23 +204,9 @@ const ProjectsIndex = (props: IProjectsView) => {
 		queryKey: ['projects'],
 		queryFn: ({ pageParam = 0 }: QueryFunctionContext) =>
 			fetchProjects(pageParam),
-		// queryFn: ({ pageParam }) => fetchProjects(pageParam),
-		// queryFn: ({ pageParam = 0 }: { pageParam: number }) =>
-		// 	fetchProjects(pageParam),
-
-		// getNextPageParam: lastPage => lastPage?.nextPage,
-		// getNextPageParam: (lastPage, pages: FetchProjectsResponse[]) => {
-		// 	console.log('getNextPageParam called', pages);
-		// 	// return lastPage?.nextPage ?? false;
-		// 	return lastPage.nextPage + 1;
-		// },
-		// getNextPageParam: (returnedData: FetchProjectsResponse) => {
-		getNextPageParam: (lastPage, allPages, lastPageParam) => {
-			console.log('getNextPageParam called', lastPage);
-			console.log('getNextPageParam called', allPages);
-			console.log('getNextPageParam called', allPages);
-			console.log('getNextPageParam zadnja stranica', lastPage.lastPage);
-			return lastPage.lastPage + 1;
+		getNextPageParam: (lastPage, fetchedData) => {
+			console.log('getNextPageParam called', lastPage, fetchedData);
+			return lastPage.nextCursor;
 		},
 		initialPageParam: 0,
 	});
@@ -394,6 +383,12 @@ const ProjectsIndex = (props: IProjectsView) => {
 						/>
 					</>
 				)}
+				<button
+					onClick={() => fetchNextPage()}
+					className='w-full bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline'
+				>
+					{isFetchingNextPage ? 'Loading...' : 'Load More'}
+				</button>
 			</Wrapper>
 		</>
 	);
