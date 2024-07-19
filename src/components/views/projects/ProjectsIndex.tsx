@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { Fragment, useCallback, useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/router';
 import {
 	brandColors,
@@ -54,23 +54,11 @@ interface IQueries {
 	connectedWalletUserId?: number;
 }
 
-interface FetchProjectsResponse {
+interface Page {
 	data: IProject[];
 	previousCursor?: number;
 	nextCursor?: number;
 }
-
-// interface FetchProjectsParams {
-// 	queryKey: [
-// 		string,
-// 		{
-// 			isLoadMore: boolean;
-// 			loadNum: number;
-// 			userIdChanged: boolean;
-// 		},
-// 	];
-// 	pageParam?: number;
-// }
 
 const ProjectsIndex = (props: IProjectsView) => {
 	const { formatMessage } = useIntl();
@@ -104,14 +92,18 @@ const ProjectsIndex = (props: IProjectsView) => {
 
 	// Default values for queryKey
 	const [isLoadMore, setIsLoadMore] = useState(false);
-	const [loadNum, setLoadNum] = useState(0);
+	// const [loadNum, setLoadNum] = useState(1);
 	const [userIdChanged, setUserIdChanged] = useState(false);
 
 	const fetchProjects = useCallback(
-		async (pageParam: number | unknown): Promise<FetchProjectsResponse> => {
-			const currentPage = pageParam === undefined ? pageParam : 0;
+		async (pageParam: number | unknown): Promise<Page> => {
+			// const currentPage = pageParam === undefined ? pageParam : 0;
+			console.log('pageParam', pageParam);
+			const currentPage = typeof pageParam === 'number' ? pageParam : 0;
 
-			console.log('currentPage', currentPage);
+			console.log('currentPage', pageParam);
+			console.log('skip projects.length', projects.length);
+			console.log('skip', projects.length * (currentPage || 0));
 
 			const variables: IQueries = {
 				limit: userIdChanged
@@ -127,61 +119,106 @@ const ProjectsIndex = (props: IProjectsView) => {
 			}
 
 			setIsLoading(true);
-			if (
-				contextVariables.mainCategory !== router.query?.slug?.toString()
-			) {
-				return { data: [], previousCursor: 0, nextCursor: 0 };
-			}
+			// if (
+			// 	contextVariables.mainCategory !== router.query?.slug?.toString()
+			// ) {
+			// 	console.log('run first');
+			// 	return {
+			// 		data: filteredProjects,
+			// 		previousCursor: 0,
+			// 		nextCursor: 0,
+			// 	};
+			// }
 
-			client
-				.query({
-					query: FETCH_ALL_PROJECTS,
-					variables: {
-						...variables,
-						...contextVariables,
-						mainCategory: isArchivedQF
-							? undefined
-							: getMainCategorySlug(selectedMainCategory),
-						qfRoundSlug: isArchivedQF ? router.query.slug : null,
-					},
-				})
-				.then((res: { data: { allProjects: IFetchAllProjects } }) => {
-					const data = res.data?.allProjects?.projects;
-					console.log({ res });
-					const count = res.data?.allProjects?.totalCount;
-					setTotalCount(count);
+			// client
+			// 	.query({
+			// 		query: FETCH_ALL_PROJECTS,
+			// 		variables: {
+			// 			...variables,
+			// 			...contextVariables,
+			// 			mainCategory: isArchivedQF
+			// 				? undefined
+			// 				: getMainCategorySlug(selectedMainCategory),
+			// 			qfRoundSlug: isArchivedQF ? router.query.slug : null,
+			// 		},
+			// 	})
+			// 	.then((res: { data: { allProjects: IFetchAllProjects } }) => {
+			// 		const data = res.data?.allProjects?.projects;
+			// 		console.log({ res });
+			// 		const count = res.data?.allProjects?.totalCount;
+			// 		setTotalCount(count);
 
-					setFilteredProjects(prevProjects => {
-						isInfiniteScrolling.current =
-							(data.length + prevProjects.length) % 45 !== 0;
-						return isLoadMore ? [...prevProjects, ...data] : data;
-					});
-					setIsLoading(false);
+			// 		setFilteredProjects(prevProjects => {
+			// 			isInfiniteScrolling.current =
+			// 				(data.length + prevProjects.length) % 45 !== 0;
+			// 			return isLoadMore ? [...prevProjects, ...data] : data;
+			// 		});
+			// 		setIsLoading(false);
 
-					const result = {
-						data: data,
-						previousCursor: projects.length * (currentPage || 0),
-						nextCursor: projects.length * (currentPage || 0) + 15,
-					};
+			// 		console.log('run third');
 
-					console.log('fetchProjects result', result);
-					return result;
-				})
-				.catch((err: any) => {
-					setIsLoading(false);
-					showToastError(err);
-					captureException(err, {
-						tags: {
-							section: 'fetchAllProjects',
-						},
-					});
-				});
+			// 		const result = {
+			// 			data: data,
+			// 			previousCursor: projects.length * (currentPage || 0),
+			// 			nextCursor: projects.length * (currentPage || 0) + 15,
+			// 		};
 
-			return { data: [], previousCursor: 0, nextCursor: 0 };
+			// 		console.log('fetchProjects result', result);
+			// 		return result;
+			// 	})
+			// 	.catch((err: any) => {
+			// 		setIsLoading(false);
+			// 		showToastError(err);
+			// 		captureException(err, {
+			// 			tags: {
+			// 				section: 'fetchAllProjects',
+			// 			},
+			// 		});
+			// 	});
+
+			// console.log('run second');
+
+			// return {
+			// 	data: filteredProjects,
+			// 	previousCursor: projects.length * (currentPage || 0),
+			// 	nextCursor: projects.length * (currentPage || 0) + 15,
+			// };
+
+			const res = await client.query({
+				query: FETCH_ALL_PROJECTS,
+				variables: {
+					...variables,
+					...contextVariables,
+					mainCategory: isArchivedQF
+						? undefined
+						: getMainCategorySlug(selectedMainCategory),
+					qfRoundSlug: isArchivedQF ? router.query.slug : null,
+				},
+			});
+
+			const data = res.data?.allProjects?.projects;
+			console.log({ res });
+			const count = res.data?.allProjects?.totalCount;
+			setTotalCount(count);
+
+			setFilteredProjects(prevProjects => {
+				isInfiniteScrolling.current =
+					(data.length + prevProjects.length) % 45 !== 0;
+				return isLoadMore ? [...prevProjects, ...data] : data;
+			});
+
+			console.log('run second');
+
+			setIsLoading(false);
+
+			return {
+				data: data,
+				previousCursor: currentPage ? currentPage - 1 : 0,
+				nextCursor: currentPage ? currentPage + 1 : 0,
+			};
 		},
 		[
 			contextVariables,
-			filteredProjects.length,
 			isArchivedQF,
 			projects.length,
 			router.query.slug,
@@ -189,6 +226,7 @@ const ProjectsIndex = (props: IProjectsView) => {
 			user?.id,
 			userIdChanged,
 			isLoadMore,
+			filteredProjects,
 		],
 	);
 
@@ -200,7 +238,7 @@ const ProjectsIndex = (props: IProjectsView) => {
 		isError,
 		isFetching,
 		isFetchingNextPage,
-	} = useInfiniteQuery<FetchProjectsResponse, Error>({
+	} = useInfiniteQuery<Page, Error>({
 		queryKey: ['projects'],
 		queryFn: ({ pageParam = 0 }: QueryFunctionContext) =>
 			fetchProjects(pageParam),
@@ -238,7 +276,7 @@ const ProjectsIndex = (props: IProjectsView) => {
 		// fetchProjects(true, pageNum.current + 1);
 		// pageNum.current = pageNum.current + 1;
 		console.log('LOAD MORE');
-		fetchNextPage();
+		// fetchNextPage();
 		// }, [fetchProjects, isLoading]);
 	}, [fetchNextPage]);
 
@@ -255,28 +293,28 @@ const ProjectsIndex = (props: IProjectsView) => {
 
 	const onProjectsPageOrActiveQFPage = !isQF || (isQF && activeQFRound);
 
-	useEffect(() => {
-		const handleObserver = (entities: any) => {
-			if (!isInfiniteScrolling.current) return;
-			const target = entities[0];
-			if (target.isIntersecting) {
-				loadMore();
-			}
-		};
-		const option = {
-			root: null,
-			threshold: 1,
-		};
-		const observer = new IntersectionObserver(handleObserver, option);
-		if (lastElementRef.current) {
-			observer.observe(lastElementRef.current);
-		}
-		return () => {
-			if (observer) {
-				observer.disconnect();
-			}
-		};
-	}, [loadMore]);
+	// useEffect(() => {
+	// 	const handleObserver = (entities: any) => {
+	// 		if (!isInfiniteScrolling.current) return;
+	// 		const target = entities[0];
+	// 		if (target.isIntersecting) {
+	// 			loadMore();
+	// 		}
+	// 	};
+	// 	const option = {
+	// 		root: null,
+	// 		threshold: 1,
+	// 	};
+	// 	const observer = new IntersectionObserver(handleObserver, option);
+	// 	if (lastElementRef.current) {
+	// 		observer.observe(lastElementRef.current);
+	// 	}
+	// 	return () => {
+	// 		if (observer) {
+	// 			observer.disconnect();
+	// 		}
+	// 	};
+	// }, [loadMore]);
 
 	useEffect(() => {
 		if (
@@ -290,6 +328,15 @@ const ProjectsIndex = (props: IProjectsView) => {
 
 	if (isNotFound)
 		return <NotAvailable description='Oops! Page Not Found...' />;
+
+	// TODO: Add a loading spinner when isFetchingNextPage is true
+	if (isFetching && !isFetchingNextPage) {
+		return <div>Loading...</div>;
+	}
+
+	if (isError) {
+		return <div>Error: {error.message}</div>;
+	}
 
 	return (
 		<>
@@ -337,13 +384,24 @@ const ProjectsIndex = (props: IProjectsView) => {
 							) : (
 								<ProjectsMiddleBanner />
 							)}
-							{filteredProjects.map((project, idx) => (
+							{data?.pages.map((page, pageIndex) => (
+								<Fragment key={pageIndex}>
+									{page.data.map((project, idx) => (
+										<ProjectCard
+											key={project.id}
+											project={project}
+											order={idx}
+										/>
+									))}
+								</Fragment>
+							))}
+							{/* {filteredProjects.map((project, idx) => (
 								<ProjectCard
 									key={project.id}
 									project={project}
 									order={idx}
 								/>
-							))}
+							))} */}
 						</ProjectsContainer>
 						{/* <FloatingButtonReferral /> */}
 					</ProjectsWrapper>
