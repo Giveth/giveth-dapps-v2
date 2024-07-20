@@ -693,6 +693,7 @@ export const MAIN_CATEGORIES_QUERY = `
 			name
 			value
 			isActive
+			canUseOnFrontend
 		}
 	}
 `;
