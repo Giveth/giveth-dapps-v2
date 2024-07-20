@@ -1,6 +1,11 @@
 import development from './config/development';
 import production from './config/production';
-import { ChainType, GlobalConfig, NonEVMNetworkConfig } from './types/config';
+import {
+	ChainType,
+	GlobalConfig,
+	NetworkConfig,
+	NonEVMNetworkConfig,
+} from './types/config';
 
 export const isProduction = process.env.NEXT_PUBLIC_ENV === 'production';
 export const isDeleteProjectEnabled =
@@ -41,6 +46,9 @@ const config: GlobalConfig = {
 	EVM_NETWORKS_CONFIG,
 	NON_EVM_NETWORKS_CONFIG,
 	NETWORKS_CONFIG: { ...EVM_NETWORKS_CONFIG, ...NON_EVM_NETWORKS_CONFIG },
+	CHAINS_WITH_SUBGRAPH: Object.entries(envConfig)
+		.filter(([key, value]) => value && value.subgraphAddress)
+		.map(([key, value]) => value as NetworkConfig),
 	// Used for adding networks to user wallet, useless since just xDAI is not
 	// included in metamask by default and its rpc endpoint is not infura
 	INFURA_API_KEY: process.env.NEXT_PUBLIC_INFURA_API_KEY,
