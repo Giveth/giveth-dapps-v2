@@ -7,7 +7,7 @@ import ProjectsCampaignBlock from '@/components/views/homepage/ProjectsCampaignB
 import IntroBlock from './introBlock';
 import VideoBlock from './videoBlock';
 import AboutGiveconomy from './aboutGiveconomy';
-import { HOME_QUERY_VARIABLES, IHomeRoute } from '../../../../pages';
+import { IHomeRoute } from '../../../../pages';
 import InformationBlock from '@/components/views/homepage/InformationBlock';
 import { CampaignsBlock } from './campaignsBlock/CampaignsBlock';
 import HomePartners from './partners';
@@ -15,7 +15,7 @@ import GetUpdates from '@/components/GetUpdates';
 import { ProjectUpdatesBlock } from './projectUpdatesBlock/ProjectUpdatesBlock';
 import { useAppSelector } from '@/features/hooks';
 import { client } from '@/apollo/apolloClient';
-import { FETCH_HOMEPAGE_DATA } from '@/apollo/gql/gqlHomePage';
+import { FETCH_CAMPAIGNS_AND_FEATURED_PROJECTS } from '@/apollo/gql/gqlHomePage';
 import { LatestUpdatesBlock } from './latestUpdates/LatestUpdatesBlock';
 import StorageLabel from '@/lib/localStorage';
 import TorusBanner from './TorusBanner';
@@ -43,9 +43,8 @@ const HomeIndex: FC<IHomeRoute> = props => {
 		if (!userData?.id) return;
 		async function fetchFeaturedUpdateProjects() {
 			const { data } = await client.query({
-				query: FETCH_HOMEPAGE_DATA,
+				query: FETCH_CAMPAIGNS_AND_FEATURED_PROJECTS,
 				variables: {
-					...HOME_QUERY_VARIABLES,
 					connectedWalletUserId: Number(userData?.id),
 				},
 				fetchPolicy: 'no-cache',
@@ -58,6 +57,7 @@ const HomeIndex: FC<IHomeRoute> = props => {
 		}
 		fetchFeaturedUpdateProjects();
 	}, [userData?.id]);
+
 	useEffect(() => {
 		setShowTorusBanner(
 			!localStorage.getItem(StorageLabel.TORUS_BANNER_VIEWED),
