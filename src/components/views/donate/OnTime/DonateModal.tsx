@@ -39,6 +39,7 @@ import { useTokenPrice } from '@/hooks/useTokenPrice';
 import { calcDonationShare } from '@/components/views/donate/helpers';
 import { Spinner } from '@/components/Spinner';
 import { FETCH_GIVETH_PROJECT_BY_ID } from '@/apollo/gql/gqlProjects';
+import createGoogleTagEventPurchase from '@/helpers/googleAnalytics';
 
 interface IDonateModalProps extends IModal {
 	token: IProjectAcceptedToken;
@@ -79,6 +80,7 @@ const DonateModal: FC<IDonateModalProps> = props => {
 		walletAddress: address,
 	} = useGeneralWallet();
 	const chainId = (chain as Chain)?.id;
+	const chainName = (chain as Chain)?.name;
 	const dispatch = useAppDispatch();
 	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
 	const isDonatingToGiveth = donationToGiveth > 0;
@@ -93,6 +95,8 @@ const DonateModal: FC<IDonateModalProps> = props => {
 	const [givethProject, setGivethProject] = useState<IProject>();
 	const [failedModalType, setFailedModalType] =
 		useState<EDonationFailedType>();
+
+	const categories = project?.categories || [];
 
 	useEffect(() => {
 		const fetchGivethProject = async () => {
@@ -215,6 +219,16 @@ const DonateModal: FC<IDonateModalProps> = props => {
 					setDonating(false);
 					return;
 				}
+
+				// Send google tag purchase event using segement
+				createGoogleTagEventPurchase({
+					txHash: firstHash,
+					chainName: chainName,
+					amount: projectDonationPrice,
+					projectId: project.id,
+					projectName: project.title,
+					categories: categories,
+				});
 
 				if (isDonatingToGiveth) {
 					createSecondDonation({
