@@ -1,45 +1,61 @@
-import { useEffect } from 'react';
 import { useAccount } from 'wagmi';
-import { useAppDispatch } from '@/features/hooks';
+import { useQueries } from '@tanstack/react-query';
+import { Address } from 'viem';
 import config from '@/configuration';
-import {
-	fetchCurrentInfoAsync,
-	fetchAllInfoAsync,
-} from '@/features/subgraph/subgraph.thunks';
+import { fetchSubgraph } from '@/services/subgraph.service';
+import { SubgraphQueryBuilder } from '@/lib/subgraph/subgraphQueryBuilder';
+import { transformSubgraphData } from '@/lib/subgraph/subgraphDataTransform';
+
+export const fetchSubgraphData = async (
+	chainId?: number,
+	address?: Address,
+) => {
+	if (!chainId || !address) return {};
+	// try {
+	let response;
+	let uri = config.EVM_NETWORKS_CONFIG[chainId]?.subgraphAddress;
+
+	if (!uri) {
+		response = {};
+	} else {
+		response = await fetchSubgraph(
+			SubgraphQueryBuilder.getChainQuery(chainId, address),
+			chainId,
+		);
+	}
+	return transformSubgraphData({
+		...response,
+		networkNumber: chainId,
+	});
+	// } catch (e) {
+	// 	console.error(`Error on query ${chainId} subgraph:`, e);
+	// 	captureException(e, {
+	// 		tags: {
+	// 			section: 'fetch${chainId}Subgraph',
+	// 		},
+	// 	});
+	// 	return {};
+	// }
+};
 
 const SubgraphController = () => {
-	const dispatch = useAppDispatch();
-
 	const { chain } = useAccount();
 	const chainId = chain?.id;
 	const { address } = useAccount();
 
-	useEffect(() => {
-		const _address = address ? address : undefined;
-		const _chainID = chainId || config.MAINNET_NETWORK_NUMBER;
-		setTimeout(
-			() => {
-				dispatch(
-					fetchAllInfoAsync({
-						userAddress: _address,
-						chainId: _chainID,
-					}),
-				);
+	useQueries({
+		queries: config.CHAINS_WITH_SUBGRAPH.map(chain => ({
+			queryKey: ['subgraph', chain.id, address],
+			queryFn: async () => {
+				return await fetchSubgraphData(chain.id, address);
 			},
-			_address ? 1000 : 0, // Prevent set no account info after account connected
-		);
-		const interval = setInterval(() => {
-			dispatch(
-				fetchCurrentInfoAsync({
-					userAddress: _address,
-					chainId: _chainID,
-				}),
-			);
-		}, config.SUBGRAPH_POLLING_INTERVAL);
-		return () => {
-			clearInterval(interval);
-		};
-	}, [address, chainId, dispatch]);
+			staleTime:
+				chainId === chain.id
+					? config.ACTIVE_SUBGRAPH_POLLING_INTERVAL
+					: config.SUBGRAPH_POLLING_INTERVAL,
+		})),
+	});
+
 	return null;
 };
 
