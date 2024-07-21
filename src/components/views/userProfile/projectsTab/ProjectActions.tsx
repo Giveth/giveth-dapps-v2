@@ -67,6 +67,7 @@ const ProjectActions: FC<IProjectActions> = ({
 	const chainId = chain?.id;
 	const projectId = project?.id;
 	const isActive = project?.status.name === EProjectStatus.ACTIVE;
+	const verificationStatus = project?.projectVerificationForm?.status;
 
 	// Handle activate project action
 	const handleActivateProject = async () => {
@@ -164,11 +165,9 @@ const ProjectActions: FC<IProjectActions> = ({
 
 	// Add action if project need verification or verification is partially done
 	if (
-		(project.projectVerificationForm?.status ===
-			EVerificationStatus.DRAFT ||
-			!project.verified) &&
-		project.projectVerificationForm?.status !==
-			EVerificationStatus.SUBMITTED
+		(verificationStatus === EVerificationStatus.DRAFT ||
+			!verificationStatus) &&
+		!project.verified
 	) {
 		options.push({
 			label: formatMessage({
