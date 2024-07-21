@@ -1,5 +1,7 @@
 import { useEffect, useState } from 'react';
 
+import { useQueryClient } from '@tanstack/react-query';
+import { useAccount } from 'wagmi';
 import {
 	getGivStakingAPR,
 	getLPStakingAPR,
@@ -7,9 +9,7 @@ import {
 } from '@/lib/stakingPool';
 import { SimplePoolStakingConfig, StakingType } from '@/types/config';
 import { APR, UserStakeInfo } from '@/types/poolInfo';
-import { useAppSelector } from '@/features/hooks';
 import { Zero } from '@/helpers/number';
-import { chainInfoNames } from '@/features/subgraph/subgraph.helper';
 
 export interface IStakeInfo {
 	apr: APR;
@@ -28,20 +28,19 @@ export const useStakingPool = (
 		notStakedAmount: 0n,
 		stakedAmount: 0n,
 	});
-
-	const chainInfoName = chainInfoNames[poolStakingConfig.network];
-
-	const currentValues = useAppSelector(
-		state => state.subgraph[chainInfoName],
-		() => hold,
-	);
+	const { chain, address } = useAccount();
+	const queryClient = useQueryClient();
+	const currentValues = queryClient.getQueryData([
+		'subgraph',
+		chain?.id,
+		address,
+	]);
 
 	const { network, type } = poolStakingConfig;
-	const { isLoaded } = currentValues;
 
 	useEffect(() => {
 		const cb = () => {
-			if (isLoaded) {
+			if (currentValues) {
 				const promise: Promise<APR> =
 					type === StakingType.GIV_GARDEN_LM ||
 					type === StakingType.GIV_UNIPOOL_LM
@@ -65,7 +64,7 @@ export const useStakingPool = (
 				clearInterval(interval);
 			}
 		};
-	}, [isLoaded]);
+	}, [currentValues]);
 
 	useEffect(() => {
 		setUserStakeInfo(getUserStakeInfo(currentValues, poolStakingConfig));
