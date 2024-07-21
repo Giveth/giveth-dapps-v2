@@ -23,9 +23,9 @@ export const getTotalGIVpower = (
 		balance: BigNumber;
 	},
 ) => {
-	if (!address) return { total: 0n, byChain: [] };
 	const res: any = [];
 	let sum = new BigNumber('0');
+	if (!address) return { total: sum, byChain: res };
 	const data = queryClient.getQueriesData({
 		predicate: query =>
 			query.queryKey[0] === 'subgraph' &&
