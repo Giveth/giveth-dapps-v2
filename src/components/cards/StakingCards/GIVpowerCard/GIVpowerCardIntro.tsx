@@ -14,8 +14,9 @@ import { useState } from 'react';
 import { useIntl } from 'react-intl';
 import styled from 'styled-components';
 import Link from 'next/link';
+import { useQueryClient } from '@tanstack/react-query';
+import { useAccount } from 'wagmi';
 import links from '@/lib/constants/links';
-import { useAppSelector } from '@/features/hooks';
 import { SubgraphDataHelper } from '@/lib/subgraph/subgraphDataHelper';
 import Routes from '@/lib/constants/Routes';
 import { LockupDetailsModal } from '@/components/modals/LockupDetailsModal';
@@ -40,8 +41,13 @@ const GIVpowerCardIntro: FC<IGIVpowerCardIntro> = ({
 		config.EVM_NETWORKS_CONFIG[poolNetwork].GIVPOWER ||
 			config.GNOSIS_CONFIG.GIVPOWER,
 	);
-	const currentValues = useAppSelector(state => state.subgraph.currentValues);
-
+	const { chain, address } = useAccount();
+	const queryClient = useQueryClient();
+	const currentValues = queryClient.getQueryData([
+		'subgraph',
+		chain?.id,
+		address,
+	]);
 	const sdh = new SubgraphDataHelper(currentValues);
 	const userGIVLocked = sdh.getUserGIVLockedBalance();
 
