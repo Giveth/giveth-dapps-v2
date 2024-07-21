@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
-import { shallowEqual } from 'react-redux';
 import { AddressZero } from '@ethersproject/constants';
-import { useAppSelector } from '@/features/hooks';
+import { useQueryClient } from '@tanstack/react-query';
+import { useAccount } from 'wagmi';
 import { TokenDistroHelper } from '@/lib/contractHelper/TokenDistroHelper';
 import { SubgraphDataHelper } from '@/lib/subgraph/subgraphDataHelper';
 
@@ -19,14 +19,17 @@ const useGIVTokenDistroHelper = (hold = false) => {
 	const [givTokenDistroHelper, setGIVTokenDistroHelper] =
 		useState<TokenDistroHelper>(defaultTokenDistroHelper);
 	const [isLoaded, setIsLoaded] = useState(false);
-	const currentValue = useAppSelector(
-		state => state.subgraph.currentValues,
-		(objA, objB) => (hold ? true : shallowEqual(objA, objB)),
-	);
+	const { chain, address } = useAccount();
+	const queryClient = useQueryClient();
+	const currentValue = queryClient.getQueryData([
+		'subgraph',
+		chain?.id,
+		address,
+	]);
 	useEffect(() => {
 		const sdh = new SubgraphDataHelper(currentValue);
 		setGIVTokenDistroHelper(new TokenDistroHelper(sdh.getGIVTokenDistro()));
-		setIsLoaded(currentValue.isLoaded as boolean);
+		// setIsLoaded(currentValue.isLoaded as boolean); //TODO:
 	}, [currentValue]);
 	return { givTokenDistroHelper, isLoaded };
 };
