@@ -162,8 +162,6 @@ const ProjectActions: FC<IProjectActions> = ({
 		options.push(recurringDonationOption);
 	}
 
-	console.log(project);
-
 	// Add action if project need verification or verification is partially done
 	if (
 		(project.projectVerificationForm?.status ===
