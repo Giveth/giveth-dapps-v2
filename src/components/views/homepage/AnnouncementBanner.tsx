@@ -1,26 +1,27 @@
 import styled from 'styled-components';
 import Image from 'next/image';
-import { brandColors, FlexCenter } from '@giveth/ui-design-system';
+import {
+	brandColors,
+	FlexCenter,
+	semanticColors,
+} from '@giveth/ui-design-system';
 import ExternalLink from '@/components/ExternalLink';
-import Regen from '/public/images/regen-token.png';
 
-const FundraisingBanner = () => {
+const AnnouncementBanner = () => {
 	return (
 		<Wrapper>
 			<PStyled>
-				<>The Giveth website is experiencing high traffic due to the </>
 				<>
-					<ExternalLink href='https://paragraph.xyz/@regen/introducing-regen'>
-						<Purple>$REGEN token announcement.</Purple>
-					</ExternalLink>
-					<ImageStyled
-						src={Regen}
-						alt='Gitcoin Grants'
-						width={24}
-						height={24}
-					/>
+					Try out our new Recurring Donations feature for a chance to
+					to WIN PRIZES this summer! 🏆
 				</>
-				<>You may experience slow loading times, we're working on it.</>
+				<>
+					<ExternalLink href='https://blog.giveth.io/recurring-donation-rally-win-big-this-sumer-with-recurring-donations-on-giveth-092798f8b988'>
+						<Purple>
+							Read up on the contest details on the Giveth blog.
+						</Purple>
+					</ExternalLink>
+				</>
 			</PStyled>
 		</Wrapper>
 	);
@@ -49,9 +50,9 @@ const Wrapper = styled(FlexCenter)`
 	padding: 16px;
 	text-align: center;
 	gap: 4px;
-	background: ${brandColors.mustard[300]};
+	background: ${semanticColors.jade[100]};
 	z-index: 99;
 	position: sticky;
 `;
 
-export default FundraisingBanner;
+export default AnnouncementBanner;

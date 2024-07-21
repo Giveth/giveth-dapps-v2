@@ -94,7 +94,7 @@ export const useCreateSolanaDonation = () => {
 				return id;
 			} catch (e: any) {
 				await postRequest('/api/donation-backup', true, {
-					chainId: transaction?.chainId!,
+					chainId: transaction?.chainId || 0,
 					txHash: transaction?.hash,
 					amount: amount,
 					token,

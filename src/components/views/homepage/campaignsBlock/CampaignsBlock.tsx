@@ -39,7 +39,7 @@ export const CampaignsBlock: FC<ICampaignsBlockProps> = ({ campaigns }) => {
 		<CampaignsBlockWrapper>
 			<ContainerRelative>
 				<BlockHeader>
-					<BlockTitle>
+					<BlockTitle id='feature-campaigns-carousel'>
 						{formatMessage({
 							id: 'label.whats_up_on_giveth',
 						})}
