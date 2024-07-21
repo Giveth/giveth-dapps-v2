@@ -9,7 +9,7 @@ import { IProjectAcceptedToken } from '@/apollo/types/gqlTypes';
 interface ITotalDonation {
 	projectTitle?: string;
 	donationToGiveth: number;
-	totalDonation?: number;
+	totalDonation?: bigint;
 	token?: IProjectAcceptedToken;
 	isActive?: boolean;
 }
@@ -22,7 +22,7 @@ const TotalDonation: FC<ITotalDonation> = props => {
 	const {
 		projectTitle,
 		donationToGiveth = 0,
-		totalDonation = 0,
+		totalDonation = 0n,
 		token,
 		isActive,
 	} = props;

@@ -17,7 +17,7 @@ import { getChainName } from '@/lib/network';
 interface IAddNewAddress {
 	project: IProject;
 	selectedChain: Chain | NonEVMChain;
-	setProjects: Dispatch<SetStateAction<IProject[]>>;
+	setProject: Dispatch<SetStateAction<IProject>>;
 	setSelectedChain: Dispatch<SetStateAction<Chain | NonEVMChain | undefined>>;
 	setAddresses: Dispatch<SetStateAction<IWalletAddress[]>>;
 }
@@ -29,7 +29,7 @@ interface IAddressForm {
 export const AddNewAddress: FC<IAddNewAddress> = ({
 	project,
 	selectedChain,
-	setProjects,
+	setProject,
 	setSelectedChain,
 	setAddresses,
 }) => {
@@ -59,28 +59,19 @@ export const AddNewAddress: FC<IAddNewAddress> = ({
 					address: _address,
 				},
 			});
-			setProjects((projects: IProject[]) => {
-				const _projects = structuredClone(projects);
-				const newProjects = [];
-				for (let i = 0; i < _projects.length; i++) {
-					const _project = _projects[i];
-					if (_project.id === project.id) {
-						_project.addresses = [
-							...(_project.addresses || []),
-							{
-								address: _address,
-								isRecipient: true,
-								networkId: selectedChain.id,
-								chainType,
-							},
-						];
-						newProjects.push(structuredClone(_project));
-					} else {
-						newProjects.push(_project);
-					}
-				}
+			setProject((project: IProject) => {
+				const _project = structuredClone(project);
+				_project.addresses = [
+					...(_project.addresses || []),
+					{
+						address: _address,
+						isRecipient: true,
+						networkId: selectedChain.id,
+						chainType,
+					},
+				];
 				setSelectedChain(undefined);
-				return newProjects;
+				return _project;
 			});
 			setAddresses(_addresses => {
 				const _adds = structuredClone(_addresses);

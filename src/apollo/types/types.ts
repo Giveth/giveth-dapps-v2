@@ -52,7 +52,6 @@ export interface IProject {
 	listed?: boolean | null;
 	categories: ICategory[];
 	reaction?: IReaction;
-	totalReactions: number;
 	adminUser: IAdminUser;
 	donations: {
 		id?: string;
@@ -64,10 +63,12 @@ export interface IProject {
 		name?: EProjectStatus;
 	};
 	updatedAt: string;
+	latestUpdateCreationDate?: string;
 	organization?: {
 		name: string;
 		label: string;
 		supportCustomTokens: boolean;
+		disableRecurringDonations?: boolean;
 	};
 	projectVerificationForm?: IProjectVerification;
 	projectPower: IProjectPower;
@@ -89,6 +90,7 @@ export enum EProjectsFilter {
 	VERIFIED = 'Verified',
 	BOOSTED_WITH_GIVPOWER = 'BoostedWithGivPower',
 	GIVING_BLOCK = 'GivingBlock',
+	Endaoment = 'Endaoment',
 	ACCEPT_FUND_ON_MAINNET = 'AcceptFundOnMainnet',
 	ACCEPT_FUND_ON_GNOSIS = 'AcceptFundOnGnosis',
 	ACCEPT_FUND_ON_POLYGON = 'AcceptFundOnPolygon',
@@ -113,6 +115,7 @@ export enum ECampaignFilterField {
 	Verified = 'verified',
 	AcceptGiv = 'givingBlocksId',
 	GivingBlock = 'fromGivingBlock',
+	Endaoment = 'fromEndaoment',
 	BoostedWithGivPower = 'boostedWithGivPower',
 	AcceptFundOnMainnet = 'acceptFundOnMainnet',
 	AcceptFundOnGnosis = 'acceptFundOnGnosis',
@@ -186,6 +189,7 @@ export enum EProjectSocialMediaType {
 	LENS = 'LENS',
 	WEBSITE = 'WEBSITE',
 	TELEGRAM = 'TELEGRAM',
+	GITHUB = 'GITHUB',
 }
 
 export interface IProjectSocialMedia {
@@ -232,6 +236,7 @@ export interface IUser {
 export interface IPassportInfo {
 	passportScore: number;
 	passportStamps: any;
+	activeQFMBDScore?: number | null;
 }
 
 export interface IUserWithPassport extends IUser, IPassportInfo {}
@@ -302,6 +307,7 @@ export interface ICategory {
 	name: string;
 	value?: string;
 	isActive?: boolean;
+	canUseOnFrontend?: boolean;
 	mainCategory?: Pick<IMainCategory, 'title'>;
 }
 
@@ -380,6 +386,12 @@ export interface ISocialProfile {
 	name: string;
 }
 
+export interface IPersonalInfo {
+	email: string;
+	walletAddress: string;
+	fullName: string;
+}
+
 export interface IProjectVerification {
 	id: string;
 	isTermAndConditionsAccepted: boolean;
@@ -399,6 +411,7 @@ export interface IProjectVerification {
 	socialProfiles?: ISocialProfile[];
 	status: EVerificationStatus;
 	lastStep: EVerificationSteps;
+	personalInfo?: IPersonalInfo;
 }
 
 export enum EVerificationStatus {
@@ -419,7 +432,9 @@ export interface IProjectVerificationUpdateInput {
 }
 
 export enum EVerificationSteps {
+	BEFORE_START = 'beforeStart',
 	PERSONAL_INFO = 'personalInfo',
+	SOCIAL_PROFILES = 'socialProfiles',
 	PROJECT_REGISTRY = 'projectRegistry',
 	PROJECT_CONTACTS = 'projectContacts',
 	MANAGING_FUNDS = 'managingFunds',
@@ -476,6 +491,7 @@ export interface IQFRound {
 	allocatedTokenSymbol: string;
 	allocatedTokenChainId: number;
 	minimumValidUsdValue?: number;
+	minMBDScore: number;
 }
 
 export interface IArchivedQFRound extends IQFRound {

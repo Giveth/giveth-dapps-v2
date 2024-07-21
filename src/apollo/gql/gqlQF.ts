@@ -17,6 +17,7 @@ export const QF_ROUNDS_QUERY = `
 			allocatedFundUSD
 			allocatedFundUSDPreferred
 			allocatedTokenSymbol
+			minMBDScore
 		}
 `;
 
@@ -71,7 +72,7 @@ export const FETCH_ARCHIVED_QF_ROUNDS = gql`
 			endDate
 			totalDonations
 			uniqueDonors
-			# isDataAnalysisDone // TODO: uncomment when backend is ready
+			isDataAnalysisDone
 		}
 	}
 `;

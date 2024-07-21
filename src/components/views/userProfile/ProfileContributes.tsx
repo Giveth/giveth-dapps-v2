@@ -146,7 +146,7 @@ const ProfileContributes: FC<IUserProfileView> = () => {
 						$active={tab === EProfile.LIKED}
 						onClick={() => setTab(EProfile.LIKED)}
 					>
-						{formatMessage({ id: 'label.liked_projects' })}
+						{formatMessage({ id: 'label.bookmarked_projects' })}
 						{myAccount && !!user?.likedProjectsCount && (
 							<Count $active={tab === EProfile.LIKED}>
 								{user?.likedProjectsCount}

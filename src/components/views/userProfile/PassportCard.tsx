@@ -13,7 +13,7 @@ export const PassportCard = () => {
 	return (
 		<StyledContributeCardBox>
 			{passportState === EPassportState.NOT_SIGNED ||
-			passportState === EPassportState.LOADING ? (
+			passportState === EPassportState.CONNECTING ? (
 				<B>{formatMessage({ id: 'label.gitcoin_passport' })}</B>
 			) : (
 				<Flex $alignItems='center' $justifyContent='space-between'>

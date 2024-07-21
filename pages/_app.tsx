@@ -6,11 +6,11 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { Toaster } from 'react-hot-toast';
 import { ApolloProvider } from '@apollo/client';
 import NProgress from 'nprogress';
-import * as snippet from '@segment/snippet';
 import { useRouter } from 'next/router';
 import { Provider as ReduxProvider } from 'react-redux';
 import { SpeedInsights } from '@vercel/speed-insights/next';
-import Script from 'next/script';
+// import Script from 'next/script';
+import { GoogleAnalytics } from '@next/third-parties/google';
 import { loadErrorMessages, loadDevMessages } from '@apollo/client/dev';
 import { WagmiProvider } from 'wagmi';
 import { projectId, wagmiConfig } from '@/wagmiConfigs';
@@ -41,6 +41,7 @@ import { zIndex } from '@/lib/constants/constants';
 import configuration, { isProduction } from '@/configuration';
 import MaintenanceIndex from '@/components/views/Errors/MaintenanceIndex';
 import { SolanaProvider } from '@/providers/solanaWalletProvider';
+// import { pageview } from '@/helpers/googleAnalytics';
 import type { AppProps } from 'next/app';
 
 if (!isProduction) {
@@ -52,10 +53,10 @@ if (!isProduction) {
 declare global {
 	interface Window {
 		analytics: any;
+		gtag: any;
 	}
 }
 
-const DEFAULT_WRITE_KEY = 'MHK95b7o6FRNHt0ZZJU9bNGUT5MNCEyB';
 const queryClient = new QueryClient();
 
 export const IntlMessages = {
@@ -65,22 +66,6 @@ export const IntlMessages = {
 };
 
 const defaultLocale = process.env.defaultLocale;
-
-function renderSnippet() {
-	const opts = {
-		apiKey:
-			process.env.NEXT_PUBLIC_ANALYTICS_WRITE_KEY || DEFAULT_WRITE_KEY,
-		// note: the page option only covers SSR tracking.
-		// Page.js is used to track other events using `window.analytics.page()`
-		page: true,
-	};
-
-	if (process.env.NEXT_PUBLIC_ENV === 'development') {
-		return snippet.max(opts);
-	}
-
-	return snippet.min(opts);
-}
 
 const RenderComponent = ({ Component, pageProps }: any) => {
 	useSafeAutoConnect();
@@ -184,6 +169,9 @@ function MyApp({ Component, pageProps }: AppProps) {
 					content='width=device-width, initial-scale=1.0'
 				/>
 			</Head>
+			<GoogleAnalytics
+				gaId={process.env.NEXT_PUBLIC_ANALYTICS_WRITE_KEY || ''}
+			/>
 			<ReduxProvider store={store}>
 				<IntlProvider
 					locale={locale!}
@@ -220,16 +208,6 @@ function MyApp({ Component, pageProps }: AppProps) {
 													<RenderComponent
 														Component={Component}
 														pageProps={pageProps}
-													/>
-												)}
-												{process.env.NEXT_PUBLIC_ENV ===
-													'production' && (
-													<Script
-														id='segment-script'
-														strategy='afterInteractive'
-														dangerouslySetInnerHTML={{
-															__html: renderSnippet(),
-														}}
 													/>
 												)}
 												{/* {process.env.NEXT_PUBLIC_ENV !==

@@ -28,19 +28,16 @@ export const PROJECT_CARD_FIELDS = gql`
 	fragment ProjectCardFields on Project {
 		...ProjectCoreFields
 		descriptionSummary
-		totalReactions
-		reaction {
-			id
-			userId
-		}
 		adminUser {
 			name
 			walletAddress
 			avatar
 		}
 		updatedAt
+		latestUpdateCreationDate
 		organization {
 			label
+			disableRecurringDonations
 		}
 		projectPower {
 			powerRank
@@ -149,6 +146,13 @@ export const FETCH_PROJECT_BY_SLUG_DONATION = gql`
 			totalDonations
 			sumDonationValueUsdForActiveQfRound
 			countUniqueDonorsForActiveQfRound
+			categories {
+				name
+				value
+				mainCategory {
+					title
+				}
+			}
 			adminUser {
 				id
 				name
@@ -158,6 +162,7 @@ export const FETCH_PROJECT_BY_SLUG_DONATION = gql`
 			organization {
 				label
 				supportCustomTokens
+				disableRecurringDonations
 			}
 			addresses {
 				address
@@ -224,7 +229,6 @@ export const FETCH_PROJECT_BY_SLUG_SINGLE_PROJECT = gql`
 				id
 				userId
 			}
-			totalReactions
 			categories {
 				name
 				value
@@ -247,6 +251,7 @@ export const FETCH_PROJECT_BY_SLUG_SINGLE_PROJECT = gql`
 				name
 				label
 				supportCustomTokens
+				disableRecurringDonations
 			}
 			verificationFormStatus
 			projectPower {
@@ -351,7 +356,6 @@ export const FETCH_PROJECT_REACTION_BY_ID = gql`
 				id
 				userId
 			}
-			totalReactions
 		}
 	}
 `;
@@ -378,7 +382,6 @@ export const FETCH_PROJECT_UPDATES = gql`
 			userId
 			content
 			isMain
-			totalReactions
 			reaction {
 				projectUpdateId
 				userId
@@ -416,7 +419,6 @@ export const FETCH_FEATURED_PROJECT_UPDATES = gql`
 			userId
 			content
 			isMain
-			totalReactions
 			createdAt
 		}
 	}
@@ -698,6 +700,7 @@ export const MAIN_CATEGORIES_QUERY = `
 			name
 			value
 			isActive
+			canUseOnFrontend
 		}
 	}
 `;

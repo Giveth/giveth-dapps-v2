@@ -19,7 +19,7 @@ import Link from 'next/link';
 import { useIntl } from 'react-intl';
 import { useRouter } from 'next/router';
 import { Shadow } from '@/components/styled-components/Shadow';
-import ProjectCardBadges from './ProjectCardLikeAndShareButtons';
+import ProjectCardBadges from './ProjectCardBadgeButtons';
 import ProjectCardOrgBadge from './ProjectCardOrgBadge';
 import { IProject } from '@/apollo/types/types';
 import { timeFromNow } from '@/lib/helpers';
@@ -54,10 +54,9 @@ const ProjectCard = (props: IProjectCard) => {
 		adminUser,
 		totalDonations,
 		sumDonationValueUsdForActiveQfRound,
-		updatedAt,
 		organization,
 		verified,
-		// projectPower,
+		latestUpdateCreationDate,
 		countUniqueDonors,
 		qfRounds,
 		estimatedMatching,
@@ -137,7 +136,7 @@ const ProjectCard = (props: IProjectCard) => {
 					<LastUpdatedContainer $isHover={isHover}>
 						{formatMessage({ id: 'label.last_updated' })}:
 						{timeFromNow(
-							updatedAt,
+							latestUpdateCreationDate || '',
 							formatRelativeTime,
 							formatMessage({ id: 'label.just_now' }),
 						)}

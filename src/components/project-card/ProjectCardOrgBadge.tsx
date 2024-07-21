@@ -25,6 +25,9 @@ const setOrgImage = (org?: string) => {
 		case ORGANIZATION.givingBlock:
 			img = '/images/thegivingblock.svg';
 			break;
+		case ORGANIZATION.endaoment:
+			img = '/images/endaoment.svg';
+			break;
 		case ORGANIZATION.change:
 			img = '/images/change.png';
 			break;

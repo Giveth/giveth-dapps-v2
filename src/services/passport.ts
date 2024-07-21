@@ -1,6 +1,9 @@
 import { signMessage } from '@wagmi/core';
 import { client } from '@/apollo/apolloClient';
-import { REFRESH_USER_SCORES } from '@/apollo/gql/gqlPassport';
+import {
+	REFRESH_USER_SCORES,
+	SCORE_ACTIVE_QF_DONOR_ADDRESS,
+} from '@/apollo/gql/gqlPassport';
 import config from '@/configuration';
 import { getPassports } from '@/helpers/passport';
 import { getRequest, postRequest } from '@/helpers/requests';
@@ -15,11 +18,11 @@ export const fetchPassportScore = async (account: string) => {
 			variables: {
 				address: account?.toLowerCase(),
 			},
-			fetchPolicy: 'no-cache',
+			fetchPolicy: 'network-only',
 		});
 		return data;
 	} catch (error) {
-		console.log('error', error);
+		console.error('error', error);
 		//remove user's info from local storage
 		const passports = getPassports();
 		delete passports[account.toLowerCase()];
@@ -64,12 +67,29 @@ export const connectPassport = async (account: string, singin: boolean) => {
 		}
 		return true;
 	} catch (error: any) {
-		console.log('error', error);
+		console.error('error', error);
 		if (error.code === 'ACTION_REJECTED') {
 			showToastError('Rejected By User');
 		} else {
 			showToastError(error);
 		}
 		return false;
+	}
+};
+
+// get user's address score using the model-based detection endpoint
+export const scoreUserAddress = async (address: `0x${string}` | undefined) => {
+	try {
+		const { data } = await client.query({
+			query: SCORE_ACTIVE_QF_DONOR_ADDRESS,
+			variables: {
+				address: address?.toLowerCase(),
+			},
+		});
+
+		return data.scoreUserAddress;
+	} catch (error) {
+		console.error('Failed to fetch user address score:', error);
+		return null;
 	}
 };

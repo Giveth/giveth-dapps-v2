@@ -6,7 +6,7 @@ import {
 	semanticColors,
 	FlexCenter,
 } from '@giveth/ui-design-system';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import CheckBox from '@/components/Checkbox';
 import { Relative } from '@/components/styled-components/Position';
@@ -16,30 +16,41 @@ import { client } from '@/apollo/apolloClient';
 import { UPDATE_PROJECT_VERIFICATION } from '@/apollo/gql/gqlVerification';
 import { EVerificationStatus, EVerificationSteps } from '@/apollo/types/types';
 import { showToastError } from '@/lib/helpers';
+import menuList from './menu/menuList';
+import { checkAllVerificationsSteps } from '@/helpers/projects';
 
 export default function TermsAndConditions() {
 	const [loading, setLoading] = useState(false);
+	const [allChecked, setAllChecked] = useState(false);
 
 	const { verificationData, setVerificationData, setStep, isDraft } =
 		useVerificationData();
+
 	const [accepted, setAccepted] = useState(
 		verificationData?.isTermAndConditionsAccepted || false,
 	);
 	const { formatMessage } = useIntl();
 
-	const updateVerificationState = () => {
+	const updateVerificationState = (newCheckedState: boolean) => {
 		setVerificationData(prevState =>
 			prevState
 				? {
 						...prevState,
 						status: EVerificationStatus.DRAFT,
+						isTermAndConditionsAccepted: newCheckedState,
 					}
 				: undefined,
 		);
-		setStep(8);
 	};
 
-	const handleNext = async () => {
+	// Handle when checkbox is confirmed
+	const handleAccepted = (newCheckedState: boolean) => {
+		setAccepted(newCheckedState);
+		handleNext(newCheckedState);
+	};
+
+	// Save term and condition accept data to database
+	const handleNext = async (newCheckedState: boolean) => {
 		try {
 			setLoading(true);
 			await client.mutate({
@@ -48,17 +59,50 @@ export default function TermsAndConditions() {
 					projectVerificationUpdateInput: {
 						projectVerificationId: Number(verificationData?.id),
 						step: EVerificationSteps.TERM_AND_CONDITION,
-						isTermAndConditionsAccepted: accepted,
+						isTermAndConditionsAccepted: newCheckedState,
 					},
 				},
 			});
 			setLoading(false);
-			updateVerificationState();
+			updateVerificationState(newCheckedState);
 		} catch (error) {
 			setLoading(false);
 			showToastError(error);
 		}
 	};
+
+	// Handle when user click on finish button
+	const handleFinish = async () => {
+		if (accepted && allChecked) {
+			try {
+				setLoading(true);
+				await client.mutate({
+					mutation: UPDATE_PROJECT_VERIFICATION,
+					variables: {
+						projectVerificationUpdateInput: {
+							projectVerificationId: Number(verificationData?.id),
+							step: EVerificationSteps.SUBMIT,
+						},
+					},
+				});
+				setLoading(false);
+				setStep(8); // GO TO FINAL STEP "DONE"
+			} catch (error) {
+				setLoading(false);
+				showToastError(error);
+			}
+		}
+	};
+
+	// Check have user submited all data needed for verification
+	useEffect(() => {
+		// Check if all elements are true
+		const allCheckedSteps = checkAllVerificationsSteps(
+			menuList,
+			verificationData,
+		);
+		setAllChecked(allCheckedSteps);
+	}, [verificationData, accepted]);
 
 	return (
 		<>
@@ -97,7 +141,7 @@ export default function TermsAndConditions() {
 							id: 'label.i_accept_all_giveth_tos',
 						})}
 						checked={accepted}
-						onChange={setAccepted}
+						onChange={handleAccepted}
 					/>
 				)}
 			</Lead>
@@ -110,14 +154,24 @@ export default function TermsAndConditions() {
 							id: 'label.prev',
 						})}`}
 					/>
-					<Button
-						onClick={handleNext}
-						loading={loading}
-						disabled={!accepted}
-						label={`${formatMessage({
-							id: 'label.finish',
-						})}     >`}
-					/>
+					{!allChecked && (
+						<ButtonWarning
+							disabled={true}
+							label={formatMessage({
+								id: 'label.some_section_missing',
+							})}
+						/>
+					)}
+					{allChecked && (
+						<Button
+							onClick={handleFinish}
+							loading={loading}
+							disabled={!accepted}
+							label={`${formatMessage({
+								id: 'label.finish',
+							})}     >`}
+						/>
+					)}
 				</BtnContainer>
 			</div>
 		</>
@@ -148,4 +202,21 @@ const BulletCircle = styled(FlexCenter)`
 	position: absolute;
 	width: 14px;
 	height: 14px;
+`;
+
+const ButtonWarning = styled(Button)`
+	padding-right: 60px;
+	border: 4px solid ${semanticColors.golden[100]};
+	background-color: ${semanticColors.golden[500]};
+	background-image: url('/images/icons/warning.svg');
+	background-size: 18px;
+	background-repeat: no-repeat;
+	background-position: 90% center;
+	text-transform: none;
+	color: #fff;
+	opacity: 1;
+
+	& span {
+		text-transform: none;
+	}
 `;

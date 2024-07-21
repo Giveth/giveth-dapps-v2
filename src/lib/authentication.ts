@@ -1,5 +1,5 @@
 import { Header, Payload, SIWS } from '@web3auth/sign-in-with-solana';
-import { signMessage } from '@wagmi/core';
+import { Connector, signMessage } from '@wagmi/core';
 import config from '@/configuration';
 import { wagmiConfig } from '@/wagmiConfigs';
 
@@ -39,7 +39,7 @@ export const createSiweMessage = async (
 			nonce,
 		};
 	} catch (error) {
-		console.log({ error });
+		console.error({ error });
 		return false;
 	}
 };
@@ -52,24 +52,32 @@ interface SignResult {
 export const signWithEvm = async (
 	address: string,
 	chainId: number,
+	connector?: Connector,
 ): Promise<SignResult | undefined> => {
-	const siweMessage: any = await createSiweMessage(
-		address!,
-		chainId!,
-		'Login into Giveth services',
-	);
+	try {
+		const siweMessage: any = await createSiweMessage(
+			address!,
+			chainId!,
+			'Login into Giveth services',
+		);
 
-	const { message, nonce } = siweMessage;
+		const { message, nonce } = siweMessage;
 
-	const signature = await signMessage(wagmiConfig, { message: message });
+		const signature = await signMessage(wagmiConfig, {
+			connector: connector,
+			message: message,
+		});
 
-	return (
-		signature && {
-			signature,
-			message,
-			nonce,
-		}
-	);
+		return (
+			signature && {
+				signature,
+				message,
+				nonce,
+			}
+		);
+	} catch (error) {
+		console.log({ ERROR: error });
+	}
 };
 
 // Solana sign message

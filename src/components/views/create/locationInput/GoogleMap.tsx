@@ -1,30 +1,23 @@
-import { GoogleMap, withGoogleMap } from 'react-google-maps';
 import React, { FC } from 'react';
+import { GoogleMap } from '@react-google-maps/api';
 import { ICoords } from '@/components/views/create/locationInput/LocationInput';
 
 const GoogleMapComponent: FC<{ coords: ICoords }> = ({ coords }) => {
-	const MapComponent = withGoogleMap(() => (
-		<GoogleMap
-			defaultCenter={coords}
-			defaultZoom={13}
-			options={{ draggable: false, disableDefaultUI: true }}
-		/>
-	));
-
 	return (
-		<MapComponent
-			containerElement={<div style={{ height: `388px` }} />}
-			mapElement={
-				<div
-					style={{
-						height: `100%`,
-						borderRadius: '8px',
-						marginTop: '32px',
-					}}
-				/>
-			}
-		/>
+		<GoogleMap
+			mapContainerStyle={mapContainerStyle}
+			center={coords}
+			zoom={13}
+			options={{ draggable: false, disableDefaultUI: true }}
+		></GoogleMap>
 	);
+};
+
+const mapContainerStyle = {
+	height: '388px',
+	width: '100%',
+	borderRadius: '8px',
+	marginTop: '32px',
 };
 
 export default React.memo(GoogleMapComponent);

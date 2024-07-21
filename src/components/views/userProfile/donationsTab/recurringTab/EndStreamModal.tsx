@@ -139,7 +139,7 @@ const EndStreamInnerModal: FC<IEndStreamInnerModalProps> = ({
 			if (error?.code !== 'ACTION_REJECTED') {
 				showToastError(error);
 			}
-			console.log('Error on recurring donation', { error });
+			console.error('Error on recurring donation', { error });
 		}
 	};
 

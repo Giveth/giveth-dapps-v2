@@ -43,7 +43,8 @@ export const AdminActions = () => {
 	const [showShareModal, setShowShareModal] = useState(false);
 	const [showMobileActionsModal, setShowMobileActionsModal] = useState(false);
 	const [showClaimModal, setShowClaimModal] = useState(false);
-	const { projectData, isActive, activateProject } = useProjectContext();
+	const { projectData, isActive, activateProject, fetchProjectBySlug } =
+		useProjectContext();
 	const project = projectData!;
 
 	const { slug, verified, verificationFormStatus } = project;
@@ -147,6 +148,7 @@ export const AdminActions = () => {
 				<DeactivateProjectModal
 					setShowModal={setDeactivateModal}
 					projectId={projectData?.id}
+					onSuccess={fetchProjectBySlug}
 				/>
 			)}
 			{showShareModal && (
@@ -192,6 +194,7 @@ export const AdminActions = () => {
 						<DeactivateProjectModal
 							setShowModal={setDeactivateModal}
 							projectId={projectData?.id}
+							onSuccess={fetchProjectBySlug}
 						/>
 					)}
 					{showShareModal && (

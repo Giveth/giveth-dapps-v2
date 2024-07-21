@@ -19,6 +19,7 @@ const socialMediaColor: { [key: string]: string } = {
 	discord: '#7289DA',
 	website: '#2EA096',
 	telegram: '#229ED9',
+	github: '#1D1E1F',
 };
 
 const removeHttpsAndWwwFromUrl = (socialMediaUrl: string) => {
@@ -35,7 +36,7 @@ const ProjectSocialItem = ({ socialMedia }: IProjectSocialMediaItem) => {
 		<a href={socialMedia.link} target='_blank'>
 			<SocialItemContainer>
 				<Flex gap='8px' $alignItems='center'>
-					{IconComponent ? (
+					{IconComponent && (
 						<IconComponent
 							color={
 								socialMediaColor[
@@ -43,7 +44,7 @@ const ProjectSocialItem = ({ socialMedia }: IProjectSocialMediaItem) => {
 								]
 							}
 						/>
-					) : null}
+					)}
 
 					<B
 						style={{

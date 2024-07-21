@@ -30,7 +30,7 @@ export const getGIVpowerBalanceByAddress = async (users: string[]) => {
 		}
 	}
 	const res = await Promise.all(queries);
-
+	console.log('unipool balances res', res);
 	const unipoolBalancesObj: { [key: string]: string } = {};
 	for (let i = 0; i < res.length; i++) {
 		const unipoolBalances = res[i].data.unipoolBalances;

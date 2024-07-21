@@ -1,37 +1,50 @@
-import { useConnect } from 'wagmi';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
+import { useAccount, useConnect } from 'wagmi';
 
-const AUTOCONNECTED_CONNECTOR_IDS = ['safe'];
-
-function checkForSafeConnector(connectors: any) {
-	return AUTOCONNECTED_CONNECTOR_IDS.some(connector => {
-		return connectors.find((c: any) => c.id === connector && c.ready);
-	});
-}
-
+const checkGnosisSafe = () => {
+	try {
+		if (typeof window !== 'undefined' && window.self !== window.top) {
+			const parentUrl = window.location.ancestorOrigins[0];
+			if (parentUrl) {
+				const parsedUrl = new URL(parentUrl);
+				const isSafe = parsedUrl.hostname.includes('safe');
+				return isSafe;
+			} else {
+				return false;
+			}
+		}
+	} catch (error) {
+		console.error('Error checking Gnosis Safe:', error);
+		return false;
+	}
+};
 function useSafeAutoConnect() {
+	const { address } = useAccount();
 	const { connect, connectors } = useConnect();
-	const isSafeEnv = useIsSafeEnvironment();
 
 	useEffect(() => {
-		if (checkForSafeConnector(connectors)) {
-			const connectorInstance = connectors.find(
-				c => c.id === AUTOCONNECTED_CONNECTOR_IDS[0], // TODO:Migrate && c.ready,
+		const autoConnect = async () => {
+			const safeConnector = connectors.find(
+				connector => connector.id === 'safe',
 			);
-			if (connectorInstance) connect({ connector: connectorInstance });
-		}
-	}, [connect, connectors, isSafeEnv]);
+			const isGnosisSafeIframe = checkGnosisSafe();
+
+			if (safeConnector && isGnosisSafeIframe) {
+				try {
+					await connect({ connector: safeConnector });
+				} catch (error) {
+					console.error('Failed to connect with Gnosis Safe:', error);
+				}
+			}
+		};
+
+		autoConnect();
+	}, [address, connectors]);
 }
 
 function useIsSafeEnvironment() {
-	const { connectors } = useConnect();
-	const [isSafe, setIsSafe] = useState<null | Boolean>(null);
-
-	useEffect(() => {
-		setIsSafe(checkForSafeConnector(connectors));
-	}, [connectors]);
-
-	return !!isSafe;
+	const isGnosisSafeIframe = checkGnosisSafe();
+	return !!isGnosisSafeIframe;
 }
 
 export { useSafeAutoConnect, useIsSafeEnvironment };
