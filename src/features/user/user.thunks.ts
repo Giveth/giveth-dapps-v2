@@ -44,8 +44,10 @@ export const signToGetToken = createAsyncThunk(
 		const {
 			address,
 			safeAddress,
+			secondarySignerAddress,
 			chainId,
 			connectors,
+			connector,
 			isGSafeConnector,
 			expiration,
 		} = signToGetToken;
@@ -56,8 +58,13 @@ export const signToGetToken = createAsyncThunk(
 		const isSAFE = isGSafeConnector;
 		let siweMessage,
 			safeMessage: any = null;
-		if (isSAFE) {
-			siweMessage = (await signWithEvm(address, chainId!)) || {};
+		if (isSAFE && secondarySignerAddress) {
+			siweMessage =
+				(await signWithEvm(
+					secondarySignerAddress,
+					chainId!,
+					connector,
+				)) || {};
 			safeMessage = await createSiweMessage(
 				safeAddress!,
 				chainId!,
@@ -94,7 +101,6 @@ export const signToGetToken = createAsyncThunk(
 					message,
 					nonce,
 				};
-
 				if (isSolana) {
 					data.address = address;
 				}
@@ -129,13 +135,8 @@ export const signToGetToken = createAsyncThunk(
 							sessionPending = true;
 						}
 					} catch (error) {
-						console.log({ error });
+						console.error({ error });
 					}
-					console.log({
-						activeSafeToken,
-						sessionPending,
-						connectors,
-					});
 
 					if (sessionPending)
 						return Promise.reject('Gnosis Safe Session pending');
@@ -165,7 +166,7 @@ export const signToGetToken = createAsyncThunk(
 						});
 					} catch (error) {
 						// user will close the transaction but it will create anyway
-						console.log({ error });
+						console.error({ error });
 					}
 					// calls the backend to create gnosis safe token
 					console.log({
@@ -192,18 +193,18 @@ export const signToGetToken = createAsyncThunk(
 						//save to localstorage if token is created
 						saveTokenToLocalstorage(safeAddress!, safeToken?.jwt);
 						await dispatch(fetchUserByAddress(safeAddress!));
-						return currentUserToken;
+						return safeToken?.jwt;
 					} else {
 						return Promise.reject('Signing pending');
 					}
-				} else {
+				} else if (!isSAFE) {
 					return currentUserToken;
 				}
 			} else {
 				return Promise.reject('Signing failed');
 			}
 		} catch (error) {
-			console.log({ error });
+			console.error({ error });
 			return Promise.reject('Signing failed');
 		}
 	},
@@ -234,7 +235,7 @@ export const startChainvineReferral = createAsyncThunk(
 			dispatch(fetchUserByAddress(address));
 			return res?.payload;
 		} catch (error) {
-			console.log({ error });
+			console.error({ error });
 			return Promise.reject('Referral start failed');
 		}
 	},
@@ -250,7 +251,7 @@ export const countReferralClick = createAsyncThunk(
 			);
 			return response?.payload;
 		} catch (error) {
-			console.log({ error });
+			console.error({ error });
 			return Promise.reject('Referral start failed');
 		}
 	},

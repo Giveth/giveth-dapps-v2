@@ -34,8 +34,10 @@ export const PROJECT_CARD_FIELDS = gql`
 			avatar
 		}
 		updatedAt
+		latestUpdateCreationDate
 		organization {
 			label
+			disableRecurringDonations
 		}
 		projectPower {
 			powerRank
@@ -144,6 +146,13 @@ export const FETCH_PROJECT_BY_SLUG_DONATION = gql`
 			totalDonations
 			sumDonationValueUsdForActiveQfRound
 			countUniqueDonorsForActiveQfRound
+			categories {
+				name
+				value
+				mainCategory {
+					title
+				}
+			}
 			adminUser {
 				id
 				name
@@ -153,6 +162,7 @@ export const FETCH_PROJECT_BY_SLUG_DONATION = gql`
 			organization {
 				label
 				supportCustomTokens
+				disableRecurringDonations
 			}
 			addresses {
 				address
@@ -241,6 +251,7 @@ export const FETCH_PROJECT_BY_SLUG_SINGLE_PROJECT = gql`
 				name
 				label
 				supportCustomTokens
+				disableRecurringDonations
 			}
 			verificationFormStatus
 			projectPower {
@@ -689,6 +700,7 @@ export const MAIN_CATEGORIES_QUERY = `
 			name
 			value
 			isActive
+			canUseOnFrontend
 		}
 	}
 `;

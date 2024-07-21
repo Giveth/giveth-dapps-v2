@@ -30,6 +30,7 @@ export const GET_USER_BY_ADDRESS = gql`
 			boostedProjectsCount
 			passportScore
 			passportStamps
+			activeQFMBDScore
 		}
 	}
 `;

@@ -1,6 +1,23 @@
+import { useEffect } from 'react';
 import { useAccount, useConnect } from 'wagmi';
-import { useEffect, useState } from 'react';
 
+const checkGnosisSafe = () => {
+	try {
+		if (typeof window !== 'undefined' && window.self !== window.top) {
+			const parentUrl = window.location.ancestorOrigins[0];
+			if (parentUrl) {
+				const parsedUrl = new URL(parentUrl);
+				const isSafe = parsedUrl.hostname.includes('safe');
+				return isSafe;
+			} else {
+				return false;
+			}
+		}
+	} catch (error) {
+		console.error('Error checking Gnosis Safe:', error);
+		return false;
+	}
+};
 function useSafeAutoConnect() {
 	const { address } = useAccount();
 	const { connect, connectors } = useConnect();
@@ -10,7 +27,9 @@ function useSafeAutoConnect() {
 			const safeConnector = connectors.find(
 				connector => connector.id === 'safe',
 			);
-			if (safeConnector) {
+			const isGnosisSafeIframe = checkGnosisSafe();
+
+			if (safeConnector && isGnosisSafeIframe) {
 				try {
 					await connect({ connector: safeConnector });
 				} catch (error) {
@@ -20,35 +39,12 @@ function useSafeAutoConnect() {
 		};
 
 		autoConnect();
-	}, [address]);
+	}, [address, connectors]);
 }
 
 function useIsSafeEnvironment() {
-	const { connect, connectors } = useConnect();
-	const [isSafe, setIsSafe] = useState(false);
-
-	useEffect(() => {
-		const checkForSafeConnector = async () => {
-			const safeConnector = connectors.find(
-				connector => connector.id === 'safe',
-			);
-			if (safeConnector) {
-				try {
-					const connection: any = await connect({
-						connector: safeConnector,
-					});
-					setIsSafe(!!connection);
-				} catch (error) {
-					console.error('Failed to connect with Gnosis Safe:', error);
-					setIsSafe(false);
-				}
-			}
-		};
-
-		checkForSafeConnector();
-	}, [connectors]);
-
-	return isSafe;
+	const isGnosisSafeIframe = checkGnosisSafe();
+	return !!isGnosisSafeIframe;
 }
 
 export { useSafeAutoConnect, useIsSafeEnvironment };

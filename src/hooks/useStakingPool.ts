@@ -47,7 +47,7 @@ export const useStakingPool = (
 						? getGivStakingAPR(network, currentValues, network)
 						: getLPStakingAPR(poolStakingConfig, currentValues);
 				promise.then(setApr).catch(e => {
-					console.log('Error Calculating APR', e);
+					console.error('Error Calculating APR', e);
 					setApr({ effectiveAPR: Zero });
 				});
 			} else {

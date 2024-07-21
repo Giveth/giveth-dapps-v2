@@ -20,6 +20,7 @@ export enum EInputs {
 	lens = 'lens',
 	website = 'website',
 	telegram = 'telegram',
+	github = 'github',
 }
 
 export enum ECreateProjectSections {
@@ -53,4 +54,5 @@ export type TInputs = {
 	[EInputs.lens]?: string;
 	[EInputs.website]?: string;
 	[EInputs.telegram]?: string;
+	[EInputs.github]?: string;
 };

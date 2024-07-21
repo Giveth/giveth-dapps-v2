@@ -29,14 +29,11 @@ import {
 	PublicGIVpowerContributeCard,
 } from '@/components/ContributeCard';
 import { formatWeiHelper } from '@/helpers/number';
-import { PassportCard } from './PassportCard';
-import ExternalLink from '@/components/ExternalLink';
-import links from '@/lib/constants/links';
 import { getTotalGIVpower } from '@/helpers/givpower';
 import { useProfileContext } from '@/context/profile.context';
 import { useIsSafeEnvironment } from '@/hooks/useSafeAutoConnect';
 import { useGeneralWallet } from '@/providers/generalWalletProvider';
-
+import { QFDonorEligibilityCard } from '@/components/views/userProfile/QFDonorEligibilityCard';
 interface IBtnProps extends IButtonProps {
 	outline?: boolean;
 }
@@ -109,6 +106,7 @@ const ProfileOverviewTab: FC<IUserProfileView> = () => {
 
 	const [section, setSection] = useState<ISection>(_sections.getGiv);
 	const { userData } = useAppSelector(state => state.user);
+	const { activeQFRound } = useAppSelector(state => state.general);
 	const boostedProjectsCount = userData?.boostedProjectsCount ?? 0;
 	const values = useAppSelector(state => state.subgraph);
 	const givPower = getTotalGIVpower(values);
@@ -199,24 +197,7 @@ const ProfileOverviewTab: FC<IUserProfileView> = () => {
 				) : (
 					<Row>
 						<Col lg={6}>
-							<SectionTitle weight={700}>
-								{formatMessage({
-									id: 'label.gitcoin_passport',
-								})}
-							</SectionTitle>
-							<SectionDesc>
-								{formatMessage({
-									id: 'label.take_control_online_identity',
-								})}
-								<br />
-								<PassportLink href={links.PASSPORT}>
-									{formatMessage({
-										id: 'label.go_to_passport',
-									})}
-									.
-								</PassportLink>
-							</SectionDesc>
-							<PassportCard />
+							{activeQFRound && <QFDonorEligibilityCard />}
 						</Col>
 					</Row>
 				))
@@ -287,10 +268,6 @@ const SectionTitle = styled(H5)`
 
 const SectionDesc = styled(P)`
 	margin-bottom: 24px;
-`;
-
-const PassportLink = styled(ExternalLink)`
-	color: ${brandColors.pinky[500]};
 `;
 
 export default ProfileOverviewTab;

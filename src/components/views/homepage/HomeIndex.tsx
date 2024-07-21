@@ -19,7 +19,7 @@ import { FETCH_HOMEPAGE_DATA } from '@/apollo/gql/gqlHomePage';
 import { LatestUpdatesBlock } from './latestUpdates/LatestUpdatesBlock';
 import StorageLabel from '@/lib/localStorage';
 import TorusBanner from './TorusBanner';
-// import FundraisingBanner from './FundraisingBanner';
+import AnnouncementBanner from './AnnouncementBanner';
 
 const HomeIndex: FC<IHomeRoute> = props => {
 	const {
@@ -66,7 +66,7 @@ const HomeIndex: FC<IHomeRoute> = props => {
 
 	return (
 		<Wrapper>
-			{/* <FundraisingBanner /> */}
+			<AnnouncementBanner />
 			{showTorusBanner && <TorusBanner />}
 			<IntroBlock />
 			<Separator />
