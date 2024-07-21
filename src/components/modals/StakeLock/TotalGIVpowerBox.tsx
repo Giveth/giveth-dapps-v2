@@ -9,15 +9,15 @@ import styled from 'styled-components';
 import { useEffect, useState } from 'react';
 import BigNumber from 'bignumber.js';
 import { useAccount } from 'wagmi';
+import { useQueryClient } from '@tanstack/react-query';
 import { formatWeiHelper } from '@/helpers/number';
-import { useAppSelector } from '@/features/hooks';
 import { WrappedSpinner } from '@/components/Spinner';
 import { getTotalGIVpower } from '@/helpers/givpower';
 import { getGIVpowerOnChain } from '@/lib/stakingPool';
 
 const TotalGIVpowerBox = () => {
 	const [totalGIVpower, setTotalGIVpower] = useState<BigNumber>();
-	const values = useAppSelector(state => state.subgraph);
+	const queryClient = useQueryClient();
 	const { chain } = useAccount();
 	const chainId = chain?.id;
 	const { address } = useAccount();
@@ -33,7 +33,7 @@ const TotalGIVpowerBox = () => {
 				);
 				// if we can get the GIVpower from the contract, we use that
 				if (_totalGIVpower) {
-					const { total } = getTotalGIVpower(values, {
+					const { total } = getTotalGIVpower(queryClient, address, {
 						chainId,
 						balance: new BigNumber(_totalGIVpower.toString()),
 					});
@@ -43,12 +43,12 @@ const TotalGIVpowerBox = () => {
 				console.log('Error on getGIVpowerOnChain', { err });
 			}
 			// if we can't get the GIVpower from the contract, we calculate it from the subgraph
-			const { total } = getTotalGIVpower(values);
+			const { total } = getTotalGIVpower(queryClient, address);
 			setTotalGIVpower(total);
 		}
 
 		fetchTotalGIVpower();
-	}, [address, chainId, values]);
+	}, [address, chainId, queryClient]);
 
 	return (
 		<BoxContainer>
