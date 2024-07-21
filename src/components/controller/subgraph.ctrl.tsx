@@ -39,9 +39,8 @@ export const fetchSubgraphData = async (
 };
 
 const SubgraphController = () => {
-	const { chain } = useAccount();
+	const { chain, address } = useAccount();
 	const chainId = chain?.id;
-	const { address } = useAccount();
 
 	useQueries({
 		queries: config.CHAINS_WITH_SUBGRAPH.map(chain => ({
