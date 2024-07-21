@@ -9,7 +9,6 @@ import NProgress from 'nprogress';
 import { useRouter } from 'next/router';
 import { Provider as ReduxProvider } from 'react-redux';
 import { SpeedInsights } from '@vercel/speed-insights/next';
-// import Script from 'next/script';
 import { GoogleAnalytics } from '@next/third-parties/google';
 import { loadErrorMessages, loadDevMessages } from '@apollo/client/dev';
 import { WagmiProvider } from 'wagmi';
@@ -41,7 +40,6 @@ import { zIndex } from '@/lib/constants/constants';
 import configuration, { isProduction } from '@/configuration';
 import MaintenanceIndex from '@/components/views/Errors/MaintenanceIndex';
 import { SolanaProvider } from '@/providers/solanaWalletProvider';
-// import { pageview } from '@/helpers/googleAnalytics';
 import type { AppProps } from 'next/app';
 
 if (!isProduction) {
@@ -118,7 +116,15 @@ function MyApp({ Component, pageProps }: AppProps) {
 		};
 		const handleChangeComplete = (url: string) => {
 			NProgress.done();
-			isProduction && window.analytics.page(url);
+			if (isProduction && typeof window.gtag === 'function') {
+				window.gtag(
+					'config',
+					process.env.NEXT_PUBLIC_ANALYTICS_WRITE_KEY || '',
+					{
+						page_path: url,
+					},
+				);
+			}
 		};
 		const handleChangeError = () => {
 			NProgress.done();
