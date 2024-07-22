@@ -31,6 +31,7 @@ import {
 import InlineToast, { EToastType } from '@/components/toasts/InlineToast';
 import links from '@/lib/constants/links';
 import { useAppSelector } from '@/features/hooks';
+import { mediaQueries } from '@/lib/constants/constants';
 
 interface PassportModalProps extends IModal {
 	qfEligibilityState: EQFElegibilityState;
@@ -363,6 +364,10 @@ const StyledWrapper = styled.div`
 	padding: 16px;
 	flex-direction: column;
 	gap: 16px;
+
+	${mediaQueries.tablet} {
+		width: 600px;
+	}
 `;
 
 const PassportInfoBox = styled(P)`
