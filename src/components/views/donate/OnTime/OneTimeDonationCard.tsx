@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import React, { FC, useEffect, useState } from 'react';
+import React, { FC, useEffect, useMemo, useState } from 'react';
 import { useIntl } from 'react-intl';
 import {
 	B,
@@ -9,11 +9,12 @@ import {
 	IconCaretDown16,
 	IconRefresh16,
 	neutralColors,
+	semanticColors,
 } from '@giveth/ui-design-system';
 // @ts-ignore
 import { captureException } from '@sentry/nextjs';
 import { Address, Chain, formatUnits, zeroAddress } from 'viem';
-import { useBalance } from 'wagmi';
+import { useBalance, useEstimateGas } from 'wagmi';
 import { setShowWelcomeModal } from '@/features/modal/modal.slice';
 import CheckBox from '@/components/Checkbox';
 
@@ -59,6 +60,7 @@ import { TokenIcon } from '../TokenIcon/TokenIcon';
 import { SelectTokenModal } from './SelectTokenModal/SelectTokenModal';
 import { Spinner } from '@/components/Spinner';
 import { useSolanaBalance } from '@/hooks/useSolanaBalance';
+import { formatCrypto } from '../../../../helpers/number';
 
 const CryptoDonation: FC = () => {
 	const {
@@ -120,6 +122,25 @@ const CryptoDonation: FC = () => {
 				? (address as Address)
 				: undefined,
 	});
+
+	const estimatedGasFeeObj = useMemo(() => {
+		const selectedChain = chain as Chain;
+		return {
+			chainId: selectedChain?.id,
+			to: addresses?.find(a => a.chainType === walletChainType)
+				?.address as Address,
+			value: amount,
+		};
+	}, [chain, addresses, amount, walletChainType]);
+
+	const { data: estimatedGasFee } = useEstimateGas(estimatedGasFeeObj);
+
+	const gasfee = useMemo(() => {
+		if (walletChainType !== ChainType.EVM || !estimatedGasFee) {
+			return 0n;
+		}
+		return estimatedGasFee;
+	}, [estimatedGasFee, walletChainType]);
 
 	const {
 		data: solanaBalance,
@@ -279,6 +300,23 @@ const CryptoDonation: FC = () => {
 		}
 	};
 
+	useEffect(() => {
+		if (
+			amount > selectedTokenBalance &&
+			selectedOneTimeToken?.chainType === ChainType.EVM
+		) {
+			setAmountError(true);
+		} else {
+			setAmountError(false);
+		}
+	}, [selectedTokenBalance, amount, selectedOneTimeToken?.chainType]);
+
+	const amountErrorText = useMemo(() => {
+		const totalAmount = formatCrypto(amount + gasfee, tokenDecimals);
+		const tokenSymbol = selectedOneTimeToken?.symbol;
+		return `You need to keep at least ${totalAmount} ${tokenSymbol} in our wallet to pay the network fees for this transaction. Please enter a lower amount.`;
+	}, [gasfee, selectedOneTimeToken?.symbol, tokenDecimals, amount]);
+
 	return (
 		<MainContainer>
 			{showQFModal && (
@@ -351,10 +389,10 @@ const CryptoDonation: FC = () => {
 						decimals={selectedOneTimeToken?.decimals}
 					/>
 				</InputWrapper>
-				<Flex gap='4px'>
+				<Flex gap='4px' $alignItems='center'>
 					<GLinkStyled
 						size='Small'
-						onClick={() => setAmount(selectedTokenBalance)}
+						onClick={() => setAmount(selectedTokenBalance - gasfee)}
 					>
 						{formatMessage({
 							id: 'label.available',
@@ -377,6 +415,7 @@ const CryptoDonation: FC = () => {
 							<IconRefresh16 />
 						)}
 					</IconWrapper>
+					{amountError && <WarnError>{amountErrorText}</WarnError>}
 				</Flex>
 			</Flex>
 			{hasActiveQFRound && !isOnEligibleNetworks && walletChainType && (
@@ -469,6 +508,12 @@ const CryptoDonation: FC = () => {
 		</MainContainer>
 	);
 };
+
+const WarnError = styled.div`
+	color: ${semanticColors.punch[500]};
+	font-size: 12px;
+	padding: 12px;
+`;
 
 const EmptySpace = styled.div`
 	margin-top: 70px;
