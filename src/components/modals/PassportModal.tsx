@@ -192,12 +192,10 @@ const PassportModal: FC<PassportModalProps> = props => {
 
 	const handleCloseModal = useCallback(() => {
 		closeModal();
-		console.log('closeModal');
 		if (
 			qfEligibilityState === EQFElegibilityState.ERROR ||
 			passportState === EPassportState.ERROR
 		) {
-			console.log('closeModal');
 			user && updateState?.(user);
 		}
 	}, [closeModal, qfEligibilityState, passportState, updateState, user]);
