@@ -360,10 +360,15 @@ const CryptoDonation: FC = () => {
 							id: 'label.available',
 						})}
 						:{' '}
-						{truncateToDecimalPlaces(
-							formatUnits(selectedTokenBalance, tokenDecimals),
-							tokenDecimals / 3,
-						)}
+						{selectedOneTimeToken
+							? truncateToDecimalPlaces(
+									formatUnits(
+										selectedTokenBalance,
+										tokenDecimals,
+									),
+									tokenDecimals / 3,
+								)
+							: 0.0}
 					</GLinkStyled>
 					<IconWrapper onClick={() => !isRefetching && refetch()}>
 						{isRefetching ? (
