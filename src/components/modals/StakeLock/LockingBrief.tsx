@@ -1,9 +1,12 @@
 import { brandColors, H5, Flex } from '@giveth/ui-design-system';
 import styled from 'styled-components';
+import { useAccount } from 'wagmi';
+import { useQuery } from '@tanstack/react-query';
 import { formatWeiHelper } from '@/helpers/number';
 import { smallFormatDate } from '@/lib/helpers';
-import { useAppSelector } from '@/features/hooks';
 import { getUnlockDate } from '@/helpers/givpower';
+import config from '@/configuration';
+import { fetchSubgraphData } from '@/components/controller/subgraph.ctrl';
 import type { FC } from 'react';
 import type { IGIVpower } from '@/types/subgraph';
 
@@ -17,9 +20,14 @@ const LockingBrief: FC<ILockingBrief> = ({
 	amount,
 	onLocking = false,
 }) => {
-	const givpowerInfo = useAppSelector(
-		state => state.subgraph.gnosisValues.givpowerInfo,
-	) as IGIVpower;
+	const { address } = useAccount();
+	const gnosisValues = useQuery({
+		queryKey: ['subgraph', config.GNOSIS_NETWORK_NUMBER, address],
+		queryFn: async () =>
+			await fetchSubgraphData(config.GNOSIS_NETWORK_NUMBER, address),
+		staleTime: config.SUBGRAPH_POLLING_INTERVAL,
+	});
+	const givpowerInfo = gnosisValues.data?.givpowerInfo as IGIVpower;
 	const unlockDate = new Date(getUnlockDate(givpowerInfo, round));
 	return (
 		<BriefContainer>
