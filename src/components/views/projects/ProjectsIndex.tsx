@@ -10,7 +10,6 @@ import {
 import styled from 'styled-components';
 import { useIntl } from 'react-intl';
 import { captureException } from '@sentry/nextjs';
-
 import { QueryFunctionContext, useInfiniteQuery } from '@tanstack/react-query';
 import ProjectCard from '@/components/project-card/ProjectCard';
 import Routes from '@/lib/constants/Routes';
@@ -18,14 +17,12 @@ import { isUserRegistered, showToastError } from '@/lib/helpers';
 import { FETCH_ALL_PROJECTS } from '@/apollo/gql/gqlProjects';
 import { client } from '@/apollo/apolloClient';
 import { IProject } from '@/apollo/types/types';
-import { IFetchAllProjects } from '@/apollo/types/gqlTypes';
 import ProjectsNoResults from '@/components/views/projects/ProjectsNoResults';
 import { BACKEND_QUERY_LIMIT, mediaQueries } from '@/lib/constants/constants';
 import { useAppDispatch, useAppSelector } from '@/features/hooks';
 import { setShowCompleteProfile } from '@/features/modal/modal.slice';
 import { ProjectsBanner } from './ProjectsBanner';
 import { useProjectsContext } from '@/context/projects.context';
-
 import { ProjectsMiddleBanner } from './MiddleBanners/ProjectsMiddleBanner';
 import { ActiveQFProjectsBanner } from './qfBanner/ActiveQFProjectsBanner';
 import { PassportBanner } from '@/components/PassportBanner';
@@ -54,6 +51,9 @@ interface IQueries {
 	connectedWalletUserId?: number;
 }
 
+/**
+ * A page of projects - return type in fetchProjects function
+ */
 interface Page {
 	data: IProject[];
 	previousCursor?: number;
@@ -67,7 +67,6 @@ const ProjectsIndex = (props: IProjectsView) => {
 	const { activeQFRound, mainCategories } = useAppSelector(
 		state => state.general,
 	);
-	const [isLoading, setIsLoading] = useState(false);
 	const [isNotFound, setIsNotFound] = useState(false);
 	const [filteredProjects, setFilteredProjects] =
 		useState<IProject[]>(projects);
@@ -84,26 +83,17 @@ const ProjectsIndex = (props: IProjectsView) => {
 	} = useProjectsContext();
 
 	const router = useRouter();
-	const pageNum = useRef(0);
 	const lastElementRef = useRef<HTMLDivElement>(null);
 	const isInfiniteScrolling = useRef(true);
 
-	router?.events?.on('routeChangeStart', () => setIsLoading(true));
-
 	// Default values for queryKey
 	const [isLoadMore, setIsLoadMore] = useState(false);
-	// const [loadNum, setLoadNum] = useState(1);
 	const [userIdChanged, setUserIdChanged] = useState(false);
 
 	const fetchProjects = useCallback(
 		async (pageParam: number | unknown): Promise<Page> => {
-			// const currentPage = pageParam === undefined ? pageParam : 0;
 			console.log('pageParam', pageParam);
 			const currentPage = typeof pageParam === 'number' ? pageParam : 0;
-
-			console.log('currentPage', pageParam);
-			console.log('skip projects.length', projects.length);
-			console.log('skip', projects.length * (currentPage || 0));
 
 			const variables: IQueries = {
 				limit: userIdChanged
@@ -118,72 +108,6 @@ const ProjectsIndex = (props: IProjectsView) => {
 				variables.connectedWalletUserId = Number(user?.id);
 			}
 
-			setIsLoading(true);
-			// if (
-			// 	contextVariables.mainCategory !== router.query?.slug?.toString()
-			// ) {
-			// 	console.log('run first');
-			// 	return {
-			// 		data: filteredProjects,
-			// 		previousCursor: 0,
-			// 		nextCursor: 0,
-			// 	};
-			// }
-
-			// client
-			// 	.query({
-			// 		query: FETCH_ALL_PROJECTS,
-			// 		variables: {
-			// 			...variables,
-			// 			...contextVariables,
-			// 			mainCategory: isArchivedQF
-			// 				? undefined
-			// 				: getMainCategorySlug(selectedMainCategory),
-			// 			qfRoundSlug: isArchivedQF ? router.query.slug : null,
-			// 		},
-			// 	})
-			// 	.then((res: { data: { allProjects: IFetchAllProjects } }) => {
-			// 		const data = res.data?.allProjects?.projects;
-			// 		console.log({ res });
-			// 		const count = res.data?.allProjects?.totalCount;
-			// 		setTotalCount(count);
-
-			// 		setFilteredProjects(prevProjects => {
-			// 			isInfiniteScrolling.current =
-			// 				(data.length + prevProjects.length) % 45 !== 0;
-			// 			return isLoadMore ? [...prevProjects, ...data] : data;
-			// 		});
-			// 		setIsLoading(false);
-
-			// 		console.log('run third');
-
-			// 		const result = {
-			// 			data: data,
-			// 			previousCursor: projects.length * (currentPage || 0),
-			// 			nextCursor: projects.length * (currentPage || 0) + 15,
-			// 		};
-
-			// 		console.log('fetchProjects result', result);
-			// 		return result;
-			// 	})
-			// 	.catch((err: any) => {
-			// 		setIsLoading(false);
-			// 		showToastError(err);
-			// 		captureException(err, {
-			// 			tags: {
-			// 				section: 'fetchAllProjects',
-			// 			},
-			// 		});
-			// 	});
-
-			// console.log('run second');
-
-			// return {
-			// 	data: filteredProjects,
-			// 	previousCursor: projects.length * (currentPage || 0),
-			// 	nextCursor: projects.length * (currentPage || 0) + 15,
-			// };
-
 			const res = await client.query({
 				query: FETCH_ALL_PROJECTS,
 				variables: {
@@ -197,7 +121,6 @@ const ProjectsIndex = (props: IProjectsView) => {
 			});
 
 			const data = res.data?.allProjects?.projects;
-			console.log({ res });
 			const count = res.data?.allProjects?.totalCount;
 			setTotalCount(count);
 
@@ -207,14 +130,10 @@ const ProjectsIndex = (props: IProjectsView) => {
 				return isLoadMore ? [...prevProjects, ...data] : data;
 			});
 
-			console.log('run second');
-
-			setIsLoading(false);
-
 			return {
 				data: data,
-				previousCursor: currentPage ? currentPage - 1 : 0,
-				nextCursor: currentPage ? currentPage + 1 : 0,
+				previousCursor: currentPage - 1,
+				nextCursor: currentPage + 1,
 			};
 		},
 		[
@@ -234,7 +153,6 @@ const ProjectsIndex = (props: IProjectsView) => {
 		data,
 		error,
 		fetchNextPage,
-		hasNextPage,
 		isError,
 		isFetching,
 		isFetchingNextPage,
@@ -242,42 +160,23 @@ const ProjectsIndex = (props: IProjectsView) => {
 		queryKey: ['projects'],
 		queryFn: ({ pageParam = 0 }: QueryFunctionContext) =>
 			fetchProjects(pageParam),
-		getNextPageParam: (lastPage, fetchedData) => {
-			console.log('getNextPageParam called', lastPage, fetchedData);
+		getNextPageParam: lastPage => {
 			return lastPage.nextCursor;
 		},
 		initialPageParam: 0,
 	});
 
 	useEffect(() => {
-		if (data) {
-			console.log('Data from React Query:', data);
-		}
-		if (hasNextPage !== undefined) {
-			console.log('Has Next Page:', hasNextPage);
-		}
-		if (isFetchingNextPage !== undefined) {
-			console.log('Is Fetching Next Page:', isFetchingNextPage);
-		}
-	}, [data, hasNextPage, isFetchingNextPage]);
+		setUserIdChanged(prevState => !prevState);
+		fetchNextPage({ cancelRefetch: true });
+	}, [fetchNextPage, user?.id]);
 
-	// useEffect(() => {
-	// 	pageNum.current = 0;
-	// 	fetchProjects(false, 0, true);
-	// }, [user?.id]);
-
-	// useEffect(() => {
-	// 	pageNum.current = 0;
-	// 	fetchProjects(false, 0);
-	// }, [contextVariables]);
+	useEffect(() => {
+		fetchNextPage({ cancelRefetch: true });
+	}, [contextVariables]);
 
 	const loadMore = useCallback(() => {
-		// if (isLoading) return;
-		// fetchProjects(true, pageNum.current + 1);
-		// pageNum.current = pageNum.current + 1;
-		console.log('LOAD MORE');
-		// fetchNextPage();
-		// }, [fetchProjects, isLoading]);
+		fetchNextPage();
 	}, [fetchNextPage]);
 
 	const handleCreateButton = () => {
@@ -293,28 +192,28 @@ const ProjectsIndex = (props: IProjectsView) => {
 
 	const onProjectsPageOrActiveQFPage = !isQF || (isQF && activeQFRound);
 
-	// useEffect(() => {
-	// 	const handleObserver = (entities: any) => {
-	// 		if (!isInfiniteScrolling.current) return;
-	// 		const target = entities[0];
-	// 		if (target.isIntersecting) {
-	// 			loadMore();
-	// 		}
-	// 	};
-	// 	const option = {
-	// 		root: null,
-	// 		threshold: 1,
-	// 	};
-	// 	const observer = new IntersectionObserver(handleObserver, option);
-	// 	if (lastElementRef.current) {
-	// 		observer.observe(lastElementRef.current);
-	// 	}
-	// 	return () => {
-	// 		if (observer) {
-	// 			observer.disconnect();
-	// 		}
-	// 	};
-	// }, [loadMore]);
+	useEffect(() => {
+		const handleObserver = (entities: any) => {
+			if (!isInfiniteScrolling.current) return;
+			const target = entities[0];
+			if (target.isIntersecting) {
+				loadMore();
+			}
+		};
+		const option = {
+			root: null,
+			threshold: 1,
+		};
+		const observer = new IntersectionObserver(handleObserver, option);
+		if (lastElementRef.current) {
+			observer.observe(lastElementRef.current);
+		}
+		return () => {
+			if (observer) {
+				observer.disconnect();
+			}
+		};
+	}, [loadMore]);
 
 	useEffect(() => {
 		if (
@@ -329,18 +228,19 @@ const ProjectsIndex = (props: IProjectsView) => {
 	if (isNotFound)
 		return <NotAvailable description='Oops! Page Not Found...' />;
 
-	// TODO: Add a loading spinner when isFetchingNextPage is true
-	if (isFetching && !isFetchingNextPage) {
-		return <div>Loading...</div>;
-	}
-
+	// Handle fetching errors -
 	if (isError) {
-		return <div>Error: {error.message}</div>;
+		showToastError(error);
+		captureException(error, {
+			tags: {
+				section: 'fetchAllProjects',
+			},
+		});
 	}
 
 	return (
 		<>
-			{isLoading && (
+			{isFetching && !isFetchingNextPage && (
 				<Loading>
 					<Spinner />
 				</Loading>
@@ -375,7 +275,9 @@ const ProjectsIndex = (props: IProjectsView) => {
 						<SortContainer totalCount={totalCount} />
 					</SortingContainer>
 				)}
-				{isLoading && <Loader className='dot-flashing' />}
+				{isFetching && !isFetchingNextPage && (
+					<Loader className='dot-flashing' />
+				)}
 				{filteredProjects?.length > 0 ? (
 					<ProjectsWrapper>
 						<ProjectsContainer>
@@ -395,13 +297,6 @@ const ProjectsIndex = (props: IProjectsView) => {
 									))}
 								</Fragment>
 							))}
-							{/* {filteredProjects.map((project, idx) => (
-								<ProjectCard
-									key={project.id}
-									project={project}
-									order={idx}
-								/>
-							))} */}
 						</ProjectsContainer>
 						{/* <FloatingButtonReferral /> */}
 					</ProjectsWrapper>
@@ -418,14 +313,14 @@ const ProjectsIndex = (props: IProjectsView) => {
 						<StyledButton
 							onClick={loadMore}
 							label={
-								isLoading
+								isFetching
 									? ''
 									: formatMessage({
 											id: 'component.button.load_more',
 										})
 							}
 							icon={
-								isLoading && (
+								isFetching && (
 									<LoadingDotIcon>
 										<div className='dot-flashing' />
 									</LoadingDotIcon>
@@ -441,12 +336,6 @@ const ProjectsIndex = (props: IProjectsView) => {
 						/>
 					</>
 				)}
-				<button
-					onClick={() => fetchNextPage()}
-					className='w-full bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline'
-				>
-					{isFetchingNextPage ? 'Loading...' : 'Load More'}
-				</button>
 			</Wrapper>
 		</>
 	);
