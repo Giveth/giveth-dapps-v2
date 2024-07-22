@@ -349,5 +349,5 @@ export const usePassport = () => {
 		activeQFRound,
 	]);
 
-	return { info, handleSign, refreshScore, fetchUserMBDScore };
+	return { info, updateState, handleSign, refreshScore, fetchUserMBDScore };
 };
