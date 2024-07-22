@@ -9,18 +9,27 @@ import styled from 'styled-components';
 import { useEffect, useState } from 'react';
 import BigNumber from 'bignumber.js';
 import { useAccount } from 'wagmi';
-import { useQueryClient } from '@tanstack/react-query';
+import { useQueries } from '@tanstack/react-query';
 import { formatWeiHelper } from '@/helpers/number';
 import { WrappedSpinner } from '@/components/Spinner';
 import { getTotalGIVpower } from '@/helpers/givpower';
 import { getGIVpowerOnChain } from '@/lib/stakingPool';
+import config from '@/configuration';
+import { fetchSubgraphData } from '@/components/controller/subgraph.ctrl';
 
 const TotalGIVpowerBox = () => {
 	const [totalGIVpower, setTotalGIVpower] = useState<BigNumber>();
-	const queryClient = useQueryClient();
-	const { chain } = useAccount();
+	const { address, chain } = useAccount();
 	const chainId = chain?.id;
-	const { address } = useAccount();
+	const subgraphValues = useQueries({
+		queries: config.CHAINS_WITH_SUBGRAPH.map(chain => ({
+			queryKey: ['subgraph', chain.id, address],
+			queryFn: async () => {
+				return await fetchSubgraphData(chain.id, address);
+			},
+			staleTime: config.SUBGRAPH_POLLING_INTERVAL,
+		})),
+	});
 
 	useEffect(() => {
 		async function fetchTotalGIVpower() {
@@ -33,22 +42,26 @@ const TotalGIVpowerBox = () => {
 				);
 				// if we can get the GIVpower from the contract, we use that
 				if (_totalGIVpower) {
-					const { total } = getTotalGIVpower(queryClient, address, {
-						chainId,
-						balance: new BigNumber(_totalGIVpower.toString()),
-					});
+					const { total } = getTotalGIVpower(
+						subgraphValues,
+						address,
+						{
+							chainId,
+							balance: new BigNumber(_totalGIVpower.toString()),
+						},
+					);
 					return setTotalGIVpower(total);
 				}
 			} catch (err) {
 				console.error('Error on getGIVpowerOnChain', { err });
 			}
 			// if we can't get the GIVpower from the contract, we calculate it from the subgraph
-			const { total } = getTotalGIVpower(queryClient, address);
+			const { total } = getTotalGIVpower(subgraphValues, address);
 			setTotalGIVpower(total);
 		}
 
 		fetchTotalGIVpower();
-	}, [address, chainId, queryClient]);
+	}, [address, chainId, subgraphValues]); // TODO: Cause re-render?!! Should check
 
 	return (
 		<BoxContainer>
