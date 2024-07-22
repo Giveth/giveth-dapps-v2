@@ -2,6 +2,30 @@ import { gql } from '@apollo/client';
 import { CAMPAIGN_CORE_FIELDS } from './gqlCampaign';
 import { PROJECT_CARD_FIELDS } from './gqlProjects';
 
+export const FETCH_CAMPAIGNS_AND_FEATURED_PROJECTS = gql`
+	${PROJECT_CARD_FIELDS}
+	${CAMPAIGN_CORE_FIELDS}
+	query (
+		$featuredProjectsLimit: Int
+		$featuredProjectsSkip: Int
+		$connectedWalletUserId: Int
+	) {
+		featuredProjects(
+			limit: $featuredProjectsLimit
+			skip: $featuredProjectsSkip
+			connectedWalletUserId: $connectedWalletUserId
+		) {
+			projects {
+				...ProjectCardFields
+			}
+			totalCount
+		}
+		campaigns(connectedWalletUserId: $connectedWalletUserId) {
+			...CampaignCoreFields
+		}
+	}
+`;
+
 export const FETCH_HOMEPAGE_DATA = gql`
 	${PROJECT_CARD_FIELDS}
 	${CAMPAIGN_CORE_FIELDS}
@@ -50,23 +74,13 @@ export const FETCH_HOMEPAGE_DATA = gql`
 			projectUpdates {
 				id
 				title
-				projectId
-				userId
 				contentSummary
-				isMain
 				createdAt
-				reaction {
-					id
-					userId
-					reaction
-					projectUpdateId
-				}
 				project {
 					slug
 					image
 				}
 			}
-			count
 		}
 		campaigns(connectedWalletUserId: $connectedWalletUserId) {
 			...CampaignCoreFields
