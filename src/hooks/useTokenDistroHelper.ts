@@ -1,9 +1,11 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { useAccount } from 'wagmi';
-import { useQueryClient } from '@tanstack/react-query';
+import { useQuery } from '@tanstack/react-query';
 import { TokenDistroHelper } from '@/lib/contractHelper/TokenDistroHelper';
 import { SubgraphDataHelper } from '@/lib/subgraph/subgraphDataHelper';
 import { RegenStreamConfig } from '@/types/config';
+import { fetchSubgraphData } from '@/components/controller/subgraph.ctrl';
+import config from '@/configuration';
 
 export const useTokenDistroHelper = (
 	poolNetwork: number,
@@ -13,13 +15,16 @@ export const useTokenDistroHelper = (
 	const [tokenDistroHelper, setTokenDistroHelper] =
 		useState<TokenDistroHelper>();
 	const { address } = useAccount();
-	const queryClient = useQueryClient();
-	const currentValues = queryClient.getQueryData([
-		'subgraph',
-		poolNetwork,
-		address,
-	]);
-	const sdh = new SubgraphDataHelper(currentValues);
+	const currentValues = useQuery({
+		queryKey: ['subgraph', poolNetwork, address],
+		queryFn: async () => await fetchSubgraphData(poolNetwork, address),
+		enabled: !hold,
+		staleTime: config.SUBGRAPH_POLLING_INTERVAL,
+	});
+	const sdh = useMemo(
+		() => new SubgraphDataHelper(currentValues.data),
+		[currentValues],
+	);
 
 	useEffect(() => {
 		if (regenStreamConfig) {
@@ -35,6 +40,6 @@ export const useTokenDistroHelper = (
 				new TokenDistroHelper(sdh.getGIVTokenDistro()),
 			);
 		}
-	}, [currentValues, regenStreamConfig]);
+	}, [currentValues.data, regenStreamConfig, sdh]);
 	return { tokenDistroHelper, sdh };
 };
