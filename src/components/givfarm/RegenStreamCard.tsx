@@ -20,6 +20,7 @@ import BigNumber from 'bignumber.js';
 import styled from 'styled-components';
 import { useIntl } from 'react-intl';
 import { useAccount } from 'wagmi';
+import { useQuery } from '@tanstack/react-query';
 import { durationToString } from '@/lib/helpers';
 import { Bar, GsPTooltip } from '@/components/GIVeconomyPages/GIVstream.sc';
 import { IconWithTooltip } from '@/components/IconWithToolTip';
@@ -34,6 +35,8 @@ import { SubgraphDataHelper } from '@/lib/subgraph/subgraphDataHelper';
 import { TokenDistroHelper } from '@/lib/contractHelper/TokenDistroHelper';
 import { Relative } from '../styled-components/Position';
 import { ArchiveAndNetworkCover } from '../ArchiveAndNetworkCover/ArchiveAndNetworkCover';
+import { getSubgraphChainId } from '@/helpers/network';
+import { fetchSubgraphData } from '../controller/subgraph.ctrl';
 
 interface RegenStreamProps {
 	streamConfig: RegenStreamConfig;
@@ -58,7 +61,14 @@ export const RegenStreamCard: FC<RegenStreamProps> = ({ streamConfig }) => {
 	const [rewardStream, setRewardStream] = useState(0n);
 	const [lockedAmount, setLockedAmount] = useState(0n);
 	const [claimedAmount, setClaimedAmount] = useState(0n);
-	const { chain } = useAccount();
+
+	const { address, chain } = useAccount();
+	const subgraphChainId = getSubgraphChainId(streamConfig.network);
+	const currentValues = useQuery({
+		queryKey: ['subgraph', subgraphChainId, address],
+		queryFn: async () => await fetchSubgraphData(subgraphChainId, address),
+		staleTime: config.SUBGRAPH_POLLING_INTERVAL,
+	});
 	const chainId = chain?.id;
 
 	const {
@@ -71,16 +81,8 @@ export const RegenStreamCard: FC<RegenStreamProps> = ({ streamConfig }) => {
 		archived,
 	} = streamConfig;
 
-	const currentValues = useAppSelector(
-		state =>
-			streamNetwork === config.GNOSIS_NETWORK_NUMBER
-				? state.subgraph.gnosisValues
-				: state.subgraph.mainnetValues,
-		() => (showModal ? true : false),
-	);
-
 	const { regenTokenDistroHelper, tokenDistroBalance } = useMemo(() => {
-		const sdh = new SubgraphDataHelper(currentValues);
+		const sdh = new SubgraphDataHelper(currentValues.data);
 		const tokenDistroBalance =
 			sdh.getTokenDistroBalance(tokenDistroAddress);
 		const regenTokenDistroHelper = new TokenDistroHelper(
