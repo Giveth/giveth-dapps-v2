@@ -1,4 +1,4 @@
-import React, { FC, useEffect } from 'react';
+import React, { FC, useEffect, useCallback } from 'react';
 import styled from 'styled-components';
 import { useIntl } from 'react-intl';
 import {
@@ -30,12 +30,14 @@ import {
 } from '@/components/views/userProfile/common.sc';
 import InlineToast, { EToastType } from '@/components/toasts/InlineToast';
 import links from '@/lib/constants/links';
+import { useAppSelector } from '@/features/hooks';
 
 interface PassportModalProps extends IModal {
 	qfEligibilityState: EQFElegibilityState;
 	passportState: EPassportState | null;
 	passportScore: number | null;
 	currentRound: any;
+	updateState?: (user: any) => void;
 	refreshScore: () => void;
 	fetchUserMBDScore?: () => void;
 	handleSign: () => void;
@@ -75,11 +77,13 @@ const PassportModal: FC<PassportModalProps> = props => {
 		passportState,
 		passportScore,
 		currentRound,
+		updateState,
 		setShowModal,
 		refreshScore,
 		fetchUserMBDScore,
 		handleSign,
 	} = props;
+	const { userData: user } = useAppSelector(state => state.user);
 
 	const { locale, formatMessage } = useIntl();
 	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
@@ -186,20 +190,32 @@ const PassportModal: FC<PassportModalProps> = props => {
 		}
 	};
 
+	const handleCloseModal = useCallback(() => {
+		closeModal();
+		console.log('closeModal');
+		if (
+			qfEligibilityState === EQFElegibilityState.ERROR ||
+			passportState === EPassportState.ERROR
+		) {
+			console.log('closeModal');
+			user && updateState?.(user);
+		}
+	}, [closeModal, qfEligibilityState, passportState, updateState, user]);
+
 	useEffect(() => {
 		if (
 			qfEligibilityState === EQFElegibilityState.ERROR ||
 			qfEligibilityState === EQFElegibilityState.ELIGIBLE
 		) {
 			setTimeout(() => {
-				closeModal();
+				handleCloseModal();
 			}, 5000);
 		}
-	}, [passportState, qfEligibilityState, closeModal]);
+	}, [passportState, qfEligibilityState, handleCloseModal]);
 
 	return (
 		<Modal
-			closeModal={closeModal}
+			closeModal={handleCloseModal}
 			isAnimating={isAnimating}
 			headerTitlePosition='left'
 			doNotCloseOnClickOutside
