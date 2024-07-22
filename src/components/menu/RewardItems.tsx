@@ -107,7 +107,7 @@ export const RewardItems: FC<IRewardItemsProps> = ({
 			pools = networkConfig.pools;
 		}
 
-		if (pools) {
+		if (pools && currentValues.data) {
 			let _farmRewards = 0n;
 			pools.forEach(pool => {
 				if (pool.type !== StakingType.UNISWAPV3_ETH_GIV) {
