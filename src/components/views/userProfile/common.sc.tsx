@@ -22,8 +22,16 @@ export const PassportSection = styled.div`
 
 export const StyledNote = styled(P)`
 	display: flex;
-	align-items: center;
+	align-items: start;
 	gap: 8px;
+
+	:first-child {
+		margin-top: 3px;
+	}
+
+	:last-child {
+		min-width: 40px;
+	}
 `;
 
 export const QFMinScore = styled(P)`

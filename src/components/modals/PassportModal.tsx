@@ -360,11 +360,11 @@ const PassportModal: FC<PassportModalProps> = props => {
 };
 
 const StyledWrapper = styled.div`
-	padding: 16px;
 	display: flex;
+	margin-inline: auto;
+	padding: 16px;
 	flex-direction: column;
 	gap: 16px;
-	width: 600px;
 `;
 
 const PassportInfoBox = styled(P)`

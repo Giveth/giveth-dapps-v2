@@ -18,7 +18,7 @@ export const QFEligibilityBG = styled(Flex)<{ $background: string }>`
 	flex-direction: column;
 	gap: 24px;
 	background-color: ${neutralColors.gray[100]};
-	width: 85%;
+	width: 98%;
 	max-width: 1076px;
 	position: relative;
 	overflow: hidden;
@@ -38,6 +38,10 @@ export const QFEligibilityBG = styled(Flex)<{ $background: string }>`
 	${mediaQueries.laptopS} {
 		min-height: 765px;
 	}
+
+	${mediaQueries.mobileL} {
+		width: 85%;
+	}
 `;
 
 export const QFEligibilityBGInner = styled(ContributeCardBox)`
@@ -46,8 +50,16 @@ export const QFEligibilityBGInner = styled(ContributeCardBox)`
 	flex-direction: column;
 	gap: 16px;
 	z-index: 1;
-	width: 50%;
+	width: 100%;
 	margin-block: auto;
+
+	${mediaQueries.tablet} {
+		width: 70%;
+	}
+
+	${mediaQueries.laptopS} {
+		width: 50%;
+	}
 `;
 
 export const EligibilityTop = styled(Flex)`
