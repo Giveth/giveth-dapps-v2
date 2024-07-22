@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 
-import { useQueryClient } from '@tanstack/react-query';
+import { useQuery } from '@tanstack/react-query';
 import { useAccount } from 'wagmi';
 import {
 	getGivStakingAPR,
@@ -10,6 +10,8 @@ import {
 import { SimplePoolStakingConfig, StakingType } from '@/types/config';
 import { APR, UserStakeInfo } from '@/types/poolInfo';
 import { Zero } from '@/helpers/number';
+import { fetchSubgraphData } from '@/components/controller/subgraph.ctrl';
+import config from '@/configuration';
 
 export interface IStakeInfo {
 	apr: APR;
@@ -29,12 +31,12 @@ export const useStakingPool = (
 		stakedAmount: 0n,
 	});
 	const { chain, address } = useAccount();
-	const queryClient = useQueryClient();
-	const currentValues = queryClient.getQueryData([
-		'subgraph',
-		chain?.id,
-		address,
-	]);
+	const currentValues = useQuery({
+		queryKey: ['subgraph', chain?.id, address],
+		queryFn: async () => await fetchSubgraphData(chain?.id, address),
+		enabled: !!chain,
+		staleTime: config.SUBGRAPH_POLLING_INTERVAL,
+	});
 
 	const { network, type } = poolStakingConfig;
 
@@ -68,7 +70,7 @@ export const useStakingPool = (
 
 	useEffect(() => {
 		setUserStakeInfo(getUserStakeInfo(currentValues, poolStakingConfig));
-	}, [currentValues, poolStakingConfig]);
+	}, [currentValues.data, poolStakingConfig]);
 
 	return {
 		apr,
