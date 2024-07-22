@@ -150,6 +150,7 @@ const InvestCard: FC<IClaimViewCardProps> = ({ index }) => {
 	);
 
 	useEffect(() => {
+		if (!gnosisValues.data || !mainnetValues.data) return;
 		const getMaxAPR = async (promises: Promise<APR>[]) => {
 			const stakePoolAPRs = await Promise.all(promises);
 			let maxApr = Zero;

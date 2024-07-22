@@ -159,6 +159,7 @@ const GovernCard: FC<IClaimViewCardProps> = ({ index }) => {
 	useEffect(() => {
 		if (!chainId) return;
 		const cb = () => {
+			if (!gnosisValues.data) return;
 			getGivStakingAPR(
 				config.GNOSIS_NETWORK_NUMBER,
 				gnosisValues.data,
