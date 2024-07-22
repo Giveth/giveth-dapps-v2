@@ -23,7 +23,7 @@ export const useTokenDistroHelper = (
 	});
 	const sdh = useMemo(
 		() => new SubgraphDataHelper(currentValues.data),
-		[currentValues],
+		[currentValues.data],
 	);
 
 	useEffect(() => {
