@@ -34,20 +34,22 @@ export const useStakingPool = (
 	const currentValues = useQuery({
 		queryKey: ['subgraph', chain?.id, address],
 		queryFn: async () => await fetchSubgraphData(chain?.id, address),
-		enabled: !!chain,
+		enabled: !hold,
 		staleTime: config.SUBGRAPH_POLLING_INTERVAL,
 	});
 
-	const { network, type } = poolStakingConfig;
-
 	useEffect(() => {
+		const { network, type } = poolStakingConfig;
 		const cb = () => {
-			if (currentValues) {
+			if (currentValues.data) {
 				const promise: Promise<APR> =
 					type === StakingType.GIV_GARDEN_LM ||
 					type === StakingType.GIV_UNIPOOL_LM
-						? getGivStakingAPR(network, currentValues, network)
-						: getLPStakingAPR(poolStakingConfig, currentValues);
+						? getGivStakingAPR(network, currentValues.data, network)
+						: getLPStakingAPR(
+								poolStakingConfig,
+								currentValues.data,
+							);
 				promise.then(setApr).catch(e => {
 					console.error('Error Calculating APR', e);
 					setApr({ effectiveAPR: Zero });
@@ -66,10 +68,13 @@ export const useStakingPool = (
 				clearInterval(interval);
 			}
 		};
-	}, [currentValues]);
+	}, [currentValues.data, poolStakingConfig]);
 
 	useEffect(() => {
-		setUserStakeInfo(getUserStakeInfo(currentValues, poolStakingConfig));
+		if (!currentValues.data) return;
+		setUserStakeInfo(
+			getUserStakeInfo(currentValues.data, poolStakingConfig),
+		);
 	}, [currentValues.data, poolStakingConfig]);
 
 	return {
