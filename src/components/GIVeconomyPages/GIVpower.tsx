@@ -16,7 +16,8 @@ import {
 import Link from 'next/link';
 import { useIntl } from 'react-intl';
 import { useWeb3Modal } from '@web3modal/wagmi/react';
-import { useQueryClient } from '@tanstack/react-query';
+import { useAccount } from 'wagmi';
+import { useQueries } from '@tanstack/react-query';
 import {
 	GIVpowerTopContainer,
 	Title,
@@ -65,12 +66,22 @@ import links from '@/lib/constants/links';
 import { getTotalGIVpower } from '@/helpers/givpower';
 import { useGeneralWallet } from '@/providers/generalWalletProvider';
 import { ChainType } from '@/types/config';
+import { fetchSubgraphData } from '../controller/subgraph.ctrl';
 
 export function TabPowerTop() {
 	const { formatMessage } = useIntl();
 	const { open: openConnectModal } = useWeb3Modal();
-	const queryClient = useQueryClient();
-	const givPower = getTotalGIVpower(queryClient);
+	const { address } = useAccount();
+	const subgraphValues = useQueries({
+		queries: config.CHAINS_WITH_SUBGRAPH.map(chain => ({
+			queryKey: ['subgraph', chain.id, address],
+			queryFn: async () => {
+				return await fetchSubgraphData(chain.id, address);
+			},
+			staleTime: config.SUBGRAPH_POLLING_INTERVAL,
+		})),
+	});
+	const givPower = getTotalGIVpower(subgraphValues, address);
 	const givPowerFormatted = formatWeiHelper(givPower.total);
 	const hasZeroGivPower = givPowerFormatted === '0';
 
