@@ -5,11 +5,12 @@ import config from '@/configuration';
 import { fetchSubgraph } from '@/services/subgraph.service';
 import { SubgraphQueryBuilder } from '@/lib/subgraph/subgraphQueryBuilder';
 import { transformSubgraphData } from '@/lib/subgraph/subgraphDataTransform';
+import { ISubgraphState } from '@/types/subgraph';
 
 export const fetchSubgraphData = async (
 	chainId?: number,
 	address?: Address,
-) => {
+): Promise<ISubgraphState> => {
 	if (!chainId || !address) return {};
 	// try {
 	let response;
