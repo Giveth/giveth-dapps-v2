@@ -1,7 +1,7 @@
 import React, { FC, useEffect, useState } from 'react';
 import { useAccount } from 'wagmi';
 import { FlexSpacer } from '@giveth/ui-design-system';
-import { useQueryClient } from '@tanstack/react-query';
+import { useQuery } from '@tanstack/react-query';
 import {
 	MenuAndButtonContainer,
 	BalanceButton,
@@ -22,6 +22,8 @@ import { MenuContainer } from './Menu.sc';
 import { ItemsProvider } from '@/context/Items.context';
 import { SubgraphDataHelper } from '@/lib/subgraph/subgraphDataHelper';
 import { formatWeiHelper } from '@/helpers/number';
+import { fetchSubgraphData } from '../controller/subgraph.ctrl';
+import config from '@/configuration';
 
 interface IRewardButtonWithMenuProps extends IHeaderButtonProps {}
 
@@ -99,13 +101,13 @@ export const RewardButtonWithMenu: FC<IRewardButtonWithMenuProps> = ({
 
 const HeaderRewardButton = () => {
 	const { chain, address } = useAccount();
-	const queryClient = useQueryClient();
-	const currentValues = queryClient.getQueryData([
-		'subgraph',
-		chain?.id,
-		address,
-	]);
-	const sdh = new SubgraphDataHelper(currentValues);
+	const currentValues = useQuery({
+		queryKey: ['subgraph', chain?.id, address],
+		queryFn: async () => await fetchSubgraphData(chain?.id, address),
+		enabled: !!chain,
+		staleTime: config.SUBGRAPH_POLLING_INTERVAL,
+	});
+	const sdh = new SubgraphDataHelper(currentValues.data);
 	const givBalance = sdh.getGIVTokenBalance();
 	return (
 		<HBContainer>
