@@ -14,7 +14,7 @@ import { useState } from 'react';
 import { useIntl } from 'react-intl';
 import styled from 'styled-components';
 import Link from 'next/link';
-import { useQueryClient } from '@tanstack/react-query';
+import { useQuery } from '@tanstack/react-query';
 import { useAccount } from 'wagmi';
 import links from '@/lib/constants/links';
 import { SubgraphDataHelper } from '@/lib/subgraph/subgraphDataHelper';
@@ -24,6 +24,7 @@ import TotalGIVpowerBox from '@/components/modals/StakeLock/TotalGIVpowerBox';
 import { StakeCardState } from '../BaseStakingCard/BaseStakingCard';
 import { useStakingPool } from '@/hooks/useStakingPool';
 import config from '@/configuration';
+import { fetchSubgraphData } from '@/components/controller/subgraph.ctrl';
 import type { Dispatch, FC, SetStateAction } from 'react';
 
 interface IGIVpowerCardIntro {
@@ -42,13 +43,13 @@ const GIVpowerCardIntro: FC<IGIVpowerCardIntro> = ({
 			config.GNOSIS_CONFIG.GIVPOWER,
 	);
 	const { chain, address } = useAccount();
-	const queryClient = useQueryClient();
-	const currentValues = queryClient.getQueryData([
-		'subgraph',
-		chain?.id,
-		address,
-	]);
-	const sdh = new SubgraphDataHelper(currentValues);
+	const currentValues = useQuery({
+		queryKey: ['subgraph', chain?.id, address],
+		queryFn: async () => await fetchSubgraphData(chain?.id, address),
+		enabled: !!chain,
+		staleTime: config.SUBGRAPH_POLLING_INTERVAL,
+	});
+	const sdh = new SubgraphDataHelper(currentValues.data);
 	const userGIVLocked = sdh.getUserGIVLockedBalance();
 
 	return (
