@@ -89,7 +89,7 @@ export const RegenStreamCard: FC<RegenStreamProps> = ({ streamConfig }) => {
 			sdh.getTokenDistro(tokenDistroAddress),
 		);
 		return { regenTokenDistroHelper, tokenDistroBalance };
-	}, [currentValues, tokenDistroAddress]);
+	}, [currentValues.data, tokenDistroAddress]);
 
 	const { mainnetThirdPartyTokensPrice, xDaiThirdPartyTokensPrice } =
 		useAppSelector(state => state.price);
