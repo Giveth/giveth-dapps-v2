@@ -160,13 +160,16 @@ const ProjectsIndex = (props: IProjectsView) => {
 		queryKey: ['projects'],
 		queryFn: ({ pageParam = 0 }: QueryFunctionContext) =>
 			fetchProjects(pageParam),
-		getNextPageParam: lastPage => {
+		getNextPageParam: (lastPage, someData) => {
+			console.log('lastPage', lastPage);
+			console.log('someData', someData);
 			return lastPage.nextCursor;
 		},
 		initialPageParam: 0,
 	});
 
 	useEffect(() => {
+		console.log('user id changed');
 		setUserIdChanged(prevState => !prevState);
 		fetchNextPage({ cancelRefetch: true });
 	}, [fetchNextPage, user?.id]);
@@ -240,7 +243,7 @@ const ProjectsIndex = (props: IProjectsView) => {
 
 	return (
 		<>
-			{isFetching && !isFetchingNextPage && (
+			{(isFetching || isFetchingNextPage) && (
 				<Loading>
 					<Spinner />
 				</Loading>
@@ -275,9 +278,7 @@ const ProjectsIndex = (props: IProjectsView) => {
 						<SortContainer totalCount={totalCount} />
 					</SortingContainer>
 				)}
-				{isFetching && !isFetchingNextPage && (
-					<Loader className='dot-flashing' />
-				)}
+				{isFetchingNextPage && <Loader className='dot-flashing' />}
 				{filteredProjects?.length > 0 ? (
 					<ProjectsWrapper>
 						<ProjectsContainer>
@@ -289,11 +290,14 @@ const ProjectsIndex = (props: IProjectsView) => {
 							{data?.pages.map((page, pageIndex) => (
 								<Fragment key={pageIndex}>
 									{page.data.map((project, idx) => (
-										<ProjectCard
-											key={project.id}
-											project={project}
-											order={idx}
-										/>
+										<div key={idx}>
+											{project.id}
+											<ProjectCard
+												key={project.id}
+												project={project}
+												order={idx}
+											/>
+										</div>
 									))}
 								</Fragment>
 							))}
@@ -313,14 +317,14 @@ const ProjectsIndex = (props: IProjectsView) => {
 						<StyledButton
 							onClick={loadMore}
 							label={
-								isFetching
+								isFetchingNextPage
 									? ''
 									: formatMessage({
 											id: 'component.button.load_more',
 										})
 							}
 							icon={
-								isFetching && (
+								isFetchingNextPage && (
 									<LoadingDotIcon>
 										<div className='dot-flashing' />
 									</LoadingDotIcon>
