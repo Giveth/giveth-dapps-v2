@@ -18,6 +18,30 @@ export const REFRESH_USER_SCORES = gql`
 			projectsCount
 			passportScore
 			passportStamps
+			activeQFMBDScore
+		}
+	}
+`;
+
+export const SCORE_ACTIVE_QF_DONOR_ADDRESS = gql`
+	query ScoreActiveQFDonorAddress($address: String!) {
+		scoreUserAddress(address: $address) {
+			id
+			firstName
+			lastName
+			name
+			email
+			avatar
+			walletAddress
+			url
+			location
+			boostedProjectsCount
+			likedProjectsCount
+			donationsCount
+			projectsCount
+			passportScore
+			passportStamps
+			activeQFMBDScore
 		}
 	}
 `;

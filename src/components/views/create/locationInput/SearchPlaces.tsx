@@ -28,6 +28,11 @@ const SearchPlaces: FC<IMyProps> = ({ address, onSelect }) => {
 		if (isGlobal && searchInputRef.current) {
 			searchInputRef.current.value = globalLocation;
 			setInputValue(globalLocation);
+		} else {
+			if (searchInputRef.current) {
+				searchInputRef.current.value = '';
+				setInputValue('');
+			}
 		}
 	}, [isGlobal]);
 
@@ -67,9 +72,7 @@ const SearchPlaces: FC<IMyProps> = ({ address, onSelect }) => {
 					placeholder={
 						isGlobal
 							? formatMessage({ id: 'label.global_impact' })
-							: formatMessage({
-									id: 'label.search_places...',
-								})
+							: formatMessage({ id: 'label.search_places...' })
 					}
 					defaultValue={inputValue}
 					disabled={isGlobal}

@@ -54,10 +54,9 @@ const ProjectCard = (props: IProjectCard) => {
 		adminUser,
 		totalDonations,
 		sumDonationValueUsdForActiveQfRound,
-		updatedAt,
 		organization,
 		verified,
-		// projectPower,
+		latestUpdateCreationDate,
 		countUniqueDonors,
 		qfRounds,
 		estimatedMatching,
@@ -138,7 +137,7 @@ const ProjectCard = (props: IProjectCard) => {
 					<LastUpdatedContainer $isHover={isHover}>
 						{formatMessage({ id: 'label.last_updated' })}:
 						{timeFromNow(
-							updatedAt,
+							latestUpdateCreationDate || '',
 							formatRelativeTime,
 							formatMessage({ id: 'label.just_now' }),
 						)}

@@ -25,7 +25,7 @@ export const DonationCard = () => {
 	const { project } = useDonateData();
 	const { formatMessage } = useIntl();
 
-	const { addresses } = project;
+	const { addresses, organization } = project;
 	const hasOpAddress =
 		addresses &&
 		addresses.some(
@@ -38,9 +38,11 @@ export const DonationCard = () => {
 		project?.adminUser.walletAddress &&
 		isAddress(project.adminUser.walletAddress);
 
+	const disableRecurringDonations = organization?.disableRecurringDonations;
+
 	return (
 		<DonationCardWrapper>
-			<Title>
+			<Title id='donation-visit'>
 				{formatMessage({ id: 'label.how_do_you_want_to_donate' })}
 			</Title>
 			<Flex>
@@ -61,7 +63,7 @@ export const DonationCard = () => {
 						id: 'label.one_time_donation',
 					})}
 				</Tab>
-				{hasOpAddress && isOwnerOnEVM ? (
+				{!disableRecurringDonations && hasOpAddress && isOwnerOnEVM ? (
 					<Tab
 						$selected={tab === ETabs.RECURRING}
 						onClick={() => {
@@ -83,22 +85,24 @@ export const DonationCard = () => {
 						})}
 					</Tab>
 				) : (
-					<IconWithTooltip
-						icon={
-							<BaseTab>
+					!disableRecurringDonations && (
+						<IconWithTooltip
+							icon={
+								<BaseTab>
+									{formatMessage({
+										id: 'label.recurring_donation',
+									})}
+								</BaseTab>
+							}
+							direction='bottom'
+						>
+							<>
 								{formatMessage({
-									id: 'label.recurring_donation',
+									id: 'label.this_project_is_not_eligible_for_recurring_donations',
 								})}
-							</BaseTab>
-						}
-						direction='bottom'
-					>
-						<>
-							{formatMessage({
-								id: 'label.this_project_is_not_eligible_for_recurring_donations',
-							})}
-						</>
-					</IconWithTooltip>
+							</>
+						</IconWithTooltip>
+					)
 				)}
 				<EmptyTab />
 			</Flex>

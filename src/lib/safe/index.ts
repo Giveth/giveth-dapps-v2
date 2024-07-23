@@ -14,7 +14,7 @@ export const getTxFromSafeTxId = async (
 		const tx = await safeService.getTransaction(safeTxHash);
 		return tx;
 	} catch (error) {
-		console.log("Couldn't get tx from safe tx hash", error);
+		console.error("Couldn't get tx from safe tx hash", error);
 		return null;
 	}
 };

@@ -10,7 +10,7 @@ export const ensureCorrectNetwork = async (targetChainId: number) => {
 		});
 		return chain.id === targetChainId;
 	} catch (error) {
-		console.log('error', error);
+		console.error('error', error);
 		return false;
 	}
 };

@@ -123,7 +123,7 @@ export const SearchModal: FC<IModal> = ({ setShowModal }) => {
 				const campaign: ICampaign = data.findCampaignBySlug;
 				setProjects(campaign.relatedProjects);
 			} catch (error) {
-				console.log('error', error);
+				console.error('error', error);
 			}
 		}
 		fetchFeaturedCampaign();
