@@ -47,9 +47,6 @@ const WelcomeModal: FC<IModal> = ({ setShowModal }) => {
 								onClick={() => {
 									openConnectModal &&
 										openConnectModal(
-											// isConnected
-											// 	? { view: 'Networks' }
-											// 	: undefined,
 											{ view: 'Networks' }, // Always open Networks view on first time
 										);
 									dispatch(setShowWelcomeModal(false));
