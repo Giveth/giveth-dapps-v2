@@ -27,19 +27,28 @@ export const useTokenDistroHelper = (
 	);
 
 	useEffect(() => {
-		if (regenStreamConfig) {
-			setTokenDistroHelper(
-				new TokenDistroHelper(
-					sdh.getTokenDistro(
-						regenStreamConfig?.tokenDistroAddress as string,
+		const updateHelper = () => {
+			if (regenStreamConfig) {
+				setTokenDistroHelper(
+					new TokenDistroHelper(
+						sdh.getTokenDistro(
+							regenStreamConfig?.tokenDistroAddress as string,
+						),
 					),
-				),
-			);
-		} else {
-			setTokenDistroHelper(
-				new TokenDistroHelper(sdh.getGIVTokenDistro()),
-			);
-		}
+				);
+			} else {
+				setTokenDistroHelper(
+					new TokenDistroHelper(sdh.getGIVTokenDistro()),
+				);
+			}
+		};
+
+		updateHelper(); // Initial update
+
+		const interval = setInterval(updateHelper, 5000); // Periodic update every 5 seconds
+
+		return () => clearInterval(interval); // Cleanup interval on component unmount
 	}, [currentValues.data, regenStreamConfig, sdh]);
+
 	return { tokenDistroHelper, sdh };
 };

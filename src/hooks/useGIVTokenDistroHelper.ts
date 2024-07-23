@@ -28,12 +28,23 @@ const useGIVTokenDistroHelper = (hold = false) => {
 		enabled: !hold,
 		staleTime: config.SUBGRAPH_POLLING_INTERVAL,
 	});
-	console.log('rerendered');
+
 	useEffect(() => {
-		const sdh = new SubgraphDataHelper(currentValues.data);
-		setGIVTokenDistroHelper(new TokenDistroHelper(sdh.getGIVTokenDistro()));
-		setIsLoaded(currentValues.isFetched as boolean); //TODO:
+		const updateHelper = () => {
+			const sdh = new SubgraphDataHelper(currentValues.data);
+			setGIVTokenDistroHelper(
+				new TokenDistroHelper(sdh.getGIVTokenDistro()),
+			);
+			setIsLoaded(currentValues.isFetched as boolean);
+		};
+
+		updateHelper(); // Initial update
+
+		const interval = setInterval(updateHelper, 5000); // Periodic update every 5 seconds
+
+		return () => clearInterval(interval); // Cleanup interval on component unmount
 	}, [currentValues.data]);
+
 	return { givTokenDistroHelper, isLoaded };
 };
 
