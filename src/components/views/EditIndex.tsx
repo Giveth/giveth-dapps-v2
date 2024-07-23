@@ -60,6 +60,7 @@ const EditIndex = () => {
 				.query({
 					query: FETCH_PROJECT_BY_ID,
 					variables: { id: Number(projectId) },
+					fetchPolicy: 'no-cache',
 				})
 				.then((res: { data: { projectById: IProjectEdition } }) => {
 					const project = res.data.projectById;

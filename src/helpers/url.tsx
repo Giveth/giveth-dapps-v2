@@ -27,8 +27,8 @@ export function campaignLinkGenerator(campaign: ICampaign) {
 				case ECampaignFilterField.Verified:
 					params.append('filter', EProjectsFilter.VERIFIED);
 					break;
-				case ECampaignFilterField.GivingBlock:
-					params.append('filter', EProjectsFilter.GIVING_BLOCK);
+				case ECampaignFilterField.Endaoment:
+					params.append('filter', EProjectsFilter.Endaoment);
 					break;
 				case ECampaignFilterField.BoostedWithGivPower:
 					params.append(

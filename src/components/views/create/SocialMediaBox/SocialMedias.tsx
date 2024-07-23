@@ -14,6 +14,7 @@ import {
 	IconXSocial18,
 	IconYoutube,
 	P,
+	IconGithub,
 } from '@giveth/ui-design-system';
 import { type FC } from 'react';
 import styled from 'styled-components';
@@ -74,19 +75,25 @@ export const socialMediasArray = [
 		name: 'Farcaster',
 		type: EInputs.farcaster,
 		icon: IconFaracaster,
-		validators: validators.farcaster,
+		validator: validators.farcaster,
 	},
 	{
 		name: 'Lens',
 		type: EInputs.lens,
 		icon: IconLens,
-		validators: validators.lens,
+		validator: validators.lens,
+	},
+	{
+		name: 'Github',
+		type: EInputs.github,
+		icon: IconGithub,
+		validator: validators.github,
 	},
 	{
 		name: 'Website',
 		type: EInputs.website,
 		icon: IconWorld16,
-		validators: validators.website,
+		validator: validators.website,
 	},
 ];
 
@@ -109,6 +116,7 @@ const SocialMedias: FC<ISocialMediaProps> = ({ setActiveProjectSection }) => {
 				<Flex $flexDirection='column'>
 					{socialMediasArray.map((socialMedia, index) => {
 						const Icon = socialMedia.icon;
+
 						return (
 							<Flex
 								key={index}

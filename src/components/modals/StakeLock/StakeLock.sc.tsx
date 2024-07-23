@@ -69,6 +69,10 @@ export const ToggleContainer = styled.div`
 	justify-content: center;
 	align-items: center;
 	gap: 10px;
+
+	.active {
+		color: inherit;
+	}
 `;
 
 export const SectionTitle = styled(H5)`

@@ -1348,10 +1348,10 @@
     "@solana/wallet-adapter-base" "^0.9.17"
     bs58 "^5.0.0"
 
-"@giveth/ui-design-system@^1.11.33":
-  version "1.11.33"
-  resolved "https://registry.yarnpkg.com/@giveth/ui-design-system/-/ui-design-system-1.11.33.tgz#9133c2e9f3bbcbcb88802410260047b87d250f4b"
-  integrity sha512-4bxVPBlOv/3cbETFDnVTXWgTjbMfkwVEpNzpOJgAQwU6KwJgSQk074fKvfRNS3Wb1UXilYs6GWvknbkJir1gtA==
+"@giveth/ui-design-system@^1.11.34":
+  version "1.11.34"
+  resolved "https://registry.yarnpkg.com/@giveth/ui-design-system/-/ui-design-system-1.11.34.tgz#9086aad954ab41587a90999a98a46ecad3be9642"
+  integrity sha512-gt28LwEcZ7KBIkqonCkiPkVLNBfxyq/3YDfFQTl8V0zqW3RzfOvIAex4XV10DTu+wJUiizN1AiQSy6h5CJgVgw==
   dependencies:
     next "14.1.0"
     react "^18"
@@ -2197,25 +2197,6 @@
     outvariant "^1.2.1"
     strict-event-emitter "^0.5.1"
 
-"@ndhoule/each@^2.0.1":
-  version "2.0.1"
-  resolved "https://registry.yarnpkg.com/@ndhoule/each/-/each-2.0.1.tgz#bbed372a603e0713a3193c706a73ddebc5b426a9"
-  integrity sha512-wHuJw6x+rF6Q9Skgra++KccjBozCr9ymtna0FhxmV/8xT/hZ2ExGYR8SV8prg8x4AH/7mzDYErNGIVHuzHeybw==
-  dependencies:
-    "@ndhoule/keys" "^2.0.0"
-
-"@ndhoule/keys@^2.0.0":
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/@ndhoule/keys/-/keys-2.0.0.tgz#3d64ae677c65a261747bf3a457c62eb292a4e0ce"
-  integrity sha512-vtCqKBC1Av6dsBA8xpAO+cgk051nfaI+PnmTZep2Px0vYrDvpUmLxv7z40COlWH5yCpu3gzNhepk+02yiQiZNw==
-
-"@ndhoule/map@^2.0.1":
-  version "2.0.1"
-  resolved "https://registry.yarnpkg.com/@ndhoule/map/-/map-2.0.1.tgz#f5ca0a47424ea67f46e2a6d499b9e9bc886aefa8"
-  integrity sha512-WOEf2An9mL4DVY6NHgaRmFC82pZGrmzW4I0hpPPdczDP4Gp5+Q1Nny77x3w0qzENA8+cbgd9+Lx2ClSTLvkB0g==
-  dependencies:
-    "@ndhoule/each" "^2.0.1"
-
 "@next/bundle-analyzer@^14.1.0":
   version "14.2.3"
   resolved "https://registry.yarnpkg.com/@next/bundle-analyzer/-/bundle-analyzer-14.2.3.tgz#dfa43586983d3fffdeb5f3c50f2c65ab1c51f184"
@@ -2329,6 +2310,13 @@
   version "14.2.3"
   resolved "https://registry.yarnpkg.com/@next/swc-win32-x64-msvc/-/swc-win32-x64-msvc-14.2.3.tgz#2be4e39ee25bfbd85be78eea17c0e7751dc4323c"
   integrity sha512-Q1/zm43RWynxrO7lW4ehciQVj+5ePBhOK+/K2P7pLFX3JaJ/IZVC69SHidrmZSOkqz7ECIOhhy7XhAFG4JYyHA==
+
+"@next/third-parties@^14.2.5":
+  version "14.2.5"
+  resolved "https://registry.yarnpkg.com/@next/third-parties/-/third-parties-14.2.5.tgz#7161d266547cabfb61b8af9721f83f8b5463a572"
+  integrity sha512-PDRJm8RZ3rnGNporHKjcdCeZqoW8iJ5uP0clo1Z08TqJiQzuntJ66zrGYCJyqTakx62UJNOp73YsQCFo6kbYYg==
+  dependencies:
+    third-party-capital "1.0.20"
 
 "@ngraveio/bc-ur@^1.0.0", "@ngraveio/bc-ur@^1.1.5":
   version "1.1.13"
@@ -2976,13 +2964,6 @@
   dependencies:
     "@noble/hashes" "~1.3.2"
     "@scure/base" "~1.1.4"
-
-"@segment/snippet@^4.15.3":
-  version "4.16.2"
-  resolved "https://registry.yarnpkg.com/@segment/snippet/-/snippet-4.16.2.tgz#22b71737ce9ab56036aeae90208a9bbca31e8522"
-  integrity sha512-2fgsrt4U+vKv14ohOAsViCEzeZotaawF2Il7YUbmYVrhPn8Hq7xuGznHKRdZeoxScQ87X36xDX2Fzh5bAYRN7g==
-  dependencies:
-    "@ndhoule/map" "^2.0.1"
 
 "@sentry-internal/feedback@7.114.0":
   version "7.114.0"
@@ -15592,6 +15573,11 @@ thenify-all@^1.0.0:
   integrity sha512-RVZSIV5IG10Hk3enotrhvz0T9em6cyHBLkH/YAZuKqd8hRkKhSfCGIcP2KUY0EPxndzANBmNllzWPwak+bheSw==
   dependencies:
     any-promise "^1.0.0"
+
+third-party-capital@1.0.20:
+  version "1.0.20"
+  resolved "https://registry.yarnpkg.com/third-party-capital/-/third-party-capital-1.0.20.tgz#e218a929a35bf4d2245da9addb8ab978d2f41685"
+  integrity sha512-oB7yIimd8SuGptespDAZnNkzIz+NWaJCu2RMsbs4Wmp9zSDUM8Nhi3s2OOcqYuv3mN4hitXc8DVx+LyUmbUDiA==
 
 thread-stream@^0.15.1:
   version "0.15.2"
