@@ -45,7 +45,7 @@ import { NoWrap, TopInnerContainer } from './commons';
 import links from '@/lib/constants/links';
 import Routes from '@/lib/constants/Routes';
 import { SubgraphDataHelper } from '@/lib/subgraph/subgraphDataHelper';
-import { fetchSubgraphData } from '../controller/subgraph.ctrl';
+import { fetchSubgraphData } from '@/services/subgraph.service';
 
 export const TabGIVbacksTop = () => {
 	const { formatMessage } = useIntl();

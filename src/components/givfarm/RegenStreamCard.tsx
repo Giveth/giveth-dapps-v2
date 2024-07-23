@@ -36,7 +36,7 @@ import { TokenDistroHelper } from '@/lib/contractHelper/TokenDistroHelper';
 import { Relative } from '../styled-components/Position';
 import { ArchiveAndNetworkCover } from '../ArchiveAndNetworkCover/ArchiveAndNetworkCover';
 import { getSubgraphChainId } from '@/helpers/network';
-import { fetchSubgraphData } from '../controller/subgraph.ctrl';
+import { fetchSubgraphData } from '@/services/subgraph.service';
 
 interface RegenStreamProps {
 	streamConfig: RegenStreamConfig;

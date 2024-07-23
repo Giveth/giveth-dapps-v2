@@ -37,7 +37,7 @@ import { setShowSwitchNetworkModal } from '@/features/modal/modal.slice';
 import { getChainName } from '@/lib/network';
 import { getNetworkConfig } from '@/helpers/givpower';
 import { useIsSafeEnvironment } from '@/hooks/useSafeAutoConnect';
-import { fetchSubgraphData } from '../controller/subgraph.ctrl';
+import { fetchSubgraphData } from '@/services/subgraph.service';
 
 export interface IRewardItemsProps {
 	showWhatIsGIVstreamModal: boolean;

@@ -42,7 +42,7 @@ import { useAppSelector } from '@/features/hooks';
 import { useIsSafeEnvironment } from '@/hooks/useSafeAutoConnect';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
 import { SubgraphDataHelper } from '@/lib/subgraph/subgraphDataHelper';
-import { fetchSubgraphData } from '../controller/subgraph.ctrl';
+import { fetchSubgraphData } from '@/services/subgraph.service';
 
 enum ClaimState {
 	UNKNOWN,

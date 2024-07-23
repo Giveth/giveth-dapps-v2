@@ -22,7 +22,7 @@ import { MenuContainer } from './Menu.sc';
 import { ItemsProvider } from '@/context/Items.context';
 import { SubgraphDataHelper } from '@/lib/subgraph/subgraphDataHelper';
 import { formatWeiHelper } from '@/helpers/number';
-import { fetchSubgraphData } from '../controller/subgraph.ctrl';
+import { fetchSubgraphData } from '@/services/subgraph.service';
 import config from '@/configuration';
 
 interface IRewardButtonWithMenuProps extends IHeaderButtonProps {}

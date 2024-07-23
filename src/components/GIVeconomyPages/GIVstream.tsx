@@ -55,7 +55,7 @@ import {
 	GridWrapper,
 } from './GIVstream.sc';
 import { IconWithTooltip } from '../IconWithToolTip';
-import { getHistory } from '@/services/subgraph.service';
+import { getHistory, fetchSubgraphData } from '@/services/subgraph.service';
 import { formatWeiHelper } from '@/helpers/number';
 import config from '@/configuration';
 import { durationToString, shortenAddress } from '@/lib/helpers';
@@ -68,7 +68,6 @@ import { givEconomySupportedNetworks } from '@/lib/constants/constants';
 import Pagination from '../Pagination';
 import GivEconomyProjectCards from '../cards/GivEconomyProjectCards';
 import { SubgraphDataHelper } from '@/lib/subgraph/subgraphDataHelper';
-import { fetchSubgraphData } from '../controller/subgraph.ctrl';
 
 export const TabGIVstreamTop = () => {
 	const { formatMessage } = useIntl();
