@@ -46,7 +46,7 @@ const config: GlobalConfig = {
 	NON_EVM_NETWORKS_CONFIG,
 	NETWORKS_CONFIG: { ...EVM_NETWORKS_CONFIG, ...NON_EVM_NETWORKS_CONFIG },
 	CHAINS_WITH_SUBGRAPH: Object.entries(envConfig)
-		.filter(([key, value]) => value && value.subgraphAddress)
+		.filter(([key, value]) => value?.subgraphAddress)
 		.map(([key, value]) => value as NetworkConfig),
 	// Used for adding networks to user wallet, useless since just xDAI is not
 	// included in metamask by default and its rpc endpoint is not infura
