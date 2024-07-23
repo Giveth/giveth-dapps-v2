@@ -14,7 +14,7 @@ import {
 // @ts-ignore
 import { captureException } from '@sentry/nextjs';
 import { Address, Chain, formatUnits, zeroAddress } from 'viem';
-import { useBalance, useEstimateGas } from 'wagmi';
+import { useBalance, useEstimateFeesPerGas, useEstimateGas } from 'wagmi';
 import { setShowWelcomeModal } from '@/features/modal/modal.slice';
 import CheckBox from '@/components/Checkbox';
 
@@ -122,25 +122,6 @@ const CryptoDonation: FC = () => {
 				? (address as Address)
 				: undefined,
 	});
-
-	const estimatedGasFeeObj = useMemo(() => {
-		const selectedChain = chain as Chain;
-		return {
-			chainId: selectedChain?.id,
-			to: addresses?.find(a => a.chainType === walletChainType)
-				?.address as Address,
-			value: amount,
-		};
-	}, [chain, addresses, amount, walletChainType]);
-
-	const { data: estimatedGasFee } = useEstimateGas(estimatedGasFeeObj);
-
-	const gasfee = useMemo(() => {
-		if (walletChainType !== ChainType.EVM || !estimatedGasFee) {
-			return 0n;
-		}
-		return estimatedGasFee;
-	}, [estimatedGasFee, walletChainType]);
 
 	const {
 		data: solanaBalance,
@@ -300,22 +281,63 @@ const CryptoDonation: FC = () => {
 		}
 	};
 
+	const estimatedGasFeeObj = useMemo(() => {
+		const selectedChain = chain as Chain;
+		return {
+			chainId: selectedChain?.id,
+			to: addresses?.find(a => a.chainType === walletChainType)
+				?.address as Address,
+			value: amount,
+		};
+	}, [chain, addresses, amount, walletChainType]);
+
+	const { data: estimatedGas } = useEstimateGas(estimatedGasFeeObj);
+	const { data: estimatedGasPrice } =
+		useEstimateFeesPerGas(estimatedGasFeeObj);
+
+	const gasfee = useMemo(() => {
+		if (
+			selectedOneTimeToken?.address !== zeroAddress ||
+			!estimatedGas ||
+			!estimatedGasPrice?.maxFeePerGas
+		) {
+			return 0n;
+		}
+		return estimatedGas * estimatedGasPrice.maxFeePerGas;
+	}, [
+		estimatedGas,
+		estimatedGasPrice?.maxFeePerGas,
+		selectedOneTimeToken?.address,
+	]);
+
 	useEffect(() => {
 		if (
-			amount > selectedTokenBalance &&
-			selectedOneTimeToken?.chainType === ChainType.EVM
+			amount + gasfee > selectedTokenBalance &&
+			selectedOneTimeToken?.address === zeroAddress
 		) {
 			setAmountError(true);
 		} else {
 			setAmountError(false);
 		}
-	}, [selectedTokenBalance, amount, selectedOneTimeToken?.chainType]);
+	}, [selectedTokenBalance, amount, selectedOneTimeToken?.address, gasfee]);
 
 	const amountErrorText = useMemo(() => {
 		const totalAmount = formatCrypto(amount + gasfee, tokenDecimals);
 		const tokenSymbol = selectedOneTimeToken?.symbol;
-		return `You need to keep at least ${totalAmount} ${tokenSymbol} in our wallet to pay the network fees for this transaction. Please enter a lower amount.`;
-	}, [gasfee, selectedOneTimeToken?.symbol, tokenDecimals, amount]);
+		return formatMessage(
+			{ id: 'label.exceed_wallet_balance' },
+			{
+				totalAmount,
+				tokenSymbol,
+			},
+		);
+	}, [
+		amount,
+		gasfee,
+		tokenDecimals,
+		selectedOneTimeToken?.symbol,
+		formatMessage,
+	]);
 
 	return (
 		<MainContainer>
@@ -401,7 +423,7 @@ const CryptoDonation: FC = () => {
 						{selectedOneTimeToken
 							? truncateToDecimalPlaces(
 									formatUnits(
-										selectedTokenBalance,
+										selectedTokenBalance - gasfee,
 										tokenDecimals,
 									),
 									tokenDecimals / 3,
