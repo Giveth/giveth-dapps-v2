@@ -140,6 +140,9 @@ function MyApp({ Component, pageProps }: AppProps) {
 					},
 				);
 			}
+
+			// Track page views => Posthog
+			posthog?.capture('$pageview');
 		};
 		const handleChangeError = () => {
 			NProgress.done();
@@ -180,16 +183,6 @@ function MyApp({ Component, pageProps }: AppProps) {
 			}
 		};
 		asyncFunc();
-	}, []);
-
-	// Track page views => Posthog
-	useEffect(() => {
-		const handleRouteChange = () => posthog?.capture('$pageview');
-		router.events.on('routeChangeComplete', handleRouteChange);
-
-		return () => {
-			router.events.off('routeChangeComplete', handleRouteChange);
-		};
 	}, []);
 
 	return (
