@@ -86,8 +86,7 @@ const StakeGIVInnerModal: FC<IStakeModalProps> = ({
 	const [stakeState, setStakeState] = useState<StakeState>(
 		StakeState.APPROVE,
 	);
-	const { address } = useAccount();
-	const { chain } = useAccount();
+	const { address, chain } = useAccount();
 	const chainId = chain?.id;
 	const { notStakedAmount: _maxAmount } = useStakingPool(poolStakingConfig);
 	const maxAmount = _maxAmount || 0n;
@@ -161,6 +160,15 @@ const StakeGIVInnerModal: FC<IStakeModalProps> = ({
 			if (txResponse) {
 				setTxHash(txResponse);
 				const data = await waitForTransaction(txResponse, isSafeEnv);
+				const event = new CustomEvent('chainEvent', {
+					detail: {
+						type: 'success',
+						chainId: chainId,
+						blockNumber: data.blockNumber,
+						address: address,
+					},
+				});
+				window.dispatchEvent(event);
 				setStakeState(
 					data.status === 'success'
 						? StakeState.CONFIRMED
@@ -194,6 +202,15 @@ const StakeGIVInnerModal: FC<IStakeModalProps> = ({
 			if (txResponse) {
 				setTxHash(txResponse);
 				const data = await waitForTransaction(txResponse, isSafeEnv);
+				const event = new CustomEvent('chainEvent', {
+					detail: {
+						type: 'success',
+						chainId: chainId,
+						blockNumber: data.blockNumber,
+						address: address,
+					},
+				});
+				window.dispatchEvent(event);
 				setStakeState(
 					data.status === 'success'
 						? StakeState.CONFIRMED

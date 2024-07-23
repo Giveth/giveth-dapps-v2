@@ -4,7 +4,6 @@ import {
 	Action,
 	combineReducers,
 } from '@reduxjs/toolkit';
-import subgraphReducer from './subgraph/subgraph.slice';
 import modalReducer from './modal/modal.slice';
 import userReducer from './user/user.slice';
 import priceReducer from './price/price.slice';
@@ -13,7 +12,6 @@ import notificationReducer from './notification/notification.slice';
 import pfpReducer from './pfp/pfp.slice';
 
 const rootReducer = combineReducers({
-	subgraph: subgraphReducer,
 	modal: modalReducer,
 	user: userReducer,
 	price: priceReducer,
