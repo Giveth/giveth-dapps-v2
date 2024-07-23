@@ -5,7 +5,6 @@ import styled from 'styled-components';
 import Image from 'next/image';
 import { useWeb3Modal } from '@web3modal/wagmi/react';
 import { useWalletModal } from '@solana/wallet-adapter-react-ui';
-import { useAccount } from 'wagmi';
 import { setShowWelcomeModal } from '@/features/modal/modal.slice';
 import { Shadow } from '@/components/styled-components/Shadow';
 import ethIcon from '/public/images/tokens/ETH.svg';
@@ -23,7 +22,6 @@ const WelcomeModal: FC<IModal> = ({ setShowModal }) => {
 	const dispatch = useAppDispatch();
 	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
 	const { setVisible } = useWalletModal();
-	const { isConnected } = useAccount();
 
 	return (
 		<>
@@ -49,9 +47,10 @@ const WelcomeModal: FC<IModal> = ({ setShowModal }) => {
 								onClick={() => {
 									openConnectModal &&
 										openConnectModal(
-											isConnected
-												? { view: 'Networks' }
-												: undefined,
+											// isConnected
+											// 	? { view: 'Networks' }
+											// 	: undefined,
+											{ view: 'Networks' }, // Always open Networks view on first time
 										);
 									dispatch(setShowWelcomeModal(false));
 								}}
