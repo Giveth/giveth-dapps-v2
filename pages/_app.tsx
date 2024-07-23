@@ -67,25 +67,6 @@ export const IntlMessages = {
 
 const defaultLocale = process.env.defaultLocale;
 
-function renderSnippet() {
-	const opts = {
-		apiKey:
-			process.env.NEXT_PUBLIC_ANALYTICS_WRITE_KEY || DEFAULT_WRITE_KEY,
-		// note: the page option only covers SSR tracking.
-		// Page.js is used to track other events using `window.analytics.page()`.
-		page: true,
-	};
-
-	if (process.env.NEXT_PUBLIC_ENV === 'development') {
-		return snippet.max(opts);
-	}
-	if (process.env.NEXT_PUBLIC_ENV === 'production') {
-		console.log = function () {};
-	}
-
-	return snippet.min(opts);
-}
-
 // Check that PostHog is client-side (used to handle Next.js SSR)
 if (typeof window !== 'undefined') {
 	posthog.init(process.env.NEXT_PUBLIC_POSTHOG_KEY || '', {
@@ -264,17 +245,6 @@ function MyApp({ Component, pageProps }: AppProps) {
 															pageProps={
 																pageProps
 															}
-														/>
-													)}
-													{process.env
-														.NEXT_PUBLIC_ENV ===
-														'production' && (
-														<Script
-															id='segment-script'
-															strategy='afterInteractive'
-															dangerouslySetInnerHTML={{
-																__html: renderSnippet(),
-															}}
 														/>
 													)}
 													{/* {process.env.NEXT_PUBLIC_ENV !==
