@@ -37,7 +37,6 @@ export const PROJECT_CARD_FIELDS = gql`
 		latestUpdateCreationDate
 		organization {
 			label
-			disableRecurringDonations
 		}
 		projectPower {
 			powerRank
@@ -251,7 +250,6 @@ export const FETCH_PROJECT_BY_SLUG_SINGLE_PROJECT = gql`
 				name
 				label
 				supportCustomTokens
-				disableRecurringDonations
 			}
 			verificationFormStatus
 			projectPower {

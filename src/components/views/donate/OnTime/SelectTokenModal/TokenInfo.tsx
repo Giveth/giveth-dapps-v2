@@ -6,53 +6,34 @@ import {
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import { useState, type FC } from 'react';
-import { Address, formatUnits, zeroAddress } from 'viem';
-import { useBalance } from 'wagmi';
+import { formatUnits } from 'viem';
 import { limitFraction } from '@/helpers/number';
 import { TokenIconWithGIVBack } from '../../TokenIcon/TokenIconWithGIVBack';
 import { IProjectAcceptedToken } from '@/apollo/types/gqlTypes';
 import { useIntersectionObserver } from '@/hooks/useIntersectionObserver';
-import { useSolanaBalance } from '@/hooks/useSolanaBalance';
-import { ChainType } from '@/types/config';
-import { useGeneralWallet } from '@/providers/generalWalletProvider';
 import { useDonateData } from '@/context/donate.context';
 
 interface ITokenInfoProps {
 	token: IProjectAcceptedToken;
+	balance: bigint | undefined;
 	hideZeroBalance: boolean;
 	onClick: () => void;
 }
 
 export const TokenInfo: FC<ITokenInfoProps> = ({
 	token,
+	balance,
 	hideZeroBalance,
 	onClick,
 }) => {
 	const [visible, setVisible] = useState(false);
 	const { selectedOneTimeToken } = useDonateData();
-	const { walletAddress: address } = useGeneralWallet();
 	const onVisible = () => {
 		if (!visible) setVisible(true);
 	};
 	const ref = useIntersectionObserver(onVisible, {
 		threshold: 0.1,
 	});
-
-	const isEvm = token.chainType === ChainType.EVM;
-	const { data: evmBalance } = useBalance({
-		token: token?.address === zeroAddress ? undefined : token?.address,
-		address: (address as Address) || undefined,
-		query: {
-			enabled: isEvm && visible,
-		},
-	});
-
-	const { data: solanaBalance } = useSolanaBalance({
-		token: token?.address,
-		address: !isEvm && visible ? address || undefined : undefined,
-	});
-
-	const balance = isEvm ? evmBalance?.value : solanaBalance;
 
 	const disable = balance === 0n;
 	const isSelected =
