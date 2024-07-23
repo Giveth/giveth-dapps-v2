@@ -37,7 +37,7 @@ import { useIsSafeEnvironment } from '@/hooks/useSafeAutoConnect';
 import { useGeneralWallet } from '@/providers/generalWalletProvider';
 import { QFDonorEligibilityCard } from '@/components/views/userProfile/QFDonorEligibilityCard';
 import config from '@/configuration';
-import { fetchSubgraphData } from '@/components/controller/subgraph.ctrl';
+import { fetchSubgraphData } from '@/services/subgraph.service';
 interface IBtnProps extends IButtonProps {
 	outline?: boolean;
 }

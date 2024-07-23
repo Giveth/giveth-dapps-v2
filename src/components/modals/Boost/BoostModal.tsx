@@ -13,7 +13,7 @@ import BoostedInnerModal from './BoostedInnerModal';
 import BoostInnerModal from './BoostInnerModal';
 import { getTotalGIVpower } from '@/helpers/givpower';
 import config from '@/configuration';
-import { fetchSubgraphData } from '@/components/controller/subgraph.ctrl';
+import { fetchSubgraphData } from '@/services/subgraph.service';
 
 interface IBoostModalProps extends IModal {
 	projectId: string;

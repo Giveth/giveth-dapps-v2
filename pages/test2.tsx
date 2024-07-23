@@ -7,7 +7,7 @@ import FailedDonation, {
 import { getTotalGIVpower } from '@/helpers/givpower';
 import { formatWeiHelper } from '@/helpers/number';
 import config from '@/configuration';
-import { fetchSubgraphData } from '@/components/controller/subgraph.ctrl';
+import { fetchSubgraphData } from '@/services/subgraph.service';
 
 const YourApp = () => {
 	const [failedModalType, setFailedModalType] =

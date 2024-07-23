@@ -15,7 +15,7 @@ import { WrappedSpinner } from '@/components/Spinner';
 import { getTotalGIVpower } from '@/helpers/givpower';
 import { getGIVpowerOnChain } from '@/lib/stakingPool';
 import config from '@/configuration';
-import { fetchSubgraphData } from '@/components/controller/subgraph.ctrl';
+import { fetchSubgraphData } from '@/services/subgraph.service';
 
 const TotalGIVpowerBox = () => {
 	const [totalGIVpower, setTotalGIVpower] = useState<BigNumber>();

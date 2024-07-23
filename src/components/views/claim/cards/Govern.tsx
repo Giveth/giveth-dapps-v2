@@ -35,7 +35,7 @@ import useGIVTokenDistroHelper from '@/hooks/useGIVTokenDistroHelper';
 import { IClaimViewCardProps } from '../Claim.view';
 import { WeiPerEther } from '@/lib/constants/constants';
 import { InputWithUnit } from '@/components/input/InputWithUnit';
-import { fetchSubgraphData } from '@/components/controller/subgraph.ctrl';
+import { fetchSubgraphData } from '@/services/subgraph.service';
 
 const GovernCardContainer = styled(Card)`
 	padding-left: 254px;

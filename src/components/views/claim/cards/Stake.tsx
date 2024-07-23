@@ -34,7 +34,7 @@ import { getNowUnixMS } from '@/helpers/time';
 import { IClaimViewCardProps } from '../Claim.view';
 import { WeiPerEther } from '@/lib/constants/constants';
 import { InputWithUnit } from '@/components/input/InputWithUnit';
-import { fetchSubgraphData } from '@/components/controller/subgraph.ctrl';
+import { fetchSubgraphData } from '@/services/subgraph.service';
 
 const InvestCardContainer = styled(Card)`
 	&::before {

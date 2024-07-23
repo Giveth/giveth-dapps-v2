@@ -4,7 +4,7 @@ import { useQuery } from '@tanstack/react-query';
 import { TokenDistroHelper } from '@/lib/contractHelper/TokenDistroHelper';
 import { SubgraphDataHelper } from '@/lib/subgraph/subgraphDataHelper';
 import { RegenStreamConfig } from '@/types/config';
-import { fetchSubgraphData } from '@/components/controller/subgraph.ctrl';
+import { fetchSubgraphData } from '@/services/subgraph.service';
 import config from '@/configuration';
 
 export const useTokenDistroHelper = (

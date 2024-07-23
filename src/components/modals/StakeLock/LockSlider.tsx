@@ -17,7 +17,7 @@ import { useQuery } from '@tanstack/react-query';
 import { smallFormatDate } from '@/lib/helpers';
 import { getUnlockDate } from '@/helpers/givpower';
 import config from '@/configuration';
-import { fetchSubgraphData } from '@/components/controller/subgraph.ctrl';
+import { fetchSubgraphData } from '@/services/subgraph.service';
 import type { IGIVpower } from '@/types/subgraph';
 
 const maxRound = 26;

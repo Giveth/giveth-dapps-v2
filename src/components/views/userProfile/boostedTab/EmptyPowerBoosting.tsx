@@ -13,7 +13,7 @@ import { useQueries } from '@tanstack/react-query';
 import Routes from '@/lib/constants/Routes';
 import { getTotalGIVpower } from '@/helpers/givpower';
 import config from '@/configuration';
-import { fetchSubgraphData } from '@/components/controller/subgraph.ctrl';
+import { fetchSubgraphData } from '@/services/subgraph.service';
 interface IEmptyPowerBoosting {
 	myAccount?: boolean;
 }

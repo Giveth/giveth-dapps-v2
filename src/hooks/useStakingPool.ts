@@ -10,7 +10,7 @@ import {
 import { SimplePoolStakingConfig, StakingType } from '@/types/config';
 import { APR, UserStakeInfo } from '@/types/poolInfo';
 import { Zero } from '@/helpers/number';
-import { fetchSubgraphData } from '@/components/controller/subgraph.ctrl';
+import { fetchSubgraphData } from '@/services/subgraph.service';
 import config from '@/configuration';
 
 export interface IStakeInfo {

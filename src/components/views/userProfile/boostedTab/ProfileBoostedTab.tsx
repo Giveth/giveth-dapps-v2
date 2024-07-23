@@ -29,7 +29,7 @@ import { formatWeiHelper } from '@/helpers/number';
 import InlineToast, { EToastType } from '@/components/toasts/InlineToast';
 import { useFetchPowerBoostingInfo } from './useFetchPowerBoostingInfo';
 import { useProfileContext } from '@/context/profile.context';
-import { fetchSubgraphData } from '@/components/controller/subgraph.ctrl';
+import { fetchSubgraphData } from '@/services/subgraph.service';
 import config from '@/configuration';
 
 export const ProfileBoostedTab: FC<IUserProfileView> = () => {

@@ -24,7 +24,7 @@ import TotalGIVpowerBox from '@/components/modals/StakeLock/TotalGIVpowerBox';
 import { StakeCardState } from '../BaseStakingCard/BaseStakingCard';
 import { useStakingPool } from '@/hooks/useStakingPool';
 import config from '@/configuration';
-import { fetchSubgraphData } from '@/components/controller/subgraph.ctrl';
+import { fetchSubgraphData } from '@/services/subgraph.service';
 import type { Dispatch, FC, SetStateAction } from 'react';
 
 interface IGIVpowerCardIntro {

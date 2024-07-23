@@ -6,7 +6,7 @@ import { formatWeiHelper } from '@/helpers/number';
 import { smallFormatDate } from '@/lib/helpers';
 import { getUnlockDate } from '@/helpers/givpower';
 import config from '@/configuration';
-import { fetchSubgraphData } from '@/components/controller/subgraph.ctrl';
+import { fetchSubgraphData } from '@/services/subgraph.service';
 import type { FC } from 'react';
 import type { IGIVpower } from '@/types/subgraph';
 
