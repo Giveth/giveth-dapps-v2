@@ -64,7 +64,6 @@ const Routes = {
 	HowToBuyXdai: '/how-to-buy-xdai',
 	PurchaseXdai: '/purchase-xdai',
 	Referral: '/referral',
-	QFElegibility: '/qf-eligibility',
 };
 
 export default Routes;
