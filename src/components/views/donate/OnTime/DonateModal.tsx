@@ -39,10 +39,11 @@ import { useTokenPrice } from '@/hooks/useTokenPrice';
 import { calcDonationShare } from '@/components/views/donate/helpers';
 import { Spinner } from '@/components/Spinner';
 import { FETCH_GIVETH_PROJECT_BY_ID } from '@/apollo/gql/gqlProjects';
+import createGoogleTagEventPurchase from '@/helpers/googleAnalytics';
 
 interface IDonateModalProps extends IModal {
 	token: IProjectAcceptedToken;
-	amount: number;
+	amount: bigint;
 	donationToGiveth: number;
 	tokenPrice?: number;
 	anonymous?: boolean;
@@ -79,6 +80,7 @@ const DonateModal: FC<IDonateModalProps> = props => {
 		walletAddress: address,
 	} = useGeneralWallet();
 	const chainId = (chain as Chain)?.id;
+	const chainName = (chain as Chain)?.name;
 	const dispatch = useAppDispatch();
 	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
 	const isDonatingToGiveth = donationToGiveth > 0;
@@ -94,20 +96,21 @@ const DonateModal: FC<IDonateModalProps> = props => {
 	const [failedModalType, setFailedModalType] =
 		useState<EDonationFailedType>();
 
+	const categories = project?.categories || [];
+
 	useEffect(() => {
 		const fetchGivethProject = async () => {
 			try {
 				const { data } = await client.query({
 					query: FETCH_GIVETH_PROJECT_BY_ID,
 					variables: { id: config.GIVETH_PROJECT_ID },
-					fetchPolicy: 'cache-first',
 				});
 				setGivethProject(data.projectById);
 				setIsLoadingGivethAddress(false);
 			} catch (e) {
 				setIsLoadingGivethAddress(false);
 				showToastError('Failed to fetch Giveth wallet address');
-				console.log('Failed to fetch Giveth wallet address', e);
+				console.error('Failed to fetch Giveth wallet address', e);
 				closeModal();
 			}
 		};
@@ -209,12 +212,23 @@ const DonateModal: FC<IDonateModalProps> = props => {
 			chainvineReferred,
 			setFailedModalType,
 			symbol: token.symbol,
+			useDonationBox: isDonatingToGiveth,
 		})
 			.then(({ isSaved, txHash: firstHash }) => {
 				if (!firstHash) {
 					setDonating(false);
 					return;
 				}
+
+				// Send google tag purchase event using segement
+				createGoogleTagEventPurchase({
+					txHash: firstHash,
+					chainName: chainName,
+					amount: projectDonationPrice,
+					projectId: project.id,
+					projectName: project.title,
+					categories: categories,
+				});
 
 				if (isDonatingToGiveth) {
 					createSecondDonation({
@@ -224,6 +238,8 @@ const DonateModal: FC<IDonateModalProps> = props => {
 						projectId: config.GIVETH_PROJECT_ID,
 						setFailedModalType,
 						symbol: token.symbol,
+						useDonationBox: true,
+						relevantDonationTxHash: firstHash,
 					})
 						.then(({ txHash: secondHash }) => {
 							if (!secondHash) {

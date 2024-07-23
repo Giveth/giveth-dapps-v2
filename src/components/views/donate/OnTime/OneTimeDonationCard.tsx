@@ -1,68 +1,64 @@
 import styled from 'styled-components';
-import React, { FC, useCallback, useEffect, useRef, useState } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
 import {
+	B,
 	brandColors,
 	Button,
-	GLink,
+	Flex,
+	IconCaretDown16,
+	IconRefresh16,
 	neutralColors,
-	semanticColors,
 } from '@giveth/ui-design-system';
 // @ts-ignore
 import { captureException } from '@sentry/nextjs';
-import { Address, Chain, erc20Abi, formatUnits, parseUnits } from 'viem';
-import { readContract } from '@wagmi/core';
-import { PublicKey } from '@solana/web3.js';
-import { useConnection } from '@solana/wallet-adapter-react';
+import { Address, Chain, formatUnits, zeroAddress } from 'viem';
+import { useBalance } from 'wagmi';
 import { setShowWelcomeModal } from '@/features/modal/modal.slice';
-import { Shadow } from '@/components/styled-components/Shadow';
-import InputBox from './InputBox';
 import CheckBox from '@/components/Checkbox';
-import DonateModal from '@/components/views/donate/DonateModal';
-import {
-	donationDecimals,
-	mediaQueries,
-	minDonationAmount,
-} from '@/lib/constants/constants';
+
 import { InsufficientFundModal } from '@/components/modals/InsufficientFund';
-import GeminiModal from './GeminiModal';
 import config from '@/configuration';
-import TokenPicker from './TokenPicker';
+
 import InlineToast, { EToastType } from '@/components/toasts/InlineToast';
 import { EProjectStatus } from '@/apollo/types/gqlEnums';
 import { client } from '@/apollo/apolloClient';
 import { PROJECT_ACCEPTED_TOKENS } from '@/apollo/gql/gqlProjects';
-import {
-	pollEvery,
-	showToastError,
-	truncateToDecimalPlaces,
-} from '@/lib/helpers';
+import { showToastError, truncateToDecimalPlaces } from '@/lib/helpers';
 import {
 	IProjectAcceptedToken,
 	IProjectAcceptedTokensGQL,
 } from '@/apollo/types/gqlTypes';
 import { prepareTokenList } from '@/components/views/donate/helpers';
-import { ORGANIZATION } from '@/lib/constants/organizations';
-import { getERC20Info } from '@/lib/contracts';
 import GIVBackToast from '@/components/views/donate/GIVBackToast';
 import { DonateWrongNetwork } from '@/components/modals/DonateWrongNetwork';
 import { useAppDispatch, useAppSelector } from '@/features/hooks';
 import DonateToGiveth from '@/components/views/donate/DonateToGiveth';
-import TotalDonation from '@/components/views/donate/TotalDonation';
-import SaveGasFees from '@/components/views/donate/SaveGasFees';
+import SaveGasFees from './SaveGasFees';
 import SwitchToAcceptedChain from '@/components/views/donate/SwitchToAcceptedChain';
 import { useDonateData } from '@/context/donate.context';
 import { useModalCallback } from '@/hooks/useModalCallback';
-import EstimatedMatchingToast from '@/components/views/donate/EstimatedMatchingToast';
 import DonateQFEligibleNetworks from './DonateQFEligibleNetworks';
 import { getActiveRound } from '@/helpers/qf';
-import QFModal from '@/components/views/donate/QFModal';
 import { useGeneralWallet } from '@/providers/generalWalletProvider';
 import { ChainType } from '@/types/config';
-import { INetworkIdWithChain } from './common.types';
-import { wagmiConfig } from '@/wagmiConfigs';
-
-const POLL_DELAY_TOKENS = config.SUBGRAPH_POLLING_INTERVAL;
+import { INetworkIdWithChain } from '../common.types';
+import DonateModal from './DonateModal';
+import QFModal from './QFModal';
+import EstimatedMatchingToast from '@/components/views/donate/OnTime/EstimatedMatchingToast';
+import TotalDonation from './TotalDonation';
+import {
+	GLinkStyled,
+	IconWrapper,
+	Input,
+	InputWrapper,
+	SelectTokenPlaceHolder,
+	SelectTokenWrapper,
+} from '../Recurring/RecurringDonationCard';
+import { TokenIcon } from '../TokenIcon/TokenIcon';
+import { SelectTokenModal } from './SelectTokenModal/SelectTokenModal';
+import { Spinner } from '@/components/Spinner';
+import { useSolanaBalance } from '@/hooks/useSolanaBalance';
 
 const CryptoDonation: FC = () => {
 	const {
@@ -70,17 +66,15 @@ const CryptoDonation: FC = () => {
 		walletChainType,
 		walletAddress: address,
 		isConnected,
-		balance,
 	} = useGeneralWallet();
-	const { connection: solanaConnection } = useConnection();
+
 	const { formatMessage } = useIntl();
 	const { isSignedIn } = useAppSelector(state => state.user);
 
-	const { project, hasActiveQFRound } = useDonateData();
+	const { project, hasActiveQFRound, selectedOneTimeToken } = useDonateData();
 	const dispatch = useAppDispatch();
 
 	const {
-		organization,
 		verified,
 		id: projectId,
 		status,
@@ -88,22 +82,12 @@ const CryptoDonation: FC = () => {
 		title: projectTitle,
 	} = project;
 
-	const { supportCustomTokens, label: orgLabel } = organization || {};
 	const isActive = status?.name === EProjectStatus.ACTIVE;
 	const noDonationSplit = Number(projectId!) === config.GIVETH_PROJECT_ID;
-
-	const [selectedToken, setSelectedToken] = useState<IProjectAcceptedToken>();
-	const [selectedTokenBalance, setSelectedTokenBalance] = useState(0n);
-	const [customInput, setCustomInput] = useState<any>();
-	const [amountTyped, setAmountTyped] = useState<number>();
-	const [inputBoxFocused, setInputBoxFocused] = useState(false);
-	const [geminiModal, setGeminiModal] = useState(false);
+	const [amount, setAmount] = useState(0n);
 	const [erc20List, setErc20List] = useState<IProjectAcceptedToken[]>();
-	const [erc20OriginalList, setErc20OriginalList] = useState<any>();
 	const [anonymous, setAnonymous] = useState<boolean>(false);
 	const [amountError, setAmountError] = useState<boolean>(false);
-	const [tokenIsGivBackEligible, setTokenIsGivBackEligible] =
-		useState<boolean>();
 	const [showDonateModal, setShowDonateModal] = useState(false);
 	const [showInsufficientModal, setShowInsufficientModal] = useState(false);
 	const [showChangeNetworkModal, setShowChangeNetworkModal] = useState(false);
@@ -116,13 +100,40 @@ const CryptoDonation: FC = () => {
 		noDonationSplit ? 0 : 5,
 	);
 	const [showQFModal, setShowQFModal] = useState(false);
+	const [showSelectTokenModal, setShowSelectTokenModal] = useState(false);
 
 	const { modalCallback: signInThenDonate } = useModalCallback(() =>
 		setShowDonateModal(true),
 	);
-	const stopPolling = useRef<any>(null);
-	const tokenSymbol = selectedToken?.symbol;
-	const tokenDecimals = selectedToken?.decimals || 18;
+
+	const {
+		data: evmBalance,
+		refetch: evmRefetch,
+		isRefetching: evmIsRefetching,
+	} = useBalance({
+		token:
+			selectedOneTimeToken?.address === zeroAddress
+				? undefined
+				: selectedOneTimeToken?.address,
+		address:
+			walletChainType === ChainType.EVM
+				? (address as Address)
+				: undefined,
+	});
+
+	const {
+		data: solanaBalance,
+		refetch: solanaRefetch,
+		isRefetching: solanaIsRefetching,
+	} = useSolanaBalance({
+		token: selectedOneTimeToken?.address,
+		address:
+			walletChainType === ChainType.SOLANA
+				? address || undefined
+				: undefined,
+	});
+
+	const tokenDecimals = selectedOneTimeToken?.decimals || 18;
 	const projectIsGivBackEligible = !!verified;
 	const { activeStartedRound } = getActiveRound(project.qfRounds);
 	const networkId = (chain as Chain)?.id;
@@ -201,20 +212,9 @@ const CryptoDonation: FC = () => {
 				setShowChangeNetworkModal(true);
 			}
 			const tokens = prepareTokenList(filteredTokens);
-			setErc20OriginalList(tokens);
 			setErc20List(tokens);
-			setSelectedToken(tokens[0]);
-			setTokenIsGivBackEligible(tokens[0]?.isGivbackEligible);
 		}
 	}, [networkId, acceptedTokens, walletChainType, addresses]);
-
-	useEffect(() => {
-		if (isConnected || address) pollToken();
-		else {
-			setSelectedToken(undefined);
-		}
-		return () => clearPoll();
-	}, [selectedToken, isConnected, address, balance]);
 
 	useEffect(() => {
 		client
@@ -237,140 +237,28 @@ const CryptoDonation: FC = () => {
 	}, []);
 
 	useEffect(() => {
-		setAmountTyped(undefined);
-	}, [selectedToken, isConnected, address, networkId]);
+		setAmount(0n);
+	}, [selectedOneTimeToken, isConnected, address, networkId]);
 
-	const checkGIVTokenAvailability = () => {
-		if (orgLabel !== ORGANIZATION.givingBlock) return true;
-		if (selectedToken?.symbol === 'GIV') {
-			setGeminiModal(true);
-			return false;
-		} else {
-			return true;
-		}
-	};
-
-	const clearPoll = () => {
-		if (stopPolling.current) {
-			stopPolling.current();
-			stopPolling.current = undefined;
-		}
-	};
-
-	const pollToken = useCallback(async () => {
-		clearPoll();
-
-		if (!selectedToken) {
-			return setSelectedTokenBalance(0n);
-		}
-		// Native token balance is provided by the Web3Provider
-		const _selectedTokenSymbol = selectedToken.symbol.toUpperCase();
-		const nativeCurrency =
-			config.NETWORKS_CONFIG[
-				!walletChainType || walletChainType == ChainType.EVM
-					? networkId
-					: walletChainType
-			]?.nativeCurrency;
-
-		if (_selectedTokenSymbol === nativeCurrency?.symbol?.toUpperCase()) {
-			return setSelectedTokenBalance(
-				parseUnits(balance || '0', nativeCurrency.decimals),
-			);
-		}
-		stopPolling.current = pollEvery(
-			() => ({
-				request: async () => {
-					try {
-						if (walletChainType === ChainType.SOLANA) {
-							const splTokenMintAddress = new PublicKey(
-								selectedToken.address,
-							);
-							const tokenAccounts =
-								await solanaConnection.getParsedTokenAccountsByOwner(
-									new PublicKey(address!),
-									{ mint: splTokenMintAddress },
-								);
-							const accountInfo =
-								tokenAccounts.value[0].account.data;
-							const splBalance =
-								accountInfo.parsed.info.tokenAmount.amount;
-							return setSelectedTokenBalance(BigInt(splBalance));
-						}
-
-						const _balance = await readContract(wagmiConfig, {
-							address: selectedToken.address! as Address,
-							abi: erc20Abi,
-							functionName: 'balanceOf',
-							args: [address as Address],
-						});
-						setSelectedTokenBalance(_balance);
-						return _balance;
-					} catch (e) {
-						captureException(e, {
-							tags: {
-								section: 'Polltoken pollEvery',
-							},
-						});
-						return setSelectedTokenBalance(0n);
-					}
-				},
-				onResult: (_balance: bigint) => {
-					if (_balance && _balance !== selectedTokenBalance) {
-						setSelectedTokenBalance(_balance);
-					}
-				},
-			}),
-			POLL_DELAY_TOKENS,
-		)();
-	}, [address, networkId, tokenSymbol, balance, walletChainType]);
-
-	const handleCustomToken = (i: Address) => {
-		if (!supportCustomTokens) return;
-		// It's a contract
-		if (i?.length === 42) {
-			try {
-				// setSelectLoading(true);
-				getERC20Info({
-					contractAddress: i,
-					networkId: networkId as number,
-				}).then(pastedToken => {
-					if (!pastedToken) return;
-					const found = erc20List?.find(
-						(t: IProjectAcceptedToken) =>
-							t.symbol === pastedToken.symbol,
-					);
-					!found &&
-						erc20List &&
-						setErc20List([...erc20List, pastedToken]);
-					setCustomInput(pastedToken?.address);
-					// setSelectLoading(false);
-				});
-			} catch (error) {
-				// setSelectLoading(false);
-				showToastError(error);
-				captureException(error, {
-					tags: {
-						section: 'handleCustomToken',
-					},
-				});
-			}
-		} else {
-			setCustomInput(i);
-			setErc20List(erc20OriginalList);
-		}
-	};
+	const selectedTokenBalance =
+		(walletChainType == ChainType.EVM
+			? evmBalance?.value
+			: solanaBalance) || 0n;
+	const refetch =
+		walletChainType === ChainType.EVM ? evmRefetch : solanaRefetch;
+	const isRefetching =
+		walletChainType === ChainType.EVM
+			? evmIsRefetching
+			: solanaIsRefetching;
 
 	const handleDonate = () => {
-		if (
-			parseUnits(String(amountTyped), tokenDecimals) >
-			selectedTokenBalance
-		) {
+		if (amount > selectedTokenBalance) {
 			return setShowInsufficientModal(true);
 		}
 		if (
 			hasActiveQFRound &&
 			!isOnEligibleNetworks &&
-			selectedToken?.chainType === ChainType.EVM
+			selectedOneTimeToken?.chainType === ChainType.EVM
 		) {
 			setShowQFModal(true);
 		} else if (!isSignedIn) {
@@ -380,14 +268,8 @@ const CryptoDonation: FC = () => {
 		}
 	};
 
-	const userBalance = truncateToDecimalPlaces(
-		formatUnits(selectedTokenBalance, tokenDecimals),
-		donationDecimals,
-	);
-	const setMaxDonation = () => setAmountTyped(userBalance);
-
 	const donationDisabled =
-		!isActive || !amountTyped || !selectedToken || amountError;
+		!isActive || !amount || !selectedOneTimeToken || amountError;
 
 	const donateWithoutMatching = () => {
 		if (isSignedIn) {
@@ -405,7 +287,6 @@ const CryptoDonation: FC = () => {
 					setShowModal={setShowQFModal}
 				/>
 			)}
-			{geminiModal && <GeminiModal setShowModal={setGeminiModal} />}
 			{showChangeNetworkModal && acceptedChains && (
 				<DonateWrongNetwork
 					setShowModal={setShowChangeNetworkModal}
@@ -417,88 +298,95 @@ const CryptoDonation: FC = () => {
 					setShowModal={setShowInsufficientModal}
 				/>
 			)}
-			{showDonateModal && selectedToken && amountTyped && (
+			{showDonateModal && selectedOneTimeToken && amount && (
 				<DonateModal
 					setShowModal={setShowDonateModal}
-					token={selectedToken}
-					amount={amountTyped}
+					token={selectedOneTimeToken}
+					amount={amount}
 					donationToGiveth={donationToGiveth}
 					anonymous={anonymous}
 					givBackEligible={
-						projectIsGivBackEligible && tokenIsGivBackEligible
+						projectIsGivBackEligible &&
+						selectedOneTimeToken.isGivbackEligible
 					}
 				/>
 			)}
-			<InputContainer>
-				{walletChainType && (
-					<SwitchToAcceptedChain
-						acceptedChains={acceptedChains}
-						setShowChangeNetworkModal={setShowChangeNetworkModal}
+			{walletChainType && (
+				<SwitchToAcceptedChain
+					acceptedChains={acceptedChains}
+					setShowChangeNetworkModal={setShowChangeNetworkModal}
+				/>
+			)}
+			<SaveGasFees acceptedChains={acceptedChains} />
+			<Flex $flexDirection='column' gap='8px'>
+				<InputWrapper>
+					<SelectTokenWrapper
+						$alignItems='center'
+						$justifyContent='space-between'
+						onClick={() => setShowSelectTokenModal(true)}
+					>
+						{selectedOneTimeToken ? (
+							<Flex gap='8px' $alignItems='center'>
+								<TokenIcon
+									symbol={selectedOneTimeToken.symbol}
+									size={24}
+								/>
+								<TokenSymbol>
+									{selectedOneTimeToken.symbol}
+								</TokenSymbol>
+							</Flex>
+						) : (
+							<SelectTokenPlaceHolder>
+								{formatMessage({
+									id: 'label.select_token',
+								})}
+							</SelectTokenPlaceHolder>
+						)}
+						<IconCaretDown16 />
+					</SelectTokenWrapper>
+					<Input
+						amount={amount}
+						setAmount={setAmount}
+						disabled={selectedOneTimeToken === undefined}
+						decimals={selectedOneTimeToken?.decimals}
 					/>
-				)}
-				<SaveGasFees acceptedChains={acceptedChains} />
-				<SearchContainer
-					$error={amountError}
-					$focused={inputBoxFocused}
-				>
-					<DropdownContainer>
-						<TokenPicker
-							tokenList={erc20List}
-							selectedToken={selectedToken}
-							inputValue={customInput}
-							onChange={(i: IProjectAcceptedToken) => {
-								setSelectedToken(i);
-								setCustomInput('');
-								setErc20List(erc20OriginalList);
-								setTokenIsGivBackEligible(i.isGivbackEligible);
-							}}
-							onInputChange={handleCustomToken}
-							placeholder={
-								supportCustomTokens
-									? formatMessage({
-											id: 'component.input.search_or_paste',
-										})
-									: formatMessage({
-											id: 'component.input.search_name',
-										})
-							}
-							projectVerified={project?.verified!}
-							disabled={!isConnected}
-						/>
-					</DropdownContainer>
-
-					<InputBox
-						value={amountTyped}
-						error={amountError}
-						onChange={val => {
-							const checkGIV = checkGIVTokenAvailability();
-							if (/^0+(?=\d)/.test(String(val))) return;
-							setAmountError(
-								val !== undefined
-									? val < minDonationAmount
-									: false,
-							);
-							if (checkGIV) setAmountTyped(val);
-						}}
-						onFocus={setInputBoxFocused}
-						disabled={!isConnected}
-					/>
-				</SearchContainer>
-				{selectedToken && (
-					<AvText onClick={setMaxDonation}>
-						{formatMessage({ id: 'label.available' })}:{' '}
-						{userBalance} {tokenSymbol}
-					</AvText>
-				)}
-			</InputContainer>
+				</InputWrapper>
+				<Flex gap='4px'>
+					<GLinkStyled
+						size='Small'
+						onClick={() => setAmount(selectedTokenBalance)}
+					>
+						{formatMessage({
+							id: 'label.available',
+						})}
+						:{' '}
+						{selectedOneTimeToken
+							? truncateToDecimalPlaces(
+									formatUnits(
+										selectedTokenBalance,
+										tokenDecimals,
+									),
+									tokenDecimals / 3,
+								)
+							: 0.0}
+					</GLinkStyled>
+					<IconWrapper onClick={() => !isRefetching && refetch()}>
+						{isRefetching ? (
+							<Spinner size={16} />
+						) : (
+							<IconRefresh16 />
+						)}
+					</IconWrapper>
+				</Flex>
+			</Flex>
 			{hasActiveQFRound && !isOnEligibleNetworks && walletChainType && (
 				<DonateQFEligibleNetworks />
 			)}
 			{hasActiveQFRound && isOnEligibleNetworks && (
 				<EstimatedMatchingToast
 					projectData={project}
-					token={selectedToken}
-					amountTyped={amountTyped}
+					token={selectedOneTimeToken}
+					amount={amount}
 				/>
 			)}
 			{!noDonationSplit ? (
@@ -512,18 +400,18 @@ const CryptoDonation: FC = () => {
 			) : (
 				<br />
 			)}
-			{selectedToken && (
+			{selectedOneTimeToken && (
 				<GIVBackToast
 					projectEligible={projectIsGivBackEligible}
-					tokenEligible={tokenIsGivBackEligible}
+					tokenEligible={selectedOneTimeToken.isGivbackEligible}
 				/>
 			)}
 			{!noDonationSplit ? (
 				<TotalDonation
 					donationToGiveth={donationToGiveth}
-					totalDonation={amountTyped}
+					totalDonation={amount}
 					projectTitle={projectTitle}
-					token={selectedToken}
+					token={selectedOneTimeToken}
 					isActive={!donationDisabled}
 				/>
 			) : (
@@ -569,6 +457,15 @@ const CryptoDonation: FC = () => {
 					})}
 				</div>
 			</CheckBoxContainer>
+			{showSelectTokenModal && (
+				<SelectTokenModal
+					setShowModal={setShowSelectTokenModal}
+					tokens={erc20List}
+					acceptCustomToken={
+						project.organization?.supportCustomTokens
+					}
+				/>
+			)}
 		</MainContainer>
 	);
 };
@@ -585,48 +482,14 @@ const MainContainer = styled.div`
 	text-align: left;
 `;
 
-const InputContainer = styled.div`
-	display: flex;
-	flex-direction: column;
-	margin-top: 18px;
-`;
-
-const AvText = styled(GLink)`
-	color: ${brandColors.deep[500]};
-	padding: 4px 0 0 5px;
-	&:hover {
-		cursor: pointer;
-		text-decoration: underline;
-	}
+const TokenSymbol = styled(B)`
+	white-space: nowrap;
 `;
 
 interface IInputBox {
 	$error: boolean;
 	$focused: boolean;
 }
-
-const SearchContainer = styled.div<IInputBox>`
-	display: flex;
-	border: 2px solid
-		${props =>
-			props.$error === true
-				? semanticColors.punch[500]
-				: neutralColors.gray[300]};
-	border-radius: 8px;
-	box-shadow: ${props => props.$focused && Shadow.Neutral[500]};
-	&:hover {
-		box-shadow: ${Shadow.Neutral[500]};
-	}
-`;
-
-const DropdownContainer = styled.div`
-	width: 35%;
-	height: 54px;
-	min-width: 140px;
-	${mediaQueries.mobileL} {
-		width: 50%;
-	}
-`;
 
 const MainButton = styled(Button)`
 	width: 100%;

@@ -5,9 +5,9 @@ import { formatUnits } from 'viem';
 import { useIntl } from 'react-intl';
 import { ISuperfluidStream } from '@/types/superFluid';
 import { limitFraction } from '@/helpers/number';
-import { TokenIconWithGIVBack } from '../TokenIcon/TokenIconWithGIVBack';
 import { countActiveStreams } from '@/helpers/donate';
 import { findTokenByAddress } from '@/helpers/superfluid';
+import { TokenIconWithGIVBack } from '../../TokenIcon/TokenIconWithGIVBack';
 
 interface IStreamInfoProps {
 	stream: ISuperfluidStream[];

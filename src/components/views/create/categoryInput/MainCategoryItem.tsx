@@ -38,22 +38,26 @@ const MainCategoryItem: FC<IProps> = props => {
 				{formatMessage({ id: 'projects_' + mainCategoryItem.slug })}
 			</CategoryTitle>
 			<SubCategoryItems>
-				{mainCategoryItem.categories.map(subcategory => {
-					const checked = selectedCategories.find(
-						el => el.name === subcategory.name,
-					);
-					return (
-						<SubCategory xs={6} sm={3} key={subcategory.value}>
-							<CheckBox
-								size={20}
-								label={subcategory.name!}
-								checked={!!checked}
-								onChange={e => onChange(e, subcategory.name)}
-								disabled={isMaxCategories && !checked}
-							/>
-						</SubCategory>
-					);
-				})}
+				{mainCategoryItem.categories
+					.filter(subcategory => subcategory.canUseOnFrontend) // Filter out subcategories that cannot be used on frontend
+					.map(subcategory => {
+						const checked = selectedCategories.find(
+							el => el.name === subcategory.name,
+						);
+						return (
+							<SubCategory xs={6} sm={3} key={subcategory.value}>
+								<CheckBox
+									size={20}
+									label={subcategory.name!}
+									checked={!!checked}
+									onChange={e =>
+										onChange(e, subcategory.name)
+									}
+									disabled={isMaxCategories && !checked}
+								/>
+							</SubCategory>
+						);
+					})}
 			</SubCategoryItems>
 		</Container>
 	);

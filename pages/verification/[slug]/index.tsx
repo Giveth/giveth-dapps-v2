@@ -50,7 +50,7 @@ const VerificationRoute = () => {
 					slug,
 					connectedWalletUserId: Number(userData?.id),
 				},
-				fetchPolicy: 'network-only',
+				fetchPolicy: 'no-cache',
 			})
 			.then((res: { data: { projectBySlug: IProject } }) => {
 				const _project = res.data.projectBySlug;
@@ -68,7 +68,7 @@ const VerificationRoute = () => {
 				setIsProjectLoading(false);
 			})
 			.catch((error: unknown) => {
-				console.log('fetchProjectBySlug error: ', error);
+				console.error('fetchProjectBySlug error: ', error);
 				captureException(error, {
 					tags: {
 						section: 'verificationFetchProjectBySlug',

@@ -59,7 +59,7 @@ const BASE_NETWORK_NUMBER = 84532;
 const ZKEVM_NETWORK_NUMBER = 2442;
 
 const SOLANA_NETWORK: NonEVMChain = {
-	id: 0,
+	id: 103,
 	networkId: 103,
 	chainType: ChainType.SOLANA,
 	name: 'Solana Devnet',
@@ -305,7 +305,7 @@ const config: EnvConfig = {
 				unit: 'LP',
 				regenStreamType: StreamType.FOX,
 				farmStartTimeMS: 1685460000000,
-				farmEndTimeMS: 1701302400000,
+				farmEndTimeMS: 1721739750000,
 				introCard: {
 					title: 'ShapeShift DAO',
 					description:

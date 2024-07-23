@@ -59,6 +59,8 @@ export const useCreateSolanaDonation = () => {
 				amount,
 				token,
 				setFailedModalType,
+				useDonationBox,
+				relevantDonationTxHash,
 			} = props;
 
 			let donationData: IOnTxHash;
@@ -77,6 +79,8 @@ export const useCreateSolanaDonation = () => {
 					symbol: token.symbol,
 					setFailedModalType,
 					safeTransactionId: null,
+					useDonationBox,
+					relevantDonationTxHash,
 				};
 			} else return;
 
@@ -90,7 +94,7 @@ export const useCreateSolanaDonation = () => {
 				return id;
 			} catch (e: any) {
 				await postRequest('/api/donation-backup', true, {
-					chainId: transaction?.chainId!,
+					chainId: transaction?.chainId || 0,
 					txHash: transaction?.hash,
 					amount: amount,
 					token,
@@ -101,11 +105,13 @@ export const useCreateSolanaDonation = () => {
 					walletAddress: transaction?.from,
 					symbol: token.symbol,
 					error: e.message,
+					useDonationBox,
+					relevantDonationTxHash,
 				});
 				setFailedModalType(EDonationFailedType.NOT_SAVED);
 			}
 		} catch (error) {
-			console.log('Error sending transaction', { error });
+			console.error('Error sending transaction', { error });
 		}
 	};
 

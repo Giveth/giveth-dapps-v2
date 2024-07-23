@@ -81,7 +81,7 @@ const getUnipoolInfo = async (
 			totalSupply = _totalSupply as bigint;
 			rewardRate = _rewardRate as bigint;
 		} catch (error) {
-			console.log('Error on fetching totalSupply,rewardRate  :', error);
+			console.error('Error on fetching totalSupply,rewardRate  :', error);
 			captureException(error, {
 				tags: {
 					section: 'getUnipoolInfo',
@@ -550,7 +550,7 @@ export const approveERC20tokenTransfer = async (
 			return false;
 		}
 	} catch (error) {
-		console.log('Error on Approve', error);
+		console.error('Error on Approve', error);
 		return false;
 	}
 };
@@ -571,7 +571,7 @@ export const wrapToken = async (
 			value: 0n,
 		});
 	} catch (error) {
-		console.log('Error on wrapping token:', error);
+		console.error('Error on wrapping token:', error);
 		captureException(error, {
 			tags: {
 				section: 'wrapToken',
@@ -606,7 +606,7 @@ export const stakeGIV = async (
 					value: 0n,
 				});
 	} catch (error) {
-		console.log('Error on stake token:', error);
+		console.error('Error on stake token:', error);
 		captureException(error, {
 			tags: {
 				section: 'stakeToken',
@@ -632,7 +632,7 @@ export const unwrapToken = async (
 			value: 0n,
 		});
 	} catch (error) {
-		console.log('Error on unwrapping token:', error);
+		console.error('Error on unwrapping token:', error);
 		captureException(error, {
 			tags: {
 				section: 'unwrapToken',
@@ -742,7 +742,7 @@ export const lockToken = async (
 			value: 0n,
 		});
 	} catch (error) {
-		console.log('Error on locking token:', error);
+		console.error('Error on locking token:', error);
 		captureException(error, {
 			tags: {
 				section: 'lockToken',
@@ -774,7 +774,7 @@ export const getGIVpowerOnChain = async (
 			args: [account],
 		})) as bigint;
 	} catch (error) {
-		console.log('Error on get total GIVpower:', error);
+		console.error('Error on get total GIVpower:', error);
 		captureException(error, {
 			tags: {
 				section: 'getTotalGIVpower',

@@ -4,7 +4,7 @@ import { type FC } from 'react';
 import { formatUnits } from 'viem';
 import { IToken } from '@/types/superFluid';
 import { limitFraction } from '@/helpers/number';
-import { TokenIconWithGIVBack } from '../TokenIcon/TokenIconWithGIVBack';
+import { TokenIconWithGIVBack } from '../../TokenIcon/TokenIconWithGIVBack';
 
 interface ITokenInfoProps {
 	token: IToken;

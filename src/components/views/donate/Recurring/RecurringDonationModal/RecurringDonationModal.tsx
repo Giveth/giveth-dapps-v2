@@ -125,41 +125,48 @@ const RecurringDonationInnerModal: FC<IRecurringDonationInnerModalProps> = ({
 	isUpdating,
 	anonymous,
 }) => {
-	const { project, selectedToken, tokenStreams, setSuccessDonation } =
-		useDonateData();
+	const {
+		project,
+		selectedRecurringToken,
+		tokenStreams,
+		setSuccessDonation,
+	} = useDonateData();
 	const { address } = useAccount();
-	const tokenPrice = useTokenPrice(selectedToken?.token);
+	const tokenPrice = useTokenPrice(selectedRecurringToken?.token);
 	const isSafeEnv = useIsSafeEnvironment();
 	const { formatMessage } = useIntl();
 
 	useEffect(() => {
-		if (!selectedToken) return;
+		if (!selectedRecurringToken) return;
 		if (
-			selectedToken.token.isSuperToken ||
-			selectedToken.token.symbol === 'ETH'
+			selectedRecurringToken.token.isSuperToken ||
+			selectedRecurringToken.token.symbol === 'ETH'
 		) {
 			setStep(EDonationSteps.DONATE);
 		}
-	}, [selectedToken, setStep]);
+	}, [selectedRecurringToken, setStep]);
 
 	const onApprove = async () => {
 		try {
 			await ensureCorrectNetwork(config.OPTIMISM_NETWORK_NUMBER);
 			console.log(
 				'amount',
-				formatUnits(amount, selectedToken?.token.decimals || 18),
+				formatUnits(
+					amount,
+					selectedRecurringToken?.token.decimals || 18,
+				),
 			);
 			setStep(EDonationSteps.APPROVING);
-			if (!address || !selectedToken) return;
+			if (!address || !selectedRecurringToken) return;
 			const superToken = findSuperTokenByTokenAddress(
-				selectedToken.token.id,
+				selectedRecurringToken.token.id,
 			);
 			if (!superToken) throw new Error('SuperToken not found');
 			const approve = await approveERC20tokenTransfer(
 				amount,
 				address,
 				superToken.id, //superTokenAddress
-				selectedToken?.token.id, //tokenAddress
+				selectedRecurringToken?.token.id, //tokenAddress
 				config.OPTIMISM_CONFIG.id,
 				isSafeEnv,
 			);
@@ -183,7 +190,7 @@ const RecurringDonationInnerModal: FC<IRecurringDonationInnerModalProps> = ({
 			if (!projectAnchorContract) {
 				throw new Error('Project anchor address not found');
 			}
-			if (!address || !selectedToken) {
+			if (!address || !selectedRecurringToken) {
 				throw new Error('address not found');
 			}
 			const provider = await getEthersProvider(wagmiConfig);
@@ -191,7 +198,7 @@ const RecurringDonationInnerModal: FC<IRecurringDonationInnerModalProps> = ({
 
 			if (!provider || !signer)
 				throw new Error('Provider or signer not found');
-			let _superToken = selectedToken.token;
+			let _superToken = selectedRecurringToken.token;
 			if (!_superToken.isSuperToken) {
 				const sp = findSuperTokenByTokenAddress(_superToken.id);
 				if (!sp) {
@@ -221,7 +228,7 @@ const RecurringDonationInnerModal: FC<IRecurringDonationInnerModalProps> = ({
 			const operations: Operation[] = [];
 
 			// Upgrade the token to super token
-			if (!isUpdating && !selectedToken.token.isSuperToken) {
+			if (!isUpdating && !selectedRecurringToken.token.isSuperToken) {
 				const upgradeOperation = await superToken.upgrade({
 					amount: amount.toString(),
 				});
@@ -470,7 +477,7 @@ const RecurringDonationInnerModal: FC<IRecurringDonationInnerModalProps> = ({
 			if (error?.code !== 'ACTION_REJECTED') {
 				showToastError(error);
 			}
-			console.log('Error on recurring donation', { error });
+			console.error('Error on recurring donation', { error });
 		}
 	};
 
@@ -496,12 +503,12 @@ const RecurringDonationInnerModal: FC<IRecurringDonationInnerModalProps> = ({
 		<Wrapper>
 			<DonateSteps donateState={step} />
 			<Items $flexDirection='column' gap='16px'>
-				{!selectedToken?.token.isSuperToken && (
+				{!selectedRecurringToken?.token.isSuperToken && (
 					<Item
 						title='Deposit into your stream balance'
 						amount={amount}
 						price={tokenPrice}
-						token={selectedToken?.token!}
+						token={selectedRecurringToken?.token!}
 					/>
 				)}
 				<Item
@@ -509,7 +516,7 @@ const RecurringDonationInnerModal: FC<IRecurringDonationInnerModalProps> = ({
 					subtext={'per month'}
 					amount={projectPerMonth}
 					price={tokenPrice}
-					token={selectedToken?.token!}
+					token={selectedRecurringToken?.token!}
 				/>
 				{donationToGiveth > 0 && (
 					<Item
@@ -517,14 +524,14 @@ const RecurringDonationInnerModal: FC<IRecurringDonationInnerModalProps> = ({
 						subtext={'per month'}
 						amount={givethPerMonth}
 						price={tokenPrice}
-						token={selectedToken?.token!}
+						token={selectedRecurringToken?.token!}
 					/>
 				)}
 			</Items>
 			<RunOutInfo
 				superTokenBalance={amount}
 				streamFlowRatePerMonth={perMonthAmount}
-				symbol={selectedToken?.token.symbol || ''}
+				symbol={selectedRecurringToken?.token.symbol || ''}
 			/>
 			<ActionButton
 				label={formatMessage({ id: buttonLabel[step] })}

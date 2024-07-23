@@ -25,7 +25,7 @@ export interface IHomeRoute {
 
 export const HOME_QUERY_VARIABLES = {
 	take: 50,
-	takeLatestUpdates: 50,
+	takeLatestUpdates: 10,
 	skipLatestUpdates: 0,
 	fromDate: '2021-01-01',
 	limit: 12,
@@ -41,7 +41,7 @@ const HomeRoute = (props: IHomeRoute) => {
 	);
 };
 
-export const getStaticProps: GetStaticProps = async context => {
+export const getStaticProps: GetStaticProps = async () => {
 	const { data } = await client.query({
 		query: FETCH_HOMEPAGE_DATA,
 		variables: HOME_QUERY_VARIABLES,

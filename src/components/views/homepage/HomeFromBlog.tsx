@@ -40,7 +40,7 @@ const HomeFromBlog = () => {
 					});
 				setMediumPosts(modifiedPosts);
 			} catch (error) {
-				console.log('error', error);
+				console.error('error', error);
 			}
 		};
 		getPosts();

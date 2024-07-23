@@ -6,9 +6,9 @@ import { Framework } from '@superfluid-finance/sdk-core';
 import styled from 'styled-components';
 import { EDonationSteps, IModifyStreamModalProps } from './ModifyStreamModal';
 import { ActionButton, Wrapper } from './ModifyStreamInnerModal';
-import { Item } from '@/components/views/donate/RecurringDonationModal/Item';
+import { Item } from '@/components/views/donate/Recurring/RecurringDonationModal/Item';
 import { IToken } from '@/types/superFluid';
-import { RunOutInfo } from '@/components/views/donate/RunOutInfo';
+import { RunOutInfo } from '@/components/views/donate/Recurring/RunOutInfo';
 import { useTokenPrice } from '@/hooks/useTokenPrice';
 import config, { isProduction } from '@/configuration';
 import { getEthersProvider, getEthersSigner } from '@/helpers/ethers';
@@ -170,7 +170,7 @@ export const UpdateStreamInnerModal: FC<IModifyStreamInnerModalProps> = ({
 			if (error?.code !== 'ACTION_REJECTED') {
 				showToastError(error);
 			}
-			console.log('Error on recurring donation', { error });
+			console.error('Error on recurring donation', { error });
 		}
 	};
 
