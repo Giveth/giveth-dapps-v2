@@ -25,6 +25,29 @@ const socialMediaColor: { [key: string]: string } = {
 const removeHttpsAndWwwFromUrl = (socialMediaUrl: string) => {
 	return socialMediaUrl.replace('https://', '').replace('www.', '');
 };
+
+/**
+ * Ensures that a given URL uses the https:// protocol.
+ * If the URL starts with http://, it will be replaced with https://.
+ * If the URL does not start with any protocol, https:// will be added.
+ * If the URL already starts with https://, it will remain unchanged.
+ *
+ * @param {string} url - The URL to be checked and possibly modified.
+ * @returns {string} - The modified URL with https://.
+ */
+function ensureHttps(url: string): string {
+	if (!url.startsWith('https://')) {
+		if (url.startsWith('http://')) {
+			// Replace http:// with https://
+			url = url.replace('http://', 'https://');
+		} else {
+			// Add https:// if no protocol is present
+			url = 'https://' + url;
+		}
+	}
+	return url;
+}
+
 const ProjectSocialItem = ({ socialMedia }: IProjectSocialMediaItem) => {
 	const item = socialMediasArray.find(item => {
 		return item.type.toLocaleLowerCase() === socialMedia.type.toLowerCase();
@@ -33,7 +56,7 @@ const ProjectSocialItem = ({ socialMedia }: IProjectSocialMediaItem) => {
 	const IconComponent = item?.icon;
 
 	return (
-		<a href={socialMedia.link} target='_blank'>
+		<a href={ensureHttps(socialMedia.link)} target='_blank'>
 			<SocialItemContainer>
 				<Flex gap='8px' $alignItems='center'>
 					{IconComponent && (
