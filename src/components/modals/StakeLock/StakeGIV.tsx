@@ -161,6 +161,15 @@ const StakeGIVInnerModal: FC<IStakeModalProps> = ({
 			if (txResponse) {
 				setTxHash(txResponse);
 				const data = await waitForTransaction(txResponse, isSafeEnv);
+				const event = new CustomEvent('chainEvent', {
+					detail: {
+						type: 'success',
+						chainId: chainId,
+						blockNumber: data.blockNumber,
+						address: address,
+					},
+				});
+				window.dispatchEvent(event);
 				setStakeState(
 					data.status === 'success'
 						? StakeState.CONFIRMED
@@ -194,6 +203,15 @@ const StakeGIVInnerModal: FC<IStakeModalProps> = ({
 			if (txResponse) {
 				setTxHash(txResponse);
 				const data = await waitForTransaction(txResponse, isSafeEnv);
+				const event = new CustomEvent('chainEvent', {
+					detail: {
+						type: 'success',
+						chainId: chainId,
+						blockNumber: data.blockNumber,
+						address: address,
+					},
+				});
+				window.dispatchEvent(event);
 				setStakeState(
 					data.status === 'success'
 						? StakeState.CONFIRMED
