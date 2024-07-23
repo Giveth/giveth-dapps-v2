@@ -232,6 +232,7 @@ export interface GlobalConfig extends EnvConfig {
 	TOKEN_NAME: string;
 	WEB3_POLLING_INTERVAL: number;
 	SUBGRAPH_POLLING_INTERVAL: number;
+	SUBGRAPH_UPDATING_UI_INTERVAL: number;
 	NOTIFICATION_POLLING_INTERVAL: number;
 	PFP_POLLING_INTERVAL: number;
 	TOKEN_PRECISION: number;
