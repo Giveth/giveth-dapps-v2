@@ -149,10 +149,19 @@ const StakeInnerModal: FC<IStakeModalProps> = ({
 			if (txResponse) {
 				setTxHash(txResponse);
 				setStakeState(StakeState.CONFIRMING);
-				const { status } = await waitForTransaction(
+				const { status, blockNumber } = await waitForTransaction(
 					txResponse,
 					isSafeEnv,
 				);
+				const event = new CustomEvent('chainEvent', {
+					detail: {
+						type: 'success',
+						chainId: chainId,
+						blockNumber: blockNumber,
+						address: address,
+					},
+				});
+				window.dispatchEvent(event);
 				setStakeState(status ? StakeState.CONFIRMED : StakeState.ERROR);
 			} else {
 				setStakeState(StakeState.STAKE);

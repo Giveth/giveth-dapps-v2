@@ -12,9 +12,12 @@ import {
 import styled from 'styled-components';
 import { Dispatch, FC, SetStateAction, useState } from 'react';
 import { useIntl } from 'react-intl';
+import { useAccount } from 'wagmi';
+import { useQuery } from '@tanstack/react-query';
 import { smallFormatDate } from '@/lib/helpers';
-import { useAppSelector } from '@/features/hooks';
 import { getUnlockDate } from '@/helpers/givpower';
+import config from '@/configuration';
+import { fetchSubgraphData } from '@/services/subgraph.service';
 import type { IGIVpower } from '@/types/subgraph';
 
 const maxRound = 26;
@@ -26,9 +29,14 @@ interface ILockSlider {
 const LockSlider: FC<ILockSlider> = ({ round, setRound }) => {
 	const { formatMessage, locale } = useIntl();
 	const [isChanged, setIsChanged] = useState(false);
-	const givpowerInfo = useAppSelector(
-		state => state.subgraph.gnosisValues.givpowerInfo,
-	) as IGIVpower;
+	const { address } = useAccount();
+	const gnosisValues = useQuery({
+		queryKey: ['subgraph', config.GNOSIS_NETWORK_NUMBER, address],
+		queryFn: async () =>
+			await fetchSubgraphData(config.GNOSIS_NETWORK_NUMBER, address),
+		staleTime: config.SUBGRAPH_POLLING_INTERVAL,
+	});
+	const givpowerInfo = gnosisValues.data?.givpowerInfo as IGIVpower;
 	const unlockDate = new Date(getUnlockDate(givpowerInfo, round));
 	return (
 		<>

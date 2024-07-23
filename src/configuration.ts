@@ -1,6 +1,11 @@
 import development from './config/development';
 import production from './config/production';
-import { ChainType, GlobalConfig, NonEVMNetworkConfig } from './types/config';
+import {
+	ChainType,
+	GlobalConfig,
+	NetworkConfig,
+	NonEVMNetworkConfig,
+} from './types/config';
 
 export const isProduction = process.env.NEXT_PUBLIC_ENV === 'production';
 export const isDeleteProjectEnabled =
@@ -31,7 +36,8 @@ NON_EVM_NETWORKS_CONFIG[ChainType.SOLANA] = envConfig.SOLANA_CONFIG;
 const config: GlobalConfig = {
 	TOKEN_NAME: 'DRGIV',
 	WEB3_POLLING_INTERVAL: 15000,
-	SUBGRAPH_POLLING_INTERVAL: 5000,
+	SUBGRAPH_POLLING_INTERVAL: 300_000,
+	SUBGRAPH_UPDATING_UI_INTERVAL: 5000,
 	NOTIFICATION_POLLING_INTERVAL: 5000,
 	PFP_POLLING_INTERVAL: 2000,
 	TOKEN_PRECISION: 2,
@@ -40,6 +46,9 @@ const config: GlobalConfig = {
 	EVM_NETWORKS_CONFIG,
 	NON_EVM_NETWORKS_CONFIG,
 	NETWORKS_CONFIG: { ...EVM_NETWORKS_CONFIG, ...NON_EVM_NETWORKS_CONFIG },
+	CHAINS_WITH_SUBGRAPH: Object.entries(envConfig)
+		.filter(([key, value]) => value?.subgraphAddress)
+		.map(([key, value]) => value as NetworkConfig),
 	// Used for adding networks to user wallet, useless since just xDAI is not
 	// included in metamask by default and its rpc endpoint is not infura
 	INFURA_API_KEY: process.env.NEXT_PUBLIC_INFURA_API_KEY,
