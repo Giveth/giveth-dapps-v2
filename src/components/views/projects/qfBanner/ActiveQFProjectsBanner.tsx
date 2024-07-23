@@ -1,4 +1,4 @@
-import { B, Lead, Container, Row } from '@giveth/ui-design-system';
+import { B, Lead, Container, Flex } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
 import Image from 'next/image';
 import { useState, useEffect } from 'react';
@@ -10,9 +10,10 @@ import {
 	Desc,
 	Title,
 	Sponsor,
-	SmallerSponsor,
-	BottomSponsors,
-	MiddleSponsors,
+	ActiveStyledRow,
+	// SmallerSponsor,
+	// BottomSponsors,
+	// MiddleSponsors,
 } from './common';
 import { useAppSelector } from '@/features/hooks';
 
@@ -85,7 +86,7 @@ export const ActiveQFProjectsBanner = () => {
 				alt='QF Banner'
 			/>
 			<Container>
-				<Row>
+				<ActiveStyledRow>
 					<ActiveStyledCol xs={12} md={6}>
 						<Title weight={700}>
 							{activeQFRound ? activeQFRound.name : null}
@@ -128,7 +129,7 @@ export const ActiveQFProjectsBanner = () => {
 						{/*		/>*/}
 						{/*	))}*/}
 						{/*</Flex>*/}
-						<MiddleSponsors>
+						<Flex>
 							{sponsors.map(s => (
 								<Sponsor
 									key={s.title}
@@ -138,8 +139,8 @@ export const ActiveQFProjectsBanner = () => {
 									height={188}
 								/>
 							))}
-						</MiddleSponsors>
-						<BottomSponsors>
+						</Flex>
+						{/* <BottomSponsors>
 							{bottomSponsors.map(s => (
 								<SmallerSponsor
 									key={s.title}
@@ -149,9 +150,9 @@ export const ActiveQFProjectsBanner = () => {
 									height={120}
 								/>
 							))}
-						</BottomSponsors>
+						</BottomSponsors> */}
 					</ActiveStyledCol>
-				</Row>
+				</ActiveStyledRow>
 			</Container>
 		</BannerContainer>
 	);
@@ -159,57 +160,57 @@ export const ActiveQFProjectsBanner = () => {
 
 const sponsors = [
 	{
-		title: '@publicNouns',
-		image: '/images/banners/qf-round/publicNouns.svg',
+		title: '@Giveth',
+		image: '/images/banners/qf-round/Giveth.svg',
 	},
 	{
-		title: '@climate_program',
-		image: '/images/banners/qf-round/climate_program.svg',
+		title: '@ThankArbitrum',
+		image: '/images/banners/qf-round/ThankArbitrum.svg',
 	},
-	{
-		title: '@celo',
-		image: '/images/banners/qf-round/celo.svg',
-	},
-	{
-		title: '@realMaskNetwork',
-		image: '/images/banners/qf-round/realMaskNetwork.svg',
-	},
+	// {
+	// 	title: '@celo',
+	// 	image: '/images/banners/qf-round/celo.svg',
+	// },
+	// {
+	// 	title: '@realMaskNetwork',
+	// 	image: '/images/banners/qf-round/realMaskNetwork.svg',
+	// },
 ];
 
-const topSponsors = [
-	{
-		title: '@Arbitrum',
-		image: '/images/banners/qf-round/sponsor3.svg',
-	},
-	{
-		title: '@GloDollar',
-		image: '/images/banners/qf-round/sponsor6.svg',
-	},
-	{
-		title: '@LottoPGF',
-		image: '/images/banners/qf-round/sponsor7.svg',
-	},
-	{
-		title: '@Open_Dollar',
-		image: '/images/banners/qf-round/sponsor8.svg',
-	},
-];
+// const topSponsors = [
+// 	{
+// 		title: '@Arbitrum',
+// 		image: '/images/banners/qf-round/sponsor3.svg',
+// 	},
+// 	{
+// 		title: '@GloDollar',
+// 		image: '/images/banners/qf-round/sponsor6.svg',
+// 	},
+// 	{
+// 		title: '@LottoPGF',
+// 		image: '/images/banners/qf-round/sponsor7.svg',
+// 	},
+// 	{
+// 		title: '@Open_Dollar',
+// 		image: '/images/banners/qf-round/sponsor8.svg',
+// 	},
+// ];
 
-const bottomSponsors = [
-	{
-		title: '@Glodollar',
-		image: '/images/banners/qf-round/Glodollar.svg',
-	},
-	{
-		title: '@OctantApp',
-		image: '/images/banners/qf-round/OctantApp.svg',
-	},
-	{
-		title: '@maearthmedia',
-		image: '/images/banners/qf-round/maearthmedia.svg',
-	},
-	{
-		title: '@RegenToken',
-		image: '/images/banners/qf-round/regenToken.svg',
-	},
-];
+// const bottomSponsors = [
+// 	{
+// 		title: '@Glodollar',
+// 		image: '/images/banners/qf-round/Glodollar.svg',
+// 	},
+// 	{
+// 		title: '@OctantApp',
+// 		image: '/images/banners/qf-round/OctantApp.svg',
+// 	},
+// 	{
+// 		title: '@maearthmedia',
+// 		image: '/images/banners/qf-round/maearthmedia.svg',
+// 	},
+// 	{
+// 		title: '@RegenToken',
+// 		image: '/images/banners/qf-round/regenToken.svg',
+// 	},
+// ];
