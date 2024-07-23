@@ -10,7 +10,11 @@ import {
 import styled from 'styled-components';
 import { useIntl } from 'react-intl';
 import { captureException } from '@sentry/nextjs';
-import { QueryFunctionContext, useInfiniteQuery } from '@tanstack/react-query';
+import {
+	QueryFunctionContext,
+	useInfiniteQuery,
+	useQueryClient,
+} from '@tanstack/react-query';
 import ProjectCard from '@/components/project-card/ProjectCard';
 import Routes from '@/lib/constants/Routes';
 import { isUserRegistered, showToastError } from '@/lib/helpers';
@@ -61,6 +65,7 @@ interface Page {
 }
 
 const ProjectsIndex = (props: IProjectsView) => {
+	const queryClient = useQueryClient();
 	const { formatMessage } = useIntl();
 	const { projects, totalCount: _totalCount } = props;
 	const user = useAppSelector(state => state.user.userData);
@@ -168,16 +173,25 @@ const ProjectsIndex = (props: IProjectsView) => {
 		initialPageParam: 0,
 	});
 
+	// User signied in or singout reset query
 	useEffect(() => {
 		console.log('user id changed');
 		setUserIdChanged(prevState => !prevState);
-		fetchNextPage({ cancelRefetch: true });
-	}, [fetchNextPage, user?.id]);
+		queryClient.resetQueries({
+			queryKey: ['projects'],
+			exact: true,
+		});
+	}, [queryClient, user?.id]);
 
+	// Reset query if contect variables change occurs
 	useEffect(() => {
-		fetchNextPage({ cancelRefetch: true });
-	}, [contextVariables]);
+		queryClient.resetQueries({
+			queryKey: ['projects'],
+			exact: true,
+		});
+	}, [contextVariables, queryClient]);
 
+	// Function that triggers when you scroll down - infinite loading
 	const loadMore = useCallback(() => {
 		fetchNextPage();
 	}, [fetchNextPage]);
@@ -193,8 +207,13 @@ const ProjectsIndex = (props: IProjectsView) => {
 	const showLoadMore =
 		totalCount > filteredProjects?.length && !isInfiniteScrolling.current;
 
+	// Check if there any active QF
 	const onProjectsPageOrActiveQFPage = !isQF || (isQF && activeQFRound);
 
+	/*
+	 * This function will be called when the observed elements intersect with the viewport.
+	 * Observed element is last project on the list that trigger another fetch projects to load.
+	 */
 	useEffect(() => {
 		const handleObserver = (entities: any) => {
 			if (!isInfiniteScrolling.current) return;
@@ -243,6 +262,17 @@ const ProjectsIndex = (props: IProjectsView) => {
 
 	return (
 		<>
+			<button
+				onClick={() => {
+					queryClient.resetQueries({
+						queryKey: ['projects'],
+						exact: true,
+					});
+					// queryClient.clear();
+				}}
+			>
+				RESET
+			</button>
 			{(isFetching || isFetchingNextPage) && (
 				<Loading>
 					<Spinner />
@@ -290,8 +320,7 @@ const ProjectsIndex = (props: IProjectsView) => {
 							{data?.pages.map((page, pageIndex) => (
 								<Fragment key={pageIndex}>
 									{page.data.map((project, idx) => (
-										<div key={idx}>
-											{project.id}
+										<div key={project.id}>
 											<ProjectCard
 												key={project.id}
 												project={project}
