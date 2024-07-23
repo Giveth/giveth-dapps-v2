@@ -86,8 +86,7 @@ const StakeGIVInnerModal: FC<IStakeModalProps> = ({
 	const [stakeState, setStakeState] = useState<StakeState>(
 		StakeState.APPROVE,
 	);
-	const { address } = useAccount();
-	const { chain } = useAccount();
+	const { address, chain } = useAccount();
 	const chainId = chain?.id;
 	const { notStakedAmount: _maxAmount } = useStakingPool(poolStakingConfig);
 	const maxAmount = _maxAmount || 0n;
