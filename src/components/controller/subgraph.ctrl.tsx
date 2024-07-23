@@ -65,10 +65,7 @@ const SubgraphController: React.FC = () => {
 				Address,
 			],
 			queryFn: async () => await fetchSubgraphData(chain.id, address),
-			staleTime:
-				chainId === chain.id
-					? config.ACTIVE_SUBGRAPH_POLLING_INTERVAL
-					: config.SUBGRAPH_POLLING_INTERVAL,
+			staleTime: config.SUBGRAPH_POLLING_INTERVAL,
 			enabled: !!address,
 		})),
 	});
