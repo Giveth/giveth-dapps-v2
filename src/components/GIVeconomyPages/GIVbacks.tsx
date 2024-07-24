@@ -12,6 +12,7 @@ import {
 import Link from 'next/link';
 import { useIntl } from 'react-intl';
 import { useAccount } from 'wagmi';
+import { useQuery } from '@tanstack/react-query';
 import {
 	GIVbacksTopContainer,
 	GIVbacksBottomContainer,
@@ -43,8 +44,8 @@ import { GIVBackExplainModal } from '../modals/GIVBackExplain';
 import { NoWrap, TopInnerContainer } from './commons';
 import links from '@/lib/constants/links';
 import Routes from '@/lib/constants/Routes';
-import { useAppSelector } from '@/features/hooks';
 import { SubgraphDataHelper } from '@/lib/subgraph/subgraphDataHelper';
+import { fetchSubgraphData } from '@/services/subgraph.service';
 
 export const TabGIVbacksTop = () => {
 	const { formatMessage } = useIntl();
@@ -52,18 +53,19 @@ export const TabGIVbacksTop = () => {
 	const [showGivBackExplain, setShowGivBackExplain] = useState(false);
 	const [givBackStream, setGivBackStream] = useState(0n);
 	const { givTokenDistroHelper } = useGIVTokenDistroHelper(showHarvestModal);
-	const { chain } = useAccount();
-	const chainId = chain?.id;
-	const values = useAppSelector(
-		state =>
-			chainId === config.OPTIMISM_NETWORK_NUMBER
-				? state.subgraph.optimismValues
-				: state.subgraph.gnosisValues,
-		() => (showHarvestModal ? true : false),
-	);
-
+	const { chain, address } = useAccount();
+	const dataChainId =
+		chain?.id === config.OPTIMISM_NETWORK_NUMBER
+			? config.OPTIMISM_NETWORK_NUMBER
+			: config.GNOSIS_NETWORK_NUMBER;
+	const values = useQuery({
+		queryKey: ['subgraph', dataChainId, address],
+		queryFn: async () => await fetchSubgraphData(dataChainId, address),
+		enabled: !!chain,
+		staleTime: config.SUBGRAPH_POLLING_INTERVAL,
+	});
 	const givTokenDistroBalance = useMemo(() => {
-		const sdh = new SubgraphDataHelper(values);
+		const sdh = new SubgraphDataHelper(values.data);
 		return sdh.getGIVTokenDistroBalance();
 	}, [values]);
 
@@ -113,7 +115,7 @@ export const TabGIVbacksTop = () => {
 										: undefined
 								}
 								subButtonCb={() => setShowGivBackExplain(true)}
-								network={chainId}
+								network={chain?.id}
 								targetNetworks={[
 									{
 										networkId: config.GNOSIS_NETWORK_NUMBER,

@@ -34,9 +34,6 @@ const TestRoute = () => {
 //This comment is for testing1
 
 const TestIndex = () => {
-	// const gnosisValues = useSelector(
-	// 	(state: RootState) => state.subgraph.gnosisValues,
-	// );
 	const [showModal, setShowModal] = useState(false);
 	const functionRef = useRef<Function>();
 	const [state, setState] = useState(0);

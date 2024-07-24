@@ -68,8 +68,8 @@ export const connectPassport = async (account: string, singin: boolean) => {
 		return true;
 	} catch (error: any) {
 		console.error('error', error);
-		if (error.code === 'ACTION_REJECTED') {
-			showToastError('Rejected By User');
+		if (error.code === 4001) {
+			showToastError('User rejected the request.');
 		} else {
 			showToastError(error);
 		}

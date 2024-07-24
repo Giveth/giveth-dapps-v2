@@ -33,7 +33,6 @@ import {
 	ScoreBox,
 	Hr,
 } from '@/components/views/userProfile/common.sc';
-import { QFEligibilityStateSection } from '@/components/views/qfEligibility/Common.sc';
 import { Spinner } from '@/components/Spinner';
 import InlineToast, { EToastType } from '@/components/toasts/InlineToast';
 import links from '@/lib/constants/links';
@@ -312,5 +311,13 @@ const EligibilityCardBottom = styled.div`
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
+	gap: 16px;
+`;
+
+export const QFEligibilityStateSection = styled(P)`
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	margin-block: 30px;
 	gap: 16px;
 `;
