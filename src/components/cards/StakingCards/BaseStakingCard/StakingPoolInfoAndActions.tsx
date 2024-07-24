@@ -63,7 +63,6 @@ interface IStakingPoolInfoAndActionsProps {
 		key?: (string | number)[] | null | undefined;
 	};
 }
-
 export const StakingPoolInfoAndActions: FC<IStakingPoolInfoAndActionsProps> = ({
 	poolStakingConfig,
 	isDiscontinued,
