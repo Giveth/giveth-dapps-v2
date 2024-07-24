@@ -50,23 +50,13 @@ export const FETCH_HOMEPAGE_DATA = gql`
 			projectUpdates {
 				id
 				title
-				projectId
-				userId
 				contentSummary
-				isMain
 				createdAt
-				reaction {
-					id
-					userId
-					reaction
-					projectUpdateId
-				}
 				project {
 					slug
 					image
 				}
 			}
-			count
 		}
 		campaigns(connectedWalletUserId: $connectedWalletUserId) {
 			...CampaignCoreFields
