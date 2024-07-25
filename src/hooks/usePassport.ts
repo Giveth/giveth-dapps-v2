@@ -100,8 +100,7 @@ export const usePassport = () => {
 			try {
 				if (!refreshUserScores) {
 					return setInfo({
-						qfEligibilityState:
-							EQFElegibilityState.MORE_INFO_NEEDED,
+						qfEligibilityState: EQFElegibilityState.ERROR,
 						passportState: EPassportState.INVALID,
 						activeQFMBDScore: null,
 						passportScore: null,

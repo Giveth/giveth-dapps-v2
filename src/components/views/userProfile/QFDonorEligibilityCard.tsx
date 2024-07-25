@@ -81,6 +81,8 @@ export const QFDonorEligibilityCard = () => {
 		passportState === EPassportState.NOT_CREATED ||
 		passportState === EPassportState.CONNECTING;
 
+	const passportScoreLoading = passportState === EPassportState.LOADING_SCORE;
+
 	const renderQFEligibilityState = () => {
 		switch (qfEligibilityState) {
 			case EQFElegibilityState.CHECK_ELIGIBILITY:
@@ -149,17 +151,24 @@ export const QFDonorEligibilityCard = () => {
 						id: 'profile.qf_donor_eligibility.title',
 					})}
 				</H5>
-				<QFEligibilityStatus
-					$bgColor={
-						QFEligibilityData[QFEligibilityCurrentState].bgColor
-					}
-					$color={QFEligibilityData[QFEligibilityCurrentState].color}
-				>
-					{formatMessage({
-						id: QFEligibilityData[QFEligibilityCurrentState].text,
-					})}
-					{QFEligibilityData[QFEligibilityCurrentState].icon}
-				</QFEligibilityStatus>
+				{passportScoreLoading ? (
+					<Spinner size={10} color={brandColors.mustard[600]} />
+				) : (
+					<QFEligibilityStatus
+						$bgColor={
+							QFEligibilityData[QFEligibilityCurrentState].bgColor
+						}
+						$color={
+							QFEligibilityData[QFEligibilityCurrentState].color
+						}
+					>
+						{formatMessage({
+							id: QFEligibilityData[QFEligibilityCurrentState]
+								.text,
+						})}
+						{QFEligibilityData[QFEligibilityCurrentState].icon}
+					</QFEligibilityStatus>
+				)}
 			</EligibilityCardTop>
 			<EligibilityCardDesc>{eligibilityDesc()}</EligibilityCardDesc>
 			{showPassportScoreSection && (
