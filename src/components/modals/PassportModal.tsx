@@ -13,6 +13,7 @@ import {
 	IconVerifiedBadge,
 	brandColors,
 	IconVerified24,
+	IconExternalLink16,
 } from '@giveth/ui-design-system';
 import { Modal } from '@/components/modals/Modal';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
@@ -32,6 +33,7 @@ import InlineToast, { EToastType } from '@/components/toasts/InlineToast';
 import links from '@/lib/constants/links';
 import { useAppSelector } from '@/features/hooks';
 import { mediaQueries } from '@/lib/constants/constants';
+import ExternalLink from '@/components/ExternalLink';
 
 interface PassportModalProps extends IModal {
 	qfEligibilityState: EQFElegibilityState;
@@ -86,7 +88,7 @@ const PassportModal: FC<PassportModalProps> = props => {
 	} = props;
 	const { userData: user } = useAppSelector(state => state.user);
 
-	const { locale, formatMessage } = useIntl();
+	const { formatMessage } = useIntl();
 	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
 
 	const MBDEligibile =
@@ -132,15 +134,6 @@ const PassportModal: FC<PassportModalProps> = props => {
 		passportState === EPassportState.NOT_CREATED ||
 		passportState === EPassportState.CONNECTING;
 
-	const qfRoundEndDate = currentRound?.endDate
-		? new Date(currentRound.endDate)
-				.toLocaleString(locale || 'en-US', {
-					day: 'numeric',
-					month: 'short',
-				})
-				.replace(/,/g, '')
-		: '';
-
 	const eligibilityDesc = () => {
 		if (qfEligibilityState === EQFElegibilityState.ELIGIBLE) {
 			return formatMessage({
@@ -150,11 +143,19 @@ const PassportModal: FC<PassportModalProps> = props => {
 			passportState === EPassportState.SIGNED ||
 			passportState === EPassportState.LOADING_SCORE
 		) {
-			return `${formatMessage({
-				id: 'profile.qf_donor_eligibility.passport.not_eligible.p1',
-			})} ${qfRoundEndDate} ${formatMessage({
-				id: 'profile.qf_donor_eligibility.passport.not_eligible.p2',
-			})}`;
+			return (
+				<>
+					{formatMessage({
+						id: 'profile.qf_donor_eligibility.passport.not_eligible.p1',
+					})}{' '}
+					<BoldText>
+						{formatMessage({ id: 'label.refresh_score' })}
+					</BoldText>{' '}
+					{formatMessage({
+						id: 'profile.qf_donor_eligibility.passport.not_eligible.p2',
+					})}
+				</>
+			);
 		} else {
 			return formatMessage({
 				id: 'profile.qf_donor_eligibility.not_eligible_desc',
@@ -287,6 +288,16 @@ const PassportModal: FC<PassportModalProps> = props => {
 								)}
 							</ScoreBox>
 						</ScoreCard>
+						<RightPositionedExternalLink href={links.PASSPORT}>
+							<Button
+								label={formatMessage({
+									id: 'label.increase_passport_score',
+								})}
+								size='small'
+								buttonType='primary'
+								icon={<IconExternalLink16 />}
+							/>
+						</RightPositionedExternalLink>
 					</PassportSection>
 				)}
 				{passportState === EPassportState.INVALID && (
@@ -427,6 +438,16 @@ const EligibilityCardBottom = styled.div`
 
 const StyledToast = styled(InlineToast)`
 	margin-inline: 16px;
+`;
+
+const BoldText = styled.strong`
+	font-weight: 600;
+	text-transform: capitalize;
+`;
+
+const RightPositionedExternalLink = styled(ExternalLink)`
+	display: flex;
+	justify-content: flex-end;
 `;
 
 export default PassportModal;
