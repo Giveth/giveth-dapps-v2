@@ -10,7 +10,7 @@ export const ManageRecurringDonation = () => {
 	const { formatMessage } = useIntl();
 	return (
 		<Box>
-			<Title weight={700}>
+			<Title weight={700} id='recurring-donation-success'>
 				{formatMessage({
 					id: 'label.managing_your_recurring_donations',
 				})}
