@@ -38,6 +38,8 @@ import { useGeneralWallet } from '@/providers/generalWalletProvider';
 import { QFDonorEligibilityCard } from '@/components/views/userProfile/QFDonorEligibilityCard';
 import config from '@/configuration';
 import { fetchSubgraphData } from '@/services/subgraph.service';
+import { getNowUnixMS } from '@/helpers/time';
+
 interface IBtnProps extends IButtonProps {
 	outline?: boolean;
 }
@@ -125,6 +127,10 @@ const ProfileOverviewTab: FC<IUserProfileView> = () => {
 	const givPower = getTotalGIVpower(subgraphValues, address);
 	const { title, subtitle, buttons } = section;
 
+	const activeStartedRound =
+		activeQFRound &&
+		new Date(activeQFRound.beginDate).getTime() < getNowUnixMS();
+
 	useEffect(() => {
 		const setupSections = async () => {
 			if (!user?.name) {
@@ -210,7 +216,7 @@ const ProfileOverviewTab: FC<IUserProfileView> = () => {
 				) : (
 					<Row>
 						<Col lg={6}>
-							{activeQFRound && <QFDonorEligibilityCard />}
+							{activeStartedRound && <QFDonorEligibilityCard />}
 						</Col>
 					</Row>
 				))

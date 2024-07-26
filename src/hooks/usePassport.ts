@@ -325,7 +325,6 @@ export const usePassport = () => {
 			});
 		} else {
 			address && dispatch(fetchUserByAddress(address));
-			updateState(user!);
 		}
 	}, [address, isSafeEnv, setNotAvailableForGSafe, user]);
 
