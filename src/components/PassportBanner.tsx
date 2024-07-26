@@ -108,11 +108,22 @@ export const PassportBannerData: IData = {
 		bg: EPBGState.INFO,
 		icon: <IconInfoOutline24 color={semanticColors.golden[700]} />,
 	},
+	[EQFElegibilityState.NOT_SIGNED]: {
+		content: 'label.passport.not_signed',
+		bg: EPBGState.INFO,
+		icon: <IconInfoOutline24 color={semanticColors.golden[700]} />,
+	},
 };
 
 export const PassportBanner = () => {
-	const { info, updateState, fetchUserMBDScore, handleSign, refreshScore } =
-		usePassport();
+	const {
+		info,
+		updateState,
+		handleSignWallet,
+		fetchUserMBDScore,
+		handleSign,
+		refreshScore,
+	} = usePassport();
 	const { currentRound, passportState, passportScore, qfEligibilityState } =
 		info;
 
@@ -212,6 +223,16 @@ export const PassportBanner = () => {
 								id: 'label.add_more_info',
 							})}
 						</GLink>
+					</StyledLink>
+				)}
+				{qfEligibilityState === EQFElegibilityState.NOT_SIGNED && (
+					<StyledLink onClick={() => handleSignWallet()}>
+						<GLink>
+							{formatMessage({
+								id: 'label.sign_message',
+							})}
+						</GLink>
+						<IconWalletOutline16 />
 					</StyledLink>
 				)}
 			</PassportBannerWrapper>

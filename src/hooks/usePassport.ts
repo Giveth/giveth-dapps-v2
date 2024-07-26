@@ -25,6 +25,7 @@ export enum EPassportState {
 }
 
 export enum EQFElegibilityState {
+	NOT_SIGNED,
 	LOADING,
 	PROCESSING,
 	NOT_CONNECTED,
@@ -236,7 +237,7 @@ export const usePassport = () => {
 			dispatch(setUserMBDScore(userAddressScore?.activeQFMBDScore));
 		} catch (error) {
 			console.error('Failed to fetch user address score:', error);
-			user && updateState(user);
+			updateState(user!);
 		}
 	}, [address, updateState, user, isSafeEnv, setNotAvailableForGSafe]);
 
@@ -300,6 +301,32 @@ export const usePassport = () => {
 		}
 	}, [address, isSafeEnv, refreshScore, setNotAvailableForGSafe, user]);
 
+	const handleSignWallet = useCallback(async () => {
+		if (!address) return;
+		if (isSafeEnv) return setNotAvailableForGSafe();
+
+		setInfo({
+			qfEligibilityState: EQFElegibilityState.LOADING,
+			passportState: null,
+			passportScore: null,
+			activeQFMBDScore: null,
+			currentRound: activeQFRound,
+		});
+
+		const res = await connectPassport(address, !user);
+		if (!res) {
+			setInfo({
+				qfEligibilityState: EQFElegibilityState.NOT_SIGNED,
+				passportState: EPassportState.NOT_SIGNED,
+				passportScore: null,
+				activeQFMBDScore: null,
+				currentRound: activeQFRound,
+			});
+		} else {
+			updateState(user!);
+		}
+	}, [address, isSafeEnv, setNotAvailableForGSafe, user]);
+
 	useEffect(() => {
 		console.log('******0', address, isUserFullFilled, user);
 		if (isSafeEnv) return setNotAvailableForGSafe();
@@ -334,9 +361,24 @@ export const usePassport = () => {
 					await updateState(user);
 				} else {
 					console.log('******6', address, isUserFullFilled, user);
+					if (
+						!passports[address.toLowerCase()] &&
+						user &&
+						user.activeQFMBDScore != null &&
+						activeQFRound &&
+						user.activeQFMBDScore < activeQFRound.minMBDScore
+					) {
+						return setInfo({
+							qfEligibilityState:
+								EQFElegibilityState.MORE_INFO_NEEDED,
+							passportState: EPassportState.NOT_SIGNED,
+							passportScore: null,
+							activeQFMBDScore: null,
+							currentRound: activeQFRound,
+						});
+					}
 					setInfo({
-						qfEligibilityState:
-							EQFElegibilityState.MORE_INFO_NEEDED,
+						qfEligibilityState: EQFElegibilityState.NOT_SIGNED,
 						passportState: EPassportState.NOT_SIGNED,
 						passportScore: null,
 						activeQFMBDScore: null,
@@ -350,14 +392,21 @@ export const usePassport = () => {
 		};
 		fetchData();
 	}, [
+		user,
 		address,
+		isSafeEnv,
+		activeQFRound,
 		isUserFullFilled,
 		updateState,
-		user,
-		isSafeEnv,
 		setNotAvailableForGSafe,
-		activeQFRound,
 	]);
 
-	return { info, updateState, handleSign, refreshScore, fetchUserMBDScore };
+	return {
+		info,
+		updateState,
+		handleSign,
+		handleSignWallet,
+		refreshScore,
+		fetchUserMBDScore,
+	};
 };
