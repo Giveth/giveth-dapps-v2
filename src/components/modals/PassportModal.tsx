@@ -202,7 +202,14 @@ const PassportModal: FC<PassportModalProps> = props => {
 					formatMessage({ id: 'label.increase_your_score' })
 				);
 			case EQFElegibilityState.RECHECK_ELIGIBILITY:
-				return formatMessage({ id: 'label.increase_your_score' });
+				return passportScoreLoading ? (
+					<>
+						<Spinner size={10} color={brandColors.mustard[600]} />
+						{formatMessage({ id: 'label.loading' })}
+					</>
+				) : (
+					formatMessage({ id: 'label.increase_your_score' })
+				);
 			default:
 				return null;
 		}
