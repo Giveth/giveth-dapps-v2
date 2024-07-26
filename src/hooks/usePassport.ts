@@ -12,6 +12,7 @@ import { useIsSafeEnvironment } from '@/hooks/useSafeAutoConnect';
 import { useAppSelector, useAppDispatch } from '@/features/hooks';
 import { useProjectsContext } from '@/context/projects.context';
 import { setUserMBDScore, setUserPassport } from '@/features/user/user.slice';
+import { fetchUserByAddress } from '@/features/user/user.thunks';
 
 export enum EPassportState {
 	NOT_CONNECTED,
@@ -323,6 +324,7 @@ export const usePassport = () => {
 				currentRound: activeQFRound,
 			});
 		} else {
+			address && dispatch(fetchUserByAddress(address));
 			updateState(user!);
 		}
 	}, [address, isSafeEnv, setNotAvailableForGSafe, user]);
