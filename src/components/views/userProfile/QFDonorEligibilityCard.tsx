@@ -12,6 +12,7 @@ import {
 	FlexCenter,
 	IconInfoOutline,
 	IconVerifiedBadge,
+	IconExternalLink16,
 } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
 import { ContributeCardBox } from '@/components/ContributeCard.sc';
@@ -36,9 +37,10 @@ import {
 import { Spinner } from '@/components/Spinner';
 import InlineToast, { EToastType } from '@/components/toasts/InlineToast';
 import links from '@/lib/constants/links';
+import ExternalLink from '@/components/ExternalLink';
 
 export const QFDonorEligibilityCard = () => {
-	const { locale, formatMessage } = useIntl();
+	const { formatMessage } = useIntl();
 	const { info, handleSign, refreshScore, fetchUserMBDScore } = usePassport();
 	const { passportState, passportScore, qfEligibilityState, currentRound } =
 		info;
@@ -81,6 +83,8 @@ export const QFDonorEligibilityCard = () => {
 		passportState === EPassportState.NOT_CREATED ||
 		passportState === EPassportState.CONNECTING;
 
+	const passportScoreLoading = passportState === EPassportState.LOADING_SCORE;
+
 	const renderQFEligibilityState = () => {
 		switch (qfEligibilityState) {
 			case EQFElegibilityState.CHECK_ELIGIBILITY:
@@ -111,14 +115,6 @@ export const QFDonorEligibilityCard = () => {
 				return formatMessage({ id: 'label.passport_connected' });
 		}
 	};
-	const qfRoundEndDate = currentRound?.endDate
-		? new Date(currentRound.endDate)
-				.toLocaleString(locale || 'en-US', {
-					day: 'numeric',
-					month: 'short',
-				})
-				.replace(/,/g, '')
-		: '';
 
 	const eligibilityDesc = () => {
 		if (qfEligibilityState === EQFElegibilityState.ELIGIBLE) {
@@ -129,11 +125,19 @@ export const QFDonorEligibilityCard = () => {
 			passportState === EPassportState.SIGNED ||
 			passportState === EPassportState.LOADING_SCORE
 		) {
-			return `${formatMessage({
-				id: 'profile.qf_donor_eligibility.passport.not_eligible.p1',
-			})} ${qfRoundEndDate} ${formatMessage({
-				id: 'profile.qf_donor_eligibility.passport.not_eligible.p2',
-			})}`;
+			return (
+				<>
+					{formatMessage({
+						id: 'profile.qf_donor_eligibility.passport.not_eligible.p1',
+					})}{' '}
+					<BoldText>
+						{formatMessage({ id: 'label.refresh_score' })}
+					</BoldText>{' '}
+					{formatMessage({
+						id: 'profile.qf_donor_eligibility.passport.not_eligible.p2',
+					})}
+				</>
+			);
 		} else {
 			return formatMessage({
 				id: 'profile.qf_donor_eligibility.not_eligible_desc',
@@ -149,17 +153,24 @@ export const QFDonorEligibilityCard = () => {
 						id: 'profile.qf_donor_eligibility.title',
 					})}
 				</H5>
-				<QFEligibilityStatus
-					$bgColor={
-						QFEligibilityData[QFEligibilityCurrentState].bgColor
-					}
-					$color={QFEligibilityData[QFEligibilityCurrentState].color}
-				>
-					{formatMessage({
-						id: QFEligibilityData[QFEligibilityCurrentState].text,
-					})}
-					{QFEligibilityData[QFEligibilityCurrentState].icon}
-				</QFEligibilityStatus>
+				{passportScoreLoading ? (
+					<Spinner size={10} color={brandColors.mustard[600]} />
+				) : (
+					<QFEligibilityStatus
+						$bgColor={
+							QFEligibilityData[QFEligibilityCurrentState].bgColor
+						}
+						$color={
+							QFEligibilityData[QFEligibilityCurrentState].color
+						}
+					>
+						{formatMessage({
+							id: QFEligibilityData[QFEligibilityCurrentState]
+								.text,
+						})}
+						{QFEligibilityData[QFEligibilityCurrentState].icon}
+					</QFEligibilityStatus>
+				)}
 			</EligibilityCardTop>
 			<EligibilityCardDesc>{eligibilityDesc()}</EligibilityCardDesc>
 			{showPassportScoreSection && (
@@ -186,6 +197,16 @@ export const QFDonorEligibilityCard = () => {
 							)}
 						</ScoreBox>
 					</ScoreCard>
+					<RightPositionedExternalLink href={links.PASSPORT}>
+						<Button
+							label={formatMessage({
+								id: 'label.increase_passport_score',
+							})}
+							size='small'
+							buttonType='primary'
+							icon={<IconExternalLink16 />}
+						/>
+					</RightPositionedExternalLink>
 				</PassportSection>
 			)}
 			<Hr />
@@ -320,4 +341,14 @@ export const QFEligibilityStateSection = styled(P)`
 	justify-content: center;
 	margin-block: 30px;
 	gap: 16px;
+`;
+
+const RightPositionedExternalLink = styled(ExternalLink)`
+	display: flex;
+	justify-content: flex-end;
+`;
+
+const BoldText = styled.strong`
+	font-weight: 600;
+	text-transform: capitalize;
 `;

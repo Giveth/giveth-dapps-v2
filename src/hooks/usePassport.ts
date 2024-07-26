@@ -9,8 +9,9 @@ import {
 import { IPassportInfo, IQFRound } from '@/apollo/types/types';
 import { getNowUnixMS } from '@/helpers/time';
 import { useIsSafeEnvironment } from '@/hooks/useSafeAutoConnect';
-import { useAppSelector } from '@/features/hooks';
+import { useAppSelector, useAppDispatch } from '@/features/hooks';
 import { useProjectsContext } from '@/context/projects.context';
+import { setUserMBDScore, setUserPassport } from '@/features/user/user.slice';
 
 export enum EPassportState {
 	NOT_CONNECTED,
@@ -55,6 +56,8 @@ const initialInfo: IPassportAndStateInfo = {
 };
 
 export const usePassport = () => {
+	const dispatch = useAppDispatch();
+
 	const { address } = useAccount();
 	const { isArchivedQF } = useProjectsContext();
 	const [info, setInfo] = useState<IPassportAndStateInfo>(initialInfo);
@@ -100,8 +103,7 @@ export const usePassport = () => {
 			try {
 				if (!refreshUserScores) {
 					return setInfo({
-						qfEligibilityState:
-							EQFElegibilityState.MORE_INFO_NEEDED,
+						qfEligibilityState: EQFElegibilityState.ERROR,
 						passportState: EPassportState.INVALID,
 						activeQFMBDScore: null,
 						passportScore: null,
@@ -231,6 +233,7 @@ export const usePassport = () => {
 		try {
 			const userAddressScore = await scoreUserAddress(address);
 			await updateState(userAddressScore);
+			dispatch(setUserMBDScore(userAddressScore?.activeQFMBDScore));
 		} catch (error) {
 			console.error('Failed to fetch user address score:', error);
 			user && updateState(user);
@@ -249,6 +252,13 @@ export const usePassport = () => {
 		try {
 			const { refreshUserScores } = await fetchPassportScore(address);
 			await updateState(refreshUserScores);
+			dispatch(
+				setUserPassport({
+					passportScore: refreshUserScores?.passportScore,
+					passportStamps: refreshUserScores?.passportStamps,
+					activeQFMBDScore: refreshUserScores?.activeQFMBDScore,
+				}),
+			);
 		} catch (error) {
 			console.error(error);
 			setInfo({
