@@ -85,6 +85,11 @@ export const QFDonorEligibilityCard = () => {
 
 	const passportScoreLoading = passportState === EPassportState.LOADING_SCORE;
 
+	const increaseScore =
+		passportScore != null &&
+		currentRound?.minimumPassportScore != null &&
+		passportScore < currentRound.minimumPassportScore;
+
 	const renderQFEligibilityState = () => {
 		switch (qfEligibilityState) {
 			case EQFElegibilityState.CHECK_ELIGIBILITY:
@@ -197,16 +202,18 @@ export const QFDonorEligibilityCard = () => {
 							)}
 						</ScoreBox>
 					</ScoreCard>
-					<RightPositionedExternalLink href={links.PASSPORT}>
-						<Button
-							label={formatMessage({
-								id: 'label.increase_passport_score',
-							})}
-							size='small'
-							buttonType='primary'
-							icon={<IconExternalLink16 />}
-						/>
-					</RightPositionedExternalLink>
+					{increaseScore && (
+						<RightPositionedExternalLink href={links.PASSPORT}>
+							<Button
+								label={formatMessage({
+									id: 'label.increase_passport_score',
+								})}
+								size='small'
+								buttonType='primary'
+								icon={<IconExternalLink16 />}
+							/>
+						</RightPositionedExternalLink>
+					)}
 				</PassportSection>
 			)}
 			<Hr />

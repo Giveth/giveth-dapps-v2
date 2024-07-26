@@ -106,6 +106,11 @@ const PassportModal: FC<PassportModalProps> = props => {
 
 	const passportScoreLoading = passportState === EPassportState.LOADING_SCORE;
 
+	const increaseScore =
+		passportScore != null &&
+		currentRound?.minimumPassportScore != null &&
+		passportScore < currentRound.minimumPassportScore;
+
 	const showPassportScoreSection =
 		passportState !== EPassportState.NOT_SIGNED &&
 		passportState !== EPassportState.NOT_CREATED &&
@@ -288,16 +293,18 @@ const PassportModal: FC<PassportModalProps> = props => {
 								)}
 							</ScoreBox>
 						</ScoreCard>
-						<RightPositionedExternalLink href={links.PASSPORT}>
-							<Button
-								label={formatMessage({
-									id: 'label.increase_passport_score',
-								})}
-								size='small'
-								buttonType='primary'
-								icon={<IconExternalLink16 />}
-							/>
-						</RightPositionedExternalLink>
+						{increaseScore && (
+							<RightPositionedExternalLink href={links.PASSPORT}>
+								<Button
+									label={formatMessage({
+										id: 'label.increase_passport_score',
+									})}
+									size='small'
+									buttonType='primary'
+									icon={<IconExternalLink16 />}
+								/>
+							</RightPositionedExternalLink>
+						)}
 					</PassportSection>
 				)}
 				{passportState === EPassportState.INVALID && (
