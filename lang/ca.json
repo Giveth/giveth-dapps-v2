@@ -708,7 +708,7 @@
 	"label.passport.not_connected": "Connecta la teva cartera per verificar la teva elegibilitat per a l'igualació de donacions.",
 	"label.passport.not_created": "Aconsegueix que la teva donació sigui igualada amb finançament quadràtic! Verifica el teu Gitcoin Passport abans ",
 	"label.passport.not_eligible": "Aconsegueix que la teva donació sigui igualada amb finançament quadràtic! Augmenta la teva puntuació de Gitcoin Passport abans ",
-	"label.passport.not_signed": "Signa el missatge amb la teva cartera per connectar-te a Passport",
+	"label.passport.not_signed": "Sign the message with your wallet to check your eligibility for donation matching",
 	"label.passport.no_active_round": "No hi ha cap ronda activa!",
 	"label.passport.round_starts_on": "La pròxima ronda comença el {data}",
 	"label.passport_score": "Puntuació del Passport",
