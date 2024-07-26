@@ -97,7 +97,6 @@ const ProjectsIndex = (props: IProjectsView) => {
 
 	const fetchProjects = useCallback(
 		async (pageParam: number | unknown): Promise<Page> => {
-			console.log('pageParam', pageParam);
 			const currentPage = typeof pageParam === 'number' ? pageParam : 0;
 
 			const variables: IQueries = {
@@ -174,22 +173,26 @@ const ProjectsIndex = (props: IProjectsView) => {
 	});
 
 	// User signied in or singout reset query
-	useEffect(() => {
-		console.log('user id changed');
-		setUserIdChanged(prevState => !prevState);
-		queryClient.resetQueries({
-			queryKey: ['projects'],
-			exact: true,
-		});
-	}, [queryClient, user?.id]);
+	// TODO: need to refactor, only change when user loggin or out
+	// useEffect(() => {
+	// 	console.log('user id changed');
+	// 	if (user?.id) {
+	// 		setUserIdChanged(prevState => !prevState);
+	// 		queryClient.resetQueries({
+	// 			queryKey: ['projects'],
+	// 			exact: true,
+	// 		});
+	// 	}
+	// }, [queryClient, user?.id]);
 
 	// Reset query if contect variables change occurs
-	useEffect(() => {
-		queryClient.resetQueries({
-			queryKey: ['projects'],
-			exact: true,
-		});
-	}, [contextVariables, queryClient]);
+	// TODO: need to refactor,
+	// useEffect(() => {
+	// 	queryClient.resetQueries({
+	// 		queryKey: ['projects'],
+	// 		exact: true,
+	// 	});
+	// }, [contextVariables, queryClient]);
 
 	// Function that triggers when you scroll down - infinite loading
 	const loadMore = useCallback(() => {
@@ -247,10 +250,30 @@ const ProjectsIndex = (props: IProjectsView) => {
 		}
 	}, [selectedMainCategory, mainCategories.length]);
 
+	// Save last clicked project
+	const handleProjectClick = (slug: string) => {
+		localStorage.setItem('lastProjectClicked', slug);
+	};
+
+	// Handle last clicked project, if it exist scroll to that position
+	useEffect(() => {
+		if (!isFetching && !isFetchingNextPage) {
+			const lastProjectClicked =
+				localStorage.getItem('lastProjectClicked');
+			if (lastProjectClicked) {
+				window.scrollTo({
+					top: document.getElementById(lastProjectClicked)?.offsetTop,
+					behavior: 'smooth',
+				});
+				localStorage.removeItem('lastProjectClicked');
+			}
+		}
+	}, [isFetching, isFetchingNextPage]);
+
 	if (isNotFound)
 		return <NotAvailable description='Oops! Page Not Found...' />;
 
-	// Handle fetching errors -
+	// Handle fetching errors from React Query
 	if (isError) {
 		showToastError(error);
 		captureException(error, {
@@ -262,17 +285,6 @@ const ProjectsIndex = (props: IProjectsView) => {
 
 	return (
 		<>
-			<button
-				onClick={() => {
-					queryClient.resetQueries({
-						queryKey: ['projects'],
-						exact: true,
-					});
-					// queryClient.clear();
-				}}
-			>
-				RESET
-			</button>
 			{(isFetching || isFetchingNextPage) && (
 				<Loading>
 					<Spinner />
@@ -320,7 +332,13 @@ const ProjectsIndex = (props: IProjectsView) => {
 							{data?.pages.map((page, pageIndex) => (
 								<Fragment key={pageIndex}>
 									{page.data.map((project, idx) => (
-										<div key={project.id}>
+										<div
+											key={project.id}
+											id={project.slug}
+											onClick={() =>
+												handleProjectClick(project.slug)
+											}
+										>
 											<ProjectCard
 												key={project.id}
 												project={project}
