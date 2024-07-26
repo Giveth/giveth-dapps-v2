@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { IUserWithPassport } from '@/apollo/types/types';
+import { IUserWithPassport, IPassportInfo } from '@/apollo/types/types';
 import {
 	fetchUserByAddress,
 	signToGetToken,
@@ -62,6 +62,19 @@ export const userSlice = createSlice({
 		},
 		setIsLoading: (state, action: PayloadAction<boolean>) => {
 			state.isLoading = action.payload;
+		},
+		setUserMBDScore: (state, action: PayloadAction<number>) => {
+			if (state.userData) {
+				state.userData.activeQFMBDScore = action.payload;
+			}
+		},
+		setUserPassport: (state, action: PayloadAction<IPassportInfo>) => {
+			if (state.userData) {
+				state.userData.passportScore = action.payload.passportScore;
+				state.userData.passportStamps = action.payload.passportStamps;
+				state.userData.activeQFMBDScore =
+					action.payload.activeQFMBDScore;
+			}
 		},
 	},
 	extraReducers: builder => {
@@ -141,5 +154,7 @@ export const {
 	setToken,
 	setBoostedProjectsCount,
 	setIsLoading,
+	setUserMBDScore,
+	setUserPassport,
 } = userSlice.actions;
 export default userSlice.reducer;
