@@ -106,6 +106,11 @@ const PassportModal: FC<PassportModalProps> = props => {
 
 	const passportScoreLoading = passportState === EPassportState.LOADING_SCORE;
 
+	const increaseScore =
+		passportScore != null &&
+		currentRound?.minimumPassportScore != null &&
+		passportScore < currentRound.minimumPassportScore;
+
 	const showPassportScoreSection =
 		passportState !== EPassportState.NOT_SIGNED &&
 		passportState !== EPassportState.NOT_CREATED &&
@@ -197,7 +202,14 @@ const PassportModal: FC<PassportModalProps> = props => {
 					formatMessage({ id: 'label.increase_your_score' })
 				);
 			case EQFElegibilityState.RECHECK_ELIGIBILITY:
-				return formatMessage({ id: 'label.increase_your_score' });
+				return passportScoreLoading ? (
+					<>
+						<Spinner size={10} color={brandColors.mustard[600]} />
+						{formatMessage({ id: 'label.loading' })}
+					</>
+				) : (
+					formatMessage({ id: 'label.increase_your_score' })
+				);
 			default:
 				return null;
 		}
@@ -288,16 +300,18 @@ const PassportModal: FC<PassportModalProps> = props => {
 								)}
 							</ScoreBox>
 						</ScoreCard>
-						<RightPositionedExternalLink href={links.PASSPORT}>
-							<Button
-								label={formatMessage({
-									id: 'label.increase_passport_score',
-								})}
-								size='small'
-								buttonType='primary'
-								icon={<IconExternalLink16 />}
-							/>
-						</RightPositionedExternalLink>
+						{increaseScore && (
+							<RightPositionedExternalLink href={links.PASSPORT}>
+								<Button
+									label={formatMessage({
+										id: 'label.increase_passport_score',
+									})}
+									size='small'
+									buttonType='primary'
+									icon={<IconExternalLink16 />}
+								/>
+							</RightPositionedExternalLink>
+						)}
 					</PassportSection>
 				)}
 				{passportState === EPassportState.INVALID && (

@@ -708,7 +708,7 @@
 	"label.passport.not_connected": "Conecta tu billetera para verificar tu elegibilidad para la igualación de donaciones.",
 	"label.passport.not_created": "¡Haz que tu donación sea complementada con financiamiento cuadrático! Verifica tu Pasaporte de Gitcoin antes de ",
 	"label.passport.not_eligible": "¡Haz que tu donación sea complementada con financiamiento cuadrático! Aumenta tu puntuación en el Pasaporte de Gitcoin antes de ",
-	"label.passport.not_signed": "Firma el mensaje con tu billetera para conectarte al Pasaporte",
+	"label.passport.not_signed": "Firme el mensaje con su cartera para comprobar si cumple los requisitos para la equiparación de donativos",
 	"label.passport.no_active_round": "¡No hay una ronda activa!",
 	"label.passport.round_starts_on": "La ronda comienza el {date}",
 	"label.passport_score": "Puntuación del Pasaporte",
