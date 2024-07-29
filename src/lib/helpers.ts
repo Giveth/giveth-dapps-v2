@@ -55,7 +55,8 @@ export const truncateToDecimalPlaces = (strNum: string, decimals: number) => {
 	if (index === -1 || decimals < 1) {
 		return Number(strNum);
 	}
-	let length = index + 1 + decimals;
+	const decimalPlaces = decimals < 6 ? 6 : decimals;
+	let length = index + 1 + decimalPlaces;
 	return Number(strNum.substring(0, length));
 };
 
