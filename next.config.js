@@ -108,11 +108,6 @@ const moduleExports = withBundleAnalyzer({
 				destination: '/qf/all',
 				permanent: false,
 			},
-			{
-				source: '/passport',
-				destination: '/qf-eligibility',
-				permanent: false,
-			},
 		];
 
 		// if (isProduction) {
