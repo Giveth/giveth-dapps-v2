@@ -14,7 +14,6 @@ import {
 import React, { ReactNode, useState } from 'react';
 import styled from 'styled-components';
 import { useIntl } from 'react-intl';
-import { useWeb3Modal } from '@web3modal/wagmi/react';
 import { EQFElegibilityState, usePassport } from '@/hooks/usePassport';
 import { useGeneralWallet } from '@/providers/generalWalletProvider';
 import { smallFormatDate } from '@/lib/helpers';
@@ -124,7 +123,6 @@ export const PassportBanner = () => {
 		info;
 
 	const { formatMessage, locale } = useIntl();
-	const { open: openConnectModal } = useWeb3Modal();
 	const { isOnSolana, handleSingOutAndSignInWithEVM } = useGeneralWallet();
 	const [showModal, setShowModal] = useState<boolean>(false);
 
