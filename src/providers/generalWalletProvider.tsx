@@ -355,6 +355,7 @@ export const GeneralWalletProvider: React.FC<{
 		if (!isGIVeconomyRoute) {
 			dispatch(setShowWelcomeModal(true));
 		} else {
+			disconnect();
 			openConnectModal();
 		}
 	};
