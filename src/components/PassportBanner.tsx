@@ -14,12 +14,7 @@ import {
 import React, { ReactNode, useState } from 'react';
 import styled from 'styled-components';
 import { useIntl } from 'react-intl';
-import { useWeb3Modal } from '@web3modal/wagmi/react';
-import {
-	EQFElegibilityState,
-	EPassportState,
-	usePassport,
-} from '@/hooks/usePassport';
+import { EQFElegibilityState, usePassport } from '@/hooks/usePassport';
 import { useGeneralWallet } from '@/providers/generalWalletProvider';
 import { smallFormatDate } from '@/lib/helpers';
 import { Spinner } from '@/components/Spinner';
@@ -128,7 +123,6 @@ export const PassportBanner = () => {
 		info;
 
 	const { formatMessage, locale } = useIntl();
-	const { open: openConnectModal } = useWeb3Modal();
 	const { isOnSolana, handleSingOutAndSignInWithEVM } = useGeneralWallet();
 	const [showModal, setShowModal] = useState<boolean>(false);
 
@@ -177,16 +171,6 @@ export const PassportBanner = () => {
 							)}
 					</P>
 				</Flex>
-				{passportState === EPassportState.NOT_CONNECTED && (
-					<StyledLink onClick={() => openConnectModal?.()}>
-						<GLink>
-							{formatMessage({
-								id: 'component.button.connect_wallet',
-							})}
-						</GLink>
-						<IconWalletOutline16 />
-					</StyledLink>
-				)}
 				{qfEligibilityState ===
 					EQFElegibilityState.CHECK_ELIGIBILITY && (
 					<StyledLink onClick={() => fetchUserMBDScore()}>
