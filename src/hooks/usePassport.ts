@@ -5,6 +5,7 @@ import {
 	connectPassport,
 	fetchPassportScore,
 	scoreUserAddress,
+	connectWallet,
 } from '@/services/passport';
 import { IPassportInfo, IQFRound } from '@/apollo/types/types';
 import { getNowUnixMS } from '@/helpers/time';
@@ -314,7 +315,7 @@ export const usePassport = () => {
 			currentRound: activeQFRound,
 		});
 
-		const res = await connectPassport(address, !user);
+		const res = await connectWallet(address, !user);
 		if (!res) {
 			setInfo({
 				qfEligibilityState: EQFElegibilityState.NOT_SIGNED,
