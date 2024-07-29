@@ -159,8 +159,9 @@ const ProjectsIndex = (props: IProjectsView) => {
 	});
 
 	// Reset query if contect variables change occurs
-	// TODO: need to refactor,
+	// TODO: This is causing a bug where the page is refreshed when you come back
 	// useEffect(() => {
+	// 	console.log('SOMETHING CHANGED');
 	// 	queryClient.resetQueries({
 	// 		queryKey: ['projects'],
 	// 		exact: true,
@@ -329,7 +330,7 @@ const ProjectsIndex = (props: IProjectsView) => {
 				{totalCount > filteredProjects?.length && (
 					<div ref={lastElementRef} />
 				)}
-				{(isFetching || isFetchingNextPage) && (
+				{!isFetching && !isFetchingNextPage && (
 					<>
 						<StyledButton
 							onClick={loadMore}
