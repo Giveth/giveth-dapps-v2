@@ -11,19 +11,16 @@ import {
 	IconFingerprint32,
 	Flex,
 } from '@giveth/ui-design-system';
+import { useAccount } from 'wagmi';
 import React, { ReactNode, useState } from 'react';
 import styled from 'styled-components';
 import { useIntl } from 'react-intl';
-import { useWeb3Modal } from '@web3modal/wagmi/react';
-import {
-	EQFElegibilityState,
-	EPassportState,
-	usePassport,
-} from '@/hooks/usePassport';
+import { EQFElegibilityState, usePassport } from '@/hooks/usePassport';
 import { useGeneralWallet } from '@/providers/generalWalletProvider';
 import { smallFormatDate } from '@/lib/helpers';
 import { Spinner } from '@/components/Spinner';
 import PassportModal from '@/components/modals/PassportModal';
+import { SignWithWalletModal } from '@/components/modals/SignWithWalletModal';
 
 enum EPBGState {
 	SUCCESS,
@@ -128,9 +125,12 @@ export const PassportBanner = () => {
 		info;
 
 	const { formatMessage, locale } = useIntl();
-	const { open: openConnectModal } = useWeb3Modal();
+	const { connector } = useAccount();
 	const { isOnSolana, handleSingOutAndSignInWithEVM } = useGeneralWallet();
 	const [showModal, setShowModal] = useState<boolean>(false);
+	const [signWithWallet, setSignWithWallet] = useState<boolean>(false);
+
+	const isGSafeConnector = connector?.id === 'safe';
 
 	return !isOnSolana ? (
 		<>
@@ -177,16 +177,6 @@ export const PassportBanner = () => {
 							)}
 					</P>
 				</Flex>
-				{passportState === EPassportState.NOT_CONNECTED && (
-					<StyledLink onClick={() => openConnectModal?.()}>
-						<GLink>
-							{formatMessage({
-								id: 'component.button.connect_wallet',
-							})}
-						</GLink>
-						<IconWalletOutline16 />
-					</StyledLink>
-				)}
 				{qfEligibilityState ===
 					EQFElegibilityState.CHECK_ELIGIBILITY && (
 					<StyledLink onClick={() => fetchUserMBDScore()}>
@@ -226,7 +216,7 @@ export const PassportBanner = () => {
 					</StyledLink>
 				)}
 				{qfEligibilityState === EQFElegibilityState.NOT_SIGNED && (
-					<StyledLink onClick={() => handleSignWallet()}>
+					<StyledLink onClick={() => setSignWithWallet(true)}>
 						<GLink>
 							{formatMessage({
 								id: 'label.sign_message',
@@ -246,6 +236,14 @@ export const PassportBanner = () => {
 					updateState={updateState}
 					refreshScore={refreshScore}
 					handleSign={handleSign}
+				/>
+			)}
+			{signWithWallet && (
+				<SignWithWalletModal
+					isGSafeConnector={isGSafeConnector}
+					setShowModal={() => {
+						setSignWithWallet(false);
+					}}
 				/>
 			)}
 		</>

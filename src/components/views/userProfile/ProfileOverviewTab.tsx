@@ -114,9 +114,10 @@ const ProfileOverviewTab: FC<IUserProfileView> = () => {
 	const givPower = getTotalGIVpower(values);
 	const { title, subtitle, buttons } = section;
 
-	const activeStartedRound =
+	const activeStartedRoundNotEnded =
 		activeQFRound &&
-		new Date(activeQFRound.beginDate).getTime() < getNowUnixMS();
+		new Date(activeQFRound.beginDate).getTime() < getNowUnixMS() &&
+		new Date(activeQFRound.endDate).getTime() > getNowUnixMS();
 
 	useEffect(() => {
 		const setupSections = async () => {
@@ -203,7 +204,9 @@ const ProfileOverviewTab: FC<IUserProfileView> = () => {
 				) : (
 					<Row>
 						<Col lg={6}>
-							{activeStartedRound && <QFDonorEligibilityCard />}
+							{activeStartedRoundNotEnded && (
+								<QFDonorEligibilityCard />
+							)}
 						</Col>
 					</Row>
 				))

@@ -5,6 +5,7 @@ import {
 	connectPassport,
 	fetchPassportScore,
 	scoreUserAddress,
+	connectWallet,
 } from '@/services/passport';
 import { IPassportInfo, IQFRound } from '@/apollo/types/types';
 import { getNowUnixMS } from '@/helpers/time';
@@ -314,7 +315,7 @@ export const usePassport = () => {
 			currentRound: activeQFRound,
 		});
 
-		const res = await connectPassport(address, !user);
+		const res = await connectWallet(address, !user);
 		if (!res) {
 			setInfo({
 				qfEligibilityState: EQFElegibilityState.NOT_SIGNED,
@@ -329,22 +330,33 @@ export const usePassport = () => {
 	}, [address, isSafeEnv, setNotAvailableForGSafe, user]);
 
 	useEffect(() => {
-		console.log('******0', address, isUserFullFilled, user);
-		if (isSafeEnv) return setNotAvailableForGSafe();
-		if (!address) {
-			console.log('******1', address, isUserFullFilled, user);
-			return setInfo({
-				qfEligibilityState: EQFElegibilityState.NOT_CONNECTED,
-				passportState: EPassportState.NOT_CONNECTED,
-				passportScore: null,
-				activeQFMBDScore: null,
-				currentRound: null,
-			});
-		}
-		console.log('******2', address, isUserFullFilled, user);
-		if (!isUserFullFilled) return;
-		console.log('******3', address, isUserFullFilled, user);
 		const fetchData = async () => {
+			console.log('******0', address, isUserFullFilled, user);
+			const now = getNowUnixMS();
+
+			if (
+				isSafeEnv ||
+				isArchivedQF ||
+				!activeQFRound ||
+				now < new Date(activeQFRound.beginDate).getTime() ||
+				now > new Date(activeQFRound.endDate).getTime()
+			) {
+				return await updateState(user!);
+			}
+
+			if (!address) {
+				console.log('******1', address, isUserFullFilled, user);
+				return setInfo({
+					qfEligibilityState: EQFElegibilityState.NOT_CONNECTED,
+					passportState: EPassportState.NOT_CONNECTED,
+					passportScore: null,
+					activeQFMBDScore: null,
+					currentRound: null,
+				});
+			}
+			console.log('******2', address, isUserFullFilled, user);
+			if (!isUserFullFilled) return;
+			console.log('******3', address, isUserFullFilled, user);
 			if (!user || user.passportScore === null) {
 				console.log('******4', address, isUserFullFilled, user);
 				console.log('Passport score is null in our database');
@@ -396,10 +408,10 @@ export const usePassport = () => {
 		user,
 		address,
 		isSafeEnv,
+		isArchivedQF,
 		activeQFRound,
 		isUserFullFilled,
 		updateState,
-		setNotAvailableForGSafe,
 	]);
 
 	return {
