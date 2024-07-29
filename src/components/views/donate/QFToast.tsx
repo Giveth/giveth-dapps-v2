@@ -15,7 +15,8 @@ import PassportModal from '@/components/modals/PassportModal';
 
 const QFToast = () => {
 	const { formatMessage, locale } = useIntl();
-	const { info, refreshScore, handleSign, fetchUserMBDScore } = usePassport();
+	const { info, updateState, refreshScore, handleSign, fetchUserMBDScore } =
+		usePassport();
 	const { qfEligibilityState, passportState, passportScore, currentRound } =
 		info;
 	const [showModal, setShowModal] = useState<boolean>(false);
@@ -95,6 +96,7 @@ const QFToast = () => {
 					passportScore={passportScore}
 					currentRound={currentRound}
 					setShowModal={setShowModal}
+					updateState={updateState}
 					refreshScore={refreshScore}
 					handleSign={handleSign}
 					fetchUserMBDScore={fetchUserMBDScore}

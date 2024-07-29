@@ -5,12 +5,15 @@ import {
 	connectPassport,
 	fetchPassportScore,
 	scoreUserAddress,
+	connectWallet,
 } from '@/services/passport';
 import { IPassportInfo, IQFRound } from '@/apollo/types/types';
 import { getNowUnixMS } from '@/helpers/time';
 import { useIsSafeEnvironment } from '@/hooks/useSafeAutoConnect';
-import { useAppSelector } from '@/features/hooks';
+import { useAppSelector, useAppDispatch } from '@/features/hooks';
 import { useProjectsContext } from '@/context/projects.context';
+import { setUserMBDScore, setUserPassport } from '@/features/user/user.slice';
+import { fetchUserByAddress } from '@/features/user/user.thunks';
 
 export enum EPassportState {
 	NOT_CONNECTED,
@@ -24,6 +27,7 @@ export enum EPassportState {
 }
 
 export enum EQFElegibilityState {
+	NOT_SIGNED,
 	LOADING,
 	PROCESSING,
 	NOT_CONNECTED,
@@ -55,6 +59,8 @@ const initialInfo: IPassportAndStateInfo = {
 };
 
 export const usePassport = () => {
+	const dispatch = useAppDispatch();
+
 	const { address } = useAccount();
 	const { isArchivedQF } = useProjectsContext();
 	const [info, setInfo] = useState<IPassportAndStateInfo>(initialInfo);
@@ -100,8 +106,7 @@ export const usePassport = () => {
 			try {
 				if (!refreshUserScores) {
 					return setInfo({
-						qfEligibilityState:
-							EQFElegibilityState.MORE_INFO_NEEDED,
+						qfEligibilityState: EQFElegibilityState.ERROR,
 						passportState: EPassportState.INVALID,
 						activeQFMBDScore: null,
 						passportScore: null,
@@ -231,9 +236,10 @@ export const usePassport = () => {
 		try {
 			const userAddressScore = await scoreUserAddress(address);
 			await updateState(userAddressScore);
+			dispatch(setUserMBDScore(userAddressScore?.activeQFMBDScore));
 		} catch (error) {
 			console.error('Failed to fetch user address score:', error);
-			user && updateState(user);
+			updateState(user!);
 		}
 	}, [address, updateState, user, isSafeEnv, setNotAvailableForGSafe]);
 
@@ -249,6 +255,13 @@ export const usePassport = () => {
 		try {
 			const { refreshUserScores } = await fetchPassportScore(address);
 			await updateState(refreshUserScores);
+			dispatch(
+				setUserPassport({
+					passportScore: refreshUserScores?.passportScore,
+					passportStamps: refreshUserScores?.passportStamps,
+					activeQFMBDScore: refreshUserScores?.activeQFMBDScore,
+				}),
+			);
 		} catch (error) {
 			console.error(error);
 			setInfo({
@@ -290,23 +303,60 @@ export const usePassport = () => {
 		}
 	}, [address, isSafeEnv, refreshScore, setNotAvailableForGSafe, user]);
 
-	useEffect(() => {
-		console.log('******0', address, isUserFullFilled, user);
+	const handleSignWallet = useCallback(async () => {
+		if (!address) return;
 		if (isSafeEnv) return setNotAvailableForGSafe();
-		if (!address) {
-			console.log('******1', address, isUserFullFilled, user);
-			return setInfo({
-				qfEligibilityState: EQFElegibilityState.NOT_CONNECTED,
-				passportState: EPassportState.NOT_CONNECTED,
+
+		setInfo({
+			qfEligibilityState: EQFElegibilityState.LOADING,
+			passportState: null,
+			passportScore: null,
+			activeQFMBDScore: null,
+			currentRound: activeQFRound,
+		});
+
+		const res = await connectWallet(address, !user);
+		if (!res) {
+			setInfo({
+				qfEligibilityState: EQFElegibilityState.NOT_SIGNED,
+				passportState: EPassportState.NOT_SIGNED,
 				passportScore: null,
 				activeQFMBDScore: null,
-				currentRound: null,
+				currentRound: activeQFRound,
 			});
+		} else {
+			address && dispatch(fetchUserByAddress(address));
 		}
-		console.log('******2', address, isUserFullFilled, user);
-		if (!isUserFullFilled) return;
-		console.log('******3', address, isUserFullFilled, user);
+	}, [address, isSafeEnv, setNotAvailableForGSafe, user]);
+
+	useEffect(() => {
 		const fetchData = async () => {
+			console.log('******0', address, isUserFullFilled, user);
+			const now = getNowUnixMS();
+
+			if (
+				isSafeEnv ||
+				isArchivedQF ||
+				!activeQFRound ||
+				now < new Date(activeQFRound.beginDate).getTime() ||
+				now > new Date(activeQFRound.endDate).getTime()
+			) {
+				return await updateState(user!);
+			}
+
+			if (!address) {
+				console.log('******1', address, isUserFullFilled, user);
+				return setInfo({
+					qfEligibilityState: EQFElegibilityState.NOT_CONNECTED,
+					passportState: EPassportState.NOT_CONNECTED,
+					passportScore: null,
+					activeQFMBDScore: null,
+					currentRound: null,
+				});
+			}
+			console.log('******2', address, isUserFullFilled, user);
+			if (!isUserFullFilled) return;
+			console.log('******3', address, isUserFullFilled, user);
 			if (!user || user.passportScore === null) {
 				console.log('******4', address, isUserFullFilled, user);
 				console.log('Passport score is null in our database');
@@ -324,9 +374,24 @@ export const usePassport = () => {
 					await updateState(user);
 				} else {
 					console.log('******6', address, isUserFullFilled, user);
+					if (
+						!passports[address.toLowerCase()] &&
+						user &&
+						user.activeQFMBDScore != null &&
+						activeQFRound &&
+						user.activeQFMBDScore < activeQFRound.minMBDScore
+					) {
+						return setInfo({
+							qfEligibilityState:
+								EQFElegibilityState.MORE_INFO_NEEDED,
+							passportState: EPassportState.NOT_SIGNED,
+							passportScore: null,
+							activeQFMBDScore: null,
+							currentRound: activeQFRound,
+						});
+					}
 					setInfo({
-						qfEligibilityState:
-							EQFElegibilityState.MORE_INFO_NEEDED,
+						qfEligibilityState: EQFElegibilityState.NOT_SIGNED,
 						passportState: EPassportState.NOT_SIGNED,
 						passportScore: null,
 						activeQFMBDScore: null,
@@ -340,14 +405,21 @@ export const usePassport = () => {
 		};
 		fetchData();
 	}, [
+		user,
 		address,
+		isSafeEnv,
+		isArchivedQF,
+		activeQFRound,
 		isUserFullFilled,
 		updateState,
-		user,
-		isSafeEnv,
-		setNotAvailableForGSafe,
-		activeQFRound,
 	]);
 
-	return { info, handleSign, refreshScore, fetchUserMBDScore };
+	return {
+		info,
+		updateState,
+		handleSign,
+		handleSignWallet,
+		refreshScore,
+		fetchUserMBDScore,
+	};
 };

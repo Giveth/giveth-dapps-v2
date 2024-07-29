@@ -1,4 +1,4 @@
-import React, { FC, useEffect } from 'react';
+import React, { FC, useEffect, useCallback } from 'react';
 import styled from 'styled-components';
 import { useIntl } from 'react-intl';
 import {
@@ -13,6 +13,7 @@ import {
 	IconVerifiedBadge,
 	brandColors,
 	IconVerified24,
+	IconExternalLink16,
 } from '@giveth/ui-design-system';
 import { Modal } from '@/components/modals/Modal';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
@@ -30,12 +31,16 @@ import {
 } from '@/components/views/userProfile/common.sc';
 import InlineToast, { EToastType } from '@/components/toasts/InlineToast';
 import links from '@/lib/constants/links';
+import { useAppSelector } from '@/features/hooks';
+import { mediaQueries } from '@/lib/constants/constants';
+import ExternalLink from '@/components/ExternalLink';
 
 interface PassportModalProps extends IModal {
 	qfEligibilityState: EQFElegibilityState;
 	passportState: EPassportState | null;
 	passportScore: number | null;
 	currentRound: any;
+	updateState?: (user: any) => void;
 	refreshScore: () => void;
 	fetchUserMBDScore?: () => void;
 	handleSign: () => void;
@@ -75,13 +80,15 @@ const PassportModal: FC<PassportModalProps> = props => {
 		passportState,
 		passportScore,
 		currentRound,
+		updateState,
 		setShowModal,
 		refreshScore,
 		fetchUserMBDScore,
 		handleSign,
 	} = props;
+	const { userData: user } = useAppSelector(state => state.user);
 
-	const { locale, formatMessage } = useIntl();
+	const { formatMessage } = useIntl();
 	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
 
 	const MBDEligibile =
@@ -96,6 +103,13 @@ const PassportModal: FC<PassportModalProps> = props => {
 
 	const qfEligibilityProcessing =
 		qfEligibilityState === EQFElegibilityState.PROCESSING;
+
+	const passportScoreLoading = passportState === EPassportState.LOADING_SCORE;
+
+	const increaseScore =
+		passportScore != null &&
+		currentRound?.minimumPassportScore != null &&
+		passportScore < currentRound.minimumPassportScore;
 
 	const showPassportScoreSection =
 		passportState !== EPassportState.NOT_SIGNED &&
@@ -125,15 +139,6 @@ const PassportModal: FC<PassportModalProps> = props => {
 		passportState === EPassportState.NOT_CREATED ||
 		passportState === EPassportState.CONNECTING;
 
-	const qfRoundEndDate = currentRound?.endDate
-		? new Date(currentRound.endDate)
-				.toLocaleString(locale || 'en-US', {
-					day: 'numeric',
-					month: 'short',
-				})
-				.replace(/,/g, '')
-		: '';
-
 	const eligibilityDesc = () => {
 		if (qfEligibilityState === EQFElegibilityState.ELIGIBLE) {
 			return formatMessage({
@@ -143,11 +148,19 @@ const PassportModal: FC<PassportModalProps> = props => {
 			passportState === EPassportState.SIGNED ||
 			passportState === EPassportState.LOADING_SCORE
 		) {
-			return `${formatMessage({
-				id: 'profile.qf_donor_eligibility.passport.not_eligible.p1',
-			})} ${qfRoundEndDate} ${formatMessage({
-				id: 'profile.qf_donor_eligibility.passport.not_eligible.p2',
-			})}`;
+			return (
+				<>
+					{formatMessage({
+						id: 'profile.qf_donor_eligibility.passport.not_eligible.p1',
+					})}{' '}
+					<BoldText>
+						{formatMessage({ id: 'label.refresh_score' })}
+					</BoldText>{' '}
+					{formatMessage({
+						id: 'profile.qf_donor_eligibility.passport.not_eligible.p2',
+					})}
+				</>
+			);
 		} else {
 			return formatMessage({
 				id: 'profile.qf_donor_eligibility.not_eligible_desc',
@@ -176,30 +189,54 @@ const PassportModal: FC<PassportModalProps> = props => {
 					formatMessage({ id: 'label.passport_connected' })
 				);
 			case EQFElegibilityState.MORE_INFO_NEEDED:
-				return gitcoinNotConnected
-					? formatMessage({
-							id: 'label.we_need_a_bit_more_info',
-						})
-					: formatMessage({ id: 'label.increase_your_score' });
+				return gitcoinNotConnected ? (
+					formatMessage({
+						id: 'label.we_need_a_bit_more_info',
+					})
+				) : passportScoreLoading ? (
+					<>
+						<Spinner size={10} color={brandColors.mustard[600]} />
+						{formatMessage({ id: 'label.loading' })}
+					</>
+				) : (
+					formatMessage({ id: 'label.increase_your_score' })
+				);
+			case EQFElegibilityState.RECHECK_ELIGIBILITY:
+				return passportScoreLoading ? (
+					<>
+						<Spinner size={10} color={brandColors.mustard[600]} />
+						{formatMessage({ id: 'label.loading' })}
+					</>
+				) : (
+					formatMessage({ id: 'label.increase_your_score' })
+				);
 			default:
 				return null;
 		}
 	};
 
-	useEffect(() => {
+	const handleCloseModal = useCallback(() => {
+		closeModal();
 		if (
 			qfEligibilityState === EQFElegibilityState.ERROR ||
-			qfEligibilityState === EQFElegibilityState.ELIGIBLE
+			passportState === EPassportState.ERROR
 		) {
-			setTimeout(() => {
-				closeModal();
-			}, 5000);
+			user && updateState?.(user);
 		}
-	}, [passportState, qfEligibilityState, closeModal]);
+	}, [closeModal, qfEligibilityState, passportState, updateState, user]);
+
+	useEffect(() => {
+		if (
+			qfEligibilityState === EQFElegibilityState.CHECK_ELIGIBILITY &&
+			!fetchUserMBDScore
+		) {
+			handleCloseModal();
+		}
+	}, [qfEligibilityState, fetchUserMBDScore, handleCloseModal]);
 
 	return (
 		<Modal
-			closeModal={closeModal}
+			closeModal={handleCloseModal}
 			isAnimating={isAnimating}
 			headerTitlePosition='left'
 			doNotCloseOnClickOutside
@@ -211,13 +248,15 @@ const PassportModal: FC<PassportModalProps> = props => {
 				<PassportInfoBox>{eligibilityDesc()}</PassportInfoBox>
 				<EligibilityStatusSection
 					$justifyContent={
-						qfEligibilityProcessing ? 'center' : 'space-between'
+						qfEligibilityProcessing || passportScoreLoading
+							? 'center'
+							: 'space-between'
 					}
 				>
 					<StyledStatusInfo>
 						{renderQFEligibilityState()}
 					</StyledStatusInfo>
-					{!qfEligibilityProcessing && (
+					{!qfEligibilityProcessing && !passportScoreLoading && (
 						<QFEligibilityStatus
 							$bgColor={
 								QFEligibilityData[QFEligibilityCurrentState]
@@ -261,6 +300,18 @@ const PassportModal: FC<PassportModalProps> = props => {
 								)}
 							</ScoreBox>
 						</ScoreCard>
+						{increaseScore && (
+							<RightPositionedExternalLink href={links.PASSPORT}>
+								<Button
+									label={formatMessage({
+										id: 'label.increase_passport_score',
+									})}
+									size='small'
+									buttonType='primary'
+									icon={<IconExternalLink16 />}
+								/>
+							</RightPositionedExternalLink>
+						)}
 					</PassportSection>
 				)}
 				{passportState === EPassportState.INVALID && (
@@ -344,11 +395,15 @@ const PassportModal: FC<PassportModalProps> = props => {
 };
 
 const StyledWrapper = styled.div`
-	padding: 16px;
 	display: flex;
+	margin-inline: auto;
+	padding: 16px;
 	flex-direction: column;
 	gap: 16px;
-	width: 600px;
+
+	${mediaQueries.tablet} {
+		width: 600px;
+	}
 `;
 
 const PassportInfoBox = styled(P)`
@@ -397,6 +452,16 @@ const EligibilityCardBottom = styled.div`
 
 const StyledToast = styled(InlineToast)`
 	margin-inline: 16px;
+`;
+
+const BoldText = styled.strong`
+	font-weight: 600;
+	text-transform: capitalize;
+`;
+
+const RightPositionedExternalLink = styled(ExternalLink)`
+	display: flex;
+	justify-content: flex-end;
 `;
 
 export default PassportModal;
