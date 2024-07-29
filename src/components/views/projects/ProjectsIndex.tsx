@@ -22,7 +22,7 @@ import { FETCH_ALL_PROJECTS } from '@/apollo/gql/gqlProjects';
 import { client } from '@/apollo/apolloClient';
 import { IProject } from '@/apollo/types/types';
 import ProjectsNoResults from '@/components/views/projects/ProjectsNoResults';
-import { BACKEND_QUERY_LIMIT, mediaQueries } from '@/lib/constants/constants';
+import { mediaQueries } from '@/lib/constants/constants';
 import { useAppDispatch, useAppSelector } from '@/features/hooks';
 import { setShowCompleteProfile } from '@/features/modal/modal.slice';
 import { ProjectsBanner } from './ProjectsBanner';
@@ -69,6 +69,7 @@ const ProjectsIndex = (props: IProjectsView) => {
 	const { formatMessage } = useIntl();
 	const { projects, totalCount: _totalCount } = props;
 	const user = useAppSelector(state => state.user.userData);
+
 	const { activeQFRound, mainCategories } = useAppSelector(
 		state => state.general,
 	);
@@ -91,21 +92,13 @@ const ProjectsIndex = (props: IProjectsView) => {
 	const lastElementRef = useRef<HTMLDivElement>(null);
 	const isInfiniteScrolling = useRef(true);
 
-	// Default values for queryKey
-	const [isLoadMore, setIsLoadMore] = useState(false);
-	const [userIdChanged, setUserIdChanged] = useState(false);
-
 	const fetchProjects = useCallback(
 		async (pageParam: number | unknown): Promise<Page> => {
 			const currentPage = typeof pageParam === 'number' ? pageParam : 0;
 
 			const variables: IQueries = {
-				limit: userIdChanged
-					? filteredProjects.length > 50
-						? BACKEND_QUERY_LIMIT
-						: filteredProjects.length
-					: projects.length,
-				skip: userIdChanged ? 0 : projects.length * (currentPage || 0),
+				limit: projects.length,
+				skip: projects.length * (currentPage || 0),
 			};
 
 			if (user?.id) {
@@ -128,11 +121,7 @@ const ProjectsIndex = (props: IProjectsView) => {
 			const count = res.data?.allProjects?.totalCount;
 			setTotalCount(count);
 
-			setFilteredProjects(prevProjects => {
-				isInfiniteScrolling.current =
-					(data.length + prevProjects.length) % 45 !== 0;
-				return isLoadMore ? [...prevProjects, ...data] : data;
-			});
+			setFilteredProjects(prevProjects => [...prevProjects, ...data]);
 
 			return {
 				data: data,
@@ -147,9 +136,6 @@ const ProjectsIndex = (props: IProjectsView) => {
 			router.query.slug,
 			selectedMainCategory,
 			user?.id,
-			userIdChanged,
-			isLoadMore,
-			filteredProjects,
 		],
 	);
 
@@ -172,19 +158,6 @@ const ProjectsIndex = (props: IProjectsView) => {
 		initialPageParam: 0,
 	});
 
-	// User signied in or singout reset query
-	// TODO: need to refactor, only change when user loggin or out
-	// useEffect(() => {
-	// 	console.log('user id changed');
-	// 	if (user?.id) {
-	// 		setUserIdChanged(prevState => !prevState);
-	// 		queryClient.resetQueries({
-	// 			queryKey: ['projects'],
-	// 			exact: true,
-	// 		});
-	// 	}
-	// }, [queryClient, user?.id]);
-
 	// Reset query if contect variables change occurs
 	// TODO: need to refactor,
 	// useEffect(() => {
@@ -206,9 +179,6 @@ const ProjectsIndex = (props: IProjectsView) => {
 			dispatch(setShowCompleteProfile(true));
 		}
 	};
-
-	const showLoadMore =
-		totalCount > filteredProjects?.length && !isInfiniteScrolling.current;
 
 	// Check if there any active QF
 	const onProjectsPageOrActiveQFPage = !isQF || (isQF && activeQFRound);
@@ -248,7 +218,7 @@ const ProjectsIndex = (props: IProjectsView) => {
 		) {
 			setIsNotFound(true);
 		}
-	}, [selectedMainCategory, mainCategories.length]);
+	}, [selectedMainCategory, mainCategories.length, isArchivedQF]);
 
 	// Save last clicked project
 	const handleProjectClick = (slug: string) => {
@@ -359,7 +329,7 @@ const ProjectsIndex = (props: IProjectsView) => {
 				{totalCount > filteredProjects?.length && (
 					<div ref={lastElementRef} />
 				)}
-				{showLoadMore && (
+				{(isFetching || isFetchingNextPage) && (
 					<>
 						<StyledButton
 							onClick={loadMore}
