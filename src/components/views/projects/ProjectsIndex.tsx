@@ -76,7 +76,9 @@ const ProjectsIndex = (props: IProjectsView) => {
 	const [isNotFound, setIsNotFound] = useState(false);
 	const [filteredProjects, setFilteredProjects] =
 		useState<IProject[]>(projects);
-	const [totalCount, setTotalCount] = useState(_totalCount);
+	const [totalPages, setTotalPages] = useState(
+		Math.ceil(_totalCount / projects.length),
+	);
 	const isMobile = useMediaQuery(`(max-width: ${deviceSize.tablet - 1}px)`);
 
 	const dispatch = useAppDispatch();
@@ -119,7 +121,8 @@ const ProjectsIndex = (props: IProjectsView) => {
 
 			const data = res.data?.allProjects?.projects;
 			const count = res.data?.allProjects?.totalCount;
-			setTotalCount(count);
+			const totalPages = Math.ceil(count / projects.length);
+			setTotalPages(totalPages);
 
 			setFilteredProjects(prevProjects => [
 				...prevProjects,
@@ -163,8 +166,10 @@ const ProjectsIndex = (props: IProjectsView) => {
 
 	// Function that triggers when you scroll down - infinite loading
 	const loadMore = useCallback(() => {
-		fetchNextPage();
-	}, [fetchNextPage]);
+		if (totalPages > (data?.pages?.length || 0)) {
+			fetchNextPage();
+		}
+	}, [data?.pages.length, fetchNextPage, totalPages]);
 
 	const handleCreateButton = () => {
 		if (isUserRegistered(user)) {
@@ -281,7 +286,7 @@ const ProjectsIndex = (props: IProjectsView) => {
 				)}
 				{onProjectsPageOrActiveQFPage && (
 					<SortingContainer>
-						<SortContainer totalCount={totalCount} />
+						<SortContainer totalCount={_totalCount} />
 					</SortingContainer>
 				)}
 				{isFetchingNextPage && <Loader className='dot-flashing' />}
@@ -320,12 +325,12 @@ const ProjectsIndex = (props: IProjectsView) => {
 				) : (
 					<ProjectsNoResults />
 				)}
-				{totalCount > filteredProjects?.length && (
+				{_totalCount > filteredProjects?.length && (
 					<div ref={lastElementRef} />
 				)}
 				{!isFetching &&
 					!isFetchingNextPage &&
-					totalCount < filteredProjects?.length && (
+					totalPages > (data?.pages?.length || 0) && (
 						<>
 							<StyledButton
 								onClick={loadMore}
@@ -344,7 +349,6 @@ const ProjectsIndex = (props: IProjectsView) => {
 									)
 								}
 							/>
-							{totalCount} - {filteredProjects?.length}
 							<StyledButton
 								onClick={handleCreateButton}
 								label={formatMessage({
