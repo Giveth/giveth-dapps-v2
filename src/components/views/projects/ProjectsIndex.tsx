@@ -121,7 +121,10 @@ const ProjectsIndex = (props: IProjectsView) => {
 			const count = res.data?.allProjects?.totalCount;
 			setTotalCount(count);
 
-			setFilteredProjects(prevProjects => [...prevProjects, ...data]);
+			setFilteredProjects(prevProjects => [
+				...prevProjects,
+				data.allProjects?.projects,
+			]);
 
 			return {
 				data: data,
@@ -157,16 +160,6 @@ const ProjectsIndex = (props: IProjectsView) => {
 		},
 		initialPageParam: 0,
 	});
-
-	// Reset query if contect variables change occurs
-	// TODO: This is causing a bug where the page is refreshed when you come back
-	// useEffect(() => {
-	// 	console.log('SOMETHING CHANGED');
-	// 	queryClient.resetQueries({
-	// 		queryKey: ['projects'],
-	// 		exact: true,
-	// 	});
-	// }, [contextVariables, queryClient]);
 
 	// Function that triggers when you scroll down - infinite loading
 	const loadMore = useCallback(() => {
@@ -330,34 +323,37 @@ const ProjectsIndex = (props: IProjectsView) => {
 				{totalCount > filteredProjects?.length && (
 					<div ref={lastElementRef} />
 				)}
-				{!isFetching && !isFetchingNextPage && (
-					<>
-						<StyledButton
-							onClick={loadMore}
-							label={
-								isFetchingNextPage
-									? ''
-									: formatMessage({
-											id: 'component.button.load_more',
-										})
-							}
-							icon={
-								isFetchingNextPage && (
-									<LoadingDotIcon>
-										<div className='dot-flashing' />
-									</LoadingDotIcon>
-								)
-							}
-						/>
-						<StyledButton
-							onClick={handleCreateButton}
-							label={formatMessage({
-								id: 'component.button.create_project',
-							})}
-							$transparent
-						/>
-					</>
-				)}
+				{!isFetching &&
+					!isFetchingNextPage &&
+					totalCount < filteredProjects?.length && (
+						<>
+							<StyledButton
+								onClick={loadMore}
+								label={
+									isFetchingNextPage
+										? ''
+										: formatMessage({
+												id: 'component.button.load_more',
+											})
+								}
+								icon={
+									isFetchingNextPage && (
+										<LoadingDotIcon>
+											<div className='dot-flashing' />
+										</LoadingDotIcon>
+									)
+								}
+							/>
+							{totalCount} - {filteredProjects?.length}
+							<StyledButton
+								onClick={handleCreateButton}
+								label={formatMessage({
+									id: 'component.button.create_project',
+								})}
+								$transparent
+							/>
+						</>
+					)}
 			</Wrapper>
 		</>
 	);
