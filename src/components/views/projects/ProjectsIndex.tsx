@@ -153,7 +153,12 @@ const ProjectsIndex = (props: IProjectsView) => {
 		isFetching,
 		isFetchingNextPage,
 	} = useInfiniteQuery<Page, Error>({
-		queryKey: ['projects'],
+		queryKey: [
+			'projects',
+			contextVariables,
+			isArchivedQF,
+			selectedMainCategory,
+		],
 		queryFn: ({ pageParam = 0 }: QueryFunctionContext) =>
 			fetchProjects(pageParam),
 		getNextPageParam: (lastPage, someData) => {
