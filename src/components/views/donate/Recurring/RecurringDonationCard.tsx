@@ -230,7 +230,7 @@ export const RecurringDonationCard = () => {
 
 	return (
 		<>
-			<Title weight={700}>
+			<Title weight={700} id='recurring-donation-page'>
 				{formatMessage({ id: 'label.make_a_recurring_donation_with' })}
 				<a href='https://www.superfluid.finance/' target='_blank'>
 					Superfluid
