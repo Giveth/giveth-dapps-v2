@@ -7,7 +7,9 @@ import {
 	useState,
 	useCallback,
 	type Dispatch,
+	useEffect,
 } from 'react';
+import { useAccount } from 'wagmi';
 import { IProject } from '@/apollo/types/types';
 import { hasActiveRound } from '@/helpers/qf';
 import { ISuperfluidStream, IToken } from '@/types/superFluid';
@@ -83,6 +85,13 @@ export const DonateProvider: FC<IProviderProps> = ({ children, project }) => {
 
 	const [successDonation, setSuccessDonation] = useState<ISuccessDonation>();
 	const [projectData, setProjectData] = useState<IProject>(project);
+
+	const { chain } = useAccount();
+
+	useEffect(() => {
+		setSelectedOneTimeToken(undefined);
+		setSelectedRecurringToken(undefined);
+	}, [chain]);
 
 	const fetchProject = useCallback(async () => {
 		const { data } = (await client.query({
