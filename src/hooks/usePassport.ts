@@ -104,15 +104,6 @@ export const usePassport = () => {
 			});
 
 			try {
-				if (!refreshUserScores) {
-					return setInfo({
-						qfEligibilityState: EQFElegibilityState.ERROR,
-						passportState: EPassportState.INVALID,
-						activeQFMBDScore: null,
-						passportScore: null,
-						currentRound: null,
-					});
-				}
 				if (!activeQFRound) {
 					return setInfo({
 						qfEligibilityState:
@@ -142,6 +133,16 @@ export const usePassport = () => {
 						activeQFMBDScore: null,
 						passportScore: refreshUserScores.passportScore,
 						currentRound: activeQFRound,
+					});
+				}
+
+				if (!refreshUserScores) {
+					return setInfo({
+						qfEligibilityState: EQFElegibilityState.ERROR,
+						passportState: EPassportState.INVALID,
+						activeQFMBDScore: null,
+						passportScore: null,
+						currentRound: null,
 					});
 				}
 
