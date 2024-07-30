@@ -481,11 +481,6 @@ const TokenSymbol = styled(B)`
 	white-space: nowrap;
 `;
 
-interface IInputBox {
-	$error: boolean;
-	$focused: boolean;
-}
-
 const MainButton = styled(Button)`
 	width: 100%;
 	background-color: ${props =>
