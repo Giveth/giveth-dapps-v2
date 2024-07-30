@@ -48,7 +48,7 @@ export const AmountInput: FC<IAmountInput> = ({
 
 	useEffect(() => {
 		//prevent changing 0.000 to 0
-		if (amount === 0n) return;
+		if (amount === 0n && displayAmount.includes('0')) return;
 		const _displayAmount = truncateToDecimalPlaces(
 			formatUnits(amount, decimals),
 			decimals / 3,

@@ -51,9 +51,9 @@ export const ModalHeader: React.FC<IModalHeader> = ({
 			{!hiddenClose && <CloseModalPlaceHolder />}
 		</ModalHeaderRow>
 	) : !hiddenClose ? (
-		<CloseModalButton onClick={closeModal}>
+		<EmptyCloseModalButton onClick={closeModal}>
 			<IconX size={24} />
-		</CloseModalButton>
+		</EmptyCloseModalButton>
 	) : null;
 };
 
@@ -74,6 +74,10 @@ const CloseModalButton = styled.div`
 	right: 24px;
 	cursor: pointer;
 	z-index: 1;
+`;
+
+const EmptyCloseModalButton = styled(CloseModalButton)`
+	top: 16px;
 `;
 
 const CloseModalPlaceHolder = styled.div`
