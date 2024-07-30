@@ -72,7 +72,7 @@ export const AmountInput: FC<IAmountInput> = ({
 	const onUserInput = useCallback(
 		(value: string) => {
 			const [, _decimals] = value.split('.');
-			if (_decimals?.length > 6) return;
+			if (_decimals?.length > decimals / 3) return;
 			setDisplayAmount(value);
 			setActiveStep(0);
 
