@@ -110,7 +110,7 @@ export const usePassport = () => {
 							EQFElegibilityState.NOT_ACTIVE_ROUND,
 						passportState: null,
 						activeQFMBDScore: null,
-						passportScore: refreshUserScores.passportScore,
+						passportScore: null,
 						currentRound: null,
 					});
 				}
@@ -121,7 +121,7 @@ export const usePassport = () => {
 						qfEligibilityState: EQFElegibilityState.NOT_STARTED,
 						passportState: null,
 						activeQFMBDScore: null,
-						passportScore: refreshUserScores.passportScore,
+						passportScore: refreshUserScores?.passportScore ?? null,
 						currentRound: activeQFRound,
 					});
 				}
@@ -131,7 +131,7 @@ export const usePassport = () => {
 						qfEligibilityState: EQFElegibilityState.ENDED,
 						passportState: null,
 						activeQFMBDScore: null,
-						passportScore: refreshUserScores.passportScore,
+						passportScore: refreshUserScores?.passportScore ?? null,
 						currentRound: activeQFRound,
 					});
 				}
