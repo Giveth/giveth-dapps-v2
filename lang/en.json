@@ -381,7 +381,7 @@
 	"label.ethereum_mainnet_or_gnosis_chain": "Ethereum Mainnet or Gnosis Chain",
 	"label.eth_addres_not_valid": "{type} address not valid",
 	"label.everytime_you_claim_giv_rewards": "Every time you claim GIV rewards from GIVbacks, the GIVgarden, or the GIVfarm, your GIVstream flowrate increases. Below is a summary.",
-	"label.exceed_wallet_balance": "You need to keep at least {totalAmount} {tokenSymbol} in our wallet to pay the network fees for this transaction. Please enter a lower amount.",
+	"label.exceed_wallet_balance": "You need to keep at least {totalAmount} {tokenSymbol} in your wallet to pay the network fees for this transaction. Please enter a lower amount.",
 	"label.expected_rank_for_next_round": "This is the expected rank for the next round based on",
 	"label.explore_a_multiverse_of_projects": "Explore a multiverse of projects changing the world and earn rewards for staking liquidity.",
 	"label.explore_by": "Explore by",

@@ -528,7 +528,7 @@ const CryptoDonation: FC = () => {
 
 const WarnError = styled.div`
 	color: ${semanticColors.punch[500]};
-	font-size: 12px;
+	font-size: 11px;
 	padding: 12px;
 `;
 
