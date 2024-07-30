@@ -121,6 +121,7 @@ export const scoreUserAddress = async (address: `0x${string}` | undefined) => {
 			variables: {
 				address: address?.toLowerCase(),
 			},
+			fetchPolicy: 'network-only',
 		});
 
 		return data.scoreUserAddress;

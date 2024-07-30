@@ -19,7 +19,7 @@ export const regexList = {
 	discord:
 		/(?:https?:\/\/)?(?:www\.)?(?:discord\.gg|discord(?:app)?\.com\/invite)\/[\w-]+/,
 	phone: /^(\+\d{1,2}\s?)?\(?\d{3}\)?[\s.-]?\d{3}[\s.-]?\d{4}$/,
-	github: /^(http(s)?:\/\/)?(www\.)?github\.com\/[\w-]+\/?$/,
+	github: /^(https:\/\/)?(www\.)?github\.com\/[A-Za-z0-9_-]+(\/[A-Za-z0-9_-]+)?\/?$/,
 };
 
 export const validators = {

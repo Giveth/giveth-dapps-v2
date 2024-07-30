@@ -104,22 +104,13 @@ export const usePassport = () => {
 			});
 
 			try {
-				if (!refreshUserScores) {
-					return setInfo({
-						qfEligibilityState: EQFElegibilityState.ERROR,
-						passportState: EPassportState.INVALID,
-						activeQFMBDScore: null,
-						passportScore: null,
-						currentRound: null,
-					});
-				}
 				if (!activeQFRound) {
 					return setInfo({
 						qfEligibilityState:
 							EQFElegibilityState.NOT_ACTIVE_ROUND,
 						passportState: null,
 						activeQFMBDScore: null,
-						passportScore: refreshUserScores.passportScore,
+						passportScore: null,
 						currentRound: null,
 					});
 				}
@@ -130,7 +121,7 @@ export const usePassport = () => {
 						qfEligibilityState: EQFElegibilityState.NOT_STARTED,
 						passportState: null,
 						activeQFMBDScore: null,
-						passportScore: refreshUserScores.passportScore,
+						passportScore: refreshUserScores?.passportScore ?? null,
 						currentRound: activeQFRound,
 					});
 				}
@@ -140,8 +131,18 @@ export const usePassport = () => {
 						qfEligibilityState: EQFElegibilityState.ENDED,
 						passportState: null,
 						activeQFMBDScore: null,
-						passportScore: refreshUserScores.passportScore,
+						passportScore: refreshUserScores?.passportScore ?? null,
 						currentRound: activeQFRound,
+					});
+				}
+
+				if (!refreshUserScores) {
+					return setInfo({
+						qfEligibilityState: EQFElegibilityState.ERROR,
+						passportState: EPassportState.INVALID,
+						activeQFMBDScore: null,
+						passportScore: null,
+						currentRound: null,
 					});
 				}
 

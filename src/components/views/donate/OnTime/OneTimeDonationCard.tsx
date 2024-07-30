@@ -116,7 +116,7 @@ const CryptoDonation: FC = () => {
 				? undefined
 				: selectedOneTimeToken?.address,
 		address:
-			walletChainType === ChainType.EVM
+			walletChainType === ChainType.EVM && !!selectedOneTimeToken?.address // disable when selected token is undefined
 				? (address as Address)
 				: undefined,
 	});
@@ -485,11 +485,6 @@ const MainContainer = styled.div`
 const TokenSymbol = styled(B)`
 	white-space: nowrap;
 `;
-
-interface IInputBox {
-	$error: boolean;
-	$focused: boolean;
-}
 
 const MainButton = styled(Button)`
 	width: 100%;
