@@ -60,7 +60,6 @@ import { TokenIcon } from '../TokenIcon/TokenIcon';
 import { SelectTokenModal } from './SelectTokenModal/SelectTokenModal';
 import { Spinner } from '@/components/Spinner';
 import { useSolanaBalance } from '@/hooks/useSolanaBalance';
-import { formatCrypto } from '../../../../helpers/number';
 
 const CryptoDonation: FC = () => {
 	const {
@@ -287,9 +286,10 @@ const CryptoDonation: FC = () => {
 			chainId: selectedChain?.id,
 			to: addresses?.find(a => a.chainType === walletChainType)
 				?.address as Address,
-			value: amount,
+			value:
+				amount > selectedTokenBalance ? selectedTokenBalance : amount,
 		};
-	}, [chain, addresses, amount, walletChainType]);
+	}, [chain, addresses, amount, selectedTokenBalance, walletChainType]);
 
 	const { data: estimatedGas } = useEstimateGas(estimatedGasFeeObj);
 	const { data: estimatedGasPrice } =
@@ -313,7 +313,8 @@ const CryptoDonation: FC = () => {
 	useEffect(() => {
 		if (
 			amount + gasfee > selectedTokenBalance &&
-			selectedOneTimeToken?.address === zeroAddress
+			selectedOneTimeToken?.address === zeroAddress &&
+			gasfee > 0n
 		) {
 			setAmountError(true);
 		} else {
@@ -322,7 +323,7 @@ const CryptoDonation: FC = () => {
 	}, [selectedTokenBalance, amount, selectedOneTimeToken?.address, gasfee]);
 
 	const amountErrorText = useMemo(() => {
-		const totalAmount = formatCrypto(amount + gasfee, tokenDecimals);
+		const totalAmount = formatUnits(gasfee, tokenDecimals);
 		const tokenSymbol = selectedOneTimeToken?.symbol;
 		return formatMessage(
 			{ id: 'label.exceed_wallet_balance' },
@@ -331,13 +332,7 @@ const CryptoDonation: FC = () => {
 				tokenSymbol,
 			},
 		);
-	}, [
-		amount,
-		gasfee,
-		tokenDecimals,
-		selectedOneTimeToken?.symbol,
-		formatMessage,
-	]);
+	}, [gasfee, tokenDecimals, selectedOneTimeToken?.symbol, formatMessage]);
 
 	return (
 		<MainContainer>
