@@ -52,6 +52,22 @@ export const signToGetToken = createAsyncThunk(
 			expiration,
 		} = signToGetToken;
 
+		const returnToGnosisSafe = async () => {
+			try {
+				// Connect to gnosis safe
+				const safeConnector = connectors.find(
+					(i: any) => i.id === 'safe',
+				);
+				safeConnector &&
+					(await connect(wagmiConfig, {
+						chainId,
+						connector: safeConnector,
+					}));
+			} catch (error) {
+				console.error('Failed to connect to Gnosis Safe:', error);
+			}
+		};
+
 		const solanaSignToGetToken = signToGetToken as ISolanaSignToGetToken;
 		const isSolana = !!solanaSignToGetToken.solanaSignedMessage;
 
@@ -138,25 +154,18 @@ export const signToGetToken = createAsyncThunk(
 						console.error({ error });
 					}
 
-					if (sessionPending)
+					if (sessionPending) {
+						console.log('Gnosis Safe Session pending');
+						await returnToGnosisSafe();
 						return Promise.reject('Gnosis Safe Session pending');
+					}
 					if (!sessionPending && !!activeSafeToken) {
 						// returns active token - SUCCESS
 						saveTokenToLocalstorage(safeAddress!, activeSafeToken);
 						return activeSafeToken;
 					}
 
-					try {
-						// Connect to gnosis safe
-						const safeConnector = connectors.find(
-							(i: any) => i.id === 'safe',
-						);
-						safeConnector &&
-							(await connect(wagmiConfig, {
-								chainId,
-								connector: safeConnector,
-							}));
-					} catch (error) {}
+					await returnToGnosisSafe();
 
 					let safeSignature;
 					const safeMessageTimestamp = new Date().getTime();
