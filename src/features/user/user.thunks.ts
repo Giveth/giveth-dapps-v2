@@ -63,7 +63,9 @@ export const signToGetToken = createAsyncThunk(
 						chainId,
 						connector: safeConnector,
 					}));
-			} catch (error) {}
+			} catch (error) {
+				console.error('Failed to connect to Gnosis Safe:', error);
+			}
 		};
 
 		const solanaSignToGetToken = signToGetToken as ISolanaSignToGetToken;
