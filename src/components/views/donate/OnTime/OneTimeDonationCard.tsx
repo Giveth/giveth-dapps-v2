@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import React, { FC, useEffect, useState } from 'react';
+import React, { FC, useEffect, useMemo, useState } from 'react';
 import { useIntl } from 'react-intl';
 import {
 	B,
@@ -9,11 +9,12 @@ import {
 	IconCaretDown16,
 	IconRefresh16,
 	neutralColors,
+	semanticColors,
 } from '@giveth/ui-design-system';
 // @ts-ignore
 import { captureException } from '@sentry/nextjs';
 import { Address, Chain, formatUnits, zeroAddress } from 'viem';
-import { useBalance } from 'wagmi';
+import { useBalance, useEstimateFeesPerGas, useEstimateGas } from 'wagmi';
 import { setShowWelcomeModal } from '@/features/modal/modal.slice';
 import CheckBox from '@/components/Checkbox';
 
@@ -279,6 +280,60 @@ const CryptoDonation: FC = () => {
 		}
 	};
 
+	const estimatedGasFeeObj = useMemo(() => {
+		const selectedChain = chain as Chain;
+		return {
+			chainId: selectedChain?.id,
+			to: addresses?.find(a => a.chainType === walletChainType)
+				?.address as Address,
+			value:
+				amount > selectedTokenBalance ? selectedTokenBalance : amount,
+		};
+	}, [chain, addresses, amount, selectedTokenBalance, walletChainType]);
+
+	const { data: estimatedGas } = useEstimateGas(estimatedGasFeeObj);
+	const { data: estimatedGasPrice } =
+		useEstimateFeesPerGas(estimatedGasFeeObj);
+
+	const gasfee = useMemo(() => {
+		if (
+			selectedOneTimeToken?.address !== zeroAddress ||
+			!estimatedGas ||
+			!estimatedGasPrice?.maxFeePerGas
+		) {
+			return 0n;
+		}
+		return estimatedGas * estimatedGasPrice.maxFeePerGas;
+	}, [
+		estimatedGas,
+		estimatedGasPrice?.maxFeePerGas,
+		selectedOneTimeToken?.address,
+	]);
+
+	useEffect(() => {
+		if (
+			amount + gasfee > selectedTokenBalance &&
+			selectedOneTimeToken?.address === zeroAddress &&
+			gasfee > 0n
+		) {
+			setAmountError(true);
+		} else {
+			setAmountError(false);
+		}
+	}, [selectedTokenBalance, amount, selectedOneTimeToken?.address, gasfee]);
+
+	const amountErrorText = useMemo(() => {
+		const totalAmount = formatUnits(gasfee, tokenDecimals);
+		const tokenSymbol = selectedOneTimeToken?.symbol;
+		return formatMessage(
+			{ id: 'label.exceed_wallet_balance' },
+			{
+				totalAmount,
+				tokenSymbol,
+			},
+		);
+	}, [gasfee, tokenDecimals, selectedOneTimeToken?.symbol, formatMessage]);
+
 	return (
 		<MainContainer>
 			{showQFModal && (
@@ -351,10 +406,10 @@ const CryptoDonation: FC = () => {
 						decimals={selectedOneTimeToken?.decimals}
 					/>
 				</InputWrapper>
-				<Flex gap='4px'>
+				<Flex gap='4px' $alignItems='center'>
 					<GLinkStyled
 						size='Small'
-						onClick={() => setAmount(selectedTokenBalance)}
+						onClick={() => setAmount(selectedTokenBalance - gasfee)}
 					>
 						{formatMessage({
 							id: 'label.available',
@@ -363,7 +418,7 @@ const CryptoDonation: FC = () => {
 						{selectedOneTimeToken
 							? truncateToDecimalPlaces(
 									formatUnits(
-										selectedTokenBalance,
+										selectedTokenBalance - gasfee,
 										tokenDecimals,
 									),
 									tokenDecimals / 3,
@@ -377,6 +432,7 @@ const CryptoDonation: FC = () => {
 							<IconRefresh16 />
 						)}
 					</IconWrapper>
+					{amountError && <WarnError>{amountErrorText}</WarnError>}
 				</Flex>
 			</Flex>
 			{hasActiveQFRound && !isOnEligibleNetworks && walletChainType && (
@@ -469,6 +525,12 @@ const CryptoDonation: FC = () => {
 		</MainContainer>
 	);
 };
+
+const WarnError = styled.div`
+	color: ${semanticColors.punch[500]};
+	font-size: 11px;
+	padding: 12px;
+`;
 
 const EmptySpace = styled.div`
 	margin-top: 70px;
