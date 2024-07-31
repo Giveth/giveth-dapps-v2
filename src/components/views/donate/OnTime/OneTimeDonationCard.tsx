@@ -286,10 +286,9 @@ const CryptoDonation: FC = () => {
 			chainId: selectedChain?.id,
 			to: addresses?.find(a => a.chainType === walletChainType)
 				?.address as Address,
-			value:
-				amount > selectedTokenBalance ? selectedTokenBalance : amount,
+			value: selectedTokenBalance,
 		};
-	}, [chain, addresses, amount, selectedTokenBalance, walletChainType]);
+	}, [chain, addresses, selectedTokenBalance, walletChainType]);
 
 	const { data: estimatedGas } = useEstimateGas(estimatedGasFeeObj);
 	const { data: estimatedGasPrice } =
