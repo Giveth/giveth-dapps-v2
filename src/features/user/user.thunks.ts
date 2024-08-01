@@ -54,6 +54,8 @@ export const signToGetToken = createAsyncThunk(
 
 		const returnToGnosisSafe = async () => {
 			try {
+				dispatch(signOut());
+				localStorage.removeItem(StorageLabel.WALLET);
 				// Connect to gnosis safe
 				const safeConnector = connectors.find(
 					(i: any) => i.id === 'safe',
