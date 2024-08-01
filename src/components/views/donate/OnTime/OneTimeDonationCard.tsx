@@ -88,7 +88,8 @@ const CryptoDonation: FC = () => {
 	const [amount, setAmount] = useState(0n);
 	const [erc20List, setErc20List] = useState<IProjectAcceptedToken[]>();
 	const [anonymous, setAnonymous] = useState<boolean>(false);
-	const [amountError, setAmountError] = useState<boolean>(false);
+	const [insufficientGasFee, setInsufficientGasFee] =
+		useState<boolean>(false);
 	const [showDonateModal, setShowDonateModal] = useState(false);
 	const [showInsufficientModal, setShowInsufficientModal] = useState(false);
 	const [showChangeNetworkModal, setShowChangeNetworkModal] = useState(false);
@@ -270,7 +271,7 @@ const CryptoDonation: FC = () => {
 	};
 
 	const donationDisabled =
-		!isActive || !amount || !selectedOneTimeToken || amountError;
+		!isActive || !amount || !selectedOneTimeToken || insufficientGasFee;
 
 	const donateWithoutMatching = () => {
 		if (isSignedIn) {
@@ -311,18 +312,21 @@ const CryptoDonation: FC = () => {
 
 	useEffect(() => {
 		if (
-			amount + gasfee > selectedTokenBalance &&
+			amount > selectedTokenBalance - gasfee &&
+			amount < selectedTokenBalance &&
 			selectedOneTimeToken?.address === zeroAddress &&
 			gasfee > 0n
 		) {
-			setAmountError(true);
+			setInsufficientGasFee(true);
 		} else {
-			setAmountError(false);
+			setInsufficientGasFee(false);
 		}
 	}, [selectedTokenBalance, amount, selectedOneTimeToken?.address, gasfee]);
 
 	const amountErrorText = useMemo(() => {
-		const totalAmount = formatUnits(gasfee, tokenDecimals);
+		const totalAmount = Number(formatUnits(gasfee, tokenDecimals)).toFixed(
+			10,
+		);
 		const tokenSymbol = selectedOneTimeToken?.symbol;
 		return formatMessage(
 			{ id: 'label.exceed_wallet_balance' },
@@ -331,7 +335,13 @@ const CryptoDonation: FC = () => {
 				tokenSymbol,
 			},
 		);
-	}, [gasfee, tokenDecimals, selectedOneTimeToken?.symbol, formatMessage]);
+	}, [
+		selectedTokenBalance,
+		gasfee,
+		tokenDecimals,
+		selectedOneTimeToken?.symbol,
+		formatMessage,
+	]);
 
 	return (
 		<MainContainer>
@@ -431,7 +441,9 @@ const CryptoDonation: FC = () => {
 							<IconRefresh16 />
 						)}
 					</IconWrapper>
-					{amountError && <WarnError>{amountErrorText}</WarnError>}
+					{insufficientGasFee && (
+						<WarnError>{amountErrorText}</WarnError>
+					)}
 				</Flex>
 			</Flex>
 			{hasActiveQFRound && !isOnEligibleNetworks && walletChainType && (
