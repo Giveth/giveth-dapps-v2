@@ -335,13 +335,7 @@ const CryptoDonation: FC = () => {
 				tokenSymbol,
 			},
 		);
-	}, [
-		selectedTokenBalance,
-		gasfee,
-		tokenDecimals,
-		selectedOneTimeToken?.symbol,
-		formatMessage,
-	]);
+	}, [gasfee, tokenDecimals, selectedOneTimeToken?.symbol, formatMessage]);
 
 	return (
 		<MainContainer>
@@ -427,7 +421,7 @@ const CryptoDonation: FC = () => {
 						{selectedOneTimeToken
 							? truncateToDecimalPlaces(
 									formatUnits(
-										selectedTokenBalance - gasfee,
+										selectedTokenBalance,
 										tokenDecimals,
 									),
 									tokenDecimals / 3,
