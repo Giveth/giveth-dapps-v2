@@ -2,7 +2,7 @@ import React from 'react';
 import {
 	celoAlfajores,
 	gnosis,
-	goerli,
+	sepolia,
 	optimismSepolia,
 	polygon,
 	arbitrumSepolia,
@@ -48,15 +48,15 @@ const SEPT_8TH_2022 = 1662595200000;
 const GNOSIS_GIV_TOKEN_ADDRESS = '0x83a8eea6427985C523a0c4d9d3E62C051B6580d3';
 const OPTIMISM_GIV_TOKEN_ADDRESS = '0x2f2c819210191750F2E11F7CfC5664a0eB4fd5e6';
 
-const MAINNET_NETWORK_NUMBER = 5; // Goerli
-const GNOSIS_NETWORK_NUMBER = 100; // xDAI
-const POLYGON_NETWORK_NUMBER = 137;
-const OPTIMISM_NETWORK_NUMBER = 11155420;
-const CELO_NETWORK_NUMBER = 44787;
+const MAINNET_NETWORK_NUMBER = sepolia.id; // sepolia
+const GNOSIS_NETWORK_NUMBER = gnosis.id; // xDAI
+const POLYGON_NETWORK_NUMBER = polygon.id;
+const OPTIMISM_NETWORK_NUMBER = optimismSepolia.id;
+const CELO_NETWORK_NUMBER = celoAlfajores.id;
 const CLASSIC_NETWORK_NUMBER = 63;
-const ARBITRUM_NETWORK_NUMBER = 421614;
-const BASE_NETWORK_NUMBER = 84532;
-const ZKEVM_NETWORK_NUMBER = 2442;
+const ARBITRUM_NETWORK_NUMBER = arbitrumSepolia.id;
+const BASE_NETWORK_NUMBER = baseSepolia.id;
+const ZKEVM_NETWORK_NUMBER = polygonZkEvmCardona.id;
 
 const SOLANA_NETWORK: NonEVMChain = {
 	id: 103,
@@ -99,7 +99,7 @@ const classic = {
 
 const EVM_CHAINS = [
 	polygon,
-	goerli,
+	sepolia,
 	gnosis,
 	optimismSepolia,
 	celoAlfajores,
@@ -135,7 +135,7 @@ const config: EnvConfig = {
 
 	RARIBLE_ADDRESS: 'https://testnet.rarible.com/',
 	MAINNET_CONFIG: {
-		...goerli,
+		...sepolia,
 		chainType: ChainType.EVM,
 		DAI_TOKEN_ADDRESS: '0xdc31Ee1784292379Fbb2964b3B9C4124D8F89C60',
 		DAI_BUY_LINK: '',
