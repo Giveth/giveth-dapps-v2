@@ -107,12 +107,13 @@ const StakeGIVInnerModal: FC<IStakeModalProps> = ({
 			? 'givpower'
 			: '';
 
+	const supportPermit =
+		network !== config.GNOSIS_NETWORK_NUMBER &&
+		network !== config.OPTIMISM_NETWORK_NUMBER;
+
 	useEffect(() => {
 		// If the user isn't on the Gnosis network or Optimism network, they can permit the staking contract to spend their GIV
-		if (
-			network !== config.GNOSIS_NETWORK_NUMBER &&
-			network !== config.OPTIMISM_NETWORK_NUMBER
-		) {
+		if (supportPermit) {
 			setPermit(true);
 			setStakeState(StakeState.APPROVE);
 		}
@@ -244,27 +245,25 @@ const StakeGIVInnerModal: FC<IStakeModalProps> = ({
 											stakeState === StakeState.APPROVING
 										}
 									/>
-									{network !== config.GNOSIS_NETWORK_NUMBER &&
-										network !==
-											config.OPTIMISM_NETWORK_NUMBER && (
-											<ToggleContainer>
-												<ToggleSwitch
-													isOn={permit}
-													toggleOnOff={() => {
-														if (permit)
-															setPermitSignature(
-																undefined,
-															);
-														setPermit(!permit);
-													}}
-													label={`${
-														permit
-															? 'Permit'
-															: 'Approve'
-													} mode`}
-												/>
-											</ToggleContainer>
-										)}
+									{supportPermit && (
+										<ToggleContainer>
+											<ToggleSwitch
+												isOn={permit}
+												toggleOnOff={() => {
+													if (permit)
+														setPermitSignature(
+															undefined,
+														);
+													setPermit(!permit);
+												}}
+												label={`${
+													permit
+														? 'Permit'
+														: 'Approve'
+												} mode`}
+											/>
+										</ToggleContainer>
+									)}
 									<StyledOutlineButton
 										label={formatMessage({
 											id:
