@@ -18,18 +18,20 @@ export const fetchMainnetThirdPartyTokensPriceAsync = createAsyncThunk(
 	'price/fetchMainnetThirdPartyTokensPrice',
 	async () => {
 		const promises: Promise<string>[] = [];
-		config.MAINNET_CONFIG.regenStreams.forEach(streamConfig => {
+		(config.MAINNET_CONFIG.regenStreams || []).forEach(streamConfig => {
 			const tokenAddress =
 				streamConfig.tokenAddressOnUniswapV2.toLowerCase();
 			promises.push(fetchMainnetTokenPrice(tokenAddress));
 		});
 		return Promise.all(promises).then(prices => {
 			let res: { [x: string]: string } = {};
-			config.MAINNET_CONFIG.regenStreams.forEach((streamConfig, idx) => {
-				const tokenAddress =
-					streamConfig.tokenAddressOnUniswapV2.toLowerCase();
-				res[tokenAddress] = prices[idx];
-			});
+			(config.MAINNET_CONFIG.regenStreams || []).forEach(
+				(streamConfig, idx) => {
+					const tokenAddress =
+						streamConfig.tokenAddressOnUniswapV2.toLowerCase();
+					res[tokenAddress] = prices[idx];
+				},
+			);
 			return res;
 		});
 	},
