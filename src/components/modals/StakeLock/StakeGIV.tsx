@@ -106,9 +106,13 @@ const StakeGIVInnerModal: FC<IStakeModalProps> = ({
 			? 'givpower'
 			: '';
 
+	const supportPermit =
+		network !== config.GNOSIS_NETWORK_NUMBER &&
+		network !== config.OPTIMISM_NETWORK_NUMBER;
+
 	useEffect(() => {
-		// If the user isn't on the Gnosis network, they can permit the staking contract to spend their GIV
-		if (network !== config.GNOSIS_NETWORK_NUMBER) {
+		// If the user isn't on the Gnosis network or Optimism network, they can permit the staking contract to spend their GIV
+		if (supportPermit) {
 			setPermit(true);
 			setStakeState(StakeState.APPROVE);
 		}
@@ -258,8 +262,7 @@ const StakeGIVInnerModal: FC<IStakeModalProps> = ({
 											stakeState === StakeState.APPROVING
 										}
 									/>
-									{network !==
-										config.GNOSIS_NETWORK_NUMBER && (
+									{supportPermit && (
 										<ToggleContainer>
 											<ToggleSwitch
 												isOn={permit}
