@@ -7,9 +7,11 @@ import {
 	neutralColors,
 	Button,
 	FlexCenter,
+	IconAlertTriangleFilled32,
 } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
 import { Chain } from 'viem';
+import { useRouter } from 'next/router';
 import StorageLabel, { getWithExpiry } from '@/lib/localStorage';
 import { Modal } from '@/components/modals/Modal';
 import { compareAddresses, formatTxLink, showToastError } from '@/lib/helpers';
@@ -40,6 +42,8 @@ import { calcDonationShare } from '@/components/views/donate/helpers';
 import { Spinner } from '@/components/Spinner';
 import { FETCH_GIVETH_PROJECT_BY_ID } from '@/apollo/gql/gqlProjects';
 import createGoogleTagEventPurchase from '@/helpers/googleAnalytics';
+import { isWalletSanctioned } from '@/services/donation';
+import Routes from '@/lib/constants/Routes';
 
 interface IDonateModalProps extends IModal {
 	token: IProjectAcceptedToken;
@@ -95,8 +99,11 @@ const DonateModal: FC<IDonateModalProps> = props => {
 	const [givethProject, setGivethProject] = useState<IProject>();
 	const [failedModalType, setFailedModalType] =
 		useState<EDonationFailedType>();
+	const [isSanctioned, setIsSanctioned] = useState<boolean>(false);
 
 	const categories = project?.categories || [];
+
+	const router = useRouter();
 
 	useEffect(() => {
 		const fetchGivethProject = async () => {
@@ -143,23 +150,38 @@ const DonateModal: FC<IDonateModalProps> = props => {
 	const projectDonationPrice = tokenPrice && tokenPrice * projectDonation;
 	const givethDonationPrice = tokenPrice && givethDonation * tokenPrice;
 
-	// this function is used to validate the token, if the token is valid, the user can donate, otherwise it will show an error message.
+	// this function is used to validate the token and check if the wallet is sanctioned
 	const validateTokenThenDonate = async () => {
 		setDonating(true);
-		client
-			.query({
-				query: VALIDATE_TOKEN,
-				fetchPolicy: 'no-cache',
-			})
-			.then((res: IMeGQL) => {
-				const _address = res.data?.me?.walletAddress;
-				if (compareAddresses(_address, address)) {
-					handleDonate();
-				} else {
-					handleFailedValidation();
+		try {
+			if (project.organization.label === 'endaoment') {
+				// We just need to check if the wallet is sanctioned for endaoment projects
+				const sanctioned = await isWalletSanctioned(address);
+				if (sanctioned) {
+					setIsSanctioned(true);
+					setDonating(false);
+					return;
 				}
-			})
-			.catch(handleFailedValidation);
+			}
+
+			client
+				.query({
+					query: VALIDATE_TOKEN,
+					fetchPolicy: 'no-cache',
+				})
+				.then((res: IMeGQL) => {
+					const _address = res.data?.me?.walletAddress;
+					if (compareAddresses(_address, address)) {
+						handleDonate();
+					} else {
+						handleFailedValidation();
+					}
+				})
+				.catch(handleFailedValidation);
+		} catch (error) {
+			setDonating(false);
+			showToastError('Error validating wallet address');
+		}
 	};
 
 	const handleFailedValidation = () => {
@@ -419,9 +441,51 @@ const DonateModal: FC<IDonateModalProps> = props => {
 					</Buttons>
 				</DonateContainer>
 			</Modal>
+			{isSanctioned && (
+				<Modal
+					closeModal={() => setIsSanctioned(false)}
+					headerTitle={formatMessage({
+						id: 'label.sanctioned_wallet',
+					})}
+					headerTitlePosition='left'
+					hiddenClose={true}
+					headerIcon={<IconAlertTriangleFilled32 size={32} />}
+					doNotCloseOnClickOutside
+				>
+					<SanctionContainer>
+						<SanctionBox>
+							<Lead>
+								{formatMessage({
+									id: 'label.sanctioned_wallet_message_part1',
+								})}
+								&nbsp;
+								<ExternalLink
+									href={'https://ofac.treasury.gov/'}
+									title={'OFAC'}
+									color={brandColors.pinky[500]}
+								/>
+								&nbsp;
+								{formatMessage({
+									id: 'label.sanctioned_wallet_message_part2',
+								})}
+							</Lead>
+						</SanctionBox>
+						<Buttons>
+							<SanctionButton
+								buttonType='primary'
+								label={formatMessage({
+									id: 'label.view_all_projects',
+								})}
+								onClick={() => {
+									router.push(Routes.AllProjects);
+								}} // Navigate to the All Projects route
+							/>
+						</Buttons>
+					</SanctionContainer>
+				</Modal>
+			)}
 			{failedModalType && (
 				<FailedDonation
-					// txUrl={formatTxLink(chainId, firstTxHash || secondTxHash)}
 					txUrl={handleTxLink(firstTxHash || secondTxHash)}
 					setShowModal={() => setFailedModalType(undefined)}
 					type={failedModalType}
@@ -459,6 +523,7 @@ const findMatchingWalletAddress = (
 
 const TxStatus = styled.div`
 	margin-bottom: 12px;
+
 	> div:first-child {
 		margin-bottom: 12px;
 	}
@@ -470,6 +535,7 @@ const DonateContainer = styled.div`
 	padding: 24px 24px 38px;
 	margin: 0;
 	width: 100%;
+
 	${mediaQueries.tablet} {
 		width: 494px;
 	}
@@ -477,18 +543,23 @@ const DonateContainer = styled.div`
 
 const DonatingBox = styled.div`
 	color: ${brandColors.deep[900]};
+
 	> :first-child {
 		margin-bottom: 8px;
 	}
+
 	h3 {
 		margin-top: -5px;
 	}
+
 	h6 {
 		color: ${neutralColors.gray[700]};
 		margin-top: -5px;
 	}
+
 	> :last-child {
 		margin: 12px 0 32px 0;
+
 		> span {
 			font-weight: 500;
 		}
@@ -498,16 +569,77 @@ const DonatingBox = styled.div`
 const DonateButton = styled(Button)<{ disabled: boolean }>`
 	background: ${props =>
 		props.disabled ? brandColors.giv[200] : brandColors.giv[500]};
+
 	&:hover:enabled {
 		background: ${brandColors.giv[700]};
 	}
+
 	:disabled {
 		cursor: not-allowed;
 	}
+
 	> :first-child > div {
 		border-top: 3px solid ${brandColors.giv[200]};
 		animation-timing-function: linear;
 	}
+
+	text-transform: uppercase;
+`;
+
+const SanctionContainer = styled(DonateContainer)`
+	background: white;
+	color: black;
+	padding: 24px 24px 38px;
+	margin: 0;
+	width: 100%;
+
+	${mediaQueries.tablet} {
+		width: 494px;
+	}
+`;
+
+const SanctionBox = styled(DonatingBox)`
+	color: ${brandColors.deep[900]};
+
+	> :first-child {
+		margin-bottom: 8px;
+	}
+
+	h3 {
+		margin-top: -5px;
+	}
+
+	h6 {
+		color: ${neutralColors.gray[700]};
+		margin-top: -5px;
+	}
+
+	> :last-child {
+		margin: 12px 0 32px 0;
+
+		> span {
+			font-weight: 500;
+		}
+	}
+`;
+
+const SanctionButton = styled(DonateButton)`
+	background: ${props =>
+		props.disabled ? brandColors.giv[200] : brandColors.giv[500]};
+
+	&:hover:enabled {
+		background: ${brandColors.giv[700]};
+	}
+
+	:disabled {
+		cursor: not-allowed;
+	}
+
+	> :first-child > div {
+		border-top: 3px solid ${brandColors.giv[200]};
+		animation-timing-function: linear;
+	}
+
 	text-transform: uppercase;
 `;
 
