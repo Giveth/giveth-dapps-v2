@@ -154,7 +154,7 @@ const DonateModal: FC<IDonateModalProps> = props => {
 	const validateTokenThenDonate = async () => {
 		setDonating(true);
 		try {
-			if (project.organization.label === 'endaoment') {
+			if (project?.organization?.label === 'endaoment') {
 				// We just need to check if the wallet is sanctioned for endaoment projects
 				const sanctioned = await isWalletSanctioned(address);
 				if (sanctioned) {
