@@ -1,10 +1,16 @@
 import React, { FC } from 'react';
 import { useIntl } from 'react-intl';
-import { neutralColors, Flex, P, B, IconArrowRight } from '@giveth/ui-design-system';
+import {
+	neutralColors,
+	Flex,
+	P,
+	B,
+	IconArrowRight,
+} from '@giveth/ui-design-system';
 import styled from 'styled-components';
+import Image from 'next/image';
 import { IDraftDonation, IProjectAcceptedToken } from '@/apollo/types/gqlTypes';
 import { UsdAmountCard } from './QRDonationCard';
-import Image from 'next/image';
 import { TokenIcon } from '../../../TokenIcon/TokenIcon';
 import config from '@/configuration';
 import { ChainType } from '@/types/config';
@@ -37,11 +43,9 @@ const ImageComponent = ({
 					<Flex $justifyContent='center' $alignItems='center'>
 						<InlineToast
 							type={EToastType.Info}
-							message={
-								formatMessage({
-									id: 'label.qr_code_expired',
-								})
-							}
+							message={formatMessage({
+								id: 'label.qr_code_expired',
+							})}
 						/>
 					</Flex>
 				</Overlay>

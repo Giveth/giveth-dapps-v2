@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
-import { useDonateData } from '@/context/donate.context';
 import {
 	neutralColors,
 	P,
@@ -13,6 +12,7 @@ import {
 	Button,
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
+import { useDonateData } from '@/context/donate.context';
 import { UsdAmountCard } from './QRDonationCard';
 import { TokenIcon } from '../../../TokenIcon/TokenIcon';
 import config from '@/configuration';
@@ -32,9 +32,7 @@ const QRDonationDetails = () => {
 		startTimer,
 		fetchDraftDonation,
 	} = useDonateData();
-	const { isSignedIn } = useAppSelector(
-		state => state.user,
-	);
+	const { isSignedIn } = useAppSelector(state => state.user);
 
 	const [tokenPrice, setTokenPrice] = useState(0);
 
@@ -56,7 +54,7 @@ const QRDonationDetails = () => {
 		} else {
 			window.open(Routes.Invoice + '/' + draftDonationData?.id, '_blank');
 		}
-	}
+	};
 
 	useEffect(() => {
 		draftDonationData?.expiresAt &&
@@ -176,7 +174,9 @@ const QRDonationDetails = () => {
 					label={formatMessage({
 						id: 'label.raise_a_ticket',
 					})}
-					onClick={() => window.open(links.REPORT_FAILED_DONATION, '_blank')}
+					onClick={() =>
+						window.open(links.REPORT_FAILED_DONATION, '_blank')
+					}
 				/>
 			)}
 		</>

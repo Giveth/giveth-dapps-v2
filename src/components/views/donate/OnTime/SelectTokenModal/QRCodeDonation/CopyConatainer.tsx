@@ -32,7 +32,7 @@ const CopyContainer: FC<{ text: string }> = ({ text }) => {
 const StyledCopyContainer = styled.div`
 	display: flex;
 	border: 1px solid ${neutralColors.gray[300]};
-    justify-content: space-between;
+	justify-content: space-between;
 	align-items: center;
 	border-radius: 8px;
 	gap: 16px;

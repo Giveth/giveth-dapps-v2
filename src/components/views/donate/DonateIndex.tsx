@@ -120,8 +120,7 @@ const DonateIndex: FC = () => {
 
 		setQRDonationStatus('waiting');
 		const expiresAt = await renewExpirationDate(draftDonationData?.id);
-		expiresAt &&
-		startTimer?.(new Date(expiresAt));
+		expiresAt && startTimer?.(new Date(expiresAt));
 	};
 
 	console.log('successDonation', successDonation);

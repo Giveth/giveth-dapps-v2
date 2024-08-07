@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import DonationStatusSection from '@/components/views/transaction/DonationStatusSection';
 import { Flex } from '@giveth/ui-design-system';
 import styled from 'styled-components';
+import { useRouter } from 'next/router';
+import DonationStatusSection from '@/components/views/transaction/DonationStatusSection';
 import QRDetailsSection from '@/components/views/transaction/QRDetailsSection';
 import { IDraftDonation } from '@/apollo/types/gqlTypes';
 import { client } from '@/apollo/apolloClient';
@@ -10,7 +11,6 @@ import {
 	FETCH_DRAFT_DONATION,
 } from '@/apollo/gql/gqlDonations';
 import { FETCH_PROJECT_BY_ID } from '@/apollo/gql/gqlProjects';
-import { useRouter } from 'next/router';
 import { formatBalance } from '@/lib/helpers';
 import config from '@/configuration';
 import { ChainType } from '@/types/config';
@@ -113,11 +113,11 @@ const TransactionView = () => {
 
 		fetchDraftDonation();
 	}, [id]);
-	
+
 	if (isLoading) {
 		return <WrappedSpinner />;
 	}
-	
+
 	if (!draftDonationData) {
 		return <ErrorsIndex statusCode='404' />;
 	}

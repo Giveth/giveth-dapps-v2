@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 import { neutralColors, Flex } from '@giveth/ui-design-system';
 import { mediaQueries } from '@/lib/constants/constants';
@@ -16,7 +16,7 @@ const StellarData = {
 	name: 'Stellar',
 	chainType: ChainType.STELLAR,
 	symbol: 'XLM',
-} as IProjectAcceptedToken; 
+} as IProjectAcceptedToken;
 
 const QRDetailsSection: React.FC<TQRDetailsSectionProps> = ({
 	usdAmount,

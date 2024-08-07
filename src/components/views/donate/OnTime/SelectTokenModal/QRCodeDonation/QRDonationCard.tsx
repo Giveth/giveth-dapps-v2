@@ -10,6 +10,7 @@ import {
 	IconArrowLeft,
 } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
+import { formatUnits } from 'viem';
 import {
 	Input,
 	InputWrapper,
@@ -20,9 +21,7 @@ import { IProjectAcceptedToken } from '@/apollo/types/gqlTypes';
 import { fetchPriceWithCoingeckoId } from '@/services/token';
 import { ChainType } from '@/types/config';
 import config from '@/configuration';
-import { truncateToDecimalPlaces } from '@/lib/helpers';
-import { formatUnits } from 'viem';
-import { formatBalance } from '@/lib/helpers';
+import { truncateToDecimalPlaces, formatBalance } from '@/lib/helpers';
 import { IDonationCardProps } from '../../../DonationCard';
 import QRDonationCardContent from './QRDonationCardContent';
 import { useQRCodeDonation } from '@/hooks/useQRCodeDonation';

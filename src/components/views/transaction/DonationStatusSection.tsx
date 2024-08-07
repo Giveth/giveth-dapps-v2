@@ -283,7 +283,12 @@ const DonationStatusSection: FC<TDonationStatusSectionProps> = React.memo(
 								label={formatMessage({
 									id: 'label.raise_a_ticket',
 								})}
-								onClick={() => window.open(links.REPORT_FAILED_DONATION, '_blank')}
+								onClick={() =>
+									window.open(
+										links.REPORT_FAILED_DONATION,
+										'_blank',
+									)
+								}
 							/>
 						</Flex>
 					) : (

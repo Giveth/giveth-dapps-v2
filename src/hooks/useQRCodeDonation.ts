@@ -1,6 +1,7 @@
 import { useState } from 'react';
-import { client } from '@/apollo/apolloClient';
 import QRCode from 'qrcode';
+import { useIntl } from 'react-intl';
+import { client } from '@/apollo/apolloClient';
 import {
 	CREATE_DRAFT_DONATION,
 	FETCH_DRAFT_DONATION,
@@ -11,7 +12,6 @@ import { ICreateDraftDonation } from '@/components/views/donate/helpers';
 import StorageLabel from '@/lib/localStorage';
 import { IDraftDonation } from '@/apollo/types/gqlTypes';
 import { useDonateData } from '@/context/donate.context';
-import { useIntl } from 'react-intl';
 
 export type TQRStatus = 'waiting' | 'failed' | 'success' | 'expired';
 
@@ -164,7 +164,9 @@ export const useQRCodeDonation = () => {
 		}
 	};
 
-	const renewExpirationDate = async (id: number): Promise<Date | undefined> => {
+	const renewExpirationDate = async (
+		id: number,
+	): Promise<Date | undefined> => {
 		try {
 			const {
 				data: { renewDraftDonationExpirationDate },

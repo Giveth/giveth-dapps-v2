@@ -1,7 +1,7 @@
 import { PublicKey } from '@solana/web3.js';
 import { getEnsAddress } from '@wagmi/core';
-import { wagmiConfig } from '@/wagmiConfigs';
 import { StrKey } from '@stellar/stellar-sdk';
+import { wagmiConfig } from '@/wagmiConfigs';
 
 export function isAddressENS(ens: string | undefined) {
 	if (!ens) return false;

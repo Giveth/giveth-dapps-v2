@@ -14,7 +14,9 @@ import {
 	deviceSize,
 	brandColors,
 	P,
+	IconSpark,
 } from '@giveth/ui-design-system';
+import Link from 'next/link';
 import styled from 'styled-components';
 import { useIntl } from 'react-intl';
 import ProjectHeader from './ProjectHeader';
@@ -42,8 +44,6 @@ import { AdminActions } from './projectActionCard/AdminActions';
 import ProjectOwnerBanner from './ProjectOwnerBanner';
 import { useGeneralWallet } from '@/providers/generalWalletProvider';
 import ProjectSocials from './ProjectSocials';
-import { IconSpark } from '@giveth/ui-design-system';
-import Link from 'next/link';
 import Routes from '@/lib/constants/Routes';
 import { ChainType } from '@/types/config';
 import { useAppSelector } from '@/features/hooks';

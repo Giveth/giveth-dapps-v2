@@ -4,6 +4,7 @@ import styled, { css } from 'styled-components';
 import { useIntl } from 'react-intl';
 import { useRouter } from 'next/router';
 import { isAddress } from 'viem';
+import { captureException } from '@sentry/nextjs';
 import { Shadow } from '@/components/styled-components/Shadow';
 import { RecurringDonationCard } from './Recurring/RecurringDonationCard';
 import OneTimeDonationCard from './OnTime/OneTimeDonationCard';
@@ -19,7 +20,6 @@ import {
 	IProjectAcceptedToken,
 	IProjectAcceptedTokensGQL,
 } from '@/apollo/types/gqlTypes';
-import { captureException } from '@sentry/nextjs';
 
 export enum ETabs {
 	ONE_TIME = 'on-time',

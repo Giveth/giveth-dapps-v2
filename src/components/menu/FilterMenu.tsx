@@ -68,7 +68,7 @@ const fundsFilter = [
 	{
 		label: 'Stellar',
 		value: EProjectsFilter.ACCEPT_FUND_ON_STELLAR,
-	}
+	},
 ];
 
 fundsFilter.push({

@@ -17,8 +17,7 @@ import { ChainType } from '@/types/config';
 import { useUserStreams } from '@/hooks/useUserStreams';
 import { client } from '@/apollo/apolloClient';
 import { FETCH_PROJECT_BY_SLUG_DONATION } from '@/apollo/gql/gqlProjects';
-import { IProjectAcceptedToken } from '@/apollo/types/gqlTypes';
-import { IDraftDonation } from '@/apollo/types/gqlTypes';
+import { IProjectAcceptedToken, IDraftDonation } from '@/apollo/types/gqlTypes';
 import { useQRCodeDonation, TQRStatus } from '@/hooks/useQRCodeDonation';
 export interface TxHashWithChainType {
 	txHash: string;
@@ -116,7 +115,13 @@ export const DonateProvider: FC<IProviderProps> = ({ children, project }) => {
 
 	const { tokenStreams } = useUserStreams();
 
-	const { draftDonation, status, retrieveDraftDonation, startTimer, setStatus } = useQRCodeDonation();
+	const {
+		draftDonation,
+		status,
+		retrieveDraftDonation,
+		startTimer,
+		setStatus,
+	} = useQRCodeDonation();
 
 	const hasActiveQFRound = hasActiveRound(project?.qfRounds);
 
