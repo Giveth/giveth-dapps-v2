@@ -6,17 +6,18 @@ import { ChainType } from '@/types/config';
 import { useGeneralWallet } from '@/providers/generalWalletProvider';
 import { IProjectAcceptedToken } from '@/apollo/types/gqlTypes';
 
-const useFetchBalance = (token: IProjectAcceptedToken) => {
+const useFetchBalance = (token: IProjectAcceptedToken | undefined) => {
 	const { walletAddress } = useGeneralWallet();
 	const [balance, setBalance] = useState<bigint | undefined>(undefined);
-	const isEvm = token.chainType === ChainType.EVM;
+
+	const isEvm = token?.chainType === ChainType.EVM;
 	const address = walletAddress as Address | null;
 
 	const evmBalanceQuery = useBalance({
 		token: token?.address === zeroAddress ? undefined : token?.address,
 		address: address as Address,
 		query: {
-			enabled: isEvm && address !== null,
+			enabled: !!token && isEvm && address !== null,
 		},
 	});
 
