@@ -754,3 +754,32 @@ export const FETCH_RECURRING_DONATIONS_BY_PROJECTID = gql`
 		}
 	}
 `;
+export const FETCH_RECURRING_DONATIONS_BY_DATE = gql`
+	query ($projectId: Int!, $startDate: String, $endDate: String) {
+		recurringDonationsByDate(
+			projectId: $projectId
+			startDate: $startDate
+			endDate: $endDate
+		) {
+			recurringDonations {
+				id
+				txHash
+				networkId
+				flowRate
+				currency
+				anonymous
+				isArchived
+				status
+				totalUsdStreamed
+				donor {
+					id
+					walletAddress
+					firstName
+					email
+				}
+				createdAt
+			}
+			totalCount
+		}
+	}
+`;
