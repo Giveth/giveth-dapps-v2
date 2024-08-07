@@ -168,6 +168,7 @@ export const FETCH_PROJECT_BY_SLUG_DONATION = gql`
 				isRecipient
 				networkId
 				chainType
+				memo
 			}
 			status {
 				name
@@ -304,6 +305,7 @@ export const FETCH_PROJECT_BY_ID = gql`
 			description
 			addresses {
 				address
+				memo
 				isRecipient
 				networkId
 				chainType
@@ -336,6 +338,7 @@ export const FETCH_GIVETH_PROJECT_BY_ID = gql`
 	query ProjectById($id: Float!) {
 		projectById(id: $id) {
 			addresses {
+				memo
 				address
 				isRecipient
 				networkId
@@ -512,6 +515,7 @@ export const CREATE_PROJECT = gql`
 				address
 				networkId
 				chainType
+				memo
 			}
 			categories {
 				name
@@ -544,6 +548,7 @@ export const UPDATE_PROJECT = gql`
 				address
 				networkId
 				chainType
+				memo
 			}
 			impactLocation
 			categories {
@@ -673,6 +678,7 @@ export const PROJECT_ACCEPTED_TOKENS = gql`
 			order
 			isStableCoin
 			coingeckoId
+			isQR
 		}
 	}
 `;

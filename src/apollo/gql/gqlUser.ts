@@ -60,6 +60,7 @@ export const FETCH_USER_PROJECTS = gql`
 				}
 				addresses {
 					address
+					memo
 					isRecipient
 					networkId
 					chainType

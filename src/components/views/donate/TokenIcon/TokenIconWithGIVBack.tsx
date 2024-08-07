@@ -37,7 +37,7 @@ export const TokenIconWithGIVBack: FC<ITokenIconWithGIVBackProps> = ({
 const TokenIconWrapper = styled.div<TokenIconWrapperProps>`
 	position: relative;
 	${props =>
-		props.$isSuperToken &&
+		props.$isSuperToken ?
 		css`
 			display: inline-flex;
 			justify-content: center;
@@ -47,7 +47,6 @@ const TokenIconWrapper = styled.div<TokenIconWrapperProps>`
 			border: 2px solid #36ce36;
 			padding: 1px;
 			border-radius: 50%;
-			transform: translateY(-5px);
 
 			& > img:first-child {
 				z-index: 5;
@@ -74,6 +73,11 @@ const TokenIconWrapper = styled.div<TokenIconWrapperProps>`
 				border-radius: 50%;
 				background-color: #36ce36;
 			}
+		` :
+		css`
+			display: flex;
+			justify-content: center;
+			align-items: center;
 		`}
 `;
 

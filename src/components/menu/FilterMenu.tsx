@@ -65,6 +65,10 @@ const fundsFilter = [
 		label: 'Polygon ZKEVM',
 		value: EProjectsFilter.ACCEPT_FUND_ON_ZKEVM,
 	},
+	{
+		label: 'Stellar',
+		value: EProjectsFilter.ACCEPT_FUND_ON_STELLAR,
+	}
 ];
 
 fundsFilter.push({

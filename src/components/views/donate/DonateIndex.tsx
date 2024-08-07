@@ -9,6 +9,8 @@ import {
 	semanticColors,
 	SublineBold,
 	Flex,
+	B,
+	Button,
 } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
 import { useRouter } from 'next/router';
@@ -32,17 +34,38 @@ import ProjectCardImage from '@/components/project-card/ProjectCardImage';
 import { useGeneralWallet } from '@/providers/generalWalletProvider';
 import { DonatePageProjectDescription } from './DonatePageProjectDescription';
 import { getActiveRound } from '@/helpers/qf';
+import QRDonationDetails from './OnTime/SelectTokenModal/QRCodeDonation/QRDonationDetails';
+import InlineToast, { EToastType } from '@/components/toasts/InlineToast';
+import { client } from '@/apollo/apolloClient';
+import { FETCH_DONATION_BY_ID } from '@/apollo/gql/gqlDonations';
+import { IDonation } from '@/apollo/types/types';
+import config from '@/configuration';
+import { ChainType } from '@/types/config';
+import { useQRCodeDonation } from '@/hooks/useQRCodeDonation';
 
 const DonateIndex: FC = () => {
 	const { formatMessage } = useIntl();
 	const { isMobile } = useDetectDevice();
-	const { project, successDonation, hasActiveQFRound } = useDonateData();
+	const {
+		project,
+		successDonation,
+		qrDonationStatus,
+		draftDonationData,
+		hasActiveQFRound,
+		setSuccessDonation,
+		setQRDonationStatus,
+		startTimer,
+	} = useDonateData();
+	const { renewExpirationDate } = useQRCodeDonation();
+
 	const alreadyDonated = useAlreadyDonatedToProject(project);
 	const dispatch = useAppDispatch();
 	const isSafeEnv = useIsSafeEnvironment();
 	const { isOnSolana } = useGeneralWallet();
 	const router = useRouter();
 	const { chainId } = useAccount();
+
+	const [showQRCode, setShowQRCode] = React.useState(false);
 
 	useEffect(() => {
 		dispatch(setShowHeader(false));
@@ -51,10 +74,57 @@ const DonateIndex: FC = () => {
 		};
 	}, [dispatch]);
 
+	useEffect(() => {
+		const fetchDonation = async () => {
+			if (qrDonationStatus === 'success') {
+				const {
+					data: { getDonationById },
+				} = (await client.query({
+					query: FETCH_DONATION_BY_ID,
+					variables: {
+						id: Number(draftDonationData?.matchedDonationId),
+					},
+					fetchPolicy: 'no-cache',
+				})) as { data: { getDonationById: IDonation } };
+
+				if (!getDonationById) return;
+
+				const { transactionId, isTokenEligibleForGivback } =
+					getDonationById;
+
+				if (!transactionId) return;
+
+				setSuccessDonation({
+					txHash: [
+						{
+							txHash: transactionId,
+							chainType: ChainType.STELLAR,
+						},
+					],
+					givBackEligible: isTokenEligibleForGivback,
+					chainId: config.STELLAR_NETWORK_NUMBER,
+				});
+			}
+		};
+		fetchDonation();
+	}, [qrDonationStatus]);
+
 	const isRecurringTab = router.query.tab?.toString() === ETabs.RECURRING;
 	const { activeStartedRound } = getActiveRound(project.qfRounds);
 	const isOnEligibleNetworks =
 		chainId && activeStartedRound?.eligibleNetworks?.includes(chainId);
+	const isFailedOperation = ['expired', 'failed'].includes(qrDonationStatus);
+
+	const updateQRCode = async () => {
+		if (!draftDonationData?.id) return;
+
+		setQRDonationStatus('waiting');
+		const expiresAt = await renewExpirationDate(draftDonationData?.id);
+		expiresAt &&
+		startTimer?.(new Date(expiresAt));
+	};
+
+	console.log('successDonation', successDonation);
 
 	return successDonation ? (
 		<>
@@ -83,24 +153,59 @@ const DonateIndex: FC = () => {
 				<NiceBanner />
 				<Row>
 					<Col xs={12} lg={6}>
-						<DonationCard />
+						<DonationCard
+							setShowQRCode={setShowQRCode}
+							showQRCode={showQRCode}
+						/>
 					</Col>
 					<Col xs={12} lg={6}>
-						<InfoWrapper>
-							<ImageWrapper>
-								<ProjectCardImage image={project.image} />
-							</ImageWrapper>
-							{!isMobile ? (
-								(!isRecurringTab && hasActiveQFRound) ||
-								(isRecurringTab && isOnEligibleNetworks) ? (
-									<QFSection projectData={project} />
-								) : (
-									<DonatePageProjectDescription
-										projectData={project}
-									/>
-								)
-							) : null}
+						<InfoWrapper
+							style={{ marginBottom: isFailedOperation ? 24 : 0 }}
+						>
+							{showQRCode ? (
+								<QRDonationDetails />
+							) : (
+								<>
+									<ImageWrapper>
+										<ProjectCardImage
+											image={project.image}
+										/>
+									</ImageWrapper>
+									{!isMobile ? (
+										(!isRecurringTab && hasActiveQFRound) ||
+										(isRecurringTab &&
+											isOnEligibleNetworks) ? (
+											<QFSection projectData={project} />
+										) : (
+											<DonatePageProjectDescription
+												projectData={project}
+											/>
+										)
+									) : null}
+								</>
+							)}
 						</InfoWrapper>
+						{isFailedOperation && (
+							<QRRetryWrapper style={{ gap: 20 }}>
+								<B>
+									{formatMessage({
+										id: 'label.need_a_new_qr_code',
+									})}
+								</B>
+								<InlineToast
+									type={EToastType.Warning}
+									message={formatMessage({
+										id: 'label.new_qr_code_needed',
+									})}
+								/>
+								<ButtonStyled
+									label={formatMessage({
+										id: 'label.update_qr_code',
+									})}
+									onClick={updateQRCode}
+								/>
+							</QRRetryWrapper>
+						)}
 					</Col>
 				</Row>
 				{!isMobile && (
@@ -137,7 +242,15 @@ const InfoWrapper = styled.div`
 	background-color: ${neutralColors.gray[100]};
 	padding: 24px;
 	border-radius: 16px;
-	height: 100%;
+	text-align: left;
+`;
+
+const QRRetryWrapper = styled(Flex)`
+	flex-direction: column;
+	padding: 24px;
+	border-radius: 16px;
+	background-color: ${neutralColors.gray[100]};
+	gap: 20px;
 	text-align: left;
 `;
 
@@ -148,6 +261,11 @@ const ImageWrapper = styled.div`
 	margin-bottom: 24px;
 	border-radius: 8px;
 	overflow: hidden;
+`;
+
+const ButtonStyled = styled(Button)`
+	width: 100%;
+	text-transform: capitalize;
 `;
 
 export default DonateIndex;

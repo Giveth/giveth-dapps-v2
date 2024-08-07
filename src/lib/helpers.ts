@@ -211,6 +211,20 @@ export const smallFormatDate = (date: Date, locale?: string) => {
 	});
 };
 
+// format date to mm-dd-yyyy (ex: Jun-31-2021)
+export const smallDashedFormatDate = (date: Date, locale?: string) => {
+	return date.toLocaleString(locale || 'en-US', {
+		day: 'numeric',
+		year: 'numeric',
+		month: 'short',
+	})
+		.split(' ')
+		.join('-')
+		.split(',')
+		.join('');
+}
+
+
 export const isSSRMode = typeof window === 'undefined';
 
 export const suggestNewAddress = (
