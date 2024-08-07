@@ -7,6 +7,7 @@ import {
 	UnsafeBurnerWalletAdapter,
 	PhantomWalletAdapter,
 	SolflareWalletAdapter,
+	CoinbaseWalletAdapter,
 } from '@solana/wallet-adapter-wallets';
 import { WalletModalProvider } from '@solana/wallet-adapter-react-ui';
 import { BaseMessageSignerWalletAdapter } from '@solana/wallet-adapter-base';
@@ -28,6 +29,7 @@ export const SolanaCtx = createContext<any>(null);
 const wallets: BaseMessageSignerWalletAdapter[] = [
 	new PhantomWalletAdapter(),
 	new SolflareWalletAdapter({ network: solanaAdapter }),
+	new CoinbaseWalletAdapter(),
 ];
 
 if (!isProduction) {
