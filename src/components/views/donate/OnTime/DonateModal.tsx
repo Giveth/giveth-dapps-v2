@@ -154,7 +154,7 @@ const DonateModal: FC<IDonateModalProps> = props => {
 	const validateTokenThenDonate = async () => {
 		setDonating(true);
 		try {
-			if (project?.organization?.label === 'endaoment') {
+			if (project?.organization?.label === 'endaoment' && address) {
 				// We just need to check if the wallet is sanctioned for endaoment projects
 				const sanctioned = await isWalletSanctioned(address);
 				if (sanctioned) {
@@ -444,6 +444,7 @@ const DonateModal: FC<IDonateModalProps> = props => {
 			{isSanctioned && (
 				<Modal
 					closeModal={() => setIsSanctioned(false)}
+					isAnimating={false}
 					headerTitle={formatMessage({
 						id: 'label.sanctioned_wallet',
 					})}
@@ -473,6 +474,7 @@ const DonateModal: FC<IDonateModalProps> = props => {
 						<Buttons>
 							<SanctionButton
 								buttonType='primary'
+								disabled={false}
 								label={formatMessage({
 									id: 'label.view_all_projects',
 								})}

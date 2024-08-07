@@ -385,7 +385,6 @@ export async function isWalletSanctioned(
 		// Check the response and determine if the address is sanctioned
 		const result = response.data && response.data[0];
 		return Boolean(result && result.isSanctioned);
-		return true;
 	} catch (error) {
 		console.error('Error checking wallet sanction status:', error);
 		return false;
