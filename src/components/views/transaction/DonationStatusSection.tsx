@@ -134,8 +134,7 @@ const Timer = (endDate: Date, locale: string) => {
 
 const transactionLink = 'https://stellar.expert/explorer/public/tx/';
 
-const formatComponent = (date: string | undefined) => {
-	const { locale } = useIntl();
+const formatComponent = (date: string | undefined, locale: string) => {
 	const timePassed = getHowManyPassed(new Date(date ?? ''), locale);
 
 	return (
@@ -155,162 +154,162 @@ const formatComponent = (date: string | undefined) => {
 	);
 };
 
-const DonationStatusSection: FC<TDonationStatusSectionProps> = React.memo(
-	({ status, draftDonationData, donationData, usdAmount }) => {
-		const { locale, formatMessage } = useIntl();
+const DonationStatusSection: FC<TDonationStatusSectionProps> = ({
+	status,
+	draftDonationData,
+	donationData,
+	usdAmount,
+}) => {
+	const { locale, formatMessage } = useIntl();
 
-		return (
-			<DetailsWapper>
-				<Flex
-					$justifyContent='space-between'
-					$alignItems='center'
-					style={{ width: '100%' }}
-				>
-					<StyledH5>
-						{formatMessage({ id: 'label.donation_status' })}
-					</StyledH5>
-					<StatusBadge status={status}>
-						<ColorfulDot status={status} />
-						{formatMessage({
-							id: `label.${StatusMap[status].text}`,
-						})}
-					</StatusBadge>
+	return (
+		<DetailsWapper>
+			<Flex
+				$justifyContent='space-between'
+				$alignItems='center'
+				style={{ width: '100%' }}
+			>
+				<StyledH5>
+					{formatMessage({ id: 'label.donation_status' })}
+				</StyledH5>
+				<StatusBadge status={status}>
+					<ColorfulDot status={status} />
+					{formatMessage({
+						id: `label.${StatusMap[status].text}`,
+					})}
+				</StatusBadge>
+			</Flex>
+			<DetailsSection>
+				<Flex $alignItems='center'>
+					<Label>{formatMessage({ id: 'label.amount' })}</Label>
+					<Flex $alignItems='center' gap='8px'>
+						<B>{draftDonationData?.amount}</B>
+						<UsdAmountCard>$ {usdAmount}</UsdAmountCard>
+						<TokenIcon
+							symbol={
+								config.NETWORKS_CONFIG[ChainType.STELLAR]
+									.nativeCurrency.symbol
+							}
+							size={32}
+						/>
+						<TokenSymbol>
+							{
+								config.NETWORKS_CONFIG[ChainType.STELLAR]
+									.nativeCurrency.symbol
+							}{' '}
+							on {config.NETWORKS_CONFIG[ChainType.STELLAR].name}
+						</TokenSymbol>
+					</Flex>
 				</Flex>
-				<DetailsSection>
-					<Flex $alignItems='center'>
-						<Label>{formatMessage({ id: 'label.amount' })}</Label>
-						<Flex $alignItems='center' gap='8px'>
-							<B>{draftDonationData?.amount}</B>
-							<UsdAmountCard>$ {usdAmount}</UsdAmountCard>
-							<TokenIcon
-								symbol={
-									config.NETWORKS_CONFIG[ChainType.STELLAR]
-										.nativeCurrency.symbol
-								}
-								size={32}
-							/>
-							<TokenSymbol>
-								{
-									config.NETWORKS_CONFIG[ChainType.STELLAR]
-										.nativeCurrency.symbol
-								}{' '}
-								on{' '}
-								{config.NETWORKS_CONFIG[ChainType.STELLAR].name}
-							</TokenSymbol>
-						</Flex>
-					</Flex>
-					<Flex $alignItems='center'>
-						<Label>{formatMessage({ id: 'label.from' })}</Label>
-						{donationData?.fromWalletAddress ? (
-							<Link>{donationData.fromWalletAddress}</Link>
-						) : (
-							<B>{'NA'}</B>
-						)}
-					</Flex>
-					<Flex $alignItems='center'>
-						<Label>
-							{formatMessage({ id: 'label.donating_to' })}
-						</Label>
-						{draftDonationData?.project?.title ? (
-							<Link>{draftDonationData.project.title}</Link>
-						) : (
-							<B>{'NA'}</B>
-						)}
-					</Flex>
-					<Flex $alignItems='center'>
-						<Label $capitalize>
-							{formatMessage({ id: 'label.recipient_address' })}
-						</Label>
-						<B>{draftDonationData?.toWalletAddress ?? 'NA'}</B>
-					</Flex>
-					<Flex $alignItems='center'>
-						<Label>{formatMessage({ id: 'label.memo' })}</Label>
-						<B>{draftDonationData?.toWalletMemo ?? 'NA'}</B>
-					</Flex>
-					<Flex $alignItems='center'>
-						<Label>{formatMessage({ id: 'label.date' })}</Label>
-						{formatComponent(draftDonationData?.createdAt)}
-					</Flex>
-					<Flex $alignItems='center'>
-						<Label $capitalize>
-							{formatMessage({
-								id: draftDonationData?.matchedDonationId
-									? 'label.transaction_link'
-									: 'label.valid_for',
-							})}
-						</Label>
-						{draftDonationData?.matchedDonationId ? (
-							donationData?.transactionId ? (
-								<Flex $alignItems='center' gap='8px'>
-									<ExternalLink
-										href={`${transactionLink}${donationData.transactionId}`}
-										title={formatMessage({
-											id: 'label.view_details',
-										})}
-										color={brandColors.pinky[500]}
-									/>
-									<IconExternalLink
-										color={brandColors.pinky[500]}
-									/>
-								</Flex>
-							) : (
-								<B>{'NA'}</B>
-							)
-						) : (
-							<B>
-								{Timer(
-									new Date(draftDonationData?.expiresAt!),
-									locale,
-								)}
-							</B>
-						)}
-					</Flex>
-				</DetailsSection>
-				<Hr />
-				<Flex $justifyContent='center' style={{ width: '100%' }}>
-					{status === 'failed' ? (
-						<Flex
-							$justifyContent='space-between'
-							$alignItems='center'
-							style={{ width: '100%' }}
-						>
-							<P>
-								{formatMessage({
-									id: 'label.did_the_donation_but_not_confirmed',
-								})}
-							</P>
-							<ButtonStyled
-								label={formatMessage({
-									id: 'label.raise_a_ticket',
-								})}
-								onClick={() =>
-									window.open(
-										links.REPORT_FAILED_DONATION,
-										'_blank',
-									)
-								}
-							/>
-						</Flex>
+				<Flex $alignItems='center'>
+					<Label>{formatMessage({ id: 'label.from' })}</Label>
+					{donationData?.fromWalletAddress ? (
+						<Link>{donationData.fromWalletAddress}</Link>
 					) : (
-						<P
-							style={{
-								paddingBlock: '8px',
-								color: neutralColors.gray[800],
-							}}
-						>
-							{formatMessage({
-								id:
-									status === 'pending'
-										? 'label.please_wait_we_will_update'
-										: 'label.the_donation_was_successful',
-							})}
-						</P>
+						<B>{'NA'}</B>
 					)}
 				</Flex>
-			</DetailsWapper>
-		);
-	},
-);
+				<Flex $alignItems='center'>
+					<Label>{formatMessage({ id: 'label.donating_to' })}</Label>
+					{draftDonationData?.project?.title ? (
+						<Link>{draftDonationData.project.title}</Link>
+					) : (
+						<B>{'NA'}</B>
+					)}
+				</Flex>
+				<Flex $alignItems='center'>
+					<Label $capitalize>
+						{formatMessage({ id: 'label.recipient_address' })}
+					</Label>
+					<B>{draftDonationData?.toWalletAddress ?? 'NA'}</B>
+				</Flex>
+				<Flex $alignItems='center'>
+					<Label>{formatMessage({ id: 'label.memo' })}</Label>
+					<B>{draftDonationData?.toWalletMemo ?? 'NA'}</B>
+				</Flex>
+				<Flex $alignItems='center'>
+					<Label>{formatMessage({ id: 'label.date' })}</Label>
+					{formatComponent(draftDonationData?.createdAt, locale)}
+				</Flex>
+				<Flex $alignItems='center'>
+					<Label $capitalize>
+						{formatMessage({
+							id: draftDonationData?.matchedDonationId
+								? 'label.transaction_link'
+								: 'label.valid_for',
+						})}
+					</Label>
+					{draftDonationData?.matchedDonationId ? (
+						donationData?.transactionId ? (
+							<Flex $alignItems='center' gap='8px'>
+								<ExternalLink
+									href={`${transactionLink}${donationData.transactionId}`}
+									title={formatMessage({
+										id: 'label.view_details',
+									})}
+									color={brandColors.pinky[500]}
+								/>
+								<IconExternalLink
+									color={brandColors.pinky[500]}
+								/>
+							</Flex>
+						) : (
+							<B>{'NA'}</B>
+						)
+					) : (
+						<B>
+							{Timer(
+								new Date(draftDonationData?.expiresAt!),
+								locale,
+							)}
+						</B>
+					)}
+				</Flex>
+			</DetailsSection>
+			<Hr />
+			<Flex $justifyContent='center' style={{ width: '100%' }}>
+				{status === 'failed' ? (
+					<Flex
+						$justifyContent='space-between'
+						$alignItems='center'
+						style={{ width: '100%' }}
+					>
+						<P>
+							{formatMessage({
+								id: 'label.did_the_donation_but_not_confirmed',
+							})}
+						</P>
+						<ButtonStyled
+							label={formatMessage({
+								id: 'label.raise_a_ticket',
+							})}
+							onClick={() =>
+								window.open(
+									links.REPORT_FAILED_DONATION,
+									'_blank',
+								)
+							}
+						/>
+					</Flex>
+				) : (
+					<P
+						style={{
+							paddingBlock: '8px',
+							color: neutralColors.gray[800],
+						}}
+					>
+						{formatMessage({
+							id:
+								status === 'pending'
+									? 'label.please_wait_we_will_update'
+									: 'label.the_donation_was_successful',
+						})}
+					</P>
+				)}
+			</Flex>
+		</DetailsWapper>
+	);
+};
 
 const DetailsWapper = styled(Flex)`
 	width: 80%;
