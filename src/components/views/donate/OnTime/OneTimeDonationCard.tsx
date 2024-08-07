@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import React, { FC, useEffect, useState } from 'react';
+import React, { FC, useEffect, useMemo, useState } from 'react';
 import { useIntl } from 'react-intl';
 import {
 	B,
@@ -13,7 +13,7 @@ import {
 } from '@giveth/ui-design-system';
 // @ts-ignore
 import { Address, Chain, formatUnits, zeroAddress } from 'viem';
-import { useBalance } from 'wagmi';
+import { useBalance, useEstimateFeesPerGas, useEstimateGas } from 'wagmi';
 import { setShowWelcomeModal } from '@/features/modal/modal.slice';
 import CheckBox from '@/components/Checkbox';
 
@@ -85,7 +85,8 @@ const CryptoDonation: FC<{
 	const [amount, setAmount] = useState(0n);
 	const [erc20List, setErc20List] = useState<IProjectAcceptedToken[]>();
 	const [anonymous, setAnonymous] = useState<boolean>(false);
-	const [amountError, setAmountError] = useState<boolean>(false);
+	const [insufficientGasFee, setInsufficientGasFee] =
+		useState<boolean>(false);
 	const [showDonateModal, setShowDonateModal] = useState(false);
 	const [showInsufficientModal, setShowInsufficientModal] = useState(false);
 	const [showChangeNetworkModal, setShowChangeNetworkModal] = useState(false);
@@ -245,7 +246,7 @@ const CryptoDonation: FC<{
 	};
 
 	const donationDisabled =
-		!isActive || !amount || !selectedOneTimeToken || amountError;
+		!isActive || !amount || !selectedOneTimeToken || insufficientGasFee;
 
 	const donateWithoutMatching = () => {
 		if (isSignedIn) {
@@ -254,6 +255,62 @@ const CryptoDonation: FC<{
 			signInThenDonate();
 		}
 	};
+
+	const estimatedGasFeeObj = useMemo(() => {
+		const selectedChain = chain as Chain;
+		return {
+			chainId: selectedChain?.id,
+			to: addresses?.find(a => a.chainType === walletChainType)
+				?.address as Address,
+			value: selectedTokenBalance,
+		};
+	}, [chain, addresses, selectedTokenBalance, walletChainType]);
+
+	const { data: estimatedGas } = useEstimateGas(estimatedGasFeeObj);
+	const { data: estimatedGasPrice } =
+		useEstimateFeesPerGas(estimatedGasFeeObj);
+
+	const gasfee = useMemo(() => {
+		if (
+			selectedOneTimeToken?.address !== zeroAddress ||
+			!estimatedGas ||
+			!estimatedGasPrice?.maxFeePerGas
+		) {
+			return 0n;
+		}
+		return estimatedGas * estimatedGasPrice.maxFeePerGas;
+	}, [
+		estimatedGas,
+		estimatedGasPrice?.maxFeePerGas,
+		selectedOneTimeToken?.address,
+	]);
+
+	useEffect(() => {
+		if (
+			amount > selectedTokenBalance - gasfee &&
+			amount < selectedTokenBalance &&
+			selectedOneTimeToken?.address === zeroAddress &&
+			gasfee > 0n
+		) {
+			setInsufficientGasFee(true);
+		} else {
+			setInsufficientGasFee(false);
+		}
+	}, [selectedTokenBalance, amount, selectedOneTimeToken?.address, gasfee]);
+
+	const amountErrorText = useMemo(() => {
+		const totalAmount = Number(formatUnits(gasfee, tokenDecimals)).toFixed(
+			10,
+		);
+		const tokenSymbol = selectedOneTimeToken?.symbol;
+		return formatMessage(
+			{ id: 'label.exceed_wallet_balance' },
+			{
+				totalAmount,
+				tokenSymbol,
+			},
+		);
+	}, [gasfee, tokenDecimals, selectedOneTimeToken?.symbol, formatMessage]);
 
 	return (
 		<MainContainer>
@@ -335,10 +392,10 @@ const CryptoDonation: FC<{
 						decimals={selectedOneTimeToken?.decimals}
 					/>
 				</InputWrapper>
-				<Flex gap='4px'>
+				<Flex gap='4px' $alignItems='center'>
 					<GLinkStyled
 						size='Small'
-						onClick={() => setAmount(selectedTokenBalance)}
+						onClick={() => setAmount(selectedTokenBalance - gasfee)}
 					>
 						{formatMessage({
 							id: 'label.available',
@@ -361,6 +418,9 @@ const CryptoDonation: FC<{
 							<IconRefresh16 />
 						)}
 					</IconWrapper>
+					{insufficientGasFee && (
+						<WarnError>{amountErrorText}</WarnError>
+					)}
 				</Flex>
 			</Flex>
 			{hasActiveQFRound && !isOnEligibleNetworks && walletChainType && (
@@ -453,6 +513,12 @@ const CryptoDonation: FC<{
 		</MainContainer>
 	);
 };
+
+const WarnError = styled.div`
+	color: ${semanticColors.punch[500]};
+	font-size: 11px;
+	padding: 12px;
+`;
 
 const EmptySpace = styled.div`
 	margin-top: 70px;

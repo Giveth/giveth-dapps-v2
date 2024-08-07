@@ -157,9 +157,7 @@ const SelectTokenInnerModal: FC<ISelectTokenModalProps> = ({
 		balance: fetchBalance(token),
 	}));
 
-	const customTokenBalance = customToken
-		? fetchBalance(customToken)
-		: undefined;
+	const customTokenBalance = fetchBalance(customToken);
 
 	// Sort tokens by balance
 	const sortedTokens = tokenBalances.sort((a, b) => {
