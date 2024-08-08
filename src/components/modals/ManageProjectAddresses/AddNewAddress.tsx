@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { useForm } from 'react-hook-form';
 import { Dispatch, FC, SetStateAction, useState } from 'react';
 import { getAddress, isAddress, type Chain } from 'viem';
+import { useIntl } from 'react-intl';
 import { IProject, IWalletAddress } from '@/apollo/types/types';
 import Input from '../../Input';
 import { requiredOptions } from '@/lib/constants/regex';
@@ -13,7 +14,6 @@ import { suggestNewAddress } from '@/lib/helpers';
 import { ChainType, NonEVMChain } from '@/types/config';
 import { isSolanaAddress, isStellarAddress } from '@/lib/wallet';
 import { getChainName } from '@/lib/network';
-import { useIntl } from 'react-intl';
 
 interface IAddNewAddress {
 	project: IProject;
