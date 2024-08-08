@@ -7,11 +7,9 @@ import {
 	neutralColors,
 	Button,
 	FlexCenter,
-	IconAlertTriangleFilled32,
 } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
 import { Chain } from 'viem';
-import { useRouter } from 'next/router';
 import StorageLabel, { getWithExpiry } from '@/lib/localStorage';
 import { Modal } from '@/components/modals/Modal';
 import { compareAddresses, formatTxLink, showToastError } from '@/lib/helpers';
@@ -43,7 +41,7 @@ import { Spinner } from '@/components/Spinner';
 import { FETCH_GIVETH_PROJECT_BY_ID } from '@/apollo/gql/gqlProjects';
 import createGoogleTagEventPurchase from '@/helpers/googleAnalytics';
 import { isWalletSanctioned } from '@/services/donation';
-import Routes from '@/lib/constants/Routes';
+import SanctionModal from '@/components/modals/SanctionedModal';
 
 interface IDonateModalProps extends IModal {
 	token: IProjectAcceptedToken;
@@ -102,8 +100,6 @@ const DonateModal: FC<IDonateModalProps> = props => {
 	const [isSanctioned, setIsSanctioned] = useState<boolean>(false);
 
 	const categories = project?.categories || [];
-
-	const router = useRouter();
 
 	useEffect(() => {
 		const fetchGivethProject = async () => {
@@ -301,7 +297,14 @@ const DonateModal: FC<IDonateModalProps> = props => {
 			</Loading>
 		);
 
-	return (
+	return isSanctioned ? (
+		<SanctionModal
+			setShowModal={() => {}}
+			closeModal={() => {
+				setIsSanctioned(false);
+			}}
+		/>
+	) : (
 		<>
 			<Modal
 				closeModal={closeModal}
@@ -441,51 +444,6 @@ const DonateModal: FC<IDonateModalProps> = props => {
 					</Buttons>
 				</DonateContainer>
 			</Modal>
-			{isSanctioned && (
-				<Modal
-					closeModal={() => setIsSanctioned(false)}
-					isAnimating={false}
-					headerTitle={formatMessage({
-						id: 'label.sanctioned_wallet',
-					})}
-					headerTitlePosition='left'
-					hiddenClose={true}
-					headerIcon={<IconAlertTriangleFilled32 size={32} />}
-					doNotCloseOnClickOutside
-				>
-					<SanctionContainer>
-						<SanctionBox>
-							<Lead>
-								{formatMessage({
-									id: 'label.sanctioned_wallet_message_part1',
-								})}
-								&nbsp;
-								<ExternalLink
-									href={'https://ofac.treasury.gov/'}
-									title={'OFAC'}
-									color={brandColors.pinky[500]}
-								/>
-								&nbsp;
-								{formatMessage({
-									id: 'label.sanctioned_wallet_message_part2',
-								})}
-							</Lead>
-						</SanctionBox>
-						<Buttons>
-							<SanctionButton
-								buttonType='primary'
-								disabled={false}
-								label={formatMessage({
-									id: 'label.view_all_projects',
-								})}
-								onClick={() => {
-									router.push(Routes.AllProjects);
-								}} // Navigate to the All Projects route
-							/>
-						</Buttons>
-					</SanctionContainer>
-				</Modal>
-			)}
 			{failedModalType && (
 				<FailedDonation
 					txUrl={handleTxLink(firstTxHash || secondTxHash)}
@@ -569,63 +527,6 @@ const DonatingBox = styled.div`
 `;
 
 const DonateButton = styled(Button)<{ disabled: boolean }>`
-	background: ${props =>
-		props.disabled ? brandColors.giv[200] : brandColors.giv[500]};
-
-	&:hover:enabled {
-		background: ${brandColors.giv[700]};
-	}
-
-	:disabled {
-		cursor: not-allowed;
-	}
-
-	> :first-child > div {
-		border-top: 3px solid ${brandColors.giv[200]};
-		animation-timing-function: linear;
-	}
-
-	text-transform: uppercase;
-`;
-
-const SanctionContainer = styled(DonateContainer)`
-	background: white;
-	color: black;
-	padding: 24px 24px 38px;
-	margin: 0;
-	width: 100%;
-
-	${mediaQueries.tablet} {
-		width: 494px;
-	}
-`;
-
-const SanctionBox = styled(DonatingBox)`
-	color: ${brandColors.deep[900]};
-
-	> :first-child {
-		margin-bottom: 8px;
-	}
-
-	h3 {
-		margin-top: -5px;
-	}
-
-	h6 {
-		color: ${neutralColors.gray[700]};
-		margin-top: -5px;
-	}
-
-	> :last-child {
-		margin: 12px 0 32px 0;
-
-		> span {
-			font-weight: 500;
-		}
-	}
-`;
-
-const SanctionButton = styled(DonateButton)`
 	background: ${props =>
 		props.disabled ? brandColors.giv[200] : brandColors.giv[500]};
 

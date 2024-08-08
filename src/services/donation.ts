@@ -1,7 +1,6 @@
 // import transakSDK from '@transak/transak-sdk'
 import { captureException } from '@sentry/nextjs';
 import { Address } from 'viem';
-import axios from 'axios';
 import {
 	CREATE_DONATION,
 	UPDATE_DONATION_STATUS,
@@ -353,21 +352,24 @@ export async function isWalletSanctioned(
 ): Promise<boolean> {
 	try {
 		const baseURL = 'https://api.trmlabs.com/public/';
-		const client = axios.create({
-			baseURL,
-			headers: {
-				Accept: 'application/json',
-				'Content-Type': 'application/json',
-			},
-		});
+		const url = `${baseURL}v1/sanctions/screening`;
 
 		// Define the address you want to screen
 		const request = [{ address: walletAddress }];
 
-		// Call endpoint https://github.com/pedroyan/trm-sanctions-demo/blob/main/demo.js
-		const response = await client.post('v1/sanctions/screening', request);
+		// Make the POST request using fetch
+		const response = await fetch(url, {
+			method: 'POST',
+			headers: {
+				Accept: 'application/json',
+				'Content-Type': 'application/json',
+			},
+			body: JSON.stringify(request),
+		});
 
-		console.log('Sanctioned result:', response?.data);
+		// Parse the JSON response
+		const data = await response.json();
+
 		/** Sample response
 		 * [
 		 *   {
@@ -383,7 +385,7 @@ export async function isWalletSanctioned(
 		 */
 
 		// Check the response and determine if the address is sanctioned
-		const result = response.data && response.data[0];
+		const result = data && data[0];
 		return Boolean(result && result.isSanctioned);
 	} catch (error) {
 		console.error('Error checking wallet sanction status:', error);

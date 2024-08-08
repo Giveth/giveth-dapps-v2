@@ -1645,5 +1645,8 @@
 	"tooltip.flowrate": "Les donacions recurrents es prenen del teu Saldo de Transmissió. Diposita tokens i mantén el teu saldo per habilitar les donacions recurrents.",
 	"tooltip.withdraw_stream_balance": "Si teniu donacions recurrents actives, el vostre saldo disponible per retirar serà lleugerament inferior al vostre saldo actual.",
 	"ubi": "Renta bàsica",
-	"water-and-sanitation": "Aigua i Sanejament"
+	"water-and-sanitation": "Aigua i Sanejament",
+	"label.sanctioned_wallet": "Adreça Sancionada Detectada!!",
+	"label.sanctioned_wallet_message_part1": "Aquesta adreça ha estat trobada a la llista de sancions dels EUA",
+	"label.sanctioned_wallet_message_part2": "Malauradament, Endaoment no permet que les adreces a la llista de sancions de l'OFAC donin a projectes realitzats per Endaoment. Consulta un altre projecte per fer una donació."
 }
