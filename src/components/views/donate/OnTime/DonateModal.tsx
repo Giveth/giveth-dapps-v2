@@ -299,7 +299,6 @@ const DonateModal: FC<IDonateModalProps> = props => {
 
 	return isSanctioned ? (
 		<SanctionModal
-			setShowModal={() => {}}
 			closeModal={() => {
 				setIsSanctioned(false);
 			}}

@@ -14,11 +14,14 @@ import ExternalLink from '@/components/ExternalLink';
 import Routes from '@/lib/constants/Routes';
 import { mediaQueries } from '@/lib/constants/constants';
 
-export const SanctionModal = ({ setShowModal, closeModal }) => {
+// Define the props interface
+interface SanctionModalProps {
+	closeModal: () => void;
+}
+
+export const SanctionModal: React.FC<SanctionModalProps> = ({ closeModal }) => {
 	const { formatMessage } = useIntl();
 	const router = useRouter();
-	// const { closeModal } = useModalAnimation(setShowModal);
-
 	const navigateToAllProjects = () => {
 		router.push(Routes.AllProjects);
 		closeModal();
@@ -27,6 +30,7 @@ export const SanctionModal = ({ setShowModal, closeModal }) => {
 	return (
 		<Modal
 			closeModal={closeModal}
+			isAnimating={false}
 			headerTitle={formatMessage({
 				id: 'label.sanctioned_wallet',
 			})}
