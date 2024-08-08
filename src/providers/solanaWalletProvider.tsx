@@ -29,7 +29,7 @@ export const SolanaCtx = createContext<any>(null);
 const wallets: BaseMessageSignerWalletAdapter[] = [
 	new PhantomWalletAdapter(),
 	new SolflareWalletAdapter({ network: solanaAdapter }),
-	new CoinbaseWalletAdapter(),
+	new CoinbaseWalletAdapter({ network: solanaAdapter }),
 ];
 
 if (!isProduction) {
