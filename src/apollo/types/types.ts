@@ -101,6 +101,7 @@ export enum EProjectsFilter {
 	ACCEPT_FUND_ON_ETC = 'AcceptFundOnETC',
 	ACCEPT_FUND_ON_SOLANA = 'AcceptFundOnSolana',
 	ACCEPT_FUND_ON_ZKEVM = 'AcceptFundOnZKEVM',
+	ACCEPT_FUND_ON_STELLAR = 'AcceptFundOnStellar',
 	ACTIVE_QF_ROUND = 'ActiveQfRound',
 }
 
@@ -126,6 +127,7 @@ export enum ECampaignFilterField {
 	AcceptFundOnOptimism = 'acceptFundOnOptimism',
 	AcceptFundOnSolana = 'acceptFundOnSolana',
 	AcceptFundOnZKEVM = 'acceptFundOnZKEVM',
+	AcceptFundOnStellar = 'acceptFundOnStellar',
 }
 
 export interface ICampaign {
@@ -153,6 +155,7 @@ export interface ICampaign {
 
 export interface IWalletAddress {
 	address?: string;
+	memo?: string;
 	isRecipient?: boolean;
 	networkId?: number;
 	chainType?: ChainType;
@@ -267,6 +270,8 @@ export interface IDonation {
 	status: EDonationStatus;
 	onramperId?: string;
 	qfRound?: IQFRound;
+	isTokenEligibleForGivback?: boolean;
+	fromWalletAddress?: string;
 }
 
 export interface IWalletDonation extends IDonation {

@@ -72,6 +72,9 @@ export const formatTxLink = (params: {
 	if (chainType === ChainType.SOLANA) {
 		return formatSolanaTxLink(txHash);
 	}
+	if (chainType === ChainType.STELLAR) {
+		return formatStellarTxLink(txHash);
+	}
 	return formatEvmTxLink(networkId, txHash);
 };
 
@@ -91,6 +94,11 @@ const formatSolanaTxLink = (txHash?: string) => {
 	}
 	// Test environment
 	return `${baseUrl}?cluster=devnet`;
+};
+
+const formatStellarTxLink = (txHash?: string) => {
+	if (!txHash) return '';
+	return `https://stellar.expert/explorer/public/tx/${txHash}`;
 };
 
 export function formatWalletLink(
@@ -209,6 +217,20 @@ export const smallFormatDate = (date: Date, locale?: string) => {
 		year: 'numeric',
 		month: 'short',
 	});
+};
+
+// format date to mm-dd-yyyy (ex: Jun-31-2021)
+export const smallDashedFormatDate = (date: Date, locale?: string) => {
+	return date
+		.toLocaleString(locale || 'en-US', {
+			day: 'numeric',
+			year: 'numeric',
+			month: 'short',
+		})
+		.split(' ')
+		.join('-')
+		.split(',')
+		.join('');
 };
 
 export const isSSRMode = typeof window === 'undefined';

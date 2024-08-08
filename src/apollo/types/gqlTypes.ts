@@ -98,6 +98,7 @@ export interface IProjectAcceptedToken {
 	chainType?: ChainType;
 	isStableCoin?: boolean;
 	coingeckoId?: string;
+	isQR?: boolean;
 }
 
 export interface IFetchGivethProjectGQL {
@@ -107,4 +108,33 @@ export interface IFetchGivethProjectGQL {
 			addresses: IWalletAddress[];
 		};
 	};
+}
+
+export interface IGetTokensDetails {
+	data: {
+		getTokensDetails: IProjectAcceptedToken;
+	};
+}
+
+export interface IDraftDonation {
+	id: number;
+	networkId: number;
+	chainType: ChainType;
+	status: string;
+	toWalletAddress: string;
+	fromWalletAddress: string;
+	tokenAddress: string;
+	currency: string;
+	amount: number;
+	projectId: number;
+	project?: IProject;
+	createdAt: string;
+	matchedDonationId: number;
+	qrCodeDataUrl?: string;
+	toWalletMemo?: string;
+	expiresAt?: string;
+}
+
+export interface GetDraftDonation {
+	getDraftDonation: IDraftDonation;
 }

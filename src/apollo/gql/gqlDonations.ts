@@ -188,6 +188,9 @@ export const CREATE_DRAFT_DONATION = gql`
 		$safeTransactionId: String
 		$useDonationBox: Boolean
 		$relevantDonationTxHash: String
+		$toWalletMemo: String
+		$qrCodeDataUrl: String
+		$isQRDonation: Boolean
 	) {
 		createDraftDonation(
 			networkId: $networkId
@@ -201,6 +204,56 @@ export const CREATE_DRAFT_DONATION = gql`
 			safeTransactionId: $safeTransactionId
 			useDonationBox: $useDonationBox
 			relevantDonationTxHash: $relevantDonationTxHash
+			toWalletMemo: $toWalletMemo
+			qrCodeDataUrl: $qrCodeDataUrl
+			isQRDonation: $isQRDonation
 		)
+	}
+`;
+
+export const FETCH_DRAFT_DONATION = gql`
+	query GetDraftDonationById($id: Int!) {
+		getDraftDonationById(id: $id) {
+			id
+			networkId
+			chainType
+			status
+			toWalletAddress
+			fromWalletAddress
+			tokenAddress
+			currency
+			amount
+			createdAt
+			matchedDonationId
+			qrCodeDataUrl
+			toWalletMemo
+			projectId
+			expiresAt
+		}
+	}
+`;
+
+export const MARK_DRAFT_DONATION_AS_FAILED = gql`
+	mutation ($id: Int!) {
+		markDraftDonationAsFailed(id: $id)
+	}
+`;
+
+export const FETCH_DONATION_BY_ID = gql`
+	${DONATION_CORE_FIELDS}
+	query GetDonationById($id: Int!) {
+		getDonationById(id: $id) {
+			...DonationCoreFields
+			isTokenEligibleForGivback
+			fromWalletAddress
+		}
+	}
+`;
+
+export const RENEW_DRAFT_DONATION_EXPIRATION = gql`
+	mutation ($id: Int!) {
+		renewDraftDonationExpirationDate(id: $id) {
+			expiresAt
+		}
 	}
 `;
