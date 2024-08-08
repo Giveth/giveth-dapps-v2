@@ -72,6 +72,9 @@ export const formatTxLink = (params: {
 	if (chainType === ChainType.SOLANA) {
 		return formatSolanaTxLink(txHash);
 	}
+	if (chainType === ChainType.STELLAR) {
+		return formatStellarTxLink(txHash);
+	}
 	return formatEvmTxLink(networkId, txHash);
 };
 
@@ -91,6 +94,11 @@ const formatSolanaTxLink = (txHash?: string) => {
 	}
 	// Test environment
 	return `${baseUrl}?cluster=devnet`;
+};
+
+const formatStellarTxLink = (txHash?: string) => {
+	if (!txHash) return '';
+	return `https://stellar.expert/explorer/public/tx/${txHash}`;
 };
 
 export function formatWalletLink(

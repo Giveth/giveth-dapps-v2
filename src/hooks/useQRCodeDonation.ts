@@ -204,10 +204,7 @@ export const useQRCodeDonation = () => {
 
 			if (!timerElement) return;
 
-			console.log('leftTime ===> 1 ', leftTime);
 			if (leftTime <= 0) {
-				console.log('leftTime ===> 2 ', leftTime);
-
 				clearInterval(timerInterval);
 				timerElement.textContent = '00 : 00';
 				setStatus('expired');

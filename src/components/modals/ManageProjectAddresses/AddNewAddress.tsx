@@ -11,8 +11,9 @@ import { ADD_RECIPIENT_ADDRESS_TO_PROJECT } from '@/apollo/gql/gqlProjects';
 import InlineToast, { EToastType } from '../../toasts/InlineToast';
 import { suggestNewAddress } from '@/lib/helpers';
 import { ChainType, NonEVMChain } from '@/types/config';
-import { isSolanaAddress } from '@/lib/wallet';
+import { isSolanaAddress, isStellarAddress } from '@/lib/wallet';
 import { getChainName } from '@/lib/network';
+import { useIntl } from 'react-intl';
 
 interface IAddNewAddress {
 	project: IProject;
@@ -24,6 +25,7 @@ interface IAddNewAddress {
 
 interface IAddressForm {
 	address: string;
+	memo?: string;
 }
 
 export const AddNewAddress: FC<IAddNewAddress> = ({
@@ -33,6 +35,7 @@ export const AddNewAddress: FC<IAddNewAddress> = ({
 	setSelectedChain,
 	setAddresses,
 }) => {
+	const { formatMessage } = useIntl();
 	const [loading, setLoading] = useState(false);
 	const {
 		register,
@@ -44,12 +47,17 @@ export const AddNewAddress: FC<IAddNewAddress> = ({
 	const chainType =
 		'chainType' in selectedChain ? selectedChain.chainType : undefined;
 
+	const isStellarChain = chainType === ChainType.STELLAR;
+
 	const handleAdd = async (formData: IAddressForm) => {
 		setLoading(true);
-		const { address } = formData;
+		const { address, memo } = formData;
 		try {
 			const _address =
-				chainType === ChainType.SOLANA ? address : getAddress(address);
+				chainType &&
+				[ChainType.SOLANA, ChainType.STELLAR].includes(chainType)
+					? address
+					: getAddress(address);
 			await client.mutate({
 				mutation: ADD_RECIPIENT_ADDRESS_TO_PROJECT,
 				variables: {
@@ -57,6 +65,7 @@ export const AddNewAddress: FC<IAddNewAddress> = ({
 					networkId: selectedChain.id,
 					chainType,
 					address: _address,
+					memo,
 				},
 			});
 			setProject((project: IProject) => {
@@ -103,6 +112,12 @@ export const AddNewAddress: FC<IAddNewAddress> = ({
 				setLoading(false);
 				return 'Invalid Solana address';
 			}
+		} else if (isStellarChain) {
+			console.log('isStellarChain', isStellarChain);
+			if (!isStellarAddress(address)) {
+				setLoading(false);
+				return 'Invalid Stellar address';
+			}
 		} else if (!isAddress(address)) {
 			setLoading(false);
 			return 'Invalid ETH address';
@@ -123,13 +138,23 @@ export const AddNewAddress: FC<IAddNewAddress> = ({
 					...requiredOptions.walletAddress,
 					validate: validateAddress,
 				}}
-				placeholder='0x...'
+				placeholder={isStellarChain ? 'G...' : '0x...'}
 				defaultValue={suggestNewAddress(
 					project.addresses!,
 					selectedChain,
 				)}
 				caption={`You can enter a new address to receive funds on ${chainName} network.`}
 			/>
+			{isStellarChain && (
+				<StyledInput
+					register={register}
+					registerName='memo'
+					label='Memo'
+					placeholder={formatMessage({
+						id: 'label.enter_the_memo',
+					})}
+				/>
+			)}
 			{errors.address && (
 				<InlineToast
 					type={EToastType.Error}

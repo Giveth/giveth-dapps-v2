@@ -163,7 +163,7 @@ const ProjectIndex: FC<IProjectBySlug> = () => {
 									</P>
 								</ToastText>
 							</Flex>
-							<Link href={Routes.Support}>
+							<Link href={Routes.Donate + `/${slug}`}>
 								<LinkItem color={brandColors.giv[300]}>
 									{formatMessage({
 										id: 'page.project.donate_with_stellar',

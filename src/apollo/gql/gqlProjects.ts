@@ -569,12 +569,14 @@ export const ADD_RECIPIENT_ADDRESS_TO_PROJECT = gql`
 		$networkId: Float!
 		$address: String!
 		$chainType: ChainType
+		$memo: String
 	) {
 		addRecipientAddressToProject(
 			projectId: $projectId
 			networkId: $networkId
 			address: $address
 			chainType: $chainType
+			memo: $memo
 		) {
 			id
 			title
@@ -598,6 +600,7 @@ export const ADD_RECIPIENT_ADDRESS_TO_PROJECT = gql`
 				isRecipient
 				networkId
 				chainType
+				memo
 			}
 			adminUser {
 				id
