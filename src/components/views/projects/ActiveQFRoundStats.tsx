@@ -66,11 +66,11 @@ export const ActiveQFRoundStats = () => {
 					<ItemContainer>
 						<ItemTitle weight={700}>
 							{formatMessage({
-								id: 'label.number_of_unique_donors',
+								id: 'label.number_of_donations',
 							})}
 						</ItemTitle>
 						<ItemValue weight={500}>
-							{data?.qfRoundStats?.uniqueDonors || '--'}
+							{data?.qfRoundStats?.donationsCount || '--'}
 						</ItemValue>
 					</ItemContainer>
 				)}
