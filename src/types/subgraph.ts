@@ -99,3 +99,19 @@ export interface ITokenDistroBalance {
 	givbackLiquidPart: string;
 	tokenDistroAddress: Address;
 }
+
+export interface ISubgraphState {
+	[key: string]:
+		| IUnipool
+		| IUnipoolBalance
+		| ITokenDistro
+		| ITokenDistroBalance
+		| ITokenBalance
+		| IUniswapV3Pool
+		| IUniswapV3Position[]
+		| IInfinitePositionReward
+		| IUniswapV3Position
+		| IGIVpower
+		| number
+		| boolean;
+}

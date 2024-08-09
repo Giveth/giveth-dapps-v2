@@ -1,5 +1,6 @@
 import { getChainId, switchChain } from '@wagmi/core';
 import { wagmiConfig } from '@/wagmiConfigs';
+import config from '@/configuration';
 
 export const ensureCorrectNetwork = async (targetChainId: number) => {
 	try {
@@ -13,4 +14,9 @@ export const ensureCorrectNetwork = async (targetChainId: number) => {
 		console.error('error', error);
 		return false;
 	}
+};
+
+export const getSubgraphChainId = (chainId: number) => {
+	const id = config.CHAINS_WITH_SUBGRAPH.find(c => c.id === chainId)?.id;
+	return id || config.GNOSIS_NETWORK_NUMBER;
 };

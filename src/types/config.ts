@@ -232,6 +232,7 @@ export interface GlobalConfig extends EnvConfig {
 	TOKEN_NAME: string;
 	WEB3_POLLING_INTERVAL: number;
 	SUBGRAPH_POLLING_INTERVAL: number;
+	SUBGRAPH_UPDATING_UI_INTERVAL: number;
 	NOTIFICATION_POLLING_INTERVAL: number;
 	PFP_POLLING_INTERVAL: number;
 	TOKEN_PRECISION: number;
@@ -245,6 +246,7 @@ export interface GlobalConfig extends EnvConfig {
 	NETWORKS_CONFIG: {
 		[key: number | string]: NetworkConfig | NonEVMNetworkConfig;
 	};
+	CHAINS_WITH_SUBGRAPH: NetworkConfig[];
 	INFURA_API_KEY: string | undefined;
 	BLOCKNATIVE_DAPP_ID: string | undefined;
 	GOOGLE_MAPS_API_KEY: string | undefined;

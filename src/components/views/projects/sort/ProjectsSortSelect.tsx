@@ -7,7 +7,6 @@ import {
 	IconArrowBottom,
 	IconDonation16,
 	neutralColors,
-	IconFlash16,
 	IconRocketInSpace16,
 	IconIncrease16,
 	semanticColors,
@@ -15,6 +14,7 @@ import {
 	Flex,
 	IconPublish16,
 	IconEstimated16,
+	IconGIVBack16,
 } from '@giveth/ui-design-system';
 import Select, {
 	components,
@@ -59,7 +59,7 @@ const ProjectsSortSelect = () => {
 		{
 			label: formatMessage({ id: 'label.rank' }),
 			value: EProjectsSortBy.GIVPOWER,
-			icon: <IconFlash16 />,
+			icon: <IconGIVBack16 color={neutralColors.gray[900]} />,
 		},
 		{
 			label: formatMessage({ id: 'label.newest' }),

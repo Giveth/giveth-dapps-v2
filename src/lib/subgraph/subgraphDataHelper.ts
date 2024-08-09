@@ -1,5 +1,5 @@
-import { ISubgraphState } from '@/features/subgraph/subgraph.types';
 import {
+	ISubgraphState,
 	ITokenBalance,
 	ITokenDistro,
 	ITokenDistroBalance,
@@ -16,7 +16,11 @@ import {
 import config from '@/configuration';
 
 export class SubgraphDataHelper {
-	constructor(private readonly state: ISubgraphState) {}
+	private readonly state: ISubgraphState;
+
+	constructor(state?: ISubgraphState) {
+		this.state = state || ({} as ISubgraphState); // Provide a default empty state if undefined
+	}
 
 	getUnipool(address: string): IUnipool {
 		return (
@@ -58,6 +62,7 @@ export class SubgraphDataHelper {
 	}
 
 	getGIVTokenBalance(): ITokenBalance {
+		if (!this.state?.networkNumber) return transformTokenBalance();
 		const givTokenAddress =
 			config.EVM_NETWORKS_CONFIG[this.state.networkNumber as number]
 				?.GIV_TOKEN_ADDRESS;

@@ -6,6 +6,7 @@ const menuList = [
 	{
 		label: 'label.social_profiles',
 		slug: EVerificationSteps.SOCIAL_PROFILES,
+		isOptional: true,
 	},
 	{ label: 'label.registration', slug: EVerificationSteps.PROJECT_REGISTRY },
 	{

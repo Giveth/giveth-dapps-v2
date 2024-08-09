@@ -11,6 +11,8 @@ import { Provider as ReduxProvider } from 'react-redux';
 import { SpeedInsights } from '@vercel/speed-insights/next';
 import { GoogleAnalytics } from '@next/third-parties/google';
 import { loadErrorMessages, loadDevMessages } from '@apollo/client/dev';
+import posthog from 'posthog-js';
+import { PostHogProvider } from 'posthog-js/react';
 import { WagmiProvider } from 'wagmi';
 import { projectId, wagmiConfig } from '@/wagmiConfigs';
 import { useApollo } from '@/apollo/apolloClient';
@@ -64,6 +66,19 @@ export const IntlMessages = {
 };
 
 const defaultLocale = process.env.defaultLocale;
+
+// Check that PostHog is client-side (used to handle Next.js SSR)
+if (typeof window !== 'undefined') {
+	posthog.init(process.env.NEXT_PUBLIC_POSTHOG_KEY || '', {
+		api_host:
+			process.env.NEXT_PUBLIC_POSTHOG_HOST || 'https://us.i.posthog.com',
+		person_profiles: 'identified_only',
+		// Enable debug mode in development
+		loaded: posthog => {
+			if (process.env.NODE_ENV === 'development') posthog.debug();
+		},
+	});
+}
 
 const RenderComponent = ({ Component, pageProps }: any) => {
 	useSafeAutoConnect();
@@ -125,6 +140,9 @@ function MyApp({ Component, pageProps }: AppProps) {
 					},
 				);
 			}
+
+			// Track page views => Posthog
+			posthog?.capture('$pageview');
 		};
 		const handleChangeError = () => {
 			NProgress.done();
@@ -189,34 +207,40 @@ function MyApp({ Component, pageProps }: AppProps) {
 							<WagmiProvider config={wagmiConfig}>
 								<QueryClientProvider client={queryClient}>
 									<GeneralWalletProvider>
-										{isMaintenanceMode ? (
-											<MaintenanceIndex />
-										) : (
-											<>
-												<NotificationController />
-												<GeneralController />
-												<PriceController />
-												<SubgraphController />
-												<UserController />
-												<HeaderWrapper />
-												{isGIVeconomyRoute(
-													router.route,
-												) && <GIVeconomyTab />}
-												{(pageProps as any)
-													.errorStatus ? (
-													<ErrorsIndex
-														statusCode={
-															(pageProps as any)
-																.errorStatus
-														}
-													/>
-												) : (
-													<RenderComponent
-														Component={Component}
-														pageProps={pageProps}
-													/>
-												)}
-												{/* {process.env.NEXT_PUBLIC_ENV !==
+										<PostHogProvider client={posthog}>
+											{isMaintenanceMode ? (
+												<MaintenanceIndex />
+											) : (
+												<>
+													<NotificationController />
+													<GeneralController />
+													<PriceController />
+													<SubgraphController />
+													<UserController />
+													<HeaderWrapper />
+													{isGIVeconomyRoute(
+														router.route,
+													) && <GIVeconomyTab />}
+													{(pageProps as any)
+														.errorStatus ? (
+														<ErrorsIndex
+															statusCode={
+																(
+																	pageProps as any
+																).errorStatus
+															}
+														/>
+													) : (
+														<RenderComponent
+															Component={
+																Component
+															}
+															pageProps={
+																pageProps
+															}
+														/>
+													)}
+													{/* {process.env.NEXT_PUBLIC_ENV !==
 												'production' && (
 												<Script
 													id='console-script'
@@ -227,11 +251,12 @@ function MyApp({ Component, pageProps }: AppProps) {
 												/>
 											)} */}
 
-												<FooterWrapper />
-												<ModalController />
-												<PfpController />
-											</>
-										)}
+													<FooterWrapper />
+													<ModalController />
+													<PfpController />
+												</>
+											)}
+										</PostHogProvider>
 									</GeneralWalletProvider>
 								</QueryClientProvider>
 							</WagmiProvider>

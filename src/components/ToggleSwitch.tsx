@@ -30,7 +30,7 @@ const ToggleSwitch: FC<IToggleButton> = ({
 			<Switch $isOn={isOn}>
 				<Bullet $isOn={isOn} />
 			</Switch>
-			<Caption>{label}</Caption>
+			<Caption className={isOn ? 'active' : ''}>{label}</Caption>
 		</Container>
 	);
 };

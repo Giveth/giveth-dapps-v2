@@ -1,50 +1,47 @@
 import BigNumber from 'bignumber.js';
+import { Address } from 'viem';
 import { getNowUnixMS } from './time';
-import { IGIVpower } from '@/types/subgraph';
 import { IPowerBoosting } from '@/apollo/types/types';
 import { EDirection } from '@/apollo/types/gqlEnums';
 import Routes from '@/lib/constants/Routes';
 import { StakingType } from '@/types/config';
 import config from '@/configuration';
-import { ISubgraphState } from '@/features/subgraph/subgraph.types';
-import { SubgraphDataHelper } from '@/lib/subgraph/subgraphDataHelper';
 import {
 	IBoostedOrder,
 	EPowerBoostingOrder,
 } from '@/components/views/userProfile/boostedTab/useFetchPowerBoostingInfo';
-import { isSubgraphKeyValid } from '@/features/subgraph/subgraph.helper';
 import { Zero } from './number';
+import { SubgraphDataHelper } from '@/lib/subgraph/subgraphDataHelper';
+import type { IGIVpower, ISubgraphState } from '@/types/subgraph';
+import type { UseQueryResult } from '@tanstack/react-query';
 
 export const getTotalGIVpower = (
-	values: { [key: string]: ISubgraphState },
+	results: UseQueryResult<ISubgraphState, Error>[],
+	address?: Address,
 	onChain?: {
 		chainId: number;
 		balance: BigNumber;
 	},
 ) => {
-	const res = [];
+	const res: any = [];
 	let sum = new BigNumber('0');
-	for (const key in values) {
-		if (Object.prototype.hasOwnProperty.call(values, key)) {
-			if (!isSubgraphKeyValid(key)) continue;
-			if (onChain && onChain.chainId === values[key].networkNumber) {
-				sum = sum.plus(onChain.balance);
-				res.push(onChain);
-			} else {
-				const value = values[key];
-				const sdh = new SubgraphDataHelper(value);
-				const userGIVPowerBalance = sdh.getUserGIVPowerBalance();
-				console.log(
-					key,
-					values[key].networkNumber,
-					userGIVPowerBalance.balance,
-				);
-				sum = sum.plus(userGIVPowerBalance.balance);
-				res.push({
-					chainId: value.networkNumber,
-					balance: userGIVPowerBalance.balance,
-				});
-			}
+	if (!address) return { total: sum, byChain: res };
+	for (let i = 0; i < results.length; i++) {
+		if (!results[i].isSuccess) continue;
+		const value = results[i].data;
+		if (!value) continue;
+		const chainId = value.chainId;
+		if (onChain && onChain.chainId === chainId) {
+			sum = sum.plus(onChain.balance);
+			res.push(onChain);
+		} else {
+			const sdh = new SubgraphDataHelper(value);
+			const userGIVPowerBalance = sdh.getUserGIVPowerBalance();
+			sum = sum.plus(userGIVPowerBalance.balance);
+			res.push({
+				chainId,
+				balance: userGIVPowerBalance.balance,
+			});
 		}
 	}
 	return { total: sum, byChain: res };

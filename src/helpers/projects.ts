@@ -47,8 +47,7 @@ export function checkVerificationStep(
 			return (
 				verificationData !== undefined &&
 				verificationData.socialProfiles !== undefined &&
-				verificationData.projectRegistry !== null &&
-				verificationData.socialProfiles.length > 0
+				verificationData.socialProfiles?.length > 0
 			);
 		case EVerificationSteps.PROJECT_REGISTRY:
 			return (

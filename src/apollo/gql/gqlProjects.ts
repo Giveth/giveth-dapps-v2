@@ -37,7 +37,6 @@ export const PROJECT_CARD_FIELDS = gql`
 		latestUpdateCreationDate
 		organization {
 			label
-			disableRecurringDonations
 		}
 		projectPower {
 			powerRank
@@ -251,7 +250,6 @@ export const FETCH_PROJECT_BY_SLUG_SINGLE_PROJECT = gql`
 				name
 				label
 				supportCustomTokens
-				disableRecurringDonations
 			}
 			verificationFormStatus
 			projectPower {
@@ -749,6 +747,35 @@ export const FETCH_RECURRING_DONATIONS_BY_PROJECTID = gql`
 					name
 					email
 					avatar
+				}
+				createdAt
+			}
+			totalCount
+		}
+	}
+`;
+export const FETCH_RECURRING_DONATIONS_BY_DATE = gql`
+	query ($projectId: Int!, $startDate: String, $endDate: String) {
+		recurringDonationsByDate(
+			projectId: $projectId
+			startDate: $startDate
+			endDate: $endDate
+		) {
+			recurringDonations {
+				id
+				txHash
+				networkId
+				flowRate
+				currency
+				anonymous
+				isArchived
+				status
+				totalUsdStreamed
+				donor {
+					id
+					walletAddress
+					firstName
+					email
 				}
 				createdAt
 			}

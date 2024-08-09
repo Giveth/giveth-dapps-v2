@@ -156,8 +156,6 @@
 	"label.amount_raised_in_this_round": "Monto recaudado en esta ronda",
 	"label.amount_to_donate_monthly": "Cantidad a donar mensualmente",
 	"label.amount_to_stake": "Cantidad a stakear",
-	"label.amplify_your_donation": "Amplifica tu donación",
-	"label.amplify_your_donation_desc": "¡Desbloquea los fondos complementarios para tu donación verificando tu identidad! Conecta tu billetera a Gitcoin Passport para verificar tu puntuación de identidad y maximizar el poder de tu donación. Passport está diseñado para verificar proactivamente la identidad de los usuarios y proteger contra ataques de Sybil.",
 	"label.and": "y",
 	"label.and_now_the_giveconomy": "Y ahora... la GIVeconomy",
 	"label.and_now_the_giveconomy.desc": "Construyendo sobre esa base y determinados en usar la blockchain para financiar bienes públicos de forma regenerativa, creamos la GIVeconomy. Impulsada por GIV, la GIVeconomy recompensa y empodera a los que donan.",
@@ -383,6 +381,7 @@
 	"label.ethereum_mainnet_or_gnosis_chain": "Ethereum Mainnet o Gnosis Chain",
 	"label.eth_addres_not_valid": "Dirección {type} no es válida",
 	"label.everytime_you_claim_giv_rewards": "Cada vez que reclamas tus recompensas en GIV desde GIVbacks, GIVgarden, o GIVfarm, tu GIVstram flowrate incrementa. A continuación un resumen.",
+	"label.exceed_wallet_balance": "Necesitas mantener al menos {totalAmount} {tokenSymbol} en tu cartera para pagar las comisiones de la red para esta transacción. Por favor, introduce una cantidad menor.",
 	"label.expected_rank_for_next_round": "Este es el rango esperado para la próxima ronda basado en",
 	"label.explore_a_multiverse_of_projects": "Explora un multiverso de proyectos que están cambiando al mundo y obtén recompensas proveyendo liquidez.",
 	"label.explore_by": "Explorar por",
@@ -1651,5 +1650,8 @@
 	"label.sign_gnosis_safe": "Firmar Gnosis Safe",
 	"label.you_need_to_execute_the_pending_multisig": "Debes ejecutar la transacción Multisig pendiente para completar tu inicio de sesión en Giveth y proceder a esta área",
 	"label.sign_a_message_with_your_safe_signer": "Firma un mensaje con la dirección de tu firma segura (Safe signer) para continuar el proceso de inicio de sesión",
-	"label.this_is_necessary_to_create_projects": "Esto es necesario para poder crear proyectos, gestionar tu perfil o usar GIVpower."
+	"label.this_is_necessary_to_create_projects": "Esto es necesario para poder crear proyectos, gestionar tu perfil o usar GIVpower.",
+	"label.sanctioned_wallet": "¡Dirección Sancionada Detectada!",
+	"label.sanctioned_wallet_message_part1": "Esta dirección ha sido encontrada en la lista de sanciones de EE.UU.",
+	"label.sanctioned_wallet_message_part2": "Lamentablemente, Endaoment no permite que las direcciones en la lista de sanciones de OFAC donen a proyectos entregados por Endaoment. Consulta otro proyecto para donar."
 }

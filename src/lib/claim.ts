@@ -7,9 +7,9 @@ import config from '../configuration';
 import MerkleDropJson from '../artifacts/MerkleDrop.json';
 import TOKEN_DISTRO_JSON from '../artifacts/TokenDistro.json';
 import { transformSubgraphData } from '@/lib/subgraph/subgraphDataTransform';
-import { fetchChainInfo } from '@/features/subgraph/subgraph.services';
 import { SubgraphDataHelper } from '@/lib/subgraph/subgraphDataHelper';
 import { wagmiConfig } from '@/wagmiConfigs';
+import { fetchSubgraphData } from '@/services/subgraph.service';
 
 const { abi: MERKLE_ABI } = MerkleDropJson;
 const { abi: TOKEN_DISTRO_ABI } = TOKEN_DISTRO_JSON;
@@ -45,9 +45,9 @@ export const fetchAirDropClaimData = async (
 	}
 };
 
-export const hasClaimedAirDrop = async (address: string): Promise<boolean> => {
+export const hasClaimedAirDrop = async (address: Address): Promise<boolean> => {
 	try {
-		const response = await fetchChainInfo(
+		const response = await fetchSubgraphData(
 			config.GNOSIS_NETWORK_NUMBER,
 			address,
 		);

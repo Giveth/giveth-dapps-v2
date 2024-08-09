@@ -257,6 +257,10 @@ const SocialContainer = styled.div`
 	${mediaQueries.mobileL} {
 		gap: 40px;
 	}
+
+	${mediaQueries.laptopS} {
+		gap: 30px;
+	}
 `;
 
 const LinkColumn = styled(Flex)`

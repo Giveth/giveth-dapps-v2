@@ -18,7 +18,7 @@ import { useProfileContext } from '@/context/profile.context';
 import ProjectItem from './ProjectItem';
 import { getUserName } from '@/helpers/user';
 
-const itemPerPage = 10;
+const itemPerPage = 12;
 
 const ProfileProjectsTab: FC<IUserProfileView> = () => {
 	const [loading, setLoading] = useState(false);

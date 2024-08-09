@@ -16,6 +16,8 @@ import {
 import Link from 'next/link';
 import { useIntl } from 'react-intl';
 import { useWeb3Modal } from '@web3modal/wagmi/react';
+import { useAccount } from 'wagmi';
+import { useQueries } from '@tanstack/react-query';
 import {
 	GIVpowerTopContainer,
 	Title,
@@ -58,19 +60,28 @@ import RocketImage from '../../../public/images/rocket.svg';
 import Growth from '../../../public/images/growth.svg';
 import GivStake from '../../../public/images/giv_stake.svg';
 import Routes from '@/lib/constants/Routes';
-import { useAppSelector } from '@/features/hooks';
 import config from '@/configuration';
 import { formatWeiHelper } from '@/helpers/number';
 import links from '@/lib/constants/links';
 import { getTotalGIVpower } from '@/helpers/givpower';
 import { useGeneralWallet } from '@/providers/generalWalletProvider';
 import { ChainType } from '@/types/config';
+import { fetchSubgraphData } from '@/services/subgraph.service';
 
 export function TabPowerTop() {
 	const { formatMessage } = useIntl();
 	const { open: openConnectModal } = useWeb3Modal();
-	const values = useAppSelector(state => state.subgraph);
-	const givPower = getTotalGIVpower(values);
+	const { address } = useAccount();
+	const subgraphValues = useQueries({
+		queries: config.CHAINS_WITH_SUBGRAPH.map(chain => ({
+			queryKey: ['subgraph', chain.id, address],
+			queryFn: async () => {
+				return await fetchSubgraphData(chain.id, address);
+			},
+			staleTime: config.SUBGRAPH_POLLING_INTERVAL,
+		})),
+	});
+	const givPower = getTotalGIVpower(subgraphValues, address);
 	const givPowerFormatted = formatWeiHelper(givPower.total);
 	const hasZeroGivPower = givPowerFormatted === '0';
 

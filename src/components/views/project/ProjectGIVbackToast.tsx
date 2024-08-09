@@ -206,7 +206,7 @@ const ProjectGIVbackToast = () => {
 			Button = (
 				<OutlineButton
 					onClick={() => setShowVerification(true)}
-					label='Verify project'
+					label={formatMessage({ id: 'label.project_verify' })}
 					icon={<IconVerifiedBadge16 />}
 				/>
 			);

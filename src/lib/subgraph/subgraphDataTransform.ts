@@ -9,11 +9,11 @@ import {
 	IUniswapV3Pool,
 	IUniswapV3Position,
 	IGIVpower,
+	ISubgraphState,
 } from '@/types/subgraph';
 import config from '@/configuration';
 import { getGIVpowerRoundsInfo } from '@/helpers/givpower';
 import { AddressZero } from '../constants/constants';
-import type { ISubgraphState } from '@/features/subgraph/subgraph.types';
 
 export const transformTokenDistro = (info: any = {}): ITokenDistro => {
 	const _startTime = info?.startTime || '0';

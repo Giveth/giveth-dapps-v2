@@ -4,7 +4,7 @@ import { renderWithProviders } from '@/tests/utils';
 import '@testing-library/jest-dom';
 import BoostModal from './BoostModal';
 import config from '@/configuration';
-import type { ISubgraphState } from '@/features/subgraph/subgraph.types';
+import { ISubgraphState } from '@/types/subgraph';
 
 beforeAll(() => {
 	Object.defineProperty(window, 'matchMedia', {

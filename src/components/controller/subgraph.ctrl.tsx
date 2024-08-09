@@ -1,45 +1,89 @@
-import { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { useAccount } from 'wagmi';
-import { useAppDispatch } from '@/features/hooks';
+import { useQueries, useQueryClient } from '@tanstack/react-query';
+import { Address } from 'viem';
 import config from '@/configuration';
 import {
-	fetchCurrentInfoAsync,
-	fetchAllInfoAsync,
-} from '@/features/subgraph/subgraph.thunks';
+	fetchLatestIndexedBlock,
+	fetchSubgraphData,
+} from '@/services/subgraph.service';
 
-const SubgraphController = () => {
-	const dispatch = useAppDispatch();
-
-	const { chain } = useAccount();
-	const chainId = chain?.id;
+const SubgraphController: React.FC = () => {
 	const { address } = useAccount();
+	const queryClient = useQueryClient();
+	const pollingIntervalsRef = useRef<{ [key: string]: NodeJS.Timeout }>({});
+
+	useQueries({
+		queries: config.CHAINS_WITH_SUBGRAPH.map(chain => ({
+			queryKey: ['subgraph', chain.id, address] as [
+				string,
+				number,
+				Address,
+			],
+			queryFn: async () => await fetchSubgraphData(chain.id, address),
+			staleTime: config.SUBGRAPH_POLLING_INTERVAL,
+			enabled: !!address,
+		})),
+	});
 
 	useEffect(() => {
-		const _address = address ? address : undefined;
-		const _chainID = chainId || config.MAINNET_NETWORK_NUMBER;
-		setTimeout(
-			() => {
-				dispatch(
-					fetchAllInfoAsync({
-						userAddress: _address,
-						chainId: _chainID,
-					}),
+		const handleEvent = (
+			event: CustomEvent<{
+				type: string;
+				chainId: number;
+				blockNumber: number;
+				address: Address;
+			}>,
+		) => {
+			const {
+				type,
+				chainId: eventChainId,
+				blockNumber,
+				address: eventAddress,
+			} = event.detail;
+			if (type === 'success' && eventChainId) {
+				console.log('event.detail', event.detail);
+				if (pollingIntervalsRef.current[eventChainId]) {
+					clearInterval(pollingIntervalsRef.current[eventChainId]);
+				}
+
+				pollingIntervalsRef.current[eventChainId] = setInterval(
+					async () => {
+						const latestBlockNumber =
+							await fetchLatestIndexedBlock(eventChainId);
+						console.log('latestBlockNumber', latestBlockNumber);
+						if (latestBlockNumber >= blockNumber) {
+							queryClient.refetchQueries({
+								queryKey: [
+									'subgraph',
+									eventChainId,
+									eventAddress,
+								],
+							});
+							clearInterval(
+								pollingIntervalsRef.current[eventChainId],
+							);
+							delete pollingIntervalsRef.current[eventChainId];
+						}
+					},
+					1000,
 				);
-			},
-			_address ? 1000 : 0, // Prevent set no account info after account connected
-		);
-		const interval = setInterval(() => {
-			dispatch(
-				fetchCurrentInfoAsync({
-					userAddress: _address,
-					chainId: _chainID,
-				}),
-			);
-		}, config.SUBGRAPH_POLLING_INTERVAL);
-		return () => {
-			clearInterval(interval);
+			}
 		};
-	}, [address, chainId, dispatch]);
+
+		window.addEventListener('chainEvent', handleEvent as EventListener);
+
+		const currentPollingIntervals = pollingIntervalsRef.current;
+
+		return () => {
+			window.removeEventListener(
+				'chainEvent',
+				handleEvent as EventListener,
+			);
+			Object.values(currentPollingIntervals).forEach(clearInterval);
+		};
+	}, [queryClient, address]);
+
 	return null;
 };
 

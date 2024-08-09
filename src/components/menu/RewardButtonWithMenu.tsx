@@ -1,7 +1,7 @@
 import React, { FC, useEffect, useState } from 'react';
 import { useAccount } from 'wagmi';
 import { FlexSpacer } from '@giveth/ui-design-system';
-import { formatWeiHelper } from '@/helpers/number';
+import { useQuery } from '@tanstack/react-query';
 import {
 	MenuAndButtonContainer,
 	BalanceButton,
@@ -12,8 +12,6 @@ import {
 	SidebarInnerContainer,
 } from '../Header/Header.sc';
 import { IconGIV } from '../Icons/GIV';
-import { useAppSelector, currentValuesHelper } from '@/features/hooks';
-import { SubgraphDataHelper } from '@/lib/subgraph/subgraphDataHelper';
 import { IHeaderButtonProps } from './UserButtonWithMenu';
 import useMediaQuery from '@/hooks/useMediaQuery';
 import { device } from '@/lib/constants/constants';
@@ -22,6 +20,10 @@ import { SideBar, ESideBarDirection } from '../sidebar/SideBar';
 import { RewardItems } from './RewardItems';
 import { MenuContainer } from './Menu.sc';
 import { ItemsProvider } from '@/context/Items.context';
+import { SubgraphDataHelper } from '@/lib/subgraph/subgraphDataHelper';
+import { formatWeiHelper } from '@/helpers/number';
+import { fetchSubgraphData } from '@/services/subgraph.service';
+import config from '@/configuration';
 
 interface IRewardButtonWithMenuProps extends IHeaderButtonProps {}
 
@@ -98,11 +100,14 @@ export const RewardButtonWithMenu: FC<IRewardButtonWithMenuProps> = ({
 };
 
 const HeaderRewardButton = () => {
-	const { chain } = useAccount();
-	const chainId = chain?.id;
-	const sdh = new SubgraphDataHelper(
-		useAppSelector(state => state.subgraph[currentValuesHelper(chainId)]),
-	);
+	const { chain, address } = useAccount();
+	const currentValues = useQuery({
+		queryKey: ['subgraph', chain?.id, address],
+		queryFn: async () => await fetchSubgraphData(chain?.id, address),
+		enabled: !!chain,
+		staleTime: config.SUBGRAPH_POLLING_INTERVAL,
+	});
+	const sdh = new SubgraphDataHelper(currentValues.data);
 	const givBalance = sdh.getGIVTokenBalance();
 	return (
 		<HBContainer>

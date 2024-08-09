@@ -1,7 +1,11 @@
 import { captureException } from '@sentry/nextjs';
+import { Address } from 'viem';
 import config from '@/configuration';
-import { ITokenAllocation } from '@/types/subgraph';
 import { gqlRequest } from '@/helpers/requests';
+import { SUBGRAPH_METADATA_QUERY } from '@/lib/subgraph/subgraph.queries';
+import { transformSubgraphData } from '@/lib/subgraph/subgraphDataTransform';
+import { SubgraphQueryBuilder } from '@/lib/subgraph/subgraphQueryBuilder';
+import type { ISubgraphState, ITokenAllocation } from '@/types/subgraph';
 
 export const fetchSubgraph = async (
 	query: string,
@@ -82,4 +86,39 @@ export const getUniswapV3TokenURI = async (
 	const data = await res.json();
 
 	return data?.data?.uniswapPosition?.tokenURI || '';
+};
+
+export const fetchSubgraphData = async (
+	chainId?: number,
+	address?: Address,
+): Promise<ISubgraphState> => {
+	if (!chainId || !address) return {} as ISubgraphState;
+	let response;
+	let uri = config.EVM_NETWORKS_CONFIG[chainId]?.subgraphAddress;
+
+	if (!uri) {
+		response = {};
+	} else {
+		response = await fetchSubgraph(
+			SubgraphQueryBuilder.getChainQuery(chainId, address),
+			chainId,
+		);
+	}
+	return transformSubgraphData({
+		...response,
+		networkNumber: chainId,
+	});
+};
+
+export const fetchLatestIndexedBlock = async (chainId: number) => {
+	let response;
+	let uri = config.EVM_NETWORKS_CONFIG[chainId]?.subgraphAddress;
+
+	if (!uri) {
+		response = {};
+	} else {
+		response = await fetchSubgraph(SUBGRAPH_METADATA_QUERY, chainId);
+		return response._meta.block.number;
+	}
+	return response;
 };

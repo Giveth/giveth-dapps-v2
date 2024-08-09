@@ -32,9 +32,20 @@ const DesktopMenu = () => {
 			{menuList.map((item, index) => {
 				let isClickable = index !== 8; // Do not enable click on last step "Done"
 				isClickable = !isDraft ? false : isClickable; // user first time came to verification steps
+
+				const isFieldDone = checkVerificationStep(
+					item.slug,
+					verificationData,
+				);
+				// show icon only if it is not optional or it is optional and user has filled it
+				const shouldShowIcon = !item.isOptional || isFieldDone;
+
+				// show check icon on last step if all steps are completed
+				const isUserOntheLastStep =
+					allCheckedSteps && index === 8 && step === 8;
+
 				const IconCheck =
-					checkVerificationStep(item.slug, verificationData) ||
-					(allCheckedSteps && index === 8 && step === 8) ? (
+					isFieldDone || isUserOntheLastStep ? (
 						<CheckCircle />
 					) : (
 						<WarningCircle />
@@ -48,7 +59,7 @@ const DesktopMenu = () => {
 						onClick={() => isClickable && setStep(index)}
 					>
 						{formatMessage({ id: item.label })}
-						{IconCheck}
+						{!!shouldShowIcon && IconCheck}
 					</MenuTitle>
 				);
 			})}

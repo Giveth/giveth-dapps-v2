@@ -156,8 +156,6 @@
 	"label.amount_raised_in_this_round": "Quantitat recaptada en aquesta ronda",
 	"label.amount_to_donate_monthly": "Quantitat a donar mensualment",
 	"label.amount_to_stake": "Quantitat a stakejar",
-	"label.amplify_your_donation": "Amplifica la teva donació",
-	"label.amplify_your_donation_desc": "Desbloqueja l'emparellament per la teva donació verificant la teva identitat! Connecta la teva cartera amb el Gitcoin Passport per comprovar la teva puntuació d'identitat i maximitzar el poder de la teva don ació. El Passport està dissenyat per verificar proactivament les identitats dels usuaris per protegir-se contra atacs Sybil.",
 	"label.and": "i",
 	"label.and_now_the_giveconomy": "I ara... la GIVeconomy",
 	"label.and_now_the_giveconomy.desc": "Construint sobre aquella base i determinats a utilitzar la blockchain per finançar béns públics de forma regenerativa, vam crear la GIVeconomy. Amb GIV com a combustible, la GIVeconomy recompensa i capacita tots els qui donen.",
@@ -383,6 +381,7 @@
 	"label.ethereum_mainnet_or_gnosis_chain": "Ethereum Mainnet o Gnosis Chain",
 	"label.eth_addres_not_valid": "Adreça {type} no és vàlida",
 	"label.everytime_you_claim_giv_rewards": "Cada vegada que reclames les teves recompenses de GIV de GIVbacks, GIVgarden o GIVfarm, la teva taxa de flux de GIVstream augmenta. A continuació, es mostra un resum.",
+	"label.exceed_wallet_balance": "Necessites mantenir almenys {totalAmount} {tokenSymbol} a la teva cartera per pagar les comissions de la xarxa per aquesta transacció. Si us plau, introdueix una quantitat menor.",
 	"label.expected_rank_for_next_round": "Aquest és el rang esperat per la pròxima ronda basat en",
 	"label.explore_a_multiverse_of_projects": "Explora un multivers de projectes que estan canviant el món i obté recompenses proveint liquiditat.",
 	"label.explore_by": "Explorar per",
@@ -710,7 +709,7 @@
 	"label.passport.not_connected": "Connecta la teva cartera per verificar la teva elegibilitat per a l'igualació de donacions.",
 	"label.passport.not_created": "Aconsegueix que la teva donació sigui igualada amb finançament quadràtic! Verifica el teu Gitcoin Passport abans ",
 	"label.passport.not_eligible": "Aconsegueix que la teva donació sigui igualada amb finançament quadràtic! Augmenta la teva puntuació de Gitcoin Passport abans ",
-	"label.passport.not_signed": "Signa el missatge amb la teva cartera per comprovar la teva elegibilitat per a la concordança de donacions",
+	"label.passport.not_signed": "Signa el missatge amb la teva cartera per comprovar la teva elegibilitat per a la concordança de donacions.",
 	"label.passport.no_active_round": "No hi ha cap ronda activa!",
 	"label.passport.round_starts_on": "La pròxima ronda comença el {data}",
 	"label.passport_score": "Puntuació del Passport",
@@ -1646,5 +1645,8 @@
 	"tooltip.flowrate": "Les donacions recurrents es prenen del teu Saldo de Transmissió. Diposita tokens i mantén el teu saldo per habilitar les donacions recurrents.",
 	"tooltip.withdraw_stream_balance": "Si teniu donacions recurrents actives, el vostre saldo disponible per retirar serà lleugerament inferior al vostre saldo actual.",
 	"ubi": "Renta bàsica",
-	"water-and-sanitation": "Aigua i Sanejament"
+	"water-and-sanitation": "Aigua i Sanejament",
+	"label.sanctioned_wallet": "Adreça Sancionada Detectada!!",
+	"label.sanctioned_wallet_message_part1": "Aquesta adreça ha estat trobada a la llista de sancions dels EUA",
+	"label.sanctioned_wallet_message_part2": "Malauradament, Endaoment no permet que les adreces a la llista de sancions de l'OFAC donin a projectes realitzats per Endaoment. Consulta un altre projecte per fer una donació."
 }

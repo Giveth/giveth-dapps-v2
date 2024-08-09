@@ -78,7 +78,15 @@ export const UserItems: FC<IUserItemsProps> = ({
 					<B>{shortenAddress(walletAddress)}</B>
 				</ItemRow>
 			</Item>
-			<Item baseTheme={theme}>
+			<Item
+				baseTheme={theme}
+				onClick={() => {
+					openChainModal &&
+						openChainModal({
+							view: 'Networks',
+						});
+				}}
+			>
 				<ItemTitle $baseTheme={theme}>
 					{formatMessage({ id: 'label.network' })}
 				</ItemTitle>
@@ -95,12 +103,7 @@ export const UserItems: FC<IUserItemsProps> = ({
 					</FlexCenter>
 
 					{!isSafeEnv && !isOnSolana && (
-						<ItemAction
-							size='Small'
-							onClick={() => {
-								openChainModal && openChainModal();
-							}}
-						>
+						<ItemAction size='Small'>
 							{formatMessage({ id: 'label.switch_network' })}
 						</ItemAction>
 					)}

@@ -80,7 +80,6 @@ const Time = styled(SublineBold)`
 const Title = styled(H6)`
 	text-overflow: ellipsis;
 	white-space: nowrap;
-	text-overflow: ellipsis;
 	overflow: hidden;
 `;
 
