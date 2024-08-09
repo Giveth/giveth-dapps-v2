@@ -168,7 +168,7 @@ const InvestCard: FC<IClaimViewCardProps> = ({ index }) => {
 			);
 			promiseQueue.push(promise);
 		});
-		config.MAINNET_CONFIG.pools.forEach(poolStakingConfig => {
+		config.MAINNET_CONFIG.pools?.forEach(poolStakingConfig => {
 			const isDiscontinued = poolStakingConfig.farmEndTimeMS
 				? getNowUnixMS() > poolStakingConfig.farmEndTimeMS
 				: false;

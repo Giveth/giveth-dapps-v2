@@ -70,6 +70,9 @@ export const SetProfilePic = ({
 	useEffect(() => {
 		const fetchPFPInfo = async (walletAddress: string) => {
 			try {
+				if (!config.MAINNET_CONFIG.subgraphAddress) {
+					throw new Error('Subgraph address not found');
+				}
 				const query = buildUsersPfpInfoQuery([walletAddress]);
 				const { data } = await gqlRequest(
 					config.MAINNET_CONFIG.subgraphAddress,

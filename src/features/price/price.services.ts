@@ -8,6 +8,7 @@ import {
 export const fetchMainnetTokenPrice = async (
 	tokenId: string,
 ): Promise<string> => {
+	if (!config.MAINNET_CONFIG.uniswapV2Subgraph) return '0';
 	const query = FETCH_MAINNET_TOKEN_PRICE;
 	const variables = {
 		tokenId: tokenId.toLowerCase(),

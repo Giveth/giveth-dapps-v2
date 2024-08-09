@@ -20,10 +20,10 @@ export const RegenStreamSection: FC<IRegenStreamSectionProps> = ({
 		chainId === config.GNOSIS_NETWORK_NUMBER
 			? [
 					...config.GNOSIS_CONFIG.regenStreams,
-					...config.MAINNET_CONFIG.regenStreams,
+					...(config.MAINNET_CONFIG.regenStreams || []),
 				]
 			: [
-					...config.MAINNET_CONFIG.regenStreams,
+					...(config.MAINNET_CONFIG.regenStreams || []),
 					...config.GNOSIS_CONFIG.regenStreams,
 				];
 	const regenStreams = showArchivedPools

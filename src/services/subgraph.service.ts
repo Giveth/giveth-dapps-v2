@@ -72,20 +72,28 @@ export const getHistory = async (
 export const getUniswapV3TokenURI = async (
 	tokenId: string | number,
 ): Promise<string> => {
-	const query = `{
-		uniswapPosition(id: "${tokenId}"){
-			tokenURI
+	try {
+		if (!config.MAINNET_CONFIG.subgraphAddress) {
+			throw new Error('Subgraph address not found');
 		}
-	  }`;
-	const body = { query };
+		const query = `{
+			uniswapPosition(id: "${tokenId}"){
+				tokenURI
+			}
+		  }`;
+		const body = { query };
 
-	const res = await fetch(config.MAINNET_CONFIG.subgraphAddress, {
-		method: 'POST',
-		body: JSON.stringify(body),
-	});
-	const data = await res.json();
+		const res = await fetch(config.MAINNET_CONFIG.subgraphAddress, {
+			method: 'POST',
+			body: JSON.stringify(body),
+		});
+		const data = await res.json();
 
-	return data?.data?.uniswapPosition?.tokenURI || '';
+		return data?.data?.uniswapPosition?.tokenURI || '';
+	} catch (error: any) {
+		console.log('Error in fetching Uniswap V3 Token URI', error.message);
+		return '';
+	}
 };
 
 export const fetchSubgraphData = async (

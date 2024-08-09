@@ -66,6 +66,7 @@ export const MintCard = () => {
 
 	useEffect(() => {
 		async function fetchData() {
+			if (!config.MAINNET_CONFIG.PFP_CONTRACT_ADDRESS) return;
 			try {
 				const baseParams = {
 					address: config.MAINNET_CONFIG.PFP_CONTRACT_ADDRESS,
@@ -114,7 +115,8 @@ export const MintCard = () => {
 
 	useEffect(() => {
 		async function fetchData() {
-			if (!walletAddress) return;
+			if (!walletAddress || !config.MAINNET_CONFIG.PFP_CONTRACT_ADDRESS)
+				return;
 			try {
 				const _balanceOf = await readContract(wagmiConfig, {
 					address: config.MAINNET_CONFIG.PFP_CONTRACT_ADDRESS,
