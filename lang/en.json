@@ -756,7 +756,7 @@
 	"label.projects_count": "{count, plural, one { Project} other { Projects} }",
 	"label.projects_on_giveth": "Projects on Giveth",
 	"label.project_boosted": "Project boosted!",
-	"label.project_by": "PROJECT BY",
+	"label.project_by": "DELIVERED BY",
 	"label.project_contact": "Project contact",
 	"label.project_details": "Project Details",
 	"label.project_features": "Project features",
