@@ -1648,5 +1648,7 @@
 	"water-and-sanitation": "Aigua i Sanejament",
 	"label.sanctioned_wallet": "Adreça Sancionada Detectada!!",
 	"label.sanctioned_wallet_message_part1": "Aquesta adreça ha estat trobada a la llista de sancions dels EUA",
-	"label.sanctioned_wallet_message_part2": "Malauradament, Endaoment no permet que les adreces a la llista de sancions de l'OFAC donin a projectes realitzats per Endaoment. Consulta un altre projecte per fer una donació."
+	"label.sanctioned_wallet_message_part2": "Malauradament, Endaoment no permet que les adreces a la llista de sancions de l'OFAC donin a projectes realitzats per Endaoment. Consulta un altre projecte per fer una donació.",
+	"label.project_card_endaoment_title": "Aquest projecte és gestionat per",
+	"label.project_card_endaoment_subtext": "Aquest projecte és gestionat per Endaoment, que s'encarrega de la conversió i lliurament dels fons fiat al projecte. Endaoment cobra una comissió del 1,5% en les donacions, que es processa fora de l'aplicació de Giveth."
 }

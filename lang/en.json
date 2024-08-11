@@ -1655,5 +1655,7 @@
 	"label.sign_gnosis_safe": "Sign Gnosis Safe",
 	"label.you_need_to_execute_the_pending_multisig": "You'll need to execute the pending Multisig transaction to complete your log-in to Giveth & proceed to this area",
 	"label.sign_a_message_with_your_safe_signer": "Sign a message with your Safe signer address to continue the log in process",
-	"label.this_is_necessary_to_create_projects": "This is necessary to be able to create projects, manage your profile or use GIVpower."
+	"label.this_is_necessary_to_create_projects": "This is necessary to be able to create projects, manage your profile or use GIVpower.",
+	"label.project_card_endaoment_title": "This project is delivered by",
+	"label.project_card_endaoment_subtext": "This project is delivered by Endaoment, which handles the conversion and delivery of fiat funding to this project. Endaoment charges a 1.5% fee on donations which is processed outside of the Giveth Dapp."
 }
