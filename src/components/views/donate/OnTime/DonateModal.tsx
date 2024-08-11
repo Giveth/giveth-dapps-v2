@@ -42,6 +42,7 @@ import { FETCH_GIVETH_PROJECT_BY_ID } from '@/apollo/gql/gqlProjects';
 import createGoogleTagEventPurchase from '@/helpers/googleAnalytics';
 import { isWalletSanctioned } from '@/services/donation';
 import SanctionModal from '@/components/modals/SanctionedModal';
+import { ORGANIZATION } from '@/lib/constants/organizations';
 
 interface IDonateModalProps extends IModal {
 	token: IProjectAcceptedToken;
@@ -150,7 +151,10 @@ const DonateModal: FC<IDonateModalProps> = props => {
 	const validateTokenThenDonate = async () => {
 		setDonating(true);
 		try {
-			if (project?.organization?.label === 'endaoment' && address) {
+			if (
+				project?.organization?.label === ORGANIZATION.endaoment &&
+				address
+			) {
 				// We just need to check if the wallet is sanctioned for endaoment projects
 				const sanctioned = await isWalletSanctioned(address);
 				if (sanctioned) {
