@@ -32,6 +32,7 @@ import ProjectCardImage from '@/components/project-card/ProjectCardImage';
 import { useGeneralWallet } from '@/providers/generalWalletProvider';
 import { DonatePageProjectDescription } from './DonatePageProjectDescription';
 import { getActiveRound } from '@/helpers/qf';
+import EndaomentProjectsInfo from '@/components/views/project/EndaomentProjectsInfo';
 
 const DonateIndex: FC = () => {
 	const { formatMessage } = useIntl();
@@ -87,6 +88,9 @@ const DonateIndex: FC = () => {
 					</Col>
 					<Col xs={12} lg={6}>
 						<InfoWrapper>
+							<EndaomentProjectsInfo
+								orgLabel={project?.organization?.label}
+							/>
 							<ImageWrapper>
 								<ProjectCardImage image={project.image} />
 							</ImageWrapper>
