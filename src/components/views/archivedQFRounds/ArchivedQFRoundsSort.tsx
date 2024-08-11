@@ -1,6 +1,5 @@
 import {
 	Flex,
-	IconAdminNotif16,
 	IconArrowBottom,
 	IconArrowTop,
 	IconDonation16,
@@ -35,11 +34,12 @@ export const ArchivedQFRoundsSort = () => {
 			value: EQFRoundsSortBy.MATCHING_POOL,
 			icon: <IconDonation16 />,
 		},
-		{
-			label: formatMessage({ id: 'label.number_of_unique_donors' }),
-			value: EQFRoundsSortBy.UNIQUE_DONORS,
-			icon: <IconAdminNotif16 />,
-		},
+		// we have impact-graph errors, so we are hiding this for now
+		// {
+		// 	label: formatMessage({ id: 'label.number_of_donations' }),
+		// 	value: EQFRoundsSortBy.UNIQUE_DONORS,
+		// 	icon: <IconAdminNotif16 />,
+		// },
 		{
 			label: formatMessage({ id: 'label.newest' }),
 			value: EQFRoundsSortBy.NEWEST,
