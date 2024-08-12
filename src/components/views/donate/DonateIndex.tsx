@@ -123,8 +123,6 @@ const DonateIndex: FC = () => {
 		expiresAt && startTimer?.(new Date(expiresAt));
 	};
 
-	console.log('successDonation', successDonation);
-
 	return successDonation ? (
 		<>
 			<DonateHeader />

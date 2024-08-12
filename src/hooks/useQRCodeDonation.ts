@@ -160,7 +160,7 @@ export const useQRCodeDonation = () => {
 
 			localStorage.removeItem(StorageLabel.DRAFT_DONATION);
 		} catch (error: any) {
-			console.error('Error deleting draft donation', error);
+			console.error('Error marking draft donation as failed', error);
 		}
 	};
 
