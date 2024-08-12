@@ -19,7 +19,12 @@ import { useAppSelector } from '@/features/hooks';
 import Input, { InputSize } from '@/components/Input';
 import { gqlAddressValidation } from '@/components/views/create/helpers';
 import { Shadow } from '@/components/styled-components/Shadow';
-import { getAddressFromENS, isAddressENS, isSolanaAddress } from '@/lib/wallet';
+import {
+	getAddressFromENS,
+	isAddressENS,
+	isSolanaAddress,
+	isStellarAddress,
+} from '@/lib/wallet';
 import InlineToast, { EToastType } from '@/components/toasts/InlineToast';
 import useDelay from '@/hooks/useDelay';
 import NetworkLogo from '@/components/NetworkLogo';
@@ -52,10 +57,12 @@ const WalletAddressInput: FC<IProps> = ({
 	const addresses = getValues(inputName);
 	const prevAddressObj = findAddressByChain(addresses, networkId, chainType);
 	const prevAddress = prevAddressObj?.address;
+	const prevMemo = prevAddressObj?.memo;
 
-	const [isValidating, setIsValidating] = useState(false);
 	const { formatMessage } = useIntl();
-	const [inputValue, setInputValue] = useState(prevAddress);
+	const [isValidating, setIsValidating] = useState(false);
+	const [walletAddressValue, setWalletAddressValue] = useState(prevAddress);
+	const [memoValue, setMemoValue] = useState(prevMemo);
 	const [error, setError] = useState({
 		message: '',
 		ref: undefined,
@@ -65,6 +72,7 @@ const WalletAddressInput: FC<IProps> = ({
 	const isDefaultAddress = compareAddresses(prevAddress, user?.walletAddress);
 	const errorMessage = error.message;
 
+	const isStellarChain = chainType === ChainType.STELLAR;
 	const isAddressUsed =
 		errorMessage.indexOf(
 			formatMessage({ id: 'label.is_already_being_used_for_a_project' }),
@@ -120,8 +128,12 @@ const WalletAddressInput: FC<IProps> = ({
 				setIsValidating(false);
 				return true;
 			}
-			if (chainType === ChainType.SOLANA) {
-				if (!isSolanaAddress(_address)) {
+			if (chainType === ChainType.SOLANA || isStellarChain) {
+				const isValidAddress = isStellarChain
+					? isStellarAddress(_address)
+					: isSolanaAddress(_address);
+
+				if (!isValidAddress) {
 					setIsValidating(false);
 					return formatMessage(
 						{
@@ -152,12 +164,14 @@ const WalletAddressInput: FC<IProps> = ({
 		if (prevAddressObj) {
 			addresses.splice(addresses.indexOf(prevAddressObj), 1);
 		}
+		const _memo = isStellarChain ? memoValue : undefined;
 		const _addresses = [
 			...addresses,
 			{
 				chainType,
 				networkId,
-				address: resolvedENS || inputValue,
+				address: resolvedENS || walletAddressValue,
+				memo: _memo,
 			},
 		];
 		setValue(inputName, _addresses);
@@ -166,15 +180,15 @@ const WalletAddressInput: FC<IProps> = ({
 
 	useEffect(() => {
 		//We had an issue with onBlur so when the user clicks on submit exactly after filling the address, then process of address validation began, so i changed it to this.
-		if (inputValue === prevAddress) return;
-		addressValidation(inputValue).then(res => {
+		if (walletAddressValue === prevAddress) return;
+		addressValidation(walletAddressValue).then(res => {
 			if (res === true) {
 				setError({ ...error, message: '' });
 				return;
 			}
 			setError({ ...error, message: res });
 		});
-	}, [inputValue]);
+	}, [walletAddressValue]);
 
 	const [inputRef] = useFocus();
 
@@ -191,7 +205,11 @@ const WalletAddressInput: FC<IProps> = ({
 				</H6>
 				<Flex gap='10px'>
 					<ChainIconShadow>
-						<NetworkLogo chainId={networkId} logoSize={24} />
+						<NetworkLogo
+							chainId={networkId}
+							chainType={chainType}
+							logoSize={24}
+						/>
 					</ChainIconShadow>
 				</Flex>
 			</Header>
@@ -209,19 +227,12 @@ const WalletAddressInput: FC<IProps> = ({
 				caption={caption}
 				size={InputSize.LARGE}
 				isValidating={isValidating}
-				value={inputValue}
-				onChange={e => setInputValue(e.target.value)}
-				error={!error.message || !inputValue ? undefined : error}
+				value={walletAddressValue}
+				onChange={e => setWalletAddressValue(e.target.value)}
+				error={
+					!error.message || !walletAddressValue ? undefined : error
+				}
 			/>
-			{delayedResolvedENS && (
-				<InlineToast
-					isHidden={!resolvedENS}
-					type={EToastType.Success}
-					message={
-						formatMessage({ id: 'label.resolved_as' }) + resolvedENS
-					}
-				/>
-			)}
 			{delayedIsAddressUsed && (
 				<InlineToast
 					isHidden={!isAddressUsed}
@@ -231,19 +242,54 @@ const WalletAddressInput: FC<IProps> = ({
 					})}
 				/>
 			)}
-			<ExchangeNotify>
-				<Warning>!</Warning>
-				<Caption>
-					{formatMessage({
-						id: 'label.please_do_not_enter_exchange_deposit',
+			{isStellarChain && (
+				<>
+					<br />
+					<Input
+						label='Memo'
+						ref={inputRef}
+						placeholder={formatMessage({
+							id: 'label.enter_the_memo',
+						})}
+						size={InputSize.LARGE}
+						value={memoValue}
+						onChange={e => setMemoValue(e.target.value)}
+					/>
+				</>
+			)}
+			{delayedResolvedENS && (
+				<InlineToast
+					isHidden={!resolvedENS}
+					type={EToastType.Success}
+					message={
+						formatMessage({ id: 'label.resolved_as' }) + resolvedENS
+					}
+				/>
+			)}
+			{isStellarChain ? (
+				<InlineToast
+					type={EToastType.Info}
+					message={formatMessage({
+						id: 'label.be_carefull_some_exchanges',
 					})}
-				</Caption>
-			</ExchangeNotify>
+				/>
+			) : (
+				<ExchangeNotify>
+					<Warning>!</Warning>
+					<Caption>
+						{formatMessage({
+							id: 'label.please_do_not_enter_exchange_deposit',
+						})}
+					</Caption>
+				</ExchangeNotify>
+			)}
 			<ButtonWrapper>
 				<Button
 					label='Add ADDRESS'
 					disabled={
-						error.message !== '' || !inputValue || isValidating
+						error.message !== '' ||
+						!walletAddressValue ||
+						isValidating
 					}
 					onClick={addAddress}
 				/>
@@ -260,12 +306,13 @@ const Warning = styled(FlexCenter)`
 	height: 14px;
 	font-size: 8px;
 	font-weight: 700;
+	margin-top: 3px;
 `;
 
 const ExchangeNotify = styled(Flex)`
 	color: ${semanticColors.blueSky[700]};
 	gap: 17px;
-	align-items: center;
+	align-items: start;
 	margin-top: 24px;
 `;
 

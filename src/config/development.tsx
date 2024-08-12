@@ -24,11 +24,13 @@ import { IconCelo } from '@/components/Icons/Celo';
 import { IconOptimism } from '@/components/Icons/Optimism';
 import { IconGnosisChain } from '@/components/Icons/GnosisChain';
 import { IconEthereum } from '@/components/Icons/Eth';
-import { IconUnknown } from '@/components/Icons/Unknown';
+// import { IconUnknown } from '@/components/Icons/Unknown';
 import IconBase from '@/components/Icons/Base';
 import IconSolana from '@/components/Icons/Solana';
 import IconZKEVM from '@/components/Icons/ZKEVM';
 import IconArbitrum from '@/components/Icons/Arbitrum';
+import IconStellar from '@/components/Icons/Stellar';
+import { IconClassic } from '@/components/Icons/Classic';
 
 const BASE_ROUTE =
 	process.env.NEXT_PUBLIC_BASE_ROUTE ||
@@ -54,13 +56,15 @@ const POLYGON_NETWORK_NUMBER = polygon.id;
 const OPTIMISM_NETWORK_NUMBER = optimismSepolia.id;
 const CELO_NETWORK_NUMBER = celoAlfajores.id;
 const CLASSIC_NETWORK_NUMBER = 63;
+const STELLAR_NETWORK_NUMBER = 1500;
+const SOLANA_NETWORK_NUMBER = 103;
 const ARBITRUM_NETWORK_NUMBER = arbitrumSepolia.id;
 const BASE_NETWORK_NUMBER = baseSepolia.id;
 const ZKEVM_NETWORK_NUMBER = polygonZkEvmCardona.id;
 
 const SOLANA_NETWORK: NonEVMChain = {
-	id: 103,
-	networkId: 103,
+	id: SOLANA_NETWORK_NUMBER,
+	networkId: SOLANA_NETWORK_NUMBER,
 	chainType: ChainType.SOLANA,
 	name: 'Solana Devnet',
 	adapterNetwork: WalletAdapterNetwork.Devnet,
@@ -69,6 +73,20 @@ const SOLANA_NETWORK: NonEVMChain = {
 		default: {
 			name: 'Solana Explorer',
 			url: 'https://explorer.solana.com',
+		},
+	},
+};
+
+const STELLAR_NOTWORK: NonEVMChain = {
+	id: STELLAR_NETWORK_NUMBER,
+	networkId: STELLAR_NETWORK_NUMBER,
+	chainType: ChainType.STELLAR,
+	name: 'Stellar',
+	nativeCurrency: { name: 'Stellar Lumens', symbol: 'XLM', decimals: 7 },
+	blockExplorers: {
+		default: {
+			name: 'Stellar Explorer',
+			url: 'https://stellar.expert/explorer/testnet',
 		},
 	},
 };
@@ -109,7 +127,7 @@ const EVM_CHAINS = [
 	polygonZkEvmCardona,
 ] as readonly [Chain, ...Chain[]];
 
-const NON_EVM_CHAINS: NonEVMChain[] = [SOLANA_NETWORK];
+const NON_EVM_CHAINS: NonEVMChain[] = [STELLAR_NOTWORK, SOLANA_NETWORK];
 
 const config: EnvConfig = {
 	GIVETH_PROJECT_ID: 1,
@@ -132,6 +150,7 @@ const config: EnvConfig = {
 	CLASSIC_NETWORK_NUMBER: CLASSIC_NETWORK_NUMBER,
 	BASE_NETWORK_NUMBER: BASE_NETWORK_NUMBER,
 	ZKEVM_NETWORK_NUMBER: ZKEVM_NETWORK_NUMBER,
+	STELLAR_NETWORK_NUMBER: STELLAR_NETWORK_NUMBER,
 
 	RARIBLE_ADDRESS: 'https://testnet.rarible.com/',
 	MAINNET_CONFIG: {
@@ -418,13 +437,18 @@ const config: EnvConfig = {
 
 	CLASSIC_CONFIG: {
 		...classic,
-		//TODO: should change the icon
 		chainType: ChainType.EVM,
-		chainLogo: (logoSize?: number) => <IconUnknown size={logoSize} />,
+		chainLogo: (logoSize?: number) => <IconClassic size={logoSize} />,
 		coingeckoChainName: 'ethereum-classic',
 		gasPreference: {
 			// Keep it empty for automatic configuration
 		},
+	},
+	STELLAR_CONFIG: {
+		...STELLAR_NOTWORK,
+		chainType: ChainType.STELLAR,
+		coingeckoChainName: 'stellar',
+		chainLogo: (logoSize?: number) => <IconStellar size={logoSize} />,
 	},
 	SOLANA_CONFIG: {
 		...SOLANA_NETWORK,
