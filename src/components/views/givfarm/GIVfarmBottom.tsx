@@ -44,8 +44,8 @@ const renderPools = (chainId?: number, showArchivedPools?: boolean) => {
 					config.OPTIMISM_CONFIG.GIVPOWER,
 					...config.GNOSIS_CONFIG.pools,
 					...config.GNOSIS_CONFIG.regenPools,
-					...config.MAINNET_CONFIG.pools,
-					...config.MAINNET_CONFIG.regenPools,
+					...(config.MAINNET_CONFIG.pools || []),
+					...(config.MAINNET_CONFIG.regenPools || []),
 				]
 			: chainId === config.OPTIMISM_NETWORK_NUMBER
 				? [
@@ -53,14 +53,14 @@ const renderPools = (chainId?: number, showArchivedPools?: boolean) => {
 						config.GNOSIS_CONFIG.GIVPOWER,
 						...config.GNOSIS_CONFIG.pools,
 						...config.GNOSIS_CONFIG.regenPools,
-						...config.MAINNET_CONFIG.pools,
-						...config.MAINNET_CONFIG.regenPools,
+						...(config.MAINNET_CONFIG.pools || []),
+						...(config.MAINNET_CONFIG.regenPools || []),
 					]
 				: [
 						config.GNOSIS_CONFIG.GIVPOWER,
 						config.OPTIMISM_CONFIG.GIVPOWER,
-						...config.MAINNET_CONFIG.pools,
-						...config.MAINNET_CONFIG.regenPools,
+						...(config.MAINNET_CONFIG.pools || []),
+						...(config.MAINNET_CONFIG.regenPools || []),
 						...config.GNOSIS_CONFIG.pools,
 						...config.GNOSIS_CONFIG.regenPools,
 					];
@@ -107,8 +107,10 @@ export const GIVfarmBottom = () => {
 							rel='noreferrer'
 							href={
 								chainId === config.OPTIMISM_NETWORK_NUMBER
-									? 'https://jumper.exchange/?fromChain=100&toChain=10'
-									: 'https://jumper.exchange/?fromChain=1&toChain=100'
+									? 'https://bridge.connext.network/GIVETH-from-optimism-to-gnosis'
+									: chainId === config.GNOSIS_NETWORK_NUMBER
+										? 'https://bridge.connext.network/GIVETH-from-gnosis-to-optimism'
+										: 'https://bridge.connext.network/GIVETH-from-ethereum-to-optimism'
 							}
 						>
 							{formatMessage({ id: 'label.bridge_your_giv' })}

@@ -673,7 +673,7 @@
 	"label.no_results_found": "No hay resultados",
 	"label.number_of_givers": "# de donantes",
 	"label.number_of_rounds": "{rounds} Rondas",
-	"label.number_of_unique_donors": "# de Donaciones",
+	"label.number_of_donations": "# de Donaciones",
 	"label.number_projects": "{count, plural, one {Proyecto} other {Proyectos}}",
 	"label.oh_no": "¡Oh no!",
 	"label.okay_it_sounds_like_your_project_is_not_a_non_profit": "Bien, parece que tu proyecto no está registrado como organización sin ánimo de lucro. Cuéntanos un poco sobre cómo está estructurada tu organización.",
@@ -1685,5 +1685,10 @@
 	"label.sign_gnosis_safe": "Firmar Gnosis Safe",
 	"label.you_need_to_execute_the_pending_multisig": "Debes ejecutar la transacción Multisig pendiente para completar tu inicio de sesión en Giveth y proceder a esta área",
 	"label.sign_a_message_with_your_safe_signer": "Firma un mensaje con la dirección de tu firma segura (Safe signer) para continuar el proceso de inicio de sesión",
-	"label.this_is_necessary_to_create_projects": "Esto es necesario para poder crear proyectos, gestionar tu perfil o usar GIVpower."
+	"label.this_is_necessary_to_create_projects": "Esto es necesario para poder crear proyectos, gestionar tu perfil o usar GIVpower.",
+	"label.sanctioned_wallet": "¡Dirección Sancionada Detectada!",
+	"label.sanctioned_wallet_message_part1": "Esta dirección ha sido encontrada en la lista de sanciones de EE.UU.",
+	"label.sanctioned_wallet_message_part2": "Lamentablemente, Endaoment no permite que las direcciones en la lista de sanciones de OFAC donen a proyectos entregados por Endaoment. Consulta otro proyecto para donar.",
+	"label.project_card_endaoment_title": "Este proyecto es gestionado por",
+	"label.project_card_endaoment_subtext": "Este proyecto es gestionado por Endaoment, que se encarga de la conversión y entrega de fondos fiat a este proyecto. Endaoment cobra una comisión del 1,5% en las donaciones, que se procesa fuera de la aplicación de Giveth."
 }

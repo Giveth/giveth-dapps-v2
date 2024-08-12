@@ -47,6 +47,7 @@ import ProjectSocials from './ProjectSocials';
 import Routes from '@/lib/constants/Routes';
 import { ChainType } from '@/types/config';
 import { useAppSelector } from '@/features/hooks';
+import { EndaomentProjectsInfo } from '@/components/views/project/EndaomentProjectsInfo';
 
 const ProjectDonations = dynamic(
 	() => import('./projectDonations/ProjectDonations.index'),
@@ -172,6 +173,9 @@ const ProjectIndex: FC<IProjectBySlug> = () => {
 							</Link>
 						</StellarSupportToast>
 					)}
+				<EndaomentProjectsInfo
+					orgLabel={projectData?.organization?.label}
+				/>
 				<Row>
 					<Col xs={12} md={8} lg={8.5}>
 						<ProjectHeader />

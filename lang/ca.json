@@ -673,7 +673,7 @@
 	"label.no_results_found": "No s'han trobat resultats",
 	"label.number_of_givers": "# de donants",
 	"label.number_of_rounds": "{rounds} Rondes",
-	"label.number_of_unique_donors": "# de Donacions",
+	"label.number_of_donations": "# de Donacions",
 	"label.number_projects": "{count, plural, one {Projecte} other {Projectes}}",
 	"label.oh_no": "Oh no!",
 	"label.okay_it_sounds_like_your_project_is_not_a_non_profit": "D'acord, sembla que el teu projecte no és una organització sense ànim de lucre registrada. Explica'ns una mica com està estructurada la teva organització.",
@@ -1680,5 +1680,10 @@
 	"tooltip.flowrate": "Les donacions recurrents es prenen del teu Saldo de Transmissió. Diposita tokens i mantén el teu saldo per habilitar les donacions recurrents.",
 	"tooltip.withdraw_stream_balance": "Si teniu donacions recurrents actives, el vostre saldo disponible per retirar serà lleugerament inferior al vostre saldo actual.",
 	"ubi": "Renta bàsica",
-	"water-and-sanitation": "Aigua i Sanejament"
+	"water-and-sanitation": "Aigua i Sanejament",
+	"label.sanctioned_wallet": "Adreça Sancionada Detectada!!",
+	"label.sanctioned_wallet_message_part1": "Aquesta adreça ha estat trobada a la llista de sancions dels EUA",
+	"label.sanctioned_wallet_message_part2": "Malauradament, Endaoment no permet que les adreces a la llista de sancions de l'OFAC donin a projectes realitzats per Endaoment. Consulta un altre projecte per fer una donació.",
+	"label.project_card_endaoment_title": "Aquest projecte és gestionat per",
+	"label.project_card_endaoment_subtext": "Aquest projecte és gestionat per Endaoment, que s'encarrega de la conversió i lliurament dels fons fiat al projecte. Endaoment cobra una comissió del 1,5% en les donacions, que es processa fora de l'aplicació de Giveth."
 }

@@ -42,6 +42,7 @@ import { IDonation } from '@/apollo/types/types';
 import config from '@/configuration';
 import { ChainType } from '@/types/config';
 import { useQRCodeDonation } from '@/hooks/useQRCodeDonation';
+import EndaomentProjectsInfo from '@/components/views/project/EndaomentProjectsInfo';
 
 const DonateIndex: FC = () => {
 	const { formatMessage } = useIntl();
@@ -163,6 +164,9 @@ const DonateIndex: FC = () => {
 								<QRDonationDetails />
 							) : (
 								<>
+                  <EndaomentProjectsInfo
+                    orgLabel={project?.organization?.label}
+                  />
 									<ImageWrapper>
 										<ProjectCardImage
 											image={project.image}
