@@ -1653,5 +1653,7 @@
 	"label.this_is_necessary_to_create_projects": "Esto es necesario para poder crear proyectos, gestionar tu perfil o usar GIVpower.",
 	"label.sanctioned_wallet": "¡Dirección Sancionada Detectada!",
 	"label.sanctioned_wallet_message_part1": "Esta dirección ha sido encontrada en la lista de sanciones de EE.UU.",
-	"label.sanctioned_wallet_message_part2": "Lamentablemente, Endaoment no permite que las direcciones en la lista de sanciones de OFAC donen a proyectos entregados por Endaoment. Consulta otro proyecto para donar."
+	"label.sanctioned_wallet_message_part2": "Lamentablemente, Endaoment no permite que las direcciones en la lista de sanciones de OFAC donen a proyectos entregados por Endaoment. Consulta otro proyecto para donar.",
+	"label.project_card_endaoment_title": "Este proyecto es gestionado por",
+	"label.project_card_endaoment_subtext": "Este proyecto es gestionado por Endaoment, que se encarga de la conversión y entrega de fondos fiat a este proyecto. Endaoment cobra una comisión del 1,5% en las donaciones, que se procesa fuera de la aplicación de Giveth."
 }

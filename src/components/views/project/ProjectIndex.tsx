@@ -40,6 +40,7 @@ import { AdminActions } from './projectActionCard/AdminActions';
 import ProjectOwnerBanner from './ProjectOwnerBanner';
 import { useGeneralWallet } from '@/providers/generalWalletProvider';
 import ProjectSocials from './ProjectSocials';
+import { EndaomentProjectsInfo } from '@/components/views/project/EndaomentProjectsInfo';
 
 const ProjectDonations = dynamic(
 	() => import('./projectDonations/ProjectDonations.index'),
@@ -127,6 +128,9 @@ const ProjectIndex: FC<IProjectBySlug> = () => {
 			<HeadContainer>
 				{isAdmin && <ProjectOwnerBanner />}
 				<ProjectBadges />
+				<EndaomentProjectsInfo
+					orgLabel={projectData?.organization?.label}
+				/>
 				<Row>
 					<Col xs={12} md={8} lg={8.5}>
 						<ProjectHeader />

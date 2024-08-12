@@ -29,7 +29,7 @@ const ExternalLink = (props: {
 };
 
 const StyledGLink = styled(GLink)<{ $color?: string }>`
-	color: ${props => props.$color || 'inherit'};
+	color: ${props => props.$color || 'inherit'} !important;
 	font-size: inherit;
 `;
 const StyledLink = styled.a<{ $fullWidth?: boolean }>`
