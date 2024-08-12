@@ -345,3 +345,50 @@ export const updateRecurringDonationStatus = async (
 		throw error;
 	}
 };
+
+// This is the function you will call to check if a wallet address is sanctioned.
+export async function isWalletSanctioned(
+	walletAddress: string,
+): Promise<boolean> {
+	try {
+		const baseURL = 'https://api.trmlabs.com/public/';
+		const url = `${baseURL}v1/sanctions/screening`;
+
+		// Define the address you want to screen
+		const request = [{ address: walletAddress }];
+
+		// Make the POST request using fetch
+		const response = await fetch(url, {
+			method: 'POST',
+			headers: {
+				Accept: 'application/json',
+				'Content-Type': 'application/json',
+			},
+			body: JSON.stringify(request),
+		});
+
+		// Parse the JSON response
+		const data = await response.json();
+
+		/** Sample response
+		 * [
+		 *   {
+		 *     address: '0xbF7BE1D1aa31E456f09FE9316e07Ac9F15B87De8',
+		 *     isSanctioned: false
+		 *   },
+		 *   {
+		 *     address: '0x2E100055A4F7100FF9898BAa3409085150355b4f',
+		 *     isSanctioned: false
+		 *   },
+		 *	 ...
+		 * ]
+		 */
+
+		// Check the response and determine if the address is sanctioned
+		const result = data && data[0];
+		return Boolean(result && result.isSanctioned);
+	} catch (error) {
+		console.error('Error checking wallet sanction status:', error);
+		return false;
+	}
+}

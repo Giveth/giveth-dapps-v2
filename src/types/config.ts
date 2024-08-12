@@ -126,6 +126,8 @@ export interface GIVpowerGgivStakingConfig extends SimplePoolStakingConfig {
 	GARDEN_ADDRESS: Address;
 }
 
+export interface SepoliaNetworkConfig extends NetworkConfig {}
+
 export interface MainnetNetworkConfig extends NetworkConfig {
 	subgraphAddress: string;
 	TOKEN_DISTRO_ADDRESS: Address;
@@ -144,6 +146,7 @@ export interface MainnetNetworkConfig extends NetworkConfig {
 	tokenAddressOnUniswapV2: Address;
 	uniswapV2Subgraph: string;
 }
+
 export interface GnosisNetworkConfig extends NetworkConfig {
 	subgraphAddress: string;
 	TOKEN_DISTRO_ADDRESS: Address;
@@ -213,7 +216,7 @@ export interface EnvConfig {
 	CLASSIC_NETWORK_NUMBER: number;
 	ZKEVM_NETWORK_NUMBER: number;
 	STELLAR_NETWORK_NUMBER: number;
-	MAINNET_CONFIG: MainnetNetworkConfig;
+	MAINNET_CONFIG: MainnetNetworkConfig | SepoliaNetworkConfig;
 	GNOSIS_CONFIG: GnosisNetworkConfig;
 	POLYGON_CONFIG: NetworkConfig;
 	OPTIMISM_CONFIG: OptimismNetworkConfig;

@@ -604,6 +604,10 @@
 	"label.look_for_the_share_and_get_rewarded": "Look for the 'Share & get rewarded' button to generate links to specific pages across the Giveth site.",
 	"label.make_a_recurring_donation_with": "Make a recurring donation with ",
 	"label.make_it_anonymous": "Make it anonymous",
+	"label.view_all_projects": "View all projects",
+	"label.sanctioned_wallet": "Sanctioned Address Detected !!",
+	"label.sanctioned_wallet_message_part1": "This address has been found on the USA",
+	"label.sanctioned_wallet_message_part2": "sanctioned list.\nUnfortunately, Endaoment does not permit addresses on the\nOFAC sanction list to donate to projects delivered by\nEndaoment. Check out another project to donate to. ",
 	"label.make_it_easier_for_donors_to_find_your_project": "Make it easier for donors to find your project by providing a location.",
 	"label.make_it_unique_and_memorable_to_stand_out_from_other_projects": "Make it unique and memorable to stand out from other projects.",
 	"label.make_sure_your_description_aligns_with_our": "Make sure your description aligns with our ",
@@ -673,7 +677,7 @@
 	"label.no_results_found": "No results found",
 	"label.number_of_givers": "# of givers",
 	"label.number_of_rounds": "{rounds} Rounds",
-	"label.number_of_unique_donors": "# of Donations",
+	"label.number_of_donations": "# of Donations",
 	"label.number_projects": "{count, plural, one { Project} other { Projects} }",
 	"label.oh_no": "Oh no!",
 	"label.okay_it_sounds_like_your_project_is_not_a_non_profit": "Okay, it sounds like your project is not a registered non-profit. Please tell us a bit about how your organization is structured.",
@@ -752,7 +756,7 @@
 	"label.projects_count": "{count, plural, one { Project} other { Projects} }",
 	"label.projects_on_giveth": "Projects on Giveth",
 	"label.project_boosted": "Project boosted!",
-	"label.project_by": "PROJECT BY",
+	"label.project_by": "DELIVERED BY",
 	"label.project_contact": "Project contact",
 	"label.project_details": "Project Details",
 	"label.project_features": "Project features",
@@ -1686,5 +1690,7 @@
 	"label.sign_gnosis_safe": "Sign Gnosis Safe",
 	"label.you_need_to_execute_the_pending_multisig": "You'll need to execute the pending Multisig transaction to complete your log-in to Giveth & proceed to this area",
 	"label.sign_a_message_with_your_safe_signer": "Sign a message with your Safe signer address to continue the log in process",
-	"label.this_is_necessary_to_create_projects": "This is necessary to be able to create projects, manage your profile or use GIVpower."
+	"label.this_is_necessary_to_create_projects": "This is necessary to be able to create projects, manage your profile or use GIVpower.",
+	"label.project_card_endaoment_title": "This project is delivered by",
+	"label.project_card_endaoment_subtext": "This project is delivered by Endaoment, which handles the conversion and delivery of fiat funding to this project. Endaoment charges a 1.5% fee on donations which is processed outside of the Giveth Dapp."
 }
