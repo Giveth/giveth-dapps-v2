@@ -45,7 +45,7 @@ export const QFDonorEligibilityCard = () => {
 	const { passportState, passportScore, qfEligibilityState, currentRound } =
 		info;
 
-	const MBDEligibile =
+	const MBDEligible =
 		qfEligibilityState === EQFElegibilityState.ELIGIBLE &&
 		passportState !== EPassportState.SIGNED &&
 		passportState !== EPassportState.LOADING_SCORE;
@@ -68,7 +68,7 @@ export const QFDonorEligibilityCard = () => {
 			EQFElegibilityState.ERROR,
 			EQFElegibilityState.LOADING,
 		].includes(qfEligibilityState) &&
-		!MBDEligibile;
+		!MBDEligible;
 
 	const checkEligibilityDisabled = [
 		EQFElegibilityState.LOADING,
@@ -102,7 +102,7 @@ export const QFDonorEligibilityCard = () => {
 					</>
 				);
 			case EQFElegibilityState.ELIGIBLE:
-				return MBDEligibile ? (
+				return MBDEligible ? (
 					<>
 						{formatMessage({ id: 'label.you_are_all_set' })}
 						<IconVerifiedBadge size={24} />
@@ -227,7 +227,7 @@ export const QFDonorEligibilityCard = () => {
 						{[
 							EQFElegibilityState.CHECK_ELIGIBILITY,
 							EQFElegibilityState.PROCESSING,
-						].includes(qfEligibilityState) || MBDEligibile ? (
+						].includes(qfEligibilityState) || MBDEligible ? (
 							<Button
 								label={formatMessage({
 									id: 'profile.qf_donor_eligibility.label.check_eligibility',
