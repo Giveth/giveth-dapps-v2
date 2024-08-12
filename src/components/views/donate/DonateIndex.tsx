@@ -164,9 +164,9 @@ const DonateIndex: FC = () => {
 								<QRDonationDetails />
 							) : (
 								<>
-                  <EndaomentProjectsInfo
-                    orgLabel={project?.organization?.label}
-                  />
+									<EndaomentProjectsInfo
+										orgLabel={project?.organization?.label}
+									/>
 									<ImageWrapper>
 										<ProjectCardImage
 											image={project.image}
