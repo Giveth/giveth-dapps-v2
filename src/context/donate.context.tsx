@@ -29,6 +29,7 @@ interface ISuccessDonation {
 	givBackEligible?: boolean;
 	excludeFromQF?: boolean;
 	isRecurring?: boolean;
+	amountInUSD?: number;
 }
 
 interface IDonateContext {

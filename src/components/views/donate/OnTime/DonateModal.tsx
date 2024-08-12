@@ -98,6 +98,7 @@ const DonateModal: FC<IDonateModalProps> = props => {
 	const [failedModalType, setFailedModalType] =
 		useState<EDonationFailedType>();
 	const [isSanctioned, setIsSanctioned] = useState<boolean>(false);
+	const [donationAmountInUSD, setDonationAmountInUSD] = useState<number | undefined>(undefined);
 
 	const categories = project?.categories || [];
 
@@ -145,6 +146,7 @@ const DonateModal: FC<IDonateModalProps> = props => {
 	);
 	const projectDonationPrice = tokenPrice && tokenPrice * projectDonation;
 	const givethDonationPrice = tokenPrice && givethDonation * tokenPrice;
+	//setDonationAmountInUSD(projectDonationPrice);
 
 	// this function is used to validate the token and check if the wallet is sanctioned
 	const validateTokenThenDonate = async () => {
@@ -205,6 +207,7 @@ const DonateModal: FC<IDonateModalProps> = props => {
 				txHash: txHashArray,
 				givBackEligible,
 				chainId,
+				amountInUSD: projectDonationPrice,
 			});
 		}, 4000);
 	};

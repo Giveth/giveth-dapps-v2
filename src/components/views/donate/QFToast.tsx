@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 import styled from 'styled-components';
 import {
 	Button,
@@ -8,10 +8,19 @@ import {
 	P,
 	semanticColors,
 	FlexCenter,
+	brandColors,
 } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
 import { EQFElegibilityState, usePassport } from '@/hooks/usePassport';
 import PassportModal from '@/components/modals/PassportModal';
+import {
+	getActiveRound,
+} from '@/helpers/qf';
+import { useDonateData } from '@/context/donate.context';
+import Link from 'next/link';
+import ExternalLink from '@/components/ExternalLink';
+import { slugToProjectView } from '@/lib/routeCreators';
+import Routes from '@/lib/constants/Routes';
 
 const QFToast = () => {
 	const { formatMessage, locale } = useIntl();
@@ -20,8 +29,15 @@ const QFToast = () => {
 	const { qfEligibilityState, passportState, passportScore, currentRound } =
 		info;
 	const [showModal, setShowModal] = useState<boolean>(false);
+	const { successDonation } = useDonateData();
+	const QFRoundArray = currentRound?[currentRound!]:undefined;
+	const { activeStartedRound } = getActiveRound(QFRoundArray);
+	const {
+		minimumValidUsdValue
+	} = activeStartedRound || {};
 
 	const isEligible = qfEligibilityState === EQFElegibilityState.ELIGIBLE;
+	const isQFEligible = minimumValidUsdValue && successDonation?.amountInUSD && (successDonation?.amountInUSD >= minimumValidUsdValue);
 
 	const color = isEligible
 		? semanticColors.jade['500']
@@ -43,6 +59,7 @@ const QFToast = () => {
 
 	if (isEligible) {
 		description =
+			isQFEligible ?
 			formatMessage({
 				id: 'page.donate.passport_toast.description.eligible',
 			}) +
@@ -56,7 +73,11 @@ const QFToast = () => {
 			endDate +
 			formatMessage({
 				id: 'page.donate.passport_toast.description.eligible_2',
-			});
+			}): 
+			<>
+				{'Make sure your donations get matched! Verify your '}
+				<ExternalLink color={brandColors.pinky[500]} href={Routes.Home + 'account'} title="QF eligibility" /> {' before '} {endDate}
+			</>
 	} else {
 		description = (
 			<>
