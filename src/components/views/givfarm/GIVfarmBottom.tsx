@@ -9,7 +9,7 @@ import {
 import { useIntl } from 'react-intl';
 import { useAccount } from 'wagmi';
 import config from '@/configuration';
-import { NetworkConfig, SimplePoolStakingConfig } from "@/types/config";
+import { NetworkConfig, SimplePoolStakingConfig } from '@/types/config';
 import {
 	PoolRow,
 	ContractRow,
@@ -36,7 +36,7 @@ const renderPool = (pool: SimplePoolStakingConfig, id: number) => (
 	</Col>
 );
 
-const getPoolsInfoByChainID = (chainId?: number):NetworkConfig[] => {
+const getPoolsInfoByChainID = (chainId?: number): NetworkConfig[] => {
 	switch (chainId) {
 		case config.GNOSIS_NETWORK_NUMBER:
 			return [
