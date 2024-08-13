@@ -225,8 +225,7 @@ const ProjectCard = (props: IProjectCard) => {
 							<PriceText>
 								{formatDonation(
 									(activeStartedRound
-										? sumDonationValueUsdForActiveQfRound! +
-											recurringDonationSumInQF
+										? sumDonationValueUsdForActiveQfRound // TODO: add recurring donation amount
 										: totalDonations) || 0,
 									'$',
 									locale,
