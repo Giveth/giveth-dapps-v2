@@ -36,34 +36,56 @@ const renderPool = (pool: SimplePoolStakingConfig, id: number) => (
 	</Col>
 );
 
+const getPoolsInfoByChainID = (chainId?: number) => {
+	switch (chainId) {
+		case config.GNOSIS_NETWORK_NUMBER:
+			return [
+				config.GNOSIS_CONFIG.GIVPOWER,
+				config.OPTIMISM_CONFIG.GIVPOWER,
+				config.ZKEVM_CONFIG.GIVPOWER,
+				...config.GNOSIS_CONFIG.pools,
+				...config.GNOSIS_CONFIG.regenPools,
+				...(config.MAINNET_CONFIG.pools || []),
+				...(config.MAINNET_CONFIG.regenPools || []),
+			];
+
+		case config.OPTIMISM_NETWORK_NUMBER:
+			return [
+				config.OPTIMISM_CONFIG.GIVPOWER,
+				config.GNOSIS_CONFIG.GIVPOWER,
+				config.ZKEVM_CONFIG.GIVPOWER,
+
+				...config.GNOSIS_CONFIG.pools,
+				...config.GNOSIS_CONFIG.regenPools,
+				...(config.MAINNET_CONFIG.pools || []),
+				...(config.MAINNET_CONFIG.regenPools || []),
+			];
+		case config.ZKEVM_NETWORK_NUMBER:
+			return [
+				config.ZKEVM_CONFIG.GIVPOWER,
+				config.GNOSIS_CONFIG.GIVPOWER,
+				config.OPTIMISM_CONFIG.GIVPOWER,
+				...config.GNOSIS_CONFIG.pools,
+				...config.GNOSIS_CONFIG.regenPools,
+				...(config.MAINNET_CONFIG.pools || []),
+				...(config.MAINNET_CONFIG.regenPools || []),
+			];
+
+		default:
+			return [
+				config.ZKEVM_CONFIG.GIVPOWER,
+				config.GNOSIS_CONFIG.GIVPOWER,
+				config.OPTIMISM_CONFIG.GIVPOWER,
+				...(config.MAINNET_CONFIG.pools || []),
+				...(config.MAINNET_CONFIG.regenPools || []),
+				...config.GNOSIS_CONFIG.pools,
+				...config.GNOSIS_CONFIG.regenPools,
+			];
+	}
+};
+
 const renderPools = (chainId?: number, showArchivedPools?: boolean) => {
-	const pools =
-		chainId === config.GNOSIS_NETWORK_NUMBER
-			? [
-					config.GNOSIS_CONFIG.GIVPOWER,
-					config.OPTIMISM_CONFIG.GIVPOWER,
-					...config.GNOSIS_CONFIG.pools,
-					...config.GNOSIS_CONFIG.regenPools,
-					...(config.MAINNET_CONFIG.pools || []),
-					...(config.MAINNET_CONFIG.regenPools || []),
-				]
-			: chainId === config.OPTIMISM_NETWORK_NUMBER
-				? [
-						config.OPTIMISM_CONFIG.GIVPOWER,
-						config.GNOSIS_CONFIG.GIVPOWER,
-						...config.GNOSIS_CONFIG.pools,
-						...config.GNOSIS_CONFIG.regenPools,
-						...(config.MAINNET_CONFIG.pools || []),
-						...(config.MAINNET_CONFIG.regenPools || []),
-					]
-				: [
-						config.GNOSIS_CONFIG.GIVPOWER,
-						config.OPTIMISM_CONFIG.GIVPOWER,
-						...(config.MAINNET_CONFIG.pools || []),
-						...(config.MAINNET_CONFIG.regenPools || []),
-						...config.GNOSIS_CONFIG.pools,
-						...config.GNOSIS_CONFIG.regenPools,
-					];
+	const pools = getPoolsInfoByChainID(chainId);
 
 	const now = getNowUnixMS();
 	const filteredPools = [];
