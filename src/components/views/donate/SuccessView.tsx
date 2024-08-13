@@ -8,7 +8,6 @@ import {
 	Row,
 	neutralColors,
 	H6,
-	B,
 } from '@giveth/ui-design-system';
 import React, { FC, useEffect, useState } from 'react';
 import styled from 'styled-components';
@@ -111,7 +110,6 @@ export const SuccessView: FC = () => {
 						<EndaomentProjectsInfo
 							orgLabel={project?.organization?.label}
 						/>
-						<B></B>
 						<ImageWrapper>
 							<ProjectCardImage image={project.image} />
 						</ImageWrapper>
