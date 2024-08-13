@@ -70,18 +70,17 @@ export const DonatePageProjectDescription: FC<
 				</P>
 			)}
 			<DescriptionSummary>{descriptionSummary}</DescriptionSummary>
-			{(project?.organization?.label === ORGANIZATION.endaoment) ?
-				null:
+			{project?.organization?.label === ORGANIZATION.endaoment ? null : (
 				<DonateDescription $flexDirection='column' gap='8px'>
 					<B>
 						{formatMessage({
-						id: 'component.donation_section.100_to_the_project',
+							id: 'component.donation_section.100_to_the_project',
 						})}
 					</B>
 					<B></B>
 					<P>
 						{formatMessage({
-						id: 'component.donation_section.desc',
+							id: 'component.donation_section.desc',
 						})}
 					</P>
 					<a
@@ -100,7 +99,7 @@ export const DonatePageProjectDescription: FC<
 						</LearnLink>
 					</a>
 				</DonateDescription>
-			}
+			)}
 		</DonationSectionWrapper>
 	);
 };

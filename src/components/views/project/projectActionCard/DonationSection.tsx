@@ -68,8 +68,7 @@ export const DonateSection: FC<IDonateSectionProps> = ({ projectData }) => {
 					</NoFund>
 				</DonateInfo>
 			)}
-			{(project?.organization?.label === ORGANIZATION.endaoment) ?
-				null:
+			{project?.organization?.label === ORGANIZATION.endaoment ? null : (
 				<DonateDescription $flexDirection='column' gap='8px'>
 					<B>
 						{formatMessage({
@@ -97,7 +96,7 @@ export const DonateSection: FC<IDonateSectionProps> = ({ projectData }) => {
 						</LearnLink>
 					</a>
 				</DonateDescription>
-			}
+			)}
 		</DonationSectionWrapper>
 	);
 };
