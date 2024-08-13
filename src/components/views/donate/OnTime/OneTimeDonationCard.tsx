@@ -137,6 +137,9 @@ const CryptoDonation: FC<{
 
 	const isOnEligibleNetworks =
 		networkId && activeStartedRound?.eligibleNetworks?.includes(networkId);
+	const hasStellarAddress = addresses?.some(
+		address => address.chainType === ChainType.STELLAR,
+	);
 
 	useEffect(() => {
 		if (
@@ -353,12 +356,14 @@ const CryptoDonation: FC<{
 				/>
 			)}
 			<SaveGasFees acceptedChains={acceptedChains} />
-			<QRToastLink onClick={() => setIsQRDonation(true)}>
-				{config.NETWORKS_CONFIG[ChainType.STELLAR]?.chainLogo(32)}
-				{formatMessage({
-					id: 'label.try_donating_wuth_stellar',
-				})}
-			</QRToastLink>
+			{hasStellarAddress && (
+				<QRToastLink onClick={() => setIsQRDonation(true)}>
+					{config.NETWORKS_CONFIG[ChainType.STELLAR]?.chainLogo(32)}
+					{formatMessage({
+						id: 'label.try_donating_wuth_stellar',
+					})}
+				</QRToastLink>
+			)}
 			<Flex $flexDirection='column' gap='8px'>
 				<InputWrapper>
 					<SelectTokenWrapper
