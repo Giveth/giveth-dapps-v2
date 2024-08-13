@@ -17,8 +17,8 @@ import { ChainType } from '@/types/config';
 import { useUserStreams } from '@/hooks/useUserStreams';
 import { client } from '@/apollo/apolloClient';
 import { FETCH_PROJECT_BY_SLUG_DONATION } from '@/apollo/gql/gqlProjects';
-import { IProjectAcceptedToken } from '@/apollo/types/gqlTypes';
-
+import { IProjectAcceptedToken, IDraftDonation } from '@/apollo/types/gqlTypes';
+import { useQRCodeDonation, TQRStatus } from '@/hooks/useQRCodeDonation';
 export interface TxHashWithChainType {
 	txHash: string;
 	chainType: ChainType;
@@ -46,6 +46,11 @@ interface IDonateContext {
 		SetStateAction<ISelectTokenWithBalance | undefined>
 	>;
 	fetchProject: () => Promise<void>;
+	draftDonationData?: IDraftDonation;
+	fetchDraftDonation?: () => Promise<void>;
+	qrDonationStatus: TQRStatus;
+	startTimer?: (startTime: Date) => void;
+	setQRDonationStatus: Dispatch<SetStateAction<TQRStatus>>;
 }
 
 interface IProviderProps {
@@ -60,6 +65,11 @@ const DonateContext = createContext<IDonateContext>({
 	project: {} as IProject,
 	tokenStreams: {},
 	fetchProject: async () => {},
+	draftDonationData: {} as IDraftDonation,
+	fetchDraftDonation: async () => {},
+	qrDonationStatus: 'waiting',
+	startTimer: () => {},
+	setQRDonationStatus: () => {},
 });
 
 DonateContext.displayName = 'DonateContext';
@@ -105,6 +115,14 @@ export const DonateProvider: FC<IProviderProps> = ({ children, project }) => {
 
 	const { tokenStreams } = useUserStreams();
 
+	const {
+		draftDonation,
+		status,
+		retrieveDraftDonation,
+		startTimer,
+		setStatus,
+	} = useQRCodeDonation();
+
 	const hasActiveQFRound = hasActiveRound(project?.qfRounds);
 
 	return (
@@ -120,6 +138,11 @@ export const DonateProvider: FC<IProviderProps> = ({ children, project }) => {
 				setSelectedRecurringToken,
 				tokenStreams,
 				fetchProject,
+				draftDonationData: draftDonation as IDraftDonation,
+				fetchDraftDonation: retrieveDraftDonation,
+				qrDonationStatus: status,
+				startTimer,
+				setQRDonationStatus: setStatus,
 			}}
 		>
 			{children}

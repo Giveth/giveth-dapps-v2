@@ -12,7 +12,6 @@ import {
 	semanticColors,
 } from '@giveth/ui-design-system';
 // @ts-ignore
-import { captureException } from '@sentry/nextjs';
 import { Address, Chain, formatUnits, zeroAddress } from 'viem';
 import { useBalance, useEstimateFeesPerGas, useEstimateGas } from 'wagmi';
 import { setShowWelcomeModal } from '@/features/modal/modal.slice';
@@ -23,13 +22,8 @@ import config from '@/configuration';
 
 import InlineToast, { EToastType } from '@/components/toasts/InlineToast';
 import { EProjectStatus } from '@/apollo/types/gqlEnums';
-import { client } from '@/apollo/apolloClient';
-import { PROJECT_ACCEPTED_TOKENS } from '@/apollo/gql/gqlProjects';
-import { showToastError, truncateToDecimalPlaces } from '@/lib/helpers';
-import {
-	IProjectAcceptedToken,
-	IProjectAcceptedTokensGQL,
-} from '@/apollo/types/gqlTypes';
+import { truncateToDecimalPlaces } from '@/lib/helpers';
+import { IProjectAcceptedToken } from '@/apollo/types/gqlTypes';
 import { prepareTokenList } from '@/components/views/donate/helpers';
 import GIVBackToast from '@/components/views/donate/GIVBackToast';
 import { DonateWrongNetwork } from '@/components/modals/DonateWrongNetwork';
@@ -61,7 +55,10 @@ import { SelectTokenModal } from './SelectTokenModal/SelectTokenModal';
 import { Spinner } from '@/components/Spinner';
 import { useSolanaBalance } from '@/hooks/useSolanaBalance';
 
-const CryptoDonation: FC = () => {
+const CryptoDonation: FC<{
+	setIsQRDonation: (isQRDonation: boolean) => void;
+	acceptedTokens: IProjectAcceptedToken[] | undefined;
+}> = ({ acceptedTokens, setIsQRDonation }) => {
 	const {
 		chain,
 		walletChainType,
@@ -93,8 +90,6 @@ const CryptoDonation: FC = () => {
 	const [showDonateModal, setShowDonateModal] = useState(false);
 	const [showInsufficientModal, setShowInsufficientModal] = useState(false);
 	const [showChangeNetworkModal, setShowChangeNetworkModal] = useState(false);
-	const [acceptedTokens, setAcceptedTokens] =
-		useState<IProjectAcceptedToken[]>();
 	const [acceptedChains, setAcceptedChains] = useState<INetworkIdWithChain[]>(
 		[],
 	);
@@ -219,26 +214,6 @@ const CryptoDonation: FC = () => {
 	}, [networkId, acceptedTokens, walletChainType, addresses]);
 
 	useEffect(() => {
-		client
-			.query({
-				query: PROJECT_ACCEPTED_TOKENS,
-				variables: { projectId: Number(projectId) },
-				fetchPolicy: 'no-cache',
-			})
-			.then((res: IProjectAcceptedTokensGQL) => {
-				setAcceptedTokens(res.data.getProjectAcceptTokens);
-			})
-			.catch((error: unknown) => {
-				showToastError(error);
-				captureException(error, {
-					tags: {
-						section: 'Crypto Donation UseEffect',
-					},
-				});
-			});
-	}, []);
-
-	useEffect(() => {
 		setAmount(0n);
 	}, [selectedOneTimeToken, isConnected, address, networkId]);
 
@@ -348,7 +323,9 @@ const CryptoDonation: FC = () => {
 			{showChangeNetworkModal && acceptedChains && (
 				<DonateWrongNetwork
 					setShowModal={setShowChangeNetworkModal}
-					acceptedChains={acceptedChains}
+					acceptedChains={acceptedChains.filter(
+						chain => chain.chainType !== ChainType.STELLAR,
+					)}
 				/>
 			)}
 			{showInsufficientModal && (
@@ -376,6 +353,12 @@ const CryptoDonation: FC = () => {
 				/>
 			)}
 			<SaveGasFees acceptedChains={acceptedChains} />
+			<QRToastLink onClick={() => setIsQRDonation(true)}>
+				{config.NETWORKS_CONFIG[ChainType.STELLAR]?.chainLogo(32)}
+				{formatMessage({
+					id: 'label.try_donating_wuth_stellar',
+				})}
+			</QRToastLink>
 			<Flex $flexDirection='column' gap='8px'>
 				<InputWrapper>
 					<SelectTokenWrapper
@@ -569,6 +552,20 @@ export const CheckBoxContainer = styled.div`
 		margin-top: 3px;
 		margin-left: 24px;
 	}
+`;
+
+const QRToastLink = styled(Flex)`
+	cursor: pointer;
+	align-items: center;
+	gap: 12px;
+	padding-block: 8px;
+	padding-left: 16px;
+	margin-block: 16px;
+	background-color: ${semanticColors.blueSky[100]};
+	color: ${semanticColors.blueSky[700]};
+	border-radius: 8px;
+	border: 1px solid ${semanticColors.blueSky[300]};
+	font-weight: 500;
 `;
 
 export default CryptoDonation;
