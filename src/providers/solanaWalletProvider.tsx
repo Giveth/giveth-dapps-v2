@@ -8,6 +8,7 @@ import {
 	PhantomWalletAdapter,
 	SolflareWalletAdapter,
 	CoinbaseWalletAdapter,
+	TrustWalletAdapter,
 } from '@solana/wallet-adapter-wallets';
 import { WalletModalProvider } from '@solana/wallet-adapter-react-ui';
 import { BaseMessageSignerWalletAdapter } from '@solana/wallet-adapter-base';
@@ -26,10 +27,11 @@ const solanaNode =
 // Create a context for the provider
 export const SolanaCtx = createContext<any>(null);
 
-const wallets: BaseMessageSignerWalletAdapter[] = [
+const wallets: BaseMessageSignerWalletAdapter<string>[] = [
 	new PhantomWalletAdapter(),
 	new SolflareWalletAdapter({ network: solanaAdapter }),
 	new CoinbaseWalletAdapter({ network: solanaAdapter }),
+	new TrustWalletAdapter() as BaseMessageSignerWalletAdapter<string>,
 ];
 
 if (!isProduction) {

@@ -113,14 +113,8 @@ export const PassportBannerData: IData = {
 };
 
 export const PassportBanner = () => {
-	const {
-		info,
-		updateState,
-		handleSignWallet,
-		fetchUserMBDScore,
-		handleSign,
-		refreshScore,
-	} = usePassport();
+	const { info, updateState, fetchUserMBDScore, handleSign, refreshScore } =
+		usePassport();
 	const { currentRound, passportState, passportScore, qfEligibilityState } =
 		info;
 

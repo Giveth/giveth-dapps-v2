@@ -23,7 +23,8 @@ export const ArchivedQFRoundStats = () => {
 		variables: { slug: router.query.slug },
 	});
 	const { qfRoundStats } = data || {};
-	const { qfRound, uniqueDonors, allDonationsUsdValue } = qfRoundStats || {};
+	const { qfRound, donationsCount, allDonationsUsdValue } =
+		qfRoundStats || {};
 	const {
 		allocatedFund,
 		allocatedFundUSD,
@@ -62,9 +63,9 @@ export const ArchivedQFRoundStats = () => {
 				</ItemContainer>
 				<ItemContainer>
 					<ItemTitle>
-						{formatMessage({ id: 'label.number_of_unique_donors' })}
+						{formatMessage({ id: 'label.number_of_donations' })}
 					</ItemTitle>
-					<ItemValue>{uniqueDonors || '--'}</ItemValue>
+					<ItemValue>{donationsCount || '--'}</ItemValue>
 				</ItemContainer>
 			</InfoSection>
 		</Wrapper>
