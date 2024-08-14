@@ -51,6 +51,7 @@ interface IDonateContext {
 	qrDonationStatus: TQRStatus;
 	startTimer?: (startTime: Date) => void;
 	setQRDonationStatus: Dispatch<SetStateAction<TQRStatus>>;
+	draftDonationLoading?: boolean;
 }
 
 interface IProviderProps {
@@ -70,6 +71,7 @@ const DonateContext = createContext<IDonateContext>({
 	qrDonationStatus: 'waiting',
 	startTimer: () => {},
 	setQRDonationStatus: () => {},
+	draftDonationLoading: false,
 });
 
 DonateContext.displayName = 'DonateContext';
@@ -121,6 +123,7 @@ export const DonateProvider: FC<IProviderProps> = ({ children, project }) => {
 		retrieveDraftDonation,
 		startTimer,
 		setStatus,
+		loading,
 	} = useQRCodeDonation();
 
 	const hasActiveQFRound = hasActiveRound(project?.qfRounds);
@@ -143,6 +146,7 @@ export const DonateProvider: FC<IProviderProps> = ({ children, project }) => {
 				qrDonationStatus: status,
 				startTimer,
 				setQRDonationStatus: setStatus,
+				draftDonationLoading: loading,
 			}}
 		>
 			{children}

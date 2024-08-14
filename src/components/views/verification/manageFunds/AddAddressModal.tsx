@@ -13,7 +13,12 @@ import { IAddress } from '@/components/views/verification/manageFunds/ManageFund
 import SelectNetwork from '@/components/views/verification/manageFunds/SelectNetwork';
 import { ISelectedNetwork } from '@/components/views/verification/manageFunds/types';
 import config from '@/configuration';
-import { getAddressFromENS, isAddressENS, isSolanaAddress } from '@/lib/wallet';
+import {
+	getAddressFromENS,
+	isAddressENS,
+	isSolanaAddress,
+	isStellarAddress,
+} from '@/lib/wallet';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
 import { requiredOptions } from '@/lib/constants/regex';
 import { getChainName } from '@/lib/network';
@@ -40,6 +45,7 @@ const networkOptions = Object.keys(networksConfig).map(key => {
 
 export interface IAddressForm {
 	address: string;
+	memo?: string;
 	title: string;
 	network: ISelectedNetwork;
 }
@@ -68,7 +74,7 @@ const AddAddressModal: FC<IProps> = ({
 	const watchChain = watch('network');
 
 	const handleAdd = async (formData: IAddressForm) => {
-		const { address, title, network } = formData;
+		const { address, memo, title, network } = formData;
 		let _address: null | string = address;
 		if (!network.chainType) {
 			const isEns = isAddressENS(address);
@@ -82,6 +88,7 @@ const AddAddressModal: FC<IProps> = ({
 				title,
 				networkId: network.value,
 				chainType: network.chainType,
+				memo,
 			});
 		}
 		closeModal();
@@ -97,6 +104,10 @@ const AddAddressModal: FC<IProps> = ({
 		if (watchChain?.chainType === ChainType.SOLANA) {
 			if (!isSolanaAddress(address)) {
 				return 'Invalid Solana address';
+			}
+		} else if (watchChain?.chainType === ChainType.STELLAR) {
+			if (!isStellarAddress(address)) {
+				return 'Invalid Stellar address';
 			}
 		} else if (isAddressENS(address)) {
 			if (chainId !== 1) {
@@ -167,6 +178,15 @@ const AddAddressModal: FC<IProps> = ({
 						}}
 						error={errors.address}
 					/>
+					{watchChain?.chainType === ChainType.STELLAR && (
+						<Input
+							register={register}
+							registerName='memo'
+							label='Memo'
+							caption='Enter the memo for this address.'
+							maxLength={28}
+						/>
+					)}
 					<Buttons>
 						<Button
 							size='small'

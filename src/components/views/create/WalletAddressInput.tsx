@@ -180,7 +180,8 @@ const WalletAddressInput: FC<IProps> = ({
 
 	useEffect(() => {
 		//We had an issue with onBlur so when the user clicks on submit exactly after filling the address, then process of address validation began, so i changed it to this.
-		if (walletAddressValue === prevAddress) return;
+		if (walletAddressValue === prevAddress)
+			setError({ ...error, message: '' });
 		addressValidation(walletAddressValue).then(res => {
 			if (res === true) {
 				setError({ ...error, message: '' });
@@ -267,7 +268,7 @@ const WalletAddressInput: FC<IProps> = ({
 				/>
 			)}
 			{isStellarChain ? (
-				<InlineToast
+				<StyledInlineToast
 					type={EToastType.Info}
 					message={formatMessage({
 						id: 'label.be_carefull_some_exchanges',
@@ -345,6 +346,10 @@ const ButtonWrapper = styled.div`
 	${mediaQueries.tablet} {
 		bottom: 20px;
 	}
+`;
+
+const StyledInlineToast = styled(InlineToast)`
+	padding: 16px 14px 16px 16px;
 `;
 
 export default WalletAddressInput;

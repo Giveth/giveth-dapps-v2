@@ -67,6 +67,7 @@ const DonateIndex: FC = () => {
 	const { chainId } = useAccount();
 
 	const [showQRCode, setShowQRCode] = React.useState(false);
+	const [stopTimer, setStopTimer] = React.useState<void | (() => void)>();
 
 	useEffect(() => {
 		dispatch(setShowHeader(false));
@@ -121,8 +122,14 @@ const DonateIndex: FC = () => {
 
 		setQRDonationStatus('waiting');
 		const expiresAt = await renewExpirationDate(draftDonationData?.id);
-		expiresAt && startTimer?.(new Date(expiresAt));
+		const stopTimerFun = startTimer?.(new Date(expiresAt!));
+		setStopTimer(() => stopTimerFun);
 	};
+
+	useEffect(() => {
+		if (!showQRCode) stopTimer?.();
+		else setStopTimer(() => undefined);
+	}, [showQRCode]);
 
 	return successDonation ? (
 		<>

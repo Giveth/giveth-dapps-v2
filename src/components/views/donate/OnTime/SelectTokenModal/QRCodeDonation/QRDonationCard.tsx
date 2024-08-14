@@ -55,6 +55,7 @@ export const QRDonationCard: FC<QRDonationCardProps> = ({
 		setQRDonationStatus,
 		qrDonationStatus,
 		draftDonationData,
+		draftDonationLoading,
 	} = useDonateData();
 	const { addresses, id } = project;
 
@@ -184,9 +185,7 @@ export const QRDonationCard: FC<QRDonationCardProps> = ({
 							<P>
 								{formatMessage({ id: 'label.donating_to' })}{' '}
 								<strong style={{ textTransform: 'capitalize' }}>
-									{formatMessage({
-										id: 'label.the_community_of_makers',
-									})}
+									{project.title || '--'}
 								</strong>
 							</P>
 							<B>{formatAmoutToDisplay(amount)}</B>
@@ -226,6 +225,7 @@ export const QRDonationCard: FC<QRDonationCardProps> = ({
 					qrDonationStatus={qrDonationStatus}
 					draftDonationData={draftDonationData}
 					projectAddress={projectAddress}
+					draftDonationLoading={draftDonationLoading}
 				/>
 			)}
 		</>

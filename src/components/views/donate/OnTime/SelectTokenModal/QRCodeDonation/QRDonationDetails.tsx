@@ -39,6 +39,7 @@ const QRDonationDetails = () => {
 	const { title } = project;
 
 	const convertToUSD = (amount: number) => {
+		if (!amount) return '--';
 		if (!tokenPrice) return '0.00';
 
 		const _tokenPrice = Math.floor(tokenPrice * 100) / 100;
@@ -57,8 +58,14 @@ const QRDonationDetails = () => {
 	};
 
 	useEffect(() => {
-		draftDonationData?.expiresAt &&
-			startTimer?.(new Date(draftDonationData?.expiresAt));
+		let stopTimer: void | (() => void);
+		if (draftDonationData?.expiresAt) {
+			stopTimer = startTimer?.(new Date(draftDonationData?.expiresAt));
+		}
+
+		return () => {
+			stopTimer?.();
+		};
 	}, [draftDonationData?.expiresAt]);
 
 	useEffect(() => {
@@ -125,7 +132,7 @@ const QRDonationDetails = () => {
 				</Flex>
 				<DonationDetails>
 					<Flex $alignItems='center' gap='8px'>
-						<B>{draftDonationData?.amount}</B>
+						<B>{draftDonationData?.amount ?? '--'}</B>
 						<UsdAmountCard>
 							$ {convertToUSD(draftDonationData?.amount!)}
 						</UsdAmountCard>
@@ -149,7 +156,7 @@ const QRDonationDetails = () => {
 							id: 'label.donating_to',
 						})}
 					</P>
-					<B>{title}</B>
+					<B>{title || '--'}</B>
 				</DonationDetails>
 				<Hr />
 				<Flex $justifyContent='space-between'>
@@ -209,9 +216,9 @@ const Timer = styled(B)`
 
 const Note = styled(Flex)`
 	align-items: center;
-	margin-top: 20px;
+	padding: 8px 4px;
 	color: ${semanticColors.blueSky[700]};
-	gap: 8px;
+	gap: 16px;
 `;
 
 const DonationStatus = styled(Flex)`
