@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import QRCode from 'qrcode';
-import { useIntl } from 'react-intl';
 import { client } from '@/apollo/apolloClient';
 import {
 	CREATE_DRAFT_DONATION,

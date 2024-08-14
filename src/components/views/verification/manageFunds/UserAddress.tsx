@@ -18,7 +18,11 @@ const UserAddress: FC<IProps> = ({ address, remove }) => {
 		<Container>
 			<Input
 				disabled
-				value={chainType === ChainType.STELLAR ? walletAddress?.toUpperCase() : walletAddress?.toLowerCase()}
+				value={
+					chainType === ChainType.STELLAR
+						? walletAddress?.toUpperCase()
+						: walletAddress?.toLowerCase()
+				}
 				label={title + ' - ' + getChainName(networkId, chainType)}
 				name='walletAddress'
 			/>
