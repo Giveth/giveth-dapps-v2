@@ -49,6 +49,7 @@ const SEPT_8TH_2022 = 1662595200000;
 
 const GNOSIS_GIV_TOKEN_ADDRESS = '0x83a8eea6427985C523a0c4d9d3E62C051B6580d3';
 const OPTIMISM_GIV_TOKEN_ADDRESS = '0x2f2c819210191750F2E11F7CfC5664a0eB4fd5e6';
+const ZKEVM_GIV_TOKEN_ADDRESS = '0xa77390562986F5d08F5aECF5D3Fb82BD16B44548';
 
 const MAINNET_NETWORK_NUMBER = sepolia.id; // sepolia
 const GNOSIS_NETWORK_NUMBER = gnosis.id; // xDAI
@@ -433,6 +434,23 @@ const config: EnvConfig = {
 			// Keep it empty for automatic configuration
 		},
 		chainLogo: (logoSize?: number) => <IconZKEVM size={logoSize} />,
+
+		subgraphAddress: process.env.NEXT_PUBLIC_SUBGRAPH_ZKEVM,
+		GIV_TOKEN_ADDRESS: ZKEVM_GIV_TOKEN_ADDRESS,
+		GIV_BUY_LINK:
+			'https://app.uniswap.org/#/swap?chain=optimism&outputCurrency=0xc916Ce4025Cb479d9BA9D798A80094a449667F5D',
+		tokenAddressOnUniswapV2: '0x4f4F9b8D5B4d0Dc10506e5551B0513B61fD59e75',
+		TOKEN_DISTRO_ADDRESS: '0x2Df3e67Be4e441Cddd2d29c3d41DFd7D516f18e6',
+		GIVPOWER: {
+			network: ZKEVM_NETWORK_NUMBER,
+			LM_ADDRESS: '0x7E9f30A74fCDf035018bc007f9930aA171863E33',
+			POOL_ADDRESS: ZKEVM_GIV_TOKEN_ADDRESS,
+			type: StakingType.GIV_UNIPOOL_LM,
+			platform: StakingPlatform.GIVETH,
+			title: 'GIV',
+			description: '100% GIV',
+			unit: 'GIV',
+		},
 	},
 
 	CLASSIC_CONFIG: {
