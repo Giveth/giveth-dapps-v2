@@ -24,6 +24,7 @@ export interface IAddress {
 	title: string;
 	networkId: number;
 	chainType?: ChainType;
+	memo?: string;
 }
 
 const ManageFundsIndex = () => {

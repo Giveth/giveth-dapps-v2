@@ -17,6 +17,7 @@ import { ChainType } from '@/types/config';
 import CopyConatainer from './CopyConatainer';
 import InlineToast, { EToastType } from '@/components/toasts/InlineToast';
 import { IWalletAddress } from '@/apollo/types/types';
+import { Spinner } from '@/components/Spinner';
 
 interface IQRDonationCardContentProps {
 	tokenData?: IProjectAcceptedToken;
@@ -25,6 +26,7 @@ interface IQRDonationCardContentProps {
 	qrDonationStatus?: string;
 	draftDonationData?: IDraftDonation;
 	projectAddress?: IWalletAddress;
+	draftDonationLoading?: boolean;
 }
 
 const ImageComponent = ({
@@ -59,7 +61,18 @@ const ImageComponent = ({
 			/>
 		</ImageWrapper>
 	) : (
-		<P>QR code is loading...</P>
+		<Flex
+			$justifyContent='center'
+			$alignItems='center'
+			style={{ marginBlock: '2rem' }}
+		>
+			<InlineToast
+				type={EToastType.Error}
+				message={formatMessage({
+					id: 'label.qr_code_error',
+				})}
+			/>
+		</Flex>
 	);
 };
 
@@ -70,8 +83,21 @@ const QRDonationCardContent: FC<IQRDonationCardContentProps> = ({
 	qrDonationStatus,
 	draftDonationData,
 	projectAddress,
+	draftDonationLoading,
 }) => {
 	const { formatMessage } = useIntl();
+
+	if (draftDonationLoading) {
+		return (
+			<Flex
+				$justifyContent='center'
+				$alignItems='center'
+				style={{ marginBlock: '3rem' }}
+			>
+				<Spinner />
+			</Flex>
+		);
+	}
 
 	return (
 		<>
@@ -82,8 +108,11 @@ const QRDonationCardContent: FC<IQRDonationCardContentProps> = ({
 					})}
 				</P>
 				<AmountWrapper>
-					<B>{amount}</B>
-					<UsdAmountCard>$ {usdAmount}</UsdAmountCard>
+					<B>{amount ?? '--'}</B>
+					<UsdAmountCard>
+						{' '}
+						{usdAmount ? `$ ${usdAmount}` : '--'}
+					</UsdAmountCard>
 					<IconArrowRight size={20} />
 					<TokenIcon symbol={tokenData?.symbol} size={32} />
 					<TokenSymbol>
@@ -93,27 +122,31 @@ const QRDonationCardContent: FC<IQRDonationCardContentProps> = ({
 				</AmountWrapper>
 			</DonationAmountCard>
 			<QRDataWrapper>
-				<P>
+				<B>
 					{formatMessage({
 						id: 'label.scan_to_donate',
 					})}
-				</P>
+				</B>
 				<ImageComponent
 					dataUrl={draftDonationData?.qrCodeDataUrl ?? ''}
 					isExpired={qrDonationStatus === 'expired'}
 				/>
-				<P>
+				<B>
 					{formatMessage({
 						id: 'label.project_address',
 					})}
-				</P>
+				</B>
 				<CopyConatainer text={projectAddress?.address ?? ''} />
-				<P>
-					{formatMessage({
-						id: 'label.copy_the_mnemo_to_use_in_your_app',
-					})}
-				</P>
-				<CopyConatainer text={projectAddress?.memo ?? ''} />
+				{projectAddress?.memo && (
+					<>
+						<B>
+							{formatMessage({
+								id: 'label.copy_the_mnemo_to_use_in_your_app',
+							})}
+						</B>
+						<CopyConatainer text={projectAddress.memo ?? ''} />
+					</>
+				)}
 			</QRDataWrapper>
 		</>
 	);
@@ -121,10 +154,11 @@ const QRDonationCardContent: FC<IQRDonationCardContentProps> = ({
 
 const DonationAmountCard = styled(Flex)`
 	background-color: ${neutralColors.gray[200]};
+	border: 1px solid ${neutralColors.gray[700]};
 	justify-content: space-between;
 	align-items: center;
-	border-radius: 1rem;
-	padding: 1rem;
+	border-radius: 8px;
+	padding: 10px 16px;
 	margin-top: 1rem;
 	width: 100%;
 `;

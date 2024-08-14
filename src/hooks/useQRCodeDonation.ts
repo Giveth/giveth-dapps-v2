@@ -16,13 +16,13 @@ import { useDonateData } from '@/context/donate.context';
 export type TQRStatus = 'waiting' | 'failed' | 'success' | 'expired';
 
 export const useQRCodeDonation = () => {
-	const { locale } = useIntl();
 	const { project } = useDonateData();
 
 	const [draftDonation, setDraftDonation] = useState<IDraftDonation | null>(
 		null,
 	);
 	const [status, setStatus] = useState<TQRStatus>('waiting');
+	const [loading, setLoading] = useState(false);
 
 	const generateStellarPaymentQRCode = async (
 		toWalletAddress: string,
@@ -31,7 +31,7 @@ export const useQRCodeDonation = () => {
 	) => {
 		const formattedAddress = toWalletAddress.toUpperCase();
 
-		const paymentData = `web+stellar:pay?destination=${formattedAddress}&amount=${amount}&memo=${memo}`;
+		const paymentData = `stellar:${formattedAddress}?amount=${amount}&memo=${memo}`;
 
 		try {
 			// Generate the QR code as a data URL
@@ -107,11 +107,15 @@ export const useQRCodeDonation = () => {
 		};
 
 		try {
+			setLoading(true);
 			const draftDonationId = localStorage.getItem(
 				StorageLabel.DRAFT_DONATION,
 			);
 
-			if (!draftDonationId) return setDraftDonation(null);
+			if (!draftDonationId) {
+				setDraftDonation(null);
+				return setLoading(false);
+			}
 
 			const {
 				data: { getDraftDonationById },
@@ -123,9 +127,11 @@ export const useQRCodeDonation = () => {
 
 			setStatus(statusMap[getDraftDonationById.status]);
 			setDraftDonation(getDraftDonationById);
+			setLoading(false);
 		} catch (error: any) {
 			console.error('Error retrieving draft donation', error);
 			setDraftDonation(null);
+			setLoading(false);
 		}
 	};
 
@@ -216,10 +222,16 @@ export const useQRCodeDonation = () => {
 
 		updateTimer();
 		timerInterval = setInterval(updateTimer, 1000);
+
+		// Return a function to stop the timer
+		return function stopTimer() {
+			clearInterval(timerInterval);
+		};
 	}
 
 	return {
 		status,
+		loading,
 		draftDonation,
 		setStatus,
 		startTimer,

@@ -161,6 +161,14 @@ export const AddNewAddress: FC<IAddNewAddress> = ({
 					message={errors.address?.message as string}
 				/>
 			)}
+			{isStellarChain && (
+				<StyledInlineToast
+					type={EToastType.Info}
+					message={formatMessage({
+						id: 'label.be_carefull_some_exchanges',
+					})}
+				/>
+			)}
 			<StyledButton
 				size='small'
 				label='SAVE ADDRESS'
@@ -179,4 +187,8 @@ const StyledInput = styled(Input)`
 const StyledButton = styled(Button)`
 	margin-top: 24px;
 	margin-left: auto;
+`;
+
+const StyledInlineToast = styled(InlineToast)`
+	padding: 16px 14px 16px 16px;
 `;
