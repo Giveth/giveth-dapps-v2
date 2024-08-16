@@ -24,7 +24,10 @@ import InlineToast, { EToastType } from '@/components/toasts/InlineToast';
 import { EProjectStatus } from '@/apollo/types/gqlEnums';
 import { truncateToDecimalPlaces } from '@/lib/helpers';
 import { IProjectAcceptedToken } from '@/apollo/types/gqlTypes';
-import { prepareTokenList } from '@/components/views/donate/helpers';
+import {
+	calcDonationShare,
+	prepareTokenList,
+} from '@/components/views/donate/helpers';
 import GIVBackToast from '@/components/views/donate/GIVBackToast';
 import { DonateWrongNetwork } from '@/components/modals/DonateWrongNetwork';
 import { useAppDispatch, useAppSelector } from '@/features/hooks';
@@ -315,6 +318,12 @@ const CryptoDonation: FC<{
 		);
 	}, [gasfee, tokenDecimals, selectedOneTimeToken?.symbol, formatMessage]);
 
+	const { givethDonation: givethDonationAmount } = calcDonationShare(
+		amount,
+		donationToGiveth,
+		selectedOneTimeToken?.decimals ?? 18,
+	);
+
 	return (
 		<MainContainer>
 			{showQFModal && (
@@ -342,6 +351,7 @@ const CryptoDonation: FC<{
 					token={selectedOneTimeToken}
 					amount={amount}
 					donationToGiveth={donationToGiveth}
+					givethDonationAmount={givethDonationAmount}
 					anonymous={anonymous}
 					givBackEligible={
 						projectIsGivBackEligible &&
@@ -442,6 +452,7 @@ const CryptoDonation: FC<{
 				<DonateToGiveth
 					setDonationToGiveth={setDonationToGiveth}
 					donationToGiveth={donationToGiveth}
+					givethDonationAmount={givethDonationAmount}
 					title={
 						formatMessage({ id: 'label.donation_to' }) + ' Giveth'
 					}
