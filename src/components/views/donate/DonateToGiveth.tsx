@@ -18,7 +18,7 @@ import CheckBox from '@/components/Checkbox';
 
 interface IDonateToGiveth {
 	donationToGiveth: number;
-	givethDonationAmount: number;
+	givethDonationAmount?: number;
 	setDonationToGiveth: (donationToGiveth: number) => void;
 	title: string;
 }
@@ -44,7 +44,11 @@ const DonateToGiveth: FC<IDonateToGiveth> = ({
 		setDonationToGiveth(e ? 0 : 5);
 	};
 
-	donationToGiveth = givethDonationAmount === 0 ? 0 : donationToGiveth;
+	// If givethDonationAmount props provided check if it's 0 and set donationToGiveth to 0
+	// because we disabled percetange amount for minimal allowed main donation amount
+	if (givethDonationAmount !== undefined) {
+		donationToGiveth = givethDonationAmount === 0 ? 0 : donationToGiveth;
+	}
 
 	return (
 		<Container>

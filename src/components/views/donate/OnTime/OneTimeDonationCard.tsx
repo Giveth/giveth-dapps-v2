@@ -318,6 +318,9 @@ const CryptoDonation: FC<{
 		);
 	}, [gasfee, tokenDecimals, selectedOneTimeToken?.symbol, formatMessage]);
 
+	// We need givethDonationAmount here because we need to calculate the donation share
+	// for Giveth. If user want to donate minimal amount to projecct, the donation share for Giveth
+	// has to be 0, disabled in UI and DonationModal
 	const { givethDonation: givethDonationAmount } = calcDonationShare(
 		amount,
 		donationToGiveth,
