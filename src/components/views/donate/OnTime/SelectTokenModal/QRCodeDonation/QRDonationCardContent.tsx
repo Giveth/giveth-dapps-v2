@@ -134,7 +134,10 @@ const QRDonationCardContent: FC<IQRDonationCardContentProps> = ({
 				{qrDonationStatus}
 				<ImageComponent
 					dataUrl={draftDonationData?.qrCodeDataUrl ?? ''}
-					isExpired={!!qrDonationStatus && ['expired', 'failed'].includes(qrDonationStatus)}
+					isExpired={
+						!!qrDonationStatus &&
+						['expired', 'failed'].includes(qrDonationStatus)
+					}
 				/>
 				<B>
 					{formatMessage({
@@ -151,14 +154,14 @@ const QRDonationCardContent: FC<IQRDonationCardContentProps> = ({
 						</B>
 						<CopyConatainer text={projectAddress.memo ?? ''} />
 					</>
-				) : 
-				<InlineToast
-					type={EToastType.Info}
-					message={formatMessage({
-						id: 'label.no_memo_is_needed_for_this_address',
-					})}
-				/>
-				}
+				) : (
+					<InlineToast
+						type={EToastType.Info}
+						message={formatMessage({
+							id: 'label.no_memo_is_needed_for_this_address',
+						})}
+					/>
+				)}
 			</QRDataWrapper>
 		</>
 	);

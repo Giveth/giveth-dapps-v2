@@ -306,7 +306,9 @@ export const useQRCodeDonation = () => {
 			if (leftTime <= 0) {
 				clearInterval(timerInterval);
 				timerElement.textContent = '00 : 00';
-				const draftDonation = await checkDraftDonationStatus(stellarAddress?.address!);
+				const draftDonation = await checkDraftDonationStatus(
+					stellarAddress?.address!,
+				);
 				if (draftDonation?.status === 'matched') {
 					setStatus('success');
 					setDraftDonation(draftDonation);

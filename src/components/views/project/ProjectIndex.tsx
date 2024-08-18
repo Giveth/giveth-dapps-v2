@@ -36,7 +36,7 @@ import ProjectCategoriesBadges from './ProjectCategoriesBadges';
 import { PassportBanner } from '@/components/PassportBanner';
 import ProjectGIVbackToast from '@/components/views/project/ProjectGIVbackToast';
 import useMediaQuery from '@/hooks/useMediaQuery';
-import { device } from '@/lib/constants/constants';
+import { device, mediaQueries } from '@/lib/constants/constants';
 import QFSection from './projectActionCard/QFSection';
 import { DonateSection } from './projectActionCard/DonationSection';
 import { ProjectStats } from './projectActionCard/ProjectStats';
@@ -48,7 +48,6 @@ import Routes from '@/lib/constants/Routes';
 import { ChainType } from '@/types/config';
 import { useAppSelector } from '@/features/hooks';
 import { EndaomentProjectsInfo } from '@/components/views/project/EndaomentProjectsInfo';
-import { mediaQueries } from '@/lib/constants/constants';
 
 const ProjectDonations = dynamic(
 	() => import('./projectDonations/ProjectDonations.index'),
@@ -341,9 +340,8 @@ const StellarSupportToast = styled(Flex)`
 		> :first-child {
 			margin-top: 2px;
 		}
-
 	}
-	
+
 	> :last-child {
 		width: 100%;
 		text-align: center;

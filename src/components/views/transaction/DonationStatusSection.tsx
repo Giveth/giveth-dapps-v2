@@ -116,7 +116,6 @@ const Timer = (
 			);
 
 			if (draftDonation?.status === 'matched') {
-
 				setStatus('successful');
 				clearInterval(interval);
 				return;
