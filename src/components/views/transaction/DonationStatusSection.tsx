@@ -93,67 +93,66 @@ const formatTime = (date: Date, locale: string) => {
 
 // Timer that keep counting time before the donation expires (mm Minutes ss Seconds) format
 const Timer = (
-	endDate: Date,
-	locale: string,
-	stellarAddress: IDraftDonation['toWalletAddress'],
-	setStatus: (status: TQRStatus) => void,
-	checkDraftDonationStatus: (
-		address: string,
-	) => Promise<IDraftDonation | null>,
+  endDate: Date,
+  locale: string,
+  stellarAddress: IDraftDonation['toWalletAddress'],
+  setStatus: (status: TQRStatus) => void,
+  checkDraftDonationStatus: (
+    address: string,
+  ) => Promise<IDraftDonation | null>,
 ) => {
-	const _endDate = new Date(endDate.toLocaleString(locale));
-	const leftTime = _endDate.getTime() - new Date().getTime();
+  const _endDate = new Date(endDate.toLocaleString(locale));
 
-	const [time, setTime] = React.useState({
-		minutes: leftTime > 0 ? Math.floor(leftTime / 60000) : 0,
-		seconds: leftTime > 0 ? Math.floor((leftTime % 60000) / 1000) : 0,
-	});
+  const calculateTimeLeft = () => {
+    const now = new Date().getTime();
+    const leftTime = _endDate.getTime() - now;
 
-	React.useEffect(() => {
-		const handleTimeout = async () => {
-			const draftDonation = await checkDraftDonationStatus(
-				stellarAddress!,
-			);
+    return {
+      minutes: leftTime > 0 ? Math.floor(leftTime / 60000) : 0,
+      seconds: leftTime > 0 ? Math.floor((leftTime % 60000) / 1000) : 0,
+    };
+  };
 
-			if (draftDonation?.status === 'matched') {
-				setStatus('successful');
-				clearInterval(interval);
-				return;
-			}
-			setStatus('failed');
-			clearInterval(interval);
-		};
+  const [time, setTime] = React.useState(calculateTimeLeft);
 
-		const interval = setInterval(() => {
-			if (time.minutes === 0 && time.seconds === 0) {
-				handleTimeout();
-			} else if (time.seconds === 0) {
-				setTime({
-					minutes: time.minutes - 1,
-					seconds: 59,
-				});
-			} else {
-				setTime({
-					minutes: time.minutes,
-					seconds: time.seconds - 1,
-				});
-			}
-		}, 1000);
+  React.useEffect(() => {
+    const handleTimeout = async () => {
+      const draftDonation = await checkDraftDonationStatus(stellarAddress);
 
-		return () => clearInterval(interval);
-	}, [time]);
+      if (draftDonation?.status === 'matched') {
+        setStatus('successful');
+      } else {
+        setStatus('failed');
+      }
+    };
 
-	return time.minutes === 0 && time.seconds === 0 ? (
-		<FlexWrap $alignItems='center' gap='8px'>
-			<P>{'30 Minutes'}</P>
-			<TextBox>{'Ecxpired at ' + formatTime(_endDate, locale)}</TextBox>
-		</FlexWrap>
-	) : (
-		<P>
-			{time.minutes.toString().padStart(2, '0')} {' Minutes '}
-			{time.seconds.toString().padStart(2, '0')} {' Seconds '}
-		</P>
-	);
+    const tick = () => {
+      const timeLeft = calculateTimeLeft();
+
+      if (timeLeft.minutes === 0 && timeLeft.seconds === 0) {
+        handleTimeout();
+        return;
+      }
+
+      setTime(timeLeft);
+    };
+
+    const interval = setInterval(tick, 1000);
+
+    return () => clearInterval(interval);
+  }, [_endDate]);
+
+  return time.minutes === 0 && time.seconds === 0 ? (
+    <FlexWrap $alignItems='center' gap='8px'>
+      <P>{'30 Minutes'}</P>
+      <TextBox>{'Expired at ' + formatTime(_endDate, locale)}</TextBox>
+    </FlexWrap>
+  ) : (
+    <P>
+      {time.minutes.toString().padStart(2, '0')} {' Minutes '}
+      {time.seconds.toString().padStart(2, '0')} {' Seconds '}
+    </P>
+  );
 };
 
 const transactionLink = 'https://stellar.expert/explorer/public/tx/';
