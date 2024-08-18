@@ -93,66 +93,67 @@ const formatTime = (date: Date, locale: string) => {
 
 // Timer that keep counting time before the donation expires (mm Minutes ss Seconds) format
 const Timer = (
-  endDate: Date,
-  locale: string,
-  stellarAddress: IDraftDonation['toWalletAddress'],
-  setStatus: (status: TQRStatus) => void,
-  checkDraftDonationStatus: (
-    address: string,
-  ) => Promise<IDraftDonation | null>,
+	endDate: Date,
+	locale: string,
+	stellarAddress: IDraftDonation['toWalletAddress'],
+	setStatus: (status: TQRStatus) => void,
+	checkDraftDonationStatus: (
+		address: string,
+	) => Promise<IDraftDonation | null>,
 ) => {
-  const _endDate = new Date(endDate.toLocaleString(locale));
+	const _endDate = new Date(endDate.toLocaleString(locale));
 
-  const calculateTimeLeft = () => {
-    const now = new Date().getTime();
-    const leftTime = _endDate.getTime() - now;
+	const calculateTimeLeft = () => {
+		const now = new Date().getTime();
+		const leftTime = _endDate.getTime() - now;
 
-    return {
-      minutes: leftTime > 0 ? Math.floor(leftTime / 60000) : 0,
-      seconds: leftTime > 0 ? Math.floor((leftTime % 60000) / 1000) : 0,
-    };
-  };
+		return {
+			minutes: leftTime > 0 ? Math.floor(leftTime / 60000) : 0,
+			seconds: leftTime > 0 ? Math.floor((leftTime % 60000) / 1000) : 0,
+		};
+	};
 
-  const [time, setTime] = React.useState(calculateTimeLeft);
+	const [time, setTime] = React.useState(calculateTimeLeft);
 
-  React.useEffect(() => {
-    const handleTimeout = async () => {
-      const draftDonation = await checkDraftDonationStatus(stellarAddress);
+	React.useEffect(() => {
+		const handleTimeout = async () => {
+			const draftDonation =
+				await checkDraftDonationStatus(stellarAddress);
 
-      if (draftDonation?.status === 'matched') {
-        setStatus('successful');
-      } else {
-        setStatus('failed');
-      }
-    };
+			if (draftDonation?.status === 'matched') {
+				setStatus('successful');
+			} else {
+				setStatus('failed');
+			}
+		};
 
-    const tick = () => {
-      const timeLeft = calculateTimeLeft();
+		const tick = () => {
+			const timeLeft = calculateTimeLeft();
 
-      if (timeLeft.minutes === 0 && timeLeft.seconds === 0) {
-        handleTimeout();
-        return;
-      }
+			if (timeLeft.minutes === 0 && timeLeft.seconds === 0) {
+				handleTimeout();
+				return;
+			}
 
-      setTime(timeLeft);
-    };
+			setTime(timeLeft);
+		};
 
-    const interval = setInterval(tick, 1000);
+		const interval = setInterval(tick, 1000);
 
-    return () => clearInterval(interval);
-  }, [_endDate]);
+		return () => clearInterval(interval);
+	}, [_endDate]);
 
-  return time.minutes === 0 && time.seconds === 0 ? (
-    <FlexWrap $alignItems='center' gap='8px'>
-      <P>{'30 Minutes'}</P>
-      <TextBox>{'Expired at ' + formatTime(_endDate, locale)}</TextBox>
-    </FlexWrap>
-  ) : (
-    <P>
-      {time.minutes.toString().padStart(2, '0')} {' Minutes '}
-      {time.seconds.toString().padStart(2, '0')} {' Seconds '}
-    </P>
-  );
+	return time.minutes === 0 && time.seconds === 0 ? (
+		<FlexWrap $alignItems='center' gap='8px'>
+			<P>{'30 Minutes'}</P>
+			<TextBox>{'Expired at ' + formatTime(_endDate, locale)}</TextBox>
+		</FlexWrap>
+	) : (
+		<P>
+			{time.minutes.toString().padStart(2, '0')} {' Minutes '}
+			{time.seconds.toString().padStart(2, '0')} {' Seconds '}
+		</P>
+	);
 };
 
 const transactionLink = 'https://stellar.expert/explorer/public/tx/';
