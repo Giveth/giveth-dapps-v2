@@ -128,6 +128,11 @@ export const TabGIVbacksTop = () => {
 										chainType:
 											config.OPTIMISM_CONFIG.chainType,
 									},
+									{
+										networkId: config.ZKEVM_NETWORK_NUMBER,
+										chainType:
+											config.ZKEVM_CONFIG.chainType,
+									},
 								]}
 							/>
 						</Col>
