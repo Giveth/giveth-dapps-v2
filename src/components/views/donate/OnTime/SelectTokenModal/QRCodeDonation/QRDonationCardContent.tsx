@@ -131,7 +131,6 @@ const QRDonationCardContent: FC<IQRDonationCardContentProps> = ({
 						id: 'label.scan_to_donate',
 					})}
 				</B>
-				{qrDonationStatus}
 				<ImageComponent
 					dataUrl={draftDonationData?.qrCodeDataUrl ?? ''}
 					isExpired={
