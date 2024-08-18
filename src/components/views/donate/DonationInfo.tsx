@@ -16,17 +16,32 @@ import { useDonateData } from '@/context/donate.context';
 
 import { useGeneralWallet } from '@/providers/generalWalletProvider';
 import { formatTxLink } from '@/lib/helpers';
+import { ChainType } from '@/types/config';
+import config from '@/configuration';
 
-const TxRow = ({ txHash, title }: { txHash: string; title?: string }) => {
+const TxRow = ({
+	txHash,
+	title,
+	chainType,
+}: {
+	txHash: string;
+	title?: string;
+	chainType?: ChainType;
+}) => {
 	const { chain, walletChainType } = useGeneralWallet();
+	const isStellar = chainType === ChainType.STELLAR;
 	return (
 		<TxLink>
 			<span>Donation to {title + ' '}</span>
 			<Link
 				href={formatTxLink({
 					txHash,
-					networkId: (chain as Chain)?.id,
-					chainType: walletChainType || undefined,
+					networkId: isStellar
+						? config.NETWORKS_CONFIG[ChainType.STELLAR].id
+						: (chain as Chain)?.id,
+					chainType: isStellar
+						? chainType
+						: walletChainType || undefined,
 				})}
 				target='_blank'
 			>
@@ -54,9 +69,17 @@ export const DonationInfo = () => {
 					id: 'label.you_can_view_them_on_a_blockchain_explorer_here',
 				})}
 			</Lead>
-			<TxRow txHash={txHash[0]?.txHash} title={project.title} />
+			<TxRow
+				txHash={txHash[0]?.txHash}
+				title={project.title}
+				chainType={txHash[0]?.chainType}
+			/>
 			{hasMultipleTxs && (
-				<TxRow txHash={txHash[1]?.txHash} title='Giveth' />
+				<TxRow
+					txHash={txHash[1]?.txHash}
+					title='Giveth'
+					chainType={txHash[1]?.chainType}
+				/>
 			)}
 			<Link href={Routes.AllProjects}>
 				<ProjectsButton size='small' label='SEE MORE PROJECTS' />

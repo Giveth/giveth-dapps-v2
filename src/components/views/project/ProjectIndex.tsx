@@ -48,6 +48,7 @@ import Routes from '@/lib/constants/Routes';
 import { ChainType } from '@/types/config';
 import { useAppSelector } from '@/features/hooks';
 import { EndaomentProjectsInfo } from '@/components/views/project/EndaomentProjectsInfo';
+import { mediaQueries } from '@/lib/constants/constants';
 
 const ProjectDonations = dynamic(
 	() => import('./projectDonations/ProjectDonations.index'),
@@ -330,13 +331,30 @@ const StellarSupportToast = styled(Flex)`
 	background-color: ${neutralColors.gray[100]};
 	color: ${brandColors.giv[300]};
 	justify-content: space-between;
-	align-items: center;
+	flex-direction: column;
+	align-items: start;
+	gap: 30px;
 
 	> :first-child {
 		gap: 16px;
 
 		> :first-child {
 			margin-top: 2px;
+		}
+
+	}
+	
+	> :last-child {
+		width: 100%;
+		text-align: center;
+	}
+
+	${mediaQueries.laptopS} {
+		flex-direction: row;
+		align-items: center;
+
+		> :last-child {
+			width: auto;
 		}
 	}
 `;

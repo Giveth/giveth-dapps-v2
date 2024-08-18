@@ -6,11 +6,14 @@ import {
 	FETCH_DRAFT_DONATION,
 	MARK_DRAFT_DONATION_AS_FAILED,
 	RENEW_DRAFT_DONATION_EXPIRATION,
+	FETCH_UPDATED_DRAFT_DONATION,
 } from '@/apollo/gql/gqlDonations';
 import { ICreateDraftDonation } from '@/components/views/donate/helpers';
 import StorageLabel from '@/lib/localStorage';
 import { IDraftDonation } from '@/apollo/types/gqlTypes';
 import { useDonateData } from '@/context/donate.context';
+import { ChainType } from '@/types/config';
+import { IWalletAddress } from '@/apollo/types/types';
 
 export type TQRStatus = 'waiting' | 'failed' | 'success' | 'expired';
 
@@ -89,16 +92,32 @@ export const useQRCodeDonation = () => {
 			});
 
 			// save draft donation to local storage
-			localStorage.setItem(
-				StorageLabel.DRAFT_DONATION,
-				createDraftDonation,
+
+			const localStorageItem = localStorage.getItem(
+				StorageLabel.DRAFT_DONATIONS,
 			);
+			if (localStorageItem) {
+				const parsedLocalStorageItem = JSON.parse(localStorageItem);
+				parsedLocalStorageItem[walletAddress] = createDraftDonation;
+				localStorage.setItem(
+					StorageLabel.DRAFT_DONATIONS,
+					JSON.stringify(parsedLocalStorageItem),
+				);
+			} else {
+				const newLocalStorageItem = {
+					[walletAddress]: createDraftDonation,
+				};
+				localStorage.setItem(
+					StorageLabel.DRAFT_DONATIONS,
+					JSON.stringify(newLocalStorageItem),
+				);
+			}
 		} catch (error: any) {
 			console.error('Error creating draft donation', error);
 		}
 	};
 
-	const retrieveDraftDonation = async (): Promise<void> => {
+	const retrieveDraftDonation = async (address: string) => {
 		const statusMap: Record<string, TQRStatus> = {
 			pending: 'waiting',
 			matched: 'success',
@@ -107,9 +126,23 @@ export const useQRCodeDonation = () => {
 
 		try {
 			setLoading(true);
-			const draftDonationId = localStorage.getItem(
-				StorageLabel.DRAFT_DONATION,
+			const draftDonations = localStorage.getItem(
+				StorageLabel.DRAFT_DONATIONS,
 			);
+
+			if (!draftDonations) {
+				setDraftDonation(null);
+				return setLoading(false);
+			}
+
+			const parsedLocalStorageItem = JSON.parse(draftDonations!);
+
+			if (!address) {
+				setDraftDonation(null);
+				return setLoading(false);
+			}
+
+			const draftDonationId = parsedLocalStorageItem[address!];
 
 			if (!draftDonationId) {
 				setDraftDonation(null);
@@ -124,21 +157,73 @@ export const useQRCodeDonation = () => {
 				fetchPolicy: 'no-cache',
 			})) as { data: { getDraftDonationById: IDraftDonation } };
 
-			setStatus(statusMap[getDraftDonationById.status]);
+			if (
+				getDraftDonationById.expiresAt &&
+				new Date(getDraftDonationById.expiresAt) < new Date() &&
+				getDraftDonationById.status === 'pending'
+			) {
+				setStatus('expired');
+			} else setStatus(statusMap[getDraftDonationById.status]);
+
 			setDraftDonation(getDraftDonationById);
 			setLoading(false);
+			return getDraftDonationById;
 		} catch (error: any) {
 			console.error('Error retrieving draft donation', error);
 			setDraftDonation(null);
 			setLoading(false);
+			return;
 		}
+	};
+
+	const checkDraftDonationStatus = async (address: string) => {
+		const draftDonations = localStorage.getItem(
+			StorageLabel.DRAFT_DONATIONS,
+		);
+
+		if (!draftDonations) return;
+
+		const parsedLocalStorageItem = JSON.parse(draftDonations!);
+
+		if (!address) return;
+
+		const draftDonationId = parsedLocalStorageItem[address!];
+
+		if (!draftDonationId) return;
+
+		const {
+			data: { fetchDaftDonationWithUpdatedStatus },
+		} = await client.query({
+			query: FETCH_UPDATED_DRAFT_DONATION,
+			variables: { id: Number(draftDonationId) },
+			fetchPolicy: 'no-cache',
+		});
+
+		if (!fetchDaftDonationWithUpdatedStatus) return;
+
+		return fetchDaftDonationWithUpdatedStatus;
 	};
 
 	const markDraftDonationAsFailed = async () => {
 		try {
-			const draftDonationId = localStorage.getItem(
-				StorageLabel.DRAFT_DONATION,
+			const draftDonations = localStorage.getItem(
+				StorageLabel.DRAFT_DONATIONS,
 			);
+
+			if (!draftDonations) return;
+
+			const parsedLocalStorageItem = JSON.parse(draftDonations!);
+
+			const projectAddress = project.addresses?.find(
+				address => address.chainType === ChainType.STELLAR,
+			);
+
+			if (!projectAddress || !projectAddress?.address) return;
+
+			const draftDonationId =
+				parsedLocalStorageItem[projectAddress?.address!];
+
+			if (!draftDonationId) return;
 
 			const {
 				data: { getDraftDonationById },
@@ -163,7 +248,12 @@ export const useQRCodeDonation = () => {
 				fetchPolicy: 'no-cache',
 			});
 
-			localStorage.removeItem(StorageLabel.DRAFT_DONATION);
+			// remove draft donation item from local storage with key = projectAddress
+			delete parsedLocalStorageItem[projectAddress?.address];
+			localStorage.setItem(
+				StorageLabel.DRAFT_DONATIONS,
+				JSON.stringify(parsedLocalStorageItem),
+			);
 		} catch (error: any) {
 			console.error('Error marking draft donation as failed', error);
 		}
@@ -199,7 +289,11 @@ export const useQRCodeDonation = () => {
 		const timerElement = document.getElementById('timer');
 		let timerInterval: NodeJS.Timeout;
 
-		function updateTimer() {
+		const stellarAddress = project.addresses?.find(
+			address => address.chainType === ChainType.STELLAR,
+		) as IWalletAddress;
+
+		async function updateTimer() {
 			const now = new Date().getTime();
 			const leftTime = endTime - now;
 
@@ -212,6 +306,12 @@ export const useQRCodeDonation = () => {
 			if (leftTime <= 0) {
 				clearInterval(timerInterval);
 				timerElement.textContent = '00 : 00';
+				const draftDonation = await checkDraftDonationStatus(stellarAddress?.address!);
+				if (draftDonation?.status === 'matched') {
+					setStatus('success');
+					setDraftDonation(draftDonation);
+					return;
+				}
 				setStatus('expired');
 				return;
 			}
@@ -234,9 +334,11 @@ export const useQRCodeDonation = () => {
 		draftDonation,
 		setStatus,
 		startTimer,
+		setDraftDonation,
 		renewExpirationDate,
-		markDraftDonationAsFailed,
 		createDraftDonation,
 		retrieveDraftDonation,
+		checkDraftDonationStatus,
+		markDraftDonationAsFailed,
 	};
 };

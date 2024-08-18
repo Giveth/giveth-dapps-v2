@@ -22,21 +22,29 @@ import { formatBalance } from '@/lib/helpers';
 import links from '@/lib/constants/links';
 import { useAppSelector } from '@/features/hooks';
 import Routes from '@/lib/constants/Routes';
+import { useQRCodeDonation } from '@/hooks/useQRCodeDonation';
 
 const QRDonationDetails = () => {
 	const { formatMessage } = useIntl();
+	const { checkDraftDonationStatus } = useQRCodeDonation();
 	const {
 		project,
 		draftDonationData,
 		qrDonationStatus,
 		startTimer,
 		fetchDraftDonation,
+		setQRDonationStatus,
+		setDraftDonationData,
 	} = useDonateData();
 	const { isSignedIn } = useAppSelector(state => state.user);
 
 	const [tokenPrice, setTokenPrice] = useState(0);
 
-	const { title } = project;
+	const { title, addresses } = project;
+
+	const stellarAddress = addresses?.find(
+		address => address.chainType === ChainType.STELLAR,
+	)?.address;
 
 	const convertToUSD = (amount: number) => {
 		if (!amount) return '--';
@@ -57,6 +65,16 @@ const QRDonationDetails = () => {
 		}
 	};
 
+	const raiseTicket = async () => {
+		const draftDonation = await checkDraftDonationStatus(stellarAddress!);
+		if (draftDonation?.status === 'matched') {
+			setQRDonationStatus('success');
+			setDraftDonationData(draftDonation);
+			return;
+		}
+		window.open(links.REPORT_FAILED_DONATION, '_blank');
+	};
+
 	useEffect(() => {
 		let stopTimer: void | (() => void);
 		if (draftDonationData?.expiresAt) {
@@ -69,7 +87,7 @@ const QRDonationDetails = () => {
 	}, [draftDonationData?.expiresAt]);
 
 	useEffect(() => {
-		fetchDraftDonation?.();
+		fetchDraftDonation?.(stellarAddress!);
 
 		const fetchTokenPrice = async () => {
 			const coingeckoChainId =
@@ -85,7 +103,7 @@ const QRDonationDetails = () => {
 		// Set up interval to refresh every 5 minutes
 		const intervalId = setInterval(() => {
 			fetchTokenPrice();
-			fetchDraftDonation?.();
+			fetchDraftDonation?.(stellarAddress!);
 		}, 300000);
 
 		return () => clearInterval(intervalId);
@@ -131,26 +149,29 @@ const QRDonationDetails = () => {
 					</StatusBadge>
 				</Flex>
 				<DonationDetails>
-					<Flex $alignItems='center' gap='8px'>
+					<FlexWrap $alignItems='center' gap='8px'>
 						<B>{draftDonationData?.amount ?? '--'}</B>
 						<UsdAmountCard>
 							$ {convertToUSD(draftDonationData?.amount!)}
 						</UsdAmountCard>
-						<TokenIcon
-							symbol={
-								config.NETWORKS_CONFIG[ChainType.STELLAR]
-									.nativeCurrency.symbol
-							}
-							size={32}
-						/>
-						<TokenSymbol>
-							{
-								config.NETWORKS_CONFIG[ChainType.STELLAR]
-									.nativeCurrency.symbol
-							}{' '}
-							on {config.NETWORKS_CONFIG[ChainType.STELLAR].name}
-						</TokenSymbol>
-					</Flex>
+						<Flex gap='8px' $alignItems='center'>
+							<TokenIcon
+								symbol={
+									config.NETWORKS_CONFIG[ChainType.STELLAR]
+										.nativeCurrency.symbol
+								}
+								size={32}
+							/>
+							<TokenSymbol>
+								{
+									config.NETWORKS_CONFIG[ChainType.STELLAR]
+										.nativeCurrency.symbol
+								}{' '}
+								on{' '}
+								{config.NETWORKS_CONFIG[ChainType.STELLAR].name}
+							</TokenSymbol>
+						</Flex>
+					</FlexWrap>
 					<P>
 						{formatMessage({
 							id: 'label.donating_to',
@@ -181,9 +202,7 @@ const QRDonationDetails = () => {
 					label={formatMessage({
 						id: 'label.raise_a_ticket',
 					})}
-					onClick={() =>
-						window.open(links.REPORT_FAILED_DONATION, '_blank')
-					}
+					onClick={raiseTicket}
 				/>
 			)}
 		</>
@@ -207,7 +226,7 @@ const RunnningTime = styled(Flex)`
 	font-weight: 500;
 `;
 
-const Timer = styled(B)`
+const Timer = styled.div`
 	font-size: 24px;
 	color: ${neutralColors.gray[900]};
 	font-weight: 700;
@@ -290,13 +309,14 @@ const TokenSymbol = styled(B)`
 	white-space: nowrap;
 `;
 
-const CheckDonation = styled(B)`
+const CheckDonation = styled.p`
 	display: flex;
 	align-items: center;
 	gap: 8px;
 	cursor: pointer;
 	text-transform: capitalize;
-	color: ${brandColors.pinky[500]};
+	font-weight: 500;
+	color: ${brandColors.pinky[500]} !important;
 `;
 
 const Hr = styled.div`
@@ -311,4 +331,7 @@ const ButtonStyled = styled(Button)`
 	text-transform: capitalize;
 `;
 
+const FlexWrap = styled(Flex)`
+	flex-wrap: wrap;
+`;
 export default QRDonationDetails;

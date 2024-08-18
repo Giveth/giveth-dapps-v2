@@ -8,11 +8,11 @@ import {
 	Flex,
 	neutralColors,
 	IconArrowLeft,
+	mediaQueries,
 } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
 import { formatUnits } from 'viem';
 import {
-	Input,
 	InputWrapper,
 	SelectTokenWrapper,
 } from '../../../Recurring/RecurringDonationCard';
@@ -26,6 +26,7 @@ import { IDonationCardProps } from '../../../DonationCard';
 import QRDonationCardContent from './QRDonationCardContent';
 import { useQRCodeDonation } from '@/hooks/useQRCodeDonation';
 import { useDonateData } from '@/context/donate.context';
+import { AmountInput } from '@/components/AmountInput/AmountInput';
 
 interface QRDonationCardProps extends IDonationCardProps {
 	qrAcceptedTokens: IProjectAcceptedToken[];
@@ -48,11 +49,15 @@ export const QRDonationCard: FC<QRDonationCardProps> = ({
 }) => {
 	const { formatMessage } = useIntl();
 
-	const { createDraftDonation, markDraftDonationAsFailed } =
-		useQRCodeDonation();
+	const {
+		createDraftDonation,
+		markDraftDonationAsFailed,
+		checkDraftDonationStatus,
+	} = useQRCodeDonation();
 	const {
 		project,
 		setQRDonationStatus,
+		setDraftDonationData,
 		qrDonationStatus,
 		draftDonationData,
 		draftDonationLoading,
@@ -69,8 +74,18 @@ export const QRDonationCard: FC<QRDonationCardProps> = ({
 		address => address.chainType === ChainType.STELLAR,
 	);
 
-	const goBack = () => {
+	const goBack = async () => {
 		if (showQRCode) {
+			const draftDonation = await checkDraftDonationStatus(
+				projectAddress?.address!,
+			);
+			if (draftDonation?.status === 'matched') {
+				setQRDonationStatus('success');
+				setDraftDonationData(draftDonation);
+				return;
+			}
+
+			await markDraftDonationAsFailed();
 			setShowQRCode(false);
 		} else {
 			setIsQRDonation(false);
@@ -151,7 +166,7 @@ export const QRDonationCard: FC<QRDonationCardProps> = ({
 			</CardHead>
 			{!showQRCode ? (
 				<>
-					<InputWrapper>
+					<StyledInputWrapper>
 						<SelectTokenWrapper
 							$alignItems='center'
 							$justifyContent='space-between'
@@ -174,9 +189,11 @@ export const QRDonationCard: FC<QRDonationCardProps> = ({
 								</TokenSymbol>
 							</Flex>
 						</SelectTokenWrapper>
-						<Input amount={amount} setAmount={setAmount} />
-						<UsdAmountCard>$ {usdAmount}</UsdAmountCard>
-					</InputWrapper>
+						<QRDonationInput>
+							<Input amount={amount} setAmount={setAmount} />
+							<UsdAmountCard>$ {usdAmount}</UsdAmountCard>
+						</QRDonationInput>
+					</StyledInputWrapper>
 					<CardBottom>
 						<FlexStyled
 							$justifyContent='space-between'
@@ -276,4 +293,36 @@ const FlexStyled = styled(Flex)<{ $color: string }>`
 	background: ${props => props.$color};
 	border-radius: 8px;
 	padding: 8px;
+`;
+
+const Input = styled(AmountInput)`
+	width: 100%;
+	#amount-input {
+		border: none;
+		flex: 1;
+		font-family: Red Hat Text;
+		font-size: 16px;
+		font-style: normal;
+		font-weight: 500;
+		line-height: 150%; /* 24px */
+		width: 100%;
+	}
+`;
+
+const QRDonationInput = styled(Flex)`
+	width: 100%;
+	border-top: 2px solid ${neutralColors.gray[300]};
+
+	${mediaQueries.tablet} {
+		border-left: 2px solid ${neutralColors.gray[300]};
+		border-top: none;
+	}
+`;
+
+const StyledInputWrapper = styled(InputWrapper)`
+	flex-direction: column;
+
+	${mediaQueries.tablet} {
+		flex-direction: row;
+	}
 `;
