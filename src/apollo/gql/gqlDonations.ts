@@ -250,9 +250,9 @@ export const FETCH_DONATION_BY_ID = gql`
 	}
 `;
 
-export const FETCH_UPDATED_DRAFT_DONATION = gql`
-	query FetchDaftDonationWithUpdatedStatus($id: Int!) {
-		fetchDaftDonationWithUpdatedStatus(id: $id) {
+export const VERIFY_QR_DONATION_TRANSACTION = gql`
+	query VerifyQRDonationTransaction($id: Int!) {
+		verifyQRDonationTransaction(id: $id) {
 			id
 			networkId
 			chainType

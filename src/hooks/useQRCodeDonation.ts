@@ -6,7 +6,7 @@ import {
 	FETCH_DRAFT_DONATION,
 	MARK_DRAFT_DONATION_AS_FAILED,
 	RENEW_DRAFT_DONATION_EXPIRATION,
-	FETCH_UPDATED_DRAFT_DONATION,
+	VERIFY_QR_DONATION_TRANSACTION,
 } from '@/apollo/gql/gqlDonations';
 import { ICreateDraftDonation } from '@/components/views/donate/helpers';
 import StorageLabel from '@/lib/localStorage';
@@ -194,7 +194,7 @@ export const useQRCodeDonation = () => {
 		const {
 			data: { fetchDaftDonationWithUpdatedStatus },
 		} = await client.query({
-			query: FETCH_UPDATED_DRAFT_DONATION,
+			query: VERIFY_QR_DONATION_TRANSACTION,
 			variables: { id: Number(draftDonationId) },
 			fetchPolicy: 'no-cache',
 		});
