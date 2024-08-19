@@ -7,6 +7,7 @@ import { useGeneralWallet } from '@/providers/generalWalletProvider';
 import { IProjectAcceptedToken } from '@/apollo/types/gqlTypes';
 
 const useFetchBalance = (token: IProjectAcceptedToken | undefined) => {
+	console.log(token)
 	const { walletAddress } = useGeneralWallet();
 	const [balance, setBalance] = useState<bigint | undefined>(undefined);
 

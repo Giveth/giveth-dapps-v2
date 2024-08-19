@@ -8,7 +8,7 @@ import {
 	IconGIVBack24,
 	IconSearch16,
 } from '@giveth/ui-design-system';
-import { useState, type FC, useEffect, useCallback, use } from 'react';
+import { useState, type FC, useEffect, useCallback, use, useMemo, useRef } from 'react';
 import { useIntl } from 'react-intl';
 import { Address, erc20Abi, isAddress } from 'viem'; // Assuming `isAddress` is a function from the `viem` library to validate Ethereum addresses
 import { useAccount } from 'wagmi';
@@ -58,35 +58,14 @@ export const SelectTokenModal: FC<ISelectTokenModalProps> = props => {
 	);
 };
 
-const useTokenBalances = (tokens: IProjectAcceptedToken[] | undefined) => {
-	const [allTokenBalances, setAllTokenBalances] = useState<Map<Address,bigint|undefined>>(new Map());
-	useEffect(() => {
-		if(tokens) {
-			const fetchBalance = useFetchBalance;
-			const fetchAllTokenBalances = async () => {
-				const balances = new Map<Address,bigint | undefined>(new Map());
-				for (let token of tokens) {
-					const fetchTokenBalance = () => {
-						return new Promise((resolve)=>{
-							balances.set(token.address,fetchBalance(token));
-							resolve(null);
-						})
-					}
-					await fetchTokenBalance();
-				};
-				return balances;
-			}
-			fetchAllTokenBalances().then((balances)=>setAllTokenBalances(balances));
-		}
-	},[tokens]);
-	return allTokenBalances;
-}
+
 
 const SelectTokenInnerModal: FC<ISelectTokenModalProps> = ({
 	tokens,
 	acceptCustomToken,
 	setShowModal,
 }) => {
+
 	const [hideZeroBalance, setHideZeroBalance] = useState(false);
 	const [searchQuery, setSearchQuery] = useState('');
 	const [filteredTokens, setFilteredTokens] = useState(tokens || []);
@@ -96,13 +75,18 @@ const SelectTokenInnerModal: FC<ISelectTokenModalProps> = ({
 	const { setSelectedOneTimeToken } = useDonateData();
 	const { isOnEVM } = useGeneralWallet();
 	const { chain: evmChain } = useAccount();
-	const allTokenBalances = useTokenBalances(tokens);
 	const fetchBalance = useFetchBalance;
+	const tokenBalancesMap = useRef<{ [key: string]: bigint | undefined }>({})
 
+	tokens?.map((token) => {
+		const balance = useFetchBalance(token);
+		tokenBalancesMap.current[token.address] = balance;
+	});
+	
 	useEffect(() => {
 		if (tokens) {
 			if (isAddress(searchQuery)) {
-				const existingToken = tokens.find(
+				const existingToken = tokens?.find(
 					token =>
 						token.address.toLowerCase() ===
 						searchQuery.toLowerCase(),
@@ -161,7 +145,7 @@ const SelectTokenInnerModal: FC<ISelectTokenModalProps> = ({
 				}
 			} else {
 				setCustomToken(undefined);
-				const filtered = tokens.filter(
+				const filtered = tokens?.filter(
 					token =>
 						token.symbol
 							.toLowerCase()
@@ -178,7 +162,7 @@ const SelectTokenInnerModal: FC<ISelectTokenModalProps> = ({
 
 	const tokenBalances = filteredTokens.map(token => ({
 		token,
-		balance: allTokenBalances?.get(token.address),
+		balance: tokenBalancesMap.current[token.address],
 	}));
 
 	const customTokenBalance = fetchBalance(customToken);
