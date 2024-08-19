@@ -123,7 +123,9 @@ const DonateIndex: FC = () => {
 				StorageLabel.DRAFT_DONATIONS,
 			);
 
-			const parsedLocalStorageItem = JSON.parse(draftDonations!);
+			if (!draftDonations) return;
+
+			const parsedLocalStorageItem = JSON.parse(draftDonations);
 
 			const stellarAddress = project.addresses?.find(
 				address => address.chainType === ChainType.STELLAR,
