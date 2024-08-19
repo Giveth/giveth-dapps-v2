@@ -117,43 +117,6 @@ const DonateIndex: FC = () => {
 		fetchDonation();
 	}, [qrDonationStatus]);
 
-	useEffect(() => {
-		const fetchDraftDonationData = async () => {
-			const draftDonations = localStorage.getItem(
-				StorageLabel.DRAFT_DONATIONS,
-			);
-
-			if (!draftDonations) return;
-
-			const parsedLocalStorageItem = JSON.parse(draftDonations);
-
-			const stellarAddress = project.addresses?.find(
-				address => address.chainType === ChainType.STELLAR,
-			)?.address;
-
-			const draftDonationId = parsedLocalStorageItem[stellarAddress!];
-
-			if (!draftDonationId) return;
-
-			const {
-				data: { getDraftDonationById },
-			} = (await client.query({
-				query: FETCH_DRAFT_DONATION,
-				variables: { id: Number(draftDonationId) },
-				fetchPolicy: 'no-cache',
-			})) as { data: { getDraftDonationById: IDraftDonation } };
-
-			if (getDraftDonationById?.status === 'pending') {
-				window.open(
-					Routes.Invoice + '/' + getDraftDonationById?.id,
-					'_self',
-				);
-			}
-		};
-
-		fetchDraftDonationData();
-	}, []);
-
 	const isRecurringTab = router.query.tab?.toString() === ETabs.RECURRING;
 	const { activeStartedRound } = getActiveRound(project.qfRounds);
 	const isOnEligibleNetworks =
