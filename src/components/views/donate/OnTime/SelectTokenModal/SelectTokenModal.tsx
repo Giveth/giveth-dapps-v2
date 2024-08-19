@@ -8,9 +8,9 @@ import {
 	IconGIVBack24,
 	IconSearch16,
 } from '@giveth/ui-design-system';
-import { useState, type FC, useEffect } from 'react';
+import { useState, type FC, useEffect, useCallback, use } from 'react';
 import { useIntl } from 'react-intl';
-import { erc20Abi, isAddress } from 'viem'; // Assuming `isAddress` is a function from the `viem` library to validate Ethereum addresses
+import { Address, erc20Abi, isAddress } from 'viem'; // Assuming `isAddress` is a function from the `viem` library to validate Ethereum addresses
 import { useAccount } from 'wagmi';
 import { readContracts } from 'wagmi/actions';
 import { IModal } from '@/types/common';
@@ -58,6 +58,30 @@ export const SelectTokenModal: FC<ISelectTokenModalProps> = props => {
 	);
 };
 
+const useTokenBalances = (tokens: IProjectAcceptedToken[] | undefined) => {
+	const [allTokenBalances, setAllTokenBalances] = useState<Map<Address,bigint|undefined>>(new Map());
+	useEffect(() => {
+		if(tokens) {
+			const fetchBalance = useFetchBalance;
+			const fetchAllTokenBalances = async () => {
+				const balances = new Map<Address,bigint | undefined>(new Map());
+				for (let token of tokens) {
+					const fetchTokenBalance = () => {
+						return new Promise((resolve)=>{
+							balances.set(token.address,fetchBalance(token));
+							resolve(null);
+						})
+					}
+					await fetchTokenBalance();
+				};
+				return balances;
+			}
+			fetchAllTokenBalances().then((balances)=>setAllTokenBalances(balances));
+		}
+	},[tokens]);
+	return allTokenBalances;
+}
+
 const SelectTokenInnerModal: FC<ISelectTokenModalProps> = ({
 	tokens,
 	acceptCustomToken,
@@ -72,6 +96,8 @@ const SelectTokenInnerModal: FC<ISelectTokenModalProps> = ({
 	const { setSelectedOneTimeToken } = useDonateData();
 	const { isOnEVM } = useGeneralWallet();
 	const { chain: evmChain } = useAccount();
+	const allTokenBalances = useTokenBalances(tokens);
+	const fetchBalance = useFetchBalance;
 
 	useEffect(() => {
 		if (tokens) {
@@ -149,12 +175,10 @@ const SelectTokenInnerModal: FC<ISelectTokenModalProps> = ({
 		}
 	}, [searchQuery, tokens]);
 
-	// Fetch balances for filtered tokens
-	const fetchBalance = useFetchBalance;
 
 	const tokenBalances = filteredTokens.map(token => ({
 		token,
-		balance: fetchBalance(token),
+		balance: allTokenBalances?.get(token.address),
 	}));
 
 	const customTokenBalance = fetchBalance(customToken);
