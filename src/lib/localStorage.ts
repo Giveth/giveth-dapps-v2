@@ -21,7 +21,7 @@ const StorageLabel = {
 	WAGMI_CONNECTED: 'wagmi.connected',
 	CREATE_PROJECT_FORM: 'createProjectForm',
 	TORUS_BANNER_VIEWED: 'torusBannerViewed',
-	DRAFT_DONATION: 'draftDonation',
+	DRAFT_DONATIONS: 'draftDonations',
 };
 
 export const setWithExpiry = (key: string, value: any, ttl: number) => {

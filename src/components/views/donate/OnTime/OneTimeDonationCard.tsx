@@ -67,7 +67,7 @@ const CryptoDonation: FC<{
 	} = useGeneralWallet();
 
 	const { formatMessage } = useIntl();
-	const { isSignedIn } = useAppSelector(state => state.user);
+	const { isSignedIn, userData } = useAppSelector(state => state.user);
 
 	const { project, hasActiveQFRound, selectedOneTimeToken } = useDonateData();
 	const dispatch = useAppDispatch();
@@ -288,6 +288,14 @@ const CryptoDonation: FC<{
 		selectedOneTimeToken?.address,
 	]);
 
+	const handleQRDonation = () => {
+		if (userData?.id && !isSignedIn) {
+			signInThenDonate();
+		} else {
+			setIsQRDonation(true);
+		}
+	};
+
 	useEffect(() => {
 		if (
 			amount > selectedTokenBalance - gasfee &&
@@ -357,7 +365,7 @@ const CryptoDonation: FC<{
 			)}
 			<SaveGasFees acceptedChains={acceptedChains} />
 			{hasStellarAddress && (
-				<QRToastLink onClick={() => setIsQRDonation(true)}>
+				<QRToastLink onClick={handleQRDonation}>
 					{config.NETWORKS_CONFIG[ChainType.STELLAR]?.chainLogo(32)}
 					{formatMessage({
 						id: 'label.try_donating_wuth_stellar',

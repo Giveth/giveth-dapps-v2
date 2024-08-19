@@ -250,6 +250,28 @@ export const FETCH_DONATION_BY_ID = gql`
 	}
 `;
 
+export const VERIFY_QR_DONATION_TRANSACTION = gql`
+	query VerifyQRDonationTransaction($id: Int!) {
+		verifyQRDonationTransaction(id: $id) {
+			id
+			networkId
+			chainType
+			status
+			toWalletAddress
+			fromWalletAddress
+			tokenAddress
+			currency
+			amount
+			createdAt
+			matchedDonationId
+			qrCodeDataUrl
+			toWalletMemo
+			projectId
+			expiresAt
+		}
+	}
+`;
+
 export const RENEW_DRAFT_DONATION_EXPIRATION = gql`
 	mutation ($id: Int!) {
 		renewDraftDonationExpirationDate(id: $id) {

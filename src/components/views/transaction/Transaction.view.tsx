@@ -129,6 +129,7 @@ const TransactionView = () => {
 				draftDonationData={draftDonationData}
 				donationData={donationData}
 				usdAmount={usdAmount}
+				setStatus={setStatus}
 			/>
 			{status === 'pending' && (
 				<QRDetailsSection

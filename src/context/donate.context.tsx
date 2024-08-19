@@ -47,11 +47,12 @@ interface IDonateContext {
 	>;
 	fetchProject: () => Promise<void>;
 	draftDonationData?: IDraftDonation;
-	fetchDraftDonation?: () => Promise<void>;
+	fetchDraftDonation?: (address: string) => Promise<void | IDraftDonation>;
 	qrDonationStatus: TQRStatus;
 	startTimer?: (startTime: Date) => void;
 	setQRDonationStatus: Dispatch<SetStateAction<TQRStatus>>;
 	draftDonationLoading?: boolean;
+	setDraftDonationData: Dispatch<SetStateAction<IDraftDonation | null>>;
 }
 
 interface IProviderProps {
@@ -72,6 +73,7 @@ const DonateContext = createContext<IDonateContext>({
 	startTimer: () => {},
 	setQRDonationStatus: () => {},
 	draftDonationLoading: false,
+	setDraftDonationData: () => {},
 });
 
 DonateContext.displayName = 'DonateContext';
@@ -124,6 +126,7 @@ export const DonateProvider: FC<IProviderProps> = ({ children, project }) => {
 		startTimer,
 		setStatus,
 		loading,
+		setDraftDonation,
 	} = useQRCodeDonation();
 
 	const hasActiveQFRound = hasActiveRound(project?.qfRounds);
@@ -142,6 +145,7 @@ export const DonateProvider: FC<IProviderProps> = ({ children, project }) => {
 				tokenStreams,
 				fetchProject,
 				draftDonationData: draftDonation as IDraftDonation,
+				setDraftDonationData: setDraftDonation,
 				fetchDraftDonation: retrieveDraftDonation,
 				qrDonationStatus: status,
 				startTimer,

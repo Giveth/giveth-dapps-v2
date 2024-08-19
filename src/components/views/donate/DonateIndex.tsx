@@ -37,12 +37,18 @@ import { getActiveRound } from '@/helpers/qf';
 import QRDonationDetails from './OnTime/SelectTokenModal/QRCodeDonation/QRDonationDetails';
 import InlineToast, { EToastType } from '@/components/toasts/InlineToast';
 import { client } from '@/apollo/apolloClient';
-import { FETCH_DONATION_BY_ID } from '@/apollo/gql/gqlDonations';
+import {
+	FETCH_DONATION_BY_ID,
+	FETCH_DRAFT_DONATION,
+} from '@/apollo/gql/gqlDonations';
 import { IDonation } from '@/apollo/types/types';
 import config from '@/configuration';
 import { ChainType } from '@/types/config';
 import { useQRCodeDonation } from '@/hooks/useQRCodeDonation';
 import EndaomentProjectsInfo from '@/components/views/project/EndaomentProjectsInfo';
+import Routes from '@/lib/constants/Routes';
+import { IDraftDonation } from '@/apollo/types/gqlTypes';
+import StorageLabel from '@/lib/localStorage';
 
 const DonateIndex: FC = () => {
 	const { formatMessage } = useIntl();
@@ -110,6 +116,43 @@ const DonateIndex: FC = () => {
 		};
 		fetchDonation();
 	}, [qrDonationStatus]);
+
+	useEffect(() => {
+		const fetchDraftDonationData = async () => {
+			const draftDonations = localStorage.getItem(
+				StorageLabel.DRAFT_DONATIONS,
+			);
+
+			if (!draftDonations) return;
+
+			const parsedLocalStorageItem = JSON.parse(draftDonations);
+
+			const stellarAddress = project.addresses?.find(
+				address => address.chainType === ChainType.STELLAR,
+			)?.address;
+
+			const draftDonationId = parsedLocalStorageItem[stellarAddress!];
+
+			if (!draftDonationId) return;
+
+			const {
+				data: { getDraftDonationById },
+			} = (await client.query({
+				query: FETCH_DRAFT_DONATION,
+				variables: { id: Number(draftDonationId) },
+				fetchPolicy: 'no-cache',
+			})) as { data: { getDraftDonationById: IDraftDonation } };
+
+			if (getDraftDonationById?.status === 'pending') {
+				window.open(
+					Routes.Invoice + '/' + getDraftDonationById?.id,
+					'_self',
+				);
+			}
+		};
+
+		fetchDraftDonationData();
+	}, []);
 
 	const isRecurringTab = router.query.tab?.toString() === ETabs.RECURRING;
 	const { activeStartedRound } = getActiveRound(project.qfRounds);

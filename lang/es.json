@@ -1207,6 +1207,7 @@
 	"label.scan_to_donate": "Escanea el código QR o copia la dirección para hacer la transferencia",
 	"label.project_address": "Dirección del proyecto",
 	"label.copy_the_mnemo_to_use_in_your_app": "Copia la mnemotecnia para usar en tu aplicación de billetera.",
+	"label.no_memo_is_needed_for_this_address": "No se necesita Memo para esta dirección",
 	"label.waiting_for_your_donation": "Esperando tu donación",
 	"label.remaining_time": "Tiempo restante",
 	"label.update_qr_code": "Actualizar código QR",

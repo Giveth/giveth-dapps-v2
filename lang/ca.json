@@ -1207,6 +1207,7 @@
 	"label.scan_to_donate": "Escaneja el codi QR o copia l'adreça per fer la transferència",
 	"label.project_address": "Adreça del projecte",
 	"label.copy_the_mnemo_to_use_in_your_app": "Copia la mnemotècnia per utilitzar a la teva aplicació de cartera.",
+	"label.no_memo_is_needed_for_this_address": "No es necessita Memo per a aquesta adreça",
 	"label.waiting_for_your_donation": "Esperant la teva donació",
 	"label.remaining_time": "Temps restant",
 	"label.update_qr_code": "Actualitzar codi QR",

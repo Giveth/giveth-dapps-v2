@@ -102,23 +102,27 @@ const QRDonationCardContent: FC<IQRDonationCardContentProps> = ({
 	return (
 		<>
 			<DonationAmountCard>
-				<P>
+				<P style={{ minWidth: 'fit-content' }}>
 					{formatMessage({
 						id: 'label.you_are_donating',
 					})}
 				</P>
 				<AmountWrapper>
-					<B>{amount ?? '--'}</B>
-					<UsdAmountCard>
-						{' '}
-						{usdAmount ? `$ ${usdAmount}` : '--'}
-					</UsdAmountCard>
-					<IconArrowRight size={20} />
-					<TokenIcon symbol={tokenData?.symbol} size={32} />
-					<TokenSymbol>
-						{tokenData?.symbol} on{' '}
-						{config.NETWORKS_CONFIG[ChainType.STELLAR].name}
-					</TokenSymbol>
+					<Flex $alignItems='center' gap='2px'>
+						<B>{amount ?? '--'}</B>
+						<UsdAmountCard>
+							{' '}
+							{usdAmount ? `$ ${usdAmount}` : '--'}
+						</UsdAmountCard>
+						<IconArrowRight size={20} />
+					</Flex>
+					<Flex $alignItems='center' gap='2px'>
+						<TokenIcon symbol={tokenData?.symbol} size={32} />
+						<TokenSymbol>
+							{tokenData?.symbol} on{' '}
+							{config.NETWORKS_CONFIG[ChainType.STELLAR].name}
+						</TokenSymbol>
+					</Flex>
 				</AmountWrapper>
 			</DonationAmountCard>
 			<QRDataWrapper>
@@ -129,7 +133,10 @@ const QRDonationCardContent: FC<IQRDonationCardContentProps> = ({
 				</B>
 				<ImageComponent
 					dataUrl={draftDonationData?.qrCodeDataUrl ?? ''}
-					isExpired={qrDonationStatus === 'expired'}
+					isExpired={
+						!!qrDonationStatus &&
+						['expired', 'failed'].includes(qrDonationStatus)
+					}
 				/>
 				<B>
 					{formatMessage({
@@ -137,7 +144,7 @@ const QRDonationCardContent: FC<IQRDonationCardContentProps> = ({
 					})}
 				</B>
 				<CopyConatainer text={projectAddress?.address ?? ''} />
-				{projectAddress?.memo && (
+				{projectAddress?.memo ? (
 					<>
 						<B>
 							{formatMessage({
@@ -146,6 +153,13 @@ const QRDonationCardContent: FC<IQRDonationCardContentProps> = ({
 						</B>
 						<CopyConatainer text={projectAddress.memo ?? ''} />
 					</>
+				) : (
+					<InlineToast
+						type={EToastType.Info}
+						message={formatMessage({
+							id: 'label.no_memo_is_needed_for_this_address',
+						})}
+					/>
 				)}
 			</QRDataWrapper>
 		</>
@@ -161,12 +175,15 @@ const DonationAmountCard = styled(Flex)`
 	padding: 10px 16px;
 	margin-top: 1rem;
 	width: 100%;
+	gap: 1rem;
+	flex-wrap: wrap;
 `;
 
 const AmountWrapper = styled(Flex)`
 	justify-content: space-between;
 	align-items: center;
 	gap: 2px;
+	flex-wrap: wrap;
 `;
 
 const TokenSymbol = styled(B)`

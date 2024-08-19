@@ -36,7 +36,7 @@ import ProjectCategoriesBadges from './ProjectCategoriesBadges';
 import { PassportBanner } from '@/components/PassportBanner';
 import ProjectGIVbackToast from '@/components/views/project/ProjectGIVbackToast';
 import useMediaQuery from '@/hooks/useMediaQuery';
-import { device } from '@/lib/constants/constants';
+import { device, mediaQueries } from '@/lib/constants/constants';
 import QFSection from './projectActionCard/QFSection';
 import { DonateSection } from './projectActionCard/DonationSection';
 import { ProjectStats } from './projectActionCard/ProjectStats';
@@ -330,13 +330,29 @@ const StellarSupportToast = styled(Flex)`
 	background-color: ${neutralColors.gray[100]};
 	color: ${brandColors.giv[300]};
 	justify-content: space-between;
-	align-items: center;
+	flex-direction: column;
+	align-items: start;
+	gap: 30px;
 
 	> :first-child {
 		gap: 16px;
 
 		> :first-child {
 			margin-top: 2px;
+		}
+	}
+
+	> :last-child {
+		width: 100%;
+		text-align: center;
+	}
+
+	${mediaQueries.laptopS} {
+		flex-direction: row;
+		align-items: center;
+
+		> :last-child {
+			width: auto;
 		}
 	}
 `;
