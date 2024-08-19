@@ -18,11 +18,11 @@ const AnnouncementBanner = () => {
 					width={20}
 					height={20}
 				/>
-				<>
+				<div id='announcement-banner'>
 					<ExternalLink href='https://x.com/Giveth/status/1823057210643296578'>
 						<Purple>Find links to all the rounds</Purple>
 					</ExternalLink>
-				</>
+				</div>
 				<>and consider making a donation to support our work.</>
 			</PStyled>
 		</Wrapper>
