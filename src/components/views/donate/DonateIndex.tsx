@@ -37,18 +37,12 @@ import { getActiveRound } from '@/helpers/qf';
 import QRDonationDetails from './OnTime/SelectTokenModal/QRCodeDonation/QRDonationDetails';
 import InlineToast, { EToastType } from '@/components/toasts/InlineToast';
 import { client } from '@/apollo/apolloClient';
-import {
-	FETCH_DONATION_BY_ID,
-	FETCH_DRAFT_DONATION,
-} from '@/apollo/gql/gqlDonations';
+import { FETCH_DONATION_BY_ID } from '@/apollo/gql/gqlDonations';
 import { IDonation } from '@/apollo/types/types';
 import config from '@/configuration';
 import { ChainType } from '@/types/config';
 import { useQRCodeDonation } from '@/hooks/useQRCodeDonation';
 import EndaomentProjectsInfo from '@/components/views/project/EndaomentProjectsInfo';
-import Routes from '@/lib/constants/Routes';
-import { IDraftDonation } from '@/apollo/types/gqlTypes';
-import StorageLabel from '@/lib/localStorage';
 
 const DonateIndex: FC = () => {
 	const { formatMessage } = useIntl();
