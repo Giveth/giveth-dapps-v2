@@ -343,25 +343,25 @@ const CryptoDonation: FC<{
 
 	return (
 		<MainContainer>
+			{isSanctioned && (
+				<SanctionModal
+					closeModal={() => {
+						setIsSanctioned(false);
+					}}
+				/>
+			)}
 			{showQFModal && (
 				<QFModal
 					donateWithoutMatching={donateWithoutMatching}
 					setShowModal={setShowQFModal}
 				/>
 			)}
-			{showChangeNetworkModal && acceptedChains && (
+			{!isSanctioned && showChangeNetworkModal && acceptedChains && (
 				<DonateWrongNetwork
 					setShowModal={setShowChangeNetworkModal}
 					acceptedChains={acceptedChains.filter(
 						chain => chain.chainType !== ChainType.STELLAR,
 					)}
-				/>
-			)}
-			{isSanctioned && (
-				<SanctionModal
-					closeModal={() => {
-						setIsSanctioned(false);
-					}}
 				/>
 			)}
 			{showInsufficientModal && (
