@@ -376,7 +376,7 @@ const CryptoDonation: FC<{
 					setShowModal={setShowQFModal}
 				/>
 			)}
-			{showChangeNetworkModal && acceptedChains && (
+			{!isSanctioned && showChangeNetworkModal && acceptedChains && (
 				<DonateWrongNetwork
 					setShowModal={setShowChangeNetworkModal}
 					acceptedChains={acceptedChains.filter(
