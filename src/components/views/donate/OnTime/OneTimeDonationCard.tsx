@@ -144,9 +144,9 @@ const CryptoDonation: FC<{
 		address => address.chainType === ChainType.STELLAR,
 	);
 
-	useEffect(()=> {
+	useEffect(() => {
 		validateSanctions();
-	},[project, address]);
+	}, [project, address]);
 
 	useEffect(() => {
 		if (
@@ -318,14 +318,14 @@ const CryptoDonation: FC<{
 
 	const validateSanctions = async () => {
 		if (project?.organization?.label === 'endaoment' && address) {
-		// We just need to check if the wallet is sanctioned for endaoment projects
+			// We just need to check if the wallet is sanctioned for endaoment projects
 			const sanctioned = await isWalletSanctioned(address);
 			if (sanctioned) {
 				setIsSanctioned(true);
 				return;
 			}
 		}
-	}
+	};
 
 	const amountErrorText = useMemo(() => {
 		const totalAmount = Number(formatUnits(gasfee, tokenDecimals)).toFixed(
@@ -343,7 +343,6 @@ const CryptoDonation: FC<{
 
 	return (
 		<MainContainer>
-			
 			{showQFModal && (
 				<QFModal
 					donateWithoutMatching={donateWithoutMatching}
