@@ -20,6 +20,9 @@ import { Shadow } from '@/components/styled-components/Shadow';
 const ProjectDevouchBox = () => {
 	const { formatMessage } = useIntl();
 	const { projectData } = useProjectContext();
+	if (!projectData) {
+		return null;
+	}
 	return (
 		<Wrapper>
 			<Content>
@@ -53,6 +56,7 @@ const ProjectDevouchBox = () => {
 			</Content>
 			<ButtonWrapper
 				target='_blank'
+				rel='noopener noreferrer'
 				href={`${links.DEVOUCH}/project/giveth/${projectData?.id}`}
 			>
 				<OutlineButton
