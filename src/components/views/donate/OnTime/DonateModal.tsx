@@ -40,9 +40,7 @@ import { calcDonationShare } from '@/components/views/donate/helpers';
 import { Spinner } from '@/components/Spinner';
 import { FETCH_GIVETH_PROJECT_BY_ID } from '@/apollo/gql/gqlProjects';
 import createGoogleTagEventPurchase from '@/helpers/googleAnalytics';
-import { isWalletSanctioned } from '@/services/donation';
 import SanctionModal from '@/components/modals/SanctionedModal';
-import { ORGANIZATION } from '@/lib/constants/organizations';
 
 interface IDonateModalProps extends IModal {
 	token: IProjectAcceptedToken;
