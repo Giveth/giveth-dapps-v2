@@ -363,6 +363,13 @@ const CryptoDonation: FC<{
 
 	return (
 		<MainContainer>
+			{isSanctioned && (
+				<SanctionModal
+					closeModal={() => {
+						setIsSanctioned(false);
+					}}
+				/>
+			)}
 			{showQFModal && (
 				<QFModal
 					donateWithoutMatching={donateWithoutMatching}
@@ -375,13 +382,6 @@ const CryptoDonation: FC<{
 					acceptedChains={acceptedChains.filter(
 						chain => chain.chainType !== ChainType.STELLAR,
 					)}
-				/>
-			)}
-			{isSanctioned && (
-				<SanctionModal
-					closeModal={() => {
-						setIsSanctioned(false);
-					}}
 				/>
 			)}
 			{showInsufficientModal && (
