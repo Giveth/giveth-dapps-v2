@@ -44,6 +44,7 @@ import { AdminActions } from './projectActionCard/AdminActions';
 import ProjectOwnerBanner from './ProjectOwnerBanner';
 import { useGeneralWallet } from '@/providers/generalWalletProvider';
 import ProjectSocials from './ProjectSocials';
+import ProjectDevouchBox from './ProjectDevouchBox';
 import Routes from '@/lib/constants/Routes';
 import { ChainType } from '@/types/config';
 import { useAppSelector } from '@/features/hooks';
@@ -259,8 +260,8 @@ const ProjectIndex: FC<IProjectBySlug> = () => {
 							/>
 						</Flex>
 					)}
+					<ProjectDevouchBox />
 				</ContainerStyled>
-
 				<SimilarProjects slug={slug} />
 			</BodyWrapper>
 		</Wrapper>
