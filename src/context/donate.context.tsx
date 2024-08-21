@@ -47,7 +47,9 @@ interface IDonateContext {
 	>;
 	fetchProject: () => Promise<void>;
 	draftDonationData?: IDraftDonation;
-	fetchDraftDonation?: (draftDonationId: number) => Promise<void | IDraftDonation>;
+	fetchDraftDonation?: (
+		draftDonationId: number,
+	) => Promise<void | IDraftDonation>;
 	qrDonationStatus: TQRStatus;
 	pendingDonationExists: boolean;
 	startTimer?: (startTime: Date) => void;

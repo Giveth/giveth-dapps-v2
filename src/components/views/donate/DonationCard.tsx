@@ -39,7 +39,9 @@ export const DonationCard: FC<IDonationCardProps> = ({
 	const [tab, setTab] = useState(
 		router.query.tab === ETabs.RECURRING ? ETabs.RECURRING : ETabs.ONE_TIME,
 	);
-	const [isQRDonation, setIsQRDonation] = useState(router.query.chain === ChainType.STELLAR.toLowerCase());
+	const [isQRDonation, setIsQRDonation] = useState(
+		router.query.chain === ChainType.STELLAR.toLowerCase(),
+	);
 	const { project } = useDonateData();
 	const { formatMessage } = useIntl();
 

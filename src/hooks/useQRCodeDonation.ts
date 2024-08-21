@@ -254,16 +254,15 @@ export const useQRCodeDonation = () => {
 		let timerInterval: NodeJS.Timeout;
 
 		async function updateTimer() {
-			
 			const now = new Date().getTime();
 			const leftTime = endTime - now;
-			
+
 			const minutes = leftTime > 0 ? Math.floor(leftTime / 60000) : 0;
 			const seconds =
-			leftTime > 0 ? Math.floor((leftTime % 60000) / 1000) : 0;
-			
+				leftTime > 0 ? Math.floor((leftTime % 60000) / 1000) : 0;
+
 			if (!timerElement) return;
-			
+
 			if (['success', 'expired', 'failed'].includes(status)) {
 				clearInterval(timerInterval);
 				timerElement.textContent = '00 : 00';
