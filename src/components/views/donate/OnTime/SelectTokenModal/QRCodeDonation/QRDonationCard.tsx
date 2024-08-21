@@ -108,11 +108,12 @@ export const QRDonationCard: FC<QRDonationCardProps> = ({
 		);
 
 		const parsedLocalStorageItem = JSON.parse(draftDonations!);
+		
 		const projectAddress: IWalletAddress | undefined =
 			project.addresses?.find(
 				address => address.chainType === ChainType.STELLAR,
 			);
-		let draftDonationId = parsedLocalStorageItem[projectAddress?.address!];
+		let draftDonationId = parsedLocalStorageItem ? parsedLocalStorageItem[projectAddress?.address!] : null;
 
 		const retDraftDonation = !!draftDonationId
 			? await retrieveDraftDonation(Number(draftDonationId))
