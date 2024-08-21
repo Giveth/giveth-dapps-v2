@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 import React, { FC, useEffect, useMemo, useState } from 'react';
 import { useIntl } from 'react-intl';
+import { useRouter } from 'next/router';
 import {
 	B,
 	brandColors,
@@ -67,6 +68,7 @@ const CryptoDonation: FC<{
 	} = useGeneralWallet();
 
 	const { formatMessage } = useIntl();
+	const router = useRouter();
 	const { isSignedIn, userData } = useAppSelector(state => state.user);
 
 	const { project, hasActiveQFRound, selectedOneTimeToken } = useDonateData();
@@ -293,6 +295,16 @@ const CryptoDonation: FC<{
 			signInThenDonate();
 		} else {
 			setIsQRDonation(true);
+			router.push(
+				{
+					query: {
+						...router.query,
+						chain: ChainType.STELLAR.toLowerCase(),
+					},
+				},
+				undefined,
+				{ shallow: true },
+			);
 		}
 	};
 
