@@ -95,10 +95,10 @@ const formatTime = (date: Date, locale: string) => {
 const Timer = (
 	endDate: Date,
 	locale: string,
-	stellarAddress: IDraftDonation['toWalletAddress'],
+	draftDonationId: number,
 	setStatus: (status: TQRStatus) => void,
 	checkDraftDonationStatus: (
-		address: string,
+		draftDonationId: number,
 	) => Promise<IDraftDonation | null>,
 ) => {
 	const _endDate = new Date(endDate.toLocaleString(locale));
@@ -118,7 +118,7 @@ const Timer = (
 	React.useEffect(() => {
 		const handleTimeout = async () => {
 			const draftDonation =
-				await checkDraftDonationStatus(stellarAddress);
+				await checkDraftDonationStatus(draftDonationId);
 
 			if (draftDonation?.status === 'matched') {
 				setStatus('successful');
@@ -290,7 +290,7 @@ const DonationStatusSection: FC<TDonationStatusSectionProps> = ({
 							{Timer(
 								new Date(draftDonationData?.expiresAt!),
 								locale,
-								stellarAddress,
+								Number(draftDonationData.id),
 								setStatus,
 								checkDraftDonationStatus,
 							)}

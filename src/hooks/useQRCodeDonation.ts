@@ -13,7 +13,6 @@ import StorageLabel from '@/lib/localStorage';
 import { IDraftDonation } from '@/apollo/types/gqlTypes';
 import { useDonateData } from '@/context/donate.context';
 import { ChainType } from '@/types/config';
-import { IWalletAddress } from '@/apollo/types/types';
 
 export type TQRStatus = 'waiting' | 'failed' | 'success' | 'expired';
 
@@ -25,6 +24,7 @@ export const useQRCodeDonation = () => {
 	);
 	const [status, setStatus] = useState<TQRStatus>('waiting');
 	const [loading, setLoading] = useState(false);
+	const [pendingDonationExists, setPendingDonationExists] = useState(false);
 
 	const generateStellarPaymentQRCode = async (
 		toWalletAddress: string,
@@ -47,7 +47,7 @@ export const useQRCodeDonation = () => {
 
 	const createDraftDonation = async (
 		payload: ICreateDraftDonation,
-	): Promise<void> => {
+	): Promise<number | undefined> => {
 		try {
 			const {
 				chainId,
@@ -112,12 +112,13 @@ export const useQRCodeDonation = () => {
 					JSON.stringify(newLocalStorageItem),
 				);
 			}
+			return createDraftDonation;
 		} catch (error: any) {
 			console.error('Error creating draft donation', error);
 		}
 	};
 
-	const retrieveDraftDonation = async (address: string) => {
+	const retrieveDraftDonation = async (draftDonationId: number) => {
 		const statusMap: Record<string, TQRStatus> = {
 			pending: 'waiting',
 			matched: 'success',
@@ -126,23 +127,6 @@ export const useQRCodeDonation = () => {
 
 		try {
 			setLoading(true);
-			const draftDonations = localStorage.getItem(
-				StorageLabel.DRAFT_DONATIONS,
-			);
-
-			if (!draftDonations) {
-				setDraftDonation(null);
-				return setLoading(false);
-			}
-
-			const parsedLocalStorageItem = JSON.parse(draftDonations!);
-
-			if (!address) {
-				setDraftDonation(null);
-				return setLoading(false);
-			}
-
-			const draftDonationId = parsedLocalStorageItem[address!];
 
 			if (!draftDonationId) {
 				setDraftDonation(null);
@@ -153,7 +137,7 @@ export const useQRCodeDonation = () => {
 				data: { getDraftDonationById },
 			} = (await client.query({
 				query: FETCH_DRAFT_DONATION,
-				variables: { id: Number(draftDonationId) },
+				variables: { id: draftDonationId },
 				fetchPolicy: 'no-cache',
 			})) as { data: { getDraftDonationById: IDraftDonation } };
 
@@ -176,26 +160,14 @@ export const useQRCodeDonation = () => {
 		}
 	};
 
-	const checkDraftDonationStatus = async (address: string) => {
-		const draftDonations = localStorage.getItem(
-			StorageLabel.DRAFT_DONATIONS,
-		);
-
-		if (!draftDonations) return;
-
-		const parsedLocalStorageItem = JSON.parse(draftDonations!);
-
-		if (!address) return;
-
-		const draftDonationId = parsedLocalStorageItem[address!];
-
+	const checkDraftDonationStatus = async (draftDonationId: number) => {
 		if (!draftDonationId) return;
 
 		const {
 			data: { fetchDaftDonationWithUpdatedStatus },
 		} = await client.query({
 			query: VERIFY_QR_DONATION_TRANSACTION,
-			variables: { id: Number(draftDonationId) },
+			variables: { id: draftDonationId },
 			fetchPolicy: 'no-cache',
 		});
 
@@ -204,25 +176,8 @@ export const useQRCodeDonation = () => {
 		return fetchDaftDonationWithUpdatedStatus;
 	};
 
-	const markDraftDonationAsFailed = async () => {
+	const markDraftDonationAsFailed = async (draftDonationId: number) => {
 		try {
-			const draftDonations = localStorage.getItem(
-				StorageLabel.DRAFT_DONATIONS,
-			);
-
-			if (!draftDonations) return;
-
-			const parsedLocalStorageItem = JSON.parse(draftDonations!);
-
-			const projectAddress = project.addresses?.find(
-				address => address.chainType === ChainType.STELLAR,
-			);
-
-			if (!projectAddress || !projectAddress?.address) return;
-
-			const draftDonationId =
-				parsedLocalStorageItem[projectAddress?.address!];
-
 			if (!draftDonationId) return;
 
 			const {
@@ -249,7 +204,16 @@ export const useQRCodeDonation = () => {
 			});
 
 			// remove draft donation item from local storage with key = projectAddress
-			delete parsedLocalStorageItem[projectAddress?.address];
+			const localStorageItem = localStorage.getItem(
+				StorageLabel.DRAFT_DONATIONS,
+			);
+			if (!localStorageItem) return;
+			const parsedLocalStorageItem = JSON.parse(localStorageItem);
+			const projectAddress = project.addresses?.find(
+				address => address.chainType === ChainType.STELLAR,
+			);
+			if (!projectAddress?.address) return;
+			delete parsedLocalStorageItem[projectAddress.address];
 			localStorage.setItem(
 				StorageLabel.DRAFT_DONATIONS,
 				JSON.stringify(parsedLocalStorageItem),
@@ -289,10 +253,6 @@ export const useQRCodeDonation = () => {
 		const timerElement = document.getElementById('timer');
 		let timerInterval: NodeJS.Timeout;
 
-		const stellarAddress = project.addresses?.find(
-			address => address.chainType === ChainType.STELLAR,
-		) as IWalletAddress;
-
 		async function updateTimer() {
 			const now = new Date().getTime();
 			const leftTime = endTime - now;
@@ -303,16 +263,25 @@ export const useQRCodeDonation = () => {
 
 			if (!timerElement) return;
 
+			if (['success', 'expired', 'failed'].includes(status)) {
+				clearInterval(timerInterval);
+				timerElement.textContent = '00 : 00';
+				return;
+			}
+
 			if (leftTime <= 0) {
 				clearInterval(timerInterval);
 				timerElement.textContent = '00 : 00';
-				const draftDonation = await checkDraftDonationStatus(
-					stellarAddress?.address!,
-				);
-				if (draftDonation?.status === 'matched') {
-					setStatus('success');
-					setDraftDonation(draftDonation);
-					return;
+
+				if (draftDonation?.id) {
+					const retDraftDonation = await checkDraftDonationStatus(
+						Number(draftDonation.id),
+					);
+					if (retDraftDonation?.status === 'matched') {
+						setStatus('success');
+						setDraftDonation(draftDonation);
+						return;
+					}
 				}
 				setStatus('expired');
 				return;
@@ -334,12 +303,14 @@ export const useQRCodeDonation = () => {
 		status,
 		loading,
 		draftDonation,
+		pendingDonationExists,
 		setStatus,
 		startTimer,
 		setDraftDonation,
 		renewExpirationDate,
 		createDraftDonation,
 		retrieveDraftDonation,
+		setPendingDonationExists,
 		checkDraftDonationStatus,
 		markDraftDonationAsFailed,
 	};

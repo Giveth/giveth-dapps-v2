@@ -66,7 +66,9 @@ const DonateIndex: FC = () => {
 	const router = useRouter();
 	const { chainId } = useAccount();
 
-	const [showQRCode, setShowQRCode] = React.useState(false);
+	const [showQRCode, setShowQRCode] = React.useState(
+		!!router.query.draft_donation,
+	);
 	const [stopTimer, setStopTimer] = React.useState<void | (() => void)>();
 
 	useEffect(() => {

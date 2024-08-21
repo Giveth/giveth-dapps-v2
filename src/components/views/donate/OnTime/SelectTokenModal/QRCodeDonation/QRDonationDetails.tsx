@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useRouter } from 'next/router';
 import { useIntl } from 'react-intl';
 import {
 	neutralColors,
@@ -10,6 +11,7 @@ import {
 	brandColors,
 	IconArrowRight,
 	Button,
+	mediaQueries,
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import { useDonateData } from '@/context/donate.context';
@@ -26,6 +28,7 @@ import { useQRCodeDonation } from '@/hooks/useQRCodeDonation';
 
 const QRDonationDetails = () => {
 	const { formatMessage } = useIntl();
+	const router = useRouter();
 	const { checkDraftDonationStatus } = useQRCodeDonation();
 	const {
 		project,
@@ -42,6 +45,7 @@ const QRDonationDetails = () => {
 
 	const { title, addresses } = project;
 
+	const draftDonationId = router.query.draft_donation;
 	const stellarAddress = addresses?.find(
 		address => address.chainType === ChainType.STELLAR,
 	)?.address;
@@ -57,16 +61,10 @@ const QRDonationDetails = () => {
 
 	const isFailedOperation = ['expired', 'failed'].includes(qrDonationStatus);
 
-	const goToDonations = () => {
-		if (isSignedIn) {
-			window.open(Routes.MyDonations, '_blank');
-		} else {
-			window.open(Routes.Invoice + '/' + draftDonationData?.id, '_blank');
-		}
-	};
-
 	const raiseTicket = async () => {
-		const draftDonation = await checkDraftDonationStatus(stellarAddress!);
+		const draftDonation = await checkDraftDonationStatus(
+			Number(draftDonationId),
+		);
 		if (draftDonation?.status === 'matched') {
 			setQRDonationStatus('success');
 			setDraftDonationData(draftDonation);
@@ -87,7 +85,9 @@ const QRDonationDetails = () => {
 	}, [draftDonationData?.expiresAt]);
 
 	useEffect(() => {
-		fetchDraftDonation?.(stellarAddress!);
+		if (!stellarAddress) return;
+
+		fetchDraftDonation?.(Number(draftDonationId));
 
 		const fetchTokenPrice = async () => {
 			const coingeckoChainId =
@@ -103,7 +103,7 @@ const QRDonationDetails = () => {
 		// Set up interval to refresh every 5 minutes
 		const intervalId = setInterval(() => {
 			fetchTokenPrice();
-			fetchDraftDonation?.(stellarAddress!);
+			fetchDraftDonation?.(Number(draftDonationId));
 		}, 300000);
 
 		return () => clearInterval(intervalId);
@@ -180,15 +180,25 @@ const QRDonationDetails = () => {
 					<B>{title || '--'}</B>
 				</DonationDetails>
 				<Hr />
-				<Flex $justifyContent='space-between'>
+				<LinkSection
+					$justifyContent='space-between'
+					$alignItems='center'
+				>
 					<B style={{ color: neutralColors.gray[800] }}>
 						{formatMessage({ id: 'label.please_wait' })}
 					</B>
-					<CheckDonation onClick={() => goToDonations()}>
+					<CheckDonation
+						onClick={() =>
+							window.open(
+								Routes.Invoice + '/' + draftDonationData?.id,
+								'_blank',
+							)
+						}
+					>
 						{formatMessage({ id: 'label.check_donations' })}
 						<IconArrowRight size={24} />
 					</CheckDonation>
-				</Flex>
+				</LinkSection>
 			</DonationStatus>
 			<B style={{ marginTop: '50px', color: neutralColors.gray[800] }}>
 				{formatMessage({
@@ -234,10 +244,14 @@ const Timer = styled.div`
 `;
 
 const Note = styled(Flex)`
-	align-items: center;
+	align-items: start;
 	padding: 8px 4px;
 	color: ${semanticColors.blueSky[700]};
 	gap: 16px;
+
+	> :first-child {
+		margin-top: 4px;
+	}
 `;
 
 const DonationStatus = styled(Flex)`
@@ -317,6 +331,14 @@ const CheckDonation = styled.p`
 	text-transform: capitalize;
 	font-weight: 500;
 	color: ${brandColors.pinky[500]} !important;
+`;
+
+const LinkSection = styled(Flex)`
+	flex-direction: column;
+
+	${mediaQueries.mobileM} {
+		flex-direction: row;
+	}
 `;
 
 const Hr = styled.div`

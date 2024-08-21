@@ -1209,6 +1209,7 @@
 	"label.copy_the_mnemo_to_use_in_your_app": "Copia la mnemotecnia para usar en tu aplicación de billetera.",
 	"label.no_memo_is_needed_for_this_address": "No se necesita Memo para esta dirección",
 	"label.waiting_for_your_donation": "Esperando tu donación",
+	"label.you_already_have_another_pending_donation": "Ya tienes otra donación pendiente, por favor dona o vuelve a hacer clic para crear otra con un importe diferente.",
 	"label.remaining_time": "Tiempo restante",
 	"label.update_qr_code": "Actualizar código QR",
 	"label.pending": "Pendiente",
