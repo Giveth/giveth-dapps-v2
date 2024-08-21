@@ -1,4 +1,5 @@
 import React, { FC, useEffect, useState } from 'react';
+import { useRouter } from 'next/router';
 import Image from 'next/image';
 import styled from 'styled-components';
 import {
@@ -27,6 +28,9 @@ import QRDonationCardContent from './QRDonationCardContent';
 import { useQRCodeDonation } from '@/hooks/useQRCodeDonation';
 import { useDonateData } from '@/context/donate.context';
 import { AmountInput } from '@/components/AmountInput/AmountInput';
+import StorageLabel from '@/lib/localStorage';
+import { IWalletAddress } from '@/apollo/types/types';
+import InlineToast, { EToastType } from '@/components/toasts/InlineToast';
 
 interface QRDonationCardProps extends IDonationCardProps {
 	qrAcceptedTokens: IProjectAcceptedToken[];
@@ -48,21 +52,27 @@ export const QRDonationCard: FC<QRDonationCardProps> = ({
 	setShowQRCode,
 }) => {
 	const { formatMessage } = useIntl();
+	const router = useRouter();
 
 	const {
 		createDraftDonation,
 		markDraftDonationAsFailed,
 		checkDraftDonationStatus,
+		retrieveDraftDonation,
 	} = useQRCodeDonation();
 	const {
 		project,
 		setQRDonationStatus,
 		setDraftDonationData,
+		setPendingDonationExists,
+		pendingDonationExists,
 		qrDonationStatus,
 		draftDonationData,
 		draftDonationLoading,
 	} = useDonateData();
 	const { addresses, id } = project;
+
+	const draftDonationId = Number(router.query.draft_donation!);
 
 	const [amount, setAmount] = useState(0n);
 	const [usdAmount, setUsdAmount] = useState('0.00');
@@ -76,16 +86,15 @@ export const QRDonationCard: FC<QRDonationCardProps> = ({
 
 	const goBack = async () => {
 		if (showQRCode) {
-			const draftDonation = await checkDraftDonationStatus(
-				projectAddress?.address!,
-			);
+			const draftDonation =
+				await checkDraftDonationStatus(draftDonationId);
 			if (draftDonation?.status === 'matched') {
 				setQRDonationStatus('success');
 				setDraftDonationData(draftDonation);
 				return;
 			}
 
-			await markDraftDonationAsFailed();
+			await markDraftDonationAsFailed(draftDonationId);
 			setShowQRCode(false);
 		} else {
 			setIsQRDonation(false);
@@ -94,30 +103,61 @@ export const QRDonationCard: FC<QRDonationCardProps> = ({
 	};
 
 	const handleNext = async () => {
-		if (!stellarToken?.symbol || !projectAddress?.address) return;
+		const draftDonations = localStorage.getItem(
+			StorageLabel.DRAFT_DONATIONS,
+		);
 
-		const patyload = {
-			walletAddress: projectAddress.address,
-			projectId: Number(id),
-			amount: Number(formatAmoutToDisplay(amount)),
-			token: stellarToken,
-			anonymous: true,
-			symbol: stellarToken.symbol,
-			setFailedModalType: () => {},
-			useDonationBox: false,
-			chainId: stellarToken?.networkId,
-			memo: projectAddress.memo,
-		};
+		const parsedLocalStorageItem = JSON.parse(draftDonations!);
+		const projectAddress: IWalletAddress | undefined =
+			project.addresses?.find(
+				address => address.chainType === ChainType.STELLAR,
+			);
+		let draftDonationId = parsedLocalStorageItem[projectAddress?.address!];
 
-		await markDraftDonationAsFailed();
-		await createDraftDonation(patyload);
+		const retDraftDonation = !!draftDonationId
+			? await retrieveDraftDonation(Number(draftDonationId))
+			: null;
+
+		if (retDraftDonation && retDraftDonation.status === 'pending') {
+			setPendingDonationExists?.(true);
+		} else {
+			if (!stellarToken?.symbol || !projectAddress?.address) return;
+
+			const patyload = {
+				walletAddress: projectAddress.address,
+				projectId: Number(id),
+				amount: Number(formatAmoutToDisplay(amount)),
+				token: stellarToken,
+				anonymous: true,
+				symbol: stellarToken.symbol,
+				setFailedModalType: () => {},
+				useDonationBox: false,
+				chainId: stellarToken?.networkId,
+				memo: projectAddress.memo,
+			};
+
+			draftDonationId = await createDraftDonation(patyload);
+			setPendingDonationExists?.(false);
+		}
+
+		if (draftDonationId) {
+			await router.push(
+				{
+					query: {
+						...router.query,
+						draft_donation: draftDonationId,
+					},
+				},
+				undefined,
+				{ shallow: true },
+			);
+		}
 		setShowQRCode(true);
 	};
 
-	useEffect(() => {
+	const convertAmountToUSD = (amount: bigint) => {
 		if (!stellarToken) {
-			setUsdAmount('0.00');
-			return;
+			return '0.00';
 		}
 
 		if (tokenPrice) {
@@ -126,10 +166,14 @@ export const QRDonationCard: FC<QRDonationCardProps> = ({
 
 			const _displayAmount = formatAmoutToDisplay(amountInUsd);
 
-			setUsdAmount(formatBalance(_displayAmount));
+			return formatBalance(_displayAmount);
 		} else {
-			setUsdAmount('0.00');
+			return '0.00';
 		}
+	};
+
+	useEffect(() => {
+		setUsdAmount(convertAmountToUSD(amount));
 	}, [amount, tokenPrice]);
 
 	useEffect(() => {
@@ -143,11 +187,6 @@ export const QRDonationCard: FC<QRDonationCardProps> = ({
 		};
 
 		fetchTokenPrice();
-
-		// Set up interval to refresh every 10 minutes
-		const intervalId = setInterval(fetchTokenPrice, 600000);
-
-		return () => clearInterval(intervalId);
 	}, []);
 
 	return (
@@ -164,6 +203,14 @@ export const QRDonationCard: FC<QRDonationCardProps> = ({
 					})}
 				</Title>
 			</CardHead>
+			{pendingDonationExists && (
+				<MarginLessInlineToast
+					type={EToastType.Warning}
+					message={formatMessage({
+						id: 'label.you_already_have_another_pending_donation',
+					})}
+				/>
+			)}
 			{!showQRCode ? (
 				<>
 					<StyledInputWrapper>
@@ -237,8 +284,8 @@ export const QRDonationCard: FC<QRDonationCardProps> = ({
 			) : (
 				<QRDonationCardContent
 					tokenData={stellarToken}
-					usdAmount={usdAmount}
-					amount={formatAmoutToDisplay(amount)}
+					usdAmount={convertAmountToUSD(amount)}
+					amount={draftDonationData?.amount?.toString() ?? '0.00'}
 					qrDonationStatus={qrDonationStatus}
 					draftDonationData={draftDonationData}
 					projectAddress={projectAddress}
@@ -325,4 +372,8 @@ const StyledInputWrapper = styled(InputWrapper)`
 	${mediaQueries.tablet} {
 		flex-direction: row;
 	}
+`;
+
+const MarginLessInlineToast = styled(InlineToast)`
+	margin: 0;
 `;

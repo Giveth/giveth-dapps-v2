@@ -47,12 +47,14 @@ interface IDonateContext {
 	>;
 	fetchProject: () => Promise<void>;
 	draftDonationData?: IDraftDonation;
-	fetchDraftDonation?: (address: string) => Promise<void | IDraftDonation>;
+	fetchDraftDonation?: (draftDonationId: number) => Promise<void | IDraftDonation>;
 	qrDonationStatus: TQRStatus;
+	pendingDonationExists: boolean;
 	startTimer?: (startTime: Date) => void;
 	setQRDonationStatus: Dispatch<SetStateAction<TQRStatus>>;
 	draftDonationLoading?: boolean;
 	setDraftDonationData: Dispatch<SetStateAction<IDraftDonation | null>>;
+	setPendingDonationExists?: Dispatch<SetStateAction<boolean>>;
 }
 
 interface IProviderProps {
@@ -70,10 +72,12 @@ const DonateContext = createContext<IDonateContext>({
 	draftDonationData: {} as IDraftDonation,
 	fetchDraftDonation: async () => {},
 	qrDonationStatus: 'waiting',
+	pendingDonationExists: false,
 	startTimer: () => {},
 	setQRDonationStatus: () => {},
 	draftDonationLoading: false,
 	setDraftDonationData: () => {},
+	setPendingDonationExists: () => {},
 });
 
 DonateContext.displayName = 'DonateContext';
@@ -123,6 +127,8 @@ export const DonateProvider: FC<IProviderProps> = ({ children, project }) => {
 		draftDonation,
 		status,
 		retrieveDraftDonation,
+		pendingDonationExists,
+		setPendingDonationExists,
 		startTimer,
 		setStatus,
 		loading,
@@ -139,6 +145,7 @@ export const DonateProvider: FC<IProviderProps> = ({ children, project }) => {
 				successDonation,
 				setSuccessDonation,
 				selectedOneTimeToken,
+				pendingDonationExists,
 				selectedRecurringToken,
 				setSelectedOneTimeToken,
 				setSelectedRecurringToken,
@@ -150,6 +157,7 @@ export const DonateProvider: FC<IProviderProps> = ({ children, project }) => {
 				qrDonationStatus: status,
 				startTimer,
 				setQRDonationStatus: setStatus,
+				setPendingDonationExists,
 				draftDonationLoading: loading,
 			}}
 		>

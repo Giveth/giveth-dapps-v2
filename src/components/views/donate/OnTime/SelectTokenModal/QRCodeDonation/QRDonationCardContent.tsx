@@ -209,7 +209,7 @@ const ImageWrapper = styled(Flex)`
 
 const Overlay = styled(Flex)`
 	position: absolute;
-	z-index: 100;
+	z-index: 50;
 	width: 100%;
 	height: 100%;
 	justify-content: center;

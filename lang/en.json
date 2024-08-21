@@ -1213,6 +1213,7 @@
 	"label.copy_the_mnemo_to_use_in_your_app": "Copy the memo to use in your wallet app.",
 	"label.no_memo_is_needed_for_this_address": "No Memo is needed for this address",
 	"label.waiting_for_your_donation": "Waiting for your donation",
+	"label.you_already_have_another_pending_donation": "You already have another pending donation, please donate or click back to create another one with a different amount.",
 	"label.remaining_time": "Remaining time",
 	"label.update_qr_code": "Update QR code",
 	"label.pending": "Pending",
