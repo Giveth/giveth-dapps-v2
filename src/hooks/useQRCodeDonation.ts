@@ -164,16 +164,16 @@ export const useQRCodeDonation = () => {
 		if (!draftDonationId) return;
 
 		const {
-			data: { fetchDaftDonationWithUpdatedStatus },
+			data: { verifyQRDonationTransaction },
 		} = await client.query({
 			query: VERIFY_QR_DONATION_TRANSACTION,
 			variables: { id: draftDonationId },
 			fetchPolicy: 'no-cache',
 		});
 
-		if (!fetchDaftDonationWithUpdatedStatus) return;
+		if (!verifyQRDonationTransaction) return;
 
-		return fetchDaftDonationWithUpdatedStatus;
+		return verifyQRDonationTransaction;
 	};
 
 	const markDraftDonationAsFailed = async (draftDonationId: number) => {
@@ -280,6 +280,10 @@ export const useQRCodeDonation = () => {
 					if (retDraftDonation?.status === 'matched') {
 						setStatus('success');
 						setDraftDonation(draftDonation);
+						return;
+					} else {
+						await markDraftDonationAsFailed(draftDonation?.id!);
+						setStatus('failed');
 						return;
 					}
 				}

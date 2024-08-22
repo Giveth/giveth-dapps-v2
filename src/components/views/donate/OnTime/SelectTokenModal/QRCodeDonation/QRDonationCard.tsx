@@ -31,11 +31,17 @@ import { AmountInput } from '@/components/AmountInput/AmountInput';
 import StorageLabel from '@/lib/localStorage';
 import { IWalletAddress } from '@/apollo/types/types';
 import InlineToast, { EToastType } from '@/components/toasts/InlineToast';
+import { useAppSelector } from '@/features/hooks';
+import { useModalCallback } from '@/hooks/useModalCallback';
 
 interface QRDonationCardProps extends IDonationCardProps {
 	qrAcceptedTokens: IProjectAcceptedToken[];
 	setIsQRDonation: (isQRDonation: boolean) => void;
 }
+
+const wsURL = process.env.NEXT_PUBLIC_BASE_ROUTE?.startsWith('https')
+	? `wss${process.env.NEXT_PUBLIC_BASE_ROUTE.replace('https', '')}`
+	: `ws${process.env.NEXT_PUBLIC_BASE_ROUTE?.replace('http', '')}`;
 
 export const formatAmoutToDisplay = (amount: bigint) => {
 	const decimals = 18;
@@ -54,6 +60,12 @@ export const QRDonationCard: FC<QRDonationCardProps> = ({
 	const { formatMessage } = useIntl();
 	const router = useRouter();
 
+	const { isSignedIn, isEnabled } = useAppSelector(state => state.user);
+	const [showDonateModal, setShowDonateModal] = useState(false);
+	const { modalCallback: signInThenDonate } = useModalCallback(() =>
+		setShowDonateModal(true),
+	);
+
 	const {
 		createDraftDonation,
 		markDraftDonationAsFailed,
@@ -65,6 +77,7 @@ export const QRDonationCard: FC<QRDonationCardProps> = ({
 		setQRDonationStatus,
 		setDraftDonationData,
 		setPendingDonationExists,
+		fetchDraftDonation,
 		pendingDonationExists,
 		qrDonationStatus,
 		draftDonationData,
@@ -84,6 +97,46 @@ export const QRDonationCard: FC<QRDonationCardProps> = ({
 		address => address.chainType === ChainType.STELLAR,
 	);
 
+	useEffect(() => {
+		const socket = new WebSocket(wsURL);
+
+		console.log('Connecting to the WebSocket server ===> ', wsURL);
+
+		socket.onopen = () => {
+			console.log('Connected to the WebSocket server');
+		};
+
+		socket.onerror = error => {
+			console.error('Error connecting to the WebSocket server', error);
+		};
+
+		const handleFetchDraftDonation = async (draftDonationId: number) => {
+			const draftDonation = await fetchDraftDonation?.(draftDonationId);
+			if (draftDonation?.status === 'matched') {
+				setQRDonationStatus('success');
+				setDraftDonationData(draftDonation);
+				return;
+			}
+		};
+
+		socket.onmessage = event => {
+			const data = JSON.parse(event.data);
+			if (data.type === 'new-donation') {
+				if (data.data.draftDonationId === draftDonationId) {
+					handleFetchDraftDonation?.(draftDonationId);
+				}
+			} else if (data.type === 'draft-donation-failed') {
+				if (data.data.draftDonationId === draftDonationId) {
+					setQRDonationStatus('failed');
+				}
+			}
+		};
+
+		return () => {
+			socket.close();
+		};
+	}, [draftDonationId]);
+
 	const goBack = async () => {
 		if (showQRCode) {
 			const draftDonation =
@@ -95,6 +148,7 @@ export const QRDonationCard: FC<QRDonationCardProps> = ({
 			}
 
 			await markDraftDonationAsFailed(draftDonationId);
+			setPendingDonationExists?.(false);
 			setShowQRCode(false);
 		} else {
 			setIsQRDonation(false);
@@ -103,59 +157,63 @@ export const QRDonationCard: FC<QRDonationCardProps> = ({
 	};
 
 	const handleNext = async () => {
-		const draftDonations = localStorage.getItem(
-			StorageLabel.DRAFT_DONATIONS,
-		);
-
-		const parsedLocalStorageItem = JSON.parse(draftDonations!);
-
-		const projectAddress: IWalletAddress | undefined =
-			project.addresses?.find(
-				address => address.chainType === ChainType.STELLAR,
-			);
-		let draftDonationId = parsedLocalStorageItem
-			? parsedLocalStorageItem[projectAddress?.address!]
-			: null;
-
-		const retDraftDonation = !!draftDonationId
-			? await retrieveDraftDonation(Number(draftDonationId))
-			: null;
-
-		if (retDraftDonation && retDraftDonation.status === 'pending') {
-			setPendingDonationExists?.(true);
+		if (isEnabled && !isSignedIn) {
+			signInThenDonate();
 		} else {
-			if (!stellarToken?.symbol || !projectAddress?.address) return;
-
-			const patyload = {
-				walletAddress: projectAddress.address,
-				projectId: Number(id),
-				amount: Number(formatAmoutToDisplay(amount)),
-				token: stellarToken,
-				anonymous: true,
-				symbol: stellarToken.symbol,
-				setFailedModalType: () => {},
-				useDonationBox: false,
-				chainId: stellarToken?.networkId,
-				memo: projectAddress.memo,
-			};
-
-			draftDonationId = await createDraftDonation(patyload);
-			setPendingDonationExists?.(false);
-		}
-
-		if (draftDonationId) {
-			await router.push(
-				{
-					query: {
-						...router.query,
-						draft_donation: draftDonationId,
-					},
-				},
-				undefined,
-				{ shallow: true },
+			const draftDonations = localStorage.getItem(
+				StorageLabel.DRAFT_DONATIONS,
 			);
+
+			const parsedLocalStorageItem = JSON.parse(draftDonations!);
+
+			const projectAddress: IWalletAddress | undefined =
+				project.addresses?.find(
+					address => address.chainType === ChainType.STELLAR,
+				);
+			let draftDonationId = parsedLocalStorageItem
+				? parsedLocalStorageItem[projectAddress?.address!]
+				: null;
+
+			const retDraftDonation = !!draftDonationId
+				? await retrieveDraftDonation(Number(draftDonationId))
+				: null;
+
+			if (retDraftDonation && retDraftDonation.status === 'pending') {
+				setPendingDonationExists?.(true);
+			} else {
+				if (!stellarToken?.symbol || !projectAddress?.address) return;
+
+				const patyload = {
+					walletAddress: projectAddress.address,
+					projectId: Number(id),
+					amount: Number(formatAmoutToDisplay(amount)),
+					token: stellarToken,
+					anonymous: true,
+					symbol: stellarToken.symbol,
+					setFailedModalType: () => {},
+					useDonationBox: false,
+					chainId: stellarToken?.networkId,
+					memo: projectAddress.memo,
+				};
+
+				draftDonationId = await createDraftDonation(patyload);
+				setPendingDonationExists?.(false);
+			}
+
+			if (draftDonationId) {
+				await router.push(
+					{
+						query: {
+							...router.query,
+							draft_donation: draftDonationId,
+						},
+					},
+					undefined,
+					{ shallow: true },
+				);
+			}
+			setShowQRCode(true);
 		}
-		setShowQRCode(true);
 	};
 
 	const convertAmountToUSD = (amount: bigint) => {

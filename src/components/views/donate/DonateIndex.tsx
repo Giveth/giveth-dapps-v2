@@ -43,6 +43,7 @@ import config from '@/configuration';
 import { ChainType } from '@/types/config';
 import { useQRCodeDonation } from '@/hooks/useQRCodeDonation';
 import EndaomentProjectsInfo from '@/components/views/project/EndaomentProjectsInfo';
+import { IDraftDonation } from '@/apollo/types/gqlTypes';
 
 const DonateIndex: FC = () => {
 	const { formatMessage } = useIntl();
@@ -55,6 +56,7 @@ const DonateIndex: FC = () => {
 		hasActiveQFRound,
 		setSuccessDonation,
 		setQRDonationStatus,
+		setDraftDonationData,
 		startTimer,
 	} = useDonateData();
 	const { renewExpirationDate } = useQRCodeDonation();
@@ -122,8 +124,16 @@ const DonateIndex: FC = () => {
 	const updateQRCode = async () => {
 		if (!draftDonationData?.id) return;
 
-		setQRDonationStatus('waiting');
 		const expiresAt = await renewExpirationDate(draftDonationData?.id);
+		setDraftDonationData((prev: IDraftDonation | null) => {
+			if (!prev) return null;
+			return {
+				...prev,
+				status: 'pending',
+				expiresAt: expiresAt?.toString() ?? undefined,
+			};
+		});
+		setQRDonationStatus('waiting');
 		const stopTimerFun = startTimer?.(new Date(expiresAt!));
 		setStopTimer(() => stopTimerFun);
 	};

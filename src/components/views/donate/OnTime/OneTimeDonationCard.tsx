@@ -69,7 +69,7 @@ const CryptoDonation: FC<{
 
 	const { formatMessage } = useIntl();
 	const router = useRouter();
-	const { isSignedIn, userData } = useAppSelector(state => state.user);
+	const { isSignedIn } = useAppSelector(state => state.user);
 
 	const { project, hasActiveQFRound, selectedOneTimeToken } = useDonateData();
 	const dispatch = useAppDispatch();
@@ -291,21 +291,17 @@ const CryptoDonation: FC<{
 	]);
 
 	const handleQRDonation = () => {
-		if (userData?.id && !isSignedIn) {
-			signInThenDonate();
-		} else {
-			setIsQRDonation(true);
-			router.push(
-				{
-					query: {
-						...router.query,
-						chain: ChainType.STELLAR.toLowerCase(),
-					},
+		setIsQRDonation(true);
+		router.push(
+			{
+				query: {
+					...router.query,
+					chain: ChainType.STELLAR.toLowerCase(),
 				},
-				undefined,
-				{ shallow: true },
-			);
-		}
+			},
+			undefined,
+			{ shallow: true },
+		);
 	};
 
 	useEffect(() => {
