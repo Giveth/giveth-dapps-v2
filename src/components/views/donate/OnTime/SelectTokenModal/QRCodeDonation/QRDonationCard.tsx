@@ -106,6 +106,10 @@ export const QRDonationCard: FC<QRDonationCardProps> = ({
 			console.log('Connected to the WebSocket server');
 		};
 
+		socket.onerror = error => {
+			console.error('Error connecting to the WebSocket server', error);
+		}
+
 		const handleFetchDraftDonation = async (draftDonationId: number) => {
 			const draftDonation = await fetchDraftDonation?.(draftDonationId);
 			if (draftDonation?.status === 'matched') {
