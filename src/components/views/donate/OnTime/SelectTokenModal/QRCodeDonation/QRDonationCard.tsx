@@ -65,6 +65,7 @@ export const QRDonationCard: FC<QRDonationCardProps> = ({
 		setQRDonationStatus,
 		setDraftDonationData,
 		setPendingDonationExists,
+		fetchDraftDonation,
 		pendingDonationExists,
 		qrDonationStatus,
 		draftDonationData,
@@ -84,6 +85,40 @@ export const QRDonationCard: FC<QRDonationCardProps> = ({
 		address => address.chainType === ChainType.STELLAR,
 	);
 
+	useEffect(() => {
+		const socket = new WebSocket('ws://localhost:4000');
+
+		socket.onopen = () => {
+			console.log('Connected to the WebSocket server');
+		};
+
+		const handleFetchDraftDonation = async (draftDonationId: number) => {
+			const draftDonation = await fetchDraftDonation?.(draftDonationId);
+			if (draftDonation?.status === 'matched') {
+				setQRDonationStatus('success');
+				setDraftDonationData(draftDonation);
+				return;
+			}
+		};
+
+		socket.onmessage = event => {
+			const data = JSON.parse(event.data);
+			if (data.type === 'new-donation') {
+				if (data.data.draftDonationId === draftDonationId) {
+					handleFetchDraftDonation?.(draftDonationId);
+				}
+			} else if (data.type === 'draft-donation-failed') {
+				if (data.data.draftDonationId === draftDonationId) {
+					setQRDonationStatus('failed');
+				}
+			}
+		};
+
+		return () => {
+			socket.close();
+		};
+	}, [draftDonationId]);
+
 	const goBack = async () => {
 		if (showQRCode) {
 			const draftDonation =
@@ -95,6 +130,7 @@ export const QRDonationCard: FC<QRDonationCardProps> = ({
 			}
 
 			await markDraftDonationAsFailed(draftDonationId);
+			setPendingDonationExists?.(false);
 			setShowQRCode(false);
 		} else {
 			setIsQRDonation(false);

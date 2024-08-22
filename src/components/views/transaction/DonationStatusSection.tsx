@@ -24,6 +24,8 @@ import { IDonation } from '@/apollo/types/types';
 import ExternalLink from '@/components/ExternalLink';
 import links from '@/lib/constants/links';
 import { useQRCodeDonation } from '@/hooks/useQRCodeDonation';
+import { client } from '@/apollo/apolloClient';
+import { MARK_DRAFT_DONATION_AS_FAILED } from '@/apollo/gql/gqlDonations';
 
 type IColor = 'golden' | 'jade' | 'punch' | 'blueSky';
 
@@ -93,6 +95,7 @@ const formatTime = (date: Date, locale: string) => {
 
 // Timer that keep counting time before the donation expires (mm Minutes ss Seconds) format
 const Timer = (
+	status: TQRStatus,
 	endDate: Date,
 	locale: string,
 	draftDonationId: number,
@@ -123,6 +126,11 @@ const Timer = (
 			if (draftDonation?.status === 'matched') {
 				setStatus('successful');
 			} else {
+				await client.mutate({
+					mutation: MARK_DRAFT_DONATION_AS_FAILED,
+					variables: { id: Number(draftDonationId) },
+					fetchPolicy: 'no-cache',
+				});
 				setStatus('failed');
 			}
 		};
@@ -143,7 +151,7 @@ const Timer = (
 		return () => clearInterval(interval);
 	}, [_endDate]);
 
-	return time.minutes === 0 && time.seconds === 0 ? (
+	return (time.minutes === 0 && time.seconds === 0) || status === 'failed' ? (
 		<FlexWrap $alignItems='center' gap='8px'>
 			<P>{'30 Minutes'}</P>
 			<TextBox>{'Expired at ' + formatTime(_endDate, locale)}</TextBox>
@@ -288,6 +296,7 @@ const DonationStatusSection: FC<TDonationStatusSectionProps> = ({
 					) : (
 						<B>
 							{Timer(
+								status,
 								new Date(draftDonationData?.expiresAt!),
 								locale,
 								Number(draftDonationData.id),

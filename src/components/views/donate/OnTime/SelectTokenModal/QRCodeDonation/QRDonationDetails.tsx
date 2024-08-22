@@ -22,7 +22,6 @@ import { ChainType } from '@/types/config';
 import { fetchPriceWithCoingeckoId } from '@/services/token';
 import { formatBalance } from '@/lib/helpers';
 import links from '@/lib/constants/links';
-import { useAppSelector } from '@/features/hooks';
 import Routes from '@/lib/constants/Routes';
 import { useQRCodeDonation } from '@/hooks/useQRCodeDonation';
 
@@ -39,7 +38,6 @@ const QRDonationDetails = () => {
 		setQRDonationStatus,
 		setDraftDonationData,
 	} = useDonateData();
-	const { isSignedIn } = useAppSelector(state => state.user);
 
 	const [tokenPrice, setTokenPrice] = useState(0);
 
@@ -103,7 +101,6 @@ const QRDonationDetails = () => {
 		// Set up interval to refresh every 5 minutes
 		const intervalId = setInterval(() => {
 			fetchTokenPrice();
-			fetchDraftDonation?.(Number(draftDonationId));
 		}, 300000);
 
 		return () => clearInterval(intervalId);

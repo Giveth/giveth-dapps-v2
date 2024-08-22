@@ -57,6 +57,7 @@ const TransactionView = () => {
 		};
 
 		const fetchDraftDonation = async (): Promise<void> => {
+			setIsLoading(true);
 			if (!id) return setDraftDonationData(null);
 
 			try {
@@ -111,7 +112,30 @@ const TransactionView = () => {
 			}
 		};
 
+		const socket = new WebSocket('ws://localhost:4000');
+
+		socket.onopen = () => {
+			console.log('Connected to the WebSocket server');
+		};
+
+		socket.onmessage = event => {
+			const data = JSON.parse(event.data);
+			if (data.type === 'new-donation') {
+				if (data.data.draftDonationId === Number(id)) {
+					fetchDraftDonation?.();
+				}
+			} else if (data.type === 'draft-donation-failed') {
+				if (data.data.draftDonationId === Number(id)) {
+					setStatus('failed');
+				}
+			}
+		};
+
 		fetchDraftDonation();
+
+		return () => {
+			socket.close();
+		};
 	}, [id]);
 
 	if (isLoading) {

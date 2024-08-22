@@ -69,7 +69,7 @@ const CryptoDonation: FC<{
 
 	const { formatMessage } = useIntl();
 	const router = useRouter();
-	const { isSignedIn, userData } = useAppSelector(state => state.user);
+	const { isSignedIn, isEnabled } = useAppSelector(state => state.user);
 
 	const { project, hasActiveQFRound, selectedOneTimeToken } = useDonateData();
 	const dispatch = useAppDispatch();
@@ -291,7 +291,7 @@ const CryptoDonation: FC<{
 	]);
 
 	const handleQRDonation = () => {
-		if (userData?.id && !isSignedIn) {
+		if (isEnabled && !isSignedIn) {
 			signInThenDonate();
 		} else {
 			setIsQRDonation(true);
