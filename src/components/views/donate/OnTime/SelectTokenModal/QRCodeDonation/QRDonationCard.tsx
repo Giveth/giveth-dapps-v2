@@ -39,6 +39,10 @@ interface QRDonationCardProps extends IDonationCardProps {
 	setIsQRDonation: (isQRDonation: boolean) => void;
 }
 
+const wsURL = process.env.NEXT_PUBLIC_BASE_ROUTE?.startsWith('https')
+	? `wss${process.env.NEXT_PUBLIC_BASE_ROUTE.replace('https', '')}`
+	: `ws${process.env.NEXT_PUBLIC_BASE_ROUTE?.replace('http', '')}`;
+
 export const formatAmoutToDisplay = (amount: bigint) => {
 	const decimals = 18;
 	return truncateToDecimalPlaces(
@@ -94,7 +98,7 @@ export const QRDonationCard: FC<QRDonationCardProps> = ({
 	);
 
 	useEffect(() => {
-		const socket = new WebSocket('ws://localhost:4000');
+		const socket = new WebSocket(wsURL);
 
 		socket.onopen = () => {
 			console.log('Connected to the WebSocket server');

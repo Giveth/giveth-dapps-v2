@@ -153,7 +153,7 @@ const Timer = (
 
 	return (time.minutes === 0 && time.seconds === 0) || status === 'failed' ? (
 		<FlexWrap $alignItems='center' gap='8px'>
-			<P>{'30 Minutes'}</P>
+			<P>{'15 Minutes'}</P>
 			<TextBox>{'Expired at ' + formatTime(_endDate, locale)}</TextBox>
 		</FlexWrap>
 	) : (
