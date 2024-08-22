@@ -31,6 +31,8 @@ import { AmountInput } from '@/components/AmountInput/AmountInput';
 import StorageLabel from '@/lib/localStorage';
 import { IWalletAddress } from '@/apollo/types/types';
 import InlineToast, { EToastType } from '@/components/toasts/InlineToast';
+import { useAppSelector } from '@/features/hooks';
+import { useModalCallback } from '@/hooks/useModalCallback';
 
 interface QRDonationCardProps extends IDonationCardProps {
 	qrAcceptedTokens: IProjectAcceptedToken[];
@@ -53,6 +55,12 @@ export const QRDonationCard: FC<QRDonationCardProps> = ({
 }) => {
 	const { formatMessage } = useIntl();
 	const router = useRouter();
+
+	const { isSignedIn, isEnabled } = useAppSelector(state => state.user);
+	const [showDonateModal, setShowDonateModal] = useState(false);
+	const { modalCallback: signInThenDonate } = useModalCallback(() =>
+		setShowDonateModal(true),
+	);
 
 	const {
 		createDraftDonation,
@@ -139,59 +147,63 @@ export const QRDonationCard: FC<QRDonationCardProps> = ({
 	};
 
 	const handleNext = async () => {
-		const draftDonations = localStorage.getItem(
-			StorageLabel.DRAFT_DONATIONS,
-		);
-
-		const parsedLocalStorageItem = JSON.parse(draftDonations!);
-
-		const projectAddress: IWalletAddress | undefined =
-			project.addresses?.find(
-				address => address.chainType === ChainType.STELLAR,
-			);
-		let draftDonationId = parsedLocalStorageItem
-			? parsedLocalStorageItem[projectAddress?.address!]
-			: null;
-
-		const retDraftDonation = !!draftDonationId
-			? await retrieveDraftDonation(Number(draftDonationId))
-			: null;
-
-		if (retDraftDonation && retDraftDonation.status === 'pending') {
-			setPendingDonationExists?.(true);
+		if (isEnabled && !isSignedIn) {
+			signInThenDonate();
 		} else {
-			if (!stellarToken?.symbol || !projectAddress?.address) return;
-
-			const patyload = {
-				walletAddress: projectAddress.address,
-				projectId: Number(id),
-				amount: Number(formatAmoutToDisplay(amount)),
-				token: stellarToken,
-				anonymous: true,
-				symbol: stellarToken.symbol,
-				setFailedModalType: () => {},
-				useDonationBox: false,
-				chainId: stellarToken?.networkId,
-				memo: projectAddress.memo,
-			};
-
-			draftDonationId = await createDraftDonation(patyload);
-			setPendingDonationExists?.(false);
-		}
-
-		if (draftDonationId) {
-			await router.push(
-				{
-					query: {
-						...router.query,
-						draft_donation: draftDonationId,
-					},
-				},
-				undefined,
-				{ shallow: true },
+			const draftDonations = localStorage.getItem(
+				StorageLabel.DRAFT_DONATIONS,
 			);
+
+			const parsedLocalStorageItem = JSON.parse(draftDonations!);
+
+			const projectAddress: IWalletAddress | undefined =
+				project.addresses?.find(
+					address => address.chainType === ChainType.STELLAR,
+				);
+			let draftDonationId = parsedLocalStorageItem
+				? parsedLocalStorageItem[projectAddress?.address!]
+				: null;
+
+			const retDraftDonation = !!draftDonationId
+				? await retrieveDraftDonation(Number(draftDonationId))
+				: null;
+
+			if (retDraftDonation && retDraftDonation.status === 'pending') {
+				setPendingDonationExists?.(true);
+			} else {
+				if (!stellarToken?.symbol || !projectAddress?.address) return;
+
+				const patyload = {
+					walletAddress: projectAddress.address,
+					projectId: Number(id),
+					amount: Number(formatAmoutToDisplay(amount)),
+					token: stellarToken,
+					anonymous: true,
+					symbol: stellarToken.symbol,
+					setFailedModalType: () => {},
+					useDonationBox: false,
+					chainId: stellarToken?.networkId,
+					memo: projectAddress.memo,
+				};
+
+				draftDonationId = await createDraftDonation(patyload);
+				setPendingDonationExists?.(false);
+			}
+
+			if (draftDonationId) {
+				await router.push(
+					{
+						query: {
+							...router.query,
+							draft_donation: draftDonationId,
+						},
+					},
+					undefined,
+					{ shallow: true },
+				);
+			}
+			setShowQRCode(true);
 		}
-		setShowQRCode(true);
 	};
 
 	const convertAmountToUSD = (amount: bigint) => {
