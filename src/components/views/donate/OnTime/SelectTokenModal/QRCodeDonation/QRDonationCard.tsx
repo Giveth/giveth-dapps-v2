@@ -40,7 +40,7 @@ interface QRDonationCardProps extends IDonationCardProps {
 }
 
 const wsURL = process.env.NEXT_PUBLIC_BASE_ROUTE?.startsWith('https')
-	? `wss${process.env.NEXT_PUBLIC_BASE_ROUTE.replace('https', '')}`
+	? `ws${process.env.NEXT_PUBLIC_BASE_ROUTE.replace('https', '')}`
 	: `ws${process.env.NEXT_PUBLIC_BASE_ROUTE?.replace('http', '')}`;
 
 export const formatAmoutToDisplay = (amount: bigint) => {
