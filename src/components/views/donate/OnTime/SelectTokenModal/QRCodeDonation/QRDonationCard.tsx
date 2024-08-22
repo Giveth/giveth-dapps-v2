@@ -100,6 +100,8 @@ export const QRDonationCard: FC<QRDonationCardProps> = ({
 	useEffect(() => {
 		const socket = new WebSocket(wsURL);
 
+		console.log('Connecting to the WebSocket server ===> ', wsURL);
+
 		socket.onopen = () => {
 			console.log('Connected to the WebSocket server');
 		};
