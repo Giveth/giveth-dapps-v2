@@ -1,4 +1,5 @@
 import {
+	Flex,
 	IconArchiving,
 	IconArrowDownCircle16,
 	IconEdit16,
@@ -12,7 +13,7 @@ import {
 	semanticColors,
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
-import { Dispatch, type FC, SetStateAction, useState } from 'react';
+import { Dispatch, type FC, SetStateAction, useMemo, useState } from 'react';
 import { useIntl } from 'react-intl';
 import router from 'next/router';
 import { useAccount, useSwitchChain } from 'wagmi';
@@ -31,6 +32,7 @@ import { findAnchorContractAddress } from '@/helpers/superfluid';
 import DeactivateProjectModal from '@/components/modals/deactivateProject/DeactivateProjectIndex';
 import { client } from '@/apollo/apolloClient';
 import { ACTIVATE_PROJECT } from '@/apollo/gql/gqlProjects';
+import { useAppSelector } from '../../../../features/hooks';
 
 interface IProjectActions {
 	project: IProject;
@@ -53,6 +55,7 @@ const ProjectActions: FC<IProjectActions> = ({
 }) => {
 	const [isHover, setIsHover] = useState(false);
 	const [deactivateModal, setDeactivateModal] = useState(false);
+	const { userData } = useAppSelector(state => state.user);
 	const { formatMessage } = useIntl();
 	const { chain } = useAccount();
 	const { switchChain } = useSwitchChain();
@@ -210,42 +213,69 @@ const ProjectActions: FC<IProjectActions> = ({
 		background: '',
 	};
 
+	const shouldRenderAlert = useMemo(() => {
+		return !userData?.isEmailVerified;
+	}, [userData]);
+
 	return (
-		<Actions
-			onMouseEnter={() => setIsHover(true)}
-			onMouseLeave={() => setIsHover(false)}
-			$isOpen={isHover}
-			$isCancelled={isCancelled}
-			className={className}
-		>
-			{isCancelled ? (
-				<CancelledWrapper>CANCELLED</CancelledWrapper>
-			) : (
-				<>
-					<Dropdown
-						style={dropdownStyle}
-						label='Actions'
-						options={options}
-						stickToRight
-					/>
-					{deactivateModal && (
-						<DeactivateProjectModal
-							setShowModal={setDeactivateModal}
-							projectId={projectId}
-							onSuccess={onDeactivateProject}
-						/>
-					)}
-				</>
+		<ActionWrapper $flexDirection='column' $alignItems='flex-end'>
+			{shouldRenderAlert && (
+				<label>
+					{formatMessage({
+						id: 'label.error.project.invalid.email',
+					})}
+				</label>
 			)}
-		</Actions>
+			<Actions
+				onMouseEnter={() => setIsHover(true)}
+				onMouseLeave={() => setIsHover(false)}
+				$isOpen={isHover}
+				$isCancelled={isCancelled}
+				className={className}
+			>
+				{isCancelled ? (
+					<CancelledWrapper>CANCELLED</CancelledWrapper>
+				) : (
+					<>
+						<Dropdown
+							style={dropdownStyle}
+							label='Actions'
+							options={options}
+							stickToRight
+							disabled={shouldRenderAlert}
+						/>
+						{deactivateModal && (
+							<DeactivateProjectModal
+								setShowModal={setDeactivateModal}
+								projectId={projectId}
+								onSuccess={onDeactivateProject}
+							/>
+						)}
+					</>
+				)}
+			</Actions>
+		</ActionWrapper>
 	);
 };
+
+const ActionWrapper = styled(Flex)`
+	gap: 8px;
+
+	> label {
+		color: ${semanticColors.golden[700]};
+		font-size: 12px;
+		font-weight: 400;
+		line-height: 18px;
+		text-align: left;
+	}
+`;
 
 const CancelledWrapper = styled.div`
 	padding: 4px 16px;
 `;
 
 const Actions = styled.div<{ $isCancelled: boolean; $isOpen: boolean }>`
+	width: max-content;
 	cursor: ${props => (props.$isCancelled ? 'default' : 'pointer')};
 	background-color: ${neutralColors.gray[200]};
 	border-radius: 8px;

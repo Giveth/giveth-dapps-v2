@@ -9,8 +9,9 @@ import {
 	Flex,
 	FlexCenter,
 	IconArrowDownCircle16,
+	semanticColors,
 } from '@giveth/ui-design-system';
-import React, { FC, useState } from 'react';
+import React, { FC, useMemo, useState } from 'react';
 import { useIntl } from 'react-intl';
 import { useRouter } from 'next/router';
 import styled from 'styled-components';
@@ -31,6 +32,7 @@ import { EVerificationStatus } from '@/apollo/types/types';
 import ClaimRecurringDonationModal from '../../userProfile/projectsTab/ClaimRecurringDonationModal';
 import config from '@/configuration';
 import { findAnchorContractAddress } from '@/helpers/superfluid';
+import { useAppSelector } from '../../../../features/hooks';
 
 interface IMobileActionsModalProps {
 	setShowModal: (value: boolean) => void;
@@ -38,6 +40,7 @@ interface IMobileActionsModalProps {
 }
 
 export const AdminActions = () => {
+	const { userData } = useAppSelector(state => state.user);
 	const [showVerificationModal, setShowVerificationModal] = useState(false);
 	const [deactivateModal, setDeactivateModal] = useState(false);
 	const [showShareModal, setShowShareModal] = useState(false);
@@ -132,9 +135,21 @@ export const AdminActions = () => {
 		borderRadius: '8px',
 	};
 
+	const shouldShowWarn = useMemo(() => {
+		return !userData?.isEmailVerified;
+	}, [userData?.isEmailVerified]);
+
 	return !isMobile ? (
 		<Wrapper>
+			{shouldShowWarn && (
+				<WarnLabel>
+					{formatMessage({
+						id: 'label.error.project.invalid.email',
+					})}
+				</WarnLabel>
+			)}
 			<Dropdown
+				disabled={shouldShowWarn}
 				style={dropdownStyle}
 				label='Project Actions'
 				options={options}
@@ -233,7 +248,19 @@ const MobileActionsModal: FC<IMobileActionsModalProps> = ({
 	);
 };
 
+const WarnLabel = styled.label`
+	color: ${semanticColors.golden[700]};
+	font-size: 12px;
+	font-weight: 400;
+	line-height: 18px;
+	text-align: left;
+	margin-bottom: 8px;
+	margin-left: auto;
+`;
+
 const Wrapper = styled.div`
+	display: flex;
+	flex-direction: column;
 	order: 1;
 	margin-bottom: 16px;
 	${mediaQueries.tablet} {

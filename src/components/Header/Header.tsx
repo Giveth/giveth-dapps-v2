@@ -1,5 +1,5 @@
 import Image from 'next/image';
-import { FC, useState, useEffect } from 'react';
+import { FC, useState, useEffect, useMemo } from 'react';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
 import {
@@ -9,6 +9,7 @@ import {
 	IconSearch24,
 	Flex,
 	FlexSpacer,
+	IconInfoOutline,
 } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
 import { useAccount } from 'wagmi';
@@ -23,11 +24,13 @@ import {
 	HomeButton,
 	GLinkNoWrap,
 	SearchButton,
+	NoVerifiedEmailWarning,
 } from './Header.sc';
 import {
 	isSSRMode,
 	isUserRegistered,
 	isGIVeconomyRoute as checkIsGIVeconomyRoute,
+	isUserVerified,
 } from '@/lib/helpers';
 import Routes from '@/lib/constants/Routes';
 import { useAppDispatch, useAppSelector } from '@/features/hooks';
@@ -145,142 +148,182 @@ const Header: FC<IHeader> = () => {
 		}
 	};
 
+	const shouldRenderNotification = useMemo(() => {
+		return !isUserVerified(userData);
+	}, [userData]);
+
+	const shouldDisableCreateButton = useMemo(() => {
+		return isUserRegistered(userData) && !userData?.isEmailVerified;
+	}, [userData]);
+
 	return (
-		<StyledHeader
-			$alignItems='center'
-			$baseTheme={theme}
-			$show={scrollDir !== EScrollDir.Down}
-		>
-			<Flex>
-				{showBackBtn ? (
-					<Logo onClick={handleBack}>
-						<Image
-							width='26'
-							height='26'
-							alt='Giveth logo'
-							src={`/images/back-2.svg`}
-						/>
-					</Logo>
-				) : (
-					<Flex gap='24px' $alignItems='center'>
-						{isMobile && (
-							<Link href={Routes.Home}>
-								<Logo>
-									<Image
-										width='50'
-										height='50'
-										alt='Giveth logo'
-										src='/images/logo/logo.svg'
-									/>
-								</Logo>
-							</Link>
-						)}
-						{!isDesktop && (
-							<HomeButton gap='4px' onClick={openSidebar}>
-								<IconMenu24 />
-								<GLink size='Big'>{currentLabel} </GLink>
-							</HomeButton>
-						)}
-					</Flex>
-				)}
-			</Flex>
-			{isDesktop && !showBackBtn && (
-				<HeaderLinks $baseTheme={theme}>
-					<LinkWithMenu
-						title={formatMessage({ id: 'label.projects' })}
-						isHeaderShowing={scrollDir !== EScrollDir.Down}
-						href={Routes.AllProjects}
-					>
-						<ProjectsMenu />
-					</LinkWithMenu>
-					<LinkWithMenu
-						title='GIVeconomy'
-						isHeaderShowing={scrollDir !== EScrollDir.Down}
-						href={Routes.GIVeconomy}
-					>
-						<GIVeconomyMenu />
-					</LinkWithMenu>
-					<LinkWithMenu
-						title={formatMessage({ id: 'label.community' })}
-						isHeaderShowing={scrollDir !== EScrollDir.Down}
-						href={Routes.Join}
-					>
-						<CommunityMenu />
-					</LinkWithMenu>
-					<SearchButton
-						$baseTheme={theme}
-						onClick={() => dispatch(setShowSearchModal(true))}
-					>
-						<Flex $alignItems='center' gap='16px'>
-							<GLinkNoWrap size='Big'>
-								{formatMessage({ id: 'label.search_projects' })}
-							</GLinkNoWrap>
-							<IconSearch24 />
+		<>
+			<StyledHeader
+				$alignItems='center'
+				$baseTheme={theme}
+				$show={scrollDir !== EScrollDir.Down}
+			>
+				<Flex>
+					{showBackBtn ? (
+						<Logo onClick={handleBack}>
+							<Image
+								width='26'
+								height='26'
+								alt='Giveth logo'
+								src={`/images/back-2.svg`}
+							/>
+						</Logo>
+					) : (
+						<Flex gap='24px' $alignItems='center'>
+							{isMobile && (
+								<Link href={Routes.Home}>
+									<Logo>
+										<Image
+											width='50'
+											height='50'
+											alt='Giveth logo'
+											src='/images/logo/logo.svg'
+										/>
+									</Logo>
+								</Link>
+							)}
+							{!isDesktop && (
+								<HomeButton gap='4px' onClick={openSidebar}>
+									<IconMenu24 />
+									<GLink size='Big'>{currentLabel} </GLink>
+								</HomeButton>
+							)}
 						</Flex>
-					</SearchButton>
-				</HeaderLinks>
-			)}
-			<FlexSpacer />
-			<Flex gap='8px'>
-				<LargeCreateProject $isTexty={isProjectPage}>
-					<Button
-						label={formatMessage({
-							id: 'component.button.create_project',
-						})}
-						size='small'
-						buttonType={isProjectPage ? 'texty-primary' : 'primary'}
-						onClick={handleCreateButton}
-					/>
-				</LargeCreateProject>
-				<SmallCreateProjectParent>
-					<SmallCreateProject
-						onClick={handleCreateButton}
-						buttonType='primary'
-						label='+'
-					/>
-				</SmallCreateProjectParent>
-				{walletAddress ? (
-					<>
-						<NotificationButtonWithMenu
+					)}
+				</Flex>
+				{isDesktop && !showBackBtn && (
+					<HeaderLinks $baseTheme={theme}>
+						<LinkWithMenu
+							title={formatMessage({ id: 'label.projects' })}
 							isHeaderShowing={scrollDir !== EScrollDir.Down}
-							theme={theme}
+							href={Routes.AllProjects}
+						>
+							<ProjectsMenu />
+						</LinkWithMenu>
+						<LinkWithMenu
+							title='GIVeconomy'
+							isHeaderShowing={scrollDir !== EScrollDir.Down}
+							href={Routes.GIVeconomy}
+						>
+							<GIVeconomyMenu />
+						</LinkWithMenu>
+						<LinkWithMenu
+							title={formatMessage({ id: 'label.community' })}
+							isHeaderShowing={scrollDir !== EScrollDir.Down}
+							href={Routes.Join}
+						>
+							<CommunityMenu />
+						</LinkWithMenu>
+						<SearchButton
+							$baseTheme={theme}
+							onClick={() => dispatch(setShowSearchModal(true))}
+						>
+							<Flex $alignItems='center' gap='16px'>
+								<GLinkNoWrap size='Big'>
+									{formatMessage({
+										id: 'label.search_projects',
+									})}
+								</GLinkNoWrap>
+								<IconSearch24 />
+							</Flex>
+						</SearchButton>
+					</HeaderLinks>
+				)}
+				<FlexSpacer />
+				<Flex gap='8px'>
+					<LargeCreateProject $isTexty={isProjectPage}>
+						<Button
+							label={formatMessage({
+								id: 'component.button.create_project',
+							})}
+							disabled={shouldDisableCreateButton}
+							size='small'
+							buttonType={
+								isProjectPage ? 'texty-primary' : 'primary'
+							}
+							onClick={handleCreateButton}
 						/>
-						{networkHasGIV && (
-							<RewardButtonWithMenu
+					</LargeCreateProject>
+					<SmallCreateProjectParent>
+						<SmallCreateProject
+							onClick={handleCreateButton}
+							buttonType='primary'
+							label='+'
+						/>
+					</SmallCreateProjectParent>
+					{walletAddress ? (
+						<>
+							<NotificationButtonWithMenu
 								isHeaderShowing={scrollDir !== EScrollDir.Down}
 								theme={theme}
 							/>
-						)}
-						<UserButtonWithMenu
-							isHeaderShowing={scrollDir !== EScrollDir.Down}
-							theme={theme}
+							{networkHasGIV && (
+								<RewardButtonWithMenu
+									isHeaderShowing={
+										scrollDir !== EScrollDir.Down
+									}
+									theme={theme}
+								/>
+							)}
+							<UserButtonWithMenu
+								isHeaderShowing={scrollDir !== EScrollDir.Down}
+								theme={theme}
+							/>
+						</>
+					) : (
+						<ConnectButton
+							buttonType='primary'
+							size='small'
+							label={formatMessage({
+								id: isGIVeconomyRoute
+									? 'component.button.connect_wallet'
+									: 'component.button.sign_in',
+							})}
+							onClick={handleModals}
 						/>
-					</>
-				) : (
-					<ConnectButton
-						buttonType='primary'
-						size='small'
-						label={formatMessage({
-							id: isGIVeconomyRoute
-								? 'component.button.connect_wallet'
-								: 'component.button.sign_in',
-						})}
-						onClick={handleModals}
-					/>
+					)}
+				</Flex>
+				{sidebarCondition && (
+					<SideBar
+						close={closeSidebar}
+						isAnimating={showSidebar}
+						direction={ESideBarDirection.Left}
+					>
+						<ItemsProvider close={closeSidebar}>
+							<HomeSidebar />
+						</ItemsProvider>
+					</SideBar>
 				)}
-			</Flex>
-			{sidebarCondition && (
-				<SideBar
-					close={closeSidebar}
-					isAnimating={showSidebar}
-					direction={ESideBarDirection.Left}
+			</StyledHeader>
+			{shouldRenderNotification && (
+				<NoVerifiedEmailWarning
+					$show={scrollDir !== EScrollDir.Down}
+					$alignItems='center'
+					$justifyContent='center'
 				>
-					<ItemsProvider close={closeSidebar}>
-						<HomeSidebar />
-					</ItemsProvider>
-				</SideBar>
+					<IconInfoOutline size={24} />
+					<p>
+						{formatMessage({
+							id: 'component.header.no_verified_email_warning',
+						})}
+					</p>
+					<span
+						onClick={() =>
+							router.push(`${Routes.MyAccountEditProfile}`)
+						}
+					>
+						{formatMessage({
+							id: 'component.header.verify_email',
+						})}
+					</span>
+				</NoVerifiedEmailWarning>
 			)}
-		</StyledHeader>
+		</>
 	);
 };
 

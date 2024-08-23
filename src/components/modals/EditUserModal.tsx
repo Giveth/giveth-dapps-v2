@@ -1,14 +1,19 @@
-import React, { useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import styled from 'styled-components';
 import { useIntl } from 'react-intl';
 import Image from 'next/image';
 import { useMutation } from '@apollo/client';
 import { Button, brandColors, FlexCenter } from '@giveth/ui-design-system';
 import { captureException } from '@sentry/nextjs';
-import { useForm } from 'react-hook-form';
+import { RegisterOptions, useForm } from 'react-hook-form';
 import { Modal } from './Modal';
 import { client } from '@/apollo/apolloClient';
-import { UPDATE_USER } from '@/apollo/gql/gqlUser';
+import {
+	CHECK_EMAIL_AVAILABILITY,
+	SEND_CODE_TO_CONFIRM_EMAIL,
+	UPDATE_USER,
+	VERIFY_USER_EMAIL_CODE,
+} from '@/apollo/gql/gqlUser';
 import { IUser } from '@/apollo/types/types';
 import { gToast, ToastType } from '../toasts';
 import {
@@ -23,6 +28,8 @@ import { requiredOptions, validators } from '@/lib/constants/regex';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
 import useUpload from '@/hooks/useUpload';
 import { useGeneralWallet } from '@/providers/generalWalletProvider';
+import VerifyInputButton from '../VerifyInputButton';
+import EmailSentCard from '../EmailSentCard';
 
 interface IEditUserModal extends IModal {
 	user: IUser;
@@ -30,6 +37,7 @@ interface IEditUserModal extends IModal {
 }
 
 type Inputs = {
+	emailCode?: string;
 	firstName: string;
 	lastName: string;
 	location: string;
@@ -51,13 +59,162 @@ const EditUserModal = ({
 	const {
 		register,
 		handleSubmit,
+		setError,
+		watch,
 		formState: { errors },
-	} = useForm<Inputs>();
+	} = useForm<Inputs>({
+		mode: 'onChange',
+		reValidateMode: 'onChange',
+
+		defaultValues: {
+			email: user.email,
+		},
+	});
 	const dispatch = useAppDispatch();
 	const { walletAddress: address } = useGeneralWallet();
+	const [isEmailVerified, setIsEmailVerified] = useState(
+		user.isEmailVerified,
+	);
+	const [isEmailSent, setIsEmailSent] = useState(user.isEmailSent);
+	const [newUserEmail, setNewUserEmail] = useState(user.email);
 
 	const [updateUser] = useMutation(UPDATE_USER);
+	const [sendEmailConfirmation, sendEmailConfirmationProps] = useMutation(
+		SEND_CODE_TO_CONFIRM_EMAIL,
+	);
+	const [checkEmailAvailability, checkEmailAvailabilityProps] = useMutation(
+		CHECK_EMAIL_AVAILABILITY,
+	);
+	const [verifyUserEmailCode, verifyUserEmailCodeProps] = useMutation(
+		VERIFY_USER_EMAIL_CODE,
+	);
+	const [editEmailAlredySent, setEditEmailAlredySent] = useState(false);
 	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
+
+	const watchEmail = watch('email');
+	const watchEmailCode = watch('emailCode');
+
+	//verify email code
+	const handleVerifyEmailCode = useCallback(async () => {
+		if (!!watchEmailCode) {
+			try {
+				await verifyUserEmailCode({
+					variables: {
+						code: watchEmailCode,
+					},
+				});
+				setIsEmailVerified(true);
+				setIsEmailSent(false);
+			} catch (error: any) {
+				setError('emailCode', {
+					type: 'manual',
+					message: error.message,
+				});
+				captureException(error, {
+					tags: {
+						section: 'InfoStepOnSave',
+					},
+				});
+			}
+		}
+	}, [watchEmailCode, verifyUserEmailCode, setError]);
+
+	//send email confirmation code
+	const handleSendEmailConfirmation = useCallback(
+		async (type?: string | void) => {
+			if (!!watchEmail && !errors.email) {
+				try {
+					await sendEmailConfirmation({
+						variables: {
+							email: watchEmail,
+						},
+					});
+					setNewUserEmail(watchEmail);
+					setIsEmailSent(true);
+					setEditEmailAlredySent(false);
+					setIsEmailVerified(false);
+
+					if (type === 'resend') {
+						gToast('Email confirmation code resent.', {
+							type: ToastType.SUCCESS,
+							title: 'Success',
+						});
+					}
+				} catch (error: any) {
+					gToast('Failed to send email confirmation code.', {
+						type: ToastType.DANGER,
+						title: error.message,
+					});
+					captureException(error, {
+						tags: {
+							section: 'InfoStepOnSave',
+						},
+					});
+				}
+			}
+		},
+		[watchEmail, errors.email, sendEmailConfirmation],
+	);
+
+	//check if the email is available
+	const handleCheckEmailAvailability = useCallback(async () => {
+		if (
+			(!!watchEmail &&
+				!errors.email &&
+				!isEmailSent &&
+				!isEmailVerified) ||
+			(isEmailVerified && watchEmail !== newUserEmail)
+		) {
+			try {
+				await checkEmailAvailability({
+					variables: {
+						email: watchEmail,
+					},
+				});
+			} catch (error: any) {
+				if (error.message === 'Email already used') {
+					setError('email', {
+						type: 'manual',
+						message: formatMessage({
+							id: 'error.invalid.email',
+						}),
+					});
+				}
+			}
+		}
+	}, [
+		newUserEmail,
+		watchEmail,
+		errors.email,
+		isEmailSent,
+		isEmailVerified,
+		user?.email,
+		checkEmailAvailability,
+		setError,
+	]);
+
+	//check if some code request is loading
+	const isLoadingSomeCodeRequest = useMemo(
+		() =>
+			sendEmailConfirmationProps.loading ||
+			checkEmailAvailabilityProps.loading,
+		[
+			sendEmailConfirmationProps.loading,
+			checkEmailAvailabilityProps.loading,
+		],
+	);
+
+	//debounce email check
+	useEffect(() => {
+		const debounceTimeInMs = 500;
+		const debouncedEmail = setTimeout(() => {
+			handleCheckEmailAvailability();
+		}, debounceTimeInMs);
+		return () => {
+			clearTimeout(debouncedEmail);
+		};
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [watchEmail]);
 
 	const onSaveAvatar = async () => {
 		try {
@@ -91,6 +248,7 @@ const EditUserModal = ({
 	const onSubmit = async (formData: Inputs) => {
 		setIsLoading(true);
 		try {
+			delete formData.emailCode;
 			const { data } = await client.mutate({
 				mutation: UPDATE_USER,
 				variables: {
@@ -120,6 +278,11 @@ const EditUserModal = ({
 		}
 		setIsLoading(false);
 	};
+
+	const shouldRenderEmailCode = useMemo(
+		() => (user?.isEmailSent || isEmailSent) && !editEmailAlredySent,
+		[user?.isEmailSent, isEmailSent, editEmailAlredySent],
+	);
 
 	return (
 		<Modal
@@ -164,33 +327,185 @@ const EditUserModal = ({
 					</FlexCenter>
 					<form onSubmit={handleSubmit(onSubmit)}>
 						<InputWrapper>
-							{inputFields.map(field => (
-								<Input
-									defaultValue={(user as any)[field.name]}
-									key={field.name}
-									registerName={field.name}
-									label={formatMessage({
-										id: field.label,
-									})}
-									placeholder={field.placeholder}
-									caption={
-										field.caption &&
-										formatMessage({
-											id: field.caption,
-										})
-									}
-									size={InputSize.SMALL}
-									register={register}
-									error={(errors as any)[field.name]}
-									registerOptions={field.registerOptions}
-								/>
-							))}
+							{inputFields.map(field => {
+								if (field.name === 'email') {
+									return (
+										<>
+											<div>
+												{shouldRenderEmailCode && (
+													<EditAlredyFiledEmail
+														onClick={() => {
+															setEditEmailAlredySent(
+																true,
+															);
+														}}
+													>
+														{formatMessage({
+															id: 'label.edit.email',
+														})}
+													</EditAlredyFiledEmail>
+												)}
+												<Input
+													defaultValue={user.email}
+													name='email'
+													registerName={'email'}
+													label={
+														!shouldRenderEmailCode
+															? 'Email'
+															: undefined
+													}
+													placeholder='Example@Domain.com'
+													register={register}
+													type='email'
+													registerOptions={
+														validators.email
+													}
+													error={errors.email}
+													size={InputSize.SMALL}
+													disabled={
+														shouldRenderEmailCode
+													}
+													caption={formatMessage({
+														id: 'label.email.caption',
+													})}
+													customFixedComponent={
+														!shouldRenderEmailCode && (
+															<VerifyInputButton
+																onClick={() => {
+																	handleSendEmailConfirmation();
+																}}
+																verified={
+																	isEmailVerified &&
+																	watchEmail ===
+																		newUserEmail
+																}
+																label={
+																	isEmailVerified &&
+																	watchEmail ===
+																		newUserEmail
+																		? formatMessage(
+																				{
+																					id: 'label.email.verified',
+																				},
+																			)
+																		: formatMessage(
+																				{
+																					id: 'label.verify.email',
+																				},
+																			)
+																}
+																isLoading={
+																	isLoadingSomeCodeRequest
+																}
+																disabled={
+																	!!errors.email ||
+																	!watchEmail ||
+																	isLoadingSomeCodeRequest ||
+																	(isEmailVerified &&
+																		watchEmail ===
+																			newUserEmail)
+																}
+															/>
+														)
+													}
+												/>
+											</div>
+											{shouldRenderEmailCode && (
+												<>
+													<EmailSentCard
+														email={watchEmail}
+													/>
+													<Input
+														registerName={
+															'emailCode'
+														}
+														label={formatMessage({
+															id: 'label.email.code',
+														})}
+														placeholder='000000'
+														register={register}
+														error={errors.emailCode}
+														size={InputSize.SMALL}
+														caption={
+															<>
+																{formatMessage({
+																	id: 'label.email.code.caption',
+																})}
+																<CustomCaption
+																	onClick={() =>
+																		handleSendEmailConfirmation(
+																			'resend',
+																		)
+																	}
+																>
+																	{formatMessage(
+																		{
+																			id: 'label.resend.email.code',
+																		},
+																	)}
+																</CustomCaption>
+															</>
+														}
+														customFixedComponent={
+															<VerifyInputButton
+																onClick={() => {
+																	handleVerifyEmailCode();
+																}}
+																label={formatMessage(
+																	{
+																		id: 'label.email.confirm.code',
+																	},
+																)}
+																isLoading={
+																	verifyUserEmailCodeProps.loading
+																}
+																disabled={
+																	!!errors.email ||
+																	!watchEmail ||
+																	verifyUserEmailCodeProps.loading
+																}
+															/>
+														}
+													/>
+												</>
+											)}
+										</>
+									);
+								}
+
+								return (
+									<Input
+										defaultValue={
+											user[field.name] as string
+										}
+										key={field.name}
+										registerName={field.name}
+										label={formatMessage({
+											id: field.label,
+										})}
+										placeholder={field.placeholder}
+										caption={
+											field.caption &&
+											formatMessage({
+												id: field.caption,
+											})
+										}
+										size={InputSize.SMALL}
+										register={register}
+										error={(errors as any)[field.name]}
+										registerOptions={field.registerOptions}
+									/>
+								);
+							})}
 							<Button
 								buttonType='secondary'
 								label={formatMessage({
 									id: 'label.save',
 								})}
-								disabled={isLoading}
+								disabled={
+									isLoading ||
+									(!!user.projectsCount && !isEmailVerified)
+								}
 								type='submit'
 							/>
 							<TextButton
@@ -208,7 +523,16 @@ const EditUserModal = ({
 	);
 };
 
-const inputFields = [
+type InputFildesArray = {
+	label: any;
+	placeholder: string;
+	name: keyof IUser;
+	type?: string;
+	caption?: string;
+	registerOptions?: RegisterOptions;
+};
+
+const inputFields: InputFildesArray[] = [
 	{
 		label: 'label.first_name',
 		placeholder: 'John',
@@ -269,6 +593,27 @@ const InputWrapper = styled.div`
 	flex-direction: column;
 	gap: 8px;
 	text-align: left;
+`;
+
+const EditAlredyFiledEmail = styled.button`
+	padding: 0;
+	margin: 0;
+	outline: none;
+	border: none;
+	background: none;
+	cursor: pointer;
+	margin-bottom: 4px;
+
+	color: ${brandColors.pinky[500]};
+	font-size: 12px;
+	font-weight: 400;
+	line-height: 15.88px;
+	text-align: left;
+`;
+
+const CustomCaption = styled.label`
+	color: #e1458d;
+	cursor: pointer;
 `;
 
 export default EditUserModal;

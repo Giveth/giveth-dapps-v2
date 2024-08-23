@@ -15,6 +15,7 @@ export const profileTabs = {
 
 export enum ProfileModal {
 	PFPModal = 'pfp',
+	EditProfile = 'edit-profile',
 }
 
 const Routes = {
@@ -42,6 +43,7 @@ const Routes = {
 	MyRecurringDonations: MyAccount + profileTabs.recurringDonations,
 	MyBoostedProjects: MyAccount + profileTabs.boosted,
 	MyAccountSetPfp: MyAccount + `?modal=${ProfileModal.PFPModal}`,
+	MyAccountEditProfile: MyAccount + `?modal=${ProfileModal.EditProfile}`,
 	Onboard: '/onboard',
 	Onboarding: '/onboarding',
 	OnboardingProjects: '/onboarding/projects',

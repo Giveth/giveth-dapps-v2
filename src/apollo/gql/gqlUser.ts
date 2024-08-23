@@ -14,6 +14,8 @@ export const USER_CORE_FIELDS = gql`
 		walletAddress
 		url
 		location
+		isEmailVerified
+		isEmailSent
 	}
 `;
 
@@ -256,3 +258,21 @@ export const FETCH_USERS_GIVPOWER_BY_ADDRESS = `
 		}
 	  }
 	}`;
+
+export const SEND_CODE_TO_CONFIRM_EMAIL = gql`
+	mutation sendCodeToConfirmEmail($email: String!) {
+		sendUserEmailConfirmationCodeFlow(email: $email)
+	}
+`;
+
+export const VERIFY_USER_EMAIL_CODE = gql`
+	mutation verifyUserEmailCode($code: String!) {
+		verifyUserEmailCode(code: $code)
+	}
+`;
+
+export const CHECK_EMAIL_AVAILABILITY = gql`
+	mutation checkEmailAvailability($email: String!) {
+		checkEmailAvailability(email: $email)
+	}
+`;

@@ -93,6 +93,10 @@ const UserProfileView: FC<IUserProfileView> = () => {
 			setShowUploadProfileModal(true);
 			removeQueryParamAndRedirect(router, ['modal']);
 		}
+		if (router.query.modal === ProfileModal.EditProfile) {
+			setShowModal(true);
+			removeQueryParamAndRedirect(router, ['modal']);
+		}
 	}, [router.query.modal]);
 
 	useEffect(() => {

@@ -303,6 +303,12 @@ export const isUserRegistered = (user?: IUser) => {
 	return Boolean(user && user.name && user.email);
 };
 
+export const isUserVerified = (user?: IUser) => {
+	if (!user?.projectsCount) return true;
+
+	return Boolean(user && user.isEmailVerified && user.email);
+};
+
 export const htmlToText = (text?: string) => {
 	if (!text) return;
 	const formattedText = text

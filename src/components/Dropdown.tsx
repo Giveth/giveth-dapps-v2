@@ -26,6 +26,7 @@ interface IDropdownProps {
 	style?: any;
 	stickToRight?: boolean;
 	color?: string;
+	disabled?: boolean;
 }
 
 export enum EOptionType {
@@ -48,6 +49,7 @@ export const Dropdown: FC<IDropdownProps> = ({
 	style,
 	stickToRight,
 	color,
+	disabled,
 }) => {
 	const [isOpen, setIsOpen] = useState(false);
 
@@ -88,7 +90,10 @@ export const Dropdown: FC<IDropdownProps> = ({
 		<Wrapper
 			style={style}
 			ref={containerRef}
-			onClick={() => setIsOpen(_open => !_open)}
+			onClick={() => {
+				if (!disabled) setIsOpen(prev => !prev);
+			}}
+			$disabled={disabled}
 		>
 			<Controller $justifyContent='space-between'>
 				<GLink size='Big'>{label}</GLink>
@@ -140,10 +145,16 @@ const Option: FC<IOptionProps> = ({ option, setIsOpen }) => {
 	);
 };
 
-const Wrapper = styled.div`
+type WrapperProps = {
+	$disabled?: boolean;
+};
+
+const Wrapper = styled.div<WrapperProps>`
 	position: relative;
 	user-select: none;
-	cursor: pointer;
+	cursor: ${({ $disabled }) => ($disabled ? 'not-allowed' : 'pointer')};
+
+	opacity: ${({ $disabled }) => ($disabled ? 0.5 : 1)};
 `;
 
 const Controller = styled(Flex)`

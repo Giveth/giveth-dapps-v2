@@ -2,7 +2,7 @@ import { EVerificationSteps } from '@/apollo/types/types';
 
 const menuList = [
 	{ label: 'label.before_you_start', slug: EVerificationSteps.BEFORE_START },
-	{ label: 'label.personal_info', slug: EVerificationSteps.PERSONAL_INFO },
+	// { label: 'label.personal_info', slug: EVerificationSteps.PERSONAL_INFO },
 	{
 		label: 'label.social_profiles',
 		slug: EVerificationSteps.SOCIAL_PROFILES,
