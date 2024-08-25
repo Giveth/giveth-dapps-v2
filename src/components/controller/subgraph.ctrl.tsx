@@ -78,7 +78,7 @@ const SubgraphController: React.FC = () => {
 						// Schedule next check if condition is not met
 						pollingTimeoutsRef.current[eventChainId] = setTimeout(
 							pollLatestBlock,
-							100,
+							2000,
 						);
 					}
 				};
@@ -86,7 +86,7 @@ const SubgraphController: React.FC = () => {
 				// Start polling with timeout
 				pollingTimeoutsRef.current[eventChainId] = setTimeout(
 					pollLatestBlock,
-					100,
+					3000,
 				);
 			}
 		};
