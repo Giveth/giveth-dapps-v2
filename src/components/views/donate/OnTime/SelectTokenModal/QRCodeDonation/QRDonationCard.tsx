@@ -38,11 +38,6 @@ interface QRDonationCardProps extends IDonationCardProps {
 	qrAcceptedTokens: IProjectAcceptedToken[];
 	setIsQRDonation: (isQRDonation: boolean) => void;
 }
-
-const wsURL = process.env.NEXT_PUBLIC_BASE_ROUTE?.startsWith('https')
-	? `wss${process.env.NEXT_PUBLIC_BASE_ROUTE.replace('https', '')}`
-	: `ws${process.env.NEXT_PUBLIC_BASE_ROUTE?.replace('http', '')}`;
-
 export const formatAmoutToDisplay = (amount: bigint) => {
 	const decimals = 18;
 	return truncateToDecimalPlaces(
@@ -98,17 +93,9 @@ export const QRDonationCard: FC<QRDonationCardProps> = ({
 	);
 
 	useEffect(() => {
-		const socket = new WebSocket(wsURL);
-
-		console.log('Connecting to the WebSocket server ===> ', wsURL);
-
-		socket.onopen = () => {
-			console.log('Connected to the WebSocket server');
-		};
-
-		socket.onerror = error => {
-			console.error('Error connecting to the WebSocket server', error);
-		};
+		const eventSource = new EventSource(
+			`${process.env.NEXT_PUBLIC_BASE_ROUTE}/events`,
+		);
 
 		const handleFetchDraftDonation = async (draftDonationId: number) => {
 			const draftDonation = await fetchDraftDonation?.(draftDonationId);
@@ -119,21 +106,26 @@ export const QRDonationCard: FC<QRDonationCardProps> = ({
 			}
 		};
 
-		socket.onmessage = event => {
-			const data = JSON.parse(event.data);
-			if (data.type === 'new-donation') {
-				if (data.data.draftDonationId === draftDonationId) {
+		eventSource.onmessage = (event: MessageEvent) => {
+			const { data, type } = JSON.parse(event.data);
+
+			if (type === 'new-donation') {
+				if (data.draftDonationId === draftDonationId) {
 					handleFetchDraftDonation?.(draftDonationId);
 				}
-			} else if (data.type === 'draft-donation-failed') {
-				if (data.data.draftDonationId === draftDonationId) {
+			} else if (type === 'draft-donation-failed') {
+				if (data.draftDonationId === draftDonationId) {
 					setQRDonationStatus('failed');
 				}
 			}
 		};
 
+		eventSource.onerror = (error: Event) => {
+			console.error('EventSource failed:', error);
+		};
+
 		return () => {
-			socket.close();
+			eventSource.close();
 		};
 	}, [draftDonationId]);
 
