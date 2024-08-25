@@ -6,7 +6,6 @@ import {
 } from '@reduxjs/toolkit';
 import modalReducer from './modal/modal.slice';
 import userReducer from './user/user.slice';
-import priceReducer from './price/price.slice';
 import generalReducer from './general/general.slice';
 import notificationReducer from './notification/notification.slice';
 import pfpReducer from './pfp/pfp.slice';
@@ -14,7 +13,6 @@ import pfpReducer from './pfp/pfp.slice';
 const rootReducer = combineReducers({
 	modal: modalReducer,
 	user: userReducer,
-	price: priceReducer,
 	general: generalReducer,
 	notification: notificationReducer,
 	pfp: pfpReducer,

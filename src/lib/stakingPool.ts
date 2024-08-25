@@ -249,8 +249,8 @@ const getBalancerPoolStakingAPR = async (
 			chainId,
 		);
 
-		const weights = _poolNormalizedWeights.map(BigInt);
-		const balances = _poolTokens.balances.map(BigInt);
+		const weights = _poolNormalizedWeights?.map(BigInt);
+		const balances = _poolTokens.balances?.map(BigInt);
 
 		if (
 			_poolTokens.tokens[0].toLowerCase() !== tokenAddress.toLowerCase()
