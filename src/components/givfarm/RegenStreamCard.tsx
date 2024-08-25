@@ -29,7 +29,6 @@ import { formatWeiHelper } from '@/helpers/number';
 import { IconFox } from '@/components/Icons/Fox';
 import { IconCult } from '@/components/Icons/Cult';
 import { HarvestAllModal } from '../modals/HarvestAll';
-import { useAppSelector } from '@/features/hooks';
 import config from '@/configuration';
 import { SubgraphDataHelper } from '@/lib/subgraph/subgraphDataHelper';
 import { TokenDistroHelper } from '@/lib/contractHelper/TokenDistroHelper';
@@ -37,6 +36,9 @@ import { Relative } from '../styled-components/Position';
 import { ArchiveAndNetworkCover } from '../ArchiveAndNetworkCover/ArchiveAndNetworkCover';
 import { getSubgraphChainId } from '@/helpers/network';
 import { fetchSubgraphData } from '@/services/subgraph.service';
+import { useFetchMainnetThirdPartyTokensPrice } from '@/hooks/useFetchMainnetThirdPartyTokensPrice';
+import { useFetchGnosisThirdPartyTokensPrice } from '@/hooks/useFetchGnosisThirdPartyTokensPrice';
+import { useFetchGIVPrice } from '@/hooks/useGivPrice';
 
 interface RegenStreamProps {
 	streamConfig: RegenStreamConfig;
@@ -91,14 +93,18 @@ export const RegenStreamCard: FC<RegenStreamProps> = ({ streamConfig }) => {
 		return { regenTokenDistroHelper, tokenDistroBalance };
 	}, [currentValues.data, tokenDistroAddress]);
 
-	const { mainnetThirdPartyTokensPrice, xDaiThirdPartyTokensPrice } =
-		useAppSelector(state => state.price);
+	const { data: mainnetThirdPartyTokensPrice } =
+		useFetchMainnetThirdPartyTokensPrice();
+	const { data: gnosisThirdPartyTokensPrice } =
+		useFetchGnosisThirdPartyTokensPrice();
+	const { data: givPrice } = useFetchGIVPrice(chainId);
 
 	useEffect(() => {
 		const currentPrice =
 			chainId === config.MAINNET_NETWORK_NUMBER
 				? mainnetThirdPartyTokensPrice
-				: xDaiThirdPartyTokensPrice;
+				: gnosisThirdPartyTokensPrice;
+		if (!currentPrice) return;
 		const price = new BigNumber(
 			currentPrice[tokenAddressOnUniswapV2.toLowerCase()],
 		);
@@ -114,7 +120,7 @@ export const RegenStreamCard: FC<RegenStreamProps> = ({ streamConfig }) => {
 		chainId,
 		tokenAddressOnUniswapV2,
 		mainnetThirdPartyTokensPrice,
-		xDaiThirdPartyTokensPrice,
+		gnosisThirdPartyTokensPrice,
 	]);
 	useEffect(() => {
 		setLockedAmount(BigInt(tokenDistroBalance.allocatedTokens));
