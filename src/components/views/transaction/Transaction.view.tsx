@@ -112,20 +112,17 @@ const TransactionView = () => {
 			}
 		};
 
-		const socket = new WebSocket('ws://localhost:4000');
+		const eventSource = new EventSource(`${process.env.NEXT_PUBLIC_BASE_ROUTE}/events`);
 
-		socket.onopen = () => {
-			console.log('Connected to the WebSocket server');
-		};
+		eventSource.onmessage = (event: MessageEvent) => {
+			const { data, type } = JSON.parse(event.data);
 
-		socket.onmessage = event => {
-			const data = JSON.parse(event.data);
-			if (data.type === 'new-donation') {
-				if (data.data.draftDonationId === Number(id)) {
+			if (type === 'new-donation') {
+				if (data.draftDonationId ===  Number(id)) {
 					fetchDraftDonation?.();
 				}
-			} else if (data.type === 'draft-donation-failed') {
-				if (data.data.draftDonationId === Number(id)) {
+			} else if (type === 'draft-donation-failed') {
+				if (data.draftDonationId === Number(id)) {
 					setStatus('failed');
 				}
 			}
@@ -134,7 +131,7 @@ const TransactionView = () => {
 		fetchDraftDonation();
 
 		return () => {
-			socket.close();
+			eventSource.close();
 		};
 	}, [id]);
 
