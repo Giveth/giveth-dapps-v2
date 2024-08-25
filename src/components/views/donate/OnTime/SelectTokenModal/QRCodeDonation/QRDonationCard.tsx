@@ -93,7 +93,9 @@ export const QRDonationCard: FC<QRDonationCardProps> = ({
 	);
 
 	useEffect(() => {
-		const eventSource = new EventSource(`${process.env.NEXT_PUBLIC_BASE_ROUTE}/events`);
+		const eventSource = new EventSource(
+			`${process.env.NEXT_PUBLIC_BASE_ROUTE}/events`,
+		);
 
 		const handleFetchDraftDonation = async (draftDonationId: number) => {
 			const draftDonation = await fetchDraftDonation?.(draftDonationId);

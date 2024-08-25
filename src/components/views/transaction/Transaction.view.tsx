@@ -112,13 +112,15 @@ const TransactionView = () => {
 			}
 		};
 
-		const eventSource = new EventSource(`${process.env.NEXT_PUBLIC_BASE_ROUTE}/events`);
+		const eventSource = new EventSource(
+			`${process.env.NEXT_PUBLIC_BASE_ROUTE}/events`,
+		);
 
 		eventSource.onmessage = (event: MessageEvent) => {
 			const { data, type } = JSON.parse(event.data);
 
 			if (type === 'new-donation') {
-				if (data.draftDonationId ===  Number(id)) {
+				if (data.draftDonationId === Number(id)) {
 					fetchDraftDonation?.();
 				}
 			} else if (type === 'draft-donation-failed') {
