@@ -9,8 +9,8 @@ import { AddressZero } from '@/lib/constants/constants';
 import { ChainType } from '@/types/config';
 import { wagmiConfig } from '@/wagmiConfigs';
 import {
-	FETCH_GNOSIS_TOKEN_PRICE,
-	FETCH_MAINNET_TOKEN_PRICE,
+	FETCH_GNOSIS_TOKEN_PRICES,
+	FETCH_MAINNET_TOKEN_PRICES,
 } from '@/apollo/gql/gqlPrice';
 
 export const fetchPrice = async (
@@ -71,12 +71,12 @@ export const fetchPriceWithCoingeckoId = async (coingeckoId: string) => {
 	}
 };
 
-export const fetchMainnetTokenPrice = async (
-	tokenId: string,
-): Promise<string> => {
-	const query = FETCH_MAINNET_TOKEN_PRICE;
+export const fetchMainnetTokenPrices = async (
+	tokenIds: string[],
+): Promise<{ [key: string]: string }> => {
+	const query = FETCH_MAINNET_TOKEN_PRICES;
 	const variables = {
-		tokenId: tokenId.toLowerCase(),
+		tokenIds: tokenIds.map(id => id.toLowerCase()),
 		daiId: '0x6b175474e89094c44da98b954eedeac495271d0f'.toLowerCase(),
 	};
 	const body = {
@@ -85,30 +85,34 @@ export const fetchMainnetTokenPrice = async (
 	};
 	const myHeaders = new Headers();
 	myHeaders.append('content-type', 'application/json');
+
 	const res = await fetch(config.MAINNET_CONFIG.uniswapV2Subgraph, {
 		method: 'POST',
 		body: JSON.stringify(body),
 		headers: myHeaders,
 	});
+
 	const data = await res.json();
-	const tokenEthPrice = new BigNumber(data?.data?.token.derivedETH);
-	const daiEthPrice = new BigNumber(data?.data?.daitoken.derivedETH);
-	return tokenEthPrice.div(daiEthPrice).toString();
+	const daiEthPrice = new BigNumber(data?.data?.daitoken?.derivedETH);
+
+	const prices: { [key: string]: string } = {};
+	data?.data?.tokens.forEach((token: any) => {
+		const tokenEthPrice = new BigNumber(token.derivedETH);
+		prices[token.id.toLowerCase()] = tokenEthPrice
+			.div(daiEthPrice)
+			.toString();
+	});
+
+	return prices;
 };
 
-export const fetchGnosisTokenPrice = async (
-	tokenId?: string,
-): Promise<string> => {
-	if (!tokenId) return '0';
-	const query = FETCH_GNOSIS_TOKEN_PRICE;
+export const fetchGnosisTokenPrices = async (
+	tokenIds: string[],
+): Promise<{ [key: string]: string }> => {
+	const query = FETCH_GNOSIS_TOKEN_PRICES;
 	const variables = {
-		id: tokenId.toLowerCase(),
+		ids: tokenIds.map(id => id.toLowerCase()),
 	};
-	const subgraph = config.GNOSIS_CONFIG.uniswapV2Subgraph;
-	if (!subgraph) {
-		console.log('Subgraph is not defined');
-		return '0';
-	}
 	const body = {
 		query,
 		variables,
@@ -117,15 +121,18 @@ export const fetchGnosisTokenPrice = async (
 	const myHeaders = new Headers();
 	myHeaders.append('content-type', 'application/json');
 
-	const requestOptions: RequestInit = {
+	const res = await fetch(config.GNOSIS_CONFIG.uniswapV2Subgraph!, {
 		method: 'POST',
 		body: JSON.stringify(body),
 		headers: myHeaders,
-	};
-	const res = await fetch(
-		config.GNOSIS_CONFIG.uniswapV2Subgraph!,
-		requestOptions,
-	);
+	});
+
 	const data = await res.json();
-	return data?.data?.token?.derivedNativeCurrency || '0';
+	const prices: { [key: string]: string } = {};
+
+	data?.data?.tokens.forEach((token: any) => {
+		prices[token.id.toLowerCase()] = token.derivedNativeCurrency || '0';
+	});
+
+	return prices;
 };

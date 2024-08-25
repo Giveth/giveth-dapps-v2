@@ -63,6 +63,7 @@ export const RewardCard: FC<IRewardCardProps> = ({
 		useState(false);
 	const { data: givPrice } = useFetchGIVPrice();
 	const { givTokenDistroHelper } = useGIVTokenDistroHelper();
+
 	useEffect(() => {
 		const price =
 			tokenPrice ||

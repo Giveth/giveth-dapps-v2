@@ -1,25 +1,16 @@
 import { useQuery } from '@tanstack/react-query';
 import config from '@/configuration';
-import { fetchMainnetTokenPrice } from '@/services/token';
+import { fetchMainnetTokenPrices } from '@/services/token'; // Updated import path if necessary
 
 export const useFetchMainnetThirdPartyTokensPrice = () => {
 	return useQuery({
 		queryKey: ['mainnetThirdPartyTokensPrice'],
 		queryFn: async () => {
-			const promises: Promise<string>[] = [];
-			config.MAINNET_CONFIG.regenStreams.forEach(streamConfig => {
-				const tokenAddress =
-					streamConfig.tokenAddressOnUniswapV2.toLowerCase();
-				promises.push(fetchMainnetTokenPrice(tokenAddress));
-			});
-			const prices = await Promise.all(promises);
-			let res: { [x: string]: string } = {};
-			config.MAINNET_CONFIG.regenStreams.forEach((streamConfig, idx) => {
-				const tokenAddress =
-					streamConfig.tokenAddressOnUniswapV2.toLowerCase();
-				res[tokenAddress] = prices[idx];
-			});
-			return res;
+			const tokenIds = config.MAINNET_CONFIG.regenStreams.map(
+				streamConfig =>
+					streamConfig.tokenAddressOnUniswapV2.toLowerCase(),
+			);
+			return await fetchMainnetTokenPrices(tokenIds); // Pass all token IDs at once
 		},
 		staleTime: config.SUBGRAPH_POLLING_INTERVAL,
 	});

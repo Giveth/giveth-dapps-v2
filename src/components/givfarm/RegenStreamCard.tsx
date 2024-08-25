@@ -38,7 +38,6 @@ import { getSubgraphChainId } from '@/helpers/network';
 import { fetchSubgraphData } from '@/services/subgraph.service';
 import { useFetchMainnetThirdPartyTokensPrice } from '@/hooks/useFetchMainnetThirdPartyTokensPrice';
 import { useFetchGnosisThirdPartyTokensPrice } from '@/hooks/useFetchGnosisThirdPartyTokensPrice';
-import { useFetchGIVPrice } from '@/hooks/useGivPrice';
 
 interface RegenStreamProps {
 	streamConfig: RegenStreamConfig;
@@ -97,7 +96,6 @@ export const RegenStreamCard: FC<RegenStreamProps> = ({ streamConfig }) => {
 		useFetchMainnetThirdPartyTokensPrice();
 	const { data: gnosisThirdPartyTokensPrice } =
 		useFetchGnosisThirdPartyTokensPrice();
-	const { data: givPrice } = useFetchGIVPrice(chainId);
 
 	useEffect(() => {
 		const currentPrice =

@@ -148,7 +148,9 @@ export const HarvestAllModal: FC<IHarvestAllModalProps> = ({
 				: gnosisThirdPartyTokensPrice;
 		if (!currentPrice) return new BigNumber('0');
 		const price = regenStreamConfig
-			? currentPrice[regenStreamConfig.tokenAddressOnUniswapV2]
+			? currentPrice[
+					regenStreamConfig.tokenAddressOnUniswapV2.toLowerCase()
+				]
 			: givPrice;
 		return new BigNumber(price || '0');
 	}, [
