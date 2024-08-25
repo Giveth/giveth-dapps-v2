@@ -17,7 +17,6 @@ import { IconGIV } from './Icons/GIV';
 import { formatWeiHelper } from '@/helpers/number';
 import { WhatIsStreamModal } from '@/components/modals/WhatIsStream';
 import useGIVTokenDistroHelper from '@/hooks/useGIVTokenDistroHelper';
-import { useAppSelector } from '@/features/hooks';
 
 import NetworkLogo from './NetworkLogo';
 import { ScaleRate, ScaleRateBig } from '@/lib/constants/constants';
@@ -25,6 +24,7 @@ import { getChainName } from '@/lib/network';
 import { INetworkIdWithChain } from './views/donate/common.types';
 import { ChainType } from '@/types/config';
 import { EVMWrongNetworkSwitchModal } from './modals/WrongNetworkInnerModal';
+import { useFetchGIVPrice } from '@/hooks/useGivPrice';
 
 interface IRewardCardProps {
 	cardName: string;
@@ -61,11 +61,12 @@ export const RewardCard: FC<IRewardCardProps> = ({
 	const [usdAmount, setUSDAmount] = useState(0n);
 	const [showWhatIsGIVstreamModal, setShowWhatIsGIVstreamModal] =
 		useState(false);
-	const givPrice = useAppSelector(state => state.price.givPrice);
+	const { data: givPrice } = useFetchGIVPrice();
 	const { givTokenDistroHelper } = useGIVTokenDistroHelper();
 	useEffect(() => {
 		const price =
-			tokenPrice || BigInt((Number(givPrice) * ScaleRate).toFixed(0));
+			tokenPrice ||
+			BigInt((Number(givPrice || 0) * ScaleRate).toFixed(0));
 		if (!price) return;
 
 		const usd = (price * liquidAmount) / ScaleRateBig;
