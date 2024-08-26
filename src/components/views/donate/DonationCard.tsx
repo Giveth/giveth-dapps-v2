@@ -97,7 +97,7 @@ export const DonationCard: FC<IDonationCardProps> = ({
 		if (!router.query.tab && hasOpAddress) {
 			setTab(ETabs.RECURRING);
 		}
-	}, [router.query.tab, hasOpAddress]);
+	}, [router.query, hasOpAddress]);
 
 	return (
 		<DonationCardWrapper>
