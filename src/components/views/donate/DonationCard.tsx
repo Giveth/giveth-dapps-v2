@@ -90,6 +90,15 @@ export const DonationCard: FC<IDonationCardProps> = ({
 			});
 	}, []);
 
+	// Check if the 'tab' query parameter is not present in the URL and project 'hasOpAddress' is true.
+	// If both conditions are met, set the active tab to 'RECURRING' using the setTab function.
+	// This ensures that the 'RECURRING' tab is active by default if rpoject has Op Address.
+	useEffect(() => {
+		if (!router.query.tab && hasOpAddress) {
+			setTab(ETabs.RECURRING);
+		}
+	}, [router.query.tab, hasOpAddress]);
+
 	return (
 		<DonationCardWrapper>
 			{!isQRDonation ? (
