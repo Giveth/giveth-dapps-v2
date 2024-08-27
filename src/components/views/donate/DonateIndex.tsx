@@ -1,4 +1,4 @@
-import React, { FC, useEffect } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import {
 	Col,
@@ -24,7 +24,7 @@ import { EContentType } from '@/lib/constants/shareContent';
 import { PassportBanner } from '@/components/PassportBanner';
 import { useAlreadyDonatedToProject } from '@/hooks/useAlreadyDonatedToProject';
 import { Shadow } from '@/components/styled-components/Shadow';
-import { useAppDispatch } from '@/features/hooks';
+import { useAppDispatch, useAppSelector } from '@/features/hooks';
 import { setShowHeader } from '@/features/general/general.slice';
 import { DonateHeader } from './DonateHeader';
 import { DonationCard, ETabs } from './DonationCard';
@@ -44,6 +44,7 @@ import { ChainType } from '@/types/config';
 import { useQRCodeDonation } from '@/hooks/useQRCodeDonation';
 import EndaomentProjectsInfo from '@/components/views/project/EndaomentProjectsInfo';
 import { IDraftDonation } from '@/apollo/types/gqlTypes';
+import DonationByProjectOwner from '@/components/modals/DonationByProjectOwner';
 
 const DonateIndex: FC = () => {
 	const { formatMessage } = useIntl();
@@ -62,12 +63,14 @@ const DonateIndex: FC = () => {
 	const { renewExpirationDate } = useQRCodeDonation();
 
 	const alreadyDonated = useAlreadyDonatedToProject(project);
+	const { userData } = useAppSelector(state => state.user);
+	const [showDonationByProjectOwner, setShowDonationByProjectOwner] =
+		useState<boolean | undefined>(false);
 	const dispatch = useAppDispatch();
 	const isSafeEnv = useIsSafeEnvironment();
 	const { isOnSolana } = useGeneralWallet();
 	const router = useRouter();
 	const { chainId } = useAccount();
-
 	const [showQRCode, setShowQRCode] = React.useState(
 		!!router.query.draft_donation,
 	);
@@ -79,6 +82,12 @@ const DonateIndex: FC = () => {
 			dispatch(setShowHeader(true));
 		};
 	}, [dispatch]);
+
+	useEffect(() => {
+		setShowDonationByProjectOwner(
+			userData?.id !== undefined && userData?.id === project.adminUser.id,
+		);
+	}, [userData?.id, project.adminUser]);
 
 	useEffect(() => {
 		const fetchDonation = async () => {
@@ -154,6 +163,13 @@ const DonateIndex: FC = () => {
 		<>
 			<DonateHeader />
 			<DonateContainer>
+				{showDonationByProjectOwner && (
+					<DonationByProjectOwner
+						setShowDonationByProjectOwner={
+							setShowDonationByProjectOwner
+						}
+					/>
+				)}
 				{alreadyDonated && (
 					<AlreadyDonatedWrapper>
 						<IconDonation24 />
