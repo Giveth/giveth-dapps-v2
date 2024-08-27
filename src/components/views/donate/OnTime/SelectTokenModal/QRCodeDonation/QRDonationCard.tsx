@@ -106,10 +106,10 @@ export const QRDonationCard: FC<QRDonationCardProps> = ({
 			}
 		};
 
-		eventSource.onopen = () => console.log(">>> Connection opened!");
+		eventSource.onopen = () => console.log('>>> Connection opened!');
 
 		eventSource.onmessage = (event: MessageEvent) => {
-			console.log("event ===> ", event);                                                                                                                                                    
+			console.log('event ===> ', event);
 			const { data, type } = JSON.parse(event.data);
 
 			if (type === 'new-donation') {
@@ -169,13 +169,9 @@ export const QRDonationCard: FC<QRDonationCardProps> = ({
 				? parsedLocalStorageItem[projectAddress?.address!]
 				: null;
 
-			let retDraftDonation;
-
-			if (!!draftDonationId) {
-				retDraftDonation = await retrieveDraftDonation(
-					Number(draftDonationId),
-				);
-			}
+			const retDraftDonation = !!draftDonationId
+				? await retrieveDraftDonation(Number(draftDonationId))
+				: null;
 
 			if (retDraftDonation && retDraftDonation.status === 'pending') {
 				setPendingDonationExists?.(true);
