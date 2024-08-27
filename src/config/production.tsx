@@ -595,6 +595,8 @@ const config: EnvConfig = {
 			title: 'GIV',
 			description: '100% GIV',
 			unit: 'GIV',
+			//Tuesday, September 3, 2024 6:00:00 PM
+			farmStartTimeMS: 1725386400000,
 		},
 	},
 	CLASSIC_CONFIG: {

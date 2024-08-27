@@ -23,9 +23,10 @@ import type { FC } from 'react';
 interface ILockInfo {
 	round: number;
 	amount: bigint;
+	farmIsNotStarted?: boolean;
 }
 
-const LockInfo: FC<ILockInfo> = ({ round, amount }) => {
+const LockInfo: FC<ILockInfo> = ({ round, amount, farmIsNotStarted }) => {
 	const { chain } = useAccount();
 	const chainId = chain?.id;
 	const { apr } =
@@ -71,7 +72,7 @@ const LockInfo: FC<ILockInfo> = ({ round, amount }) => {
 					</LockInfoRowHelp>
 				</LockInfoRowTitle>
 				<LockInfoRowValue>
-					{apr
+					{apr && !farmIsNotStarted
 						? `${formatEthHelper(
 								apr.effectiveAPR.multipliedBy(multipler),
 							)}%`

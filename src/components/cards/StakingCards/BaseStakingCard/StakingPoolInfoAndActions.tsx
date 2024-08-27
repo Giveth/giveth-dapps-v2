@@ -505,6 +505,7 @@ export const StakingPoolInfoAndActions: FC<IStakingPoolInfoAndActionsProps> = ({
 					setShowModal={setShowLockModal}
 					poolStakingConfig={poolStakingConfig}
 					isGIVpower={isGIVpower}
+					started={started}
 				/>
 			)}
 			{showWhatIsGIVstreamModal && (
