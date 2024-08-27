@@ -195,7 +195,6 @@ const DonationStatusSection: FC<TDonationStatusSectionProps> = ({
 }) => {
 	const { locale, formatMessage } = useIntl();
 	const { checkDraftDonationStatus } = useQRCodeDonation();
-	const stellarAddress = draftDonationData?.toWalletAddress;
 
 	return (
 		<DetailsWapper>

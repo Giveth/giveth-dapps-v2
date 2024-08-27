@@ -12,7 +12,6 @@ import { ICreateDraftDonation } from '@/components/views/donate/helpers';
 import StorageLabel from '@/lib/localStorage';
 import { IDraftDonation } from '@/apollo/types/gqlTypes';
 import { useDonateData } from '@/context/donate.context';
-import { ChainType } from '@/types/config';
 
 export type TQRStatus = 'waiting' | 'failed' | 'success' | 'expired';
 
@@ -202,22 +201,6 @@ export const useQRCodeDonation = () => {
 				variables: { id: Number(draftDonationId) },
 				fetchPolicy: 'no-cache',
 			});
-
-			// remove draft donation item from local storage with key = projectAddress
-			const localStorageItem = localStorage.getItem(
-				StorageLabel.DRAFT_DONATIONS,
-			);
-			if (!localStorageItem) return;
-			const parsedLocalStorageItem = JSON.parse(localStorageItem);
-			const projectAddress = project.addresses?.find(
-				address => address.chainType === ChainType.STELLAR,
-			);
-			if (!projectAddress?.address) return;
-			delete parsedLocalStorageItem[projectAddress.address];
-			localStorage.setItem(
-				StorageLabel.DRAFT_DONATIONS,
-				JSON.stringify(parsedLocalStorageItem),
-			);
 		} catch (error: any) {
 			console.error('Error marking draft donation as failed', error);
 		}
