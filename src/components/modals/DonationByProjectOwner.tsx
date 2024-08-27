@@ -37,7 +37,9 @@ export const DonationByProjectOwner: React.FC<DonationByProjectOwnerProps> = ({
 		<Modal
 			closeModal={closeModal}
 			isAnimating={false}
-			headerTitle={'Project Owner Address Detected'}
+			headerTitle={formatMessage({
+				id: 'label.project_owner_address_detected',
+			})}
 			headerTitlePosition='left'
 			hiddenClose={true}
 			headerIcon={<IconAlertTriangleFilled32 size={32} />}
@@ -46,10 +48,9 @@ export const DonationByProjectOwner: React.FC<DonationByProjectOwnerProps> = ({
 			<ModalContainer>
 				<ModalBox>
 					<Lead>
-						You cannot donate to a project you are the owner of.
-						There are thousands of projects on Giveth looking for
-						your support! Please choose another project to donate
-						to.
+						{formatMessage({
+							id: 'label.project_owner_cant_donate_to_own_project',
+						})}
 					</Lead>
 				</ModalBox>
 				<Buttons>
