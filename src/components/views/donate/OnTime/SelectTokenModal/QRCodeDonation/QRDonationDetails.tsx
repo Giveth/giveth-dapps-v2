@@ -104,7 +104,7 @@ const QRDonationDetails = () => {
 		}, 300000);
 
 		return () => clearInterval(intervalId);
-	}, []);
+	}, [draftDonationData?.id])
 
 	return (
 		<>
