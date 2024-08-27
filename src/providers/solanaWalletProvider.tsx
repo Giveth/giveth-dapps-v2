@@ -30,8 +30,6 @@ export const SolanaCtx = createContext<any>(null);
 const wallets: BaseMessageSignerWalletAdapter<string>[] = [
 	new PhantomWalletAdapter(),
 	new SolflareWalletAdapter({ network: solanaAdapter }),
-	new CoinbaseWalletAdapter({ network: solanaAdapter }),
-	new TrustWalletAdapter() as BaseMessageSignerWalletAdapter<string>,
 ];
 
 if (!isProduction) {
