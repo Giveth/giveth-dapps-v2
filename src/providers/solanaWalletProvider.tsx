@@ -7,8 +7,6 @@ import {
 	UnsafeBurnerWalletAdapter,
 	PhantomWalletAdapter,
 	SolflareWalletAdapter,
-	CoinbaseWalletAdapter,
-	TrustWalletAdapter,
 } from '@solana/wallet-adapter-wallets';
 import { WalletModalProvider } from '@solana/wallet-adapter-react-ui';
 import { BaseMessageSignerWalletAdapter } from '@solana/wallet-adapter-base';
