@@ -1225,7 +1225,7 @@
 	"label.success": "Success",
 	"label.donation_status": "Donation status",
 	"label.qr_code_expired": "QR Code Expired, please request a new QR Code!",
-	"label.did_the_donation_but_not_confirmed": "I did the donation but it's not confirmed.",	
+	"label.did_the_donation_but_not_confirmed": "I did the donation but it's not confirmed.",
 	"label.raise_a_ticket": "Raise a ticket",
 	"label.need_a_new_qr_code": "Need a new QR code?",
 	"label.valid_for": "Valid for",
@@ -1695,5 +1695,9 @@
 	"label.sign_a_message_with_your_safe_signer": "Sign a message with your Safe signer address to continue the log in process",
 	"label.this_is_necessary_to_create_projects": "This is necessary to be able to create projects, manage your profile or use GIVpower.",
 	"label.project_card_endaoment_title": "This project is delivered by",
-	"label.project_card_endaoment_subtext": "This project is delivered by Endaoment, which handles the conversion and delivery of fiat funding to this project. Endaoment charges a 1.5% fee on donations which is processed outside of the Giveth Dapp."
+	"label.project_card_endaoment_subtext": "This project is delivered by Endaoment, which handles the conversion and delivery of fiat funding to this project. Endaoment charges a 1.5% fee on donations which is processed outside of the Giveth Dapp.",
+	"label.devouch.view_this_project": "View this Project on DeVouch",
+	"label.devouch.if_you_are_eligible": "If you are an eligible Giveth Verifier you can vouch for this project's legitimacy, potentially increasing the benefits it receives on Giveth.",
+	"label.devouch.learn_more_about_devouch": "Learn more about DeVouch & Decentralized Verification",
+	"label.devouch.attest_on_devouch": "Attest on Devouch"
 }
