@@ -79,7 +79,7 @@ const SelectTokenInnerModal: FC<ISelectTokenModalProps> = ({
 	const tokenBalancesMap = useRef<{ [key: string]: bigint | undefined }>({})
 
 	tokens?.map((token) => {
-		const balance = useFetchBalance(token);
+		const balance = fetchBalance(token);
 		tokenBalancesMap.current[token.address] = balance;
 	});
 	
