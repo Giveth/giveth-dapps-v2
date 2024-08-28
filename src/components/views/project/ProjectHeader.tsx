@@ -78,7 +78,7 @@ const Title = styled(H3)`
 	position: absolute;
 	bottom: 40px;
 	left: 40px;
-	color: #fff;
+	color: #ffffff;
 	font-weight: bold;
 	text-align: left;
 	z-index: 1;
