@@ -23,7 +23,6 @@ const chains = configuration.EVM_CHAINS;
 export const wagmiConfig = createConfig({
 	chains: chains, // required
 	connectors: [
-		safe({ allowedDomains: [/app.safe.global$/], debug: false }),
 		walletConnect({
 			projectId,
 			metadata,
