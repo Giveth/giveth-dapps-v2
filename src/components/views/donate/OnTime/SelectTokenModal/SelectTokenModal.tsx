@@ -8,9 +8,9 @@ import {
 	IconGIVBack24,
 	IconSearch16,
 } from '@giveth/ui-design-system';
-import { useState, type FC, useEffect, useCallback, use, useMemo, useRef } from 'react';
+import { useState, type FC, useEffect, useRef } from 'react';
 import { useIntl } from 'react-intl';
-import { Address, erc20Abi, isAddress } from 'viem'; // Assuming `isAddress` is a function from the `viem` library to validate Ethereum addresses
+import { erc20Abi, isAddress } from 'viem'; // Assuming `isAddress` is a function from the `viem` library to validate Ethereum addresses
 import { useAccount } from 'wagmi';
 import { readContracts } from 'wagmi/actions';
 import { IModal } from '@/types/common';
@@ -58,14 +58,11 @@ export const SelectTokenModal: FC<ISelectTokenModalProps> = props => {
 	);
 };
 
-
-
 const SelectTokenInnerModal: FC<ISelectTokenModalProps> = ({
 	tokens,
 	acceptCustomToken,
 	setShowModal,
 }) => {
-
 	const [hideZeroBalance, setHideZeroBalance] = useState(false);
 	const [searchQuery, setSearchQuery] = useState('');
 	const [filteredTokens, setFilteredTokens] = useState(tokens || []);
@@ -76,13 +73,13 @@ const SelectTokenInnerModal: FC<ISelectTokenModalProps> = ({
 	const { isOnEVM } = useGeneralWallet();
 	const { chain: evmChain } = useAccount();
 	const fetchBalance = useFetchBalance;
-	const tokenBalancesMap = useRef<{ [key: string]: bigint | undefined }>({})
+	const tokenBalancesMap = useRef<{ [key: string]: bigint | undefined }>({});
 
-	tokens?.map((token) => {
+	tokens?.map(token => {
 		const balance = fetchBalance(token);
 		tokenBalancesMap.current[token.address] = balance;
 	});
-	
+
 	useEffect(() => {
 		if (tokens) {
 			if (isAddress(searchQuery)) {
@@ -158,7 +155,6 @@ const SelectTokenInnerModal: FC<ISelectTokenModalProps> = ({
 			}
 		}
 	}, [searchQuery, tokens]);
-
 
 	const tokenBalances = filteredTokens.map(token => ({
 		token,
