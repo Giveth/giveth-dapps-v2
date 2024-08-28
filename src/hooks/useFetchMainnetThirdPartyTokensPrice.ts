@@ -6,10 +6,11 @@ export const useFetchMainnetThirdPartyTokensPrice = () => {
 	return useQuery({
 		queryKey: ['mainnetThirdPartyTokensPrice'],
 		queryFn: async () => {
-			const tokenIds = config.MAINNET_CONFIG.regenStreams.map(
+			const tokenIds = config.MAINNET_CONFIG.regenStreams?.map(
 				streamConfig =>
 					streamConfig.tokenAddressOnUniswapV2.toLowerCase(),
 			);
+			if (!tokenIds) return {};
 			return await fetchMainnetTokenPrices(tokenIds); // Pass all token IDs at once
 		},
 		staleTime: config.SUBGRAPH_POLLING_INTERVAL,
