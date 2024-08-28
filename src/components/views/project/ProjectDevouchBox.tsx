@@ -19,8 +19,9 @@ import { Shadow } from '@/components/styled-components/Shadow';
 
 const ProjectDevouchBox = () => {
 	const { formatMessage } = useIntl();
-	const { projectData } = useProjectContext();
-	if (!projectData) {
+	const { projectData, isDraft, isAdmin } = useProjectContext();
+
+	if (!projectData || isDraft || isAdmin) {
 		return null;
 	}
 	return (
