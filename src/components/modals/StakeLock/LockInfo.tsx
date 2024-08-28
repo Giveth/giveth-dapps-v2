@@ -72,11 +72,11 @@ const LockInfo: FC<ILockInfo> = ({ round, amount, farmIsNotStarted }) => {
 					</LockInfoRowHelp>
 				</LockInfoRowTitle>
 				<LockInfoRowValue>
-					{apr && !farmIsNotStarted
-						? `${formatEthHelper(
-								apr.effectiveAPR.multipliedBy(multipler),
-							)}%`
-						: ' ? '}
+					{farmIsNotStarted
+						? 'Coming Soon'
+						: !apr
+							? ' ? '
+							: `${formatEthHelper(apr.effectiveAPR.multipliedBy(multipler))}%`}
 					<LockInfoRowSpark>
 						<IconSpark size={16} />
 					</LockInfoRowSpark>
@@ -131,6 +131,7 @@ const MultiPlyHelp = styled.div`
 	top: -16px;
 	right: -20px;
 	cursor: pointer;
+
 	&:hover {
 		color: ${brandColors.giv[200]};
 	}
@@ -152,6 +153,7 @@ const LockInfoRowHelp = styled.div`
 	top: 1px;
 	right: -24px;
 	cursor: pointer;
+
 	&:hover {
 		color: ${brandColors.giv[200]};
 	}
@@ -163,6 +165,7 @@ const LockInfoRowSpark = styled.div`
 	left: -18px;
 	cursor: pointer;
 	color: ${brandColors.mustard[500]};
+
 	&:hover {
 		color: ${brandColors.mustard[400]};
 	}
@@ -170,6 +173,7 @@ const LockInfoRowSpark = styled.div`
 
 export const LockInfoTooltip = styled(Subline)`
 	color: ${neutralColors.gray[100]};
+
 	${mediaQueries.tablet} {
 		width: 160px;
 	}

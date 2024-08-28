@@ -365,9 +365,13 @@ export const StakingPoolInfoAndActions: FC<IStakingPoolInfoAndActionsProps> = ({
 					<ClaimButton
 						disabled={availableStakedToken <= 0n}
 						onClick={() => setShowLockModal(true)}
-						label={formatMessage({
-							id: 'label.increase_rewards',
-						})}
+						label={
+							started
+								? formatMessage({
+										id: 'label.increase_rewards',
+									})
+								: 'Lock your GIV'
+						}
 						buttonType='primary'
 					/>
 				)}
