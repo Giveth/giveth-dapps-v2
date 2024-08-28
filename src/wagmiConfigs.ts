@@ -1,5 +1,5 @@
 import { cookieStorage, createConfig, createStorage } from 'wagmi';
-import { safe, walletConnect, coinbaseWallet } from '@wagmi/connectors';
+import { walletConnect, coinbaseWallet } from '@wagmi/connectors';
 
 import { createClient, http } from 'viem';
 import configuration from './configuration';
