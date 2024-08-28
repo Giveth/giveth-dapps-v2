@@ -1,27 +1,29 @@
 import styled from 'styled-components';
 import Image from 'next/image';
-import {
-	brandColors,
-	FlexCenter,
-	semanticColors,
-} from '@giveth/ui-design-system';
+import { brandColors, FlexCenter } from '@giveth/ui-design-system';
 import ExternalLink from '@/components/ExternalLink';
+import gitcoin from '/public/images/gitcoin-grants.png';
 
 const AnnouncementBanner = () => {
 	return (
 		<Wrapper>
 			<PStyled>
 				<>
-					Try out our new Recurring Donations feature for a chance to
-					to WIN PRIZES this summer! 🏆
+					Donate to Giveth in Gitcoin Grants 21! We are participating
+					in 4 QF rounds on Gitcoin.
 				</>
-				<>
-					<ExternalLink href='https://blog.giveth.io/recurring-donation-rally-win-big-this-sumer-with-recurring-donations-on-giveth-092798f8b988'>
-						<Purple>
-							Read up on the contest details on the Giveth blog.
-						</Purple>
+				<ImageStyled
+					src={gitcoin}
+					alt='Gitcoin Grants 21'
+					width={20}
+					height={20}
+				/>
+				<div id='announcement-banner'>
+					<ExternalLink href='https://x.com/Giveth/status/1823057210643296578'>
+						<Purple>Find links to all the rounds</Purple>
 					</ExternalLink>
-				</>
+				</div>
+				<>and consider making a donation to support our work.</>
 			</PStyled>
 		</Wrapper>
 	);
@@ -50,7 +52,7 @@ const Wrapper = styled(FlexCenter)`
 	padding: 16px;
 	text-align: center;
 	gap: 4px;
-	background: ${semanticColors.jade[100]};
+	background: ${brandColors.giv[100]};
 	z-index: 99;
 	position: sticky;
 `;

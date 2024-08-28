@@ -161,7 +161,6 @@ export const TabGIVbacksBottom = () => {
 	useEffect(() => {
 		if (
 			givTokenDistroHelper &&
-			isLoaded &&
 			givTokenDistroHelper.startTime.getTime() !== 0
 		) {
 			const now = getNowUnixMS();
