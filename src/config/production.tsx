@@ -34,6 +34,7 @@ import IconStellar from '@/components/Icons/Stellar';
 
 const GNOSIS_GIV_TOKEN_ADDRESS = '0x4f4F9b8D5B4d0Dc10506e5551B0513B61fD59e75';
 const OPTIMISM_GIV_TOKEN_ADDRESS = '0x528CDc92eAB044E1E39FE43B9514bfdAB4412B98';
+const ZKEVM_GIV_TOKEN_ADDRESS = '0xddAFB91475bBf6210a151FA911AC8fdA7dE46Ec2';
 
 const SEPT_8TH_2022 = 1662595200000;
 const MAINNET_NETWORK_NUMBER = 1; // Mainnet
@@ -579,6 +580,24 @@ const config: EnvConfig = {
 			// Keep it empty for automatic configuration
 		},
 		chainLogo: (logoSize?: number) => <IconZKEVM size={logoSize} />,
+		subgraphAddress: process.env.NEXT_PUBLIC_SUBGRAPH_ZKEVM,
+		GIV_TOKEN_ADDRESS: ZKEVM_GIV_TOKEN_ADDRESS,
+		GIV_BUY_LINK:
+			'https://velodrome.finance/swap?from=eth&to=0x528cdc92eab044e1e39fe43b9514bfdab4412b98',
+		TOKEN_DISTRO_ADDRESS: '0x4fB9B10ECDe1b048DBC79aBEAB3793edc93a0d54',
+		uniswapV2Subgraph: '',
+		GIVPOWER: {
+			network: ZKEVM_NETWORK_NUMBER,
+			LM_ADDRESS: '0xc790f82bf6f8709aa4a56dc11afad7af7c2a9867',
+			POOL_ADDRESS: ZKEVM_GIV_TOKEN_ADDRESS,
+			type: StakingType.GIV_UNIPOOL_LM,
+			platform: StakingPlatform.GIVETH,
+			title: 'GIV',
+			description: '100% GIV',
+			unit: 'GIV',
+			//Tuesday, September 3, 2024 6:00:00 PM
+			farmStartTimeMS: 1725386400000,
+		},
 	},
 	CLASSIC_CONFIG: {
 		...classic,

@@ -43,7 +43,7 @@ const LockingBrief: FC<ILockingBrief> = ({
 };
 
 export const BriefContainer = styled(Flex)`
-	color: ${brandColors.giv[300]};
+	color: ${brandColors.giv['000']};
 	flex-direction: column;
 	gap: 8px;
 `;
