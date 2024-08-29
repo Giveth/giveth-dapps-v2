@@ -23,8 +23,6 @@ const YourApp = () => {
 		})),
 	});
 
-	console.log('subgraphValues', subgraphValues);
-
 	return (
 		<div>
 			<w3m-button />
