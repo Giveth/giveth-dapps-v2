@@ -35,8 +35,8 @@ export const DonationCard = () => {
 		);
 
 	const isOwnerOnEVM =
-		project?.adminUser.walletAddress &&
-		isAddress(project.adminUser.walletAddress);
+		project?.adminUser?.walletAddress &&
+		isAddress(project.adminUser?.walletAddress);
 
 	const disableRecurringDonations = organization?.disableRecurringDonations;
 

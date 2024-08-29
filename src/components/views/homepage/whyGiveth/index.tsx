@@ -90,7 +90,7 @@ const WhyGiveth: FC<IWhyGivethProps> = props => {
 						{nonZeroDonations.map(i => (
 							<DonationCard
 								key={i.id}
-								address={i.user.walletAddress}
+								address={i.user?.walletAddress}
 								amount={i.valueUsd!}
 								projectTitle={i.project.title}
 								slug={i.project.slug}

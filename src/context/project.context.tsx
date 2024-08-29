@@ -216,7 +216,7 @@ export const ProjectProvider = ({
 					const _users =
 						boostingResp.data.getPowerBoosting.powerBoostings.map(
 							(boosting: IPowerBoosting) =>
-								boosting.user.walletAddress?.toLocaleLowerCase(),
+								boosting.user?.walletAddress?.toLocaleLowerCase(),
 						);
 
 					if (!_users || _users.length === 0) {
@@ -241,7 +241,7 @@ export const ProjectProvider = ({
 						const powerBoosting = _boostersData.powerBoostings[i];
 						powerBoosting.user.givpowerBalance =
 							unipoolBalancesObj[
-								powerBoosting.user.walletAddress.toLowerCase()
+								powerBoosting.user?.walletAddress.toLowerCase()
 							];
 						const _allocated = new BigNumber(
 							powerBoosting.user.givpowerBalance,

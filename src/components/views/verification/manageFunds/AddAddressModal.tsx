@@ -162,7 +162,7 @@ const AddAddressModal: FC<IProps> = ({
 						label='Wallet Address'
 						caption='Enter the related address.'
 						registerOptions={{
-							...requiredOptions.walletAddress,
+							...requiredOptions?.walletAddress,
 							validate: validateAddress,
 						}}
 						error={errors.address}

@@ -120,7 +120,7 @@ export const AddNewAddress: FC<IAddNewAddress> = ({
 				autoFocus
 				label={`Receiving address on ${chainName}`}
 				registerOptions={{
-					...requiredOptions.walletAddress,
+					...requiredOptions?.walletAddress,
 					validate: validateAddress,
 				}}
 				placeholder='0x...'

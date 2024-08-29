@@ -26,7 +26,7 @@ const UserRoute: FC<IUserRouteProps> = ({ user }) => {
 	}
 
 	const areSameUsers =
-		user.walletAddress?.toLowerCase() ===
+		user?.walletAddress?.toLowerCase() ===
 		userData?.walletAddress?.toLowerCase();
 
 	const userName = getUserName(user);
@@ -39,7 +39,7 @@ const UserRoute: FC<IUserRouteProps> = ({ user }) => {
 					desc: 'See the donations, projects & other public information about this user.',
 					image:
 						user.avatar || 'https://i.ibb.co/HTbdCdd/Thumbnail.png',
-					url: `https://giveth.io/user/${user.walletAddress}`,
+					url: `https://giveth.io/user/${user?.walletAddress}`,
 				}}
 			/>
 			<ProfileProvider

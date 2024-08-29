@@ -12,7 +12,7 @@ export function getUserName(user?: IUser, short = true) {
 		user.name ||
 		`${user.firstName || ''} ${user.lastName || ''}`.trim() ||
 		(short
-			? user.walletAddress?.substring(0, 8) + '...'
-			: user.walletAddress)
+			? user?.walletAddress?.substring(0, 8) + '...'
+			: user?.walletAddress)
 	);
 }
