@@ -433,7 +433,7 @@ const DonateModal: FC<IDonateModalProps> = props => {
 						)}
 						<DonateButton
 							loading={donating}
-							buttonType='primary'
+							buttonType='secondary'
 							disabled={donating || processFinished}
 							label={
 								donating
