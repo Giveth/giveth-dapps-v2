@@ -73,7 +73,11 @@ const QRDonationDetails = () => {
 
 	useEffect(() => {
 		let stopTimer: void | (() => void);
-		if (draftDonationData?.expiresAt) {
+
+		if (
+			draftDonationData?.id === draftDonationId &&
+			draftDonationData?.expiresAt
+		) {
 			stopTimer = startTimer?.(new Date(draftDonationData?.expiresAt));
 		}
 
@@ -104,7 +108,7 @@ const QRDonationDetails = () => {
 		}, 300000);
 
 		return () => clearInterval(intervalId);
-	}, [draftDonationData?.id]);
+	}, [draftDonationId]);
 
 	return (
 		<>

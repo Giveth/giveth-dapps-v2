@@ -50,7 +50,6 @@ const gqlRes = `{
 			networkId
 			chainType
 			title
-			memo
 		}
 	}
 	user {
