@@ -11,13 +11,15 @@ import {
 import React, { ChangeEvent, useState } from 'react';
 import styled from 'styled-components';
 import { useAccount, useSwitchChain } from 'wagmi';
-import { Address } from 'viem';
+import { Abi, Address } from 'viem';
 import { readContract } from '@wagmi/core';
-import { abi as PFP_ABI } from '@/artifacts/pfpGiver.json';
+import PFP_ARTIFACTS from '@/artifacts/pfpGiver.json';
 import config from '@/configuration';
 import { getAddressFromENS, isAddressENS } from '@/lib/wallet';
 import EligibilityModal from './EligibilityModal';
 import { wagmiConfig } from '@/wagmiConfigs';
+
+const PFP_ABI = PFP_ARTIFACTS.abi as Abi;
 
 const CheckEligibility = () => {
 	const [walletAddress, setWalletAddress] = useState('');

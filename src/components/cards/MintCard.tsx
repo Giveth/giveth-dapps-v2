@@ -18,13 +18,15 @@ import { readContracts, readContract } from '@wagmi/core';
 import { MintModal } from '../modals/Mint/MintModal';
 import { formatWeiHelper } from '@/helpers/number';
 import config from '@/configuration';
-import { abi as PFP_ABI } from '@/artifacts/pfpGiver.json';
+import PFP_ARTIFACTS from '@/artifacts/pfpGiver.json';
 import { InsufficientFundModal } from '../modals/InsufficientFund';
 import { usePFPMintData } from '@/context/pfpmint.context';
 import { useGeneralWallet } from '@/providers/generalWalletProvider';
 import { wagmiConfig } from '@/wagmiConfigs';
 import { getReadContractResult } from '@/lib/contracts';
+
 const MIN_NFT_QTY = 1;
+const PFP_ABI = PFP_ARTIFACTS.abi as Abi;
 
 interface IpfpContractData {
 	price: bigint;
@@ -70,7 +72,7 @@ export const MintCard = () => {
 				const baseParams = {
 					address: config.MAINNET_CONFIG.PFP_CONTRACT_ADDRESS,
 					chainId: config.MAINNET_NETWORK_NUMBER,
-					abi: PFP_ABI as Abi,
+					abi: PFP_ABI,
 				} as const;
 				const result = await readContracts(wagmiConfig, {
 					contracts: [
@@ -119,7 +121,7 @@ export const MintCard = () => {
 				const _balanceOf = await readContract(wagmiConfig, {
 					address: config.MAINNET_CONFIG.PFP_CONTRACT_ADDRESS,
 					chainId: config.MAINNET_NETWORK_NUMBER,
-					abi: PFP_ABI as Abi,
+					abi: PFP_ABI,
 					functionName: 'balanceOf',
 					args: [walletAddress],
 				});
