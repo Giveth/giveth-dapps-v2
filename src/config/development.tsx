@@ -29,7 +29,6 @@ import IconBase from '@/components/Icons/Base';
 import IconSolana from '@/components/Icons/Solana';
 import IconZKEVM from '@/components/Icons/ZKEVM';
 import IconArbitrum from '@/components/Icons/Arbitrum';
-import IconStellar from '@/components/Icons/Stellar';
 import { IconClassic } from '@/components/Icons/Classic';
 
 const BASE_ROUTE =
