@@ -35,8 +35,6 @@ const CheckEligibility = () => {
 
 	const checkAddress = async (address: Address) => {
 		try {
-			if (!config.MAINNET_CONFIG.PFP_CONTRACT_ADDRESS)
-				throw new Error('PFP contract address not found');
 			const isAllowed = await readContract(wagmiConfig, {
 				address: config.MAINNET_CONFIG.PFP_CONTRACT_ADDRESS,
 				abi: PFP_ABI,

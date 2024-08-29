@@ -8,12 +8,16 @@ import { GeneralMetatags } from '@/components/Metatag';
 import ProjectsIndex from '@/components/views/projects/ProjectsIndex';
 import { projectsMetatags } from '@/content/metatags';
 import { ProjectsProvider } from '@/context/projects.context';
+import { useReferral } from '@/hooks/useReferral';
 import { IProjectsRouteProps } from 'pages/projects/[slug]';
 import { getMainCategorySlug } from '@/helpers/projects';
 import { EProjectsSortBy } from '@/apollo/types/gqlEnums';
 
 const QFProjectsCategoriesRoute = (props: IProjectsRouteProps) => {
 	const { projects, totalCount } = props;
+
+	useReferral();
+
 	return (
 		<ProjectsProvider isQF>
 			<GeneralMetatags info={projectsMetatags} />

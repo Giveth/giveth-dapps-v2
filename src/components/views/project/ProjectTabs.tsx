@@ -25,10 +25,10 @@ const badgeCount = (count?: number) => {
 
 const ProjectTabs = (props: IProjectTabs) => {
 	const { activeTab, slug } = props;
-	const { projectData, totalDonationsCount, boostersData } =
-		useProjectContext();
+	const { projectData, totalDonationsCount } = useProjectContext();
 	const { totalProjectUpdates } = projectData || {};
 	const { formatMessage } = useIntl();
+	const { boostersData } = useProjectContext();
 
 	const tabsArray = [
 		{ title: 'label.about' },
@@ -69,7 +69,6 @@ const ProjectTabs = (props: IProjectTabs) => {
 									className={
 										activeTab === index ? 'active' : ''
 									}
-									color='white'
 								>
 									{i.badge}
 								</Badge>
@@ -95,7 +94,7 @@ const InnerWrapper = styled(Flex)`
 
 const Badge = styled(Subline)`
 	background: ${neutralColors.gray[800]};
-	color: #ffffff;
+	color: white;
 	border-radius: 40px;
 	height: 22px;
 	padding: 0 9px;

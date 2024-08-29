@@ -25,7 +25,7 @@ const solanaNode =
 // Create a context for the provider
 export const SolanaCtx = createContext<any>(null);
 
-const wallets: BaseMessageSignerWalletAdapter<string>[] = [
+const wallets: BaseMessageSignerWalletAdapter[] = [
 	new PhantomWalletAdapter(),
 	new SolflareWalletAdapter({ network: solanaAdapter }),
 ];

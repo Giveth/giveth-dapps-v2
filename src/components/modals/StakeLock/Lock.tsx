@@ -43,7 +43,6 @@ import type { PoolStakingConfig } from '@/types/config';
 interface ILockModalProps extends IModal {
 	poolStakingConfig: PoolStakingConfig;
 	isGIVpower: boolean;
-	started: boolean;
 }
 
 export enum ELockState {
@@ -58,7 +57,6 @@ const LockModal: FC<ILockModalProps> = ({
 	poolStakingConfig,
 	isGIVpower,
 	setShowModal,
-	started,
 }) => {
 	const { formatMessage } = useIntl();
 	const isSafeEnv = useIsSafeEnvironment();
@@ -168,11 +166,7 @@ const LockModal: FC<ILockModalProps> = ({
 								</IconWithTooltip>
 							</Flex>
 							<LockSlider setRound={setRound} round={round} />
-							<LockInfo
-								round={round}
-								amount={amount}
-								farmIsNotStarted={!started}
-							/>
+							<LockInfo round={round} amount={amount} />
 							<StyledButton
 								buttonType='primary'
 								size='small'
@@ -206,11 +200,7 @@ const LockModal: FC<ILockModalProps> = ({
 								amount={amount}
 								onLocking
 							/>
-							<LockInfo
-								round={round}
-								amount={amount}
-								farmIsNotStarted={!started}
-							/>
+							<LockInfo round={round} amount={amount} />
 							<StyledButton
 								buttonType='primary'
 								label={formatMessage({
