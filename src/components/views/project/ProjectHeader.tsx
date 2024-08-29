@@ -37,7 +37,7 @@ const ProjectHeader = () => {
 				loading='lazy'
 			/>
 			<GradientOverlay />
-			<Title>
+			<Title color='white'>
 				<div>{title}</div>
 				<ProjectOwnerWithPfp user={adminUser} />
 			</Title>
