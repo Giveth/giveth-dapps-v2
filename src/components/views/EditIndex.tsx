@@ -64,13 +64,13 @@ const EditIndex = () => {
 				})
 				.then((res: { data: { projectById: IProjectEdition } }) => {
 					const project = res.data.projectById;
-					setOwnerAddress(project.adminUser.walletAddress);
+					setOwnerAddress(project.adminUser?.walletAddress);
 					if (project.status.name === EProjectStatus.CANCEL) {
 						setIsCancelled(true);
 						setProject(undefined);
 					} else if (
 						!compareAddresses(
-							project.adminUser.walletAddress,
+							project.adminUser?.walletAddress,
 							user?.walletAddress,
 						)
 					) {

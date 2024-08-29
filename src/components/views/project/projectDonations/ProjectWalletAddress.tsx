@@ -16,19 +16,10 @@ interface IProjectWalletAddressProps {
 }
 
 const ProjectWalletAddress = (props: IProjectWalletAddressProps) => {
-	const formatStellarAddress = (address: string) => {
-		const firstPart = address.slice(0, 18);
-		const secondPart = address.slice(-18);
-		return `${firstPart}...${secondPart}`;
-	};
-
 	const { address, networkId, chainType } = props;
 	let _address = address;
 	if (chainType === ChainType.EVM) {
 		_address = getAddress(address);
-	}
-	if (chainType === ChainType.STELLAR) {
-		_address = formatStellarAddress(address);
 	}
 
 	return (

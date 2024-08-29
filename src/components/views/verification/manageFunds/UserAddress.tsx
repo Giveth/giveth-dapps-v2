@@ -5,7 +5,6 @@ import Input from '@/components/Input';
 import { IAddress } from '@/components/views/verification/manageFunds/ManageFundsIndex';
 import { RemoveIcon } from '@/components/views/verification/Common';
 import { getChainName } from '@/lib/network';
-import { ChainType } from '@/types/config';
 
 interface IProps {
 	address: IAddress;
@@ -18,11 +17,7 @@ const UserAddress: FC<IProps> = ({ address, remove }) => {
 		<Container>
 			<Input
 				disabled
-				value={
-					chainType === ChainType.STELLAR
-						? walletAddress?.toUpperCase()
-						: walletAddress?.toLowerCase()
-				}
+				value={walletAddress?.toLowerCase()}
 				label={title + ' - ' + getChainName(networkId, chainType)}
 				name='walletAddress'
 			/>

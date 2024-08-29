@@ -46,7 +46,6 @@ const networks = [
 	config.SOLANA_CONFIG,
 	config.BASE_CONFIG,
 	config.ZKEVM_CONFIG,
-	config.STELLAR_CONFIG,
 ];
 
 export const DonateWrongNetwork: FC<IDonateWrongNetwork> = props => {

@@ -29,8 +29,7 @@ const WhyGiveth: FC<IWhyGivethProps> = props => {
 		donationsTotalUsdPerDate,
 	} = props;
 	const nonZeroDonations = recentDonations.filter(
-		// Note from Mateo: On staging there are some donations with no user... was breaking the app
-		i => !!i?.user?.walletAddress && i.valueUsd && i.valueUsd > 0.1,
+		i => i.valueUsd && i.valueUsd > 0.1,
 	);
 
 	const statsArray = [
@@ -62,6 +61,7 @@ const WhyGiveth: FC<IWhyGivethProps> = props => {
 			setAnimationWidth(clientWidth);
 		}
 	}, [donationCardsRef.current]);
+
 	return (
 		<Relative>
 			<GivethStats>
@@ -90,7 +90,7 @@ const WhyGiveth: FC<IWhyGivethProps> = props => {
 						{nonZeroDonations.map(i => (
 							<DonationCard
 								key={i.id}
-								address={i.user.walletAddress}
+								address={i.user?.walletAddress}
 								amount={i.valueUsd!}
 								projectTitle={i.project.title}
 								slug={i.project.slug}

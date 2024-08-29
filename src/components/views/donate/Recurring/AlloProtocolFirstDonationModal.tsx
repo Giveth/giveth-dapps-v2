@@ -70,8 +70,8 @@ const AlloProtocolFirstDonationModal: FC<IAlloProtocolModal> = ({
 			try {
 				setIsLoading(true);
 				if (
-					!project?.adminUser.walletAddress ||
-					!isAddress(project?.adminUser.walletAddress)
+					!project?.adminUser?.walletAddress ||
+					!isAddress(project?.adminUser?.walletAddress)
 				) {
 					throw new Error('Invalid Project Admin Address');
 				}
@@ -87,7 +87,7 @@ const AlloProtocolFirstDonationModal: FC<IAlloProtocolModal> = ({
 							protocol: 1,
 							pointer: '',
 						},
-						project?.adminUser.walletAddress, //admin user wallet address
+						project?.adminUser?.walletAddress, //admin user wallet address
 						[],
 					],
 				});

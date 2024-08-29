@@ -18,11 +18,7 @@ const PfpController = () => {
 		const _pendingList = Object.keys(pendingList);
 		const interval: any = setInterval(async () => {
 			try {
-				if (
-					config.MAINNET_CONFIG.subgraphAddress &&
-					_pendingList &&
-					_pendingList.length > 0
-				) {
+				if (_pendingList && _pendingList.length > 0) {
 					const query = buildUsersPfpInfoQuery(_pendingList);
 					const res = await gqlRequest(
 						config.MAINNET_CONFIG.subgraphAddress,
