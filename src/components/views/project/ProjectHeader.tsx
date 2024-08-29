@@ -37,7 +37,7 @@ const ProjectHeader = () => {
 				loading='lazy'
 			/>
 			<GradientOverlay />
-			<Title color='white'>
+			<Title>
 				<div>{title}</div>
 				<ProjectOwnerWithPfp user={adminUser} />
 			</Title>
@@ -78,7 +78,7 @@ const Title = styled(H3)`
 	position: absolute;
 	bottom: 40px;
 	left: 40px;
-	color: #ffffff;
+	color: #fff;
 	font-weight: bold;
 	text-align: left;
 	z-index: 1;
