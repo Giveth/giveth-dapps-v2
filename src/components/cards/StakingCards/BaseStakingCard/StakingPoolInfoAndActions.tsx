@@ -354,7 +354,7 @@ export const StakingPoolInfoAndActions: FC<IStakingPoolInfoAndActionsProps> = ({
 			)}
 			<HarvestButtonsWrapper>
 				<ClaimButton
-					disabled={exploited || earned === 0n}
+					disabled={exploited || earned === 0n || !started}
 					onClick={() => setShowHarvestModal(true)}
 					label={formatMessage({
 						id: 'label.harvest_rewards',
@@ -365,9 +365,13 @@ export const StakingPoolInfoAndActions: FC<IStakingPoolInfoAndActionsProps> = ({
 					<ClaimButton
 						disabled={availableStakedToken <= 0n}
 						onClick={() => setShowLockModal(true)}
-						label={formatMessage({
-							id: 'label.increase_rewards',
-						})}
+						label={
+							started
+								? formatMessage({
+										id: 'label.increase_rewards',
+									})
+								: 'Lock your GIV'
+						}
 						buttonType='primary'
 					/>
 				)}
@@ -505,6 +509,7 @@ export const StakingPoolInfoAndActions: FC<IStakingPoolInfoAndActionsProps> = ({
 					setShowModal={setShowLockModal}
 					poolStakingConfig={poolStakingConfig}
 					isGIVpower={isGIVpower}
+					started={started}
 				/>
 			)}
 			{showWhatIsGIVstreamModal && (

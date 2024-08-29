@@ -1,6 +1,14 @@
 import { useState } from 'react';
 import { useQueries } from '@tanstack/react-query';
 import { useAccount } from 'wagmi';
+import {
+	PublicKey,
+	LAMPORTS_PER_SOL,
+	Transaction,
+	SystemProgram,
+} from '@solana/web3.js';
+import BigNumber from 'bignumber.js';
+import { useConnection, useWallet } from '@solana/wallet-adapter-react';
 import FailedDonation, {
 	EDonationFailedType,
 } from '@/components/modals/FailedDonation';
@@ -25,8 +33,84 @@ const YourApp = () => {
 
 	console.log('subgraphValues', subgraphValues);
 
+	// Solana wallet hooks
+	const {
+		publicKey,
+		disconnect: solanaWalletDisconnect,
+		signMessage: solanaSignMessage,
+		sendTransaction: solanaSendTransaction,
+		connecting: solanaIsConnecting,
+		connected: solanaIsConnected,
+	} = useWallet();
+
+	const { connection: solanaConnection } = useConnection();
+
+	const donateToSolana = async () => {
+		if (!publicKey) {
+			console.error('Wallet is not connected');
+			return;
+		}
+
+		console.log('Connection endpoint:', solanaConnection.rpcEndpoint);
+
+		const to = 'B6bfJUMPnpL2ddngPPe3M7QNpvrv7hiYYiGtg9iCJDMS';
+		const donationValue = 0.001;
+
+		console.log('publicKey', publicKey);
+		console.log('Public Key string:', publicKey.toString());
+
+		// Ensure the wallet has enough funds by requesting an airdrop if necessary
+		let balance = await solanaConnection.getBalance(publicKey);
+		console.log('Initial balance:', balance);
+		if (balance < LAMPORTS_PER_SOL) {
+			console.log('Airdropping 1 SOL for testing...');
+			const airdropSignature = await solanaConnection.requestAirdrop(
+				publicKey,
+				LAMPORTS_PER_SOL,
+			);
+			await solanaConnection.confirmTransaction(airdropSignature);
+			balance = await solanaConnection.getBalance(publicKey);
+			console.log('New balance:', balance);
+		}
+
+		const lamports = new BigNumber(donationValue)
+			.times(LAMPORTS_PER_SOL)
+			.toFixed();
+
+		const transaction = new Transaction().add(
+			SystemProgram.transfer({
+				fromPubkey: publicKey!,
+				toPubkey: new PublicKey(to),
+				lamports: BigInt(lamports),
+			}),
+		);
+
+		console.log('Transaction', transaction);
+
+		console.log(
+			'Fee Payer:',
+			transaction.feePayer ? transaction.feePayer.toBase58() : 'None',
+		);
+
+		transaction.feePayer = publicKey;
+
+		const simulationResult =
+			await solanaConnection.simulateTransaction(transaction);
+		console.log('Simulation Result:', simulationResult);
+
+		if (simulationResult.value.err) {
+			console.error('Simulation error:', simulationResult.value.err);
+			return;
+		}
+
+		const hash = await solanaSendTransaction(transaction, solanaConnection);
+
+		console.log('hash', hash);
+	};
+
 	return (
 		<div>
+			<button onClick={donateToSolana}>DONATE ON SOLANA</button>
 			<w3m-button />
 			<div>
 				<button
