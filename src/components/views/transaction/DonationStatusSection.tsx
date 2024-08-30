@@ -28,6 +28,16 @@ import { client } from '@/apollo/apolloClient';
 import { MARK_DRAFT_DONATION_AS_FAILED } from '@/apollo/gql/gqlDonations';
 
 type IColor = 'golden' | 'jade' | 'punch' | 'blueSky';
+interface TimerProps {
+	status: TQRStatus;
+	endDate: Date;
+	locale: string;
+	draftDonationId: number;
+	setStatus: (status: TQRStatus) => void;
+	checkDraftDonationStatus: (
+		draftDonationId: number,
+	) => Promise<IDraftDonation | null>;
+}
 
 const StatusMap: Record<string, { color: IColor; text: string }> = {
 	pending: {
@@ -94,16 +104,14 @@ const formatTime = (date: Date, locale: string) => {
 };
 
 // Timer that keep counting time before the donation expires (mm Minutes ss Seconds) format
-const Timer = (
-	status: TQRStatus,
-	endDate: Date,
-	locale: string,
-	draftDonationId: number,
-	setStatus: (status: TQRStatus) => void,
-	checkDraftDonationStatus: (
-		draftDonationId: number,
-	) => Promise<IDraftDonation | null>,
-) => {
+const Timer: React.FC<TimerProps> = ({
+	status,
+	endDate,
+	locale,
+	draftDonationId,
+	setStatus,
+	checkDraftDonationStatus,
+}) => {
 	const _endDate = new Date(endDate.toLocaleString(locale));
 
 	const calculateTimeLeft = () => {
@@ -135,11 +143,12 @@ const Timer = (
 			}
 		};
 
-		const tick = () => {
+		const tick = async () => {
 			const timeLeft = calculateTimeLeft();
 
 			if (timeLeft.minutes === 0 && timeLeft.seconds === 0) {
-				handleTimeout();
+				await handleTimeout();
+				clearInterval(interval); // Stop the interval after handling timeout
 				return;
 			}
 
@@ -149,7 +158,14 @@ const Timer = (
 		const interval = setInterval(tick, 1000);
 
 		return () => clearInterval(interval);
-	}, [_endDate]);
+	}, [
+		_endDate,
+		draftDonationId,
+		status,
+		locale,
+		checkDraftDonationStatus,
+		setStatus,
+	]);
 
 	return (time.minutes === 0 && time.seconds === 0) || status === 'failed' ? (
 		<FlexWrap $alignItems='center' gap='8px'>
@@ -294,14 +310,16 @@ const DonationStatusSection: FC<TDonationStatusSectionProps> = ({
 						)
 					) : (
 						<B>
-							{Timer(
+							{Timer({
 								status,
-								new Date(draftDonationData?.expiresAt!),
+								endDate: new Date(
+									draftDonationData?.expiresAt!,
+								),
 								locale,
-								Number(draftDonationData.id),
+								draftDonationId: Number(draftDonationData.id),
 								setStatus,
 								checkDraftDonationStatus,
-							)}
+							})}
 						</B>
 					)}
 				</FlexWrap>

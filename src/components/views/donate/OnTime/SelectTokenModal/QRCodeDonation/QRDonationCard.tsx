@@ -106,8 +106,6 @@ export const QRDonationCard: FC<QRDonationCardProps> = ({
 			}
 		};
 
-		eventSource.onopen = () => console.log('>>> Connection opened!');
-
 		eventSource.onmessage = (event: MessageEvent) => {
 			console.log('event ===> ', event);
 			const { data, type } = JSON.parse(event.data);
