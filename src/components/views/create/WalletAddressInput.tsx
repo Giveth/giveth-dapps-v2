@@ -111,7 +111,7 @@ const WalletAddressInput: FC<IProps> = ({
 		else throw formatMessage({ id: 'label.invalid_ens_address' });
 	};
 
-	const addressValidation = async (address?: string) => {
+	const addressValidation = async (address?: string, memo?: string) => {
 		try {
 			setError({ ...error, message: '' });
 			setResolvedENS(undefined);
@@ -151,7 +151,11 @@ const WalletAddressInput: FC<IProps> = ({
 					{ type: 'ETH' },
 				);
 			}
-			const res = await gqlAddressValidation(_address);
+			const res = await gqlAddressValidation({
+				address: _address,
+				chainType,
+				memo: isStellarChain ? memo : undefined,
+			});
 			setIsValidating(false);
 			return res;
 		} catch (e: any) {
@@ -180,16 +184,16 @@ const WalletAddressInput: FC<IProps> = ({
 
 	useEffect(() => {
 		//We had an issue with onBlur so when the user clicks on submit exactly after filling the address, then process of address validation began, so i changed it to this.
-		if (walletAddressValue === prevAddress)
+		if (walletAddressValue === prevAddress && memoValue === prevMemo)
 			setError({ ...error, message: '' });
-		addressValidation(walletAddressValue).then(res => {
+		addressValidation(walletAddressValue, memoValue).then(res => {
 			if (res === true) {
 				setError({ ...error, message: '' });
 				return;
 			}
 			setError({ ...error, message: res });
 		});
-	}, [walletAddressValue]);
+	}, [walletAddressValue, memoValue]);
 
 	const [inputRef] = useFocus();
 
@@ -234,15 +238,6 @@ const WalletAddressInput: FC<IProps> = ({
 					!error.message || !walletAddressValue ? undefined : error
 				}
 			/>
-			{delayedIsAddressUsed && (
-				<InlineToast
-					isHidden={!isAddressUsed}
-					type={EToastType.Error}
-					message={formatMessage({
-						id: 'label.this_address_is_already_used',
-					})}
-				/>
-			)}
 			{isStellarChain && (
 				<>
 					<br />
@@ -255,8 +250,21 @@ const WalletAddressInput: FC<IProps> = ({
 						size={InputSize.LARGE}
 						value={memoValue}
 						onChange={e => setMemoValue(e.target.value)}
+						maxLength={28}
 					/>
 				</>
+			)}
+			{delayedIsAddressUsed && (
+				<InlineToast
+					isHidden={!isAddressUsed}
+					type={EToastType.Error}
+					message={formatMessage({
+						id:
+							isStellarChain && memoValue
+								? 'label.this_address_and_memo_is_already_used'
+								: 'label.this_address_is_already_used',
+					})}
+				/>
 			)}
 			{delayedResolvedENS && (
 				<InlineToast
