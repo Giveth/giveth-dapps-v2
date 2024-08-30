@@ -8,11 +8,12 @@ import {
 	IconGIVBack24,
 	IconSearch16,
 } from '@giveth/ui-design-system';
-import { useState, type FC, useEffect, useRef } from 'react';
+import { useState, type FC, useEffect } from 'react';
 import { useIntl } from 'react-intl';
 import { erc20Abi, isAddress } from 'viem'; // Assuming `isAddress` is a function from the `viem` library to validate Ethereum addresses
 import { useAccount } from 'wagmi';
 import { readContracts } from 'wagmi/actions';
+import { useConnection } from '@solana/wallet-adapter-react';
 import { IModal } from '@/types/common';
 import { Modal } from '@/components/modals/Modal';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
@@ -24,7 +25,7 @@ import { shortenAddress, showToastError } from '@/lib/helpers';
 import { useGeneralWallet } from '@/providers/generalWalletProvider';
 import { wagmiConfig } from '@/wagmiConfigs';
 import { ChainType } from '@/types/config';
-import useFetchBalance from './useFetchBalanceHook';
+import { getBalanceForToken } from './getBalanceForToken';
 
 export interface ISelectTokenModalProps extends IModal {
 	tokens?: IProjectAcceptedToken[];
@@ -66,24 +67,24 @@ const SelectTokenInnerModal: FC<ISelectTokenModalProps> = ({
 	const [hideZeroBalance, setHideZeroBalance] = useState(false);
 	const [searchQuery, setSearchQuery] = useState('');
 	const [filteredTokens, setFilteredTokens] = useState(tokens || []);
+	const { connection } = useConnection();
+	const [tokenBalances, setTokenBalances] = useState<
+		{ token: IProjectAcceptedToken; balance: bigint | undefined }[]
+	>([]);
 	const [customToken, setCustomToken] = useState<
 		IProjectAcceptedToken | undefined
 	>();
+	const [customTokenBalance, setCustomTokenBalance] = useState<
+		bigint | undefined
+	>(undefined);
 	const { setSelectedOneTimeToken } = useDonateData();
-	const { isOnEVM } = useGeneralWallet();
-	const { chain: evmChain } = useAccount();
-	const fetchBalance = useFetchBalance;
-	const tokenBalancesMap = useRef<{ [key: string]: bigint | undefined }>({});
-
-	tokens?.map(token => {
-		const balance = fetchBalance(token);
-		tokenBalancesMap.current[token.address] = balance;
-	});
+	const { walletAddress, isOnEVM } = useGeneralWallet();
+	const { chain: evmChain, address } = useAccount();
 
 	useEffect(() => {
 		if (tokens) {
 			if (isAddress(searchQuery)) {
-				const existingToken = tokens?.find(
+				const existingToken = tokens.find(
 					token =>
 						token.address.toLowerCase() ===
 						searchQuery.toLowerCase(),
@@ -142,7 +143,7 @@ const SelectTokenInnerModal: FC<ISelectTokenModalProps> = ({
 				}
 			} else {
 				setCustomToken(undefined);
-				const filtered = tokens?.filter(
+				const filtered = tokens.filter(
 					token =>
 						token.symbol
 							.toLowerCase()
@@ -154,17 +155,56 @@ const SelectTokenInnerModal: FC<ISelectTokenModalProps> = ({
 				setFilteredTokens(filtered);
 			}
 		}
-	}, [searchQuery, tokens]);
+	}, [searchQuery, tokens, walletAddress]);
 
-	const tokenBalances = filteredTokens.map(token => ({
-		token,
-		balance: tokenBalancesMap.current[token.address],
-	}));
+	useEffect(() => {
+		(async () => {
+			if (customToken) {
+				const balance = await getBalanceForToken(
+					customToken,
+					walletAddress,
+				);
+				setCustomTokenBalance(balance);
+			} else {
+				setCustomTokenBalance(undefined);
+			}
+		})();
+	}, [customToken, walletAddress]);
 
-	const customTokenBalance = fetchBalance(customToken);
+	useEffect(() => {
+		const fetchTokenBalances = async () => {
+			try {
+				const balances = await Promise.all(
+					filteredTokens.map(async token => {
+						const isEvm = token?.chainType === ChainType.EVM;
+						return isEvm
+							? {
+									token,
+									balance: await getBalanceForToken(
+										token,
+										walletAddress,
+									),
+								}
+							: {
+									token,
+									balance: await getBalanceForToken(
+										token,
+										walletAddress,
+										connection,
+									),
+								};
+					}),
+				);
+				setTokenBalances(balances);
+			} catch (error) {
+				console.error('Error fetching token balances:', error);
+			}
+		};
+		fetchTokenBalances();
+	}, [tokens, filteredTokens, walletAddress]);
 
 	// Sort tokens by balance
-	const sortedTokens = tokenBalances.sort((a, b) => {
+	const sortedTokens = tokenBalances.sort((a: any, b: any) => {
 		if (a.balance === undefined) return 1;
 		if (b.balance === undefined) return -1;
 		return Number(b.balance) - Number(a.balance);
@@ -200,7 +240,7 @@ const SelectTokenInnerModal: FC<ISelectTokenModalProps> = ({
 						}}
 					/>
 				) : sortedTokens.length > 0 ? (
-					sortedTokens.map(({ token, balance }) => (
+					sortedTokens.map(({ token, balance }: any) => (
 						<TokenInfo
 							key={token.symbol}
 							token={token}
