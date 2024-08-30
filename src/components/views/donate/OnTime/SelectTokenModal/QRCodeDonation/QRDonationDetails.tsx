@@ -186,7 +186,9 @@ const QRDonationDetails = () => {
 					$alignItems='center'
 				>
 					<B style={{ color: neutralColors.gray[800] }}>
-						{formatMessage({ id: 'label.please_wait' })}
+						{formatMessage({
+							id: isFailedOperation ? 'label.the_time_is_up' : 'label.please_wait',
+						})}
 					</B>
 					<CheckDonation
 						onClick={() =>
