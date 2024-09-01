@@ -1280,7 +1280,7 @@
 	"label.you_havent_boosted_any_projects_yet": "You haven't boosted any projects yet!",
 	"label.you_havent_created_any_projects_yet": "You haven’t created any project yet!",
 	"label.you_havent_donated_to_any_projects_yet": "You haven’t donated to any project yet!",
-	"label.you_havent_liked_any_projects_yet": "You haven’t liked any project yet!",
+	"label.you_havent_liked_any_projects_yet": "You haven’t bookmarked any project yet!",
 	"label.you_have_already_boosted_20_projects": "You have already boosted the maximum 20 projects!",
 	"label.you_have_no_notifications": "You have no notifications",
 	"label.you_have_successfuly_claimed": "You have successfully claimed",
@@ -1695,5 +1695,9 @@
 	"label.sign_a_message_with_your_safe_signer": "Sign a message with your Safe signer address to continue the log in process",
 	"label.this_is_necessary_to_create_projects": "This is necessary to be able to create projects, manage your profile or use GIVpower.",
 	"label.project_card_endaoment_title": "This project is delivered by",
-	"label.project_card_endaoment_subtext": "This project is delivered by Endaoment, which handles the conversion and delivery of fiat funding to this project. Endaoment charges a 1.5% fee on donations which is processed outside of the Giveth Dapp."
+	"label.project_card_endaoment_subtext": "This project is delivered by Endaoment, which handles the conversion and delivery of fiat funding to this project. Endaoment charges a 1.5% fee on donations which is processed outside of the Giveth Dapp.",
+	"label.devouch.view_this_project": "View this Project on DeVouch",
+	"label.devouch.if_you_are_eligible": "If you are an eligible Giveth Verifier you can vouch for this project's legitimacy, potentially increasing the benefits it receives on Giveth.",
+	"label.devouch.learn_more_about_devouch": "Learn more about DeVouch & Decentralized Verification",
+	"label.devouch.attest_on_devouch": "Attest on Devouch"
 }

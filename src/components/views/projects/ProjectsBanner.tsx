@@ -56,13 +56,13 @@ export const BannerContainer = styled(FlexCenter)`
 
 const Title = styled(H1)`
 	z-index: 1;
-	color: ${neutralColors.gray[100]};
-	margin-bottom: 32px;
+	color: ${neutralColors.gray[100]} !important;
+	margin-bottom: 32px !important;
 `;
 
 const Desc = styled(SemiTitle)`
 	z-index: 1;
-	color: ${neutralColors.gray[100]};
+	color: ${neutralColors.gray[100]} !important;
 	text-transform: uppercase;
 	max-width: 800px;
 	text-align: center;

@@ -18,6 +18,8 @@ import useMediaQuery from '@/hooks/useMediaQuery';
 import { device } from '@/lib/constants/constants';
 import { formatDonation } from '@/helpers/number';
 import { IProject } from '@/apollo/types/types';
+import { useDonateData } from '@/context/donate.context';
+import { ORGANIZATION } from '@/lib/constants/organizations';
 
 interface IDonateSectionProps {
 	projectData?: IProject;
@@ -27,6 +29,7 @@ export const DonateSection: FC<IDonateSectionProps> = ({ projectData }) => {
 	const { formatMessage, locale } = useIntl();
 	const { totalDonations } = projectData || {};
 	const isMobile = !useMediaQuery(device.tablet);
+	const { project } = useDonateData();
 
 	return (
 		<DonationSectionWrapper gap='24px'>
@@ -65,33 +68,35 @@ export const DonateSection: FC<IDonateSectionProps> = ({ projectData }) => {
 					</NoFund>
 				</DonateInfo>
 			)}
-			<DonateDescription $flexDirection='column' gap='8px'>
-				<B>
-					{formatMessage({
-						id: 'component.donation_section.100_to_the_project',
-					})}
-				</B>
-				<P>
-					{formatMessage({
-						id: 'component.donation_section.desc',
-					})}
-				</P>
-				<a
-					href='https://docs.giveth.io/whatisgiveth/zero-fees'
-					target='_blank'
-					referrerPolicy='no-referrer'
-					rel='noreferrer'
-				>
-					<LearnLink $alignItems='center' gap='2px'>
-						<Subline>
-							{formatMessage({
-								id: 'component.donation_section.learn_zero_fee',
-							})}
-						</Subline>
-						<IconChevronRight16 />
-					</LearnLink>
-				</a>
-			</DonateDescription>
+			{project?.organization?.label === ORGANIZATION.endaoment ? null : (
+				<DonateDescription $flexDirection='column' gap='8px'>
+					<B>
+						{formatMessage({
+							id: 'component.donation_section.100_to_the_project',
+						})}
+					</B>
+					<P>
+						{formatMessage({
+							id: 'component.donation_section.desc',
+						})}
+					</P>
+					<a
+						href='https://docs.giveth.io/whatisgiveth/zero-fees'
+						target='_blank'
+						referrerPolicy='no-referrer'
+						rel='noreferrer'
+					>
+						<LearnLink $alignItems='center' gap='2px'>
+							<Subline>
+								{formatMessage({
+									id: 'component.donation_section.learn_zero_fee',
+								})}
+							</Subline>
+							<IconChevronRight16 />
+						</LearnLink>
+					</a>
+				</DonateDescription>
+			)}
 		</DonationSectionWrapper>
 	);
 };

@@ -150,6 +150,11 @@ export const TabGIVstreamTop = () => {
 										chainType:
 											config.OPTIMISM_CONFIG.chainType,
 									},
+									{
+										networkId: config.ZKEVM_NETWORK_NUMBER,
+										chainType:
+											config.ZKEVM_CONFIG.chainType,
+									},
 								]}
 								title='Your GIVstream Rewards'
 							/>

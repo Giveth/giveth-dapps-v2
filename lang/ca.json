@@ -604,6 +604,7 @@
 	"label.look_for_the_share_and_get_rewarded": "Busca el botó 'Comparteix i guanya recompenses' per generar enllaços a pàgines específiques a tot el lloc de Giveth.",
 	"label.make_a_recurring_donation_with": "Fes una donació recurrent amb ",
 	"label.make_it_anonymous": "Fes-ho anònim",
+	"label.qr_code_error": "S'ha produït un error en generar el codi QR. Torneu-ho a provar.",
 	"label.make_it_easier_for_donors_to_find_your_project": "Fes més fàcil que els donants trobin el teu projecte proporcionant una ubicació.",
 	"label.make_it_unique_and_memorable_to_stand_out_from_other_projects": "Fes-ho únic i memorable per destacar entre altres projectes.",
 	"label.make_sure_your_description_aligns_with_our": "Assegura't que la teva descripció s'aligna amb el nostre ",
@@ -1275,7 +1276,7 @@
 	"label.you_havent_boosted_any_projects_yet": "Encara no has boostejat ningun projecte!",
 	"label.you_havent_created_any_projects_yet": "Encara no has creat cap projecte!",
 	"label.you_havent_donated_to_any_projects_yet": "Encara no has donat a cap projecte!",
-	"label.you_havent_liked_any_projects_yet": "Encara no has donat like a cap projecte!",
+	"label.you_havent_liked_any_projects_yet": "Encara no has desat cap projecte als marcadors!",
 	"label.you_have_already_boosted_20_projects": "Ja has impulsat el màxim de 20 projectes!",
 	"label.you_have_no_notifications": "No tens notificacions",
 	"label.you_have_successfuly_claimed": "Has reclamat amb èxit",
@@ -1687,5 +1688,9 @@
 	"label.sanctioned_wallet_message_part1": "Aquesta adreça ha estat trobada a la llista de sancions dels EUA",
 	"label.sanctioned_wallet_message_part2": "Malauradament, Endaoment no permet que les adreces a la llista de sancions de l'OFAC donin a projectes realitzats per Endaoment. Consulta un altre projecte per fer una donació.",
 	"label.project_card_endaoment_title": "Aquest projecte és gestionat per",
-	"label.project_card_endaoment_subtext": "Aquest projecte és gestionat per Endaoment, que s'encarrega de la conversió i lliurament dels fons fiat al projecte. Endaoment cobra una comissió del 1,5% en les donacions, que es processa fora de l'aplicació de Giveth."
+	"label.project_card_endaoment_subtext": "Aquest projecte és gestionat per Endaoment, que s'encarrega de la conversió i lliurament dels fons fiat al projecte. Endaoment cobra una comissió del 1,5% en les donacions, que es processa fora de l'aplicació de Giveth.",
+	"label.devouch.view_this_project": "Veure aquest projecte a DeVouch",
+	"label.devouch.if_you_are_eligible": "Si ets un verificador elegible de Giveth, pots avalar la legitimitat d'aquest projecte, potencialment augmentant els beneficis que rep a Giveth.",
+	"label.devouch.learn_more_about_devouch": "Més informació sobre DeVouch i la verificació descentralitzada",
+	"label.devouch.attest_on_devouch": "Certifica a DeVouch"
 }
