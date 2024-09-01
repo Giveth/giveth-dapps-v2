@@ -9,10 +9,13 @@ import {
 	Flex,
 	neutralColors,
 	IconArrowLeft,
+	Caption,
 	mediaQueries,
+	semanticColors,
 } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
 import { formatUnits } from 'viem';
+
 import {
 	InputWrapper,
 	SelectTokenWrapper,
@@ -33,18 +36,35 @@ import { IWalletAddress } from '@/apollo/types/types';
 import InlineToast, { EToastType } from '@/components/toasts/InlineToast';
 import { useAppSelector } from '@/features/hooks';
 import { useModalCallback } from '@/hooks/useModalCallback';
+import links from '@/lib/constants/links';
 
 interface QRDonationCardProps extends IDonationCardProps {
 	qrAcceptedTokens: IProjectAcceptedToken[];
 	setIsQRDonation: (isQRDonation: boolean) => void;
 }
-export const formatAmoutToDisplay = (amount: bigint) => {
+
+interface IMessage {
+	text: string;
+}
+
+const formatAmountToDisplay = (amount: bigint) => {
 	const decimals = 18;
 	return truncateToDecimalPlaces(
 		formatUnits(amount, decimals),
 		decimals / 3,
 	).toString();
 };
+
+const Message: FC<IMessage> = ({ text }) => (
+	<Wrapper>
+		<Caption>{text}</Caption>{' '}
+		<StyledLink>
+			<a href={links.GIVBACK_DOC} target='_noreferrer noopener'>
+				Learn more
+			</a>
+		</StyledLink>
+	</Wrapper>
+);
 
 export const QRDonationCard: FC<QRDonationCardProps> = ({
 	showQRCode,
@@ -54,7 +74,6 @@ export const QRDonationCard: FC<QRDonationCardProps> = ({
 }) => {
 	const { formatMessage } = useIntl();
 	const router = useRouter();
-
 	const { isSignedIn, isEnabled } = useAppSelector(state => state.user);
 	const [showDonateModal, setShowDonateModal] = useState(false);
 	const { modalCallback: signInThenDonate } = useModalCallback(() =>
@@ -78,13 +97,13 @@ export const QRDonationCard: FC<QRDonationCardProps> = ({
 		draftDonationData,
 		draftDonationLoading,
 	} = useDonateData();
+
 	const { addresses, id } = project;
-
 	const draftDonationId = Number(router.query.draft_donation!);
-
 	const [amount, setAmount] = useState(0n);
 	const [usdAmount, setUsdAmount] = useState('0.00');
 	const [tokenPrice, setTokenPrice] = useState(0);
+
 	const stellarToken = qrAcceptedTokens.find(
 		token => token.chainType === ChainType.STELLAR,
 	);
@@ -102,22 +121,21 @@ export const QRDonationCard: FC<QRDonationCardProps> = ({
 			if (draftDonation?.status === 'matched') {
 				setQRDonationStatus('success');
 				setDraftDonationData(draftDonation);
-				return;
 			}
 		};
 
 		eventSource.onmessage = (event: MessageEvent) => {
-			console.log('event ===> ', event);
 			const { data, type } = JSON.parse(event.data);
-
-			if (type === 'new-donation') {
-				if (data.draftDonationId === draftDonationId) {
-					handleFetchDraftDonation?.(draftDonationId);
-				}
-			} else if (type === 'draft-donation-failed') {
-				if (data.draftDonationId === draftDonationId) {
-					setQRDonationStatus('failed');
-				}
+			if (
+				type === 'new-donation' &&
+				data.draftDonationId === draftDonationId
+			) {
+				handleFetchDraftDonation(draftDonationId);
+			} else if (
+				type === 'draft-donation-failed' &&
+				data.draftDonationId === draftDonationId
+			) {
+				setQRDonationStatus('failed');
 			}
 		};
 
@@ -139,7 +157,6 @@ export const QRDonationCard: FC<QRDonationCardProps> = ({
 				setDraftDonationData(draftDonation);
 				return;
 			}
-
 			await markDraftDonationAsFailed(draftDonationId);
 			setPendingDonationExists?.(false);
 			setShowQRCode(false);
@@ -156,18 +173,15 @@ export const QRDonationCard: FC<QRDonationCardProps> = ({
 			const draftDonations = localStorage.getItem(
 				StorageLabel.DRAFT_DONATIONS,
 			);
-
 			const parsedLocalStorageItem = JSON.parse(draftDonations!);
-
-			const projectAddress: IWalletAddress | undefined =
-				project.addresses?.find(
-					address => address.chainType === ChainType.STELLAR,
-				);
+			const projectAddress = project.addresses?.find(
+				address => address.chainType === ChainType.STELLAR,
+			);
 			let draftDonationId = parsedLocalStorageItem
 				? parsedLocalStorageItem[projectAddress?.address!]
 				: null;
 
-			const retDraftDonation = !!draftDonationId
+			const retDraftDonation = draftDonationId
 				? await retrieveDraftDonation(Number(draftDonationId))
 				: null;
 
@@ -176,10 +190,10 @@ export const QRDonationCard: FC<QRDonationCardProps> = ({
 			} else {
 				if (!stellarToken?.symbol || !projectAddress?.address) return;
 
-				const patyload = {
+				const payload = {
 					walletAddress: projectAddress.address,
 					projectId: Number(id),
-					amount: Number(formatAmoutToDisplay(amount)),
+					amount: Number(formatAmountToDisplay(amount)),
 					token: stellarToken,
 					anonymous: true,
 					symbol: stellarToken.symbol,
@@ -189,7 +203,7 @@ export const QRDonationCard: FC<QRDonationCardProps> = ({
 					memo: projectAddress.memo,
 				};
 
-				draftDonationId = await createDraftDonation(patyload);
+				draftDonationId = await createDraftDonation(payload);
 				setPendingDonationExists?.(false);
 			}
 
@@ -209,21 +223,16 @@ export const QRDonationCard: FC<QRDonationCardProps> = ({
 		}
 	};
 
-	const convertAmountToUSD = (amount: bigint) => {
-		if (!stellarToken) {
-			return '0.00';
+	const convertAmountToUSD = (amount: bigint | number) => {
+		if (!stellarToken || !tokenPrice) return '0.00';
+
+		if (typeof amount === 'number') {
+			return formatBalance(amount * tokenPrice);
 		}
 
-		if (tokenPrice) {
-			const priceBigInt = BigInt(Math.floor(tokenPrice * 100));
-			const amountInUsd = (amount * priceBigInt) / 100n;
-
-			const _displayAmount = formatAmoutToDisplay(amountInUsd);
-
-			return formatBalance(_displayAmount);
-		} else {
-			return '0.00';
-		}
+		const priceBigInt = BigInt(Math.floor(tokenPrice * 100));
+		const amountInUsd = (amount * priceBigInt) / 100n;
+		return formatBalance(formatAmountToDisplay(amountInUsd));
 	};
 
 	useEffect(() => {
@@ -235,9 +244,7 @@ export const QRDonationCard: FC<QRDonationCardProps> = ({
 			const coingeckoChainId =
 				config.NETWORKS_CONFIG[ChainType.STELLAR].coingeckoChainName;
 			const price = await fetchPriceWithCoingeckoId(coingeckoChainId);
-			if (price) {
-				setTokenPrice(price);
-			}
+			if (price) setTokenPrice(price);
 		};
 
 		fetchTokenPrice();
@@ -306,7 +313,7 @@ export const QRDonationCard: FC<QRDonationCardProps> = ({
 									{project.title || '--'}
 								</strong>
 							</P>
-							<B>{formatAmoutToDisplay(amount)}</B>
+							<B>{formatAmountToDisplay(amount)}</B>
 						</FlexStyled>
 						<FlexStyled
 							$justifyContent='space-between'
@@ -317,7 +324,7 @@ export const QRDonationCard: FC<QRDonationCardProps> = ({
 									id: 'label.your_total_donation',
 								})}
 							</B>
-							<B>{formatAmoutToDisplay(amount)}</B>
+							<B>{formatAmountToDisplay(amount)}</B>
 						</FlexStyled>
 						<Button
 							label='Next'
@@ -333,12 +340,22 @@ export const QRDonationCard: FC<QRDonationCardProps> = ({
 							onClick={handleNext}
 							disabled={amount === 0n}
 						/>
+						<InfoToast
+							message={
+								<Message
+									text={formatMessage({
+										id: 'toast.modify_stream_balance',
+									})}
+								/>
+							}
+							type={EToastType.Info}
+						/>
 					</CardBottom>
 				</>
 			) : (
 				<QRDonationCardContent
 					tokenData={stellarToken}
-					usdAmount={convertAmountToUSD(amount)}
+					usdAmount={convertAmountToUSD(draftDonationData?.amount!)}
 					amount={draftDonationData?.amount?.toString() ?? '0.00'}
 					qrDonationStatus={qrDonationStatus}
 					draftDonationData={draftDonationData}
@@ -398,6 +415,7 @@ const FlexStyled = styled(Flex)<{ $color: string }>`
 
 const Input = styled(AmountInput)`
 	width: 100%;
+
 	#amount-input {
 		border: none;
 		flex: 1;
@@ -405,7 +423,7 @@ const Input = styled(AmountInput)`
 		font-size: 16px;
 		font-style: normal;
 		font-weight: 500;
-		line-height: 150%; /* 24px */
+		line-height: 24px;
 		width: 100%;
 	}
 `;
@@ -430,4 +448,20 @@ const StyledInputWrapper = styled(InputWrapper)`
 
 const MarginLessInlineToast = styled(InlineToast)`
 	margin: 0;
+`;
+
+const InfoToast = styled(InlineToast)`
+	margin-top: 10px;
+`;
+
+const Wrapper = styled.div`
+	& > * {
+		display: inline;
+	}
+`;
+
+const StyledLink = styled.div`
+	display: inline;
+	margin-left: 4px;
+	color: ${semanticColors.punch[500]};
 `;

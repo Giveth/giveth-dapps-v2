@@ -52,8 +52,7 @@ const QRDonationDetails = () => {
 		if (!amount) return '--';
 		if (!tokenPrice) return '0.00';
 
-		const _tokenPrice = Math.floor(tokenPrice * 100) / 100;
-		const amountInUsd = _tokenPrice * amount;
+		const amountInUsd = tokenPrice * amount;
 		return formatBalance(amountInUsd);
 	};
 
