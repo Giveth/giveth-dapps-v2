@@ -12,8 +12,6 @@ import Image from 'next/image';
 import { IDraftDonation, IProjectAcceptedToken } from '@/apollo/types/gqlTypes';
 import { UsdAmountCard } from './QRDonationCard';
 import { TokenIcon } from '../../../TokenIcon/TokenIcon';
-import config from '@/configuration';
-import { ChainType } from '@/types/config';
 import CopyConatainer from './CopyConatainer';
 import InlineToast, { EToastType } from '@/components/toasts/InlineToast';
 import { IWalletAddress } from '@/apollo/types/types';

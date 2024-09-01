@@ -19,13 +19,11 @@ import {
 } from '../../../Recurring/RecurringDonationCard';
 import { TokenIconWithGIVBack } from '../../../TokenIcon/TokenIconWithGIVBack';
 import { IProjectAcceptedToken } from '@/apollo/types/gqlTypes';
-import { fetchPriceWithCoingeckoId } from '@/services/token';
 import { ChainType } from '@/types/config';
 import config from '@/configuration';
 import { truncateToDecimalPlaces, formatBalance } from '@/lib/helpers';
 import { IDonationCardProps } from '../../../DonationCard';
 import QRDonationCardContent from './QRDonationCardContent';
-import { useQRCodeDonation } from '@/hooks/useQRCodeDonation';
 import { useDonateData } from '@/context/donate.context';
 import { AmountInput } from '@/components/AmountInput/AmountInput';
 import StorageLabel from '@/lib/localStorage';
@@ -33,6 +31,7 @@ import { IWalletAddress } from '@/apollo/types/types';
 import InlineToast, { EToastType } from '@/components/toasts/InlineToast';
 import { useAppSelector } from '@/features/hooks';
 import { useModalCallback } from '@/hooks/useModalCallback';
+import { useQRCodeDonation } from '@/hooks/useQRCodeDonation';
 
 interface QRDonationCardProps extends IDonationCardProps {
 	qrAcceptedTokens: IProjectAcceptedToken[];
