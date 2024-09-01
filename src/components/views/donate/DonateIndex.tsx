@@ -9,6 +9,8 @@ import {
 	semanticColors,
 	SublineBold,
 	Flex,
+	B,
+	Button,
 } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
 import { useRouter } from 'next/router';
@@ -32,18 +34,38 @@ import ProjectCardImage from '@/components/project-card/ProjectCardImage';
 import { useGeneralWallet } from '@/providers/generalWalletProvider';
 import { DonatePageProjectDescription } from './DonatePageProjectDescription';
 import { getActiveRound } from '@/helpers/qf';
+import InlineToast, { EToastType } from '@/components/toasts/InlineToast';
+import { useQRCodeDonation } from '@/hooks/useQRCodeDonation';
 import EndaomentProjectsInfo from '@/components/views/project/EndaomentProjectsInfo';
+import { IDraftDonation } from '@/apollo/types/gqlTypes';
 
 const DonateIndex: FC = () => {
 	const { formatMessage } = useIntl();
 	const { isMobile } = useDetectDevice();
-	const { project, successDonation, hasActiveQFRound } = useDonateData();
+	const {
+		project,
+		successDonation,
+		qrDonationStatus,
+		draftDonationData,
+		hasActiveQFRound,
+		// setSuccessDonation,
+		setQRDonationStatus,
+		setDraftDonationData,
+		startTimer,
+	} = useDonateData();
+	const { renewExpirationDate } = useQRCodeDonation();
+
 	const alreadyDonated = useAlreadyDonatedToProject(project);
 	const dispatch = useAppDispatch();
 	const isSafeEnv = useIsSafeEnvironment();
 	const { isOnSolana } = useGeneralWallet();
 	const router = useRouter();
 	const { chainId } = useAccount();
+
+	const [showQRCode, setShowQRCode] = React.useState(
+		!!router.query.draft_donation,
+	);
+	const [stopTimer, setStopTimer] = React.useState<void | (() => void)>();
 
 	useEffect(() => {
 		dispatch(setShowHeader(false));
@@ -56,6 +78,29 @@ const DonateIndex: FC = () => {
 	const { activeStartedRound } = getActiveRound(project.qfRounds);
 	const isOnEligibleNetworks =
 		chainId && activeStartedRound?.eligibleNetworks?.includes(chainId);
+	const isFailedOperation = ['expired', 'failed'].includes(qrDonationStatus);
+
+	const updateQRCode = async () => {
+		if (!draftDonationData?.id) return;
+
+		const expiresAt = await renewExpirationDate(draftDonationData?.id);
+		setDraftDonationData((prev: IDraftDonation | null) => {
+			if (!prev) return null;
+			return {
+				...prev,
+				status: 'pending',
+				expiresAt: expiresAt?.toString() ?? undefined,
+			};
+		});
+		setQRDonationStatus('waiting');
+		const stopTimerFun = startTimer?.(new Date(expiresAt!));
+		setStopTimer(() => stopTimerFun);
+	};
+
+	useEffect(() => {
+		if (!showQRCode) stopTimer?.();
+		else setStopTimer(() => undefined);
+	}, [showQRCode]);
 
 	return successDonation ? (
 		<>
@@ -84,27 +129,57 @@ const DonateIndex: FC = () => {
 				<NiceBanner />
 				<Row>
 					<Col xs={12} lg={6}>
-						<DonationCard />
+						<DonationCard
+							setShowQRCode={setShowQRCode}
+							showQRCode={showQRCode}
+						/>
 					</Col>
 					<Col xs={12} lg={6}>
 						<InfoWrapper>
-							<EndaomentProjectsInfo
-								orgLabel={project?.organization?.label}
-							/>
-							<ImageWrapper>
-								<ProjectCardImage image={project.image} />
-							</ImageWrapper>
-							{!isMobile ? (
-								(!isRecurringTab && hasActiveQFRound) ||
-								(isRecurringTab && isOnEligibleNetworks) ? (
-									<QFSection projectData={project} />
-								) : (
-									<DonatePageProjectDescription
-										projectData={project}
-									/>
-								)
-							) : null}
+							{/* {showQRCode ? (
+								<QRDonationDetails />
+							) : ( */}
+							<>
+								<EndaomentProjectsInfo
+									orgLabel={project?.organization?.label}
+								/>
+								<ImageWrapper>
+									<ProjectCardImage image={project.image} />
+								</ImageWrapper>
+								{!isMobile ? (
+									(!isRecurringTab && hasActiveQFRound) ||
+									(isRecurringTab && isOnEligibleNetworks) ? (
+										<QFSection projectData={project} />
+									) : (
+										<DonatePageProjectDescription
+											projectData={project}
+										/>
+									)
+								) : null}
+							</>
+							{/* )} */}
 						</InfoWrapper>
+						{isFailedOperation && (
+							<QRRetryWrapper style={{ gap: 20 }}>
+								<B>
+									{formatMessage({
+										id: 'label.need_a_new_qr_code',
+									})}
+								</B>
+								<InlineToast
+									type={EToastType.Warning}
+									message={formatMessage({
+										id: 'label.new_qr_code_needed',
+									})}
+								/>
+								<ButtonStyled
+									label={formatMessage({
+										id: 'label.update_qr_code',
+									})}
+									onClick={updateQRCode}
+								/>
+							</QRRetryWrapper>
+						)}
 					</Col>
 				</Row>
 				{!isMobile && (
@@ -141,7 +216,15 @@ const InfoWrapper = styled.div`
 	background-color: ${neutralColors.gray[100]};
 	padding: 24px;
 	border-radius: 16px;
-	height: 100%;
+	text-align: left;
+`;
+
+const QRRetryWrapper = styled(Flex)`
+	flex-direction: column;
+	padding: 24px;
+	border-radius: 16px;
+	background-color: ${neutralColors.gray[100]};
+	gap: 20px;
 	text-align: left;
 `;
 
@@ -152,6 +235,11 @@ const ImageWrapper = styled.div`
 	margin-bottom: 24px;
 	border-radius: 8px;
 	overflow: hidden;
+`;
+
+const ButtonStyled = styled(Button)`
+	width: 100%;
+	text-transform: capitalize;
 `;
 
 export default DonateIndex;

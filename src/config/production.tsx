@@ -30,9 +30,11 @@ import IconBase from '@/components/Icons/Base';
 import IconSolana from '@/components/Icons/Solana';
 import IconArbitrum from '@/components/Icons/Arbitrum';
 import IconZKEVM from '@/components/Icons/ZKEVM';
+// import IconStellar from '@/components/Icons/Stellar';
 
 const GNOSIS_GIV_TOKEN_ADDRESS = '0x4f4F9b8D5B4d0Dc10506e5551B0513B61fD59e75';
 const OPTIMISM_GIV_TOKEN_ADDRESS = '0x528CDc92eAB044E1E39FE43B9514bfdAB4412B98';
+const ZKEVM_GIV_TOKEN_ADDRESS = '0xddAFB91475bBf6210a151FA911AC8fdA7dE46Ec2';
 
 const SEPT_8TH_2022 = 1662595200000;
 const MAINNET_NETWORK_NUMBER = 1; // Mainnet
@@ -44,9 +46,12 @@ const ARBITRUM_NETWORK_NUMBER = 42161;
 const BASE_NETWORK_NUMBER = 8453;
 const ZKEVM_NETWORK_NUMBER = 1101;
 const CLASSIC_NETWORK_NUMBER = 61;
+// const STELLAR_NETWORK_NUMBER = 1500;
+const SOLANA_NETWORK_NUMBER = 101;
+
 const SOLANA_NETWORK: NonEVMChain = {
-	id: 0,
-	networkId: 101,
+	id: SOLANA_NETWORK_NUMBER,
+	networkId: SOLANA_NETWORK_NUMBER,
 	chainType: ChainType.SOLANA,
 	adapterNetwork: WalletAdapterNetwork.Mainnet,
 	name: 'Solana',
@@ -58,6 +63,25 @@ const SOLANA_NETWORK: NonEVMChain = {
 		},
 	},
 };
+
+// const STELLAR_NOTWORK: NonEVMChain = {
+// 	id: STELLAR_NETWORK_NUMBER,
+// 	networkId: STELLAR_NETWORK_NUMBER,
+// 	chainType: ChainType.STELLAR,
+// 	name: 'Stellar',
+// 	nativeCurrency: {
+// 		name: 'Stellar Lumens',
+// 		symbol: 'XLM',
+// 		decimals: 7,
+// 	},
+// 	blockExplorers: {
+// 		default: {
+// 			name: 'Stellar Explorer',
+// 			url: 'https://stellar.expert/explorer/public/',
+// 		},
+// 	},
+// };
+
 const EVM_CHAINS = [
 	mainnet,
 	gnosis,
@@ -70,6 +94,7 @@ const EVM_CHAINS = [
 	polygonZkEvm,
 ] as readonly [Chain, ...Chain[]];
 
+// const NON_EVM_CHAINS: NonEVMChain[] = [SOLANA_NETWORK, STELLAR_NOTWORK];
 const NON_EVM_CHAINS: NonEVMChain[] = [SOLANA_NETWORK];
 
 const BASE_ROUTE =
@@ -104,6 +129,7 @@ const config: EnvConfig = {
 	BASE_NETWORK_NUMBER: BASE_NETWORK_NUMBER,
 	ZKEVM_NETWORK_NUMBER: ZKEVM_NETWORK_NUMBER,
 	CLASSIC_NETWORK_NUMBER: CLASSIC_NETWORK_NUMBER,
+	// STELLAR_NETWORK_NUMBER: STELLAR_NETWORK_NUMBER,
 
 	RARIBLE_ADDRESS: 'https://rarible.com/',
 	MAINNET_CONFIG: {
@@ -555,6 +581,24 @@ const config: EnvConfig = {
 			// Keep it empty for automatic configuration
 		},
 		chainLogo: (logoSize?: number) => <IconZKEVM size={logoSize} />,
+		subgraphAddress: process.env.NEXT_PUBLIC_SUBGRAPH_ZKEVM,
+		GIV_TOKEN_ADDRESS: ZKEVM_GIV_TOKEN_ADDRESS,
+		GIV_BUY_LINK:
+			'https://velodrome.finance/swap?from=eth&to=0x528cdc92eab044e1e39fe43b9514bfdab4412b98',
+		TOKEN_DISTRO_ADDRESS: '0x4fB9B10ECDe1b048DBC79aBEAB3793edc93a0d54',
+		uniswapV2Subgraph: '',
+		GIVPOWER: {
+			network: ZKEVM_NETWORK_NUMBER,
+			LM_ADDRESS: '0xc790f82bf6f8709aa4a56dc11afad7af7c2a9867',
+			POOL_ADDRESS: ZKEVM_GIV_TOKEN_ADDRESS,
+			type: StakingType.GIV_UNIPOOL_LM,
+			platform: StakingPlatform.GIVETH,
+			title: 'GIV',
+			description: '100% GIV',
+			unit: 'GIV',
+			//Tuesday, September 3, 2024 6:00:00 PM
+			farmStartTimeMS: 1725386400000,
+		},
 	},
 	CLASSIC_CONFIG: {
 		...classic,
@@ -573,6 +617,11 @@ const config: EnvConfig = {
 		coingeckoChainName: 'solana',
 		chainLogo: (logoSize?: number) => <IconSolana size={logoSize} />,
 	},
+	// STELLAR_CONFIG: {
+	// 	...STELLAR_NOTWORK,
+	// 	coingeckoChainName: 'stellar',
+	// 	chainLogo: (logoSize?: number) => <IconStellar size={logoSize} />,
+	// },
 };
 
 export default config;

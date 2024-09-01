@@ -32,6 +32,7 @@ const EVM_NETWORKS_CONFIG = {
 const NON_EVM_NETWORKS_CONFIG: { [key: string]: NonEVMNetworkConfig } = {};
 
 NON_EVM_NETWORKS_CONFIG[ChainType.SOLANA] = envConfig.SOLANA_CONFIG;
+// NON_EVM_NETWORKS_CONFIG[ChainType.STELLAR] = envConfig.STELLAR_CONFIG;
 
 const config: GlobalConfig = {
 	TOKEN_NAME: 'DRGIV',

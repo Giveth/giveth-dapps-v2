@@ -74,6 +74,10 @@ export const GIVfarmTop = () => {
 									networkId: config.OPTIMISM_NETWORK_NUMBER,
 									chainType: config.OPTIMISM_CONFIG.chainType,
 								},
+								{
+									networkId: config.ZKEVM_NETWORK_NUMBER,
+									chainType: config.ZKEVM_CONFIG.chainType,
+								},
 							]}
 						/>
 					</Col>
