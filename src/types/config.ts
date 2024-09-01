@@ -260,7 +260,7 @@ export interface GlobalConfig extends EnvConfig {
 export enum ChainType {
 	SOLANA = 'SOLANA',
 	EVM = 'EVM',
-	STELLAR = 'STELLAR',
+	// STELLAR = 'STELLAR',
 }
 
 export interface IChainType {
