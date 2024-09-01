@@ -9,9 +9,9 @@ import {
 	Flex,
 	neutralColors,
 	IconArrowLeft,
-	Caption,
+	brandColors,
 	mediaQueries,
-	semanticColors,
+	IconGIVBack24,
 } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
 import { formatUnits } from 'viem';
@@ -32,7 +32,6 @@ import { useQRCodeDonation } from '@/hooks/useQRCodeDonation';
 import { useDonateData } from '@/context/donate.context';
 import { AmountInput } from '@/components/AmountInput/AmountInput';
 import StorageLabel from '@/lib/localStorage';
-import { IWalletAddress } from '@/apollo/types/types';
 import InlineToast, { EToastType } from '@/components/toasts/InlineToast';
 import { useAppSelector } from '@/features/hooks';
 import { useModalCallback } from '@/hooks/useModalCallback';
@@ -45,6 +44,8 @@ interface QRDonationCardProps extends IDonationCardProps {
 
 interface IMessage {
 	text: string;
+	link: string;
+	linkText: string;
 }
 
 const formatAmountToDisplay = (amount: bigint) => {
@@ -55,15 +56,17 @@ const formatAmountToDisplay = (amount: bigint) => {
 	).toString();
 };
 
-const Message: FC<IMessage> = ({ text }) => (
-	<Wrapper>
-		<Caption>{text}</Caption>{' '}
-		<StyledLink>
-			<a href={links.GIVBACK_DOC} target='_noreferrer noopener'>
-				Learn more
-			</a>
-		</StyledLink>
-	</Wrapper>
+const GivBackToast: FC<IMessage> = ({ text, link, linkText }) => (
+	<GivBackWrapper>
+		<IconGIVBack24 color={brandColors.giv[500]} />
+		<B>
+			{text}
+			{'. '}
+			<StyledLink onClick={() => window.open(link, '_blank')}>
+				{linkText}.
+			</StyledLink>
+		</B>
+	</GivBackWrapper>
 );
 
 export const QRDonationCard: FC<QRDonationCardProps> = ({
@@ -340,15 +343,14 @@ export const QRDonationCard: FC<QRDonationCardProps> = ({
 							onClick={handleNext}
 							disabled={amount === 0n}
 						/>
-						<InfoToast
-							message={
-								<Message
-									text={formatMessage({
-										id: 'toast.modify_stream_balance',
-									})}
-								/>
-							}
-							type={EToastType.Info}
+						<GivBackToast
+							text={formatMessage({
+								id: 'label.sign_in_with_your_eth_wallet_for_givebacks',
+							})}
+							link={links.GIVBACK_DOC}
+							linkText={formatMessage({
+								id: 'label.learn_more',
+							})}
 						/>
 					</CardBottom>
 				</>
@@ -450,11 +452,15 @@ const MarginLessInlineToast = styled(InlineToast)`
 	margin: 0;
 `;
 
-const InfoToast = styled(InlineToast)`
+const GivBackWrapper = styled(Flex)`
+	align-items: center;
+	border-radius: 8px;
+	border: 1px solid ${brandColors.giv[500]};
+	background: ${brandColors.giv[50]};
+	padding: 16px 8px;
 	margin-top: 10px;
-`;
+	gap: 10px;
 
-const Wrapper = styled.div`
 	& > * {
 		display: inline;
 	}
@@ -463,5 +469,6 @@ const Wrapper = styled.div`
 const StyledLink = styled.div`
 	display: inline;
 	margin-left: 4px;
-	color: ${semanticColors.punch[500]};
+	color: ${brandColors.pinky[500]};
+	cursor: pointer;
 `;

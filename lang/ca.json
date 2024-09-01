@@ -632,6 +632,7 @@
 	"label.modify_stream_balance": "Modificar el Saldo de la Transmissió",
 	"label.month": "{count, plural, one { Mes} other { Mesos} }",
 	"label.monthly": "Mensualment",
+	"label.sign_in_with_your_eth_wallet_for_givebacks": "Inicia la sessió amb la teva cartera Ethereum per a GIVbacks",
 	"label.monthly_across_all_projects": "mensualment a tots els projectes",
 	"label.months": "{count, plural, one { Mes} other { Mesos} }",
 	"label.more_about_us": "Més sobre nosaltres",
