@@ -53,11 +53,6 @@ export interface ICreateDonation {
 	relevantDonationTxHash?: string;
 }
 
-export interface ICreateDraftDonation extends ICreateDonation {
-	chainId: number;
-	memo?: string;
-}
-
 export const calcDonationShare = (
 	totalDonation: bigint,
 	givethDonationPercent: number,

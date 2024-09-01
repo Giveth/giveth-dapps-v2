@@ -188,14 +188,8 @@ const ProjectDonationTable = ({ selectedQF }: IProjectDonationTable) => {
 											id: 'label.anonymous',
 										})}
 									</LeftPadding>
-								) : donation.user ? (
-									<UserWithPFPInCell user={donation.user} />
 								) : (
-									<LeftPadding>
-										{formatMessage({
-											id: 'label.anonymous',
-										})}
-									</LeftPadding>
+									<UserWithPFPInCell user={donation.user} />
 								)}
 							</DonationTableCell>
 							{isAdmin && (
