@@ -343,15 +343,17 @@ export const QRDonationCard: FC<QRDonationCardProps> = ({
 							onClick={handleNext}
 							disabled={amount === 0n}
 						/>
-						<GivBackToast
-							text={formatMessage({
-								id: 'label.sign_in_with_your_eth_wallet_for_givebacks',
-							})}
-							link={links.GIVBACK_DOC}
-							linkText={formatMessage({
-								id: 'label.learn_more',
-							})}
-						/>
+						{!isSignedIn && (
+							<GivBackToast
+								text={formatMessage({
+									id: 'label.sign_in_with_your_eth_wallet_for_givebacks',
+								})}
+								link={links.GIVBACK_DOC}
+								linkText={formatMessage({
+									id: 'label.learn_more',
+								})}
+							/>
+						)}
 					</CardBottom>
 				</>
 			) : (
