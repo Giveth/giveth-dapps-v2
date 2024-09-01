@@ -38,11 +38,11 @@ import { claimAirDrop } from '@/lib/claim';
 import { waitForTransaction } from '@/lib/transaction';
 import config from '@/configuration';
 import { IModal } from '@/types/common';
-import { useAppSelector } from '@/features/hooks';
 import { useIsSafeEnvironment } from '@/hooks/useSafeAutoConnect';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
 import { SubgraphDataHelper } from '@/lib/subgraph/subgraphDataHelper';
 import { fetchSubgraphData } from '@/services/subgraph.service';
+import { useFetchGIVPrice } from '@/hooks/useGivPrice';
 
 enum ClaimState {
 	UNKNOWN,
@@ -90,7 +90,7 @@ export const GIVdropHarvestModal: FC<IGIVdropHarvestModal> = ({
 	const chainId = chain?.id;
 	const sdh = new SubgraphDataHelper(currentValues.data);
 	const givTokenDistroBalance = sdh.getGIVTokenDistroBalance();
-	const givPrice = useAppSelector(state => state.price.givPrice);
+	const { data: givPrice } = useFetchGIVPrice(chainId);
 
 	useEffect(() => {
 		const bnGIVback = BigInt(givTokenDistroBalance.givback);
@@ -119,7 +119,7 @@ export const GIVdropHarvestModal: FC<IGIVdropHarvestModal> = ({
 	}, [givdropAmount, givTokenDistroHelper, claimableNow, givBackLiquidPart]);
 
 	const calcUSD = (amount: string) => {
-		const _givPrice = new BigNumber(givPrice);
+		const _givPrice = new BigNumber(givPrice || '0');
 		return _givPrice.isNaN() ? '0' : _givPrice.times(amount).toFixed(2);
 	};
 

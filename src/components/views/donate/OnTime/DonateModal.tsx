@@ -48,6 +48,7 @@ interface IDonateModalProps extends IModal {
 	token: IProjectAcceptedToken;
 	amount: bigint;
 	donationToGiveth: number;
+	givethDonationAmount: number;
 	tokenPrice?: number;
 	anonymous?: boolean;
 	givBackEligible?: boolean;
@@ -59,6 +60,7 @@ const DonateModal: FC<IDonateModalProps> = props => {
 		amount,
 		setShowModal,
 		donationToGiveth,
+		givethDonationAmount,
 		anonymous,
 		givBackEligible,
 	} = props;
@@ -86,7 +88,7 @@ const DonateModal: FC<IDonateModalProps> = props => {
 	const chainName = (chain as Chain)?.name;
 	const dispatch = useAppDispatch();
 	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
-	const isDonatingToGiveth = donationToGiveth > 0;
+	const isDonatingToGiveth = donationToGiveth > 0 && givethDonationAmount > 0;
 	const { formatMessage } = useIntl();
 	const { setSuccessDonation, project } = useDonateData();
 
@@ -433,7 +435,7 @@ const DonateModal: FC<IDonateModalProps> = props => {
 						)}
 						<DonateButton
 							loading={donating}
-							buttonType='primary'
+							buttonType='secondary'
 							disabled={donating || processFinished}
 							label={
 								donating

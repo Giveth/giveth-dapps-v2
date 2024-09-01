@@ -185,6 +185,7 @@ export const TabGIVstreamBottom = () => {
 		queryKey: ['subgraph', chain?.id, address],
 		queryFn: async () => await fetchSubgraphData(chain?.id, address),
 		enabled: !!chain,
+		staleTime: config.SUBGRAPH_POLLING_INTERVAL,
 	});
 
 	const chainId = chain?.id;
@@ -404,6 +405,7 @@ export const GIVstreamHistory: FC = () => {
 		queryKey: ['subgraph', chain?.id, address],
 		queryFn: async () => await fetchSubgraphData(chain?.id, address),
 		enabled: !!chain,
+		staleTime: config.SUBGRAPH_POLLING_INTERVAL,
 	});
 
 	const chainId = chain?.id;
