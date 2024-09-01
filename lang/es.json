@@ -1011,7 +1011,7 @@
 	"label.the_service_is_a_kycfree_authorized_financial_intermediary": "Son una entidad financiera autorizada localizada en Suiza, libre de KYC",
 	"label.think_about_where_your_potential_donors_might_look_for_a_project_like_yours": "Piensa dónde tus posibles donantes podrían buscar un proyecto como el tuyo.",
 	"label.this_address_is_already_used": "Esta dirección ya esta en uso para otro proyecto. Por favor ingrese una dirección que no este actualmente asociada a ningún otro proyecto.",
-	"label.this_address_and_memo_is_already_used": "Esta dirección y esta nota ya se han utilizado para otro proyecto. Por favor, introduzca una dirección con una nota diferente.",
+	"label.this_address_and_memo_is_already_used": "Esta dirección ya se utiliza para otro proyecto con el mismo MEMO. Por favor, introduzca una dirección diferente o un MEMO diferente.",
 	"label.this_documentation": "este artículo de documentación",
 	"label.this_farm_has_ended": "Esta Farm ha terminado",
 	"label.this_feature_will_be_available_soon": "Esta función estará disponible pronto.",
