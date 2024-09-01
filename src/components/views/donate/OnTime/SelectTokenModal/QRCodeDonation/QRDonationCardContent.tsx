@@ -120,7 +120,7 @@ const QRDonationCardContent: FC<IQRDonationCardContentProps> = ({
 						<TokenIcon symbol={tokenData?.symbol} size={32} />
 						<TokenSymbol>
 							{tokenData?.symbol} on{' '}
-							{config.NETWORKS_CONFIG[ChainType.STELLAR].name}
+							{/* {config.NETWORKS_CONFIG[ChainType.STELLAR].name} */}
 						</TokenSymbol>
 					</Flex>
 				</AmountWrapper>

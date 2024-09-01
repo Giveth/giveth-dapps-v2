@@ -232,18 +232,18 @@ export const QRDonationCard: FC<QRDonationCardProps> = ({
 		setUsdAmount(convertAmountToUSD(amount));
 	}, [amount, tokenPrice]);
 
-	useEffect(() => {
-		const fetchTokenPrice = async () => {
-			const coingeckoChainId =
-				config.NETWORKS_CONFIG[ChainType.STELLAR].coingeckoChainName;
-			const price = await fetchPriceWithCoingeckoId(coingeckoChainId);
-			if (price) {
-				setTokenPrice(price);
-			}
-		};
+	// useEffect(() => {
+	// 	const fetchTokenPrice = async () => {
+	// 		const coingeckoChainId =
+	// 			config.NETWORKS_CONFIG[ChainType.STELLAR].coingeckoChainName;
+	// 		const price = await fetchPriceWithCoingeckoId(coingeckoChainId);
+	// 		if (price) {
+	// 			setTokenPrice(price);
+	// 		}
+	// 	};
 
-		fetchTokenPrice();
-	}, []);
+	// 	fetchTokenPrice();
+	// }, []);
 
 	return (
 		<>

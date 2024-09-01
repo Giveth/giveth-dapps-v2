@@ -142,7 +142,7 @@ const ProjectIndex: FC<IProjectBySlug> = () => {
 			<HeadContainer>
 				{isAdmin && <ProjectOwnerBanner />}
 				<ProjectBadges />
-				{hasStellarAddress &&
+				{/* {hasStellarAddress &&
 					!isAdmin &&
 					!userDataLoading &&
 					!isLoading && (
@@ -175,7 +175,7 @@ const ProjectIndex: FC<IProjectBySlug> = () => {
 								</LinkItem>
 							</Link>
 						</StellarSupportToast>
-					)}
+					)} */}
 				<EndaomentProjectsInfo
 					orgLabel={projectData?.organization?.label}
 				/>

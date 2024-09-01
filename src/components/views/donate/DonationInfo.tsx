@@ -36,9 +36,10 @@ const TxRow = ({
 			<Link
 				href={formatTxLink({
 					txHash,
-					networkId: isStellar
-						? config.NETWORKS_CONFIG[ChainType.STELLAR].id
-						: (chain as Chain)?.id,
+					// networkId: isStellar
+					// 	? config.NETWORKS_CONFIG[ChainType.STELLAR].id
+					// 	: (chain as Chain)?.id,
+					networkId: (chain as Chain)?.id,
 					chainType: isStellar
 						? chainType
 						: walletChainType || undefined,

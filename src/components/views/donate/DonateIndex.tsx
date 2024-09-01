@@ -36,11 +36,11 @@ import { DonatePageProjectDescription } from './DonatePageProjectDescription';
 import { getActiveRound } from '@/helpers/qf';
 import QRDonationDetails from './OnTime/SelectTokenModal/QRCodeDonation/QRDonationDetails';
 import InlineToast, { EToastType } from '@/components/toasts/InlineToast';
-import { client } from '@/apollo/apolloClient';
-import { FETCH_DONATION_BY_ID } from '@/apollo/gql/gqlDonations';
-import { IDonation } from '@/apollo/types/types';
-import config from '@/configuration';
-import { ChainType } from '@/types/config';
+// import { client } from '@/apollo/apolloClient';
+// import { FETCH_DONATION_BY_ID } from '@/apollo/gql/gqlDonations';
+// import { IDonation } from '@/apollo/types/types';
+// import config from '@/configuration';
+// import { ChainType } from '@/types/config';
 import { useQRCodeDonation } from '@/hooks/useQRCodeDonation';
 import EndaomentProjectsInfo from '@/components/views/project/EndaomentProjectsInfo';
 import { IDraftDonation } from '@/apollo/types/gqlTypes';
@@ -54,7 +54,7 @@ const DonateIndex: FC = () => {
 		qrDonationStatus,
 		draftDonationData,
 		hasActiveQFRound,
-		setSuccessDonation,
+		// setSuccessDonation,
 		setQRDonationStatus,
 		setDraftDonationData,
 		startTimer,
@@ -80,40 +80,40 @@ const DonateIndex: FC = () => {
 		};
 	}, [dispatch]);
 
-	useEffect(() => {
-		const fetchDonation = async () => {
-			if (qrDonationStatus === 'success') {
-				const {
-					data: { getDonationById },
-				} = (await client.query({
-					query: FETCH_DONATION_BY_ID,
-					variables: {
-						id: Number(draftDonationData?.matchedDonationId),
-					},
-					fetchPolicy: 'no-cache',
-				})) as { data: { getDonationById: IDonation } };
+	// useEffect(() => {
+	// 	const fetchDonation = async () => {
+	// 		if (qrDonationStatus === 'success') {
+	// 			const {
+	// 				data: { getDonationById },
+	// 			} = (await client.query({
+	// 				query: FETCH_DONATION_BY_ID,
+	// 				variables: {
+	// 					id: Number(draftDonationData?.matchedDonationId),
+	// 				},
+	// 				fetchPolicy: 'no-cache',
+	// 			})) as { data: { getDonationById: IDonation } };
 
-				if (!getDonationById) return;
+	// 			if (!getDonationById) return;
 
-				const { transactionId, isTokenEligibleForGivback } =
-					getDonationById;
+	// 			const { transactionId, isTokenEligibleForGivback } =
+	// 				getDonationById;
 
-				if (!transactionId) return;
+	// 			if (!transactionId) return;
 
-				setSuccessDonation({
-					txHash: [
-						{
-							txHash: transactionId,
-							chainType: ChainType.STELLAR,
-						},
-					],
-					givBackEligible: isTokenEligibleForGivback,
-					chainId: config.STELLAR_NETWORK_NUMBER,
-				});
-			}
-		};
-		fetchDonation();
-	}, [qrDonationStatus]);
+	// 			setSuccessDonation({
+	// 				txHash: [
+	// 					{
+	// 						txHash: transactionId,
+	// 						chainType: ChainType.STELLAR,
+	// 					},
+	// 				],
+	// 				givBackEligible: isTokenEligibleForGivback,
+	// 				chainId: config.STELLAR_NETWORK_NUMBER,
+	// 			});
+	// 		}
+	// 	};
+	// 	fetchDonation();
+	// }, [qrDonationStatus]);
 
 	const isRecurringTab = router.query.tab?.toString() === ETabs.RECURRING;
 	const { activeStartedRound } = getActiveRound(project.qfRounds);
@@ -179,9 +179,9 @@ const DonateIndex: FC = () => {
 						<InfoWrapper
 							style={{ marginBottom: isFailedOperation ? 24 : 0 }}
 						>
-							{showQRCode ? (
+							{/* {showQRCode ? (
 								<QRDonationDetails />
-							) : (
+							) : ( */}
 								<>
 									<EndaomentProjectsInfo
 										orgLabel={project?.organization?.label}
@@ -203,7 +203,7 @@ const DonateIndex: FC = () => {
 										)
 									) : null}
 								</>
-							)}
+							{/* )} */}
 						</InfoWrapper>
 						{isFailedOperation && (
 							<QRRetryWrapper style={{ gap: 20 }}>

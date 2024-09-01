@@ -385,14 +385,14 @@ const CryptoDonation: FC<{
 				/>
 			)}
 			<SaveGasFees acceptedChains={acceptedChains} />
-			{hasStellarAddress && (
+			{/* {hasStellarAddress && (
 				<QRToastLink onClick={handleQRDonation}>
 					{config.NETWORKS_CONFIG[ChainType.STELLAR]?.chainLogo(32)}
 					{formatMessage({
 						id: 'label.try_donating_wuth_stellar',
 					})}
 				</QRToastLink>
-			)}
+			)} */}
 			<Flex $flexDirection='column' gap='8px'>
 				<InputWrapper>
 					<SelectTokenWrapper

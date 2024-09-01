@@ -92,7 +92,7 @@ export const DonationCard: FC<IDonationCardProps> = ({
 
 	return (
 		<DonationCardWrapper>
-			{!isQRDonation ? (
+			{/* {!isQRDonation ? ( */}
 				<>
 					<Title id='donation-visit'>
 						{formatMessage({
@@ -175,14 +175,14 @@ export const DonationCard: FC<IDonationCardProps> = ({
 						{tab === ETabs.RECURRING && <RecurringDonationCard />}
 					</TabWrapper>
 				</>
-			) : (
+			{/* ) : (
 				<QRDonationCard
 					setIsQRDonation={setIsQRDonation}
 					setShowQRCode={setShowQRCode}
 					qrAcceptedTokens={qrAcceptedTokens || []}
 					showQRCode={showQRCode}
 				/>
-			)}
+			)} */}
 		</DonationCardWrapper>
 	);
 };
