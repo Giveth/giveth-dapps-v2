@@ -28,8 +28,8 @@ const NiceBanner: FC = () => {
 					<IconSpark size={32} color={brandColors.giv[500]} />
 				</Title>
 				<Lead>
-					Donate DAI, xDAI, wxDAI or USDC to this project and receive
-					$nice tokens in addition to GIVbacks.
+					Donate DAI, xDAI, wxDAI, USDGLO or USDC to this project and
+					receive $nice tokens in addition to GIVbacks.
 					<InfoReadMore
 						as='a'
 						rel='noopener noreferrer'

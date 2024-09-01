@@ -34,9 +34,9 @@ export const ProfileProvider = (props: {
 		const fetchTotal = async () => {
 			try {
 				const res = await getGIVpowerBalanceByAddress([
-					user.walletAddress!,
+					user?.walletAddress!,
 				]);
-				setBalance(res[user.walletAddress!]);
+				setBalance(res[user?.walletAddress!]);
 			} catch (error) {
 				console.error('error on getGIVpowerBalanceByAddress', {
 					error,

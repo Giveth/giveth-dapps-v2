@@ -76,8 +76,6 @@ const links = {
 	STAKE_TOGETHER_OPTIMISM:
 		'https://app.staketogether.org/en/usd/optimism/product/staking/eth-restaking?projectAddress=0x93E79499b00a2fdAAC38e6005B0ad8E88b177346',
 	ENDAOMENT: 'https://endaoment.org',
-	DEVOUCH: 'https://devouch.xyz',
-	DEVOUCH_DOCS: 'https://docs.giveth.io/dapps/projectVerification',
 };
 
 if (!isProduction) {

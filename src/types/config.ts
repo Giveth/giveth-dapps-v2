@@ -126,8 +126,6 @@ export interface GIVpowerGgivStakingConfig extends SimplePoolStakingConfig {
 	GARDEN_ADDRESS: Address;
 }
 
-export interface SepoliaNetworkConfig extends NetworkConfig {}
-
 export interface MainnetNetworkConfig extends NetworkConfig {
 	subgraphAddress: string;
 	TOKEN_DISTRO_ADDRESS: Address;
@@ -146,7 +144,6 @@ export interface MainnetNetworkConfig extends NetworkConfig {
 	tokenAddressOnUniswapV2: Address;
 	uniswapV2Subgraph: string;
 }
-
 export interface GnosisNetworkConfig extends NetworkConfig {
 	subgraphAddress: string;
 	TOKEN_DISTRO_ADDRESS: Address;
@@ -183,7 +180,7 @@ export interface NonEVMChain {
 	networkId: number;
 	name: string;
 	chainType: ChainType;
-	adapterNetwork?: WalletAdapterNetwork;
+	adapterNetwork: WalletAdapterNetwork;
 	nativeCurrency: {
 		name: string;
 		symbol: string;
@@ -215,8 +212,7 @@ export interface EnvConfig {
 	BASE_NETWORK_NUMBER: number;
 	CLASSIC_NETWORK_NUMBER: number;
 	ZKEVM_NETWORK_NUMBER: number;
-	STELLAR_NETWORK_NUMBER: number;
-	MAINNET_CONFIG: MainnetNetworkConfig | SepoliaNetworkConfig;
+	MAINNET_CONFIG: MainnetNetworkConfig;
 	GNOSIS_CONFIG: GnosisNetworkConfig;
 	POLYGON_CONFIG: NetworkConfig;
 	OPTIMISM_CONFIG: OptimismNetworkConfig;
@@ -230,7 +226,6 @@ export interface EnvConfig {
 	MICROSERVICES: MicroservicesConfig;
 	RARIBLE_ADDRESS: string;
 	SOLANA_CONFIG: NonEVMNetworkConfig;
-	STELLAR_CONFIG: NonEVMNetworkConfig;
 }
 
 export interface GlobalConfig extends EnvConfig {
@@ -260,7 +255,6 @@ export interface GlobalConfig extends EnvConfig {
 export enum ChainType {
 	SOLANA = 'SOLANA',
 	EVM = 'EVM',
-	STELLAR = 'STELLAR',
 }
 
 export interface IChainType {

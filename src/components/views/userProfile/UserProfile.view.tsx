@@ -98,9 +98,6 @@ const UserProfileView: FC<IUserProfileView> = () => {
 	useEffect(() => {
 		const fetchPFPInfo = async (walletAddress: string) => {
 			try {
-				if (!config.MAINNET_CONFIG.subgraphAddress) {
-					throw new Error('Subgraph address not found');
-				}
 				const query = buildUsersPfpInfoQuery([walletAddress]);
 				const { data } = await gqlRequest(
 					config.MAINNET_CONFIG.subgraphAddress,
@@ -118,7 +115,7 @@ const UserProfileView: FC<IUserProfileView> = () => {
 			}
 		};
 		if (user?.walletAddress) {
-			fetchPFPInfo(user.walletAddress);
+			fetchPFPInfo(user?.walletAddress);
 		}
 	}, [user]);
 

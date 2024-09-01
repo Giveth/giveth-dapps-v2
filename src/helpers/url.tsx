@@ -90,12 +90,6 @@ export function campaignLinkGenerator(campaign: ICampaign) {
 						EProjectsFilter.ACCEPT_FUND_ON_ZKEVM,
 					);
 					break;
-				case ECampaignFilterField.AcceptFundOnStellar:
-					params.append(
-						'filter',
-						EProjectsFilter.ACCEPT_FUND_ON_STELLAR,
-					);
-					break;
 				default:
 					break;
 			}
