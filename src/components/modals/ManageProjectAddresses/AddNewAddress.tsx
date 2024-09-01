@@ -113,7 +113,6 @@ export const AddNewAddress: FC<IAddNewAddress> = ({
 				return 'Invalid Solana address';
 			}
 		} else if (isStellarChain) {
-			console.log('isStellarChain', isStellarChain);
 			if (!isStellarAddress(address)) {
 				setLoading(false);
 				return 'Invalid Stellar address';
