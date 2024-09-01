@@ -12,7 +12,11 @@ import {
 	Row,
 	Flex,
 	deviceSize,
+	brandColors,
+	P,
+	// IconSpark,
 } from '@giveth/ui-design-system';
+// import Link from 'next/link';
 import styled from 'styled-components';
 import { useIntl } from 'react-intl';
 import ProjectHeader from './ProjectHeader';
@@ -32,7 +36,7 @@ import ProjectCategoriesBadges from './ProjectCategoriesBadges';
 import { PassportBanner } from '@/components/PassportBanner';
 import ProjectGIVbackToast from '@/components/views/project/ProjectGIVbackToast';
 import useMediaQuery from '@/hooks/useMediaQuery';
-import { device } from '@/lib/constants/constants';
+import { device, mediaQueries } from '@/lib/constants/constants';
 import QFSection from './projectActionCard/QFSection';
 import { DonateSection } from './projectActionCard/DonationSection';
 import { ProjectStats } from './projectActionCard/ProjectStats';
@@ -40,6 +44,10 @@ import { AdminActions } from './projectActionCard/AdminActions';
 import ProjectOwnerBanner from './ProjectOwnerBanner';
 import { useGeneralWallet } from '@/providers/generalWalletProvider';
 import ProjectSocials from './ProjectSocials';
+import ProjectDevouchBox from './ProjectDevouchBox';
+// import Routes from '@/lib/constants/Routes';
+import { ChainType } from '@/types/config';
+import { useAppSelector } from '@/features/hooks';
 import { EndaomentProjectsInfo } from '@/components/views/project/EndaomentProjectsInfo';
 
 const ProjectDonations = dynamic(
@@ -65,6 +73,7 @@ export enum EProjectPageTabs {
 const ProjectIndex: FC<IProjectBySlug> = () => {
 	const { formatMessage } = useIntl();
 	const [activeTab, setActiveTab] = useState(0);
+	const { isLoading: userDataLoading } = useAppSelector(state => state.user);
 
 	const isMobile = !useMediaQuery(device.tablet);
 	const {
@@ -77,11 +86,16 @@ const ProjectIndex: FC<IProjectBySlug> = () => {
 		isAdmin,
 		isLoading,
 	} = useProjectContext();
+
 	const { isOnSolana } = useGeneralWallet();
 
 	const router = useRouter();
 	const slug = router.query.projectIdSlug as string;
-	const categories = projectData?.categories;
+	const { categories, addresses } = projectData || {};
+	const recipientAddresses = addresses?.filter(a => a.isRecipient);
+	const hasStellarAddress = recipientAddresses?.some(
+		address => address.chainType === ChainType.STELLAR,
+	);
 
 	useEffect(() => {
 		if (!isSSRMode) {
@@ -248,8 +262,8 @@ const ProjectIndex: FC<IProjectBySlug> = () => {
 							/>
 						</Flex>
 					)}
+					<ProjectDevouchBox />
 				</ContainerStyled>
-
 				<SimilarProjects slug={slug} />
 			</BodyWrapper>
 		</Wrapper>
@@ -309,6 +323,58 @@ const MobileActionsContainer = styled(Flex)`
 	border-radius: 16px;
 	padding: 16px 24px;
 	margin-bottom: 8px;
+`;
+
+const StellarSupportToast = styled(Flex)`
+	margin-block: 24px;
+	padding: 16px;
+	border: 1px solid ${brandColors.giv[300]};
+	border-radius: 8px;
+	background-color: ${neutralColors.gray[100]};
+	color: ${brandColors.giv[300]};
+	justify-content: space-between;
+	flex-direction: column;
+	align-items: start;
+	gap: 30px;
+
+	> :first-child {
+		gap: 16px;
+
+		> :first-child {
+			margin-top: 2px;
+		}
+	}
+
+	> :last-child {
+		width: 100%;
+		text-align: center;
+	}
+
+	${mediaQueries.laptopS} {
+		flex-direction: row;
+		align-items: center;
+
+		> :last-child {
+			width: auto;
+		}
+	}
+`;
+
+const ToastText = styled.div`
+	display: flex;
+	flex-direction: column;
+	gap: 4px;
+
+	> :first-child {
+		font-weight: 500;
+	}
+`;
+
+const LinkItem = styled(P)<{ color: string }>`
+	cursor: pointer;
+	color: ${props => props.color};
+	font-weight: 500;
+	text-transform: capitalize;
 `;
 
 export default ProjectIndex;

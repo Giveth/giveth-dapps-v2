@@ -34,6 +34,7 @@ import { EContentType } from '@/lib/constants/shareContent';
 import QFToast from './QFToast';
 import { DonationInfo } from './DonationInfo';
 import { ManageRecurringDonation } from './Recurring/ManageRecurringDonation';
+import EndaomentProjectsInfo from '../project/EndaomentProjectsInfo';
 
 export const SuccessView: FC = () => {
 	const { formatMessage } = useIntl();
@@ -106,6 +107,9 @@ export const SuccessView: FC = () => {
 			<Row>
 				<Col xs={12} lg={6}>
 					<InfoWrapper>
+						<EndaomentProjectsInfo
+							orgLabel={project?.organization?.label}
+						/>
 						<ImageWrapper>
 							<ProjectCardImage image={project.image} />
 						</ImageWrapper>

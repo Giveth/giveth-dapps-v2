@@ -108,6 +108,7 @@ const StakeGIVInnerModal: FC<IStakeModalProps> = ({
 
 	const supportPermit =
 		network !== config.GNOSIS_NETWORK_NUMBER &&
+		network !== config.ZKEVM_NETWORK_NUMBER &&
 		network !== config.OPTIMISM_NETWORK_NUMBER;
 
 	useEffect(() => {

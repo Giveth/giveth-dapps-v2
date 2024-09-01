@@ -2,7 +2,7 @@ import React from 'react';
 import {
 	celoAlfajores,
 	gnosis,
-	goerli,
+	sepolia,
 	optimismSepolia,
 	polygon,
 	arbitrumSepolia,
@@ -24,13 +24,13 @@ import { IconCelo } from '@/components/Icons/Celo';
 import { IconOptimism } from '@/components/Icons/Optimism';
 import { IconGnosisChain } from '@/components/Icons/GnosisChain';
 import { IconEthereum } from '@/components/Icons/Eth';
-import { IconUnknown } from '@/components/Icons/Unknown';
+// import { IconUnknown } from '@/components/Icons/Unknown';
 import IconBase from '@/components/Icons/Base';
 import IconSolana from '@/components/Icons/Solana';
 import IconZKEVM from '@/components/Icons/ZKEVM';
 import IconArbitrum from '@/components/Icons/Arbitrum';
 // import IconStellar from '@/components/Icons/Stellar';
-// import { IconClassic } from '@/components/Icons/Classic';
+import { IconClassic } from '@/components/Icons/Classic';
 
 const BASE_ROUTE =
 	process.env.NEXT_PUBLIC_BASE_ROUTE ||
@@ -49,12 +49,13 @@ const SEPT_8TH_2022 = 1662595200000;
 
 const GNOSIS_GIV_TOKEN_ADDRESS = '0x83a8eea6427985C523a0c4d9d3E62C051B6580d3';
 const OPTIMISM_GIV_TOKEN_ADDRESS = '0x2f2c819210191750F2E11F7CfC5664a0eB4fd5e6';
+const ZKEVM_GIV_TOKEN_ADDRESS = '0xa77390562986F5d08F5aECF5D3Fb82BD16B44548';
 
-const MAINNET_NETWORK_NUMBER = 5; // Goerli
-const GNOSIS_NETWORK_NUMBER = 100; // xDAI
-const POLYGON_NETWORK_NUMBER = 137;
-const OPTIMISM_NETWORK_NUMBER = 11155420;
-const CELO_NETWORK_NUMBER = 44787;
+const MAINNET_NETWORK_NUMBER = sepolia.id; // sepolia
+const GNOSIS_NETWORK_NUMBER = gnosis.id; // xDAI
+const POLYGON_NETWORK_NUMBER = polygon.id;
+const OPTIMISM_NETWORK_NUMBER = optimismSepolia.id;
+const CELO_NETWORK_NUMBER = celoAlfajores.id;
 const CLASSIC_NETWORK_NUMBER = 63;
 // const STELLAR_NETWORK_NUMBER = 1500;
 const SOLANA_NETWORK_NUMBER = 103;
@@ -63,8 +64,8 @@ const BASE_NETWORK_NUMBER = baseSepolia.id;
 const ZKEVM_NETWORK_NUMBER = polygonZkEvmCardona.id;
 
 const SOLANA_NETWORK: NonEVMChain = {
-	id: 103,
-	networkId: 103,
+	id: SOLANA_NETWORK_NUMBER,
+	networkId: SOLANA_NETWORK_NUMBER,
 	chainType: ChainType.SOLANA,
 	name: 'Solana Devnet',
 	adapterNetwork: WalletAdapterNetwork.Devnet,
@@ -117,7 +118,7 @@ const classic = {
 
 const EVM_CHAINS = [
 	polygon,
-	goerli,
+	sepolia,
 	gnosis,
 	optimismSepolia,
 	celoAlfajores,
@@ -155,63 +156,13 @@ const config: EnvConfig = {
 
 	RARIBLE_ADDRESS: 'https://testnet.rarible.com/',
 	MAINNET_CONFIG: {
-		...goerli,
+		...sepolia,
 		chainType: ChainType.EVM,
-		DAI_TOKEN_ADDRESS: '0xdc31Ee1784292379Fbb2964b3B9C4124D8F89C60',
-		DAI_BUY_LINK: '',
-		PFP_CONTRACT_ADDRESS: '0x9F8c0e0353234F6f644fc7AF84Ac006f02cecE77',
-
 		gasPreference: {
 			// Keep it empty for automatic configuration
 		},
-		subgraphAddress:
-			process.env.NEXT_PUBLIC_SUBGRAPH_MAINNET ||
-			'https://api.studio.thegraph.com/query/40764/giveconomy-staging-goerli/1.5.0?source=giveth',
 		coingeckoChainName: 'ethereum',
 		chainLogo: (logoSize?: number) => <IconEthereum size={logoSize} />,
-
-		GIV_TOKEN_ADDRESS: '0xA2470F25bb8b53Bd3924C7AC0C68d32BF2aBd5be',
-		GIV_BUY_LINK:
-			'https://app.uniswap.org/#/swap?outputCurrency=0x29434A25abd94AE882aA883eea81585Aaa5b078D',
-		tokenAddressOnUniswapV2: '0x4f4F9b8D5B4d0Dc10506e5551B0513B61fD59e75',
-		WETH_TOKEN_ADDRESS: '0xB4FBF271143F4FBf7B91A5ded31805e42b2208d6',
-		TOKEN_DISTRO_ADDRESS: '0x4358c99abFe7A9983B6c96785b8870b5412C5B4B',
-
-		pools: [
-			{
-				network: MAINNET_NETWORK_NUMBER,
-				POOL_ADDRESS: '0x0551f038a84cb0d42584a8E3eaf5a409D22F4211',
-				LM_ADDRESS: '0x6420Ad2d9B512f1cF0B899794598Ed17da2C5836',
-				type: StakingType.UNISWAPV2_GIV_DAI,
-				platform: StakingPlatform.UNISWAP,
-				title: 'GIV / DAI',
-				description: '50% GIV, 50% DAI',
-				provideLiquidityLink:
-					'https://app.uniswap.org/#/add/v2/0xA2470F25bb8b53Bd3924C7AC0C68d32BF2aBd5be/0xdc31Ee1784292379Fbb2964b3B9C4124D8F89C60?chain=goerli',
-				unit: 'LP',
-				farmEndTimeMS: SEPT_8TH_2022,
-			},
-			{
-				network: MAINNET_NETWORK_NUMBER,
-				POOL_ADDRESS: '0xf8cba1c22b6515982bf43e71b7e8b546a3323ea8',
-				VAULT_ADDRESS: '0xba12222222228d8ba445958a75a0704d566bf2c8',
-				POOL_ID:
-					'0xf8cba1c22b6515982bf43e71b7e8b546a3323ea80002000000000000000000df',
-				LM_ADDRESS: '0x887673d8295aF9BE0D8e12412c2B87a49cFcd7bd',
-				type: StakingType.BALANCER_ETH_GIV,
-				platform: StakingPlatform.BALANCER,
-				title: 'GIV / ETH',
-				description: '80% GIV, 20% ETH',
-				provideLiquidityLink:
-					'https://goerli.balancer.fi/#/pool/0xf8cba1c22b6515982bf43e71b7e8b546a3323ea80002000000000000000000df',
-				unit: 'LP',
-			},
-		],
-		regenPools: [],
-		uniswapV2Subgraph:
-			process.env.NEXT_PUBLIC_SUBGRAPH_UNISWAP_V2 ||
-			'https://gateway-arbitrum.network.thegraph.com/api/49102048d5822209c7cd189f8e4a51a9/subgraphs/id/EYCKATKGBKLWvSfwvBjzfCBmGwYNdVkduYXVivCsLRFu',
-		regenStreams: [],
 	},
 
 	GNOSIS_CONFIG: {
@@ -484,13 +435,29 @@ const config: EnvConfig = {
 			// Keep it empty for automatic configuration
 		},
 		chainLogo: (logoSize?: number) => <IconZKEVM size={logoSize} />,
+
+		subgraphAddress: process.env.NEXT_PUBLIC_SUBGRAPH_ZKEVM,
+		GIV_TOKEN_ADDRESS: ZKEVM_GIV_TOKEN_ADDRESS,
+		GIV_BUY_LINK:
+			'https://app.uniswap.org/#/swap?chain=optimism&outputCurrency=0xc916Ce4025Cb479d9BA9D798A80094a449667F5D',
+		tokenAddressOnUniswapV2: '0x4f4F9b8D5B4d0Dc10506e5551B0513B61fD59e75',
+		TOKEN_DISTRO_ADDRESS: '0x2Df3e67Be4e441Cddd2d29c3d41DFd7D516f18e6',
+		GIVPOWER: {
+			network: ZKEVM_NETWORK_NUMBER,
+			LM_ADDRESS: '0x7E9f30A74fCDf035018bc007f9930aA171863E33',
+			POOL_ADDRESS: ZKEVM_GIV_TOKEN_ADDRESS,
+			type: StakingType.GIV_UNIPOOL_LM,
+			platform: StakingPlatform.GIVETH,
+			title: 'GIV',
+			description: '100% GIV',
+			unit: 'GIV',
+		},
 	},
 
 	CLASSIC_CONFIG: {
 		...classic,
-		//TODO: should change the icon
 		chainType: ChainType.EVM,
-		chainLogo: (logoSize?: number) => <IconUnknown size={logoSize} />,
+		chainLogo: (logoSize?: number) => <IconClassic size={logoSize} />,
 		coingeckoChainName: 'ethereum-classic',
 		gasPreference: {
 			// Keep it empty for automatic configuration

@@ -328,6 +328,7 @@
 	"label.donate_to_verified_projects_on_giveth": "Dona a proyectos verificados en Giveth. Obtenga GIV y aumente su GIVstream con el programa GIVbacks.",
 	"label.donate_without_matching": "Donar sin igualar",
 	"label.donate_with_dollars": "Dona con Dólares",
+	"label.qr_code_error": "Se ha producido un error al generar el código QR. Por favor, inténtalo de nuevo.",
 	"label.donating": "Donando",
 	"label.donating_camelcase": "Donando",
 	"label.donating_percentage_to": "Donando el {percentage} a ",
@@ -1275,7 +1276,7 @@
 	"label.you_havent_boosted_any_projects_yet": "¡Todavía no has boosteado ningún proyecto!",
 	"label.you_havent_created_any_projects_yet": "¡No has creado ningún proyecto todavía!",
 	"label.you_havent_donated_to_any_projects_yet": "¡Todavía no has donado a ningún proyecto!",
-	"label.you_havent_liked_any_projects_yet": "¡Todavía no has dado like a ningún proyecto!",
+	"label.you_havent_liked_any_projects_yet": "¡Aún no has marcado ningún proyecto como favorito!",
 	"label.you_have_already_boosted_20_projects": "Ya has boosteado el máximo de 20 proyectos!",
 	"label.you_have_no_notifications": "No tienes notificaciones",
 	"label.you_have_successfuly_claimed": "Has reclamado con éxito",
@@ -1692,5 +1693,9 @@
 	"label.sanctioned_wallet_message_part1": "Esta dirección ha sido encontrada en la lista de sanciones de EE.UU.",
 	"label.sanctioned_wallet_message_part2": "Lamentablemente, Endaoment no permite que las direcciones en la lista de sanciones de OFAC donen a proyectos entregados por Endaoment. Consulta otro proyecto para donar.",
 	"label.project_card_endaoment_title": "Este proyecto es gestionado por",
-	"label.project_card_endaoment_subtext": "Este proyecto es gestionado por Endaoment, que se encarga de la conversión y entrega de fondos fiat a este proyecto. Endaoment cobra una comisión del 1,5% en las donaciones, que se procesa fuera de la aplicación de Giveth."
+	"label.project_card_endaoment_subtext": "Este proyecto es gestionado por Endaoment, que se encarga de la conversión y entrega de fondos fiat a este proyecto. Endaoment cobra una comisión del 1,5% en las donaciones, que se procesa fuera de la aplicación de Giveth.",
+	"label.devouch.view_this_project": "Ver este proyecto en DeVouch",
+	"label.devouch.if_you_are_eligible": "Si eres un verificador elegible de Giveth, puedes avalar la legitimidad de este proyecto, potencialmente aumentando los beneficios que recibe en Giveth.",
+	"label.devouch.learn_more_about_devouch": "Más información sobre DeVouch y la verificación descentralizada",
+	"label.devouch.attest_on_devouch": "Certificar en DeVouch"
 }
