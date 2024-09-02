@@ -345,7 +345,7 @@ export const QRDonationCard: FC<QRDonationCardProps> = ({
 							onClick={handleNext}
 							disabled={amount === 0n}
 						/>
-						{!isSignedIn && (
+						{!isSignedIn && stellarToken?.isGivbackEligible && (
 							<GivBackToast
 								text={formatMessage({
 									id: 'label.sign_in_with_your_eth_wallet_for_givebacks',
