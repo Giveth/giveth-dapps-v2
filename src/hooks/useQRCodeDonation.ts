@@ -110,7 +110,8 @@ export const useQRCodeDonation = (project: IProject) => {
 			}
 			return createDraftDonation;
 		} catch (error: any) {
-			console.error('Error creating draft donation', error);
+			console.error('Error creating draft donation', error.message);
+			throw error.message;
 		}
 	};
 

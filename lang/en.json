@@ -1241,6 +1241,7 @@
 	"page.project.donate_with_stellar": "Donate with Stellar",
 	"label.try_donating_wuth_stellar": "Try donating with Stellar.",
 	"label.check_donations": "View Donation Receipt",
+	"label.check_donation": "View Donation",
 	"error.enter_amount": "Amount must be greater than 0",
 	"label.enter_the_memo": "Enter the Memo",
 	"label.be_carefull_some_exchanges": "Be careful!  Some exchanges and wallets requires Memo to fund your account. Make sure to put it in the form if your wallet supports a memo.",

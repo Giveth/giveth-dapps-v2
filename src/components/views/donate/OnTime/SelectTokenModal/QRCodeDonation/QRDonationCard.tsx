@@ -24,7 +24,11 @@ import { IProjectAcceptedToken } from '@/apollo/types/gqlTypes';
 import { fetchPriceWithCoingeckoId } from '@/services/token';
 import { ChainType } from '@/types/config';
 import config from '@/configuration';
-import { truncateToDecimalPlaces, formatBalance } from '@/lib/helpers';
+import {
+	truncateToDecimalPlaces,
+	formatBalance,
+	showToastError,
+} from '@/lib/helpers';
 import { IDonationCardProps } from '../../../DonationCard';
 import QRDonationCardContent from './QRDonationCardContent';
 import { useQRCodeDonation } from '@/hooks/useQRCodeDonation';
@@ -188,20 +192,25 @@ export const QRDonationCard: FC<QRDonationCardProps> = ({
 			} else {
 				if (!stellarToken?.symbol || !projectAddress?.address) return;
 
-				const payload = {
-					walletAddress: projectAddress.address,
-					projectId: Number(id),
-					amount: Number(formatAmountToDisplay(amount)),
-					token: stellarToken,
-					anonymous: isSignedIn && isEnabled ? false : true,
-					symbol: stellarToken.symbol,
-					setFailedModalType: () => {},
-					useDonationBox: false,
-					chainId: stellarToken?.networkId,
-					memo: projectAddress.memo,
-				};
+				try {
+					const payload = {
+						walletAddress: projectAddress.address,
+						projectId: Number(id),
+						amount: Number(formatAmountToDisplay(amount)),
+						token: stellarToken,
+						anonymous: isSignedIn && isEnabled ? false : true,
+						symbol: stellarToken.symbol,
+						setFailedModalType: () => {},
+						useDonationBox: false,
+						chainId: stellarToken?.networkId,
+						memo: projectAddress.memo,
+					};
 
-				draftDonationId = await createDraftDonation(payload);
+					draftDonationId = await createDraftDonation(payload);
+				} catch (error) {
+					showToastError(error);
+					return;
+				}
 				setPendingDonationExists?.(false);
 			}
 

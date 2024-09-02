@@ -1237,6 +1237,7 @@
 	"page.project.donate_with_stellar": "Dona amb Stellar",
 	"label.try_donating_wuth_stellar": "Prova de donar amb Stellar.",
 	"label.check_donations": "Comprova les donacions",
+	"label.check_donation": "Comprova la donació",
 	"error.enter_amount": "La quantitat ha de ser superior a 0",
 	"label.enter_the_memo": "Introdueix el memo",
 	"label.be_carefull_some_exchanges": "Ves amb compte! Alguns intercanvis i carteres requereixen Memo per finançar el teu compte. Assegura't d'introduir-ho al formulari si la teva cartera admet un memo.",
