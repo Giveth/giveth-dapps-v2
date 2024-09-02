@@ -632,7 +632,7 @@
 	"label.modify_stream_balance": "Modificar el Saldo de Transmisión",
 	"label.month": "{count, plural, one { Mes} other { Meses} }",
 	"label.monthly": "Mensualmente",
-	"label.sign_in_with_your_eth_wallet_for_givebacks": "Inicia sesión con tu billetera ETH para GIVbacks",
+	"label.sign_in_with_your_eth_wallet_for_givebacks": "Inicia sesión con tu billetera ETH para GIVbacks.",
 	"label.monthly_across_all_projects": "mensualmente en todos los proyectos",
 	"label.months": "{count, plural, one { Mes} other { Meses} }",
 	"label.more_about_us": "Más acerca de nosotros",

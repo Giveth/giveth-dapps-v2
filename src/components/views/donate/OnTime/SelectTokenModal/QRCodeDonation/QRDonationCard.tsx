@@ -11,7 +11,6 @@ import {
 	IconArrowLeft,
 	brandColors,
 	mediaQueries,
-	IconGIVBack24,
 } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
 import { formatUnits } from 'viem';
@@ -58,14 +57,10 @@ const formatAmountToDisplay = (amount: bigint) => {
 
 const GivBackToast: FC<IMessage> = ({ text, link, linkText }) => (
 	<GivBackWrapper>
-		<IconGIVBack24 color={brandColors.giv[500]} />
-		<B>
-			{text}
-			{'. '}
-			<StyledLink onClick={() => window.open(link, '_blank')}>
-				{linkText}.
-			</StyledLink>
-		</B>
+		<P>{text}</P>
+		<StyledLink onClick={() => window.open(link, '_blank')}>
+			{linkText}
+		</StyledLink>
 	</GivBackWrapper>
 );
 
@@ -198,7 +193,7 @@ export const QRDonationCard: FC<QRDonationCardProps> = ({
 					projectId: Number(id),
 					amount: Number(formatAmountToDisplay(amount)),
 					token: stellarToken,
-					anonymous: true,
+					anonymous: isSignedIn && isEnabled ? false : true,
 					symbol: stellarToken.symbol,
 					setFailedModalType: () => {},
 					useDonationBox: false,
@@ -458,9 +453,12 @@ const MarginLessInlineToast = styled(InlineToast)`
 
 const GivBackWrapper = styled(Flex)`
 	align-items: center;
+	justify-content: space-between;
 	border-radius: 8px;
 	border: 1px solid ${brandColors.giv[500]};
-	padding: 16px 8px;
+	background: ${brandColors.giv[50]};
+	color: ${brandColors.giv[500]};
+	padding: 16px;
 	margin-top: 10px;
 	gap: 10px;
 
@@ -472,6 +470,6 @@ const GivBackWrapper = styled(Flex)`
 const StyledLink = styled.div`
 	display: inline;
 	margin-left: 4px;
-	color: ${brandColors.pinky[500]};
+	font-weight: 500;
 	cursor: pointer;
 `;
