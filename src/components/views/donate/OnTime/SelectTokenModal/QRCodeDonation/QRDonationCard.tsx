@@ -226,16 +226,18 @@ export const QRDonationCard: FC<QRDonationCardProps> = ({
 		}
 	};
 
-	const convertAmountToUSD = (amount: bigint | number) => {
+	const convertAmountToUSD = (amount: bigint) => {
 		if (!stellarToken || !tokenPrice) return '0.00';
-
-		if (typeof amount === 'number') {
-			return formatBalance(amount * tokenPrice);
-		}
 
 		const priceBigInt = BigInt(Math.floor(tokenPrice * 100));
 		const amountInUsd = (amount * priceBigInt) / 100n;
 		return formatBalance(formatAmountToDisplay(amountInUsd));
+	};
+
+	const calculateUsdAmount = (amount?: number) => {
+		if (!tokenPrice || !amount) return '0.00';
+
+		return formatBalance(amount * tokenPrice);
 	};
 
 	useEffect(() => {
@@ -359,7 +361,7 @@ export const QRDonationCard: FC<QRDonationCardProps> = ({
 			) : (
 				<QRDonationCardContent
 					tokenData={stellarToken}
-					usdAmount={convertAmountToUSD(draftDonationData?.amount!)}
+					usdAmount={calculateUsdAmount(draftDonationData?.amount)}
 					amount={draftDonationData?.amount?.toString() ?? '0.00'}
 					qrDonationStatus={qrDonationStatus}
 					draftDonationData={draftDonationData}

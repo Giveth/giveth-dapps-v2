@@ -51,7 +51,7 @@ const PersonalInfo = () => {
 					step: 'personalInfo',
 					personalInfo: {
 						email: getValues('email'),
-						walletAddress: verificationData?.user.walletAddress,
+						walletAddress: verificationData?.user?.walletAddress,
 						fullName:
 							verificationData?.user.firstName +
 							' ' +
@@ -133,7 +133,7 @@ const PersonalInfo = () => {
 			'name',
 			`${verificationData?.user?.firstName} ${verificationData?.user?.lastName}`,
 		);
-		setValue('walletAddress', verificationData?.user.walletAddress || '');
+		setValue('walletAddress', verificationData?.user?.walletAddress || '');
 		setValue(
 			'email',
 			verificationData?.email || verificationData?.user?.email || '',

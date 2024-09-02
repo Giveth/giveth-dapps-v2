@@ -55,8 +55,8 @@ export const DonationCard: FC<IDonationCardProps> = ({
 		);
 
 	const isOwnerOnEVM =
-		project?.adminUser.walletAddress &&
-		isAddress(project.adminUser.walletAddress);
+		project?.adminUser?.walletAddress &&
+		isAddress(project.adminUser?.walletAddress);
 
 	const [acceptedTokens, setAcceptedTokens] =
 		useState<IProjectAcceptedToken[]>();

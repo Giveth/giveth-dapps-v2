@@ -56,9 +56,9 @@ const VerificationRoute = () => {
 				const _project = res.data.projectBySlug;
 				const isOwner = compareAddresses(
 					userData?.walletAddress,
-					_project.adminUser.walletAddress,
+					_project.adminUser?.walletAddress,
 				);
-				setOwnerAddress(_project.adminUser.walletAddress);
+				setOwnerAddress(_project.adminUser?.walletAddress);
 				setAllowVerification(
 					_project.status.name === EProjectStatus.ACTIVE && isOwner,
 				);
