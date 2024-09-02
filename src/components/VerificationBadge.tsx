@@ -22,7 +22,7 @@ const VerificationBadge: FC<IProps> = ({ isVerified, verificationStatus }) => {
 			badgeStatus = EBadgeStatus.GIVETH;
 			break;
 		case EVerificationStatus.VERIFIED:
-			label = 'Verified';
+			label = 'Eligible';
 			badgeStatus = EBadgeStatus.SUCCESS;
 			break;
 		case EVerificationStatus.DRAFT:
@@ -30,7 +30,7 @@ const VerificationBadge: FC<IProps> = ({ isVerified, verificationStatus }) => {
 			badgeStatus = EBadgeStatus.WARNING;
 			break;
 		default:
-			label = 'Not Verified';
+			label = 'Ineligible';
 			badgeStatus = EBadgeStatus.ERROR;
 	}
 	return <Badge status={badgeStatus} label={label} />;
