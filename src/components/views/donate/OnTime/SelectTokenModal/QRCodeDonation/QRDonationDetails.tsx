@@ -76,7 +76,9 @@ const QRDonationDetails = () => {
 			draftDonationData?.id === draftDonationId &&
 			draftDonationData?.expiresAt
 		) {
-			const stopTimerFun = startTimer?.(new Date(draftDonationData?.expiresAt));
+			const stopTimerFun = startTimer?.(
+				new Date(draftDonationData?.expiresAt),
+			);
 			setStopTimer(() => stopTimerFun);
 		}
 

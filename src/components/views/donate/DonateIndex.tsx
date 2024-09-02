@@ -61,7 +61,8 @@ const DonateIndex: FC = () => {
 		setPendingDonationExists,
 		startTimer,
 	} = useDonateData();
-	const { renewExpirationDate, retrieveDraftDonation } = useQRCodeDonation(project);
+	const { renewExpirationDate, retrieveDraftDonation } =
+		useQRCodeDonation(project);
 	const { isSignedIn, isEnabled } = useAppSelector(state => state.user);
 
 	const alreadyDonated = useAlreadyDonatedToProject(project);

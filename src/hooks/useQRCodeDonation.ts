@@ -16,7 +16,6 @@ import { IProject } from '@/apollo/types/types';
 export type TQRStatus = 'waiting' | 'failed' | 'success' | 'expired';
 
 export const useQRCodeDonation = (project: IProject) => {
-
 	const [draftDonation, setDraftDonation] = useState<IDraftDonation | null>(
 		null,
 	);
