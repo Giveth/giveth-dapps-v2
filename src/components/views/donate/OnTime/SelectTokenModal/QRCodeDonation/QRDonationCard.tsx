@@ -458,7 +458,6 @@ const GivBackWrapper = styled(Flex)`
 	align-items: center;
 	border-radius: 8px;
 	border: 1px solid ${brandColors.giv[500]};
-	background: ${brandColors.giv[50]};
 	padding: 16px 8px;
 	margin-top: 10px;
 	gap: 10px;

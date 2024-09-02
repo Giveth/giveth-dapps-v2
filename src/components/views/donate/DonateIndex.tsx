@@ -24,7 +24,7 @@ import { EContentType } from '@/lib/constants/shareContent';
 import { PassportBanner } from '@/components/PassportBanner';
 import { useAlreadyDonatedToProject } from '@/hooks/useAlreadyDonatedToProject';
 import { Shadow } from '@/components/styled-components/Shadow';
-import { useAppDispatch } from '@/features/hooks';
+import { useAppDispatch, useAppSelector } from '@/features/hooks';
 import { setShowHeader } from '@/features/general/general.slice';
 import { DonateHeader } from './DonateHeader';
 import { DonationCard, ETabs } from './DonationCard';
@@ -62,6 +62,7 @@ const DonateIndex: FC = () => {
 		startTimer,
 	} = useDonateData();
 	const { renewExpirationDate, retrieveDraftDonation } = useQRCodeDonation();
+	const { isSignedIn, isEnabled } = useAppSelector(state => state.user);
 
 	const alreadyDonated = useAlreadyDonatedToProject(project);
 	const dispatch = useAppDispatch();
@@ -109,7 +110,11 @@ const DonateIndex: FC = () => {
 							chainType: ChainType.STELLAR,
 						},
 					],
-					givBackEligible: isTokenEligibleForGivback,
+					givBackEligible:
+						isTokenEligibleForGivback &&
+						project.verified &&
+						isSignedIn &&
+						isEnabled,
 					chainId: config.STELLAR_NETWORK_NUMBER,
 				});
 			}
