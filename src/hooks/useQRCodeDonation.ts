@@ -91,7 +91,6 @@ export const useQRCodeDonation = () => {
 			});
 
 			// save draft donation to local storage
-
 			const localStorageItem = localStorage.getItem(
 				StorageLabel.DRAFT_DONATIONS,
 			);

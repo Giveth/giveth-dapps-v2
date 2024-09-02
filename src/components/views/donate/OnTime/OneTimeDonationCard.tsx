@@ -23,12 +23,12 @@ import config from '@/configuration';
 
 import InlineToast, { EToastType } from '@/components/toasts/InlineToast';
 import { EProjectStatus } from '@/apollo/types/gqlEnums';
+import { truncateToDecimalPlaces } from '@/lib/helpers';
+import { IProjectAcceptedToken } from '@/apollo/types/gqlTypes';
 import {
 	calcDonationShare,
 	prepareTokenList,
 } from '@/components/views/donate/helpers';
-import { truncateToDecimalPlaces } from '@/lib/helpers';
-import { IProjectAcceptedToken } from '@/apollo/types/gqlTypes';
 import GIVBackToast from '@/components/views/donate/GIVBackToast';
 import { DonateWrongNetwork } from '@/components/modals/DonateWrongNetwork';
 import { useAppDispatch, useAppSelector } from '@/features/hooks';
@@ -385,14 +385,14 @@ const CryptoDonation: FC<{
 				/>
 			)}
 			<SaveGasFees acceptedChains={acceptedChains} />
-			{/* {hasStellarAddress && (
+			{hasStellarAddress && (
 				<QRToastLink onClick={handleQRDonation}>
 					{config.NETWORKS_CONFIG[ChainType.STELLAR]?.chainLogo(32)}
 					{formatMessage({
 						id: 'label.try_donating_wuth_stellar',
 					})}
 				</QRToastLink>
-			)} */}
+			)}
 			<Flex $flexDirection='column' gap='8px'>
 				<InputWrapper>
 					<SelectTokenWrapper

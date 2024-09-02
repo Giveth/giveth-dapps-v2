@@ -349,6 +349,17 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 				return;
 			}
 
+			// replace memo with undefined if it is not a stellar chain or if it is a stellar chain but memo is empty
+			addresses.forEach(address => {
+				if (
+					address.chainType !== ChainType.STELLAR ||
+					!address.memo ||
+					address.memo === ''
+				) {
+					address.memo = undefined;
+				}
+			});
+
 			const projectData: IProjectCreation = {
 				title: name,
 				description: description!,

@@ -54,9 +54,10 @@ const TxRow = ({
 
 export const DonationInfo = () => {
 	const { formatMessage } = useIntl();
-	const { successDonation, project } = useDonateData();
+	const { successDonation, project, draftDonationData } = useDonateData();
 	const { txHash = [] } = successDonation || {};
 	const hasMultipleTxs = txHash.length > 1;
+	const isStellar = txHash[0]?.chainType === ChainType.STELLAR;
 
 	return (
 		<Options>
@@ -64,6 +65,24 @@ export const DonationInfo = () => {
 				{formatMessage({
 					id: 'label.your_transactions_have_been_submitted',
 				})}
+				{isStellar && (
+					<span>
+						{' '}
+						<CheckDonation
+							onClick={() =>
+								window.open(
+									Routes.Invoice +
+										'/' +
+										draftDonationData?.id,
+									'_blank',
+								)
+							}
+						>
+							{formatMessage({ id: 'label.check_donations' })}{' '}
+							<IconExternalLink24 />
+						</CheckDonation>
+					</span>
+				)}
 				<br />
 				{formatMessage({
 					id: 'label.you_can_view_them_on_a_blockchain_explorer_here',
@@ -109,4 +128,13 @@ const TxLink = styled(Lead)`
 	> span {
 		color: ${neutralColors.gray[700]};
 	}
+`;
+
+const CheckDonation = styled.span`
+	display: inline-flex;
+	gap: 8px;
+	align-items: center;
+	cursor: pointer;
+	text-transform: capitalize;
+	color: ${brandColors.pinky[500]} !important;
 `;
