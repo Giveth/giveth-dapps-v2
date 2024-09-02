@@ -9,7 +9,6 @@ import {
 	Button,
 	IconWalletApprove32,
 	Lead,
-	neutralColors,
 	IconExternalLink16,
 	Flex,
 } from '@giveth/ui-design-system';
@@ -244,7 +243,7 @@ export const SignWithWalletModal: FC<IProps> = ({
 						})}
 					</Description>
 				)}
-				{!multisigState.lastStep && (
+				{!multisigState.lastStep && isSafeEnv && (
 					<NoteDescription color='red'>
 						{formatMessage({
 							id: isGSafeConnector
@@ -412,7 +411,6 @@ const Description = styled(Lead)`
 
 const NoteDescription = styled(Lead)`
 	margin-top: 24px;
-	color: ${neutralColors.gray[600]};
 	font-size: 18px;
 `;
 

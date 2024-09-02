@@ -86,6 +86,8 @@ export const fetchMainnetTokenPrices = async (
 	const myHeaders = new Headers();
 	myHeaders.append('content-type', 'application/json');
 
+	if (!config.MAINNET_CONFIG.uniswapV2Subgraph) return {};
+
 	const res = await fetch(config.MAINNET_CONFIG.uniswapV2Subgraph, {
 		method: 'POST',
 		body: JSON.stringify(body),

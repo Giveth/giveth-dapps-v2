@@ -27,6 +27,7 @@ import { client } from '@/apollo/apolloClient';
 import { FETCH_QF_ROUND_HISTORY } from '@/apollo/gql/gqlDonations';
 import { IGetQfRoundHistory, IQFRound } from '@/apollo/types/types';
 import { formatDonation } from '@/helpers/number';
+import { ChainType } from '@/types/config';
 
 interface IProjectTotalFundCardProps {
 	selectedQF: IQFRound | null;
@@ -280,14 +281,18 @@ const ProjectTotalFundCard = ({ selectedQF }: IProjectTotalFundCardProps) => {
 
 			<BottomSection>
 				<CustomP>Project recipient address</CustomP>
-				{recipientAddresses?.map(addObj => (
-					<ProjectWalletAddress
-						key={addObj.networkId}
-						address={addObj.address!}
-						networkId={addObj.networkId!}
-						chainType={addObj.chainType}
-					/>
-				))}
+				{/* FOR RELEASE */}
+				{recipientAddresses?.map(
+					addObj =>
+						addObj.chainType !== ChainType.STELLAR && (
+							<ProjectWalletAddress
+								key={addObj.networkId}
+								address={addObj.address!}
+								networkId={addObj.networkId!}
+								chainType={addObj.chainType}
+							/>
+						),
+				)}
 			</BottomSection>
 		</Wrapper>
 	);

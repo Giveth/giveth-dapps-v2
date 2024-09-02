@@ -1,6 +1,14 @@
 import { useState } from 'react';
 import { useQueries } from '@tanstack/react-query';
 import { useAccount } from 'wagmi';
+import {
+	PublicKey,
+	LAMPORTS_PER_SOL,
+	Transaction,
+	SystemProgram,
+} from '@solana/web3.js';
+import BigNumber from 'bignumber.js';
+import { useConnection, useWallet } from '@solana/wallet-adapter-react';
 import FailedDonation, {
 	EDonationFailedType,
 } from '@/components/modals/FailedDonation';
@@ -25,6 +33,7 @@ const YourApp = () => {
 
 	return (
 		<div>
+			<button onClick={donateToSolana}>DONATE ON SOLANA</button>
 			<w3m-button />
 			<div>
 				<button
