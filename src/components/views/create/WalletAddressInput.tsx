@@ -95,6 +95,14 @@ const WalletAddressInput: FC<IProps> = ({
 	const isProjectPrevAddress = (newAddress: string) => {
 		// Do not validate if the input address is the same as project prev wallet address
 		if (userAddresses.length === 0) return false;
+		if (isStellarChain) {
+			const isAddressMatch = userAddresses.some(
+				address =>
+					address === newAddress &&
+					(!memoValue || memoValue === prevMemo),
+			);
+			return isAddressMatch;
+		}
 		return userAddresses
 			.map(prevAddress => prevAddress.toLowerCase())
 			.includes(newAddress.toLowerCase());
@@ -345,14 +353,18 @@ const Container = styled.div`
 	background: ${neutralColors.gray[100]};
 	border-radius: 12px;
 	padding: 16px;
+
+	${mediaQueries.tablet} {
+		position: relative;
+	}
 `;
 
 const ButtonWrapper = styled.div`
 	position: absolute;
-	right: 20px; // Adjust the distance from the right edge as per your need
+	right: 15px; // Adjust the distance from the right edge as per your need
 	bottom: 78px; // Adjust the distance from the bottom edge as per your need
 	${mediaQueries.tablet} {
-		bottom: 20px;
+		bottom: -50px;
 	}
 `;
 
