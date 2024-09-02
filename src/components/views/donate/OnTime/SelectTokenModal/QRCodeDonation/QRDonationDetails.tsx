@@ -28,7 +28,6 @@ import { useQRCodeDonation } from '@/hooks/useQRCodeDonation';
 const QRDonationDetails = () => {
 	const { formatMessage } = useIntl();
 	const router = useRouter();
-	const { checkDraftDonationStatus } = useQRCodeDonation();
 	const {
 		project,
 		draftDonationData,
@@ -38,8 +37,10 @@ const QRDonationDetails = () => {
 		setQRDonationStatus,
 		setDraftDonationData,
 	} = useDonateData();
+	const { checkDraftDonationStatus } = useQRCodeDonation(project);
 
 	const [tokenPrice, setTokenPrice] = useState(0);
+	const [stopTimer, setStopTimer] = React.useState<void | (() => void)>();
 
 	const { title, addresses } = project;
 
@@ -71,19 +72,24 @@ const QRDonationDetails = () => {
 	};
 
 	useEffect(() => {
-		let stopTimer: void | (() => void);
-
 		if (
 			draftDonationData?.id === draftDonationId &&
 			draftDonationData?.expiresAt
 		) {
-			stopTimer = startTimer?.(new Date(draftDonationData?.expiresAt));
+			const stopTimerFun = startTimer?.(new Date(draftDonationData?.expiresAt));
+			setStopTimer(() => stopTimerFun);
 		}
 
 		return () => {
 			stopTimer?.();
 		};
 	}, [draftDonationData?.expiresAt]);
+
+	useEffect(() => {
+		if (qrDonationStatus === 'failed') {
+			stopTimer?.();
+		}
+	}, [qrDonationStatus]);
 
 	useEffect(() => {
 		if (!stellarAddress) return;

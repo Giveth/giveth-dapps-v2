@@ -79,12 +79,6 @@ export const QRDonationCard: FC<QRDonationCardProps> = ({
 	);
 
 	const {
-		createDraftDonation,
-		markDraftDonationAsFailed,
-		checkDraftDonationStatus,
-		retrieveDraftDonation,
-	} = useQRCodeDonation();
-	const {
 		project,
 		setQRDonationStatus,
 		setDraftDonationData,
@@ -95,6 +89,12 @@ export const QRDonationCard: FC<QRDonationCardProps> = ({
 		draftDonationData,
 		draftDonationLoading,
 	} = useDonateData();
+	const {
+		createDraftDonation,
+		markDraftDonationAsFailed,
+		checkDraftDonationStatus,
+		retrieveDraftDonation,
+	} = useQRCodeDonation(project);
 
 	const { addresses, id } = project;
 	const draftDonationId = Number(router.query.draft_donation!);

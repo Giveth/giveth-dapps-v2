@@ -26,6 +26,7 @@ import links from '@/lib/constants/links';
 import { useQRCodeDonation } from '@/hooks/useQRCodeDonation';
 import { client } from '@/apollo/apolloClient';
 import { MARK_DRAFT_DONATION_AS_FAILED } from '@/apollo/gql/gqlDonations';
+import { useDonateData } from '@/context/donate.context';
 
 type IColor = 'golden' | 'jade' | 'punch' | 'blueSky';
 interface TimerProps {
@@ -210,7 +211,8 @@ const DonationStatusSection: FC<TDonationStatusSectionProps> = ({
 	setStatus,
 }) => {
 	const { locale, formatMessage } = useIntl();
-	const { checkDraftDonationStatus } = useQRCodeDonation();
+	const { project } = useDonateData();
+	const { checkDraftDonationStatus } = useQRCodeDonation(project);
 
 	return (
 		<DetailsWapper>

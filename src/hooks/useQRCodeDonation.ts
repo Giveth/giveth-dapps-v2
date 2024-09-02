@@ -11,12 +11,11 @@ import {
 import { ICreateDraftDonation } from '@/components/views/donate/helpers';
 import StorageLabel from '@/lib/localStorage';
 import { IDraftDonation } from '@/apollo/types/gqlTypes';
-import { useDonateData } from '@/context/donate.context';
+import { IProject } from '@/apollo/types/types';
 
 export type TQRStatus = 'waiting' | 'failed' | 'success' | 'expired';
 
-export const useQRCodeDonation = () => {
-	const { project } = useDonateData();
+export const useQRCodeDonation = (project: IProject) => {
 
 	const [draftDonation, setDraftDonation] = useState<IDraftDonation | null>(
 		null,
@@ -187,7 +186,6 @@ export const useQRCodeDonation = () => {
 			});
 
 			if (
-				!draftDonationId ||
 				!getDraftDonationById ||
 				getDraftDonationById.status !== 'pending' ||
 				getDraftDonationById.projectId != project.id
@@ -260,8 +258,8 @@ export const useQRCodeDonation = () => {
 						Number(draftDonation.id),
 					);
 					if (retDraftDonation?.status === 'matched') {
+						setDraftDonation(retDraftDonation);
 						setStatus('success');
-						setDraftDonation(draftDonation);
 						return;
 					} else {
 						await markDraftDonationAsFailed(draftDonation?.id!);
