@@ -204,7 +204,7 @@ export const UpdateStreamInnerModal: FC<IModifyStreamInnerModalProps> = ({
 				<>
 					<StyledToast
 						type={EToastType.Info}
-						message='Your recurring donation to the Giveth community of Makers is being processed.'
+						message={`Your recurring donation to the ${donation.project.title} is being processed.`}
 					/>
 					{tx && <TXLink tx={tx} />}
 					<ActionButton
@@ -217,7 +217,7 @@ export const UpdateStreamInnerModal: FC<IModifyStreamInnerModalProps> = ({
 				<>
 					<StyledToast
 						type={EToastType.Success}
-						message='Your recurring donation to the Giveth community of Makers is now active!'
+						message={`Your recurring donation to the ${donation.project.title} is now active!`}
 					/>
 					{tx && <TXLink tx={tx} />}
 					<ActionButton
