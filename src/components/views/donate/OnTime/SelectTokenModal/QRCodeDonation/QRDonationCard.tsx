@@ -11,7 +11,6 @@ import {
 	IconArrowLeft,
 	brandColors,
 	mediaQueries,
-	IconGIVBack24,
 } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
 import { formatUnits } from 'viem';
@@ -25,7 +24,11 @@ import { IProjectAcceptedToken } from '@/apollo/types/gqlTypes';
 import { fetchPriceWithCoingeckoId } from '@/services/token';
 import { ChainType } from '@/types/config';
 import config from '@/configuration';
-import { truncateToDecimalPlaces, formatBalance } from '@/lib/helpers';
+import {
+	truncateToDecimalPlaces,
+	formatBalance,
+	showToastError,
+} from '@/lib/helpers';
 import { IDonationCardProps } from '../../../DonationCard';
 import QRDonationCardContent from './QRDonationCardContent';
 import { useQRCodeDonation } from '@/hooks/useQRCodeDonation';
@@ -58,14 +61,10 @@ const formatAmountToDisplay = (amount: bigint) => {
 
 const GivBackToast: FC<IMessage> = ({ text, link, linkText }) => (
 	<GivBackWrapper>
-		<IconGIVBack24 color={brandColors.giv[500]} />
-		<B>
-			{text}
-			{'. '}
-			<StyledLink onClick={() => window.open(link, '_blank')}>
-				{linkText}.
-			</StyledLink>
-		</B>
+		<P>{text}</P>
+		<StyledLink onClick={() => window.open(link, '_blank')}>
+			{linkText}
+		</StyledLink>
 	</GivBackWrapper>
 );
 
@@ -84,12 +83,6 @@ export const QRDonationCard: FC<QRDonationCardProps> = ({
 	);
 
 	const {
-		createDraftDonation,
-		markDraftDonationAsFailed,
-		checkDraftDonationStatus,
-		retrieveDraftDonation,
-	} = useQRCodeDonation();
-	const {
 		project,
 		setQRDonationStatus,
 		setDraftDonationData,
@@ -100,6 +93,12 @@ export const QRDonationCard: FC<QRDonationCardProps> = ({
 		draftDonationData,
 		draftDonationLoading,
 	} = useDonateData();
+	const {
+		createDraftDonation,
+		markDraftDonationAsFailed,
+		checkDraftDonationStatus,
+		retrieveDraftDonation,
+	} = useQRCodeDonation(project);
 
 	const { addresses, id } = project;
 	const draftDonationId = Number(router.query.draft_donation!);
@@ -193,20 +192,25 @@ export const QRDonationCard: FC<QRDonationCardProps> = ({
 			} else {
 				if (!stellarToken?.symbol || !projectAddress?.address) return;
 
-				const payload = {
-					walletAddress: projectAddress.address,
-					projectId: Number(id),
-					amount: Number(formatAmountToDisplay(amount)),
-					token: stellarToken,
-					anonymous: true,
-					symbol: stellarToken.symbol,
-					setFailedModalType: () => {},
-					useDonationBox: false,
-					chainId: stellarToken?.networkId,
-					memo: projectAddress.memo,
-				};
+				try {
+					const payload = {
+						walletAddress: projectAddress.address,
+						projectId: Number(id),
+						amount: Number(formatAmountToDisplay(amount)),
+						token: stellarToken,
+						anonymous: isSignedIn && isEnabled ? false : true,
+						symbol: stellarToken.symbol,
+						setFailedModalType: () => {},
+						useDonationBox: false,
+						chainId: stellarToken?.networkId,
+						memo: projectAddress.memo,
+					};
 
-				draftDonationId = await createDraftDonation(payload);
+					draftDonationId = await createDraftDonation(payload);
+				} catch (error) {
+					showToastError(error);
+					return;
+				}
 				setPendingDonationExists?.(false);
 			}
 
@@ -345,7 +349,7 @@ export const QRDonationCard: FC<QRDonationCardProps> = ({
 							onClick={handleNext}
 							disabled={amount === 0n}
 						/>
-						{!isSignedIn && (
+						{!isSignedIn && stellarToken?.isGivbackEligible && (
 							<GivBackToast
 								text={formatMessage({
 									id: 'label.sign_in_with_your_eth_wallet_for_givebacks',
@@ -458,9 +462,12 @@ const MarginLessInlineToast = styled(InlineToast)`
 
 const GivBackWrapper = styled(Flex)`
 	align-items: center;
+	justify-content: space-between;
 	border-radius: 8px;
 	border: 1px solid ${brandColors.giv[500]};
-	padding: 16px 8px;
+	background: ${brandColors.giv[50]};
+	color: ${brandColors.giv[500]};
+	padding: 16px;
 	margin-top: 10px;
 	gap: 10px;
 
@@ -472,6 +479,6 @@ const GivBackWrapper = styled(Flex)`
 const StyledLink = styled.div`
 	display: inline;
 	margin-left: 4px;
-	color: ${brandColors.pinky[500]};
+	font-weight: 500;
 	cursor: pointer;
 `;

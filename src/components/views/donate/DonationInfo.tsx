@@ -78,7 +78,7 @@ export const DonationInfo = () => {
 								)
 							}
 						>
-							{formatMessage({ id: 'label.check_donations' })}{' '}
+							{formatMessage({ id: 'label.check_donation' })}{' '}
 							<IconExternalLink24 />
 						</CheckDonation>
 					</span>
