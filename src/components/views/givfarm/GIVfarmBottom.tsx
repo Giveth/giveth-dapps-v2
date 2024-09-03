@@ -170,18 +170,6 @@ export const GIVfarmBottom = () => {
 						</GLink>
 						<IconExternalLink />
 					</ExtLinkRow>
-					<ExtLinkRow $alignItems='center'>
-						<GLink
-							as='a'
-							size='Big'
-							target='_blank'
-							rel='noreferrer'
-							href={_config.GIV_BUY_LINK}
-						>
-							{formatMessage({ id: 'label.buy_giv_token' })}
-						</GLink>
-						<IconExternalLink />
-					</ExtLinkRow>
 					<ContractRow>
 						<GLink>{`${formatMessage({
 							id: 'label.contract',
