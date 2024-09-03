@@ -635,7 +635,7 @@
 	"label.modify_stream_balance": "Modify Stream Balance",
 	"label.month": "{count, plural, one { Month} other { Months} }",
 	"label.monthly": "Monthly",
-	"label.sign_in_with_your_eth_wallet_for_givebacks": "Sign in with your ETH wallet to claim GIVbacks.",
+	"label.sign_in_with_your_eth_wallet_for_givebacks": "Sign in with your ETH address to be eligible for GIVbacks.",
 	"label.monthly_across_all_projects": "monthly, across all projects",
 	"label.months": "{count, plural, one { Month} other { Months} }",
 	"label.more_about_us": "More about us",

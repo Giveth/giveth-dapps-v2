@@ -52,6 +52,14 @@ const formatAmountToDisplay = (amount: bigint) => {
 	).toString();
 };
 
+const capitalizeFirstLetters = (str: string) => {
+	return str
+		.toLowerCase()
+		.split(' ')
+		.map(word => word.charAt(0).toUpperCase() + word.slice(1))
+		.join(' ');
+};
+
 export const QRDonationCard: FC<QRDonationCardProps> = ({
 	showQRCode,
 	qrAcceptedTokens,
@@ -333,7 +341,7 @@ export const QRDonationCard: FC<QRDonationCardProps> = ({
 							onClick={handleNext}
 							disabled={amount === 0n}
 						/>
-						{!isSignedIn && stellarToken?.isGivbackEligible && (
+						{!isSignedIn && (
 							<InlineToast
 								noIcon
 								type={EToastType.Hint}
@@ -341,6 +349,11 @@ export const QRDonationCard: FC<QRDonationCardProps> = ({
 									id: 'label.sign_in_with_your_eth_wallet_for_givebacks',
 								})}
 								link={links.GIVBACK_DOC}
+								linkText={capitalizeFirstLetters(
+									formatMessage({
+										id: 'label.learn_more',
+									}),
+								)}
 							/>
 						)}
 					</CardBottom>
