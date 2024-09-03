@@ -11,6 +11,8 @@ export const isProduction = process.env.NEXT_PUBLIC_ENV === 'production';
 export const isDeleteProjectEnabled =
 	process.env.NEXT_PUBLIC_DELETE_PROJECT_ENABLED === 'true';
 
+console.log({ isDeleteProjectEnabled });
+
 const envConfig = isProduction ? production : development;
 
 export const SENTRY_URGENT = 'urgent';
