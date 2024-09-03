@@ -583,7 +583,7 @@ const config: EnvConfig = {
 		subgraphAddress: process.env.NEXT_PUBLIC_SUBGRAPH_ZKEVM,
 		GIV_TOKEN_ADDRESS: ZKEVM_GIV_TOKEN_ADDRESS,
 		GIV_BUY_LINK:
-			'https://velodrome.finance/swap?from=eth&to=0x528cdc92eab044e1e39fe43b9514bfdab4412b98',
+			'https://linktr.ee/GIVtoken',
 		TOKEN_DISTRO_ADDRESS: '0x4fB9B10ECDe1b048DBC79aBEAB3793edc93a0d54',
 		uniswapV2Subgraph: '',
 		GIVPOWER: {
