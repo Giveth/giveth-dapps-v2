@@ -30,7 +30,7 @@ import IconBase from '@/components/Icons/Base';
 import IconSolana from '@/components/Icons/Solana';
 import IconArbitrum from '@/components/Icons/Arbitrum';
 import IconZKEVM from '@/components/Icons/ZKEVM';
-import IconStellar from '@/components/Icons/Stellar';
+// import IconStellar from '@/components/Icons/Stellar';
 
 const GNOSIS_GIV_TOKEN_ADDRESS = '0x4f4F9b8D5B4d0Dc10506e5551B0513B61fD59e75';
 const OPTIMISM_GIV_TOKEN_ADDRESS = '0x528CDc92eAB044E1E39FE43B9514bfdAB4412B98';
@@ -46,7 +46,7 @@ const ARBITRUM_NETWORK_NUMBER = 42161;
 const BASE_NETWORK_NUMBER = 8453;
 const ZKEVM_NETWORK_NUMBER = 1101;
 const CLASSIC_NETWORK_NUMBER = 61;
-const STELLAR_NETWORK_NUMBER = 1500;
+// const STELLAR_NETWORK_NUMBER = 1500;
 const SOLANA_NETWORK_NUMBER = 101;
 
 const SOLANA_NETWORK: NonEVMChain = {
@@ -64,23 +64,23 @@ const SOLANA_NETWORK: NonEVMChain = {
 	},
 };
 
-const STELLAR_NOTWORK: NonEVMChain = {
-	id: STELLAR_NETWORK_NUMBER,
-	networkId: STELLAR_NETWORK_NUMBER,
-	chainType: ChainType.STELLAR,
-	name: 'Stellar',
-	nativeCurrency: {
-		name: 'Stellar Lumens',
-		symbol: 'XLM',
-		decimals: 7,
-	},
-	blockExplorers: {
-		default: {
-			name: 'Stellar Explorer',
-			url: 'https://stellar.expert/explorer/public/',
-		},
-	},
-};
+// const STELLAR_NOTWORK: NonEVMChain = {
+// 	id: STELLAR_NETWORK_NUMBER,
+// 	networkId: STELLAR_NETWORK_NUMBER,
+// 	chainType: ChainType.STELLAR,
+// 	name: 'Stellar',
+// 	nativeCurrency: {
+// 		name: 'Stellar Lumens',
+// 		symbol: 'XLM',
+// 		decimals: 7,
+// 	},
+// 	blockExplorers: {
+// 		default: {
+// 			name: 'Stellar Explorer',
+// 			url: 'https://stellar.expert/explorer/public/',
+// 		},
+// 	},
+// };
 
 const EVM_CHAINS = [
 	mainnet,
@@ -94,7 +94,8 @@ const EVM_CHAINS = [
 	polygonZkEvm,
 ] as readonly [Chain, ...Chain[]];
 
-const NON_EVM_CHAINS: NonEVMChain[] = [SOLANA_NETWORK, STELLAR_NOTWORK];
+// const NON_EVM_CHAINS: NonEVMChain[] = [SOLANA_NETWORK, STELLAR_NOTWORK];
+const NON_EVM_CHAINS: NonEVMChain[] = [SOLANA_NETWORK];
 
 const BASE_ROUTE =
 	process.env.NEXT_PUBLIC_BASE_ROUTE || 'https://mainnet.serve.giveth.io';
@@ -128,7 +129,7 @@ const config: EnvConfig = {
 	BASE_NETWORK_NUMBER: BASE_NETWORK_NUMBER,
 	ZKEVM_NETWORK_NUMBER: ZKEVM_NETWORK_NUMBER,
 	CLASSIC_NETWORK_NUMBER: CLASSIC_NETWORK_NUMBER,
-	STELLAR_NETWORK_NUMBER: STELLAR_NETWORK_NUMBER,
+	// STELLAR_NETWORK_NUMBER: STELLAR_NETWORK_NUMBER,
 
 	RARIBLE_ADDRESS: 'https://rarible.com/',
 	MAINNET_CONFIG: {
@@ -614,11 +615,11 @@ const config: EnvConfig = {
 		coingeckoChainName: 'solana',
 		chainLogo: (logoSize?: number) => <IconSolana size={logoSize} />,
 	},
-	STELLAR_CONFIG: {
-		...STELLAR_NOTWORK,
-		coingeckoChainName: 'stellar',
-		chainLogo: (logoSize?: number) => <IconStellar size={logoSize} />,
-	},
+	// STELLAR_CONFIG: {
+	// 	...STELLAR_NOTWORK,
+	// 	coingeckoChainName: 'stellar',
+	// 	chainLogo: (logoSize?: number) => <IconStellar size={logoSize} />,
+	// },
 };
 
 export default config;

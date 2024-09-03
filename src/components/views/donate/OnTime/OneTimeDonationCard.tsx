@@ -23,9 +23,12 @@ import config from '@/configuration';
 
 import InlineToast, { EToastType } from '@/components/toasts/InlineToast';
 import { EProjectStatus } from '@/apollo/types/gqlEnums';
+import {
+	calcDonationShare,
+	prepareTokenList,
+} from '@/components/views/donate/helpers';
 import { truncateToDecimalPlaces } from '@/lib/helpers';
 import { IProjectAcceptedToken } from '@/apollo/types/gqlTypes';
-import { prepareTokenList } from '@/components/views/donate/helpers';
 import GIVBackToast from '@/components/views/donate/GIVBackToast';
 import { DonateWrongNetwork } from '@/components/modals/DonateWrongNetwork';
 import { useAppDispatch, useAppSelector } from '@/features/hooks';
@@ -275,7 +278,7 @@ const CryptoDonation: FC<{
 	const { data: estimatedGasPrice } =
 		useEstimateFeesPerGas(estimatedGasFeeObj);
 
-	const gasfee = useMemo(() => {
+	const gasfee = useMemo((): bigint => {
 		if (
 			selectedOneTimeToken?.address !== zeroAddress ||
 			!estimatedGas ||
@@ -331,6 +334,15 @@ const CryptoDonation: FC<{
 		);
 	}, [gasfee, tokenDecimals, selectedOneTimeToken?.symbol, formatMessage]);
 
+	// We need givethDonationAmount here because we need to calculate the donation share
+	// for Giveth. If user want to donate minimal amount to projecct, the donation share for Giveth
+	// has to be 0, disabled in UI and DonationModal
+	const { givethDonation: givethDonationAmount } = calcDonationShare(
+		amount,
+		donationToGiveth,
+		selectedOneTimeToken?.decimals ?? 18,
+	);
+
 	return (
 		<MainContainer>
 			{showQFModal && (
@@ -358,6 +370,7 @@ const CryptoDonation: FC<{
 					token={selectedOneTimeToken}
 					amount={amount}
 					donationToGiveth={donationToGiveth}
+					givethDonationAmount={givethDonationAmount}
 					anonymous={anonymous}
 					givBackEligible={
 						projectIsGivBackEligible &&
@@ -372,14 +385,14 @@ const CryptoDonation: FC<{
 				/>
 			)}
 			<SaveGasFees acceptedChains={acceptedChains} />
-			{hasStellarAddress && (
+			{/* {hasStellarAddress && (
 				<QRToastLink onClick={handleQRDonation}>
 					{config.NETWORKS_CONFIG[ChainType.STELLAR]?.chainLogo(32)}
 					{formatMessage({
 						id: 'label.try_donating_wuth_stellar',
 					})}
 				</QRToastLink>
-			)}
+			)} */}
 			<Flex $flexDirection='column' gap='8px'>
 				<InputWrapper>
 					<SelectTokenWrapper
@@ -458,6 +471,7 @@ const CryptoDonation: FC<{
 				<DonateToGiveth
 					setDonationToGiveth={setDonationToGiveth}
 					donationToGiveth={donationToGiveth}
+					givethDonationAmount={givethDonationAmount}
 					title={
 						formatMessage({ id: 'label.donation_to' }) + ' Giveth'
 					}

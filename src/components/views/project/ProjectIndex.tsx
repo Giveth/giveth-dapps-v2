@@ -14,9 +14,9 @@ import {
 	deviceSize,
 	brandColors,
 	P,
-	IconSpark,
+	// IconSpark,
 } from '@giveth/ui-design-system';
-import Link from 'next/link';
+// import Link from 'next/link';
 import styled from 'styled-components';
 import { useIntl } from 'react-intl';
 import ProjectHeader from './ProjectHeader';
@@ -45,7 +45,7 @@ import ProjectOwnerBanner from './ProjectOwnerBanner';
 import { useGeneralWallet } from '@/providers/generalWalletProvider';
 import ProjectSocials from './ProjectSocials';
 import ProjectDevouchBox from './ProjectDevouchBox';
-import Routes from '@/lib/constants/Routes';
+// import Routes from '@/lib/constants/Routes';
 import { ChainType } from '@/types/config';
 import { useAppSelector } from '@/features/hooks';
 import { EndaomentProjectsInfo } from '@/components/views/project/EndaomentProjectsInfo';
@@ -142,7 +142,7 @@ const ProjectIndex: FC<IProjectBySlug> = () => {
 			<HeadContainer>
 				{isAdmin && <ProjectOwnerBanner />}
 				<ProjectBadges />
-				{hasStellarAddress &&
+				{/* {hasStellarAddress &&
 					!isAdmin &&
 					!userDataLoading &&
 					!isLoading && (
@@ -175,7 +175,7 @@ const ProjectIndex: FC<IProjectBySlug> = () => {
 								</LinkItem>
 							</Link>
 						</StellarSupportToast>
-					)}
+					)} */}
 				<EndaomentProjectsInfo
 					orgLabel={projectData?.organization?.label}
 				/>

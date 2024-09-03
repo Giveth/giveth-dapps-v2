@@ -113,7 +113,6 @@ export const AddNewAddress: FC<IAddNewAddress> = ({
 				return 'Invalid Solana address';
 			}
 		} else if (isStellarChain) {
-			console.log('isStellarChain', isStellarChain);
 			if (!isStellarAddress(address)) {
 				setLoading(false);
 				return 'Invalid Stellar address';
@@ -135,7 +134,7 @@ export const AddNewAddress: FC<IAddNewAddress> = ({
 				autoFocus
 				label={`Receiving address on ${chainName}`}
 				registerOptions={{
-					...requiredOptions.walletAddress,
+					...requiredOptions?.walletAddress,
 					validate: validateAddress,
 				}}
 				placeholder={isStellarChain ? 'G...' : '0x...'}

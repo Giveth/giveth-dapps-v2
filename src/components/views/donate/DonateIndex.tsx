@@ -34,13 +34,7 @@ import ProjectCardImage from '@/components/project-card/ProjectCardImage';
 import { useGeneralWallet } from '@/providers/generalWalletProvider';
 import { DonatePageProjectDescription } from './DonatePageProjectDescription';
 import { getActiveRound } from '@/helpers/qf';
-import QRDonationDetails from './OnTime/SelectTokenModal/QRCodeDonation/QRDonationDetails';
 import InlineToast, { EToastType } from '@/components/toasts/InlineToast';
-import { client } from '@/apollo/apolloClient';
-import { FETCH_DONATION_BY_ID } from '@/apollo/gql/gqlDonations';
-import { IDonation } from '@/apollo/types/types';
-import config from '@/configuration';
-import { ChainType } from '@/types/config';
 import { useQRCodeDonation } from '@/hooks/useQRCodeDonation';
 import EndaomentProjectsInfo from '@/components/views/project/EndaomentProjectsInfo';
 import { IDraftDonation } from '@/apollo/types/gqlTypes';
@@ -54,7 +48,7 @@ const DonateIndex: FC = () => {
 		qrDonationStatus,
 		draftDonationData,
 		hasActiveQFRound,
-		setSuccessDonation,
+		// setSuccessDonation,
 		setQRDonationStatus,
 		setDraftDonationData,
 		startTimer,
@@ -79,41 +73,6 @@ const DonateIndex: FC = () => {
 			dispatch(setShowHeader(true));
 		};
 	}, [dispatch]);
-
-	useEffect(() => {
-		const fetchDonation = async () => {
-			if (qrDonationStatus === 'success') {
-				const {
-					data: { getDonationById },
-				} = (await client.query({
-					query: FETCH_DONATION_BY_ID,
-					variables: {
-						id: Number(draftDonationData?.matchedDonationId),
-					},
-					fetchPolicy: 'no-cache',
-				})) as { data: { getDonationById: IDonation } };
-
-				if (!getDonationById) return;
-
-				const { transactionId, isTokenEligibleForGivback } =
-					getDonationById;
-
-				if (!transactionId) return;
-
-				setSuccessDonation({
-					txHash: [
-						{
-							txHash: transactionId,
-							chainType: ChainType.STELLAR,
-						},
-					],
-					givBackEligible: isTokenEligibleForGivback,
-					chainId: config.STELLAR_NETWORK_NUMBER,
-				});
-			}
-		};
-		fetchDonation();
-	}, [qrDonationStatus]);
 
 	const isRecurringTab = router.query.tab?.toString() === ETabs.RECURRING;
 	const { activeStartedRound } = getActiveRound(project.qfRounds);
@@ -176,34 +135,29 @@ const DonateIndex: FC = () => {
 						/>
 					</Col>
 					<Col xs={12} lg={6}>
-						<InfoWrapper
-							style={{ marginBottom: isFailedOperation ? 24 : 0 }}
-						>
-							{showQRCode ? (
+						<InfoWrapper>
+							{/* {showQRCode ? (
 								<QRDonationDetails />
-							) : (
-								<>
-									<EndaomentProjectsInfo
-										orgLabel={project?.organization?.label}
-									/>
-									<ImageWrapper>
-										<ProjectCardImage
-											image={project.image}
+							) : ( */}
+							<>
+								<EndaomentProjectsInfo
+									orgLabel={project?.organization?.label}
+								/>
+								<ImageWrapper>
+									<ProjectCardImage image={project.image} />
+								</ImageWrapper>
+								{!isMobile ? (
+									(!isRecurringTab && hasActiveQFRound) ||
+									(isRecurringTab && isOnEligibleNetworks) ? (
+										<QFSection projectData={project} />
+									) : (
+										<DonatePageProjectDescription
+											projectData={project}
 										/>
-									</ImageWrapper>
-									{!isMobile ? (
-										(!isRecurringTab && hasActiveQFRound) ||
-										(isRecurringTab &&
-											isOnEligibleNetworks) ? (
-											<QFSection projectData={project} />
-										) : (
-											<DonatePageProjectDescription
-												projectData={project}
-											/>
-										)
-									) : null}
-								</>
-							)}
+									)
+								) : null}
+							</>
+							{/* )} */}
 						</InfoWrapper>
 						{isFailedOperation && (
 							<QRRetryWrapper style={{ gap: 20 }}>

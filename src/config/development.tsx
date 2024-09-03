@@ -29,7 +29,7 @@ import IconBase from '@/components/Icons/Base';
 import IconSolana from '@/components/Icons/Solana';
 import IconZKEVM from '@/components/Icons/ZKEVM';
 import IconArbitrum from '@/components/Icons/Arbitrum';
-import IconStellar from '@/components/Icons/Stellar';
+// import IconStellar from '@/components/Icons/Stellar';
 import { IconClassic } from '@/components/Icons/Classic';
 
 const BASE_ROUTE =
@@ -57,7 +57,7 @@ const POLYGON_NETWORK_NUMBER = polygon.id;
 const OPTIMISM_NETWORK_NUMBER = optimismSepolia.id;
 const CELO_NETWORK_NUMBER = celoAlfajores.id;
 const CLASSIC_NETWORK_NUMBER = 63;
-const STELLAR_NETWORK_NUMBER = 1500;
+// const STELLAR_NETWORK_NUMBER = 1500;
 const SOLANA_NETWORK_NUMBER = 103;
 const ARBITRUM_NETWORK_NUMBER = arbitrumSepolia.id;
 const BASE_NETWORK_NUMBER = baseSepolia.id;
@@ -78,19 +78,19 @@ const SOLANA_NETWORK: NonEVMChain = {
 	},
 };
 
-const STELLAR_NOTWORK: NonEVMChain = {
-	id: STELLAR_NETWORK_NUMBER,
-	networkId: STELLAR_NETWORK_NUMBER,
-	chainType: ChainType.STELLAR,
-	name: 'Stellar',
-	nativeCurrency: { name: 'Stellar Lumens', symbol: 'XLM', decimals: 7 },
-	blockExplorers: {
-		default: {
-			name: 'Stellar Explorer',
-			url: 'https://stellar.expert/explorer/testnet',
-		},
-	},
-};
+// const STELLAR_NOTWORK: NonEVMChain = {
+// 	id: STELLAR_NETWORK_NUMBER,
+// 	networkId: STELLAR_NETWORK_NUMBER,
+// 	chainType: ChainType.STELLAR,
+// 	name: 'Stellar',
+// 	nativeCurrency: { name: 'Stellar Lumens', symbol: 'XLM', decimals: 7 },
+// 	blockExplorers: {
+// 		default: {
+// 			name: 'Stellar Explorer',
+// 			url: 'https://stellar.expert/explorer/testnet',
+// 		},
+// 	},
+// };
 
 const classic = {
 	id: 63,
@@ -128,7 +128,8 @@ const EVM_CHAINS = [
 	polygonZkEvmCardona,
 ] as readonly [Chain, ...Chain[]];
 
-const NON_EVM_CHAINS: NonEVMChain[] = [STELLAR_NOTWORK, SOLANA_NETWORK];
+// const NON_EVM_CHAINS: NonEVMChain[] = [STELLAR_NOTWORK, SOLANA_NETWORK];
+const NON_EVM_CHAINS: NonEVMChain[] = [SOLANA_NETWORK];
 
 const config: EnvConfig = {
 	GIVETH_PROJECT_ID: 1,
@@ -151,7 +152,7 @@ const config: EnvConfig = {
 	CLASSIC_NETWORK_NUMBER: CLASSIC_NETWORK_NUMBER,
 	BASE_NETWORK_NUMBER: BASE_NETWORK_NUMBER,
 	ZKEVM_NETWORK_NUMBER: ZKEVM_NETWORK_NUMBER,
-	STELLAR_NETWORK_NUMBER: STELLAR_NETWORK_NUMBER,
+	// STELLAR_NETWORK_NUMBER: STELLAR_NETWORK_NUMBER,
 
 	RARIBLE_ADDRESS: 'https://testnet.rarible.com/',
 	MAINNET_CONFIG: {
@@ -462,12 +463,12 @@ const config: EnvConfig = {
 			// Keep it empty for automatic configuration
 		},
 	},
-	STELLAR_CONFIG: {
-		...STELLAR_NOTWORK,
-		chainType: ChainType.STELLAR,
-		coingeckoChainName: 'stellar',
-		chainLogo: (logoSize?: number) => <IconStellar size={logoSize} />,
-	},
+	// STELLAR_CONFIG: {
+	// 	...STELLAR_NOTWORK,
+	// 	chainType: ChainType.STELLAR,
+	// 	coingeckoChainName: 'stellar',
+	// 	chainLogo: (logoSize?: number) => <IconStellar size={logoSize} />,
+	// },
 	SOLANA_CONFIG: {
 		...SOLANA_NETWORK,
 		coingeckoChainName: 'solana',
