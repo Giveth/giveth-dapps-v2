@@ -306,10 +306,10 @@ const CryptoDonation: FC<{
 
 	useEffect(() => {
 		if (
-			amount > (selectedTokenBalance - gasfee) &&
-			(amount < selectedTokenBalance) &&
-			(selectedOneTimeToken?.address === zeroAddress) &&
-			(gasfee > 0n)
+			amount > selectedTokenBalance - gasfee &&
+			amount < selectedTokenBalance &&
+			selectedOneTimeToken?.address === zeroAddress &&
+			gasfee > 0n
 		) {
 			setInsufficientGasFee(true);
 		} else {

@@ -73,9 +73,7 @@ const SelectTokenInnerModal: FC<ISelectTokenModalProps> = ({
 	const [searchQuery, setSearchQuery] = useState('');
 	const [filteredTokens, setFilteredTokens] = useState(tokens || []);
 	const { connection } = useConnection();
-	const [tokenBalances, setTokenBalances] = useState<
-		ITokenBalance[]
-	>([]);
+	const [tokenBalances, setTokenBalances] = useState<ITokenBalance[]>([]);
 	const [customToken, setCustomToken] = useState<
 		IProjectAcceptedToken | undefined
 	>();
@@ -209,11 +207,13 @@ const SelectTokenInnerModal: FC<ISelectTokenModalProps> = ({
 	}, [tokens, filteredTokens, walletAddress]);
 
 	// Sort tokens by balance
-	const sortedTokens = tokenBalances.sort((a: ITokenBalance, b: ITokenBalance) => {
-		if (a.balance === undefined) return 1;
-		if (b.balance === undefined) return -1;
-		return Number(b.balance) - Number(a.balance);
-	});
+	const sortedTokens = tokenBalances.sort(
+		(a: ITokenBalance, b: ITokenBalance) => {
+			if (a.balance === undefined) return 1;
+			if (b.balance === undefined) return -1;
+			return Number(b.balance) - Number(a.balance);
+		},
+	);
 
 	return (
 		<>
