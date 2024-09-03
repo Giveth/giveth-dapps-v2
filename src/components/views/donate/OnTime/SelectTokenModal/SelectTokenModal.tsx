@@ -32,6 +32,11 @@ export interface ISelectTokenModalProps extends IModal {
 	acceptCustomToken?: boolean;
 }
 
+interface ITokenBalance {
+	token: IProjectAcceptedToken;
+	balance: bigint | undefined;
+}
+
 export const SelectTokenModal: FC<ISelectTokenModalProps> = props => {
 	const { isAnimating, closeModal } = useModalAnimation(props.setShowModal);
 	const { formatMessage } = useIntl();
@@ -69,7 +74,7 @@ const SelectTokenInnerModal: FC<ISelectTokenModalProps> = ({
 	const [filteredTokens, setFilteredTokens] = useState(tokens || []);
 	const { connection } = useConnection();
 	const [tokenBalances, setTokenBalances] = useState<
-		{ token: IProjectAcceptedToken; balance: bigint | undefined }[]
+		ITokenBalance[]
 	>([]);
 	const [customToken, setCustomToken] = useState<
 		IProjectAcceptedToken | undefined
@@ -204,7 +209,7 @@ const SelectTokenInnerModal: FC<ISelectTokenModalProps> = ({
 	}, [tokens, filteredTokens, walletAddress]);
 
 	// Sort tokens by balance
-	const sortedTokens = tokenBalances.sort((a: any, b: any) => {
+	const sortedTokens = tokenBalances.sort((a: ITokenBalance, b: ITokenBalance) => {
 		if (a.balance === undefined) return 1;
 		if (b.balance === undefined) return -1;
 		return Number(b.balance) - Number(a.balance);
@@ -240,7 +245,7 @@ const SelectTokenInnerModal: FC<ISelectTokenModalProps> = ({
 						}}
 					/>
 				) : sortedTokens.length > 0 ? (
-					sortedTokens.map(({ token, balance }: any) => (
+					sortedTokens.map(({ token, balance }: ITokenBalance) => (
 						<TokenInfo
 							key={token.symbol}
 							token={token}

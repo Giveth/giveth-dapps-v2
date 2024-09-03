@@ -39,8 +39,8 @@ export const getBalanceForToken = async (
 				return 0n;
 			}
 			const accountInfo = tokenAccounts?.value[0].account.data;
-			const balance = accountInfo?.parsed.info.tokenAmount
-				.amount as bigint;
+			const balance = BigInt(accountInfo?.parsed.info.tokenAmount
+				.amount);
 			return balance;
 		}
 	} catch (error) {
