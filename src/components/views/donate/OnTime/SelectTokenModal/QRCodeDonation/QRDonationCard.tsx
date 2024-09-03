@@ -9,7 +9,6 @@ import {
 	Flex,
 	neutralColors,
 	IconArrowLeft,
-	brandColors,
 	mediaQueries,
 } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
