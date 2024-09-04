@@ -228,16 +228,8 @@ export const CustomSponsors = styled(Flex)`
 	height: 80px;
 	align-items: center;
 	justify-content: center;
-	${mediaQueries.tablet} {
+	${mediaQueries.mobileL} {
 		width: 120px;
 		height: 120px;
-	}
-	@media (max-width: 477px) {
-		width: 60px;
-		height: 60px;
-	}
-	@media (max-width: ${deviceSize.mobileM + 'px'}) {
-		width: 50px;
-		height: 50px;
 	}
 `;
