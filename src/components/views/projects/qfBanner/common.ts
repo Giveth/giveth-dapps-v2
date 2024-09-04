@@ -13,8 +13,8 @@ import Image from 'next/image';
 
 export const BannerContainer = styled.div`
 	position: relative;
-	padding-top: 40px;
-	padding-bottom: 60px;
+	padding-top: 70px;
+	padding-bottom: 100px;
 	background: linear-gradient(98deg, #0f0116 24.06%, #380950 93.92%);
 	img {
 		-webkit-user-drag: none;
