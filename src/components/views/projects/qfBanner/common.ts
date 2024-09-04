@@ -222,3 +222,22 @@ export const StyledColArch = styled(Col)`
 	text-align: center;
 	color: #ffffff;
 `;
+
+export const CustomSponsors = styled(Flex)`
+	width: 100%;
+	height: 80px;
+	align-items: center;
+	justify-content: center;
+	${mediaQueries.tablet} {
+		width: 120px;
+		height: 120px;
+	}
+	@media (max-width: 477px) {
+		width: 60px;
+		height: 60px;
+	}
+	@media (max-width: ${deviceSize.mobileM + 'px'}) {
+		width: 50px;
+		height: 50px;
+	}
+`;
