@@ -228,7 +228,7 @@ export const CustomSponsors = styled(Flex)`
 	height: 80px;
 	align-items: center;
 	justify-content: center;
-	${mediaQueries.mobileL} {
+	${mediaQueries.mobileS} {
 		width: 120px;
 		height: 120px;
 	}
