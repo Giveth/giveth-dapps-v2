@@ -25,6 +25,7 @@ import { ChainType } from '@/types/config';
 import config from '@/configuration';
 import {
 	truncateToDecimalPlaces,
+	capitalizeAllWords,
 	formatBalance,
 	showToastError,
 } from '@/lib/helpers';
@@ -50,14 +51,6 @@ const formatAmountToDisplay = (amount: bigint) => {
 		formatUnits(amount, decimals),
 		decimals / 3,
 	).toString();
-};
-
-const capitalizeFirstLetters = (str: string) => {
-	return str
-		.toLowerCase()
-		.split(' ')
-		.map(word => word.charAt(0).toUpperCase() + word.slice(1))
-		.join(' ');
 };
 
 export const QRDonationCard: FC<QRDonationCardProps> = ({
@@ -341,7 +334,7 @@ export const QRDonationCard: FC<QRDonationCardProps> = ({
 							onClick={handleNext}
 							disabled={amount === 0n}
 						/>
-						{!isSignedIn && (
+						{!isSignedIn && stellarToken?.isGivbackEligible && (
 							<InlineToast
 								noIcon
 								type={EToastType.Hint}
@@ -349,7 +342,7 @@ export const QRDonationCard: FC<QRDonationCardProps> = ({
 									id: 'label.sign_in_with_your_eth_wallet_for_givebacks',
 								})}
 								link={links.GIVBACK_DOC}
-								linkText={capitalizeFirstLetters(
+								linkText={capitalizeAllWords(
 									formatMessage({
 										id: 'label.learn_more',
 									}),
