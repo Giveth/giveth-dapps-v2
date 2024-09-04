@@ -1,4 +1,4 @@
-import { B, Lead, Container, Flex } from '@giveth/ui-design-system';
+import { B, Lead, Container } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
 import Image from 'next/image';
 import { useState, useEffect } from 'react';
