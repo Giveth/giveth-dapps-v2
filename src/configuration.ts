@@ -8,6 +8,7 @@ import {
 } from './types/config';
 
 export const isProduction = process.env.NEXT_PUBLIC_ENV === 'production';
+console.log(process.env.NEXT_PUBLIC_DELETE_PROJECT_ENABLED);
 export const isDeleteProjectEnabled =
 	process.env.NEXT_PUBLIC_DELETE_PROJECT_ENABLED === 'true';
 
