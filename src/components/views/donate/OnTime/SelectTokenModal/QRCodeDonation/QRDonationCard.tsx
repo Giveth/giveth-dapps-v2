@@ -9,7 +9,6 @@ import {
 	Flex,
 	neutralColors,
 	IconArrowLeft,
-	brandColors,
 	mediaQueries,
 } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
@@ -26,6 +25,7 @@ import { ChainType } from '@/types/config';
 import config from '@/configuration';
 import {
 	truncateToDecimalPlaces,
+	capitalizeAllWords,
 	formatBalance,
 	showToastError,
 } from '@/lib/helpers';
@@ -45,12 +45,6 @@ interface QRDonationCardProps extends IDonationCardProps {
 	setIsQRDonation: (isQRDonation: boolean) => void;
 }
 
-interface IMessage {
-	text: string;
-	link: string;
-	linkText: string;
-}
-
 const formatAmountToDisplay = (amount: bigint) => {
 	const decimals = 18;
 	return truncateToDecimalPlaces(
@@ -58,15 +52,6 @@ const formatAmountToDisplay = (amount: bigint) => {
 		decimals / 3,
 	).toString();
 };
-
-const GivBackToast: FC<IMessage> = ({ text, link, linkText }) => (
-	<GivBackWrapper>
-		<P>{text}</P>
-		<StyledLink onClick={() => window.open(link, '_blank')}>
-			{linkText}
-		</StyledLink>
-	</GivBackWrapper>
-);
 
 export const QRDonationCard: FC<QRDonationCardProps> = ({
 	showQRCode,
@@ -350,14 +335,18 @@ export const QRDonationCard: FC<QRDonationCardProps> = ({
 							disabled={amount === 0n}
 						/>
 						{!isSignedIn && stellarToken?.isGivbackEligible && (
-							<GivBackToast
-								text={formatMessage({
+							<InlineToast
+								noIcon
+								type={EToastType.Hint}
+								message={formatMessage({
 									id: 'label.sign_in_with_your_eth_wallet_for_givebacks',
 								})}
 								link={links.GIVBACK_DOC}
-								linkText={formatMessage({
-									id: 'label.learn_more',
-								})}
+								linkText={capitalizeAllWords(
+									formatMessage({
+										id: 'label.learn_more',
+									}),
+								)}
 							/>
 						)}
 					</CardBottom>
@@ -458,27 +447,4 @@ const StyledInputWrapper = styled(InputWrapper)`
 
 const MarginLessInlineToast = styled(InlineToast)`
 	margin: 0;
-`;
-
-const GivBackWrapper = styled(Flex)`
-	align-items: center;
-	justify-content: space-between;
-	border-radius: 8px;
-	border: 1px solid ${brandColors.giv[500]};
-	background: ${brandColors.giv[50]};
-	color: ${brandColors.giv[500]};
-	padding: 16px;
-	margin-top: 10px;
-	gap: 10px;
-
-	& > * {
-		display: inline;
-	}
-`;
-
-const StyledLink = styled.div`
-	display: inline;
-	margin-left: 4px;
-	font-weight: 500;
-	cursor: pointer;
 `;

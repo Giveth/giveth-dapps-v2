@@ -474,6 +474,7 @@ const ButtonStyled = styled(Button)`
 
 const FlexWrap = styled(Flex)`
 	flex-wrap: wrap;
+	gap: 10px;
 `;
 
 const FlexDirection = styled(Flex)`
