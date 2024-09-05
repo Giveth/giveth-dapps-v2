@@ -74,10 +74,10 @@ export const Desc = styled(Flex)`
 	justify-content: center;
 	gap: 8px;
 	padding: 9px 20px;
-	background: ${brandColors.pinky[500]};
+	background: ${brandColors.mustard[500]};
 	margin-top: 12px;
 	margin-bottom: 32px;
-	color: ${neutralColors.gray[100]};
+	color: ${neutralColors.gray[900]};
 `;
 
 export const ImgBase = styled.img`
