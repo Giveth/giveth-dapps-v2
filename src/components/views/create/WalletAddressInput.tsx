@@ -95,6 +95,14 @@ const WalletAddressInput: FC<IProps> = ({
 	const isProjectPrevAddress = (newAddress: string) => {
 		// Do not validate if the input address is the same as project prev wallet address
 		if (userAddresses.length === 0) return false;
+		if (isStellarChain) {
+			const isAddressMatch = userAddresses.some(
+				address =>
+					address === newAddress &&
+					(!memoValue || memoValue === prevMemo),
+			);
+			return isAddressMatch;
+		}
 		return userAddresses
 			.map(prevAddress => prevAddress.toLowerCase())
 			.includes(newAddress.toLowerCase());
@@ -111,7 +119,7 @@ const WalletAddressInput: FC<IProps> = ({
 		else throw formatMessage({ id: 'label.invalid_ens_address' });
 	};
 
-	const addressValidation = async (address?: string) => {
+	const addressValidation = async (address?: string, memo?: string) => {
 		try {
 			setError({ ...error, message: '' });
 			setResolvedENS(undefined);
@@ -151,7 +159,11 @@ const WalletAddressInput: FC<IProps> = ({
 					{ type: 'ETH' },
 				);
 			}
-			const res = await gqlAddressValidation(_address);
+			const res = await gqlAddressValidation({
+				address: _address,
+				chainType,
+				memo: isStellarChain ? memo : undefined,
+			});
 			setIsValidating(false);
 			return res;
 		} catch (e: any) {
@@ -180,16 +192,16 @@ const WalletAddressInput: FC<IProps> = ({
 
 	useEffect(() => {
 		//We had an issue with onBlur so when the user clicks on submit exactly after filling the address, then process of address validation began, so i changed it to this.
-		if (walletAddressValue === prevAddress)
+		if (walletAddressValue === prevAddress && memoValue === prevMemo)
 			setError({ ...error, message: '' });
-		addressValidation(walletAddressValue).then(res => {
+		addressValidation(walletAddressValue, memoValue).then(res => {
 			if (res === true) {
 				setError({ ...error, message: '' });
 				return;
 			}
 			setError({ ...error, message: res });
 		});
-	}, [walletAddressValue]);
+	}, [walletAddressValue, memoValue]);
 
 	const [inputRef] = useFocus();
 
@@ -234,15 +246,6 @@ const WalletAddressInput: FC<IProps> = ({
 					!error.message || !walletAddressValue ? undefined : error
 				}
 			/>
-			{delayedIsAddressUsed && (
-				<InlineToast
-					isHidden={!isAddressUsed}
-					type={EToastType.Error}
-					message={formatMessage({
-						id: 'label.this_address_is_already_used',
-					})}
-				/>
-			)}
 			{isStellarChain && (
 				<>
 					<br />
@@ -255,8 +258,21 @@ const WalletAddressInput: FC<IProps> = ({
 						size={InputSize.LARGE}
 						value={memoValue}
 						onChange={e => setMemoValue(e.target.value)}
+						maxLength={28}
 					/>
 				</>
+			)}
+			{delayedIsAddressUsed && (
+				<InlineToast
+					isHidden={!isAddressUsed}
+					type={EToastType.Error}
+					message={formatMessage({
+						id:
+							isStellarChain && memoValue
+								? 'label.this_address_and_memo_is_already_used'
+								: 'label.this_address_is_already_used',
+					})}
+				/>
 			)}
 			{delayedResolvedENS && (
 				<InlineToast
@@ -337,14 +353,18 @@ const Container = styled.div`
 	background: ${neutralColors.gray[100]};
 	border-radius: 12px;
 	padding: 16px;
+
+	${mediaQueries.tablet} {
+		position: relative;
+	}
 `;
 
 const ButtonWrapper = styled.div`
 	position: absolute;
-	right: 20px; // Adjust the distance from the right edge as per your need
+	right: 15px; // Adjust the distance from the right edge as per your need
 	bottom: 78px; // Adjust the distance from the bottom edge as per your need
 	${mediaQueries.tablet} {
-		bottom: 20px;
+		bottom: -50px;
 	}
 `;
 

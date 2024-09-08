@@ -135,7 +135,7 @@ export const DonateProvider: FC<IProviderProps> = ({ children, project }) => {
 		setStatus,
 		loading,
 		setDraftDonation,
-	} = useQRCodeDonation();
+	} = useQRCodeDonation(project);
 
 	const hasActiveQFRound = hasActiveRound(project?.qfRounds);
 

@@ -24,7 +24,7 @@ import { EContentType } from '@/lib/constants/shareContent';
 import { PassportBanner } from '@/components/PassportBanner';
 import { useAlreadyDonatedToProject } from '@/hooks/useAlreadyDonatedToProject';
 import { Shadow } from '@/components/styled-components/Shadow';
-import { useAppDispatch } from '@/features/hooks';
+import { useAppDispatch, useAppSelector } from '@/features/hooks';
 import { setShowHeader } from '@/features/general/general.slice';
 import { DonateHeader } from './DonateHeader';
 import { DonationCard, ETabs } from './DonationCard';
@@ -38,12 +38,13 @@ import QRDonationDetails from './OnTime/SelectTokenModal/QRCodeDonation/QRDonati
 import InlineToast, { EToastType } from '@/components/toasts/InlineToast';
 import { client } from '@/apollo/apolloClient';
 import { FETCH_DONATION_BY_ID } from '@/apollo/gql/gqlDonations';
-import { IDonation } from '@/apollo/types/types';
+import { IDonation, IWalletAddress } from '@/apollo/types/types';
 import config from '@/configuration';
 import { ChainType } from '@/types/config';
 import { useQRCodeDonation } from '@/hooks/useQRCodeDonation';
 import EndaomentProjectsInfo from '@/components/views/project/EndaomentProjectsInfo';
 import { IDraftDonation } from '@/apollo/types/gqlTypes';
+import StorageLabel from '@/lib/localStorage';
 
 const DonateIndex: FC = () => {
 	const { formatMessage } = useIntl();
@@ -57,9 +58,12 @@ const DonateIndex: FC = () => {
 		setSuccessDonation,
 		setQRDonationStatus,
 		setDraftDonationData,
+		setPendingDonationExists,
 		startTimer,
 	} = useDonateData();
-	const { renewExpirationDate } = useQRCodeDonation();
+	const { renewExpirationDate, retrieveDraftDonation } =
+		useQRCodeDonation(project);
+	const { isSignedIn, isEnabled } = useAppSelector(state => state.user);
 
 	const alreadyDonated = useAlreadyDonatedToProject(project);
 	const dispatch = useAppDispatch();
@@ -107,7 +111,11 @@ const DonateIndex: FC = () => {
 							chainType: ChainType.STELLAR,
 						},
 					],
-					givBackEligible: isTokenEligibleForGivback,
+					givBackEligible:
+						isTokenEligibleForGivback &&
+						project.verified &&
+						isSignedIn &&
+						isEnabled,
 					chainId: config.STELLAR_NETWORK_NUMBER,
 				});
 			}
@@ -124,24 +132,74 @@ const DonateIndex: FC = () => {
 	const updateQRCode = async () => {
 		if (!draftDonationData?.id) return;
 
-		const expiresAt = await renewExpirationDate(draftDonationData?.id);
-		setDraftDonationData((prev: IDraftDonation | null) => {
-			if (!prev) return null;
-			return {
-				...prev,
-				status: 'pending',
-				expiresAt: expiresAt?.toString() ?? undefined,
-			};
-		});
-		setQRDonationStatus('waiting');
-		const stopTimerFun = startTimer?.(new Date(expiresAt!));
-		setStopTimer(() => stopTimerFun);
+		const draftDonations = localStorage.getItem(
+			StorageLabel.DRAFT_DONATIONS,
+		);
+
+		const parsedLocalStorageItem = JSON.parse(draftDonations!);
+
+		const projectAddress: IWalletAddress | undefined =
+			project.addresses?.find(
+				address => address.chainType === ChainType.STELLAR,
+			);
+		let draftDonationId = parsedLocalStorageItem
+			? parsedLocalStorageItem[projectAddress?.address!]
+			: null;
+
+		const retDraftDonation = !!draftDonationId
+			? await retrieveDraftDonation(Number(draftDonationId))
+			: null;
+
+		if (retDraftDonation && retDraftDonation.status === 'pending') {
+			setPendingDonationExists?.(true);
+			parsedLocalStorageItem[projectAddress?.address!] =
+				retDraftDonation.id;
+			localStorage.setItem(
+				StorageLabel.DRAFT_DONATIONS,
+				JSON.stringify(parsedLocalStorageItem),
+			);
+			router.push(
+				{
+					query: {
+						...router.query,
+						draft_donation: retDraftDonation.id,
+					},
+				},
+				undefined,
+				{ shallow: true },
+			);
+		} else {
+			const expiresAt = await renewExpirationDate(draftDonationData?.id);
+			setDraftDonationData((prev: IDraftDonation | null) => {
+				if (!prev) return null;
+				return {
+					...prev,
+					status: 'pending',
+					expiresAt: expiresAt?.toString() ?? undefined,
+				};
+			});
+			parsedLocalStorageItem[projectAddress?.address!] =
+				draftDonationData.id;
+			localStorage.setItem(
+				StorageLabel.DRAFT_DONATIONS,
+				JSON.stringify(parsedLocalStorageItem),
+			);
+			setQRDonationStatus('waiting');
+			const stopTimerFun = startTimer?.(new Date(expiresAt!));
+			setStopTimer(() => stopTimerFun);
+		}
 	};
 
 	useEffect(() => {
 		if (!showQRCode) stopTimer?.();
 		else setStopTimer(() => undefined);
 	}, [showQRCode]);
+
+	useEffect(() => {
+		if (qrDonationStatus === 'failed') {
+			stopTimer?.();
+		}
+	}, [qrDonationStatus]);
 
 	return successDonation ? (
 		<>

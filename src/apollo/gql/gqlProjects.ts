@@ -491,8 +491,16 @@ export const UPLOAD_IMAGE = gql`
 `;
 
 export const WALLET_ADDRESS_IS_VALID = gql`
-	query WalletAddressIsValid($address: String!) {
-		walletAddressIsValid(address: $address)
+	query WalletAddressIsValid(
+		$address: String!
+		$chainType: String
+		$memo: String
+	) {
+		walletAddressIsValid(
+			address: $address
+			chainType: $chainType
+			memo: $memo
+		)
 	}
 `;
 

@@ -94,7 +94,7 @@ const EVM_CHAINS = [
 	polygonZkEvm,
 ] as readonly [Chain, ...Chain[]];
 
-const NON_EVM_CHAINS: NonEVMChain[] = [SOLANA_NETWORK, STELLAR_NOTWORK];
+const NON_EVM_CHAINS: NonEVMChain[] = [STELLAR_NOTWORK, SOLANA_NETWORK];
 
 const BASE_ROUTE =
 	process.env.NEXT_PUBLIC_BASE_ROUTE || 'https://mainnet.serve.giveth.io';

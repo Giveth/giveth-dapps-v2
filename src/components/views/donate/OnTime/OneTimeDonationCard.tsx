@@ -25,7 +25,10 @@ import InlineToast, { EToastType } from '@/components/toasts/InlineToast';
 import { EProjectStatus } from '@/apollo/types/gqlEnums';
 import { truncateToDecimalPlaces } from '@/lib/helpers';
 import { IProjectAcceptedToken } from '@/apollo/types/gqlTypes';
-import { prepareTokenList } from '@/components/views/donate/helpers';
+import {
+	calcDonationShare,
+	prepareTokenList,
+} from '@/components/views/donate/helpers';
 import GIVBackToast from '@/components/views/donate/GIVBackToast';
 import { DonateWrongNetwork } from '@/components/modals/DonateWrongNetwork';
 import { useAppDispatch, useAppSelector } from '@/features/hooks';
@@ -55,6 +58,8 @@ import { TokenIcon } from '../TokenIcon/TokenIcon';
 import { SelectTokenModal } from './SelectTokenModal/SelectTokenModal';
 import { Spinner } from '@/components/Spinner';
 import { useSolanaBalance } from '@/hooks/useSolanaBalance';
+import { isWalletSanctioned } from '@/services/donation';
+import SanctionModal from '@/components/modals/SanctionedModal';
 
 const CryptoDonation: FC<{
 	setIsQRDonation: (isQRDonation: boolean) => void;
@@ -92,6 +97,7 @@ const CryptoDonation: FC<{
 	const [showDonateModal, setShowDonateModal] = useState(false);
 	const [showInsufficientModal, setShowInsufficientModal] = useState(false);
 	const [showChangeNetworkModal, setShowChangeNetworkModal] = useState(false);
+	const [isSanctioned, setIsSanctioned] = useState<boolean>(false);
 	const [acceptedChains, setAcceptedChains] = useState<INetworkIdWithChain[]>(
 		[],
 	);
@@ -142,6 +148,10 @@ const CryptoDonation: FC<{
 	const hasStellarAddress = addresses?.some(
 		address => address.chainType === ChainType.STELLAR,
 	);
+
+	useEffect(() => {
+		validateSanctions();
+	}, [project, address]);
 
 	useEffect(() => {
 		if (
@@ -275,7 +285,7 @@ const CryptoDonation: FC<{
 	const { data: estimatedGasPrice } =
 		useEstimateFeesPerGas(estimatedGasFeeObj);
 
-	const gasfee = useMemo(() => {
+	const gasfee = useMemo((): bigint => {
 		if (
 			selectedOneTimeToken?.address !== zeroAddress ||
 			!estimatedGas ||
@@ -317,6 +327,17 @@ const CryptoDonation: FC<{
 		}
 	}, [selectedTokenBalance, amount, selectedOneTimeToken?.address, gasfee]);
 
+	const validateSanctions = async () => {
+		if (project?.organization?.label === 'endaoment' && address) {
+			// We just need to check if the wallet is sanctioned for endaoment projects
+			const sanctioned = await isWalletSanctioned(address);
+			if (sanctioned) {
+				setIsSanctioned(true);
+				return;
+			}
+		}
+	};
+
 	const amountErrorText = useMemo(() => {
 		const totalAmount = Number(formatUnits(gasfee, tokenDecimals)).toFixed(
 			10,
@@ -331,15 +352,31 @@ const CryptoDonation: FC<{
 		);
 	}, [gasfee, tokenDecimals, selectedOneTimeToken?.symbol, formatMessage]);
 
+	// We need givethDonationAmount here because we need to calculate the donation share
+	// for Giveth. If user want to donate minimal amount to projecct, the donation share for Giveth
+	// has to be 0, disabled in UI and DonationModal
+	const { givethDonation: givethDonationAmount } = calcDonationShare(
+		amount,
+		donationToGiveth,
+		selectedOneTimeToken?.decimals ?? 18,
+	);
+
 	return (
 		<MainContainer>
+			{isSanctioned && (
+				<SanctionModal
+					closeModal={() => {
+						setIsSanctioned(false);
+					}}
+				/>
+			)}
 			{showQFModal && (
 				<QFModal
 					donateWithoutMatching={donateWithoutMatching}
 					setShowModal={setShowQFModal}
 				/>
 			)}
-			{showChangeNetworkModal && acceptedChains && (
+			{!isSanctioned && showChangeNetworkModal && acceptedChains && (
 				<DonateWrongNetwork
 					setShowModal={setShowChangeNetworkModal}
 					acceptedChains={acceptedChains.filter(
@@ -358,6 +395,7 @@ const CryptoDonation: FC<{
 					token={selectedOneTimeToken}
 					amount={amount}
 					donationToGiveth={donationToGiveth}
+					givethDonationAmount={givethDonationAmount}
 					anonymous={anonymous}
 					givBackEligible={
 						projectIsGivBackEligible &&
@@ -458,6 +496,7 @@ const CryptoDonation: FC<{
 				<DonateToGiveth
 					setDonationToGiveth={setDonationToGiveth}
 					donationToGiveth={donationToGiveth}
+					givethDonationAmount={givethDonationAmount}
 					title={
 						formatMessage({ id: 'label.donation_to' }) + ' Giveth'
 					}
