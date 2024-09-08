@@ -371,7 +371,8 @@ export const StakingPoolInfoAndActions: FC<IStakingPoolInfoAndActionsProps> = ({
 										id: 'label.increase_rewards',
 									})
 								: 'Lock your GIV'
-						}stellar
+						}
+						stellar
 						buttonType='primary'
 					/>
 				)}
