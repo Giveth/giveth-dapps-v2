@@ -118,7 +118,7 @@ const UserProfileView: FC<IUserProfileView> = () => {
 			}
 		};
 		if (user?.walletAddress) {
-			fetchPFPInfo(user.walletAddress);
+			fetchPFPInfo(user?.walletAddress);
 		}
 	}, [user]);
 

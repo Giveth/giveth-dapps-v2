@@ -84,7 +84,7 @@ const AlloProtocolModal: FC<IAlloProtocolModal> = ({
 							protocol: 1,
 							pointer: '',
 						},
-						addedProjectState?.adminUser.walletAddress, //admin user wallet address
+						addedProjectState?.adminUser?.walletAddress, //admin user wallet address
 						[],
 					],
 				});

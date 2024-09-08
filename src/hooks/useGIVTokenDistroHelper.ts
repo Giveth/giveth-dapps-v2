@@ -12,7 +12,9 @@ export const defaultTokenDistroHelper = new TokenDistroHelper({
 	initialAmount: '0',
 	lockedAmount: '0',
 	totalTokens: '0',
-	startTime: 0,
+	//Used gnosis start time (2021-12-24T16:00:00.000Z) to show givbacks tound correctly in https://giveth.io/givbacks
+	// https://gnosisscan.io/address/0xc0dbDcA66a0636236fAbe1B3C16B1bD4C84bB1E1#readProxyContract
+	startTime: 1640361600000,
 	cliffTime: 0,
 	endTime: 0,
 });

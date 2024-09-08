@@ -60,6 +60,7 @@ export const RewardItems: FC<IRewardItemsProps> = ({
 		queryKey: ['subgraph', chain?.id, address],
 		queryFn: async () => await fetchSubgraphData(chain?.id, address),
 		enabled: !!chain,
+		staleTime: config.SUBGRAPH_POLLING_INTERVAL,
 	});
 	const { givTokenDistroHelper } = useGIVTokenDistroHelper();
 	const dispatch = useAppDispatch();

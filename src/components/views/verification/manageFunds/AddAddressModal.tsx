@@ -45,7 +45,6 @@ const networkOptions = Object.keys(networksConfig).map(key => {
 
 export interface IAddressForm {
 	address: string;
-	memo?: string;
 	title: string;
 	network: ISelectedNetwork;
 }
@@ -74,7 +73,7 @@ const AddAddressModal: FC<IProps> = ({
 	const watchChain = watch('network');
 
 	const handleAdd = async (formData: IAddressForm) => {
-		const { address, memo, title, network } = formData;
+		const { address, title, network } = formData;
 		let _address: null | string = address;
 		if (!network.chainType) {
 			const isEns = isAddressENS(address);
@@ -88,7 +87,6 @@ const AddAddressModal: FC<IProps> = ({
 				title,
 				networkId: network.value,
 				chainType: network.chainType,
-				memo,
 			});
 		}
 		closeModal();
@@ -173,20 +171,11 @@ const AddAddressModal: FC<IProps> = ({
 						label='Wallet Address'
 						caption='Enter the related address.'
 						registerOptions={{
-							...requiredOptions.walletAddress,
+							...requiredOptions?.walletAddress,
 							validate: validateAddress,
 						}}
 						error={errors.address}
 					/>
-					{watchChain?.chainType === ChainType.STELLAR && (
-						<Input
-							register={register}
-							registerName='memo'
-							label='Memo'
-							caption='Enter the memo for this address.'
-							maxLength={28}
-						/>
-					)}
 					<Buttons>
 						<Button
 							size='small'

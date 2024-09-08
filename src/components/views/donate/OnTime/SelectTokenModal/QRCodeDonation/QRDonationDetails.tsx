@@ -28,7 +28,6 @@ import { useQRCodeDonation } from '@/hooks/useQRCodeDonation';
 const QRDonationDetails = () => {
 	const { formatMessage } = useIntl();
 	const router = useRouter();
-	const { checkDraftDonationStatus } = useQRCodeDonation();
 	const {
 		project,
 		draftDonationData,
@@ -38,8 +37,10 @@ const QRDonationDetails = () => {
 		setQRDonationStatus,
 		setDraftDonationData,
 	} = useDonateData();
+	const { checkDraftDonationStatus } = useQRCodeDonation(project);
 
 	const [tokenPrice, setTokenPrice] = useState(0);
+	const [stopTimer, setStopTimer] = React.useState<void | (() => void)>();
 
 	const { title, addresses } = project;
 
@@ -52,8 +53,7 @@ const QRDonationDetails = () => {
 		if (!amount) return '--';
 		if (!tokenPrice) return '0.00';
 
-		const _tokenPrice = Math.floor(tokenPrice * 100) / 100;
-		const amountInUsd = _tokenPrice * amount;
+		const amountInUsd = tokenPrice * amount;
 		return formatBalance(amountInUsd);
 	};
 
@@ -72,15 +72,26 @@ const QRDonationDetails = () => {
 	};
 
 	useEffect(() => {
-		let stopTimer: void | (() => void);
-		if (draftDonationData?.expiresAt) {
-			stopTimer = startTimer?.(new Date(draftDonationData?.expiresAt));
+		if (
+			draftDonationData?.id === draftDonationId &&
+			draftDonationData?.expiresAt
+		) {
+			const stopTimerFun = startTimer?.(
+				new Date(draftDonationData?.expiresAt),
+			);
+			setStopTimer(() => stopTimerFun);
 		}
 
 		return () => {
 			stopTimer?.();
 		};
 	}, [draftDonationData?.expiresAt]);
+
+	useEffect(() => {
+		if (qrDonationStatus === 'failed') {
+			stopTimer?.();
+		}
+	}, [qrDonationStatus]);
 
 	useEffect(() => {
 		if (!stellarAddress) return;
@@ -104,7 +115,7 @@ const QRDonationDetails = () => {
 		}, 300000);
 
 		return () => clearInterval(intervalId);
-	}, []);
+	}, [draftDonationId]);
 
 	return (
 		<>
@@ -182,7 +193,11 @@ const QRDonationDetails = () => {
 					$alignItems='center'
 				>
 					<B style={{ color: neutralColors.gray[800] }}>
-						{formatMessage({ id: 'label.please_wait' })}
+						{formatMessage({
+							id: isFailedOperation
+								? 'label.the_time_is_up'
+								: 'label.please_wait',
+						})}
 					</B>
 					<CheckDonation
 						onClick={() =>

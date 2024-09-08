@@ -11,14 +11,11 @@ import {
 import { ICreateDraftDonation } from '@/components/views/donate/helpers';
 import StorageLabel from '@/lib/localStorage';
 import { IDraftDonation } from '@/apollo/types/gqlTypes';
-import { useDonateData } from '@/context/donate.context';
-import { ChainType } from '@/types/config';
+import { IProject } from '@/apollo/types/types';
 
 export type TQRStatus = 'waiting' | 'failed' | 'success' | 'expired';
 
-export const useQRCodeDonation = () => {
-	const { project } = useDonateData();
-
+export const useQRCodeDonation = (project: IProject) => {
 	const [draftDonation, setDraftDonation] = useState<IDraftDonation | null>(
 		null,
 	);
@@ -92,7 +89,6 @@ export const useQRCodeDonation = () => {
 			});
 
 			// save draft donation to local storage
-
 			const localStorageItem = localStorage.getItem(
 				StorageLabel.DRAFT_DONATIONS,
 			);
@@ -114,7 +110,8 @@ export const useQRCodeDonation = () => {
 			}
 			return createDraftDonation;
 		} catch (error: any) {
-			console.error('Error creating draft donation', error);
+			console.error('Error creating draft donation', error.message);
+			throw error.message;
 		}
 	};
 
@@ -189,7 +186,6 @@ export const useQRCodeDonation = () => {
 			});
 
 			if (
-				!draftDonationId ||
 				!getDraftDonationById ||
 				getDraftDonationById.status !== 'pending' ||
 				getDraftDonationById.projectId != project.id
@@ -202,22 +198,6 @@ export const useQRCodeDonation = () => {
 				variables: { id: Number(draftDonationId) },
 				fetchPolicy: 'no-cache',
 			});
-
-			// remove draft donation item from local storage with key = projectAddress
-			const localStorageItem = localStorage.getItem(
-				StorageLabel.DRAFT_DONATIONS,
-			);
-			if (!localStorageItem) return;
-			const parsedLocalStorageItem = JSON.parse(localStorageItem);
-			const projectAddress = project.addresses?.find(
-				address => address.chainType === ChainType.STELLAR,
-			);
-			if (!projectAddress?.address) return;
-			delete parsedLocalStorageItem[projectAddress.address];
-			localStorage.setItem(
-				StorageLabel.DRAFT_DONATIONS,
-				JSON.stringify(parsedLocalStorageItem),
-			);
 		} catch (error: any) {
 			console.error('Error marking draft donation as failed', error);
 		}
@@ -278,8 +258,8 @@ export const useQRCodeDonation = () => {
 						Number(draftDonation.id),
 					);
 					if (retDraftDonation?.status === 'matched') {
+						setDraftDonation(retDraftDonation);
 						setStatus('success');
-						setDraftDonation(draftDonation);
 						return;
 					} else {
 						await markDraftDonationAsFailed(draftDonation?.id!);

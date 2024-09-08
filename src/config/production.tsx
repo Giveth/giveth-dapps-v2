@@ -34,6 +34,7 @@ import IconStellar from '@/components/Icons/Stellar';
 
 const GNOSIS_GIV_TOKEN_ADDRESS = '0x4f4F9b8D5B4d0Dc10506e5551B0513B61fD59e75';
 const OPTIMISM_GIV_TOKEN_ADDRESS = '0x528CDc92eAB044E1E39FE43B9514bfdAB4412B98';
+const ZKEVM_GIV_TOKEN_ADDRESS = '0xddAFB91475bBf6210a151FA911AC8fdA7dE46Ec2';
 
 const SEPT_8TH_2022 = 1662595200000;
 const MAINNET_NETWORK_NUMBER = 1; // Mainnet
@@ -93,7 +94,7 @@ const EVM_CHAINS = [
 	polygonZkEvm,
 ] as readonly [Chain, ...Chain[]];
 
-const NON_EVM_CHAINS: NonEVMChain[] = [SOLANA_NETWORK, STELLAR_NOTWORK];
+const NON_EVM_CHAINS: NonEVMChain[] = [STELLAR_NOTWORK, SOLANA_NETWORK];
 
 const BASE_ROUTE =
 	process.env.NEXT_PUBLIC_BASE_ROUTE || 'https://mainnet.serve.giveth.io';
@@ -147,7 +148,7 @@ const config: EnvConfig = {
 		chainLogo: (logoSize = 24) => <IconEthereum size={logoSize} />,
 
 		GIV_TOKEN_ADDRESS: '0x900db999074d9277c5da2a43f252d74366230da0',
-		GIV_BUY_LINK: 'https://swap.cow.fi/#/1/swap/ETH/GIV',
+		GIV_BUY_LINK: 'https://linktr.ee/GIVtoken',
 		tokenAddressOnUniswapV2: '0x4f4F9b8D5B4d0Dc10506e5551B0513B61fD59e75',
 		WETH_TOKEN_ADDRESS: '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2',
 		TOKEN_DISTRO_ADDRESS: '0x87dE995F6744B75bBe0255A973081142aDb61f4d',
@@ -293,7 +294,7 @@ const config: EnvConfig = {
 		chainLogo: (logoSize = 24) => <IconGnosisChain size={logoSize} />,
 
 		GIV_TOKEN_ADDRESS: '0x4f4F9b8D5B4d0Dc10506e5551B0513B61fD59e75',
-		GIV_BUY_LINK: 'https://swap.cow.fi/#/100/swap/WXDAI/GIV',
+		GIV_BUY_LINK: 'https://linktr.ee/GIVtoken',
 		gGIV_TOKEN_ADDRESS: '0xfFBAbEb49be77E5254333d5fdfF72920B989425f',
 		tokenAddressOnUniswapV2: '0x4f4F9b8D5B4d0Dc10506e5551B0513B61fD59e75',
 		MERKLE_ADDRESS: '0xFad63adEFb8203F7605F25f6a921c8bf45604A5e',
@@ -439,8 +440,7 @@ const config: EnvConfig = {
 			process.env.NEXT_PUBLIC_SUBGRAPH_OPTIMISM ||
 			'https://gateway-arbitrum.network.thegraph.com/api/720ca27934ee17d259dc2975d9a6d714/subgraphs/id/zyoJAUh2eGLEbEkBqESDD497qHLGH1YcKH9PBEMnWjM',
 		GIV_TOKEN_ADDRESS: OPTIMISM_GIV_TOKEN_ADDRESS,
-		GIV_BUY_LINK:
-			'https://velodrome.finance/swap?from=eth&to=0x528cdc92eab044e1e39fe43b9514bfdab4412b98',
+		GIV_BUY_LINK: 'https://linktr.ee/GIVtoken',
 		tokenAddressOnUniswapV2: '0x4f4F9b8D5B4d0Dc10506e5551B0513B61fD59e75',
 		TOKEN_DISTRO_ADDRESS: '0xe3ac7b3e6b4065f4765d76fdc215606483bf3bd1',
 		uniswapV2Subgraph: '',
@@ -579,6 +579,23 @@ const config: EnvConfig = {
 			// Keep it empty for automatic configuration
 		},
 		chainLogo: (logoSize?: number) => <IconZKEVM size={logoSize} />,
+		subgraphAddress: process.env.NEXT_PUBLIC_SUBGRAPH_ZKEVM,
+		GIV_TOKEN_ADDRESS: ZKEVM_GIV_TOKEN_ADDRESS,
+		GIV_BUY_LINK: 'https://linktr.ee/GIVtoken',
+		TOKEN_DISTRO_ADDRESS: '0x4fB9B10ECDe1b048DBC79aBEAB3793edc93a0d54',
+		uniswapV2Subgraph: '',
+		GIVPOWER: {
+			network: ZKEVM_NETWORK_NUMBER,
+			LM_ADDRESS: '0xc790f82bf6f8709aa4a56dc11afad7af7c2a9867',
+			POOL_ADDRESS: ZKEVM_GIV_TOKEN_ADDRESS,
+			type: StakingType.GIV_UNIPOOL_LM,
+			platform: StakingPlatform.GIVETH,
+			title: 'GIV',
+			description: '100% GIV',
+			unit: 'GIV',
+			//Tuesday, September 3, 2024 6:00:00 PM
+			farmStartTimeMS: 1725386400000,
+		},
 	},
 	CLASSIC_CONFIG: {
 		...classic,

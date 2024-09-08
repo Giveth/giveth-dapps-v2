@@ -158,27 +158,9 @@ export const GIVfarmBottom = () => {
 							size='Big'
 							target='_blank'
 							rel='noreferrer'
-							href={
-								chainId === config.OPTIMISM_NETWORK_NUMBER
-									? 'https://bridge.connext.network/GIVETH-from-optimism-to-gnosis'
-									: chainId === config.GNOSIS_NETWORK_NUMBER
-										? 'https://bridge.connext.network/GIVETH-from-gnosis-to-optimism'
-										: 'https://bridge.connext.network/GIVETH-from-ethereum-to-optimism'
-							}
+							href='https://linktr.ee/GIVtoken'
 						>
 							{formatMessage({ id: 'label.bridge_your_giv' })}
-						</GLink>
-						<IconExternalLink />
-					</ExtLinkRow>
-					<ExtLinkRow $alignItems='center'>
-						<GLink
-							as='a'
-							size='Big'
-							target='_blank'
-							rel='noreferrer'
-							href={_config.GIV_BUY_LINK}
-						>
-							{formatMessage({ id: 'label.buy_giv_token' })}
 						</GLink>
 						<IconExternalLink />
 					</ExtLinkRow>

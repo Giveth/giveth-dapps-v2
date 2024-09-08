@@ -24,7 +24,6 @@ import { store } from '@/features/store';
 import SubgraphController from '@/components/controller/subgraph.ctrl';
 import UserController from '@/components/controller/user.ctrl';
 import ModalController from '@/components/controller/modal.ctrl';
-import PriceController from '@/components/controller/price.ctrl';
 import GeneralController from '@/components/controller/general.ctrl';
 import NotificationController from '@/components/controller/pfp.ctrl';
 import PfpController from '@/components/controller/notification.ctrl';
@@ -214,7 +213,6 @@ function MyApp({ Component, pageProps }: AppProps) {
 												<>
 													<NotificationController />
 													<GeneralController />
-													<PriceController />
 													<SubgraphController />
 													<UserController />
 													<HeaderWrapper />
