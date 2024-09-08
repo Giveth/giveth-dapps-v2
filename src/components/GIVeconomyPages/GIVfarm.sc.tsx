@@ -49,6 +49,11 @@ export const PoolRow = styled(Row)`
 
 export const ContractRow = styled(Flex)`
 	gap: 8px;
+	color: ${brandColors.cyan[500]};
+	cursor: pointer;
+	&:hover {
+		color: ${brandColors.cyan[300]};
+	}
 `;
 
 export const CopyWrapper = styled.div`
