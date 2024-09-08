@@ -1300,6 +1300,8 @@
 	"label.we_need_a_bit_more_info": "¡Necesitamos un poco más de información!",
 	"label.passport_connected": "Pasaporte conectado",
 	"label.increase_passport_score": "Aumentar la puntuación del pasaporte",
+	"label.project_owner_address_detected": "Dirección del propietario del proyecto detectada",
+	"label.project_owner_cant_donate_to_own_project": "No puedes donar a un proyecto del que eres propietario. ¡Hay miles de proyectos en Giveth que buscan tu apoyo! Por favor, elige otro proyecto para donar.",
 	"label.qf_donor_eligibility.banner.check_eligibility": "¡Haz que tus donaciones sean igualadas! Verifica tu unicidad con un clic.",
 	"label.qf_donor_eligibility.banner.recheck_eligibility": "¡Haz que tus donaciones sean igualadas! Aumenta tu puntuación de Gitcoin Passport antes de",
 	"label.qf_donor_eligibility.banner.more_info_needed": "¡Necesitamos un poco más de información para verificar tu elegibilidad para QF!",

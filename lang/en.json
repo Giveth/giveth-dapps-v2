@@ -1304,6 +1304,8 @@
 	"label.we_need_a_bit_more_info": "We need a bit more info!",
 	"label.passport_connected": "Passport connected",
 	"label.increase_passport_score": "Increase Passport score",
+	"label.project_owner_address_detected": "Project Owner Address Detected",
+	"label.project_owner_cant_donate_to_own_project": "You cannot donate to a project you are the owner of. There are thousands of projects on Giveth looking for your support! Please choose another project to donate to.",
 	"label.qf_donor_eligibility.banner.check_eligibility": "Get your donations matched! Verify your uniqueness with one click.",
 	"label.qf_donor_eligibility.banner.recheck_eligibility": "Get your donations matched! Increase your Gitcoin Passport score before",
 	"label.qf_donor_eligibility.banner.more_info_needed": "We need a bit more information to verify your QF Eligibility!",
