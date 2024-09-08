@@ -372,7 +372,6 @@ export const StakingPoolInfoAndActions: FC<IStakingPoolInfoAndActionsProps> = ({
 									})
 								: 'Lock your GIV'
 						}
-						stellar
 						buttonType='primary'
 					/>
 				)}
