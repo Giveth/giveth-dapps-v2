@@ -440,8 +440,7 @@ const config: EnvConfig = {
 			process.env.NEXT_PUBLIC_SUBGRAPH_OPTIMISM ||
 			'https://gateway-arbitrum.network.thegraph.com/api/720ca27934ee17d259dc2975d9a6d714/subgraphs/id/zyoJAUh2eGLEbEkBqESDD497qHLGH1YcKH9PBEMnWjM',
 		GIV_TOKEN_ADDRESS: OPTIMISM_GIV_TOKEN_ADDRESS,
-		GIV_BUY_LINK:
-			'https://linktr.ee/GIVtoken',
+		GIV_BUY_LINK: 'https://linktr.ee/GIVtoken',
 		tokenAddressOnUniswapV2: '0x4f4F9b8D5B4d0Dc10506e5551B0513B61fD59e75',
 		TOKEN_DISTRO_ADDRESS: '0xe3ac7b3e6b4065f4765d76fdc215606483bf3bd1',
 		uniswapV2Subgraph: '',
@@ -582,8 +581,7 @@ const config: EnvConfig = {
 		chainLogo: (logoSize?: number) => <IconZKEVM size={logoSize} />,
 		subgraphAddress: process.env.NEXT_PUBLIC_SUBGRAPH_ZKEVM,
 		GIV_TOKEN_ADDRESS: ZKEVM_GIV_TOKEN_ADDRESS,
-		GIV_BUY_LINK:
-			'https://linktr.ee/GIVtoken',
+		GIV_BUY_LINK: 'https://linktr.ee/GIVtoken',
 		TOKEN_DISTRO_ADDRESS: '0x4fB9B10ECDe1b048DBC79aBEAB3793edc93a0d54',
 		uniswapV2Subgraph: '',
 		GIVPOWER: {
