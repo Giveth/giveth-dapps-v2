@@ -266,6 +266,21 @@ export const QRDonationCard: FC<QRDonationCardProps> = ({
 					})}
 				/>
 			)}
+			{!isSignedIn && stellarToken?.isGivbackEligible && (
+				<InlineToast
+					noIcon
+					type={EToastType.Hint}
+					message={formatMessage({
+						id: 'label.sign_in_with_your_eth_wallet_for_givebacks',
+					})}
+					link={links.GIVBACK_DOC}
+					linkText={capitalizeAllWords(
+						formatMessage({
+							id: 'label.learn_more',
+						}),
+					)}
+				/>
+			)}
 			{!showQRCode ? (
 				<>
 					<StyledInputWrapper>
@@ -329,26 +344,12 @@ export const QRDonationCard: FC<QRDonationCardProps> = ({
 									alt='Next'
 									width={16}
 									height={16}
+									style={{ marginLeft: '8px' }} // Add margin to the right of the icon
 								/>
 							}
 							onClick={handleNext}
 							disabled={amount === 0n}
 						/>
-						{!isSignedIn && stellarToken?.isGivbackEligible && (
-							<InlineToast
-								noIcon
-								type={EToastType.Hint}
-								message={formatMessage({
-									id: 'label.sign_in_with_your_eth_wallet_for_givebacks',
-								})}
-								link={links.GIVBACK_DOC}
-								linkText={capitalizeAllWords(
-									formatMessage({
-										id: 'label.learn_more',
-									}),
-								)}
-							/>
-						)}
 					</CardBottom>
 				</>
 			) : (
