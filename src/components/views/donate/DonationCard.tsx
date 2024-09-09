@@ -53,6 +53,7 @@ export const DonationCard: FC<IDonationCardProps> = ({
 				address.chainType === ChainType.EVM &&
 				address.networkId === config.OPTIMISM_NETWORK_NUMBER,
 		);
+	const isEndaomentProject = project?.organization?.label === 'endaoment';
 
 	const isOwnerOnEVM =
 		project?.adminUser?.walletAddress &&
@@ -94,10 +95,10 @@ export const DonationCard: FC<IDonationCardProps> = ({
 	// If both conditions are met, set the active tab to 'RECURRING' using the setTab function.
 	// This ensures that the 'RECURRING' tab is active by default if project has Op Address.
 	useEffect(() => {
-		if (!router.query.tab && hasOpAddress) {
+		if (!router.query.tab && hasOpAddress && !isEndaomentProject) {
 			setTab(ETabs.RECURRING);
 		}
-	}, [router.query, hasOpAddress]);
+	}, [router.query, hasOpAddress, isEndaomentProject]);
 
 	return (
 		<DonationCardWrapper>
