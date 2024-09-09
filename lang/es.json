@@ -1244,6 +1244,7 @@
 	"label.the_donation_was_successful": "La donación fue exitosa. Guarda esta URL si deseas mantener un registro de tu donación.",
 	"label.view_details": "Ver detalles",
 	"label.transaction_link": "Enlace de la transacción",
+	"label.transaction_detail": "Detalles de la transacción",
 	"label.your_transactions_have_been_submitted": "Tus transacciones han sido enviadas",
 	"label.your_withdrawal_from_this_stream_balance_is_being_processed": "Tu retiro de este saldo de transmisión se está procesando.",
 	"label.your_withdrawal_from_this_stream_balance_was_successful": "Tu retiro de este saldo de transmisión ha sido exitoso.",
