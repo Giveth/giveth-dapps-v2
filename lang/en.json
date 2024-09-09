@@ -1233,6 +1233,7 @@
 	"label.valid_for": "Valid for",
 	"label.new_qr_code_needed": "If you didn’t make it in time, you need to generate a new QR code.",
 	"label.please_wait_for_you_donation_to_come_through": "Do not close this page until your donation is successful.",
+	"label.transaction_detail": "Transaction detail",
 	"label.please_wait": "Please wait",
 	"label.the_time_is_up": "The time is up.",
 	"label.the_community_of_makers": "The community of makers",

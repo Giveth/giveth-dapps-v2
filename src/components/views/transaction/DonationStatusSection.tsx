@@ -172,19 +172,19 @@ const Timer: React.FC<TimerProps> = ({
 
 	return (time.minutes === 0 && time.seconds === 0) || status === 'failed' ? (
 		<FlexWrap $alignItems='center' gap='8px'>
-			<P>{'15 Minutes'}</P>
+			<B>{'15 Minutes'}</B>
 			<TextBox>{'Expired at ' + formatTime(_endDate, locale)}</TextBox>
 		</FlexWrap>
 	) : (
-		<P>
+		<TextBox>
 			{time.minutes.toString().padStart(2, '0')} {' Minutes '}
 			{time.seconds.toString().padStart(2, '0')} {' Seconds '}
-		</P>
+		</TextBox>
 	);
 };
 
-const transactionLink = 'https://stellar.expert/explorer/public/tx/';
-const addressLink = 'https://stellar.expert/explorer/public/account/';
+const STELLAR_TRANSACTION_LINK = 'https://stellar.expert/explorer/public/tx/';
+const STELLAR_ADDRESS_LINK = 'https://stellar.expert/explorer/public/account/';
 
 const formatComponent = (date: string | undefined, locale: string) => {
 	const timePassed = getHowManyPassed(new Date(date ?? ''), locale);
@@ -193,14 +193,14 @@ const formatComponent = (date: string | undefined, locale: string) => {
 		<FlexWrap $alignItems='center' gap='8px'>
 			{date ? (
 				<>
-					<P style={{ minWidth: 'fit-content' }}>
+					<B style={{ minWidth: 'fit-content' }}>
 						{timePassed.value} {timePassed.unit} ago
-					</P>
+					</B>
 					<TextBox>{smallDashedFormatDate(new Date(date))}</TextBox>
 					<TextBox>{formatTime(new Date(date), locale)}</TextBox>
 				</>
 			) : (
-				'NA'
+				<B>NA</B>
 			)}
 		</FlexWrap>
 	);
@@ -236,25 +236,18 @@ const DonationStatusSection: FC<TDonationStatusSectionProps> = ({
 			</Flex>
 			<DetailsSection>
 				<FlexWrap $alignItems='center'>
-					<Label
-						style={{
-							flex: '0 0 150px',
-							color: neutralColors.gray[700],
-						}}
-					>
-						{formatMessage({ id: 'label.amount' })}
-					</Label>
+					<Label>{formatMessage({ id: 'label.amount' })}</Label>
 					<FlexWrap $alignItems='center' gap='8px'>
 						<B>{draftDonationData?.amount}</B>
 						<UsdAmountCard>$ {usdAmount}</UsdAmountCard>
-						<TokenIcon
-							symbol={
-								config.NETWORKS_CONFIG[ChainType.STELLAR]
-									.nativeCurrency.symbol
-							}
-							size={32}
-						/>
 						<TokenSymbol>
+							<TokenIcon
+								symbol={
+									config.NETWORKS_CONFIG[ChainType.STELLAR]
+										.nativeCurrency.symbol
+								}
+								size={32}
+							/>
 							{
 								config.NETWORKS_CONFIG[ChainType.STELLAR]
 									.nativeCurrency.symbol
@@ -263,106 +256,56 @@ const DonationStatusSection: FC<TDonationStatusSectionProps> = ({
 						</TokenSymbol>
 					</FlexWrap>
 				</FlexWrap>
-				<FlexWrap $alignItems='center'>
-					<Label
-						style={{
-							flex: '0 0 150px',
-							color: neutralColors.gray[700],
-						}}
-					>
-						{formatMessage({ id: 'label.from' })}
-					</Label>
+				<FlexAddress $alignItems='center'>
+					<Label>{formatMessage({ id: 'label.from' })}</Label>
 					{donationData?.fromWalletAddress ? (
 						<ExternalLink
-							href={`${addressLink}${donationData.fromWalletAddress}`}
-							title={donationData.fromWalletAddress}
-							color={brandColors.giv[500]}
-						/>
+							href={`${STELLAR_ADDRESS_LINK}${donationData.fromWalletAddress}`}
+						>
+							<Link>{donationData.fromWalletAddress}</Link>
+						</ExternalLink>
 					) : (
 						<B>{'NA'}</B>
 					)}
-				</FlexWrap>
+				</FlexAddress>
 				<FlexWrap $alignItems='center'>
-					<Label
-						style={{
-							flex: '0 0 150px',
-							color: neutralColors.gray[700],
-						}}
-					>
-						{formatMessage({ id: 'label.donating_to' })}
-					</Label>
+					<Label>{formatMessage({ id: 'label.donating_to' })}</Label>
 					{draftDonationData?.project?.title ? (
 						<ExternalLink
-							title={draftDonationData.project.title}
-							color={brandColors.giv[500]}
 							href={slugToProjectView(
 								draftDonationData.project.slug,
 							)}
-						></ExternalLink>
+						>
+							<Link>{draftDonationData.project.title}</Link>
+						</ExternalLink>
 					) : (
 						<B>{'NA'}</B>
 					)}
 				</FlexWrap>
-				<Flex $alignItems='center' style={{ width: '100%' }}>
-					<Label
-						$capitalize
-						style={{
-							flex: '0 0 150px',
-							color: neutralColors.gray[700],
-						}}
-					>
+				<FlexAddress $alignItems='center' style={{ width: '100%' }}>
+					<Label $capitalize>
 						{formatMessage({ id: 'label.recipient_address' })}
 					</Label>
 					{draftDonationData?.toWalletAddress ? (
-						<div
-							style={{
-								flex: '1',
-								wordBreak: 'break-all',
-								whiteSpace: 'normal',
-								overflowWrap: 'break-word',
-							}}
+						<ExternalLink
+							href={`${STELLAR_ADDRESS_LINK}${draftDonationData?.toWalletAddress}`}
 						>
-							<ExternalLink
-								href={`${addressLink}${draftDonationData?.toWalletAddress}`}
-								title={draftDonationData?.toWalletAddress}
-								color={brandColors.giv[500]}
-							/>
-						</div>
+							<Link>{draftDonationData?.toWalletAddress}</Link>
+						</ExternalLink>
 					) : (
 						<B>{'NA'}</B>
 					)}
-				</Flex>
-
+				</FlexAddress>
 				<FlexWrap $alignItems='center'>
-					<Label
-						style={{
-							flex: '0 0 150px',
-							color: neutralColors.gray[700],
-						}}
-					>
-						{formatMessage({ id: 'label.memo' })}
-					</Label>
+					<Label>{formatMessage({ id: 'label.memo' })}</Label>
 					<B>{draftDonationData?.toWalletMemo ?? 'NA'}</B>
 				</FlexWrap>
 				<FlexWrap $alignItems='center'>
-					<Label
-						style={{
-							flex: '0 0 150px',
-							color: neutralColors.gray[700],
-						}}
-					>
-						{formatMessage({ id: 'label.date' })}
-					</Label>
+					<Label>{formatMessage({ id: 'label.date' })}</Label>
 					{formatComponent(draftDonationData?.createdAt, locale)}
 				</FlexWrap>
 				<FlexWrap $alignItems='center'>
-					<Label
-						$capitalize
-						style={{
-							flex: '0 0 150px',
-							color: neutralColors.gray[700],
-						}}
-					>
+					<Label $capitalize>
 						{formatMessage({
 							id: draftDonationData?.matchedDonationId
 								? 'label.transaction_link'
@@ -373,14 +316,16 @@ const DonationStatusSection: FC<TDonationStatusSectionProps> = ({
 						donationData?.transactionId ? (
 							<Flex $alignItems='center' gap='8px'>
 								<ExternalLink
-									href={`${transactionLink}${donationData.transactionId}`}
-									title={formatMessage({
-										id: 'label.view_details',
-									})}
-									color={brandColors.giv[500]}
-								/>
+									href={`${STELLAR_TRANSACTION_LINK}${donationData.transactionId}`}
+								>
+									<Link color={brandColors.pinky[500]}>
+										{formatMessage({
+											id: 'label.transaction_detail',
+										})}
+									</Link>
+								</ExternalLink>
 								<IconExternalLink
-									color={brandColors.giv[500]}
+									color={brandColors.pinky[500]}
 								/>
 							</Flex>
 						) : (
@@ -497,7 +442,10 @@ const ColorfulDot = styled.div<{ status: string }>`
 		semanticColors[StatusMap[status].color][700]};
 `;
 
-const TokenSymbol = styled(B)`
+const TokenSymbol = styled(Flex)`
+	align-items: center;
+	gap: 8px;
+	font-weight: 500;
 	white-space: nowrap;
 `;
 
@@ -516,7 +464,11 @@ const Label = styled(B)<{ $capitalize?: boolean }>`
 	width: 50%;
 	text-transform: ${({ $capitalize }) =>
 		$capitalize ? 'capitalize' : 'none'};
-	color: ${neutralColors.gray[700]};
+	color: ${neutralColors.gray[700]} !important;
+
+	${mediaQueries.tablet} {
+		width: 30%;
+	}
 
 	${mediaQueries.laptopS} {
 		width: 19%;
@@ -527,12 +479,6 @@ const Hr = styled.div`
 	width: 100%;
 	height: 1px;
 	background-color: ${neutralColors.gray[300]};
-`;
-
-const Link = styled(B)`
-	color: ${semanticColors.blueSky[500]};
-	cursor: pointer;
-	word-break: break-word;
 `;
 
 const TextBox = styled(P)`
@@ -553,6 +499,31 @@ const FlexWrap = styled(Flex)`
 	gap: 10px;
 `;
 
+const FlexAddress = styled(Flex)`
+	flex-wrap: wrap;
+	gap: 10px;
+
+	${mediaQueries.tablet} {
+		flex-wrap: nowrap;
+	}
+
+	> :last-child {
+		width: 100% !important;
+	}
+
+	${mediaQueries.laptopL} {
+		> :last-child {
+			width: 81% !important;
+		}
+	}
+
+	${mediaQueries.tablet} {
+		> :last-child {
+			width: 50% !important;
+		}
+	}
+`;
+
 const FlexDirection = styled(Flex)`
 	flex-direction: column;
 	gap: 16px;
@@ -560,6 +531,12 @@ const FlexDirection = styled(Flex)`
 	${mediaQueries.tablet} {
 		flex-direction: row;
 	}
+`;
+
+const Link = styled(B)<{ color?: string }>`
+	color: ${({ color }) => color || semanticColors.blueSky[500]} !important;
+	word-break: break-all;
+	font-weight: 500 !important;
 `;
 
 export default DonationStatusSection;

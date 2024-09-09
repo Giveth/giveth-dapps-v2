@@ -604,6 +604,7 @@
 	"label.look_for_the_share_and_get_rewarded": "Busca el botó 'Comparteix i guanya recompenses' per generar enllaços a pàgines específiques a tot el lloc de Giveth.",
 	"label.make_a_recurring_donation_with": "Fes una donació recurrent amb ",
 	"label.make_it_anonymous": "Fes-ho anònim",
+	"label.transaction_detail": "Detall de la transacció",
 	"label.qr_code_error": "S'ha produït un error en generar el codi QR. Torneu-ho a provar.",
 	"label.make_it_easier_for_donors_to_find_your_project": "Fes més fàcil que els donants trobin el teu projecte proporcionant una ubicació.",
 	"label.make_it_unique_and_memorable_to_stand_out_from_other_projects": "Fes-ho únic i memorable per destacar entre altres projectes.",
