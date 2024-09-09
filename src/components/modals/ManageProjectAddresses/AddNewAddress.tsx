@@ -152,6 +152,7 @@ export const AddNewAddress: FC<IAddNewAddress> = ({
 					placeholder={formatMessage({
 						id: 'label.enter_the_memo',
 					})}
+					maxLength={28}
 				/>
 			)}
 			{errors.address && (

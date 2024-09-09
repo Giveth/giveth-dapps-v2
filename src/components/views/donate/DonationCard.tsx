@@ -12,7 +12,7 @@ import config from '@/configuration';
 import { useDonateData } from '@/context/donate.context';
 import { ChainType } from '@/types/config';
 import { IconWithTooltip } from '@/components/IconWithToolTip';
-// import { QRDonationCard } from './OnTime/SelectTokenModal/QRCodeDonation/QRDonationCard';
+import { QRDonationCard } from './OnTime/SelectTokenModal/QRCodeDonation/QRDonationCard';
 import { client } from '@/apollo/apolloClient';
 import { PROJECT_ACCEPTED_TOKENS } from '@/apollo/gql/gqlProjects';
 import { showToastError } from '@/lib/helpers';
@@ -90,48 +90,34 @@ export const DonationCard: FC<IDonationCardProps> = ({
 			});
 	}, []);
 
+	// Check if the 'tab' query parameter is not present in the URL and project 'hasOpAddress' is true.
+	// If both conditions are met, set the active tab to 'RECURRING' using the setTab function.
+	// This ensures that the 'RECURRING' tab is active by default if project has Op Address.
+	useEffect(() => {
+		if (!router.query.tab && hasOpAddress) {
+			setTab(ETabs.RECURRING);
+		}
+	}, [router.query, hasOpAddress]);
+
 	return (
 		<DonationCardWrapper>
-			{/* {!isQRDonation ? ( */}
-			<>
-				<Title id='donation-visit'>
-					{formatMessage({
-						id: 'label.how_do_you_want_to_donate',
-					})}
-				</Title>
-				<Flex>
-					<Tab
-						$selected={tab === ETabs.ONE_TIME}
-						onClick={() => {
-							setTab(ETabs.ONE_TIME);
-							router.push(
-								{
-									query: {
-										...router.query,
-										tab: ETabs.ONE_TIME,
-									},
-								},
-								undefined,
-								{ shallow: true },
-							);
-						}}
-					>
+			{!isQRDonation ? (
+				<>
+					<Title id='donation-visit'>
 						{formatMessage({
-							id: 'label.one_time_donation',
+							id: 'label.how_do_you_want_to_donate',
 						})}
-					</Tab>
-					{!disableRecurringDonations &&
-					hasOpAddress &&
-					isOwnerOnEVM ? (
+					</Title>
+					<Flex>
 						<Tab
-							$selected={tab === ETabs.RECURRING}
+							$selected={tab === ETabs.ONE_TIME}
 							onClick={() => {
-								setTab(ETabs.RECURRING);
+								setTab(ETabs.ONE_TIME);
 								router.push(
 									{
 										query: {
 											...router.query,
-											tab: ETabs.RECURRING,
+											tab: ETabs.ONE_TIME,
 										},
 									},
 									undefined,
@@ -140,49 +126,72 @@ export const DonationCard: FC<IDonationCardProps> = ({
 							}}
 						>
 							{formatMessage({
-								id: 'label.recurring_donation',
+								id: 'label.one_time_donation',
 							})}
 						</Tab>
-					) : (
-						!disableRecurringDonations && (
-							<IconWithTooltip
-								icon={
-									<BaseTab>
-										{formatMessage({
-											id: 'label.recurring_donation',
-										})}
-									</BaseTab>
-								}
-								direction='bottom'
+						{!disableRecurringDonations &&
+						hasOpAddress &&
+						isOwnerOnEVM ? (
+							<Tab
+								$selected={tab === ETabs.RECURRING}
+								onClick={() => {
+									setTab(ETabs.RECURRING);
+									router.push(
+										{
+											query: {
+												...router.query,
+												tab: ETabs.RECURRING,
+											},
+										},
+										undefined,
+										{ shallow: true },
+									);
+								}}
 							>
-								<>
-									{formatMessage({
-										id: 'label.this_project_is_not_eligible_for_recurring_donations',
-									})}
-								</>
-							</IconWithTooltip>
-						)
-					)}
-					<EmptyTab />
-				</Flex>
-				<TabWrapper>
-					{tab === ETabs.ONE_TIME && (
-						<OneTimeDonationCard
-							setIsQRDonation={setIsQRDonation}
-							acceptedTokens={acceptedTokens}
-						/>
-					)}
-					{tab === ETabs.RECURRING && <RecurringDonationCard />}
-				</TabWrapper>
-			</>
-			{/* // ) : (
-			// 	<QRDonationCard
-			// 		setIsQRDonation={setIsQRDonation}
-			// 		setShowQRCode={setShowQRCode}
-			// 		qrAcceptedTokens={qrAcceptedTokens || []}
-			// 		showQRCode={showQRCode}
-			// 	/>
-			// )} */}
+								{formatMessage({
+									id: 'label.recurring_donation',
+								})}
+							</Tab>
+						) : (
+							!disableRecurringDonations && (
+								<IconWithTooltip
+									icon={
+										<BaseTab>
+											{formatMessage({
+												id: 'label.recurring_donation',
+											})}
+										</BaseTab>
+									}
+									direction='bottom'
+								>
+									<>
+										{formatMessage({
+											id: 'label.this_project_is_not_eligible_for_recurring_donations',
+										})}
+									</>
+								</IconWithTooltip>
+							)
+						)}
+						<EmptyTab />
+					</Flex>
+					<TabWrapper>
+						{tab === ETabs.ONE_TIME && (
+							<OneTimeDonationCard
+								setIsQRDonation={setIsQRDonation}
+								acceptedTokens={acceptedTokens}
+							/>
+						)}
+						{tab === ETabs.RECURRING && <RecurringDonationCard />}
+					</TabWrapper>
+				</>
+			) : (
+				<QRDonationCard
+					setIsQRDonation={setIsQRDonation}
+					setShowQRCode={setShowQRCode}
+					qrAcceptedTokens={qrAcceptedTokens || []}
+					showQRCode={showQRCode}
+				/>
+			)}
 		</DonationCardWrapper>
 	);
 };

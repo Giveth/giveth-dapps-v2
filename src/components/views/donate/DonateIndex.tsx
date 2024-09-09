@@ -1,4 +1,4 @@
-import React, { FC, useEffect } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import {
 	Col,
@@ -24,7 +24,7 @@ import { EContentType } from '@/lib/constants/shareContent';
 import { PassportBanner } from '@/components/PassportBanner';
 import { useAlreadyDonatedToProject } from '@/hooks/useAlreadyDonatedToProject';
 import { Shadow } from '@/components/styled-components/Shadow';
-import { useAppDispatch } from '@/features/hooks';
+import { useAppDispatch, useAppSelector } from '@/features/hooks';
 import { setShowHeader } from '@/features/general/general.slice';
 import { DonateHeader } from './DonateHeader';
 import { DonationCard, ETabs } from './DonationCard';
@@ -34,10 +34,18 @@ import ProjectCardImage from '@/components/project-card/ProjectCardImage';
 import { useGeneralWallet } from '@/providers/generalWalletProvider';
 import { DonatePageProjectDescription } from './DonatePageProjectDescription';
 import { getActiveRound } from '@/helpers/qf';
+import QRDonationDetails from './OnTime/SelectTokenModal/QRCodeDonation/QRDonationDetails';
 import InlineToast, { EToastType } from '@/components/toasts/InlineToast';
+import { client } from '@/apollo/apolloClient';
+import { FETCH_DONATION_BY_ID } from '@/apollo/gql/gqlDonations';
+import { IDonation, IWalletAddress } from '@/apollo/types/types';
+import config from '@/configuration';
+import { ChainType } from '@/types/config';
 import { useQRCodeDonation } from '@/hooks/useQRCodeDonation';
 import EndaomentProjectsInfo from '@/components/views/project/EndaomentProjectsInfo';
 import { IDraftDonation } from '@/apollo/types/gqlTypes';
+import StorageLabel from '@/lib/localStorage';
+import DonationByProjectOwner from '@/components/modals/DonationByProjectOwner';
 
 const DonateIndex: FC = () => {
 	const { formatMessage } = useIntl();
@@ -48,20 +56,25 @@ const DonateIndex: FC = () => {
 		qrDonationStatus,
 		draftDonationData,
 		hasActiveQFRound,
-		// setSuccessDonation,
+		setSuccessDonation,
 		setQRDonationStatus,
 		setDraftDonationData,
+		setPendingDonationExists,
 		startTimer,
 	} = useDonateData();
-	const { renewExpirationDate } = useQRCodeDonation();
+	const { renewExpirationDate, retrieveDraftDonation } =
+		useQRCodeDonation(project);
+	const { isSignedIn, isEnabled } = useAppSelector(state => state.user);
 
 	const alreadyDonated = useAlreadyDonatedToProject(project);
+	const { userData } = useAppSelector(state => state.user);
+	const [showDonationByProjectOwner, setShowDonationByProjectOwner] =
+		useState<boolean | undefined>(false);
 	const dispatch = useAppDispatch();
 	const isSafeEnv = useIsSafeEnvironment();
 	const { isOnSolana } = useGeneralWallet();
 	const router = useRouter();
 	const { chainId } = useAccount();
-
 	const [showQRCode, setShowQRCode] = React.useState(
 		!!router.query.draft_donation,
 	);
@@ -74,6 +87,51 @@ const DonateIndex: FC = () => {
 		};
 	}, [dispatch]);
 
+	useEffect(() => {
+		setShowDonationByProjectOwner(
+			userData?.id !== undefined && userData?.id === project.adminUser.id,
+		);
+	}, [userData?.id, project.adminUser]);
+
+	useEffect(() => {
+		const fetchDonation = async () => {
+			if (qrDonationStatus === 'success') {
+				const {
+					data: { getDonationById },
+				} = (await client.query({
+					query: FETCH_DONATION_BY_ID,
+					variables: {
+						id: Number(draftDonationData?.matchedDonationId),
+					},
+					fetchPolicy: 'no-cache',
+				})) as { data: { getDonationById: IDonation } };
+
+				if (!getDonationById) return;
+
+				const { transactionId, isTokenEligibleForGivback } =
+					getDonationById;
+
+				if (!transactionId) return;
+
+				setSuccessDonation({
+					txHash: [
+						{
+							txHash: transactionId,
+							chainType: ChainType.STELLAR,
+						},
+					],
+					givBackEligible:
+						isTokenEligibleForGivback &&
+						project.verified &&
+						isSignedIn &&
+						isEnabled,
+					chainId: config.STELLAR_NETWORK_NUMBER,
+				});
+			}
+		};
+		fetchDonation();
+	}, [qrDonationStatus]);
+
 	const isRecurringTab = router.query.tab?.toString() === ETabs.RECURRING;
 	const { activeStartedRound } = getActiveRound(project.qfRounds);
 	const isOnEligibleNetworks =
@@ -83,24 +141,74 @@ const DonateIndex: FC = () => {
 	const updateQRCode = async () => {
 		if (!draftDonationData?.id) return;
 
-		const expiresAt = await renewExpirationDate(draftDonationData?.id);
-		setDraftDonationData((prev: IDraftDonation | null) => {
-			if (!prev) return null;
-			return {
-				...prev,
-				status: 'pending',
-				expiresAt: expiresAt?.toString() ?? undefined,
-			};
-		});
-		setQRDonationStatus('waiting');
-		const stopTimerFun = startTimer?.(new Date(expiresAt!));
-		setStopTimer(() => stopTimerFun);
+		const draftDonations = localStorage.getItem(
+			StorageLabel.DRAFT_DONATIONS,
+		);
+
+		const parsedLocalStorageItem = JSON.parse(draftDonations!);
+
+		const projectAddress: IWalletAddress | undefined =
+			project.addresses?.find(
+				address => address.chainType === ChainType.STELLAR,
+			);
+		let draftDonationId = parsedLocalStorageItem
+			? parsedLocalStorageItem[projectAddress?.address!]
+			: null;
+
+		const retDraftDonation = !!draftDonationId
+			? await retrieveDraftDonation(Number(draftDonationId))
+			: null;
+
+		if (retDraftDonation && retDraftDonation.status === 'pending') {
+			setPendingDonationExists?.(true);
+			parsedLocalStorageItem[projectAddress?.address!] =
+				retDraftDonation.id;
+			localStorage.setItem(
+				StorageLabel.DRAFT_DONATIONS,
+				JSON.stringify(parsedLocalStorageItem),
+			);
+			router.push(
+				{
+					query: {
+						...router.query,
+						draft_donation: retDraftDonation.id,
+					},
+				},
+				undefined,
+				{ shallow: true },
+			);
+		} else {
+			const expiresAt = await renewExpirationDate(draftDonationData?.id);
+			setDraftDonationData((prev: IDraftDonation | null) => {
+				if (!prev) return null;
+				return {
+					...prev,
+					status: 'pending',
+					expiresAt: expiresAt?.toString() ?? undefined,
+				};
+			});
+			parsedLocalStorageItem[projectAddress?.address!] =
+				draftDonationData.id;
+			localStorage.setItem(
+				StorageLabel.DRAFT_DONATIONS,
+				JSON.stringify(parsedLocalStorageItem),
+			);
+			setQRDonationStatus('waiting');
+			const stopTimerFun = startTimer?.(new Date(expiresAt!));
+			setStopTimer(() => stopTimerFun);
+		}
 	};
 
 	useEffect(() => {
 		if (!showQRCode) stopTimer?.();
 		else setStopTimer(() => undefined);
 	}, [showQRCode]);
+
+	useEffect(() => {
+		if (qrDonationStatus === 'failed') {
+			stopTimer?.();
+		}
+	}, [qrDonationStatus]);
 
 	return successDonation ? (
 		<>
@@ -113,6 +221,13 @@ const DonateIndex: FC = () => {
 		<>
 			<DonateHeader />
 			<DonateContainer>
+				{showDonationByProjectOwner && (
+					<DonationByProjectOwner
+						setShowDonationByProjectOwner={
+							setShowDonationByProjectOwner
+						}
+					/>
+				)}
 				{alreadyDonated && (
 					<AlreadyDonatedWrapper>
 						<IconDonation24 />
@@ -135,29 +250,34 @@ const DonateIndex: FC = () => {
 						/>
 					</Col>
 					<Col xs={12} lg={6}>
-						<InfoWrapper>
-							{/* {showQRCode ? (
+						<InfoWrapper
+							style={{ marginBottom: isFailedOperation ? 24 : 0 }}
+						>
+							{showQRCode ? (
 								<QRDonationDetails />
-							) : ( */}
-							<>
-								<EndaomentProjectsInfo
-									orgLabel={project?.organization?.label}
-								/>
-								<ImageWrapper>
-									<ProjectCardImage image={project.image} />
-								</ImageWrapper>
-								{!isMobile ? (
-									(!isRecurringTab && hasActiveQFRound) ||
-									(isRecurringTab && isOnEligibleNetworks) ? (
-										<QFSection projectData={project} />
-									) : (
-										<DonatePageProjectDescription
-											projectData={project}
+							) : (
+								<>
+									<EndaomentProjectsInfo
+										orgLabel={project?.organization?.label}
+									/>
+									<ImageWrapper>
+										<ProjectCardImage
+											image={project.image}
 										/>
-									)
-								) : null}
-							</>
-							{/* )} */}
+									</ImageWrapper>
+									{!isMobile ? (
+										(!isRecurringTab && hasActiveQFRound) ||
+										(isRecurringTab &&
+											isOnEligibleNetworks) ? (
+											<QFSection projectData={project} />
+										) : (
+											<DonatePageProjectDescription
+												projectData={project}
+											/>
+										)
+									) : null}
+								</>
+							)}
 						</InfoWrapper>
 						{isFailedOperation && (
 							<QRRetryWrapper style={{ gap: 20 }}>

@@ -40,9 +40,7 @@ import { calcDonationShare } from '@/components/views/donate/helpers';
 import { Spinner } from '@/components/Spinner';
 import { FETCH_GIVETH_PROJECT_BY_ID } from '@/apollo/gql/gqlProjects';
 import createGoogleTagEventPurchase from '@/helpers/googleAnalytics';
-import { isWalletSanctioned } from '@/services/donation';
 import SanctionModal from '@/components/modals/SanctionedModal';
-import { ORGANIZATION } from '@/lib/constants/organizations';
 
 interface IDonateModalProps extends IModal {
 	token: IProjectAcceptedToken;
@@ -152,38 +150,20 @@ const DonateModal: FC<IDonateModalProps> = props => {
 	// this function is used to validate the token and check if the wallet is sanctioned
 	const validateTokenThenDonate = async () => {
 		setDonating(true);
-		try {
-			if (
-				project?.organization?.label === ORGANIZATION.endaoment &&
-				address
-			) {
-				// We just need to check if the wallet is sanctioned for endaoment projects
-				const sanctioned = await isWalletSanctioned(address);
-				if (sanctioned) {
-					setIsSanctioned(true);
-					setDonating(false);
-					return;
+		client
+			.query({
+				query: VALIDATE_TOKEN,
+				fetchPolicy: 'no-cache',
+			})
+			.then((res: IMeGQL) => {
+				const _address = res.data?.me?.walletAddress;
+				if (compareAddresses(_address, address)) {
+					handleDonate();
+				} else {
+					handleFailedValidation();
 				}
-			}
-
-			client
-				.query({
-					query: VALIDATE_TOKEN,
-					fetchPolicy: 'no-cache',
-				})
-				.then((res: IMeGQL) => {
-					const _address = res.data?.me?.walletAddress;
-					if (compareAddresses(_address, address)) {
-						handleDonate();
-					} else {
-						handleFailedValidation();
-					}
-				})
-				.catch(handleFailedValidation);
-		} catch (error) {
-			setDonating(false);
-			showToastError('Error validating wallet address');
-		}
+			})
+			.catch(handleFailedValidation);
 	};
 
 	const handleFailedValidation = () => {
