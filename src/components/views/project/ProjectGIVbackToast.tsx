@@ -327,7 +327,7 @@ const ButtonWrapper = styled.div`
 		flex-direction: row-reverse;
 		color: ${brandColors.giv[500]};
 		gap: 0;
-		width: 200px;
+		width: 250px;
 		svg {
 			margin-right: 8px;
 			flex-shrink: 0;
