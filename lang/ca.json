@@ -138,7 +138,7 @@
 	"label.add_update": "Afegeix Actualització",
 	"label.add_your_dao": "Afegeix la teva DAO",
 	"label.again": "de nou",
-	"label.aim_for_200_500_words": "Apunta a 200-500 paraules.",
+	"label.provide_minimum_characters": "Proporcioneu almenys {min} caràcters de text en la descripció del vostre projecte.",
 	"label.allo_protocol_registry_set_up": "Configuració del Registre del Protocol Allo",
 	"label.all_donations": "Totes les Donacions",
 	"label.all_fem": "Totes",

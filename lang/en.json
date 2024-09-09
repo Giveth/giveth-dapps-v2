@@ -138,7 +138,7 @@
 	"label.add_update": "Add Update",
 	"label.add_your_dao": "Add Your DAO",
 	"label.again": "again",
-	"label.aim_for_200_500_words": "Aim for 200-500 words.",
+	"label.provide_minimum_characters": "Provide at least {min} characters of text in your project description.",
 	"label.allo_protocol_registry_set_up": " Allo Protocol Registry Set up",
 	"label.all_donations": "All Donations",
 	"label.all_fem": "All",
