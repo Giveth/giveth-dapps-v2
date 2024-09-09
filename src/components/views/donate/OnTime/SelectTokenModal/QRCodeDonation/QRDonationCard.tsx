@@ -266,7 +266,7 @@ export const QRDonationCard: FC<QRDonationCardProps> = ({
 					})}
 				/>
 			)}
-			{!isSignedIn && stellarToken?.isGivbackEligible && (
+			{!showQRCode && !isSignedIn && stellarToken?.isGivbackEligible && (
 				<InlineToast
 					noIcon
 					type={EToastType.Hint}
