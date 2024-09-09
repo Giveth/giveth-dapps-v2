@@ -1300,8 +1300,6 @@
 	"label.we_need_a_bit_more_info": "Necessitem una mica més d'informació!",
 	"label.passport_connected": "Passaport connectat",
 	"label.increase_passport_score": "Augmenta la puntuació del passaport",
-	"label.project_owner_address_detected": "Adreça del propietari del projecte detectada",
-    "label.project_owner_cant_donate_to_own_project": "No pots donar a un projecte del qual ets propietari. Hi ha milers de projectes a Giveth que busquen el teu suport! Si us plau, tria un altre projecte per donar.",
 	"label.qf_donor_eligibility.banner.check_eligibility": "Fes que les teves donacions es igualin! Verifica la teva unicitat amb un clic.",
 	"label.qf_donor_eligibility.banner.recheck_eligibility": "Fes que les teves donacions es igualin! Augmenta la teva puntuació de Gitcoin Passport abans de",
 	"label.qf_donor_eligibility.banner.more_info_needed": "Necessitem una mica més d'informació per verificar la teva elegibilitat per QF!",
