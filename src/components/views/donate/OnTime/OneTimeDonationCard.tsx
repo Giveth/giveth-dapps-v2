@@ -367,6 +367,7 @@ const CryptoDonation: FC<{
 				<SanctionModal
 					closeModal={() => {
 						setIsSanctioned(false);
+						setShowChangeNetworkModal(false);
 					}}
 				/>
 			)}
