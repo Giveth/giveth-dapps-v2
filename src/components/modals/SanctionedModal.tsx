@@ -33,7 +33,7 @@ export const SanctionModal: React.FC<SanctionModalProps> = ({ closeModal }) => {
 			closeModal();
 			setIsRedirecting(false);
 		};
-		if(isRedirecting) {
+		if (isRedirecting) {
 			router.events.on('routeChangeComplete', handleRouteChangeComplete);
 		}
 		return () => {
