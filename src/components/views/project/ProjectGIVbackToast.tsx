@@ -39,7 +39,6 @@ const ProjectGIVbackToast = () => {
 	const [showBoost, setShowBoost] = useState(false);
 	const [showVerification, setShowVerification] = useState(false);
 	const { projectData, isAdmin, activateProject } = useProjectContext();
-	console.log({ projectData });
 	const verStatus = projectData?.verificationFormStatus;
 	const projectStatus = projectData?.status.name;
 	const isVerified = projectData?.verified;
