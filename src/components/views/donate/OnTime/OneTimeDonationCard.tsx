@@ -35,7 +35,10 @@ import { useAppDispatch, useAppSelector } from '@/features/hooks';
 import DonateToGiveth from '@/components/views/donate/DonateToGiveth';
 import SaveGasFees from './SaveGasFees';
 import SwitchToAcceptedChain from '@/components/views/donate/SwitchToAcceptedChain';
-import { useDonateData } from '@/context/donate.context';
+import {
+	DonateModalPriorityValues,
+	useDonateData,
+} from '@/context/donate.context';
 import { useModalCallback } from '@/hooks/useModalCallback';
 import DonateQFEligibleNetworks from './DonateQFEligibleNetworks';
 import { getActiveRound } from '@/helpers/qf';
@@ -58,8 +61,6 @@ import { TokenIcon } from '../TokenIcon/TokenIcon';
 import { SelectTokenModal } from './SelectTokenModal/SelectTokenModal';
 import { Spinner } from '@/components/Spinner';
 import { useSolanaBalance } from '@/hooks/useSolanaBalance';
-import { isWalletSanctioned } from '@/services/donation';
-import SanctionModal from '@/components/modals/SanctionedModal';
 
 const CryptoDonation: FC<{
 	setIsQRDonation: (isQRDonation: boolean) => void;
@@ -76,7 +77,13 @@ const CryptoDonation: FC<{
 	const router = useRouter();
 	const { isSignedIn } = useAppSelector(state => state.user);
 
-	const { project, hasActiveQFRound, selectedOneTimeToken } = useDonateData();
+	const {
+		project,
+		hasActiveQFRound,
+		selectedOneTimeToken,
+		currentDonateModal,
+		setDonateModalByPriority,
+	} = useDonateData();
 	const dispatch = useAppDispatch();
 
 	const {
@@ -97,7 +104,6 @@ const CryptoDonation: FC<{
 	const [showDonateModal, setShowDonateModal] = useState(false);
 	const [showInsufficientModal, setShowInsufficientModal] = useState(false);
 	const [showChangeNetworkModal, setShowChangeNetworkModal] = useState(false);
-	const [isSanctioned, setIsSanctioned] = useState<boolean>(false);
 	const [acceptedChains, setAcceptedChains] = useState<INetworkIdWithChain[]>(
 		[],
 	);
@@ -148,10 +154,6 @@ const CryptoDonation: FC<{
 	const hasStellarAddress = addresses?.some(
 		address => address.chainType === ChainType.STELLAR,
 	);
-
-	useEffect(() => {
-		validateSanctions();
-	}, [project, address]);
 
 	useEffect(() => {
 		if (
@@ -327,17 +329,6 @@ const CryptoDonation: FC<{
 		}
 	}, [selectedTokenBalance, amount, selectedOneTimeToken?.address, gasfee]);
 
-	const validateSanctions = async () => {
-		if (project?.organization?.label === 'endaoment' && address) {
-			// We just need to check if the wallet is sanctioned for endaoment projects
-			const sanctioned = await isWalletSanctioned(address);
-			if (sanctioned) {
-				setIsSanctioned(true);
-				return;
-			}
-		}
-	};
-
 	const amountErrorText = useMemo(() => {
 		const totalAmount = Number(formatUnits(gasfee, tokenDecimals)).toFixed(
 			10,
@@ -352,6 +343,14 @@ const CryptoDonation: FC<{
 		);
 	}, [gasfee, tokenDecimals, selectedOneTimeToken?.symbol, formatMessage]);
 
+	useEffect(() => {
+		if (showChangeNetworkModal && acceptedChains) {
+			setDonateModalByPriority(
+				DonateModalPriorityValues.ShowNetworkModal,
+			);
+		}
+	}, [showChangeNetworkModal, acceptedChains]);
+
 	// We need givethDonationAmount here because we need to calculate the donation share
 	// for Giveth. If user want to donate minimal amount to projecct, the donation share for Giveth
 	// has to be 0, disabled in UI and DonationModal
@@ -363,21 +362,14 @@ const CryptoDonation: FC<{
 
 	return (
 		<MainContainer>
-			{isSanctioned && (
-				<SanctionModal
-					closeModal={() => {
-						setIsSanctioned(false);
-						setShowChangeNetworkModal(false);
-					}}
-				/>
-			)}
 			{showQFModal && (
 				<QFModal
 					donateWithoutMatching={donateWithoutMatching}
 					setShowModal={setShowQFModal}
 				/>
 			)}
-			{!isSanctioned && showChangeNetworkModal && acceptedChains && (
+			{currentDonateModal ===
+				DonateModalPriorityValues.ShowNetworkModal && (
 				<DonateWrongNetwork
 					setShowModal={setShowChangeNetworkModal}
 					acceptedChains={acceptedChains.filter(

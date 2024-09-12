@@ -19,7 +19,10 @@ import SocialBox from '../../DonateSocialBox';
 import NiceBanner from './NiceBanner';
 import useDetectDevice from '@/hooks/useDetectDevice';
 import { useIsSafeEnvironment } from '@/hooks/useSafeAutoConnect';
-import { useDonateData } from '@/context/donate.context';
+import {
+	DonateModalPriorityValues,
+	useDonateData,
+} from '@/context/donate.context';
 import { EContentType } from '@/lib/constants/shareContent';
 import { PassportBanner } from '@/components/PassportBanner';
 import { useAlreadyDonatedToProject } from '@/hooks/useAlreadyDonatedToProject';
@@ -46,6 +49,7 @@ import EndaomentProjectsInfo from '@/components/views/project/EndaomentProjectsI
 import { IDraftDonation } from '@/apollo/types/gqlTypes';
 import StorageLabel from '@/lib/localStorage';
 import DonationByProjectOwner from '@/components/modals/DonationByProjectOwner';
+import { isWalletSanctioned } from '@/services/donation';
 
 const DonateIndex: FC = () => {
 	const { formatMessage } = useIntl();
@@ -56,11 +60,13 @@ const DonateIndex: FC = () => {
 		qrDonationStatus,
 		draftDonationData,
 		hasActiveQFRound,
+		currentDonateModal,
 		setSuccessDonation,
 		setQRDonationStatus,
 		setDraftDonationData,
 		setPendingDonationExists,
 		startTimer,
+		setDonateModalByPriority,
 	} = useDonateData();
 	const { renewExpirationDate, retrieveDraftDonation } =
 		useQRCodeDonation(project);
@@ -78,6 +84,7 @@ const DonateIndex: FC = () => {
 	const [showQRCode, setShowQRCode] = React.useState(
 		!!router.query.draft_donation,
 	);
+	const { walletAddress: address } = useGeneralWallet();
 	const [stopTimer, setStopTimer] = React.useState<void | (() => void)>();
 
 	useEffect(() => {
@@ -87,10 +94,32 @@ const DonateIndex: FC = () => {
 		};
 	}, [dispatch]);
 
+	const validateSanctions = async () => {
+		if (project.organization?.label === 'endaoment' && address) {
+			// We just need to check if the wallet is sanctioned for endaoment projects
+			const sanctioned = await isWalletSanctioned(address);
+			if (sanctioned) {
+				setDonateModalByPriority(
+					DonateModalPriorityValues.OFACSanctionListModal,
+				);
+				return;
+			}
+		}
+	};
+
 	useEffect(() => {
-		setShowDonationByProjectOwner(
-			userData?.id !== undefined && userData?.id === project.adminUser.id,
-		);
+		validateSanctions();
+	}, [project, address]);
+
+	useEffect(() => {
+		if (
+			userData?.id !== undefined &&
+			userData?.id === project.adminUser.id
+		) {
+			setDonateModalByPriority(
+				DonateModalPriorityValues.DonationByProjectOwner,
+			);
+		}
 	}, [userData?.id, project.adminUser]);
 
 	useEffect(() => {
@@ -221,11 +250,14 @@ const DonateIndex: FC = () => {
 		<>
 			<DonateHeader />
 			<DonateContainer>
-				{showDonationByProjectOwner && (
+				{currentDonateModal ===
+					DonateModalPriorityValues.DonationByProjectOwner && (
 					<DonationByProjectOwner
-						setShowDonationByProjectOwner={
-							setShowDonationByProjectOwner
-						}
+						closeModal={() => {
+							setDonateModalByPriority(
+								DonateModalPriorityValues.None,
+							);
+						}}
 					/>
 				)}
 				{alreadyDonated && (

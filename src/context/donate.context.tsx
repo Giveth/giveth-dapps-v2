@@ -42,6 +42,10 @@ interface IDonateContext {
 	setSelectedOneTimeToken: Dispatch<
 		SetStateAction<IProjectAcceptedToken | undefined>
 	>;
+	currentDonateModal: DonateModalPriorityValues;
+	setDonateModalByPriority: (
+		changeCurrentModal: DonateModalPriorityValues,
+	) => void;
 	setSelectedRecurringToken: Dispatch<
 		SetStateAction<ISelectTokenWithBalance | undefined>
 	>;
@@ -64,13 +68,24 @@ interface IProviderProps {
 	project: IProject;
 }
 
+export enum DonateModalPriorityValues {
+	None,
+	ShowNetworkModal,
+	DonationByProjectOwner,
+	OFACSanctionListModal,
+}
+
 const DonateContext = createContext<IDonateContext>({
 	setSuccessDonation: () => {},
 	setSelectedOneTimeToken: () => {},
 	setSelectedRecurringToken: () => {},
 	project: {} as IProject,
+	currentDonateModal: DonateModalPriorityValues.None,
 	tokenStreams: {},
 	fetchProject: async () => {},
+	setDonateModalByPriority: (
+		changeCurrentModal: DonateModalPriorityValues,
+	) => {},
 	draftDonationData: {} as IDraftDonation,
 	fetchDraftDonation: async () => {},
 	qrDonationStatus: 'waiting',
@@ -105,6 +120,8 @@ export const DonateProvider: FC<IProviderProps> = ({ children, project }) => {
 
 	const [successDonation, setSuccessDonation] = useState<ISuccessDonation>();
 	const [projectData, setProjectData] = useState<IProject>(project);
+	const [currentDonateModal, setCurrentDonateModal] =
+		useState<DonateModalPriorityValues>(DonateModalPriorityValues.None);
 
 	const { chain } = useAccount();
 
@@ -112,6 +129,17 @@ export const DonateProvider: FC<IProviderProps> = ({ children, project }) => {
 		setSelectedOneTimeToken(undefined);
 		setSelectedRecurringToken(undefined);
 	}, [chain]);
+
+	const setDonateModalByPriority = useCallback(
+		(changeModal: DonateModalPriorityValues) => {
+			if (changeModal === DonateModalPriorityValues.None) {
+				setCurrentDonateModal(DonateModalPriorityValues.None);
+			} else if (changeModal > currentDonateModal) {
+				setCurrentDonateModal(changeModal);
+			}
+		},
+		[currentDonateModal],
+	);
 
 	const fetchProject = useCallback(async () => {
 		const { data } = (await client.query({
@@ -149,6 +177,8 @@ export const DonateProvider: FC<IProviderProps> = ({ children, project }) => {
 				selectedOneTimeToken,
 				pendingDonationExists,
 				selectedRecurringToken,
+				setDonateModalByPriority,
+				currentDonateModal,
 				setSelectedOneTimeToken,
 				setSelectedRecurringToken,
 				tokenStreams,
