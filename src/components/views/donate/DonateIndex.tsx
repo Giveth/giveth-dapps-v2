@@ -122,7 +122,7 @@ const DonateIndex: FC = () => {
 					],
 					givBackEligible:
 						isTokenEligibleForGivback &&
-						project.verified &&
+						project.isGivbackEligible &&
 						isSignedIn &&
 						isEnabled,
 					chainId: config.STELLAR_NETWORK_NUMBER,
