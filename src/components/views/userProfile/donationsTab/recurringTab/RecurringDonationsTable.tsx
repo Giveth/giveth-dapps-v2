@@ -122,11 +122,13 @@ const RecurringDonationTable: FC<RecurringDonationTable> = ({
 					) : (
 						<DonationTableCell>
 							<B color={semanticColors.jade[500]}>
-								{limitFraction(
-									formatUnits(
-										BigInt(donation.flowRate) *
-											ONE_MONTH_SECONDS,
-										18,
+								{formatDonation(
+									limitFraction(
+										formatUnits(
+											BigInt(donation.flowRate) *
+												ONE_MONTH_SECONDS,
+											18,
+										),
 									),
 								)}
 							</B>
