@@ -50,6 +50,7 @@ import { IDraftDonation } from '@/apollo/types/gqlTypes';
 import StorageLabel from '@/lib/localStorage';
 import DonationByProjectOwner from '@/components/modals/DonationByProjectOwner';
 import { isWalletSanctioned } from '@/services/donation';
+import SanctionModal from '@/components/modals/SanctionedModal';
 
 const DonateIndex: FC = () => {
 	const { formatMessage } = useIntl();
@@ -260,6 +261,18 @@ const DonateIndex: FC = () => {
 						}}
 					/>
 				)}
+
+				{currentDonateModal ===
+					DonateModalPriorityValues.OFACSanctionListModal && (
+					<SanctionModal
+						closeModal={() => {
+							setDonateModalByPriority(
+								DonateModalPriorityValues.None,
+							);
+						}}
+					/>
+				)}
+
 				{alreadyDonated && (
 					<AlreadyDonatedWrapper>
 						<IconDonation24 />
