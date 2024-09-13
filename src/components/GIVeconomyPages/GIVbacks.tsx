@@ -166,10 +166,6 @@ export const TabGIVbacksBottom = () => {
 				fetchPolicy: 'no-cache',
 			});
 			setGivbackAllocations(data?.allocatedGivbacks);
-			console.log(
-				'fetchAllocatedGivbacks** ',
-				JSON.stringify(data?.allocatedGivbacks, null, 2),
-			);
 		}
 		fetchAllocatedGivbacks();
 	}, []);
