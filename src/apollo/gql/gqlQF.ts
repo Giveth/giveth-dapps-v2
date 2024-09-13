@@ -41,6 +41,7 @@ export const FETCH_QF_ROUND_STATS = gql`
 	query fetchQfRoundStats($slug: String!) {
 		qfRoundStats(slug: $slug) {
 			uniqueDonors
+			donationsCount
 			allDonationsUsdValue
 			matchingPool
 			qfRound {

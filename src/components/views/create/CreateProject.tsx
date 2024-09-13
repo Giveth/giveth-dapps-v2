@@ -67,6 +67,7 @@ interface ICreateProjectProps {
 const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 	const [quality, setQuality] = useState(EQualityState.LOW);
 	const [isLoading, setIsLoading] = useState(false);
+	const [isLoadingPreview, setIsLoadingPreview] = useState(false);
 	const [addedProjectState, setAddedProjectState] = useState<IProject>();
 	const [showAlloProtocolModal, setShowAlloProtocolModal] = useState(false);
 	const [addressModalChainId, setAddressModalChainId] = useState<number>();
@@ -285,7 +286,6 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 	};
 
 	const onSubmit = async (formData: TInputs) => {
-		setIsLoading(true);
 		if (
 			!watchDraft &&
 			quality === EQualityState.MEDIUM &&
@@ -318,6 +318,9 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 				telegram,
 				github,
 			} = formData;
+			//Only set loading to true if it is not a draft
+			setIsLoading(!draft);
+			setIsLoadingPreview(!!draft);
 
 			// Transforming the social media fields into the required structure
 			const socialMedia = [
@@ -342,8 +345,20 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 					formatMessage({ id: 'label.recipient_addresses_cant' }),
 				);
 				setIsLoading(false);
+				setIsLoadingPreview(false);
 				return;
 			}
+
+			// replace memo with undefined if it is not a stellar chain or if it is a stellar chain but memo is empty
+			addresses.forEach(address => {
+				if (
+					address.chainType !== ChainType.STELLAR ||
+					!address.memo ||
+					address.memo === ''
+				) {
+					address.memo = undefined;
+				}
+			});
 
 			const projectData: IProjectCreation = {
 				title: name,
@@ -375,6 +390,7 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 					? setAddedProjectState(addedProject.data?.createProject)
 					: setAddedProjectState(addedProject.data?.updateProject);
 				setIsLoading(false);
+				setIsLoadingPreview(false);
 			}
 
 			if (isDraft && !draft) {
@@ -460,7 +476,6 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 						<FormProvider {...formMethods}>
 							<form
 								onSubmit={handleSubmit(onSubmit, onError)}
-								onSubmitCapture={() => setIsLoading(true)}
 								id='hook-form'
 							>
 								<NameInput
@@ -588,16 +603,16 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 											label={formatMessage({
 												id: 'label.preview',
 											})}
+											onClick={() =>
+												setValue(EInputs.draft, true)
+											}
 											buttonType='primary'
-											disabled={isLoading}
-											loading={isLoading}
+											disabled={isLoadingPreview}
+											loading={isLoadingPreview}
 											icon={
 												<IconExternalLink size={16} />
 											}
 											type='submit'
-											onClick={() =>
-												setValue(EInputs.draft, true)
-											}
 										/>
 									)}
 									{quality === EQualityState.LOW ? (

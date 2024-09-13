@@ -43,6 +43,7 @@ import type { PoolStakingConfig } from '@/types/config';
 interface ILockModalProps extends IModal {
 	poolStakingConfig: PoolStakingConfig;
 	isGIVpower: boolean;
+	started: boolean;
 }
 
 export enum ELockState {
@@ -57,6 +58,7 @@ const LockModal: FC<ILockModalProps> = ({
 	poolStakingConfig,
 	isGIVpower,
 	setShowModal,
+	started,
 }) => {
 	const { formatMessage } = useIntl();
 	const isSafeEnv = useIsSafeEnvironment();
@@ -64,7 +66,7 @@ const LockModal: FC<ILockModalProps> = ({
 	const [round, setRound] = useState(0);
 	const [lockState, setLockState] = useState<ELockState>(ELockState.LOCK);
 	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
-	const { chain } = useAccount();
+	const { address, chain } = useAccount();
 	const chainId = chain?.id;
 	const { stakedAmount: stakedLpAmount } =
 		useStakingPool(poolStakingConfig) || {};
@@ -97,6 +99,15 @@ const LockModal: FC<ILockModalProps> = ({
 			);
 			if (txResponse) {
 				const data = await waitForTransaction(txResponse, isSafeEnv);
+				const event = new CustomEvent('chainEvent', {
+					detail: {
+						type: 'success',
+						chainId: chainId,
+						blockNumber: data.blockNumber,
+						address: address,
+					},
+				});
+				window.dispatchEvent(event);
 				setLockState(
 					data.status === 'success'
 						? ELockState.BOOST
@@ -157,7 +168,11 @@ const LockModal: FC<ILockModalProps> = ({
 								</IconWithTooltip>
 							</Flex>
 							<LockSlider setRound={setRound} round={round} />
-							<LockInfo round={round} amount={amount} />
+							<LockInfo
+								round={round}
+								amount={amount}
+								farmIsNotStarted={!started}
+							/>
 							<StyledButton
 								buttonType='primary'
 								size='small'
@@ -191,7 +206,11 @@ const LockModal: FC<ILockModalProps> = ({
 								amount={amount}
 								onLocking
 							/>
-							<LockInfo round={round} amount={amount} />
+							<LockInfo
+								round={round}
+								amount={amount}
+								farmIsNotStarted={!started}
+							/>
 							<StyledButton
 								buttonType='primary'
 								label={formatMessage({

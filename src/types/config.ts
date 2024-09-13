@@ -126,6 +126,8 @@ export interface GIVpowerGgivStakingConfig extends SimplePoolStakingConfig {
 	GARDEN_ADDRESS: Address;
 }
 
+export interface SepoliaNetworkConfig extends NetworkConfig {}
+
 export interface MainnetNetworkConfig extends NetworkConfig {
 	subgraphAddress: string;
 	TOKEN_DISTRO_ADDRESS: Address;
@@ -144,6 +146,7 @@ export interface MainnetNetworkConfig extends NetworkConfig {
 	tokenAddressOnUniswapV2: Address;
 	uniswapV2Subgraph: string;
 }
+
 export interface GnosisNetworkConfig extends NetworkConfig {
 	subgraphAddress: string;
 	TOKEN_DISTRO_ADDRESS: Address;
@@ -180,7 +183,7 @@ export interface NonEVMChain {
 	networkId: number;
 	name: string;
 	chainType: ChainType;
-	adapterNetwork: WalletAdapterNetwork;
+	adapterNetwork?: WalletAdapterNetwork;
 	nativeCurrency: {
 		name: string;
 		symbol: string;
@@ -212,7 +215,8 @@ export interface EnvConfig {
 	BASE_NETWORK_NUMBER: number;
 	CLASSIC_NETWORK_NUMBER: number;
 	ZKEVM_NETWORK_NUMBER: number;
-	MAINNET_CONFIG: MainnetNetworkConfig;
+	STELLAR_NETWORK_NUMBER: number;
+	MAINNET_CONFIG: MainnetNetworkConfig | SepoliaNetworkConfig;
 	GNOSIS_CONFIG: GnosisNetworkConfig;
 	POLYGON_CONFIG: NetworkConfig;
 	OPTIMISM_CONFIG: OptimismNetworkConfig;
@@ -226,12 +230,14 @@ export interface EnvConfig {
 	MICROSERVICES: MicroservicesConfig;
 	RARIBLE_ADDRESS: string;
 	SOLANA_CONFIG: NonEVMNetworkConfig;
+	STELLAR_CONFIG: NonEVMNetworkConfig;
 }
 
 export interface GlobalConfig extends EnvConfig {
 	TOKEN_NAME: string;
 	WEB3_POLLING_INTERVAL: number;
 	SUBGRAPH_POLLING_INTERVAL: number;
+	SUBGRAPH_UPDATING_UI_INTERVAL: number;
 	NOTIFICATION_POLLING_INTERVAL: number;
 	PFP_POLLING_INTERVAL: number;
 	TOKEN_PRECISION: number;
@@ -245,6 +251,7 @@ export interface GlobalConfig extends EnvConfig {
 	NETWORKS_CONFIG: {
 		[key: number | string]: NetworkConfig | NonEVMNetworkConfig;
 	};
+	CHAINS_WITH_SUBGRAPH: NetworkConfig[];
 	INFURA_API_KEY: string | undefined;
 	BLOCKNATIVE_DAPP_ID: string | undefined;
 	GOOGLE_MAPS_API_KEY: string | undefined;
@@ -253,6 +260,7 @@ export interface GlobalConfig extends EnvConfig {
 export enum ChainType {
 	SOLANA = 'SOLANA',
 	EVM = 'EVM',
+	STELLAR = 'STELLAR',
 }
 
 export interface IChainType {

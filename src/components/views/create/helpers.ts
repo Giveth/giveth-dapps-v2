@@ -4,6 +4,7 @@ import {
 	WALLET_ADDRESS_IS_VALID,
 } from '@/apollo/gql/gqlProjects';
 import { backendGQLRequest } from '@/helpers/requests';
+import { ChainType } from '@/types/config';
 
 export const gqlTitleValidation = async (title: string, locale: string) => {
 	try {
@@ -19,11 +20,19 @@ export const gqlTitleValidation = async (title: string, locale: string) => {
 	}
 };
 
-export const gqlAddressValidation = async (address: string) => {
+export const gqlAddressValidation = async ({
+	address,
+	chainType,
+	memo,
+}: {
+	address: string;
+	chainType?: ChainType;
+	memo?: string;
+}) => {
 	try {
 		const { data } = await client.query({
 			query: WALLET_ADDRESS_IS_VALID,
-			variables: { address },
+			variables: { address, chainType, memo },
 		});
 		return data.walletAddressIsValid;
 	} catch (error: any) {

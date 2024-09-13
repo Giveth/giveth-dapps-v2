@@ -79,7 +79,7 @@ const UnStakeInnerModal: FC<IUnStakeModalProps> = ({
 	);
 	const userGIVLocked = sdh.getUserGIVLockedBalance();
 	const { stakedAmount } = useStakingPool(poolStakingConfig);
-	const { chain } = useAccount();
+	const { address, chain } = useAccount();
 	const chainId = chain?.id;
 	const { title, type, LM_ADDRESS } =
 		poolStakingConfig as SimplePoolStakingConfig;
@@ -108,7 +108,16 @@ const UnStakeInnerModal: FC<IUnStakeModalProps> = ({
 		}
 		setTxHash(tx);
 		setUnstakeState(StakeState.SUBMITTING);
-		const { status } = await waitForTransaction(tx, isSafeEnv);
+		const { status, blockNumber } = await waitForTransaction(tx, isSafeEnv);
+		const event = new CustomEvent('chainEvent', {
+			detail: {
+				type: 'success',
+				chainId: chainId,
+				blockNumber: blockNumber,
+				address: address,
+			},
+		});
+		window.dispatchEvent(event);
 		if (status) {
 			setUnstakeState(StakeState.CONFIRMED);
 		} else {

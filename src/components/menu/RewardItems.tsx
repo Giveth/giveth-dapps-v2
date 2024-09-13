@@ -10,13 +10,14 @@ import { useIntl } from 'react-intl';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useAccount } from 'wagmi';
+import { useQuery } from '@tanstack/react-query';
 import config from '@/configuration';
 import useGIVTokenDistroHelper from '@/hooks/useGIVTokenDistroHelper';
 import { formatWeiHelper } from '@/helpers/number';
 import { WhatIsStreamModal } from '@/components/modals/WhatIsStream';
 import { getUserStakeInfo } from '@/lib/stakingPool';
 import Routes from '@/lib/constants/Routes';
-import { useAppDispatch, useAppSelector } from '@/features/hooks';
+import { useAppDispatch } from '@/features/hooks';
 import { ETheme } from '@/features/general/general.slice';
 import { SubgraphDataHelper } from '@/lib/subgraph/subgraphDataHelper';
 import { SimplePoolStakingConfig, StakingType } from '@/types/config';
@@ -36,6 +37,7 @@ import { setShowSwitchNetworkModal } from '@/features/modal/modal.slice';
 import { getChainName } from '@/lib/network';
 import { getNetworkConfig } from '@/helpers/givpower';
 import { useIsSafeEnvironment } from '@/hooks/useSafeAutoConnect';
+import { fetchSubgraphData } from '@/services/subgraph.service';
 
 export interface IRewardItemsProps {
 	showWhatIsGIVstreamModal: boolean;
@@ -53,13 +55,18 @@ export const RewardItems: FC<IRewardItemsProps> = ({
 	const [givStreamLiquidPart, setGIVstreamLiquidPart] = useState(0n);
 	const [flowRateNow, setFlowRateNow] = useState(0n);
 
-	const currentValues = useAppSelector(state => state.subgraph.currentValues);
+	const { address, chain } = useAccount();
+	const currentValues = useQuery({
+		queryKey: ['subgraph', chain?.id, address],
+		queryFn: async () => await fetchSubgraphData(chain?.id, address),
+		enabled: !!chain,
+		staleTime: config.SUBGRAPH_POLLING_INTERVAL,
+	});
 	const { givTokenDistroHelper } = useGIVTokenDistroHelper();
-	const { chain } = useAccount();
-	const chainId = chain?.id;
 	const dispatch = useAppDispatch();
 
-	const sdh = new SubgraphDataHelper(currentValues);
+	const chainId = chain?.id;
+	const sdh = new SubgraphDataHelper(currentValues.data);
 
 	const tokenDistroBalance = sdh.getGIVTokenDistroBalance();
 	const { givbackLiquidPart } = tokenDistroBalance;
@@ -82,7 +89,12 @@ export const RewardItems: FC<IRewardItemsProps> = ({
 				_allocatedTokens - _givbackLiquidPart,
 			),
 		);
-	}, [currentValues, givTokenDistroHelper]);
+	}, [
+		givTokenDistroHelper,
+		tokenDistroBalance.allocatedTokens,
+		tokenDistroBalance.claimed,
+		tokenDistroBalance.givbackLiquidPart,
+	]);
 
 	useEffect(() => {
 		if (!chainId) return;
@@ -96,13 +108,13 @@ export const RewardItems: FC<IRewardItemsProps> = ({
 			pools = networkConfig.pools;
 		}
 
-		if (pools) {
+		if (pools && currentValues.data) {
 			let _farmRewards = 0n;
 			pools.forEach(pool => {
 				if (pool.type !== StakingType.UNISWAPV3_ETH_GIV) {
 					if (!pool?.exploited) {
 						_farmRewards += getUserStakeInfo(
-							currentValues,
+							currentValues.data,
 							pool as SimplePoolStakingConfig,
 						).earned;
 					}
@@ -112,7 +124,7 @@ export const RewardItems: FC<IRewardItemsProps> = ({
 				givTokenDistroHelper.getLiquidPart(_farmRewards),
 			);
 		}
-	}, [currentValues, chainId, givTokenDistroHelper]);
+	}, [currentValues.data, chainId, givTokenDistroHelper]);
 
 	return (
 		<>

@@ -31,7 +31,6 @@ export const GIVpowerCard = () => {
 	useEffect(() => {
 		if (
 			givTokenDistroHelper &&
-			isLoaded &&
 			givTokenDistroHelper.startTime.getTime() !== 0
 		) {
 			const now = getNowUnixMS();

@@ -16,6 +16,8 @@ import {
 } from '@giveth/ui-design-system';
 
 import { useIntl } from 'react-intl';
+import { useAccount } from 'wagmi';
+import { useQueries } from '@tanstack/react-query';
 import Routes from '@/lib/constants/Routes';
 import { isUserRegistered } from '@/lib/helpers';
 import { mediaQueries } from '@/lib/constants/constants';
@@ -34,6 +36,10 @@ import { useProfileContext } from '@/context/profile.context';
 import { useIsSafeEnvironment } from '@/hooks/useSafeAutoConnect';
 import { useGeneralWallet } from '@/providers/generalWalletProvider';
 import { QFDonorEligibilityCard } from '@/components/views/userProfile/QFDonorEligibilityCard';
+import config from '@/configuration';
+import { fetchSubgraphData } from '@/services/subgraph.service';
+import { getNowUnixMS } from '@/helpers/time';
+
 interface IBtnProps extends IButtonProps {
 	outline?: boolean;
 }
@@ -108,9 +114,23 @@ const ProfileOverviewTab: FC<IUserProfileView> = () => {
 	const { userData } = useAppSelector(state => state.user);
 	const { activeQFRound } = useAppSelector(state => state.general);
 	const boostedProjectsCount = userData?.boostedProjectsCount ?? 0;
-	const values = useAppSelector(state => state.subgraph);
-	const givPower = getTotalGIVpower(values);
+	const { address } = useAccount();
+	const subgraphValues = useQueries({
+		queries: config.CHAINS_WITH_SUBGRAPH.map(chain => ({
+			queryKey: ['subgraph', chain.id, address],
+			queryFn: async () => {
+				return await fetchSubgraphData(chain.id, address);
+			},
+			staleTime: config.SUBGRAPH_POLLING_INTERVAL,
+		})),
+	});
+	const givPower = getTotalGIVpower(subgraphValues, address);
 	const { title, subtitle, buttons } = section;
+
+	const activeStartedRoundNotEnded =
+		activeQFRound &&
+		new Date(activeQFRound.beginDate).getTime() < getNowUnixMS() &&
+		new Date(activeQFRound.endDate).getTime() > getNowUnixMS();
 
 	useEffect(() => {
 		const setupSections = async () => {
@@ -197,7 +217,9 @@ const ProfileOverviewTab: FC<IUserProfileView> = () => {
 				) : (
 					<Row>
 						<Col lg={6}>
-							{activeQFRound && <QFDonorEligibilityCard />}
+							{activeStartedRoundNotEnded && (
+								<QFDonorEligibilityCard />
+							)}
 						</Col>
 					</Row>
 				))

@@ -156,7 +156,7 @@ const ProjectGIVbackToast = () => {
 			Button = (
 				<ExternalLink href={`${Routes.Verification}/${slug}`}>
 					<OutlineButton
-						label='Resume verification'
+						label='Resume GIVbacks Form'
 						icon={<IconVerifiedBadge16 />}
 					/>
 				</ExternalLink>
@@ -327,7 +327,7 @@ const ButtonWrapper = styled.div`
 		flex-direction: row-reverse;
 		color: ${brandColors.giv[500]};
 		gap: 0;
-		width: 194px;
+		width: 100%;
 		svg {
 			margin-right: 8px;
 			flex-shrink: 0;
@@ -354,7 +354,7 @@ const Wrapper = styled(Flex)`
 	border-radius: 16px;
 	margin-top: 12px;
 	flex-direction: column;
-	${mediaQueries.tablet} {
+	${mediaQueries.laptopL} {
 		flex-direction: row;
 	}
 `;

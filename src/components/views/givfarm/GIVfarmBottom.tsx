@@ -9,7 +9,11 @@ import {
 import { useIntl } from 'react-intl';
 import { useAccount } from 'wagmi';
 import config from '@/configuration';
-import { SimplePoolStakingConfig } from '@/types/config';
+import {
+	BalancerPoolStakingConfig,
+	ICHIPoolStakingConfig,
+	SimplePoolStakingConfig,
+} from '@/types/config';
 import {
 	PoolRow,
 	ContractRow,
@@ -36,34 +40,83 @@ const renderPool = (pool: SimplePoolStakingConfig, id: number) => (
 	</Col>
 );
 
+const getPoolsInfoByChainID = (
+	chainId?: number,
+): Array<
+	SimplePoolStakingConfig | BalancerPoolStakingConfig | ICHIPoolStakingConfig
+> => {
+	switch (chainId) {
+		case config.GNOSIS_NETWORK_NUMBER:
+			return [
+				...(config.GNOSIS_CONFIG.GIVPOWER
+					? [config.GNOSIS_CONFIG.GIVPOWER]
+					: []),
+				...(config.OPTIMISM_CONFIG.GIVPOWER
+					? [config.OPTIMISM_CONFIG.GIVPOWER]
+					: []),
+				...(config.ZKEVM_CONFIG.GIVPOWER
+					? [config.ZKEVM_CONFIG.GIVPOWER]
+					: []),
+				...config.GNOSIS_CONFIG.pools,
+				...config.GNOSIS_CONFIG.regenPools,
+				...(config.MAINNET_CONFIG.pools || []),
+				...(config.MAINNET_CONFIG.regenPools || []),
+			];
+
+		case config.OPTIMISM_NETWORK_NUMBER:
+			return [
+				...(config.OPTIMISM_CONFIG.GIVPOWER
+					? [config.OPTIMISM_CONFIG.GIVPOWER]
+					: []),
+				...(config.GNOSIS_CONFIG.GIVPOWER
+					? [config.GNOSIS_CONFIG.GIVPOWER]
+					: []),
+				...(config.ZKEVM_CONFIG.GIVPOWER
+					? [config.ZKEVM_CONFIG.GIVPOWER]
+					: []),
+				...config.GNOSIS_CONFIG.pools,
+				...config.GNOSIS_CONFIG.regenPools,
+				...(config.MAINNET_CONFIG.pools || []),
+				...(config.MAINNET_CONFIG.regenPools || []),
+			];
+		case config.ZKEVM_NETWORK_NUMBER:
+			return [
+				...(config.ZKEVM_CONFIG.GIVPOWER
+					? [config.ZKEVM_CONFIG.GIVPOWER]
+					: []),
+				...(config.GNOSIS_CONFIG.GIVPOWER
+					? [config.GNOSIS_CONFIG.GIVPOWER]
+					: []),
+				...(config.OPTIMISM_CONFIG.GIVPOWER
+					? [config.OPTIMISM_CONFIG.GIVPOWER]
+					: []),
+				...config.GNOSIS_CONFIG.pools,
+				...config.GNOSIS_CONFIG.regenPools,
+				...(config.MAINNET_CONFIG.pools || []),
+				...(config.MAINNET_CONFIG.regenPools || []),
+			];
+
+		default:
+			return [
+				...(config.ZKEVM_CONFIG.GIVPOWER
+					? [config.ZKEVM_CONFIG.GIVPOWER]
+					: []),
+				...(config.GNOSIS_CONFIG.GIVPOWER
+					? [config.GNOSIS_CONFIG.GIVPOWER]
+					: []),
+				...(config.OPTIMISM_CONFIG.GIVPOWER
+					? [config.OPTIMISM_CONFIG.GIVPOWER]
+					: []),
+				...(config.MAINNET_CONFIG.pools || []),
+				...(config.MAINNET_CONFIG.regenPools || []),
+				...config.GNOSIS_CONFIG.pools,
+				...config.GNOSIS_CONFIG.regenPools,
+			];
+	}
+};
+
 const renderPools = (chainId?: number, showArchivedPools?: boolean) => {
-	const pools =
-		chainId === config.GNOSIS_NETWORK_NUMBER
-			? [
-					config.GNOSIS_CONFIG.GIVPOWER,
-					config.OPTIMISM_CONFIG.GIVPOWER,
-					...config.GNOSIS_CONFIG.pools,
-					...config.GNOSIS_CONFIG.regenPools,
-					...config.MAINNET_CONFIG.pools,
-					...config.MAINNET_CONFIG.regenPools,
-				]
-			: chainId === config.OPTIMISM_NETWORK_NUMBER
-				? [
-						config.OPTIMISM_CONFIG.GIVPOWER,
-						config.GNOSIS_CONFIG.GIVPOWER,
-						...config.GNOSIS_CONFIG.pools,
-						...config.GNOSIS_CONFIG.regenPools,
-						...config.MAINNET_CONFIG.pools,
-						...config.MAINNET_CONFIG.regenPools,
-					]
-				: [
-						config.GNOSIS_CONFIG.GIVPOWER,
-						config.OPTIMISM_CONFIG.GIVPOWER,
-						...config.MAINNET_CONFIG.pools,
-						...config.MAINNET_CONFIG.regenPools,
-						...config.GNOSIS_CONFIG.pools,
-						...config.GNOSIS_CONFIG.regenPools,
-					];
+	const pools = getPoolsInfoByChainID(chainId);
 
 	const now = getNowUnixMS();
 	const filteredPools = [];
@@ -105,25 +158,9 @@ export const GIVfarmBottom = () => {
 							size='Big'
 							target='_blank'
 							rel='noreferrer'
-							href={
-								chainId === config.OPTIMISM_NETWORK_NUMBER
-									? 'https://jumper.exchange/?fromChain=100&toChain=10'
-									: 'https://jumper.exchange/?fromChain=1&toChain=100'
-							}
+							href='https://linktr.ee/GIVtoken'
 						>
 							{formatMessage({ id: 'label.bridge_your_giv' })}
-						</GLink>
-						<IconExternalLink />
-					</ExtLinkRow>
-					<ExtLinkRow $alignItems='center'>
-						<GLink
-							as='a'
-							size='Big'
-							target='_blank'
-							rel='noreferrer'
-							href={_config.GIV_BUY_LINK}
-						>
-							{formatMessage({ id: 'label.buy_giv_token' })}
 						</GLink>
 						<IconExternalLink />
 					</ExtLinkRow>

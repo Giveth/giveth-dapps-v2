@@ -4,14 +4,17 @@ import {
 	mediaQueries,
 	Flex,
 	deviceSize,
+	Row,
+	neutralColors,
+	brandColors,
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import Image from 'next/image';
 
 export const BannerContainer = styled.div`
 	position: relative;
-	padding-top: 40px;
-	padding-bottom: 60px;
+	padding-top: 70px;
+	padding-bottom: 100px;
 	background: linear-gradient(98deg, #0f0116 24.06%, #380950 93.92%);
 	img {
 		-webkit-user-drag: none;
@@ -34,6 +37,14 @@ export const StyledCol = styled(Col)`
 	color: #ffffff;
 `;
 
+export const ActiveStyledRow = styled(Row)`
+	flex-direction: row;
+
+	@media (max-width: 1350px) {
+		flex-direction: column-reverse;
+	}
+`;
+
 export const ActiveStyledCol = styled(Col)`
 	position: relative;
 	display: flex;
@@ -52,7 +63,7 @@ export const ActiveStyledCol = styled(Col)`
 
 export const Title = styled(H1)`
 	margin-top: 32px;
-	color: #618600;
+	color: ${neutralColors.gray[100]};
 `;
 
 export const Desc = styled(Flex)`
@@ -63,10 +74,10 @@ export const Desc = styled(Flex)`
 	justify-content: center;
 	gap: 8px;
 	padding: 9px 20px;
-	background: #fbff44;
+	background: ${brandColors.mustard[500]};
 	margin-top: 12px;
 	margin-bottom: 32px;
-	color: #545517;
+	color: ${neutralColors.gray[900]};
 `;
 
 export const ImgBase = styled.img`
@@ -210,4 +221,15 @@ export const StyledColArch = styled(Col)`
 	min-height: 300px;
 	text-align: center;
 	color: #ffffff;
+`;
+
+export const CustomSponsors = styled(Flex)`
+	width: 100%;
+	height: 80px;
+	align-items: center;
+	justify-content: center;
+	${mediaQueries.mobileS} {
+		width: 120px;
+		height: 120px;
+	}
 `;

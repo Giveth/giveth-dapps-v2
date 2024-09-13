@@ -1,5 +1,5 @@
 import { cookieStorage, createConfig, createStorage } from 'wagmi';
-import { safe, walletConnect } from '@wagmi/connectors';
+import { walletConnect, coinbaseWallet, safe } from '@wagmi/connectors';
 
 import { createClient, http } from 'viem';
 import configuration from './configuration';
@@ -23,10 +23,13 @@ const chains = configuration.EVM_CHAINS;
 export const wagmiConfig = createConfig({
 	chains: chains, // required
 	connectors: [
-		safe({ allowedDomains: [/app.safe.global$/], debug: false }),
 		walletConnect({
 			projectId,
 			metadata,
+		}),
+		coinbaseWallet({ appName: 'Giveth', version: '3' }),
+		safe({
+			allowedDomains: [/app.safe.global$/],
 		}),
 	],
 	ssr: true,

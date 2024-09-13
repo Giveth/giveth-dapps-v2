@@ -12,6 +12,7 @@ import BigNumber from 'bignumber.js';
 import { captureException } from '@sentry/nextjs';
 import { useAccount } from 'wagmi';
 import { WriteContractReturnType } from 'viem';
+import { useQuery } from '@tanstack/react-query';
 import { Modal } from './Modal';
 import {
 	ConfirmedInnerModal,
@@ -37,10 +38,11 @@ import { claimAirDrop } from '@/lib/claim';
 import { waitForTransaction } from '@/lib/transaction';
 import config from '@/configuration';
 import { IModal } from '@/types/common';
-import { useAppSelector } from '@/features/hooks';
 import { useIsSafeEnvironment } from '@/hooks/useSafeAutoConnect';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
 import { SubgraphDataHelper } from '@/lib/subgraph/subgraphDataHelper';
+import { fetchSubgraphData } from '@/services/subgraph.service';
+import { useFetchGIVPrice } from '@/hooks/useGivPrice';
 
 enum ClaimState {
 	UNKNOWN,
@@ -76,16 +78,19 @@ export const GIVdropHarvestModal: FC<IGIVdropHarvestModal> = ({
 		ClaimState.UNKNOWN,
 	);
 
-	const { givTokenDistroHelper } = useGIVTokenDistroHelper();
-	const sdh = new SubgraphDataHelper(
-		useAppSelector(state => state.subgraph.currentValues),
-	);
-	const givTokenDistroBalance = sdh.getGIVTokenDistroBalance();
-	const givPrice = useAppSelector(state => state.price.givPrice);
 	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
-	const { chain } = useAccount();
+	const { givTokenDistroHelper } = useGIVTokenDistroHelper();
+	const { address, chain } = useAccount();
+	const currentValues = useQuery({
+		queryKey: ['subgraph', chain?.id, address],
+		queryFn: async () => await fetchSubgraphData(chain?.id, address),
+		staleTime: config.SUBGRAPH_POLLING_INTERVAL,
+	});
+
 	const chainId = chain?.id;
-	const { address } = useAccount();
+	const sdh = new SubgraphDataHelper(currentValues.data);
+	const givTokenDistroBalance = sdh.getGIVTokenDistroBalance();
+	const { data: givPrice } = useFetchGIVPrice(chainId);
 
 	useEffect(() => {
 		const bnGIVback = BigInt(givTokenDistroBalance.givback);
@@ -114,7 +119,7 @@ export const GIVdropHarvestModal: FC<IGIVdropHarvestModal> = ({
 	}, [givdropAmount, givTokenDistroHelper, claimableNow, givBackLiquidPart]);
 
 	const calcUSD = (amount: string) => {
-		const _givPrice = new BigNumber(givPrice);
+		const _givPrice = new BigNumber(givPrice || '0');
 		return _givPrice.isNaN() ? '0' : _givPrice.times(amount).toFixed(2);
 	};
 

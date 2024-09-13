@@ -53,6 +53,11 @@ export interface ICreateDonation {
 	relevantDonationTxHash?: string;
 }
 
+export interface ICreateDraftDonation extends ICreateDonation {
+	chainId: number;
+	memo?: string;
+}
+
 export const calcDonationShare = (
 	totalDonation: bigint,
 	givethDonationPercent: number,
@@ -65,7 +70,13 @@ export const calcDonationShare = (
 	}
 	let projectDonation = totalDonation - givethDonation;
 	if (projectDonation < minDonationAmount) {
-		projectDonation = minDonationAmount;
+		if (totalDonation >= minDonationAmount * 2n) {
+			projectDonation = minDonationAmount;
+			givethDonation = totalDonation - projectDonation;
+		} else {
+			projectDonation = totalDonation;
+			givethDonation = 0n;
+		}
 	}
 	return {
 		projectDonation: formatCrypto(projectDonation, decimals),

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import {
 	P,
@@ -21,7 +21,7 @@ import { useRouter } from 'next/router';
 import { Shadow } from '@/components/styled-components/Shadow';
 import ProjectCardBadges from './ProjectCardBadgeButtons';
 import ProjectCardOrgBadge from './ProjectCardOrgBadge';
-import { IProject } from '@/apollo/types/types';
+import { IAdminUser, IProject } from '@/apollo/types/types';
 import { timeFromNow } from '@/lib/helpers';
 import ProjectCardImage from './ProjectCardImage';
 import { slugToProjectDonate, slugToProjectView } from '@/lib/routeCreators';
@@ -33,6 +33,8 @@ import { formatDonation } from '@/helpers/number';
 import { RoundNotStartedModal } from './RoundNotStartedModal';
 import { TooltipContent } from '@/components/modals/HarvestAll.sc';
 import { IconWithTooltip } from '@/components/IconWithToolTip';
+import { FETCH_RECURRING_DONATIONS_BY_DATE } from '@/apollo/gql/gqlProjects';
+import { client } from '@/apollo/apolloClient';
 
 const cardRadius = '12px';
 const imgHeight = '226px';
@@ -43,10 +45,24 @@ interface IProjectCard {
 	className?: string;
 	order?: number;
 }
-
+interface IRecurringDonation {
+	id: string;
+	txHash: string;
+	networkId: number;
+	currency: string;
+	anonymous: boolean;
+	status: string;
+	amountStreamed: number;
+	totalUsdStreamed: number;
+	flowRate: string;
+	donor: IAdminUser;
+	createdAt: string;
+	finished: boolean;
+}
 const ProjectCard = (props: IProjectCard) => {
 	const { project, className } = props;
 	const {
+		id,
 		title,
 		descriptionSummary,
 		image,
@@ -61,6 +77,7 @@ const ProjectCard = (props: IProjectCard) => {
 		qfRounds,
 		estimatedMatching,
 	} = project;
+	const [recurringDonationSumInQF, setRecurringDonationSumInQF] = useState(0);
 	const [isHover, setIsHover] = useState(false);
 	const [showHintModal, setShowHintModal] = useState(false);
 	const [destination, setDestination] = useState('');
@@ -95,6 +112,44 @@ const ProjectCard = (props: IProjectCard) => {
 			setShowHintModal(true);
 		}
 	};
+
+	const fetchProjectRecurringDonationsByDate = async () => {
+		const startDate = activeStartedRound?.beginDate;
+		const endDate = activeStartedRound?.endDate;
+		if (startDate && endDate) {
+			const { data: projectRecurringDonations } = await client.query({
+				query: FETCH_RECURRING_DONATIONS_BY_DATE,
+				variables: {
+					projectId: parseInt(id),
+					startDate,
+					endDate,
+				},
+			});
+			const { recurringDonationsByDate } = projectRecurringDonations;
+			return recurringDonationsByDate;
+		}
+	};
+	useEffect(() => {
+		const calculateTotalAmountStreamed = async () => {
+			if (activeStartedRound?.isActive) {
+				const donations = await fetchProjectRecurringDonationsByDate();
+				let totalAmountStreamed;
+				if (donations.totalCount != 0) {
+					console.log(id, donations.recurringDonations);
+					totalAmountStreamed = donations.recurringDonations.reduce(
+						(sum: number, donation: IRecurringDonation) => {
+							return sum + donation.totalUsdStreamed;
+						},
+						0,
+					);
+					setRecurringDonationSumInQF(totalAmountStreamed);
+				}
+				console.log(id, totalAmountStreamed);
+			}
+		};
+
+		calculateTotalAmountStreamed();
+	}, [props]);
 
 	return (
 		// </Link>
@@ -171,7 +226,7 @@ const ProjectCard = (props: IProjectCard) => {
 							<PriceText>
 								{formatDonation(
 									(activeStartedRound
-										? sumDonationValueUsdForActiveQfRound
+										? sumDonationValueUsdForActiveQfRound // TODO: add recurring donation amount
 										: totalDonations) || 0,
 									'$',
 									locale,

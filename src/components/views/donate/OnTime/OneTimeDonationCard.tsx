@@ -1,6 +1,7 @@
 import styled from 'styled-components';
-import React, { FC, useEffect, useState } from 'react';
+import React, { FC, useEffect, useMemo, useState } from 'react';
 import { useIntl } from 'react-intl';
+import { useRouter } from 'next/router';
 import {
 	B,
 	brandColors,
@@ -9,11 +10,11 @@ import {
 	IconCaretDown16,
 	IconRefresh16,
 	neutralColors,
+	semanticColors,
 } from '@giveth/ui-design-system';
 // @ts-ignore
-import { captureException } from '@sentry/nextjs';
 import { Address, Chain, formatUnits, zeroAddress } from 'viem';
-import { useBalance } from 'wagmi';
+import { useBalance, useEstimateFeesPerGas, useEstimateGas } from 'wagmi';
 import { setShowWelcomeModal } from '@/features/modal/modal.slice';
 import CheckBox from '@/components/Checkbox';
 
@@ -22,14 +23,12 @@ import config from '@/configuration';
 
 import InlineToast, { EToastType } from '@/components/toasts/InlineToast';
 import { EProjectStatus } from '@/apollo/types/gqlEnums';
-import { client } from '@/apollo/apolloClient';
-import { PROJECT_ACCEPTED_TOKENS } from '@/apollo/gql/gqlProjects';
-import { showToastError, truncateToDecimalPlaces } from '@/lib/helpers';
+import { truncateToDecimalPlaces } from '@/lib/helpers';
+import { IProjectAcceptedToken } from '@/apollo/types/gqlTypes';
 import {
-	IProjectAcceptedToken,
-	IProjectAcceptedTokensGQL,
-} from '@/apollo/types/gqlTypes';
-import { prepareTokenList } from '@/components/views/donate/helpers';
+	calcDonationShare,
+	prepareTokenList,
+} from '@/components/views/donate/helpers';
 import GIVBackToast from '@/components/views/donate/GIVBackToast';
 import { DonateWrongNetwork } from '@/components/modals/DonateWrongNetwork';
 import { useAppDispatch, useAppSelector } from '@/features/hooks';
@@ -59,8 +58,13 @@ import { TokenIcon } from '../TokenIcon/TokenIcon';
 import { SelectTokenModal } from './SelectTokenModal/SelectTokenModal';
 import { Spinner } from '@/components/Spinner';
 import { useSolanaBalance } from '@/hooks/useSolanaBalance';
+import { isWalletSanctioned } from '@/services/donation';
+import SanctionModal from '@/components/modals/SanctionedModal';
 
-const CryptoDonation: FC = () => {
+const CryptoDonation: FC<{
+	setIsQRDonation: (isQRDonation: boolean) => void;
+	acceptedTokens: IProjectAcceptedToken[] | undefined;
+}> = ({ acceptedTokens, setIsQRDonation }) => {
 	const {
 		chain,
 		walletChainType,
@@ -69,6 +73,7 @@ const CryptoDonation: FC = () => {
 	} = useGeneralWallet();
 
 	const { formatMessage } = useIntl();
+	const router = useRouter();
 	const { isSignedIn } = useAppSelector(state => state.user);
 
 	const { project, hasActiveQFRound, selectedOneTimeToken } = useDonateData();
@@ -87,12 +92,12 @@ const CryptoDonation: FC = () => {
 	const [amount, setAmount] = useState(0n);
 	const [erc20List, setErc20List] = useState<IProjectAcceptedToken[]>();
 	const [anonymous, setAnonymous] = useState<boolean>(false);
-	const [amountError, setAmountError] = useState<boolean>(false);
+	const [insufficientGasFee, setInsufficientGasFee] =
+		useState<boolean>(false);
 	const [showDonateModal, setShowDonateModal] = useState(false);
 	const [showInsufficientModal, setShowInsufficientModal] = useState(false);
 	const [showChangeNetworkModal, setShowChangeNetworkModal] = useState(false);
-	const [acceptedTokens, setAcceptedTokens] =
-		useState<IProjectAcceptedToken[]>();
+	const [isSanctioned, setIsSanctioned] = useState<boolean>(false);
 	const [acceptedChains, setAcceptedChains] = useState<INetworkIdWithChain[]>(
 		[],
 	);
@@ -116,7 +121,7 @@ const CryptoDonation: FC = () => {
 				? undefined
 				: selectedOneTimeToken?.address,
 		address:
-			walletChainType === ChainType.EVM
+			walletChainType === ChainType.EVM && !!selectedOneTimeToken?.address // disable when selected token is undefined
 				? (address as Address)
 				: undefined,
 	});
@@ -140,6 +145,13 @@ const CryptoDonation: FC = () => {
 
 	const isOnEligibleNetworks =
 		networkId && activeStartedRound?.eligibleNetworks?.includes(networkId);
+	const hasStellarAddress = addresses?.some(
+		address => address.chainType === ChainType.STELLAR,
+	);
+
+	useEffect(() => {
+		validateSanctions();
+	}, [project, address]);
 
 	useEffect(() => {
 		if (
@@ -217,26 +229,6 @@ const CryptoDonation: FC = () => {
 	}, [networkId, acceptedTokens, walletChainType, addresses]);
 
 	useEffect(() => {
-		client
-			.query({
-				query: PROJECT_ACCEPTED_TOKENS,
-				variables: { projectId: Number(projectId) },
-				fetchPolicy: 'no-cache',
-			})
-			.then((res: IProjectAcceptedTokensGQL) => {
-				setAcceptedTokens(res.data.getProjectAcceptTokens);
-			})
-			.catch((error: unknown) => {
-				showToastError(error);
-				captureException(error, {
-					tags: {
-						section: 'Crypto Donation UseEffect',
-					},
-				});
-			});
-	}, []);
-
-	useEffect(() => {
 		setAmount(0n);
 	}, [selectedOneTimeToken, isConnected, address, networkId]);
 
@@ -269,7 +261,7 @@ const CryptoDonation: FC = () => {
 	};
 
 	const donationDisabled =
-		!isActive || !amount || !selectedOneTimeToken || amountError;
+		!isActive || !amount || !selectedOneTimeToken || insufficientGasFee;
 
 	const donateWithoutMatching = () => {
 		if (isSignedIn) {
@@ -279,18 +271,117 @@ const CryptoDonation: FC = () => {
 		}
 	};
 
+	const estimatedGasFeeObj = useMemo(() => {
+		const selectedChain = chain as Chain;
+		return {
+			chainId: selectedChain?.id,
+			to: addresses?.find(a => a.chainType === walletChainType)
+				?.address as Address,
+			value: selectedTokenBalance,
+		};
+	}, [chain, addresses, selectedTokenBalance, walletChainType]);
+
+	const { data: estimatedGas } = useEstimateGas(estimatedGasFeeObj);
+	const { data: estimatedGasPrice } =
+		useEstimateFeesPerGas(estimatedGasFeeObj);
+
+	const gasfee = useMemo((): bigint => {
+		if (
+			selectedOneTimeToken?.address !== zeroAddress ||
+			!estimatedGas ||
+			!estimatedGasPrice?.maxFeePerGas
+		) {
+			return 0n;
+		}
+		return estimatedGas * estimatedGasPrice.maxFeePerGas;
+	}, [
+		estimatedGas,
+		estimatedGasPrice?.maxFeePerGas,
+		selectedOneTimeToken?.address,
+	]);
+
+	const handleQRDonation = () => {
+		setIsQRDonation(true);
+		router.push(
+			{
+				query: {
+					...router.query,
+					chain: ChainType.STELLAR.toLowerCase(),
+				},
+			},
+			undefined,
+			{ shallow: true },
+		);
+	};
+
+	useEffect(() => {
+		if (
+			amount > selectedTokenBalance - gasfee &&
+			amount < selectedTokenBalance &&
+			selectedOneTimeToken?.address === zeroAddress &&
+			gasfee > 0n
+		) {
+			setInsufficientGasFee(true);
+		} else {
+			setInsufficientGasFee(false);
+		}
+	}, [selectedTokenBalance, amount, selectedOneTimeToken?.address, gasfee]);
+
+	const validateSanctions = async () => {
+		if (project?.organization?.label === 'endaoment' && address) {
+			// We just need to check if the wallet is sanctioned for endaoment projects
+			const sanctioned = await isWalletSanctioned(address);
+			if (sanctioned) {
+				setIsSanctioned(true);
+				return;
+			}
+		}
+	};
+
+	const amountErrorText = useMemo(() => {
+		const totalAmount = Number(formatUnits(gasfee, tokenDecimals)).toFixed(
+			10,
+		);
+		const tokenSymbol = selectedOneTimeToken?.symbol;
+		return formatMessage(
+			{ id: 'label.exceed_wallet_balance' },
+			{
+				totalAmount,
+				tokenSymbol,
+			},
+		);
+	}, [gasfee, tokenDecimals, selectedOneTimeToken?.symbol, formatMessage]);
+
+	// We need givethDonationAmount here because we need to calculate the donation share
+	// for Giveth. If user want to donate minimal amount to projecct, the donation share for Giveth
+	// has to be 0, disabled in UI and DonationModal
+	const { givethDonation: givethDonationAmount } = calcDonationShare(
+		amount,
+		donationToGiveth,
+		selectedOneTimeToken?.decimals ?? 18,
+	);
+
 	return (
 		<MainContainer>
+			{isSanctioned && (
+				<SanctionModal
+					closeModal={() => {
+						setIsSanctioned(false);
+					}}
+				/>
+			)}
 			{showQFModal && (
 				<QFModal
 					donateWithoutMatching={donateWithoutMatching}
 					setShowModal={setShowQFModal}
 				/>
 			)}
-			{showChangeNetworkModal && acceptedChains && (
+			{!isSanctioned && showChangeNetworkModal && acceptedChains && (
 				<DonateWrongNetwork
 					setShowModal={setShowChangeNetworkModal}
-					acceptedChains={acceptedChains}
+					acceptedChains={acceptedChains.filter(
+						chain => chain.chainType !== ChainType.STELLAR,
+					)}
 				/>
 			)}
 			{showInsufficientModal && (
@@ -304,6 +395,7 @@ const CryptoDonation: FC = () => {
 					token={selectedOneTimeToken}
 					amount={amount}
 					donationToGiveth={donationToGiveth}
+					givethDonationAmount={givethDonationAmount}
 					anonymous={anonymous}
 					givBackEligible={
 						projectIsGivBackEligible &&
@@ -318,6 +410,14 @@ const CryptoDonation: FC = () => {
 				/>
 			)}
 			<SaveGasFees acceptedChains={acceptedChains} />
+			{hasStellarAddress && (
+				<QRToastLink onClick={handleQRDonation}>
+					{config.NETWORKS_CONFIG[ChainType.STELLAR]?.chainLogo(32)}
+					{formatMessage({
+						id: 'label.try_donating_wuth_stellar',
+					})}
+				</QRToastLink>
+			)}
 			<Flex $flexDirection='column' gap='8px'>
 				<InputWrapper>
 					<SelectTokenWrapper
@@ -351,10 +451,10 @@ const CryptoDonation: FC = () => {
 						decimals={selectedOneTimeToken?.decimals}
 					/>
 				</InputWrapper>
-				<Flex gap='4px'>
+				<Flex gap='4px' $alignItems='center'>
 					<GLinkStyled
 						size='Small'
-						onClick={() => setAmount(selectedTokenBalance)}
+						onClick={() => setAmount(selectedTokenBalance - gasfee)}
 					>
 						{formatMessage({
 							id: 'label.available',
@@ -377,6 +477,9 @@ const CryptoDonation: FC = () => {
 							<IconRefresh16 />
 						)}
 					</IconWrapper>
+					{insufficientGasFee && (
+						<WarnError>{amountErrorText}</WarnError>
+					)}
 				</Flex>
 			</Flex>
 			{hasActiveQFRound && !isOnEligibleNetworks && walletChainType && (
@@ -393,6 +496,7 @@ const CryptoDonation: FC = () => {
 				<DonateToGiveth
 					setDonationToGiveth={setDonationToGiveth}
 					donationToGiveth={donationToGiveth}
+					givethDonationAmount={givethDonationAmount}
 					title={
 						formatMessage({ id: 'label.donation_to' }) + ' Giveth'
 					}
@@ -470,6 +574,12 @@ const CryptoDonation: FC = () => {
 	);
 };
 
+const WarnError = styled.div`
+	color: ${semanticColors.punch[500]};
+	font-size: 11px;
+	padding: 12px;
+`;
+
 const EmptySpace = styled.div`
 	margin-top: 70px;
 `;
@@ -485,11 +595,6 @@ const MainContainer = styled.div`
 const TokenSymbol = styled(B)`
 	white-space: nowrap;
 `;
-
-interface IInputBox {
-	$error: boolean;
-	$focused: boolean;
-}
 
 const MainButton = styled(Button)`
 	width: 100%;
@@ -507,6 +612,20 @@ export const CheckBoxContainer = styled.div`
 		margin-top: 3px;
 		margin-left: 24px;
 	}
+`;
+
+const QRToastLink = styled(Flex)`
+	cursor: pointer;
+	align-items: center;
+	gap: 12px;
+	padding-block: 8px;
+	padding-left: 16px;
+	margin-block: 16px;
+	background-color: ${semanticColors.blueSky[100]};
+	color: ${semanticColors.blueSky[700]};
+	border-radius: 8px;
+	border: 1px solid ${semanticColors.blueSky[300]};
+	font-weight: 500;
 `;
 
 export default CryptoDonation;

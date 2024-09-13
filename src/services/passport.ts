@@ -68,8 +68,44 @@ export const connectPassport = async (account: string, singin: boolean) => {
 		return true;
 	} catch (error: any) {
 		console.error('error', error);
-		if (error.code === 'ACTION_REJECTED') {
-			showToastError('Rejected By User');
+		if (error.code === 4001) {
+			showToastError('User rejected the request.');
+		} else {
+			showToastError(error);
+		}
+		return false;
+	}
+};
+
+export const connectWallet = async (account: string, singin: boolean) => {
+	//Get Nonce and Message
+	try {
+		const { nonce, message } = await getRequest(
+			`${config.MICROSERVICES.authentication}/passportNonce`,
+			true,
+			{},
+		);
+
+		//sign message
+		const signature = await signMessage(wagmiConfig, { message });
+
+		//auth
+		const { jwt } = await postRequest(
+			`${config.MICROSERVICES.authentication}/passportAuthentication`,
+			true,
+			{ message, signature, nonce },
+		);
+
+		if (singin) {
+			//use passport jwt to sign in to the giveth and create user
+			localStorage.setItem(StorageLabel.USER, account.toLowerCase());
+			localStorage.setItem(StorageLabel.TOKEN, jwt);
+		}
+		return true;
+	} catch (error: any) {
+		console.error('error', error);
+		if (error.code === 4001) {
+			showToastError('User rejected the request.');
 		} else {
 			showToastError(error);
 		}
@@ -85,6 +121,7 @@ export const scoreUserAddress = async (address: `0x${string}` | undefined) => {
 			variables: {
 				address: address?.toLowerCase(),
 			},
+			fetchPolicy: 'network-only',
 		});
 
 		return data.scoreUserAddress;

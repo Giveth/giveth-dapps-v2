@@ -47,8 +47,10 @@ export const AmountInput: FC<IAmountInput> = ({
 	const [displayAmount, setDisplayAmount] = useState('');
 
 	useEffect(() => {
-		//prevent changing 0.000 to 0
-		if (amount === 0n) return;
+		// Prevent changing 0.000 to 0
+		const regex = /^0(\.0+)?$/;
+		const isZero = regex.test(displayAmount);
+		if (amount === 0n && isZero) return;
 		const _displayAmount = truncateToDecimalPlaces(
 			formatUnits(amount, decimals),
 			decimals / 3,
@@ -72,7 +74,7 @@ export const AmountInput: FC<IAmountInput> = ({
 	const onUserInput = useCallback(
 		(value: string) => {
 			const [, _decimals] = value.split('.');
-			if (_decimals?.length > 6) return;
+			if (_decimals?.length > decimals / 3) return;
 			setDisplayAmount(value);
 			setActiveStep(0);
 

@@ -30,12 +30,12 @@ import BAL_WEIGHTED_POOL_Json from '../artifacts/BalancerWeightedPool.json';
 import BAL_VAULT_Json from '../artifacts/BalancerVault.json';
 import TOKEN_MANAGER_Json from '../artifacts/HookedTokenManager.json';
 import UnipoolGIVpower from '../artifacts/UnipoolGIVpower.json';
-import { ISubgraphState } from '@/features/subgraph/subgraph.types';
 import { SubgraphDataHelper } from '@/lib/subgraph/subgraphDataHelper';
 import { E18, MaxUint256 } from './constants/constants';
 import { Zero } from '@/helpers/number';
 import { wagmiConfig } from '@/wagmiConfigs';
 import { getReadContractResult } from './contracts';
+import { ISubgraphState } from '@/types/subgraph';
 
 const { abi: LM_ABI } = LM_Json;
 const { abi: GP_ABI } = GP_Json;
@@ -249,8 +249,8 @@ const getBalancerPoolStakingAPR = async (
 			chainId,
 		);
 
-		const weights = _poolNormalizedWeights.map(BigInt);
-		const balances = _poolTokens.balances.map(BigInt);
+		const weights = _poolNormalizedWeights?.map(BigInt);
+		const balances = _poolTokens?.balances.map(BigInt);
 
 		if (
 			_poolTokens.tokens[0].toLowerCase() !== tokenAddress.toLowerCase()

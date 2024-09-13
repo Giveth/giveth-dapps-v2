@@ -4,6 +4,8 @@ import styled from 'styled-components';
 import BigNumber from 'bignumber.js';
 import { H2, H5, Lead, Flex } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
+import { useAccount } from 'wagmi';
+import { useQuery } from '@tanstack/react-query';
 import {
 	APRRow,
 	ArrowButton,
@@ -27,12 +29,12 @@ import { formatEthHelper, formatWeiHelper, Zero } from '@/helpers/number';
 import { APR } from '@/types/poolInfo';
 import { getLPStakingAPR } from '@/lib/stakingPool';
 import useGIVTokenDistroHelper from '@/hooks/useGIVTokenDistroHelper';
-import { useAppSelector } from '@/features/hooks';
 import { SimplePoolStakingConfig, StakingType } from '@/types/config';
 import { getNowUnixMS } from '@/helpers/time';
 import { IClaimViewCardProps } from '../Claim.view';
 import { WeiPerEther } from '@/lib/constants/constants';
 import { InputWithUnit } from '@/components/input/InputWithUnit';
+import { fetchSubgraphData } from '@/services/subgraph.service';
 
 const InvestCardContainer = styled(Card)`
 	&::before {
@@ -88,15 +90,26 @@ const Desc = styled(Lead)`
 const InvestCard: FC<IClaimViewCardProps> = ({ index }) => {
 	const { totalAmount, step, goNextStep, goPreviousStep } = useClaim();
 	const { formatMessage } = useIntl();
-
 	const [deposit, setDeposit] = useState<string>('0');
 	const [potentialClaim, setPotentialClaim] = useState(0n);
 	const [earnEstimate, setEarnEstimate] = useState(0n);
 	const [APR, setAPR] = useState<BigNumber>(Zero);
+
+	const { address } = useAccount();
 	const { givTokenDistroHelper } = useGIVTokenDistroHelper();
-	const { gnosisValues, mainnetValues } = useAppSelector(
-		state => state.subgraph,
-	);
+	const gnosisValues = useQuery({
+		queryKey: ['subgraph', config.GNOSIS_NETWORK_NUMBER, address],
+		queryFn: async () =>
+			await fetchSubgraphData(config.GNOSIS_NETWORK_NUMBER, address),
+		staleTime: config.SUBGRAPH_POLLING_INTERVAL,
+	});
+
+	const mainnetValues = useQuery({
+		queryKey: ['subgraph', config.MAINNET_NETWORK_NUMBER, address],
+		queryFn: async () =>
+			await fetchSubgraphData(config.MAINNET_NETWORK_NUMBER, address),
+		staleTime: config.SUBGRAPH_POLLING_INTERVAL,
+	});
 
 	useEffect(() => {
 		if (totalAmount) {
@@ -137,6 +150,7 @@ const InvestCard: FC<IClaimViewCardProps> = ({ index }) => {
 	);
 
 	useEffect(() => {
+		if (!gnosisValues.data || !mainnetValues.data) return;
 		const getMaxAPR = async (promises: Promise<APR>[]) => {
 			const stakePoolAPRs = await Promise.all(promises);
 			let maxApr = Zero;
@@ -150,11 +164,11 @@ const InvestCard: FC<IClaimViewCardProps> = ({ index }) => {
 		config.GNOSIS_CONFIG.pools.forEach(poolStakingConfig => {
 			const promise: Promise<APR> = getLPStakingAPR(
 				poolStakingConfig as SimplePoolStakingConfig,
-				gnosisValues,
+				gnosisValues.data,
 			);
 			promiseQueue.push(promise);
 		});
-		config.MAINNET_CONFIG.pools.forEach(poolStakingConfig => {
+		config.MAINNET_CONFIG.pools?.forEach(poolStakingConfig => {
 			const isDiscontinued = poolStakingConfig.farmEndTimeMS
 				? getNowUnixMS() > poolStakingConfig.farmEndTimeMS
 				: false;
@@ -167,12 +181,12 @@ const InvestCard: FC<IClaimViewCardProps> = ({ index }) => {
 
 			const promise: Promise<APR> = getLPStakingAPR(
 				poolStakingConfig as SimplePoolStakingConfig,
-				mainnetValues,
+				mainnetValues.data,
 			);
 			promiseQueue.push(promise);
 		});
 		getMaxAPR(promiseQueue);
-	}, [mainnetValues, gnosisValues]);
+	}, [mainnetValues.data, gnosisValues.data]);
 
 	return (
 		<InvestCardContainer $activeIndex={step} $index={index}>

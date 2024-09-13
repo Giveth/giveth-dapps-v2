@@ -1,6 +1,6 @@
 {
 	"name": "givethdapp",
-	"version": "2.29.2",
+	"version": "2.30.0",
 	"private": true,
 	"scripts": {
 		"build": "next build",
@@ -12,7 +12,7 @@
 		"cypress": "cypress open"
 	},
 	"resolutions": {
-		"styled-components": "^6",
+		"styled-components": "^6.1.12",
 		"@types/react": "^18.0.15",
 		"@types/react-dom": "^18.0.6"
 	},
@@ -30,11 +30,12 @@
 		"@solana/wallet-adapter-react-ui": "^0.9.35",
 		"@solana/wallet-adapter-wallets": "^0.19.26",
 		"@solana/web3.js": "^1.90.0",
+		"@stellar/stellar-sdk": "^12.2.0",
 		"@superfluid-finance/sdk-core": "^0.7.0",
 		"@tanstack/react-query": "^5.45.1",
 		"@vercel/speed-insights": "^1.0.9",
 		"@web3auth/sign-in-with-solana": "^3.0.0",
-		"@web3modal/wagmi": "^5.0.6",
+		"@web3modal/wagmi": "^5.1.7",
 		"apollo-upload-client": "^18.0.1",
 		"base58": "^2.0.1",
 		"bignumber.js": "^9.1.2",
@@ -46,6 +47,8 @@
 		"lottie-react": "^2.4.0",
 		"next": "^14.2.3",
 		"nprogress": "^0.2.0",
+		"posthog-js": "^1.147.0",
+		"qrcode": "^1.5.3",
 		"quill": "^1.3.7",
 		"quill-emoji": "^0.2.0",
 		"quill-image-resize-module": "^3.0.0",
@@ -65,11 +68,11 @@
 		"react-share": "^5.0.3",
 		"sharp": "^0.33.3",
 		"siwe": "^2.3.2",
-		"styled-components": "^6.1.11",
+		"styled-components": "^6.1.12",
 		"swiper": "^11.1.3",
 		"unsplash-js": "^7.0.19",
 		"viem": "^2.16.1",
-		"wagmi": "^2.10.4"
+		"wagmi": "^2.12.10"
 	},
 	"devDependencies": {
 		"@babel/preset-typescript": "^7.23.3",
@@ -84,6 +87,7 @@
 		"@types/lodash.isequal": "^4.5.8",
 		"@types/node": "^20.11.20",
 		"@types/nprogress": "^0.2.3",
+		"@types/qrcode": "^1.5.5",
 		"@types/react": "^18.3.2",
 		"@types/react-custom-scrollbars": "^4.0.13",
 		"@types/react-datepicker": "^6.0.1",
