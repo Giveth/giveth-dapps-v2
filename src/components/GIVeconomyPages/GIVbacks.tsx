@@ -45,6 +45,7 @@ import Routes from '@/lib/constants/Routes';
 import { SubgraphDataHelper } from '@/lib/subgraph/subgraphDataHelper';
 import { fetchSubgraphData } from '@/services/subgraph.service';
 import { FETCH_ALLOCATED_GIVBACKS } from '@/apollo/gql/gqlGivbacks';
+import { client } from '@/apollo/apolloClient';
 
 export const TabGIVbacksTop = () => {
 	const { formatMessage } = useIntl();
@@ -148,7 +149,23 @@ export const TabGIVbacksBottom = () => {
 	const [round, setRound] = useState(0);
 	const [roundStarTime, setRoundStarTime] = useState(new Date());
 	const [roundEndTime, setRoundEndTime] = useState(new Date());
-	const { data } = useQuery(FETCH_ALLOCATED_GIVBACKS);
+	const [givbackAllocations, setGivbackAllocations] = useState(null);
+
+	useEffect(() => {
+		async function fetchAllocatedGivbacks() {
+			const { data } = await client.query({
+				query: FETCH_ALLOCATED_GIVBACKS,
+				fetchPolicy: 'no-cache',
+			});
+			setGivbackAllocations(data?.allocatedGivbacks);
+			console.log(
+				'fetchAllocatedGivbacks** ',
+				JSON.stringify(data?.allocatedGivbacks, null, 2),
+			);
+		}
+		fetchAllocatedGivbacks();
+	}, []);
+
 	const { givTokenDistroHelper, isLoaded } = useGIVTokenDistroHelper();
 	useEffect(() => {
 		if (
@@ -250,11 +267,9 @@ export const TabGIVbacksBottom = () => {
 										</P>
 										<GivAllocated>
 											<NoWrap>
-												{data &&
-												data.allocatedGivbacks &&
-												data.allocatedGivbacks
-													.allocatedGivTokens
-													? `${data.allocatedGivbacks.allocatedGivTokens} GIV`
+												{givbackAllocations &&
+												givbackAllocations.allocatedGivTokens
+													? `${givbackAllocations.allocatedGivTokens} GIV`
 													: '?'}
 											</NoWrap>
 										</GivAllocated>
