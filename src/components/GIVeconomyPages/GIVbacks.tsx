@@ -149,7 +149,15 @@ export const TabGIVbacksBottom = () => {
 	const [round, setRound] = useState(0);
 	const [roundStarTime, setRoundStarTime] = useState(new Date());
 	const [roundEndTime, setRoundEndTime] = useState(new Date());
-	const [givbackAllocations, setGivbackAllocations] = useState(null);
+	// Define an interface for the type of givbackAllocations
+	interface GivbackAllocations {
+		usdValueSentAmountInPowerRound: number;
+		allocatedGivTokens: number;
+		givPrice: number;
+		date: string;
+	}
+	const [givbackAllocations, setGivbackAllocations] =
+		useState<GivbackAllocations | null>(null);
 
 	useEffect(() => {
 		async function fetchAllocatedGivbacks() {
