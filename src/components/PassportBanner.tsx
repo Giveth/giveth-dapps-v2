@@ -144,35 +144,35 @@ export const PassportBanner = () => {
 							{
 								data:
 									qfEligibilityState ===
-									EQFElegibilityState.NOT_STARTED &&
+										EQFElegibilityState.NOT_STARTED &&
 									currentRound
 										? smallFormatDate(
-											new Date(
-												currentRound?.beginDate,
-											),
-										)
+												new Date(
+													currentRound?.beginDate,
+												),
+											)
 										: undefined,
 							},
 						)}
 						{currentRound &&
-						qfEligibilityState ===
-						EQFElegibilityState.RECHECK_ELIGIBILITY && (
-							<>
-								{' '}
-								<strong>
-									{new Date(currentRound.endDate)
-										.toLocaleString(locale || 'en-US', {
-											day: 'numeric',
-											month: 'short',
-										})
-										.replace(/,/g, '')}
-								</strong>
-							</>
-						)}
+							qfEligibilityState ===
+								EQFElegibilityState.RECHECK_ELIGIBILITY && (
+								<>
+									{' '}
+									<strong>
+										{new Date(currentRound.endDate)
+											.toLocaleString(locale || 'en-US', {
+												day: 'numeric',
+												month: 'short',
+											})
+											.replace(/,/g, '')}
+									</strong>
+								</>
+							)}
 					</P>
 				</Flex>
 				{qfEligibilityState ===
-				EQFElegibilityState.CHECK_ELIGIBILITY && (
+					EQFElegibilityState.CHECK_ELIGIBILITY && (
 					<StyledLink onClick={() => fetchUserMBDScore()}>
 						<GLink>
 							{formatMessage({
@@ -182,7 +182,7 @@ export const PassportBanner = () => {
 					</StyledLink>
 				)}
 				{qfEligibilityState ===
-				EQFElegibilityState.RECHECK_ELIGIBILITY && (
+					EQFElegibilityState.RECHECK_ELIGIBILITY && (
 					<StyledLink onClick={() => setShowModal(true)}>
 						<GLink>
 							{formatMessage({
@@ -200,7 +200,7 @@ export const PassportBanner = () => {
 					</StyledStatus>
 				)}
 				{qfEligibilityState ===
-				EQFElegibilityState.MORE_INFO_NEEDED && (
+					EQFElegibilityState.MORE_INFO_NEEDED && (
 					<StyledLink onClick={() => setShowModal(true)}>
 						<GLink>
 							{formatMessage({
