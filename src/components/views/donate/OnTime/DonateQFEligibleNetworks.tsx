@@ -9,6 +9,7 @@ import {
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import { useIntl } from 'react-intl';
+import { useRouter } from 'next/router';
 import SwitchNetwork from '@/components/modals/SwitchNetwork';
 import { useDonateData } from '@/context/donate.context';
 import { getActiveRound } from '@/helpers/qf';
@@ -20,6 +21,11 @@ const DonateQFEligibleNetworks = () => {
 	const [showModal, setShowModal] = useState(false);
 	const { project } = useDonateData();
 	const { formatMessage } = useIntl();
+
+	const router = useRouter();
+	const [isQRDonation, setIsQRDonation] = useState(
+		router.query.chain === ChainType.STELLAR.toLowerCase(),
+	);
 
 	const { activeStartedRound } = getActiveRound(project.qfRounds);
 
@@ -45,11 +51,23 @@ const DonateQFEligibleNetworks = () => {
 					})}
 				</Flex>
 			</MakeDonationTitle>
-			<MakeDonationDescription>
-				{formatMessage({ id: 'label.donations_made_on' })}
-				&nbsp;<BoldCaption>{chainsString}</BoldCaption>&nbsp;
-				{formatMessage({ id: 'label.are_eligible_to_be_matched' })}
-			</MakeDonationDescription>
+			{!isQRDonation && (
+				<MakeDonationDescription>
+					{formatMessage({ id: 'label.donations_made_on' })}
+					&nbsp;<BoldCaption>{chainsString}</BoldCaption>&nbsp;
+					{formatMessage({ id: 'label.are_eligible_to_be_matched' })}
+				</MakeDonationDescription>
+			)}
+			{isQRDonation && (
+				<MakeDonationDescription>
+					{formatMessage({ id: 'label.donations_made_on' })}
+					&nbsp;<BoldCaption>{chainsString}</BoldCaption>&nbsp;
+					{formatMessage({ id: 'label.are_eligible_to_be_matched' })}
+					{formatMessage({
+						id: 'label.stellar_is_not_eligible_for_matching',
+					})}
+				</MakeDonationDescription>
+			)}
 			<ActionsRow $justifyContent='flex-start' $alignItems='center'>
 				<StyledCaption onClick={() => setShowModal(true)}>
 					{formatMessage({ id: 'label.switch_network' })}

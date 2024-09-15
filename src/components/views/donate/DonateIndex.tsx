@@ -78,6 +78,9 @@ const DonateIndex: FC = () => {
 	const [showQRCode, setShowQRCode] = React.useState(
 		!!router.query.draft_donation,
 	);
+	const [isQRDonation, _setIsQRDonation] = useState(
+		router.query.chain === ChainType.STELLAR.toLowerCase(),
+	);
 	const [stopTimer, setStopTimer] = React.useState<void | (() => void)>();
 
 	useEffect(() => {
@@ -238,9 +241,10 @@ const DonateIndex: FC = () => {
 						</SublineBold>
 					</AlreadyDonatedWrapper>
 				)}
-				{!isSafeEnv && hasActiveQFRound && !isOnSolana && (
-					<PassportBanner />
-				)}
+				{!isSafeEnv &&
+					hasActiveQFRound &&
+					!isOnSolana &&
+					!isQRDonation && <PassportBanner />}
 				<NiceBanner />
 				<Row>
 					<Col xs={12} lg={6}>
@@ -268,6 +272,7 @@ const DonateIndex: FC = () => {
 									{!isMobile ? (
 										(!isRecurringTab && hasActiveQFRound) ||
 										(isRecurringTab &&
+											!isQRDonation &&
 											isOnEligibleNetworks) ? (
 											<QFSection projectData={project} />
 										) : (

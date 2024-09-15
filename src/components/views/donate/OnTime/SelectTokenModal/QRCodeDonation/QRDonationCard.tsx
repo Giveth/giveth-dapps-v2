@@ -39,6 +39,7 @@ import InlineToast, { EToastType } from '@/components/toasts/InlineToast';
 import { useAppSelector } from '@/features/hooks';
 import { useModalCallback } from '@/hooks/useModalCallback';
 import links from '@/lib/constants/links';
+import DonateQFEligibleNetworks from '@/components/views/donate/OnTime/DonateQFEligibleNetworks';
 
 interface QRDonationCardProps extends IDonationCardProps {
 	qrAcceptedTokens: IProjectAcceptedToken[];
@@ -62,6 +63,9 @@ export const QRDonationCard: FC<QRDonationCardProps> = ({
 	const { formatMessage } = useIntl();
 	const router = useRouter();
 	const { isSignedIn, isEnabled } = useAppSelector(state => state.user);
+	const [isQRDonation, _setIsQRDonation] = useState(
+		router.query.chain === ChainType.STELLAR.toLowerCase(),
+	);
 	const [showDonateModal, setShowDonateModal] = useState(false);
 	const { modalCallback: signInThenDonate } = useModalCallback(() =>
 		setShowDonateModal(true),
@@ -69,6 +73,7 @@ export const QRDonationCard: FC<QRDonationCardProps> = ({
 
 	const {
 		project,
+		hasActiveQFRound,
 		setQRDonationStatus,
 		setDraftDonationData,
 		setPendingDonationExists,
@@ -311,6 +316,9 @@ export const QRDonationCard: FC<QRDonationCardProps> = ({
 							<UsdAmountCard>$ {usdAmount}</UsdAmountCard>
 						</QRDonationInput>
 					</StyledInputWrapper>
+					{hasActiveQFRound && isQRDonation && (
+						<DonateQFEligibleNetworks />
+					)}
 					<CardBottom>
 						<FlexStyled
 							$justifyContent='space-between'
