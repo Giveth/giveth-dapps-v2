@@ -123,115 +123,104 @@ export const PassportBanner = () => {
 	const { isOnSolana, handleSingOutAndSignInWithEVM } = useGeneralWallet();
 	const [showModal, setShowModal] = useState<boolean>(false);
 	const [signWithWallet, setSignWithWallet] = useState<boolean>(false);
-	const router = useRouter();
-	const [isQRDonation, _setIsQRDonation] = useState(
-		router.query.chain === ChainType.STELLAR.toLowerCase(),
-	);
+
 	const isGSafeConnector = connector?.id === 'safe';
 
 	return !isOnSolana ? (
 		<>
-			{!isQRDonation && (
-				<PassportBannerWrapper
-					$bgColor={PassportBannerData[qfEligibilityState].bg}
-				>
-					<Flex gap='8px' $alignItems='center'>
-						<IconWrapper>
-							{PassportBannerData[qfEligibilityState].icon}
-						</IconWrapper>
-						<P>
-							{formatMessage(
-								{
-									id: PassportBannerData[qfEligibilityState]
-										.content,
-								},
-								{
-									data:
-										qfEligibilityState ===
-											EQFElegibilityState.NOT_STARTED &&
-										currentRound
-											? smallFormatDate(
-													new Date(
-														currentRound?.beginDate,
-													),
-												)
-											: undefined,
-								},
-							)}
-							{currentRound &&
-								qfEligibilityState ===
-									EQFElegibilityState.RECHECK_ELIGIBILITY && (
-									<>
-										{' '}
-										<strong>
-											{new Date(currentRound.endDate)
-												.toLocaleString(
-													locale || 'en-US',
-													{
-														day: 'numeric',
-														month: 'short',
-													},
-												)
-												.replace(/,/g, '')}
-										</strong>
-									</>
-								)}
-						</P>
-					</Flex>
-					{qfEligibilityState ===
-						EQFElegibilityState.CHECK_ELIGIBILITY && (
-						<StyledLink onClick={() => fetchUserMBDScore()}>
-							<GLink>
-								{formatMessage({
-									id: 'qf_donor_eligibility.banner.link.check_eligibility',
-								})}
-							</GLink>
-						</StyledLink>
-					)}
-					{qfEligibilityState ===
+			<PassportBannerWrapper
+				$bgColor={PassportBannerData[qfEligibilityState].bg}
+			>
+				<Flex gap='8px' $alignItems='center'>
+					<IconWrapper>
+						{PassportBannerData[qfEligibilityState].icon}
+					</IconWrapper>
+					<P>
+						{formatMessage(
+							{
+								id: PassportBannerData[qfEligibilityState]
+									.content,
+							},
+							{
+								data:
+									qfEligibilityState ===
+									EQFElegibilityState.NOT_STARTED &&
+									currentRound
+										? smallFormatDate(
+											new Date(
+												currentRound?.beginDate,
+											),
+										)
+										: undefined,
+							},
+						)}
+						{currentRound &&
+						qfEligibilityState ===
 						EQFElegibilityState.RECHECK_ELIGIBILITY && (
-						<StyledLink onClick={() => setShowModal(true)}>
-							<GLink>
-								{formatMessage({
-									id: 'qf_donor_eligibility.banner.link.recheck_eligibility',
-								})}
-							</GLink>
-						</StyledLink>
-					)}
-					{qfEligibilityState === EQFElegibilityState.PROCESSING && (
-						<StyledStatus>
+							<>
+								{' '}
+								<strong>
+									{new Date(currentRound.endDate)
+										.toLocaleString(locale || 'en-US', {
+											day: 'numeric',
+											month: 'short',
+										})
+										.replace(/,/g, '')}
+								</strong>
+							</>
+						)}
+					</P>
+				</Flex>
+				{qfEligibilityState ===
+				EQFElegibilityState.CHECK_ELIGIBILITY && (
+					<StyledLink onClick={() => fetchUserMBDScore()}>
+						<GLink>
 							{formatMessage({
-								id: 'label.processing',
+								id: 'qf_donor_eligibility.banner.link.check_eligibility',
 							})}
-							<Spinner
-								color={brandColors.mustard[600]}
-								size={25}
-							/>
-						</StyledStatus>
-					)}
-					{qfEligibilityState ===
-						EQFElegibilityState.MORE_INFO_NEEDED && (
-						<StyledLink onClick={() => setShowModal(true)}>
-							<GLink>
-								{formatMessage({
-									id: 'label.add_more_info',
-								})}
-							</GLink>
-						</StyledLink>
-					)}
-					{qfEligibilityState === EQFElegibilityState.NOT_SIGNED && (
-						<StyledLink onClick={() => setSignWithWallet(true)}>
-							<GLink>
-								{formatMessage({
-									id: 'label.sign_message',
-								})}
-							</GLink>
-							<IconWalletOutline16 />
-						</StyledLink>
-					)}
-				</PassportBannerWrapper>
-			)}
-			{!isQRDonation && showModal && (
+						</GLink>
+					</StyledLink>
+				)}
+				{qfEligibilityState ===
+				EQFElegibilityState.RECHECK_ELIGIBILITY && (
+					<StyledLink onClick={() => setShowModal(true)}>
+						<GLink>
+							{formatMessage({
+								id: 'qf_donor_eligibility.banner.link.recheck_eligibility',
+							})}
+						</GLink>
+					</StyledLink>
+				)}
+				{qfEligibilityState === EQFElegibilityState.PROCESSING && (
+					<StyledStatus>
+						{formatMessage({
+							id: 'label.processing',
+						})}
+						<Spinner color={brandColors.mustard[600]} size={25} />
+					</StyledStatus>
+				)}
+				{qfEligibilityState ===
+				EQFElegibilityState.MORE_INFO_NEEDED && (
+					<StyledLink onClick={() => setShowModal(true)}>
+						<GLink>
+							{formatMessage({
+								id: 'label.add_more_info',
+							})}
+						</GLink>
+					</StyledLink>
+				)}
+				{qfEligibilityState === EQFElegibilityState.NOT_SIGNED && (
+					<StyledLink onClick={() => setSignWithWallet(true)}>
+						<GLink>
+							{formatMessage({
+								id: 'label.sign_message',
+							})}
+						</GLink>
+						<IconWalletOutline16 />
+					</StyledLink>
+				)}
+			</PassportBannerWrapper>
+			{showModal && (
 				<PassportModal
 					qfEligibilityState={qfEligibilityState}
 					passportState={passportState}
@@ -243,7 +232,7 @@ export const PassportBanner = () => {
 					handleSign={handleSign}
 				/>
 			)}
-			{!isQRDonation && signWithWallet && (
+			{signWithWallet && (
 				<SignWithWalletModal
 					isGSafeConnector={isGSafeConnector}
 					setShowModal={() => {
@@ -253,24 +242,20 @@ export const PassportBanner = () => {
 			)}
 		</>
 	) : (
-		<>
-			{!isQRDonation && (
-				<PassportBannerWrapper
-					$bgColor={PassportBannerData[qfEligibilityState].bg}
-				>
-					<P>
-						{formatMessage({
-							id: 'label.to_activate_your_gitcoin_passport',
-						})}
-					</P>
-					<StyledP onClick={handleSingOutAndSignInWithEVM}>
-						{formatMessage({
-							id: 'label.switch_to_evm',
-						})}
-					</StyledP>
-				</PassportBannerWrapper>
-			)}
-		</>
+		<PassportBannerWrapper
+			$bgColor={PassportBannerData[qfEligibilityState].bg}
+		>
+			<P>
+				{formatMessage({
+					id: 'label.to_activate_your_gitcoin_passport',
+				})}
+			</P>
+			<StyledP onClick={handleSingOutAndSignInWithEVM}>
+				{formatMessage({
+					id: 'label.switch_to_evm',
+				})}
+			</StyledP>
+		</PassportBannerWrapper>
 	);
 };
 
@@ -286,7 +271,6 @@ export const PassportBannerWrapper = styled(Flex)<IPassportBannerWrapperProps>`
 	justify-content: center;
 	gap: 8px;
 	position: relative;
-
 	${mediaQueries.tablet} {
 		flex-direction: row;
 	}
