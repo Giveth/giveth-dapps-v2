@@ -16,6 +16,7 @@ import { getActiveRound } from '@/helpers/qf';
 import { getChainName } from '@/lib/network';
 import { ChainType } from '@/types/config';
 import links from '@/lib/constants/links';
+import { slugToProjectDonate } from '@/lib/routeCreators';
 
 const DonateQFEligibleNetworks = () => {
 	const [showModal, setShowModal] = useState(false);
@@ -66,25 +67,39 @@ const DonateQFEligibleNetworks = () => {
 					{formatMessage({
 						id: 'label.stellar_is_not_eligible_for_matching',
 					})}
+					<ExternalLink
+						href={slugToProjectDonate(project.slug)}
+						target='_blank'
+						color={brandColors.pinky[500]}
+						rel='noreferrer noopener'
+					>
+						<StyledCaption>
+							{
+								"Go back and make sure you're on the right network"
+							}
+						</StyledCaption>
+					</ExternalLink>
 				</MakeDonationDescription>
 			)}
-			<ActionsRow $justifyContent='flex-start' $alignItems='center'>
-				<StyledCaption onClick={() => setShowModal(true)}>
-					{formatMessage({ id: 'label.switch_network' })}
-				</StyledCaption>
-				<Divider />
-				<ExternalLink
-					href={links.ACROSS_BRIDGE}
-					target='_blank'
-					rel='noreferrer noopener'
-				>
-					<StyledCaption>
-						{formatMessage({ id: 'label.bridge_tokens' })}
+			{!isQRDonation && (
+				<ActionsRow $justifyContent='flex-start' $alignItems='center'>
+					<StyledCaption onClick={() => setShowModal(true)}>
+						{formatMessage({ id: 'label.switch_network' })}
 					</StyledCaption>
-					<IconExternalLink16 />
-				</ExternalLink>
-			</ActionsRow>
-			{showModal && (
+					<Divider />
+					<ExternalLink
+						href={links.ACROSS_BRIDGE}
+						target='_blank'
+						rel='noreferrer noopener'
+					>
+						<StyledCaption>
+							{formatMessage({ id: 'label.bridge_tokens' })}
+						</StyledCaption>
+						<IconExternalLink16 />
+					</ExternalLink>
+				</ActionsRow>
+			)}
+			{!isQRDonation && showModal && (
 				<SwitchNetwork
 					setShowModal={setShowModal}
 					customNetworks={eligibleNetworksWithChainType}
@@ -121,6 +136,8 @@ const BoldCaption = styled(Caption)`
 
 const StyledCaption = styled(Caption)`
 	cursor: pointer;
+	color: ${brandColors
+		.pinky[500]} !important; // Match this to the other link's color
 `;
 
 const ActionsRow = styled(Flex)`
