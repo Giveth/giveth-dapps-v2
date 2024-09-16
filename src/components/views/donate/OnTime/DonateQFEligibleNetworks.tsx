@@ -6,7 +6,7 @@ import {
 	neutralColors,
 	Flex,
 } from '@giveth/ui-design-system';
-import React, { useState } from 'react';
+import React, { FC, useState } from 'react';
 import styled from 'styled-components';
 import { useIntl } from 'react-intl';
 import { useRouter } from 'next/router';
@@ -16,17 +16,20 @@ import { getActiveRound } from '@/helpers/qf';
 import { getChainName } from '@/lib/network';
 import { ChainType } from '@/types/config';
 import links from '@/lib/constants/links';
-import { slugToProjectDonate } from '@/lib/routeCreators';
 
-const DonateQFEligibleNetworks = () => {
+type TDonateQFEligibleNetworksProps = {
+	goBack?: () => void;
+};
+
+const DonateQFEligibleNetworks: FC<TDonateQFEligibleNetworksProps> = ({
+	goBack,
+}) => {
 	const [showModal, setShowModal] = useState(false);
 	const { project } = useDonateData();
 	const { formatMessage } = useIntl();
 
 	const router = useRouter();
-	const [isQRDonation, setIsQRDonation] = useState(
-		router.query.chain === ChainType.STELLAR.toLowerCase(),
-	);
+	const isQRDonation = router.query.chain === ChainType.STELLAR.toLowerCase();
 
 	const { activeStartedRound } = getActiveRound(project.qfRounds);
 
@@ -41,6 +44,10 @@ const DonateQFEligibleNetworks = () => {
 		}));
 
 	const chainsString = eligibleChainNames?.join(' & ');
+
+	const goBackToNetworkSelection = () => {
+		goBack?.();
+	};
 
 	return (
 		<Container>
@@ -67,18 +74,9 @@ const DonateQFEligibleNetworks = () => {
 					{formatMessage({
 						id: 'label.stellar_is_not_eligible_for_matching',
 					})}
-					<ExternalLink
-						href={slugToProjectDonate(project.slug)}
-						target='_blank'
-						color={brandColors.pinky[500]}
-						rel='noreferrer noopener'
-					>
-						<StyledCaption>
-							{
-								"Go back and make sure you're on the right network"
-							}
-						</StyledCaption>
-					</ExternalLink>
+					<StyledCaption onClick={() => goBackToNetworkSelection()} style={{ marginTop: '4px' }}>
+						{formatMessage({ id: 'label.go_back_and_check_network' })}
+					</StyledCaption>
 				</MakeDonationDescription>
 			)}
 			{!isQRDonation && (

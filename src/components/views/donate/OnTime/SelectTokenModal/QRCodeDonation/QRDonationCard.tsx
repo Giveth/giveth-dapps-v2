@@ -63,10 +63,8 @@ export const QRDonationCard: FC<QRDonationCardProps> = ({
 	const { formatMessage } = useIntl();
 	const router = useRouter();
 	const { isSignedIn, isEnabled } = useAppSelector(state => state.user);
-	const [isQRDonation, _setIsQRDonation] = useState(
-		router.query.chain === ChainType.STELLAR.toLowerCase(),
-	);
-	const [showDonateModal, setShowDonateModal] = useState(false);
+	const isQRDonation = router.query.chain === ChainType.STELLAR.toLowerCase();
+	const [_showDonateModal, setShowDonateModal] = useState(false);
 	const { modalCallback: signInThenDonate } = useModalCallback(() =>
 		setShowDonateModal(true),
 	);
@@ -339,7 +337,7 @@ export const QRDonationCard: FC<QRDonationCardProps> = ({
 						</QRDonationInput>
 					</StyledInputWrapper>
 					{hasActiveQFRound && isQRDonation && (
-						<DonateQFEligibleNetworks />
+						<DonateQFEligibleNetworks goBack={goBack} />
 					)}
 					<CardBottom>
 						<FlexStyled
