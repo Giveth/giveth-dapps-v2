@@ -44,9 +44,9 @@ const WhatCanYouDo = () => {
 				<li>
 					<b>Earn GIVpower to boost projects:</b> If you lock your GIV
 					tokens with Giveth, you can also get GIVpower, which will
-					allow you to boost verified projects to improve their
-					project ranking. Donors to higher ranked projects will get
-					more GIV from our GIVbacks program.
+					allow you to boost vouched projects to improve their project
+					ranking. Donors to higher ranked projects will get more GIV
+					from our GIVbacks program.
 				</li>
 				<li>
 					<b>Watch Your Impact Grow:</b> Stay updated with regular

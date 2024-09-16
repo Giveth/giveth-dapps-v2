@@ -16,9 +16,9 @@ const projectOwnerSteps = [
 		),
 	},
 	{
-		title: 'Get Your Project Verified',
+		title: 'Make your project GIVbacks Eligible',
 		description:
-			'It is possible to have a project on Giveth without being verified. However, there are some pretty good benefits to getting verified, including greater legitimacy and more rewards for your donors. Our verification process is simply, straightforward and human.',
+			'It is possible to have a project on Giveth without being GIVbacks eligible. However, there are some pretty good benefits to becoming GIVbacks eligible, including greater legitimacy and more rewards for your donors. Our application process is simply, straightforward and human.',
 		element: (
 			<iframe
 				width='100%'
