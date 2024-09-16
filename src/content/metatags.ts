@@ -41,8 +41,8 @@ export const projectsMetatags = {
 };
 
 export const givbacksMetatags = {
-	title: 'GIVbacks: Get rewarded for donating to GIVbacks eligible projects',
-	desc: 'GIVbacks rewards donors to GIVbacks eligible projects with GIV, super-charging Giveth as a donor-driven force for good.',
+	title: 'GIVbacks: Get rewarded for donating to verified projects',
+	desc: 'When you make a donation of $5 or more to a GIVbacks eligible project you qualify to get GIV!',
 	image: 'https://i.ibb.co/HTbdCdd/Thumbnail.png',
 	url: 'https://giveth.io/givbacks',
 };
