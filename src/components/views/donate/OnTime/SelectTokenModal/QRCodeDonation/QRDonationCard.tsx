@@ -40,7 +40,6 @@ import { useAppSelector } from '@/features/hooks';
 import { useModalCallback } from '@/hooks/useModalCallback';
 import links from '@/lib/constants/links';
 import DonateQFEligibleNetworks from '@/components/views/donate/OnTime/DonateQFEligibleNetworks';
-import { ParsedUrlQueryInput } from 'querystring';
 
 interface QRDonationCardProps extends IDonationCardProps {
 	qrAcceptedTokens: IProjectAcceptedToken[];
