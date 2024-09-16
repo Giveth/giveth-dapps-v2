@@ -79,6 +79,7 @@ const ProjectsIndex = (props: IProjectsView) => {
 	const [totalPages, setTotalPages] = useState(
 		Math.ceil(_totalCount / projects.length),
 	);
+	const [totalCount, setTotalCount] = useState(_totalCount);
 	const isMobile = useMediaQuery(`(max-width: ${deviceSize.tablet - 1}px)`);
 
 	const dispatch = useAppDispatch();
@@ -123,6 +124,7 @@ const ProjectsIndex = (props: IProjectsView) => {
 			const count = res.data?.allProjects?.totalCount;
 			const totalPages = Math.ceil(count / projects.length);
 			setTotalPages(totalPages);
+			setTotalCount(count);
 
 			setFilteredProjects(prevProjects => [
 				...prevProjects,
@@ -291,7 +293,7 @@ const ProjectsIndex = (props: IProjectsView) => {
 				)}
 				{onProjectsPageOrActiveQFPage && (
 					<SortingContainer>
-						<SortContainer totalCount={_totalCount} />
+						<SortContainer totalCount={totalCount} />
 					</SortingContainer>
 				)}
 				{isFetchingNextPage && <Loader className='dot-flashing' />}
