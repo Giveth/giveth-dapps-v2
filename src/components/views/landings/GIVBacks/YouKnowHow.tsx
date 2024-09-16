@@ -26,7 +26,7 @@ const YouKnowHow = () => {
 					create impact, but rewards you in return. The Giveth mission
 					is to reward & empower those who give — to projects, to
 					society, and to the world. With GIVbacks, we’re rewarding
-					givers by giving GIV to donors to verified projects on
+					givers by giving GIV to donors to GIVbacks eligible projects on
 					Giveth.
 				</H4>
 			</Wrapper>

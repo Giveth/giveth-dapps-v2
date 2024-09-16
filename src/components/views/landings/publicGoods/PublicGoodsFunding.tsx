@@ -171,13 +171,13 @@ const PublicGoodsFunding = () => {
 						We support donations on multiple chains including
 						Ethereum Mainnet, Gnosis Chain, Optimism, Celo, and
 						Polygon. More are always being added. Donating to a
-						verified project on Giveth means receiving GIV tokens in
-						return, with the potential for up to 80% of the actual
-						donation. These tokens can be used for a variety of
-						purposes, including earning rewards through staking in
-						the GIVgarden and participating in governance. They can
-						also easily be converted to other cryptocurrencies or
-						fiat currencies.
+						GIVbacks eligible project on Giveth means receiving GIV
+						tokens in return, with the potential for up to 80% of
+						the actual donation. These tokens can be used for a
+						variety of purposes, including earning rewards through
+						staking in the GIVgarden and participating in
+						governance. They can also easily be converted to other
+						cryptocurrencies or fiat currencies.
 					</Lead>
 				</Section>
 				<Section>

@@ -18,7 +18,7 @@ const GIVeconomySteps = [
 	{
 		title: 'GIVBacks: Get Rewarded for Donating',
 		description:
-			'Not only does Giveth take zero fees for all donations, but we actually reward donors for donating! Learn about our revolutionary GIVbacks program, and how you can earn GIV tokens when you donate to a verified project on Giveth.',
+			'Not only does Giveth take zero fees for all donations, but we actually reward donors for donating! Learn about our revolutionary GIVbacks program, and how you can earn GIV tokens when you donate to a GIVbacks eligible project on Giveth.',
 		element: (
 			<iframe
 				width='100%'
@@ -34,7 +34,7 @@ const GIVeconomySteps = [
 	{
 		title: 'Get a GIVstream',
 		description:
-			"Wouldn't it be cool if you could get constant rewards for donating? That's exactly what our GIVstream does. When you donate to a verified project on Giveth, you'll get a constant stream of GIV tokens until December 23, 2026!",
+			"Wouldn't it be cool if you could get constant rewards for donating? That's exactly what our GIVstream does. When you donate to a GIVbacks eligible project on Giveth, you'll get a constant stream of GIV tokens until December 23, 2026!",
 		buttonText: 'VIEW OUR ENTIRE GIVeconomy SERIES',
 		buttonLink:
 			'https://www.youtube.com/watch?v=-JXwwIGJGQQ&list=PL4Artm1rmCWH4Q5XnrQWf8fm0xob3hbdZ',

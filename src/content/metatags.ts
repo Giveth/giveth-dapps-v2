@@ -28,14 +28,14 @@ export const givstreamMetatags = {
 
 export const givpowerMetatags = {
 	title: 'GIVpower: Boost Projects with GIVpower',
-	desc: 'With GIVpower, you can support verified projects, while earning rewards on your GIV.',
+	desc: 'With GIVpower, you can support vouched projects, while earning rewards on your GIV.',
 	image: 'https://i.ibb.co/HTbdCdd/Thumbnail.png',
 	url: 'https://giveth.io/givpower',
 };
 
 export const projectsMetatags = {
 	title: 'Give directly to for-good projects with crypto & zero fees',
-	desc: 'Support for-good projects, nonprofits & charities with crypto donations. Give directly with zero added fees. Get rewarded when you donate to verified projects!',
+	desc: 'Support for-good projects, nonprofits & charities with crypto donations. Give directly with zero added fees. Get rewarded when you donate to GIVbacks eligible projects!',
 	image: 'https://giveth.mypinata.cloud/ipfs/QmQ9sfdevs9vS7czBXBfDaRRPhU8a6T5gXxF3NDGSnQe1c',
 	url: 'https://giveth.io/projects',
 };
@@ -49,7 +49,7 @@ export const givbacksMetatags = {
 
 export const giveconomyMetatags = {
 	title: 'GIVeconomy: Empowering our collective to build the Future of Giving.',
-	desc: 'Giveth is a donor owned and governed economy. With GIVbacks, we reward donors to verified projects on Giveth with GIV. ',
+	desc: 'Giveth is a donor owned and governed economy. With GIVbacks, we reward donors to GIVbacks eligible projects on Giveth with GIV. ',
 	image: 'https://i.ibb.co/HTbdCdd/Thumbnail.png',
 	url: 'https://giveth.io/giveconomy',
 };

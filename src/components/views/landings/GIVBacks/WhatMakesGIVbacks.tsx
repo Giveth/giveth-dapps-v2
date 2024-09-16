@@ -13,9 +13,9 @@ const WhatMakesGIVbacks = () => {
 						<br />
 						Our mission at Giveth is to recognize and incentivize
 						those who selflessly give. Through GIVbacks, every
-						donation made to our verified projects doesn’t just
+						donation made to our GIVbacks eligible projects doesn’t just
 						create societal value, but also earns you GIV tokens.
-						When you donate to verified projects you qualify to
+						When you donate to GIVbacks eligible projects you qualify to
 						receive GIV tokens. Through GIVbacks, GIV empowers
 						donors with governance rights.
 					</li>

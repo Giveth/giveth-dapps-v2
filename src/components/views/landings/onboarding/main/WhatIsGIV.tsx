@@ -27,7 +27,7 @@ const WhatIsGIV = () => {
 						GIV as a reward for donating to{' '}
 						<InternalLink
 							href={Routes.AllProjects}
-							title='verified projects'
+							title='GIVbacks eligible projects'
 							color={brandColors.pinky[500]}
 						/>{' '}
 						(through our{' '}
