@@ -230,7 +230,7 @@ const DonateIndex: FC = () => {
 						}
 					/>
 				)}
-				{alreadyDonated && (
+				{alreadyDonated && !isQRDonation && (
 					<AlreadyDonatedWrapper>
 						<IconDonation24 />
 						<SublineBold>
