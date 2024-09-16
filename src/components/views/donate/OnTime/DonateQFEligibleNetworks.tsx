@@ -74,8 +74,13 @@ const DonateQFEligibleNetworks: FC<TDonateQFEligibleNetworksProps> = ({
 					{formatMessage({
 						id: 'label.stellar_is_not_eligible_for_matching',
 					})}
-					<StyledCaption onClick={() => goBackToNetworkSelection()} style={{ marginTop: '4px' }}>
-						{formatMessage({ id: 'label.go_back_and_check_network' })}
+					<StyledCaption
+						onClick={() => goBackToNetworkSelection()}
+						style={{ marginTop: '4px' }}
+					>
+						{formatMessage({
+							id: 'label.go_back_and_check_network',
+						})}
 					</StyledCaption>
 				</MakeDonationDescription>
 			)}
