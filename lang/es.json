@@ -338,6 +338,8 @@
 	"label.donations": "Donaciones",
 	"label.donations_and_projects": "Donaciones & Proyectos",
 	"label.donations_made_on": "Donaciones realizadas el",
+	"label.go_back_and_check_network": "Vuelve atrás y asegúrate de que estás en la red correcta.",
+	"label.stellar_is_not_eligible_for_matching": "Stellar no es elegible para esta ronda.",
 	"label.donations_received": "Donaciones Recibidas",
 	"label.donation_finalized": "¡Donación finalizada!",
 	"label.donation_submitted": "Donación enviada",
