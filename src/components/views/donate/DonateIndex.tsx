@@ -78,10 +78,9 @@ const DonateIndex: FC = () => {
 	const [showQRCode, setShowQRCode] = React.useState(
 		!!router.query.draft_donation,
 	);
-	const [isQRDonation, _setIsQRDonation] = useState(
-		router.query.chain === ChainType.STELLAR.toLowerCase(),
-	);
 	const [stopTimer, setStopTimer] = React.useState<void | (() => void)>();
+
+	const isQRDonation = router.query.chain === ChainType.STELLAR.toLowerCase();
 
 	useEffect(() => {
 		dispatch(setShowHeader(false));
@@ -270,9 +269,10 @@ const DonateIndex: FC = () => {
 										/>
 									</ImageWrapper>
 									{!isMobile ? (
-										(!isRecurringTab && hasActiveQFRound) ||
+										(!isQRDonation &&
+											!isRecurringTab &&
+											hasActiveQFRound) ||
 										(isRecurringTab &&
-											!isQRDonation &&
 											isOnEligibleNetworks) ? (
 											<QFSection projectData={project} />
 										) : (

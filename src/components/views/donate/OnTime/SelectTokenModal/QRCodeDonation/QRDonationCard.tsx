@@ -40,6 +40,7 @@ import { useAppSelector } from '@/features/hooks';
 import { useModalCallback } from '@/hooks/useModalCallback';
 import links from '@/lib/constants/links';
 import DonateQFEligibleNetworks from '@/components/views/donate/OnTime/DonateQFEligibleNetworks';
+import { ParsedUrlQueryInput } from 'querystring';
 
 interface QRDonationCardProps extends IDonationCardProps {
 	qrAcceptedTokens: IProjectAcceptedToken[];
@@ -141,20 +142,42 @@ export const QRDonationCard: FC<QRDonationCardProps> = ({
 	}, [draftDonationId]);
 
 	const goBack = async () => {
+		const prevQuery = router.query;
+
+		const updateQuery = (excludeKey: string) =>
+			Object.keys(prevQuery).reduce((acc, key) => {
+				return key !== excludeKey
+					? { ...acc, [key]: prevQuery[key] }
+					: acc;
+			}, {});
+
 		if (showQRCode) {
 			const draftDonation =
 				await checkDraftDonationStatus(draftDonationId);
+
 			if (draftDonation?.status === 'matched') {
 				setQRDonationStatus('success');
 				setDraftDonationData(draftDonation);
 				return;
 			}
+
 			await markDraftDonationAsFailed(draftDonationId);
 			setPendingDonationExists?.(false);
 			setShowQRCode(false);
+
+			await router.push(
+				{ query: updateQuery('draft_donation') },
+				undefined,
+				{ shallow: true },
+			);
 		} else {
 			setIsQRDonation(false);
+
+			await router.push({ query: updateQuery('chain') }, undefined, {
+				shallow: true,
+			});
 		}
+
 		setQRDonationStatus('waiting');
 	};
 
