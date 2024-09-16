@@ -26,6 +26,7 @@ import { useGeneralWallet } from '@/providers/generalWalletProvider';
 import { wagmiConfig } from '@/wagmiConfigs';
 import { ChainType } from '@/types/config';
 import { getBalanceForToken } from './getBalanceForToken';
+import { Spinner } from '@/components/Spinner';
 
 export interface ISelectTokenModalProps extends IModal {
 	tokens?: IProjectAcceptedToken[];
@@ -81,8 +82,9 @@ const SelectTokenInnerModal: FC<ISelectTokenModalProps> = ({
 		bigint | undefined
 	>(undefined);
 	const { setSelectedOneTimeToken } = useDonateData();
-	const { walletAddress, isOnEVM } = useGeneralWallet();
+	const { walletAddress, isOnEVM, isConnected } = useGeneralWallet();
 	const { chain: evmChain, address } = useAccount();
+	const [balanceIsLoading, setBalanceIsLoading] = useState<boolean>(false);
 
 	useEffect(() => {
 		if (tokens) {
@@ -177,9 +179,11 @@ const SelectTokenInnerModal: FC<ISelectTokenModalProps> = ({
 	useEffect(() => {
 		const fetchTokenBalances = async () => {
 			try {
+				setBalanceIsLoading(true);
 				const balances = await Promise.all(
 					filteredTokens.map(async token => {
 						const isEvm = token?.chainType === ChainType.EVM;
+
 						return isEvm
 							? {
 									token,
@@ -199,11 +203,14 @@ const SelectTokenInnerModal: FC<ISelectTokenModalProps> = ({
 					}),
 				);
 				setTokenBalances(balances);
+				setBalanceIsLoading(true);
 			} catch (error) {
 				console.error('Error fetching token balances:', error);
 			}
 		};
-		fetchTokenBalances();
+		if (isConnected) {
+			fetchTokenBalances();
+		}
 	}, [tokens, filteredTokens, walletAddress]);
 
 	// Sort tokens by balance
@@ -244,7 +251,7 @@ const SelectTokenInnerModal: FC<ISelectTokenModalProps> = ({
 							setShowModal(false);
 						}}
 					/>
-				) : sortedTokens.length > 0 ? (
+				) : sortedTokens.length > 0 && isConnected ? (
 					sortedTokens.map(({ token, balance }: ITokenBalance) => (
 						<TokenInfo
 							key={token.symbol}
@@ -257,6 +264,10 @@ const SelectTokenInnerModal: FC<ISelectTokenModalProps> = ({
 							}}
 						/>
 					))
+				) : balanceIsLoading ? (
+					<h1>
+						<Spinner />
+					</h1>
 				) : (
 					<div>No token supported on this chain</div>
 				)}
