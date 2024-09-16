@@ -39,6 +39,7 @@ import InlineToast, { EToastType } from '@/components/toasts/InlineToast';
 import { useAppSelector } from '@/features/hooks';
 import { useModalCallback } from '@/hooks/useModalCallback';
 import links from '@/lib/constants/links';
+import DonateQFEligibleNetworks from '@/components/views/donate/OnTime/DonateQFEligibleNetworks';
 
 interface QRDonationCardProps extends IDonationCardProps {
 	qrAcceptedTokens: IProjectAcceptedToken[];
@@ -62,13 +63,15 @@ export const QRDonationCard: FC<QRDonationCardProps> = ({
 	const { formatMessage } = useIntl();
 	const router = useRouter();
 	const { isSignedIn, isEnabled } = useAppSelector(state => state.user);
-	const [showDonateModal, setShowDonateModal] = useState(false);
+	const isQRDonation = router.query.chain === ChainType.STELLAR.toLowerCase();
+	const [_showDonateModal, setShowDonateModal] = useState(false);
 	const { modalCallback: signInThenDonate } = useModalCallback(() =>
 		setShowDonateModal(true),
 	);
 
 	const {
 		project,
+		hasActiveQFRound,
 		setQRDonationStatus,
 		setDraftDonationData,
 		setPendingDonationExists,
@@ -136,20 +139,42 @@ export const QRDonationCard: FC<QRDonationCardProps> = ({
 	}, [draftDonationId]);
 
 	const goBack = async () => {
+		const prevQuery = router.query;
+
+		const updateQuery = (excludeKey: string) =>
+			Object.keys(prevQuery).reduce((acc, key) => {
+				return key !== excludeKey
+					? { ...acc, [key]: prevQuery[key] }
+					: acc;
+			}, {});
+
 		if (showQRCode) {
 			const draftDonation =
 				await checkDraftDonationStatus(draftDonationId);
+
 			if (draftDonation?.status === 'matched') {
 				setQRDonationStatus('success');
 				setDraftDonationData(draftDonation);
 				return;
 			}
+
 			await markDraftDonationAsFailed(draftDonationId);
 			setPendingDonationExists?.(false);
 			setShowQRCode(false);
+
+			await router.push(
+				{ query: updateQuery('draft_donation') },
+				undefined,
+				{ shallow: true },
+			);
 		} else {
 			setIsQRDonation(false);
+
+			await router.push({ query: updateQuery('chain') }, undefined, {
+				shallow: true,
+			});
 		}
+
 		setQRDonationStatus('waiting');
 	};
 
@@ -311,6 +336,9 @@ export const QRDonationCard: FC<QRDonationCardProps> = ({
 							<UsdAmountCard>$ {usdAmount}</UsdAmountCard>
 						</QRDonationInput>
 					</StyledInputWrapper>
+					{hasActiveQFRound && isQRDonation && (
+						<DonateQFEligibleNetworks goBack={goBack} />
+					)}
 					<CardBottom>
 						<FlexStyled
 							$justifyContent='space-between'

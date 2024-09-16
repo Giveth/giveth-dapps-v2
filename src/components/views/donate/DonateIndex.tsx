@@ -80,6 +80,8 @@ const DonateIndex: FC = () => {
 	);
 	const [stopTimer, setStopTimer] = React.useState<void | (() => void)>();
 
+	const isQRDonation = router.query.chain === ChainType.STELLAR.toLowerCase();
+
 	useEffect(() => {
 		dispatch(setShowHeader(false));
 		return () => {
@@ -228,7 +230,7 @@ const DonateIndex: FC = () => {
 						}
 					/>
 				)}
-				{alreadyDonated && (
+				{alreadyDonated && !isQRDonation && (
 					<AlreadyDonatedWrapper>
 						<IconDonation24 />
 						<SublineBold>
@@ -238,9 +240,10 @@ const DonateIndex: FC = () => {
 						</SublineBold>
 					</AlreadyDonatedWrapper>
 				)}
-				{!isSafeEnv && hasActiveQFRound && !isOnSolana && (
-					<PassportBanner />
-				)}
+				{!isSafeEnv &&
+					hasActiveQFRound &&
+					!isOnSolana &&
+					!isQRDonation && <PassportBanner />}
 				<NiceBanner />
 				<Row>
 					<Col xs={12} lg={6}>
@@ -266,7 +269,9 @@ const DonateIndex: FC = () => {
 										/>
 									</ImageWrapper>
 									{!isMobile ? (
-										(!isRecurringTab && hasActiveQFRound) ||
+										(!isQRDonation &&
+											!isRecurringTab &&
+											hasActiveQFRound) ||
 										(isRecurringTab &&
 											isOnEligibleNetworks) ? (
 											<QFSection projectData={project} />
