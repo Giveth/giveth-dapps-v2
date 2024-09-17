@@ -146,9 +146,9 @@ const CryptoDonation: FC<{
 	const isOnEligibleNetworks =
 		networkId && activeStartedRound?.eligibleNetworks?.includes(networkId);
 
-  const tokenPrice = useTokenPrice(selectedOneTimeToken);
+	const tokenPrice = useTokenPrice(selectedOneTimeToken);
 
-  useEffect(() => {
+	useEffect(() => {
 		validateSanctions();
 	}, [project, address]);
 
