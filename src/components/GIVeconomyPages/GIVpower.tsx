@@ -315,6 +315,7 @@ export function TabPowerBottom() {
 							<BenefitsCardHeading weight={700}>
 								{formatMessage({ id: 'label.for_givers' })}
 							</BenefitsCardHeading>
+							<br /> {/* Adding a line break here */}
 							<BenefitsCardContainer>
 								<BenefitsCardTextContainer>
 									<QuoteText size='small'>
