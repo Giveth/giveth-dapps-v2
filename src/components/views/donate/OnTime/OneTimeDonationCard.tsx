@@ -8,6 +8,8 @@ import {
 	Flex,
 	FlexCenter,
 	IconCaretDown16,
+	IconGIVBack24,
+	IconQFNew,
 	IconRefresh16,
 	IconWalletOutline24,
 	neutralColors,
@@ -62,6 +64,7 @@ import { useSolanaBalance } from '@/hooks/useSolanaBalance';
 import { isWalletSanctioned } from '@/services/donation';
 import SanctionModal from '@/components/modals/SanctionedModal';
 import { useTokenPrice } from '@/hooks/useTokenPrice';
+import { GIVBACKS_DONATION_QUALIFICATION_VALUE_USD } from '@/lib/constants/constants';
 
 const CryptoDonation: FC<{
 	acceptedTokens: IProjectAcceptedToken[] | undefined;
@@ -408,6 +411,32 @@ const CryptoDonation: FC<{
 					})}
 				</ConnectWallet>
 			)}
+			{isConnected && (
+				<EligibilityBadgeWrapper>
+					<QFEligibilityBadge>
+						<IconQFNew size={30} />
+						{formatMessage(
+							{
+								id: 'page.donate.donate_$_to_get_matched',
+							},
+							{
+								value: activeStartedRound?.minimumValidUsdValue,
+							},
+						)}
+					</QFEligibilityBadge>
+					<GivbacksEligibilityBadge>
+						<IconGIVBack24 color={neutralColors.gray[700]} />
+						{formatMessage(
+							{
+								id: 'page.donate.donate_$_to_be_eligible',
+							},
+							{
+								value: GIVBACKS_DONATION_QUALIFICATION_VALUE_USD,
+							},
+						)}
+					</GivbacksEligibilityBadge>
+				</EligibilityBadgeWrapper>
+			)}
 			<FlexStyled
 				$flexDirection='column'
 				gap='8px'
@@ -580,6 +609,31 @@ const CryptoDonation: FC<{
 	);
 };
 
+const BadgesBase = styled(FlexCenter)`
+	gap: 8px;
+	font-size: 12px;
+	font-weight: 500;
+	background: ${neutralColors.gray[200]};
+	color: ${neutralColors.gray[700]};
+	border-radius: 8px;
+	border: 1px solid ${neutralColors.gray[400]};
+	padding: 4px;
+`;
+
+const EligibilityBadgeWrapper = styled(Flex)`
+	margin: 12px 0 24px;
+	gap: 16px;
+	justify-content: center;
+	flex-direction: column;
+	> div {
+		height: 36px;
+	}
+`;
+
+const GivbacksEligibilityBadge = styled(BadgesBase)``;
+
+const QFEligibilityBadge = styled(BadgesBase)``;
+
 const FlexStyled = styled(Flex)<{ disabled: boolean }>`
 	${props =>
 		props.disabled &&
@@ -594,16 +648,8 @@ const DonateAnonymously = styled.div<{ disabled: boolean }>`
 		props.disabled ? neutralColors.gray[600] + ' !important' : 'inherit'};
 `;
 
-const ConnectWallet = styled(FlexCenter)`
-	background: ${neutralColors.gray[200]};
-	color: ${neutralColors.gray[700]};
-	border-radius: 8px;
-	gap: 8px;
-	border: 1px solid ${neutralColors.gray[400]};
-	padding: 4px;
+const ConnectWallet = styled(BadgesBase)`
 	margin: 12px 0 24px;
-	font-size: 12px;
-	font-weight: 500;
 `;
 
 const WarnError = styled.div`
