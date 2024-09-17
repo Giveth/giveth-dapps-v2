@@ -405,7 +405,7 @@ const CryptoDonation: FC<{
 					givBackEligible={
 						projectIsGivBackEligible &&
 						selectedOneTimeToken.isGivbackEligible &&
-						Boolean(tokenPrice) &&
+						tokenPrice !== undefined &&
 						tokenPrice * projectDonationAmount >= 4
 					}
 				/>
