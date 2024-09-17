@@ -1238,7 +1238,7 @@
 	"page.project.we_are_supporting_stellar": "Aquest projecte admet donacions en Stellar",
 	"page.project.you_can_try_donating": "Prova de fer donacions utilitzant la Xarxa Stellar.",
 	"page.project.donate_with_stellar": "Dona amb Stellar",
-	"label.try_donating_wuth_stellar": "Prova de donar amb Stellar.",
+	"label.try_donating_with_stellar": "Prova de donar amb Stellar. No cal que connecteu la vostra cartera.",
 	"label.check_donations": "Comprova les donacions",
 	"label.check_donation": "Comprova la donació",
 	"error.enter_amount": "La quantitat ha de ser superior a 0",
