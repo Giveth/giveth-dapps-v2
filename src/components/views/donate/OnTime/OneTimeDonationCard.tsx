@@ -150,7 +150,6 @@ const CryptoDonation: FC<{
 		address => address.chainType === ChainType.STELLAR,
 	);
 	const tokenPrice = useTokenPrice(selectedOneTimeToken);
-	console.log('*** tokenPrice', tokenPrice);
 
 	useEffect(() => {
 		validateSanctions();
@@ -406,7 +405,7 @@ const CryptoDonation: FC<{
 					givBackEligible={
 						projectIsGivBackEligible &&
 						selectedOneTimeToken.isGivbackEligible &&
-						tokenPrice &&
+						Boolean(tokenPrice) &&
 						tokenPrice * projectDonationAmount >= 4
 					}
 				/>
