@@ -1237,7 +1237,7 @@
 	"page.project.we_are_supporting_stellar": "Este proyecto admite donaciones en Stellar",
 	"page.project.you_can_try_donating": "Prueba a hacer donaciones usando la Red Stellar.",
 	"page.project.donate_with_stellar": "Dona con Stellar",
-	"label.try_donating_wuth_stellar": "Intenta donar con Stellar.",
+	"label.try_donating_with_stellar": "Intenta donar con Stellar. No necesitas conectar tu billetera.",
 	"label.check_donations": "Verificar donaciones",
 	"label.check_donation": "Verificar donación",
 	"error.enter_amount": "La cantidad debe ser mayor que 0",
