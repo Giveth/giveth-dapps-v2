@@ -22,9 +22,6 @@ import {
 	GIVpowerTopContainer,
 	Title,
 	Subtitle,
-	LearnMoreButton,
-	HeadingSectionContainer,
-	HeadingTextContainer,
 	FeaturesCardContainer,
 	FeaturesCardHeading,
 	FeaturesCardSubheading,
@@ -62,7 +59,6 @@ import GivStake from '../../../public/images/giv_stake.svg';
 import Routes from '@/lib/constants/Routes';
 import config from '@/configuration';
 import { formatWeiHelper } from '@/helpers/number';
-import links from '@/lib/constants/links';
 import { getTotalGIVpower } from '@/helpers/givpower';
 import { useGeneralWallet } from '@/providers/generalWalletProvider';
 import { ChainType } from '@/types/config';
@@ -224,22 +220,6 @@ export function TabPowerBottom() {
 					})}
 				</H3>
 				<br />
-				<HeadingSectionContainer>
-					<HeadingTextContainer>
-						<QuoteText size='small'>
-							{formatMessage({
-								id: 'label.use_your_givpower_to_boost_verified_projects',
-							})}
-						</QuoteText>
-					</HeadingTextContainer>
-					<LearnMoreButton
-						isExternal
-						label={formatMessage({ id: 'label.learn_more' })}
-						target='_blank'
-						href={links.GIVPOWER_DOC}
-						size='large'
-					/>
-				</HeadingSectionContainer>
 				<FeaturesCardContainer>
 					<FeaturesCardHeading weight={700}>
 						{formatMessage({ id: 'label.how_does_givpower_work' })}
@@ -374,6 +354,7 @@ export function TabPowerBottom() {
 							<BenefitsCardHeading weight={700}>
 								{formatMessage({ id: 'label.for_projects' })}
 							</BenefitsCardHeading>
+							<br /> {/* Adding a line break here */}
 							<BenefitsCardTextContainer>
 								<QuoteText size='small'>
 									{formatMessage({
