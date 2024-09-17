@@ -48,6 +48,7 @@ export interface IProject {
 	impactLocation?: string;
 	qualityScore?: number;
 	verified?: boolean;
+	isGivbackEligible?: boolean;
 	verificationStatus?: EProjectVerificationStatus;
 	listed?: boolean | null;
 	categories: ICategory[];
