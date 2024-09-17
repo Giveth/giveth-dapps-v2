@@ -60,6 +60,7 @@ import { Spinner } from '@/components/Spinner';
 import { useSolanaBalance } from '@/hooks/useSolanaBalance';
 import { isWalletSanctioned } from '@/services/donation';
 import SanctionModal from '@/components/modals/SanctionedModal';
+import { useTokenPrice } from '@/hooks/useTokenPrice';
 
 const CryptoDonation: FC<{
 	setIsQRDonation: (isQRDonation: boolean) => void;
@@ -148,6 +149,8 @@ const CryptoDonation: FC<{
 	const hasStellarAddress = addresses?.some(
 		address => address.chainType === ChainType.STELLAR,
 	);
+	const tokenPrice = useTokenPrice(selectedOneTimeToken);
+	console.log('*** tokenPrice', tokenPrice);
 
 	useEffect(() => {
 		validateSanctions();
@@ -355,7 +358,10 @@ const CryptoDonation: FC<{
 	// We need givethDonationAmount here because we need to calculate the donation share
 	// for Giveth. If user want to donate minimal amount to projecct, the donation share for Giveth
 	// has to be 0, disabled in UI and DonationModal
-	const { givethDonation: givethDonationAmount } = calcDonationShare(
+	const {
+		givethDonation: givethDonationAmount,
+		projectDonation: projectDonationAmount,
+	} = calcDonationShare(
 		amount,
 		donationToGiveth,
 		selectedOneTimeToken?.decimals ?? 18,
@@ -399,7 +405,9 @@ const CryptoDonation: FC<{
 					anonymous={anonymous}
 					givBackEligible={
 						projectIsGivBackEligible &&
-						selectedOneTimeToken.isGivbackEligible
+						selectedOneTimeToken.isGivbackEligible &&
+						tokenPrice &&
+						tokenPrice * projectDonationAmount >= 4
 					}
 				/>
 			)}
