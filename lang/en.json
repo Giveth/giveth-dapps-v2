@@ -1354,6 +1354,8 @@
 	"page.donate.donate_$_to_get_matched": "Donate ${value} to get your donation matched",
 	"page.donate.donations_will_be_matched": "Donation will be matched",
 	"page.donate.givbacks_eligible": "GIVbacks eligible",
+	"page.donate.project_not_givbacks_eligible": "Project is not GIVbacks eligible",
+	"page.donate.token_not_givbacks_eligible": "{token} is not eligible for GIVbacks",
 	"page.engage.discord.desc": "Join the conversation! Discord is where our team communicates. Introduce yourself, give us feedback, find out how to contribute or just say hello!",
 	"page.engage.discourse.desc": "The Giveth forum is where we create discourse around new and existing proposals. We share ideas involving development and governance, cultivating discussions about important topics around our team and community.",
 	"page.engage.github.desc": "Got some developer skills? Check out our Github! We always welcome new contributors. Please also join one of our dev channels in Discord to say hello!",

@@ -144,11 +144,10 @@ const CryptoDonation: FC<{
 	});
 
 	const tokenDecimals = selectedOneTimeToken?.decimals || 18;
-	const projectIsGivBackEligible = !!verified;
 	const { activeStartedRound } = getActiveRound(project.qfRounds);
 	const networkId = (chain as Chain)?.id;
 
-	const isOnEligibleNetworks =
+	const isOnQFEligibleNetworks =
 		networkId && activeStartedRound?.eligibleNetworks?.includes(networkId);
 
 	const tokenPrice = useTokenPrice(selectedOneTimeToken);
@@ -253,7 +252,7 @@ const CryptoDonation: FC<{
 		}
 		if (
 			hasActiveQFRound &&
-			!isOnEligibleNetworks &&
+			!isOnQFEligibleNetworks &&
 			selectedOneTimeToken?.chainType === ChainType.EVM
 		) {
 			setShowQFModal(true);
@@ -361,7 +360,11 @@ const CryptoDonation: FC<{
 		!!activeStartedRound &&
 		donationUsdValue >= (activeStartedRound?.minimumValidUsdValue || 0);
 
-	const isGiveBacksEligible =
+	const isTokenGivbacksEligible = selectedOneTimeToken?.isGivbackEligible;
+	const isProjectGivbacksEligible = !!verified;
+	const isGivbacksEligible =
+		isTokenGivbacksEligible &&
+		isProjectGivbacksEligible &&
 		donationUsdValue >= GIVBACKS_DONATION_QUALIFICATION_VALUE_USD;
 
 	return (
@@ -401,7 +404,7 @@ const CryptoDonation: FC<{
 					givethDonationAmount={givethDonationAmount}
 					anonymous={anonymous}
 					givBackEligible={
-						projectIsGivBackEligible &&
+						isProjectGivbacksEligible &&
 						selectedOneTimeToken.isGivbackEligible &&
 						tokenPrice !== undefined &&
 						tokenPrice * projectDonationAmount >= 4
@@ -425,7 +428,7 @@ const CryptoDonation: FC<{
 			)}
 			{isConnected && (
 				<EligibilityBadgeWrapper>
-					{activeStartedRound && (
+					{activeStartedRound && isOnQFEligibleNetworks && (
 						<QFEligibilityBadge active={isDonationMatched}>
 							<IconQFNew size={30} />
 							{formatMessage(
@@ -440,22 +443,28 @@ const CryptoDonation: FC<{
 							)}
 						</QFEligibilityBadge>
 					)}
-					<GivbacksEligibilityBadge active={isGiveBacksEligible}>
+					<GivbacksEligibilityBadge active={isGivbacksEligible}>
 						<IconGIVBack24
 							color={
-								isGiveBacksEligible
+								isGivbacksEligible
 									? semanticColors.jade[500]
 									: neutralColors.gray[700]
 							}
 						/>
 						{formatMessage(
 							{
-								id: isGiveBacksEligible
+								id: isGivbacksEligible
 									? 'page.donate.givbacks_eligible'
-									: 'page.donate.donate_$_to_be_eligible',
+									: !isProjectGivbacksEligible
+										? 'page.donate.project_not_givbacks_eligible'
+										: selectedOneTimeToken &&
+											  !isTokenGivbacksEligible
+											? 'page.donate.token_not_givbacks_eligible'
+											: 'page.donate.donate_$_to_be_eligible',
 							},
 							{
 								value: GIVBACKS_DONATION_QUALIFICATION_VALUE_USD,
+								token: selectedOneTimeToken?.symbol,
 							},
 						)}
 					</GivbacksEligibilityBadge>
@@ -536,11 +545,11 @@ const CryptoDonation: FC<{
 					)}
 				</FlexStyled>
 			</FlexStyled>
-			{hasActiveQFRound && !isOnEligibleNetworks && walletChainType && (
+			{hasActiveQFRound && !isOnQFEligibleNetworks && walletChainType && (
 				<DonateQFEligibleNetworks />
 			)}
 			{hasActiveQFRound &&
-				isOnEligibleNetworks &&
+				isOnQFEligibleNetworks &&
 				selectedTokenBalance && (
 					<EstimatedMatchingToast
 						projectData={project}
@@ -563,8 +572,8 @@ const CryptoDonation: FC<{
 			)}
 			{selectedOneTimeToken && (
 				<GIVBackToast
-					projectEligible={projectIsGivBackEligible}
-					tokenEligible={selectedOneTimeToken.isGivbackEligible}
+					projectEligible={isProjectGivbacksEligible}
+					tokenEligible={isTokenGivbacksEligible}
 				/>
 			)}
 			{!noDonationSplit ? (
