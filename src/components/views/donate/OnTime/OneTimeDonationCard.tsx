@@ -80,7 +80,7 @@ const CryptoDonation: FC<{
 	const dispatch = useAppDispatch();
 
 	const {
-		verified,
+		isGivbackEligible,
 		id: projectId,
 		status,
 		addresses,
@@ -139,7 +139,7 @@ const CryptoDonation: FC<{
 	});
 
 	const tokenDecimals = selectedOneTimeToken?.decimals || 18;
-	const projectIsGivBackEligible = !!verified;
+	const projectIsGivBackEligible = !!isGivbackEligible;
 	const { activeStartedRound } = getActiveRound(project.qfRounds);
 	const networkId = (chain as Chain)?.id;
 
