@@ -1347,6 +1347,8 @@
 	"page.donate.zero_fees": "Sense Comissions",
 	"page.donate.donate_$_to_be_eligible": "Fes una donació de ${value} per ser elegible per a GIVbacks",
 	"page.donate.donate_$_to_get_matched": "Dona ${value} per igualar la teva donació",
+	"page.donate.donations_will_be_matched": "La donació serà igualada",
+	"page.donate.givbacks_eligible": "GIVbacks elegibles",
 	"page.engage.discord.desc": "Uneix-te a la conversa! Discord és on el nostre equip es comunica. Presenta't, dóna'ns comentaris, descobreix com contribuir o simplement saluda!",
 	"page.engage.discourse.desc": "El fòrum de Giveth és on creem discursos sobre propostes noves i existents. Compartim idees sobre desenvolupament i governança, cultivant discussions sobre temes importants al voltant del nostre equip i la comunitat.",
 	"page.engage.github.desc": "Tens habilitats de desenvolupament? Comprova el nostre Github! Sempre benvingut a nous col·laboradors. Si us plau, uneix-te a un dels nostres canals de dev a Discord per saludar-nos!",

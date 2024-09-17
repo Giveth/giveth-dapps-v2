@@ -1347,6 +1347,8 @@
 	"page.donate.zero_fees": "Sin Comisiones",
 	"page.donate.donate_$_to_be_eligible": "Dona ${value} para ser elegible para GIVbacks",
 	"page.donate.donate_$_to_get_matched": "Dona ${value} para que tu donación sea igualada",
+	"page.donate.donations_will_be_matched": "La donación será igualada",
+	"page.donate.givbacks_eligible": "Elegibles para GIVbacks",
 	"page.engage.discord.desc": "¡Únete a la conversación! Nuestro equipo se comunica en Discord. Preséntate, danos retroalimentación, descubre cómo contribuir o ¡sólo saluda!",
 	"page.engage.discourse.desc": "El foro de Giveth es donde creamos debates alrededor de propuestas existentes y nuevas. Compartimos ideas sobre el desarrollo y la gobernanza, desarrollando debates sobre temas importantes en torno a nuestro equipo y comunidad.",
 	"page.engage.github.desc": "¿Sabes de desarrollo? ¡Entra a nuestro Github! Las puertas siempre están abiertas para nuevos colaboradores. ¡También te invitamos a unirte a nuestro canal de devs en Discord!",

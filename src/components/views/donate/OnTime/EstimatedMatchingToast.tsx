@@ -21,7 +21,6 @@ import {
 	getActiveRound,
 } from '@/helpers/qf';
 import { IProjectAcceptedToken } from '@/apollo/types/gqlTypes';
-import { useTokenPrice } from '@/hooks/useTokenPrice';
 import { formatDonation } from '@/helpers/number';
 import { formatBalance, truncateToDecimalPlaces } from '@/lib/helpers';
 
@@ -29,19 +28,19 @@ interface IEstimatedMatchingToast {
 	projectData: IProject;
 	amount: bigint;
 	token?: IProjectAcceptedToken;
+	tokenPrice?: number;
 }
 
 const EstimatedMatchingToast: React.FC<IEstimatedMatchingToast> = ({
 	projectData,
 	token,
 	amount,
+	tokenPrice,
 }) => {
 	const { formatMessage, locale } = useIntl();
 	const { estimatedMatching, qfRounds } = projectData || {};
 	const { allProjectsSum, matchingPool, projectDonationsSqrtRootSum } =
 		estimatedMatching || {};
-
-	const tokenPrice = useTokenPrice(token);
 
 	const { activeStartedRound } = getActiveRound(qfRounds);
 	const {

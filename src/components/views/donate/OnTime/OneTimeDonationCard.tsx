@@ -12,12 +12,14 @@ import {
 	IconQFNew,
 	IconRefresh16,
 	IconWalletOutline24,
+	mediaQueries,
 	neutralColors,
 	semanticColors,
 } from '@giveth/ui-design-system';
 // @ts-ignore
 import { Address, Chain, formatUnits, zeroAddress } from 'viem';
 import { useBalance, useEstimateFeesPerGas, useEstimateGas } from 'wagmi';
+import { ethers } from 'ethers';
 import { setShowWelcomeModal } from '@/features/modal/modal.slice';
 import CheckBox from '@/components/Checkbox';
 
@@ -352,6 +354,16 @@ const CryptoDonation: FC<{
 		selectedOneTimeToken?.decimals ?? 18,
 	);
 
+	const donationUsdValue =
+		(tokenPrice || 0) * Number(ethers.utils.formatEther(amount));
+
+	const isDonationMatched =
+		!!activeStartedRound &&
+		donationUsdValue >= (activeStartedRound?.minimumValidUsdValue || 0);
+
+	const isGiveBacksEligible =
+		donationUsdValue >= GIVBACKS_DONATION_QUALIFICATION_VALUE_USD;
+
 	return (
 		<MainContainer>
 			{isSanctioned && (
@@ -413,22 +425,34 @@ const CryptoDonation: FC<{
 			)}
 			{isConnected && (
 				<EligibilityBadgeWrapper>
-					<QFEligibilityBadge>
-						<IconQFNew size={30} />
+					{activeStartedRound && (
+						<QFEligibilityBadge active={isDonationMatched}>
+							<IconQFNew size={30} />
+							{formatMessage(
+								{
+									id: isDonationMatched
+										? 'page.donate.donations_will_be_matched'
+										: 'page.donate.donate_$_to_get_matched',
+								},
+								{
+									value: activeStartedRound?.minimumValidUsdValue,
+								},
+							)}
+						</QFEligibilityBadge>
+					)}
+					<GivbacksEligibilityBadge active={isGiveBacksEligible}>
+						<IconGIVBack24
+							color={
+								isGiveBacksEligible
+									? semanticColors.jade[500]
+									: neutralColors.gray[700]
+							}
+						/>
 						{formatMessage(
 							{
-								id: 'page.donate.donate_$_to_get_matched',
-							},
-							{
-								value: activeStartedRound?.minimumValidUsdValue,
-							},
-						)}
-					</QFEligibilityBadge>
-					<GivbacksEligibilityBadge>
-						<IconGIVBack24 color={neutralColors.gray[700]} />
-						{formatMessage(
-							{
-								id: 'page.donate.donate_$_to_be_eligible',
+								id: isGiveBacksEligible
+									? 'page.donate.givbacks_eligible'
+									: 'page.donate.donate_$_to_be_eligible',
 							},
 							{
 								value: GIVBACKS_DONATION_QUALIFICATION_VALUE_USD,
@@ -522,6 +546,7 @@ const CryptoDonation: FC<{
 						projectData={project}
 						token={selectedOneTimeToken}
 						amount={amount}
+						tokenPrice={tokenPrice}
 					/>
 				)}
 			{!noDonationSplit ? (
@@ -609,14 +634,17 @@ const CryptoDonation: FC<{
 	);
 };
 
-const BadgesBase = styled(FlexCenter)`
+const BadgesBase = styled(FlexCenter)<{ active?: boolean }>`
 	gap: 8px;
 	font-size: 12px;
 	font-weight: 500;
 	background: ${neutralColors.gray[200]};
-	color: ${neutralColors.gray[700]};
+	color: ${props =>
+		props.active ? semanticColors.jade[500] : neutralColors.gray[700]};
 	border-radius: 8px;
-	border: 1px solid ${neutralColors.gray[400]};
+	border: 1px solid
+		${props =>
+			props.active ? semanticColors.jade[400] : neutralColors.gray[400]};
 	padding: 4px;
 `;
 
@@ -627,6 +655,10 @@ const EligibilityBadgeWrapper = styled(Flex)`
 	flex-direction: column;
 	> div {
 		height: 36px;
+	}
+	${mediaQueries.tablet} {
+		flex-direction: row;
+		justify-content: flex-start;
 	}
 `;
 
