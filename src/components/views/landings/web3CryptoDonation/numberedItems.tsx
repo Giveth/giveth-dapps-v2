@@ -33,10 +33,10 @@ const numberedList = [
 					href={links.GIVBACK_DOC}
 					title='GIVbacks'
 				/>
-				). That means that if you donate to any verified project on
-				Giveth with crypto currency, you’ll be eligible to receive an
-				airdrop of GIV tokens at a value of up to 80% of the value of
-				what you donated! 🤯
+				). That means that if you donate to any GIVbacks eligible
+				project on Giveth with crypto currency, you’ll be eligible to
+				receive an airdrop of GIV tokens at a value of up to 80% of the
+				value of what you donated! 🤯
 			</>
 		),
 	},
