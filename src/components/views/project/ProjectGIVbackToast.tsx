@@ -1,3 +1,4 @@
+import * as process from 'node:process';
 import styled from 'styled-components';
 import {
 	B,
@@ -29,7 +30,6 @@ import { useModalCallback } from '@/hooks/useModalCallback';
 import { isSSRMode } from '@/lib/helpers';
 import BoostModal from '@/components/modals/Boost/BoostModal';
 import { useAppSelector } from '@/features/hooks';
-import { formatDonation } from '@/helpers/number';
 import { EProjectStatus } from '@/apollo/types/gqlEnums';
 import { EVerificationStatus } from '@/apollo/types/types';
 import Routes from '@/lib/constants/Routes';
@@ -49,7 +49,7 @@ const ProjectGIVbackToast = () => {
 	const color = isOwnerVerified
 		? semanticColors.golden[600]
 		: neutralColors.gray[900];
-	const { formatMessage, locale } = useIntl();
+	const { formatMessage } = useIntl();
 	const { open: openConnectModal } = useWeb3Modal();
 	const {
 		isEnabled,
@@ -84,22 +84,21 @@ const ProjectGIVbackToast = () => {
 	let title = '';
 	let description, Button;
 
+	const givbackFactorPercent = ((givbackFactor || 0) * 100).toFixed();
+	const NEXT_PUBLIC_GIVBACKS_DONATION_QUALIFICATION_VALUE_USD =
+		process.env.NEXT_PUBLIC_GIVBACKS_DONATION_QUALIFICATION_VALUE_USD;
+
 	if (isOwnerVerified) {
 		if (givbackFactor !== 0) {
-			title =
-				formatMessage({
-					id: `${useIntlTitle}verified_owner_1`,
-				}) +
-				formatDonation(
-					(givbackFactor || 0) * 100,
-					undefined,
-					locale,
-					true,
-				) +
-				'%' +
-				formatMessage({
-					id: `${useIntlTitle}verified_owner_2`,
-				});
+			title = formatMessage(
+				{
+					id: `${useIntlTitle}verified_owner`,
+				},
+				{
+					percent: givbackFactorPercent,
+					value: NEXT_PUBLIC_GIVBACKS_DONATION_QUALIFICATION_VALUE_USD,
+				},
+			);
 		}
 		description = formatMessage({
 			id: `${useIntlDescription}verified_owner`,
@@ -259,18 +258,6 @@ const ProjectGIVbackToast = () => {
 					<div>
 						<Title color={color}>{title}</Title>
 						<Description>{description}</Description>
-						{isOwnerVerified && (
-							<Note>
-								<span>
-									{formatMessage({
-										id: 'label.note',
-									}) + ' '}
-								</span>
-								{formatMessage({
-									id: 'project.givback_toast.description.verified_owner.note',
-								})}
-							</Note>
-						)}
 						{link && (
 							<ExternalLink href={link}>
 								<LearnMore>
@@ -296,17 +283,10 @@ const ProjectGIVbackToast = () => {
 	);
 };
 
-const Note = styled(P)`
-	color: ${neutralColors.gray[800]};
-	> span {
-		font-weight: 500;
-	}
-`;
-
 const LearnMore = styled(Caption)`
 	display: flex;
 	gap: 2px;
-	color: ${brandColors.pinky[500]};
+	color: ${brandColors.pinky[500]} !important;
 `;
 
 const Description = styled(P)`
