@@ -163,7 +163,7 @@ export const TabGIVbacksBottom = () => {
 		async function fetchAllocatedGivbacks() {
 			const { data } = await client.query({
 				query: FETCH_ALLOCATED_GIVBACKS,
-				fetchPolicy: 'no-cache',
+				fetchPolicy: 'network-only',
 			});
 			setGivbackAllocations(data?.allocatedGivbacks);
 		}
@@ -274,7 +274,7 @@ export const TabGIVbacksBottom = () => {
 												{givbackAllocations &&
 												givbackAllocations.allocatedGivTokens
 													? `${givbackAllocations.allocatedGivTokens} GIV`
-													: '?'}
+													: 'TBD'}
 											</NoWrap>
 										</GivAllocated>
 									</RoundInfoTallRow>
