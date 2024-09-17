@@ -1,7 +1,6 @@
 import Image from 'next/image';
 import {
 	brandColors,
-	H3,
 	H4,
 	IconRocketInSpace32,
 	QuoteText,
@@ -214,12 +213,6 @@ export function TabPowerBottom() {
 	return (
 		<>
 			<GIVpowerContainer>
-				<H3 weight={700}>
-					{formatMessage({
-						id: 'label.boost_projects_with_givpower',
-					})}
-				</H3>
-				<br />
 				<FeaturesCardContainer>
 					<FeaturesCardHeading weight={700}>
 						{formatMessage({ id: 'label.how_does_givpower_work' })}
