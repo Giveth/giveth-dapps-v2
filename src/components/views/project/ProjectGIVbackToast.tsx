@@ -1,4 +1,3 @@
-import * as process from 'node:process';
 import styled from 'styled-components';
 import {
 	B,
@@ -34,6 +33,7 @@ import { EProjectStatus } from '@/apollo/types/gqlEnums';
 import { EVerificationStatus } from '@/apollo/types/types';
 import Routes from '@/lib/constants/Routes';
 import { VerificationModal } from '@/components/modals/VerificationModal';
+import { GIVBACKS_DONATION_QUALIFICATION_VALUE_USD } from '@/lib/constants/constants';
 
 const ProjectGIVbackToast = () => {
 	const [showBoost, setShowBoost] = useState(false);
@@ -49,7 +49,7 @@ const ProjectGIVbackToast = () => {
 	const color = isOwnerVerified
 		? semanticColors.golden[600]
 		: neutralColors.gray[900];
-	const { formatMessage } = useIntl();
+	const { formatMessage, locale } = useIntl();
 	const { open: openConnectModal } = useWeb3Modal();
 	const {
 		isEnabled,
@@ -85,8 +85,6 @@ const ProjectGIVbackToast = () => {
 	let description, Button;
 
 	const givbackFactorPercent = ((givbackFactor || 0) * 100).toFixed();
-	const NEXT_PUBLIC_GIVBACKS_DONATION_QUALIFICATION_VALUE_USD =
-		process.env.NEXT_PUBLIC_GIVBACKS_DONATION_QUALIFICATION_VALUE_USD;
 
 	if (isOwnerVerified) {
 		if (givbackFactor !== 0) {
@@ -96,7 +94,7 @@ const ProjectGIVbackToast = () => {
 				},
 				{
 					percent: givbackFactorPercent,
-					value: NEXT_PUBLIC_GIVBACKS_DONATION_QUALIFICATION_VALUE_USD,
+					value: GIVBACKS_DONATION_QUALIFICATION_VALUE_USD,
 				},
 			);
 		}
