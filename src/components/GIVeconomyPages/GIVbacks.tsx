@@ -19,8 +19,6 @@ import {
 	GIVbackRewardCard,
 	GBSubtitle,
 	GBTitle,
-	GbDataBlock,
-	GbButton,
 	GIVBackCard,
 	RoundSection,
 	RoundTitle,
@@ -46,6 +44,8 @@ import links from '@/lib/constants/links';
 import Routes from '@/lib/constants/Routes';
 import { SubgraphDataHelper } from '@/lib/subgraph/subgraphDataHelper';
 import { fetchSubgraphData } from '@/services/subgraph.service';
+import { FETCH_ALLOCATED_GIVBACKS } from '@/apollo/gql/gqlGivbacks';
+import { client } from '@/apollo/apolloClient';
 
 export const TabGIVbacksTop = () => {
 	const { formatMessage } = useIntl();
@@ -107,14 +107,6 @@ export const TabGIVbacksTop = () => {
 								actionCb={() => {
 									setShowHarvestModal(true);
 								}}
-								subButtonLabel={
-									givbackLiquidPart === 0n
-										? formatMessage({
-												id: 'label.why_dont_i_have_givbacks',
-											})
-										: undefined
-								}
-								subButtonCb={() => setShowGivBackExplain(true)}
 								network={chain?.id}
 								targetNetworks={[
 									{
@@ -157,6 +149,27 @@ export const TabGIVbacksBottom = () => {
 	const [round, setRound] = useState(0);
 	const [roundStarTime, setRoundStarTime] = useState(new Date());
 	const [roundEndTime, setRoundEndTime] = useState(new Date());
+	// Define an interface for the type of givbackAllocations
+	interface GivbackAllocations {
+		usdValueSentAmountInPowerRound: number;
+		allocatedGivTokens: number;
+		givPrice: number;
+		date: string;
+	}
+	const [givbackAllocations, setGivbackAllocations] =
+		useState<GivbackAllocations | null>(null);
+
+	useEffect(() => {
+		async function fetchAllocatedGivbacks() {
+			const { data } = await client.query({
+				query: FETCH_ALLOCATED_GIVBACKS,
+				fetchPolicy: 'network-only',
+			});
+			setGivbackAllocations(data?.allocatedGivbacks);
+		}
+		fetchAllocatedGivbacks();
+	}, []);
+
 	const { givTokenDistroHelper, isLoaded } = useGIVTokenDistroHelper();
 	useEffect(() => {
 		if (
@@ -185,51 +198,6 @@ export const TabGIVbacksBottom = () => {
 	return (
 		<GIVbacksBottomContainer>
 			<Container>
-				<Row>
-					<Col xs={12} sm={6}>
-						<GbDataBlock
-							title={formatMessage({ id: 'label.donor_rewards' })}
-							button={
-								<Link href={Routes.AllProjects}>
-									<GbButton
-										label={formatMessage({
-											id: 'label.donate_to_earn_giv',
-										})}
-										linkType='secondary'
-										size='large'
-									/>
-								</Link>
-							}
-						>
-							{formatMessage({
-								id: 'label.when_you_donate_to_Verified_projects',
-							})}
-						</GbDataBlock>
-					</Col>
-					<Col xs={12} sm={6}>
-						<GbDataBlock
-							title={formatMessage({
-								id: 'label.project_verification',
-							})}
-							button={
-								<GbButton
-									isExternal
-									label={formatMessage({
-										id: 'label.verify_your_project',
-									})}
-									linkType='secondary'
-									size='large'
-									href={links.VERIFICATION_DOCS}
-									target='_blank'
-								/>
-							}
-						>
-							{formatMessage({
-								id: 'label.great_projects_make_the_giveconomy_thrive',
-							})}
-						</GbDataBlock>
-					</Col>
-				</Row>
 				<GIVBackCard>
 					<Row>
 						<Col xs={12} md={8}>
@@ -303,9 +271,10 @@ export const TabGIVbacksBottom = () => {
 										</P>
 										<GivAllocated>
 											<NoWrap>
-												{formatMessage({
-													id: 'label.one_million_giv',
-												})}
+												{givbackAllocations &&
+												givbackAllocations.allocatedGivTokens
+													? `${givbackAllocations.allocatedGivTokens} GIV`
+													: 'TBD'}
 											</NoWrap>
 										</GivAllocated>
 									</RoundInfoTallRow>

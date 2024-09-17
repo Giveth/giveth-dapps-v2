@@ -15,6 +15,8 @@ import { IconWithTooltip } from '@/components/IconWithToolTip';
 import Input, { InputSize } from '@/components/Input';
 import { InputSuffix } from '@/components/styled-components/Input';
 import CheckBox from '@/components/Checkbox';
+import { useGeneralWallet } from '@/providers/generalWalletProvider';
+import { useDonateData } from '@/context/donate.context';
 
 interface IDonateToGiveth {
 	donationToGiveth: number;
@@ -33,6 +35,10 @@ const DonateToGiveth: FC<IDonateToGiveth> = ({
 }) => {
 	const { formatMessage } = useIntl();
 
+	const { selectedOneTimeToken } = useDonateData();
+
+	const { isConnected } = useGeneralWallet();
+
 	const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
 		const newPercentage = +e.target.value;
 		if (isNaN(newPercentage) || newPercentage < 0 || newPercentage > 90)
@@ -45,13 +51,13 @@ const DonateToGiveth: FC<IDonateToGiveth> = ({
 	};
 
 	// If givethDonationAmount props provided check if it's 0 and set donationToGiveth to 0
-	// because we disabled percetange amount for minimal allowed main donation amount
+	// because we disabled percentage amount for minimal allowed main donation amount
 	if (givethDonationAmount !== undefined) {
 		donationToGiveth = givethDonationAmount === 0 ? 0 : donationToGiveth;
 	}
 
 	return (
-		<Container>
+		<Container disabled={!isConnected || !selectedOneTimeToken}>
 			<Flex $alignItems='center' gap='4px'>
 				<Caption $medium>{title}</Caption>
 				<IconWithTooltip icon={<IconHelpFilled16 />} direction='top'>
@@ -137,8 +143,9 @@ const Options = styled(Flex)`
 	gap: 8px;
 `;
 
-const Container = styled.div`
+const Container = styled.div<{ disabled?: boolean }>`
 	margin: 16px 0 13px;
+	opacity: ${props => (props.disabled ? 0.4 : 1)};
 `;
 
 export default DonateToGiveth;

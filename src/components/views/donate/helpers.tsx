@@ -62,7 +62,10 @@ export const calcDonationShare = (
 	totalDonation: bigint,
 	givethDonationPercent: number,
 	decimals = 18,
-) => {
+): {
+	projectDonation: number;
+	givethDonation: number;
+} => {
 	let givethDonation = (totalDonation * BigInt(givethDonationPercent)) / 100n;
 	const minDonationAmount = parseUnits('1', decimals - decimals / 3);
 	if (givethDonation < minDonationAmount && givethDonationPercent !== 0) {
@@ -80,7 +83,6 @@ export const calcDonationShare = (
 	}
 	return {
 		projectDonation: formatCrypto(projectDonation, decimals),
-
 		givethDonation: formatCrypto(givethDonation, decimals),
 	};
 };

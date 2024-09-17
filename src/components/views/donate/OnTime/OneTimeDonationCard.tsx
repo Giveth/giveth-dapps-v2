@@ -1,20 +1,25 @@
 import styled from 'styled-components';
 import React, { FC, useEffect, useMemo, useState } from 'react';
 import { useIntl } from 'react-intl';
-import { useRouter } from 'next/router';
 import {
 	B,
 	brandColors,
 	Button,
 	Flex,
+	FlexCenter,
 	IconCaretDown16,
+	IconGIVBack24,
+	IconQFNew,
 	IconRefresh16,
+	IconWalletOutline24,
+	mediaQueries,
 	neutralColors,
 	semanticColors,
 } from '@giveth/ui-design-system';
 // @ts-ignore
 import { Address, Chain, formatUnits, zeroAddress } from 'viem';
 import { useBalance, useEstimateFeesPerGas, useEstimateGas } from 'wagmi';
+import { ethers } from 'ethers';
 import { setShowWelcomeModal } from '@/features/modal/modal.slice';
 import CheckBox from '@/components/Checkbox';
 
@@ -60,11 +65,12 @@ import { Spinner } from '@/components/Spinner';
 import { useSolanaBalance } from '@/hooks/useSolanaBalance';
 import { isWalletSanctioned } from '@/services/donation';
 import SanctionModal from '@/components/modals/SanctionedModal';
+import { useTokenPrice } from '@/hooks/useTokenPrice';
+import { GIVBACKS_DONATION_QUALIFICATION_VALUE_USD } from '@/lib/constants/constants';
 
 const CryptoDonation: FC<{
-	setIsQRDonation: (isQRDonation: boolean) => void;
 	acceptedTokens: IProjectAcceptedToken[] | undefined;
-}> = ({ acceptedTokens, setIsQRDonation }) => {
+}> = ({ acceptedTokens }) => {
 	const {
 		chain,
 		walletChainType,
@@ -73,7 +79,6 @@ const CryptoDonation: FC<{
 	} = useGeneralWallet();
 
 	const { formatMessage } = useIntl();
-	const router = useRouter();
 	const { isSignedIn } = useAppSelector(state => state.user);
 
 	const { project, hasActiveQFRound, selectedOneTimeToken } = useDonateData();
@@ -139,15 +144,13 @@ const CryptoDonation: FC<{
 	});
 
 	const tokenDecimals = selectedOneTimeToken?.decimals || 18;
-	const projectIsGivBackEligible = !!verified;
 	const { activeStartedRound } = getActiveRound(project.qfRounds);
 	const networkId = (chain as Chain)?.id;
 
-	const isOnEligibleNetworks =
+	const isOnQFEligibleNetworks =
 		networkId && activeStartedRound?.eligibleNetworks?.includes(networkId);
-	const hasStellarAddress = addresses?.some(
-		address => address.chainType === ChainType.STELLAR,
-	);
+
+	const tokenPrice = useTokenPrice(selectedOneTimeToken);
 
 	useEffect(() => {
 		validateSanctions();
@@ -249,7 +252,7 @@ const CryptoDonation: FC<{
 		}
 		if (
 			hasActiveQFRound &&
-			!isOnEligibleNetworks &&
+			!isOnQFEligibleNetworks &&
 			selectedOneTimeToken?.chainType === ChainType.EVM
 		) {
 			setShowQFModal(true);
@@ -300,20 +303,6 @@ const CryptoDonation: FC<{
 		selectedOneTimeToken?.address,
 	]);
 
-	const handleQRDonation = () => {
-		setIsQRDonation(true);
-		router.push(
-			{
-				query: {
-					...router.query,
-					chain: ChainType.STELLAR.toLowerCase(),
-				},
-			},
-			undefined,
-			{ shallow: true },
-		);
-	};
-
 	useEffect(() => {
 		if (
 			amount > selectedTokenBalance - gasfee &&
@@ -355,11 +344,28 @@ const CryptoDonation: FC<{
 	// We need givethDonationAmount here because we need to calculate the donation share
 	// for Giveth. If user want to donate minimal amount to projecct, the donation share for Giveth
 	// has to be 0, disabled in UI and DonationModal
-	const { givethDonation: givethDonationAmount } = calcDonationShare(
+	const {
+		givethDonation: givethDonationAmount,
+		projectDonation: projectDonationAmount,
+	} = calcDonationShare(
 		amount,
 		donationToGiveth,
 		selectedOneTimeToken?.decimals ?? 18,
 	);
+
+	const donationUsdValue =
+		(tokenPrice || 0) * Number(ethers.utils.formatEther(amount));
+
+	const isDonationMatched =
+		!!activeStartedRound &&
+		donationUsdValue >= (activeStartedRound?.minimumValidUsdValue || 0);
+
+	const isTokenGivbacksEligible = selectedOneTimeToken?.isGivbackEligible;
+	const isProjectGivbacksEligible = !!verified;
+	const isGivbacksEligible =
+		isTokenGivbacksEligible &&
+		isProjectGivbacksEligible &&
+		donationUsdValue >= GIVBACKS_DONATION_QUALIFICATION_VALUE_USD;
 
 	return (
 		<MainContainer>
@@ -398,8 +404,10 @@ const CryptoDonation: FC<{
 					givethDonationAmount={givethDonationAmount}
 					anonymous={anonymous}
 					givBackEligible={
-						projectIsGivBackEligible &&
-						selectedOneTimeToken.isGivbackEligible
+						isProjectGivbacksEligible &&
+						selectedOneTimeToken.isGivbackEligible &&
+						tokenPrice !== undefined &&
+						tokenPrice * projectDonationAmount >= 4
 					}
 				/>
 			)}
@@ -410,20 +418,71 @@ const CryptoDonation: FC<{
 				/>
 			)}
 			<SaveGasFees acceptedChains={acceptedChains} />
-			{hasStellarAddress && (
-				<QRToastLink onClick={handleQRDonation}>
-					{config.NETWORKS_CONFIG[ChainType.STELLAR]?.chainLogo(32)}
+			{!isConnected && (
+				<ConnectWallet>
+					<IconWalletOutline24 color={neutralColors.gray[700]} />
 					{formatMessage({
-						id: 'label.try_donating_wuth_stellar',
+						id: 'label.please_connect_your_wallet',
 					})}
-				</QRToastLink>
+				</ConnectWallet>
 			)}
-			<Flex $flexDirection='column' gap='8px'>
+			{isConnected && (
+				<EligibilityBadgeWrapper>
+					{activeStartedRound && isOnQFEligibleNetworks && (
+						<QFEligibilityBadge active={isDonationMatched}>
+							<IconQFNew size={30} />
+							{formatMessage(
+								{
+									id: isDonationMatched
+										? 'page.donate.donations_will_be_matched'
+										: 'page.donate.donate_$_to_get_matched',
+								},
+								{
+									value: activeStartedRound?.minimumValidUsdValue,
+								},
+							)}
+						</QFEligibilityBadge>
+					)}
+					<GivbacksEligibilityBadge active={isGivbacksEligible}>
+						<IconGIVBack24
+							color={
+								isGivbacksEligible
+									? semanticColors.jade[500]
+									: neutralColors.gray[700]
+							}
+						/>
+						{formatMessage(
+							{
+								id: isGivbacksEligible
+									? 'page.donate.givbacks_eligible'
+									: !isProjectGivbacksEligible
+										? 'page.donate.project_not_givbacks_eligible'
+										: selectedOneTimeToken &&
+											  !isTokenGivbacksEligible
+											? 'page.donate.token_not_givbacks_eligible'
+											: 'page.donate.donate_$_to_be_eligible',
+							},
+							{
+								value: GIVBACKS_DONATION_QUALIFICATION_VALUE_USD,
+								token: selectedOneTimeToken?.symbol,
+							},
+						)}
+					</GivbacksEligibilityBadge>
+				</EligibilityBadgeWrapper>
+			)}
+			<FlexStyled
+				$flexDirection='column'
+				gap='8px'
+				disabled={!isConnected}
+			>
 				<InputWrapper>
 					<SelectTokenWrapper
 						$alignItems='center'
 						$justifyContent='space-between'
-						onClick={() => setShowSelectTokenModal(true)}
+						onClick={() =>
+							isConnected && setShowSelectTokenModal(true)
+						}
+						disabled={!isConnected}
 					>
 						{selectedOneTimeToken ? (
 							<Flex gap='8px' $alignItems='center'>
@@ -451,7 +510,11 @@ const CryptoDonation: FC<{
 						decimals={selectedOneTimeToken?.decimals}
 					/>
 				</InputWrapper>
-				<Flex gap='4px' $alignItems='center'>
+				<FlexStyled
+					gap='4px'
+					$alignItems='center'
+					disabled={!selectedOneTimeToken}
+				>
 					<GLinkStyled
 						size='Small'
 						onClick={() => setAmount(selectedTokenBalance - gasfee)}
@@ -480,18 +543,21 @@ const CryptoDonation: FC<{
 					{insufficientGasFee && (
 						<WarnError>{amountErrorText}</WarnError>
 					)}
-				</Flex>
-			</Flex>
-			{hasActiveQFRound && !isOnEligibleNetworks && walletChainType && (
+				</FlexStyled>
+			</FlexStyled>
+			{hasActiveQFRound && !isOnQFEligibleNetworks && walletChainType && (
 				<DonateQFEligibleNetworks />
 			)}
-			{hasActiveQFRound && isOnEligibleNetworks && (
-				<EstimatedMatchingToast
-					projectData={project}
-					token={selectedOneTimeToken}
-					amount={amount}
-				/>
-			)}
+			{hasActiveQFRound &&
+				isOnQFEligibleNetworks &&
+				selectedTokenBalance && (
+					<EstimatedMatchingToast
+						projectData={project}
+						token={selectedOneTimeToken}
+						amount={amount}
+						tokenPrice={tokenPrice}
+					/>
+				)}
 			{!noDonationSplit ? (
 				<DonateToGiveth
 					setDonationToGiveth={setDonationToGiveth}
@@ -506,8 +572,8 @@ const CryptoDonation: FC<{
 			)}
 			{selectedOneTimeToken && (
 				<GIVBackToast
-					projectEligible={projectIsGivBackEligible}
-					tokenEligible={selectedOneTimeToken.isGivbackEligible}
+					projectEligible={isProjectGivbacksEligible}
+					tokenEligible={isTokenGivbacksEligible}
 				/>
 			)}
 			{!noDonationSplit ? (
@@ -554,12 +620,15 @@ const CryptoDonation: FC<{
 					checked={anonymous}
 					onChange={() => setAnonymous(!anonymous)}
 					size={14}
+					disabled={!isConnected || !selectedOneTimeToken}
 				/>
-				<div>
+				<DonateAnonymously
+					disabled={!isConnected || !selectedOneTimeToken}
+				>
 					{formatMessage({
 						id: 'component.tooltip.donate_anonymously',
 					})}
-				</div>
+				</DonateAnonymously>
 			</CheckBoxContainer>
 			{showSelectTokenModal && (
 				<SelectTokenModal
@@ -573,6 +642,56 @@ const CryptoDonation: FC<{
 		</MainContainer>
 	);
 };
+
+const BadgesBase = styled(FlexCenter)<{ active?: boolean }>`
+	gap: 8px;
+	font-size: 12px;
+	font-weight: 500;
+	background: ${neutralColors.gray[200]};
+	color: ${props =>
+		props.active ? semanticColors.jade[500] : neutralColors.gray[700]};
+	border-radius: 8px;
+	border: 1px solid
+		${props =>
+			props.active ? semanticColors.jade[400] : neutralColors.gray[400]};
+	padding: 4px;
+`;
+
+const EligibilityBadgeWrapper = styled(Flex)`
+	margin: 12px 0 24px;
+	gap: 16px;
+	justify-content: center;
+	flex-direction: column;
+	> div {
+		height: 36px;
+	}
+	${mediaQueries.tablet} {
+		flex-direction: row;
+		justify-content: flex-start;
+	}
+`;
+
+const GivbacksEligibilityBadge = styled(BadgesBase)``;
+
+const QFEligibilityBadge = styled(BadgesBase)``;
+
+const FlexStyled = styled(Flex)<{ disabled: boolean }>`
+	${props =>
+		props.disabled &&
+		`
+		opacity: 0.5;
+		pointer-events: none;
+	`}
+`;
+
+const DonateAnonymously = styled.div<{ disabled: boolean }>`
+	color: ${props =>
+		props.disabled ? neutralColors.gray[600] + ' !important' : 'inherit'};
+`;
+
+const ConnectWallet = styled(BadgesBase)`
+	margin: 12px 0 24px;
+`;
 
 const WarnError = styled.div`
 	color: ${semanticColors.punch[500]};
@@ -612,20 +731,6 @@ export const CheckBoxContainer = styled.div`
 		margin-top: 3px;
 		margin-left: 24px;
 	}
-`;
-
-const QRToastLink = styled(Flex)`
-	cursor: pointer;
-	align-items: center;
-	gap: 12px;
-	padding-block: 8px;
-	padding-left: 16px;
-	margin-block: 16px;
-	background-color: ${semanticColors.blueSky[100]};
-	color: ${semanticColors.blueSky[700]};
-	border-radius: 8px;
-	border: 1px solid ${semanticColors.blueSky[300]};
-	font-weight: 500;
 `;
 
 export default CryptoDonation;
