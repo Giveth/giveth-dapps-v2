@@ -1627,6 +1627,8 @@
 	"project.givback_toast.description.non_verified_owner_rejected_2": " o al soporte de Discord para más instrucciones.",
 	"project.givback_toast.description.non_verified_owner_submitted": "¡Noticias emocionantes! Tu solicitud ha sido enviada y está en la cola para ser revisada por nuestro equipo de revisión de elegibilidad para GIVbacks. Te responderemos en un plazo de 1-2 semanas.",
 	"project.givback_toast.description.non_verified_public": "Actualmente, los GIVbacks solo se otorgan por donaciones hechas a proyectos elegibles para GIVbacks en Ethereum. ¡Tu contribución sigue siendo importante, incluso si no genera GIVbacks!",
+	"project.givback_toast.description.verified_owner_not_eligible": "Tu proyecto ha sido avalado por los Verificadores de Giveth y ahora puede beneficiarse de GIVpower. Haz stake y bloquea tus tokens GIV para impulsar este proyecto y hacerlo más visible en la página de proyectos. Sin embargo, donar a este proyecto no generará GIVbacks para los donantes.",
+	"project.givback_toast.title.verified_owner_not_eligible": "Tu proyecto ha sido avalado",
 	"project.givback_toast.description.verified_owner": "Impulsa tu proyecto para aumentar la cantidad de GIVbacks que reciben tus donantes en Ethereum y aumentar su visibilidad entre otros proyectos.",
 	"project.givback_toast.description.verified_owner.note": "Como propietario de este proyecto, no recibirás GIVbacks por donar a él.",
 	"project.givback_toast.description.verified_public": "Las donaciones en Ethereum a proyectos elegibles para GIVbacks son recompensadas con GIV. ¡Impulsa este proyecto para aumentar su porcentaje de recompensas y hacerlo más visible en la página de proyectos!",

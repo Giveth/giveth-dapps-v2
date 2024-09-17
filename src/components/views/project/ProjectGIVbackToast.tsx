@@ -47,7 +47,10 @@ const ProjectGIVbackToast = () => {
 	const isOwnerGivbackEligible = isGivbackEligible && isAdmin;
 	const isOwnerNotVerified = !isVerified && isAdmin;
 	const isPublicGivbackEligible = isGivbackEligible && !isAdmin;
-	const isPublicVerifiedNotEligible = isVerified && !isGivbackEligible;
+	const isPublicVerifiedNotEligible =
+		isVerified && !isAdmin && !isGivbackEligible;
+	const isOwnerVerifiedNotEligible =
+		isVerified && isAdmin && !isGivbackEligible;
 
 	const color = isOwnerGivbackEligible
 		? semanticColors.golden[600]
@@ -220,6 +223,21 @@ const ProjectGIVbackToast = () => {
 		});
 		description = formatMessage({
 			id: `${useIntlDescription}verified_public_not_eligible`,
+		});
+		link = links.GIVPOWER_DOC;
+		Button = (
+			<OutlineButton
+				onClick={handleBoostClick}
+				label='Boost'
+				icon={<IconRocketInSpace16 />}
+			/>
+		);
+	} else if (isOwnerVerifiedNotEligible) {
+		title = formatMessage({
+			id: `${useIntlTitle}verified_owner_not_eligible`,
+		});
+		description = formatMessage({
+			id: `${useIntlDescription}verified_owner_not_eligible`,
 		});
 		link = links.GIVPOWER_DOC;
 		Button = (
