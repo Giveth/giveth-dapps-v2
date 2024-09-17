@@ -496,7 +496,7 @@ export const UPLOAD_IMAGE = gql`
 export const WALLET_ADDRESS_IS_VALID = gql`
 	query WalletAddressIsValid(
 		$address: String!
-		$chainType: String
+		$chainType: ChainType
 		$memo: String
 	) {
 		walletAddressIsValid(
