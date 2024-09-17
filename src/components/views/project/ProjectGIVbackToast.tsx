@@ -49,7 +49,7 @@ const ProjectGIVbackToast = () => {
 	const color = isOwnerVerified
 		? semanticColors.golden[600]
 		: neutralColors.gray[900];
-	const { formatMessage, locale } = useIntl();
+	const { formatMessage } = useIntl();
 	const { open: openConnectModal } = useWeb3Modal();
 	const {
 		isEnabled,
@@ -220,9 +220,14 @@ const ProjectGIVbackToast = () => {
 					id: `${useIntlTitle}verified_public_2`,
 				});
 		}
-		description = formatMessage({
-			id: `${useIntlDescription}verified_public`,
-		});
+		description = formatMessage(
+			{
+				id: `${useIntlDescription}verified_public`,
+			},
+			{
+				value: GIVBACKS_DONATION_QUALIFICATION_VALUE_USD,
+			},
+		);
 		Button = (
 			<OutlineButton
 				onClick={handleBoostClick}
@@ -305,7 +310,7 @@ const ButtonWrapper = styled.div`
 		flex-direction: row-reverse;
 		color: ${brandColors.giv[500]};
 		gap: 0;
-		width: 100%;
+		width: 180px;
 		svg {
 			margin-right: 8px;
 			flex-shrink: 0;

@@ -1628,7 +1628,7 @@
 	"project.givback_toast.description.non_verified_owner_submitted": "¡Noticias emocionantes! Tu solicitud ha sido enviada y está en la cola para ser revisada por nuestro equipo de revisión de elegibilidad para GIVbacks. Te responderemos en un plazo de 1-2 semanas.",
 	"project.givback_toast.description.non_verified_public": "Actualmente, los GIVbacks solo se otorgan por donaciones hechas a proyectos elegibles para GIVbacks en Ethereum. ¡Tu contribución sigue siendo importante, incluso si no genera GIVbacks!",
 	"project.givback_toast.description.verified_owner": "¡Impulsa tu proyecto para aumentar su porcentaje de GIVbacks y ayúdalo a aparecer más arriba en la página de proyectos!",
-	"project.givback_toast.description.verified_public": "Las donaciones en Ethereum a proyectos elegibles para GIVbacks son recompensadas con GIV. ¡Impulsa este proyecto para aumentar su porcentaje de recompensas y hacerlo más visible en la página de proyectos!",
+	"project.givback_toast.description.verified_public": "Las donaciones de ${value} o más son elegibles para recibir GIVbacks. ¡Impulsa este proyecto para aumentar su porcentaje de recompensas y su visibilidad en la página de proyectos!",
 	"project.givback_toast.title.non_verified_owner": "¿Tu proyecto está creando o apoyando bienes públicos?",
 	"project.givback_toast.title.non_verified_owner_cancelled": "Estado Cancelado",
 	"project.givback_toast.title.non_verified_owner_deactive": "Modo Desactivado",
