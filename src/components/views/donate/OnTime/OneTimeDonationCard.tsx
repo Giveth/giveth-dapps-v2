@@ -1,14 +1,15 @@
 import styled from 'styled-components';
 import React, { FC, useEffect, useMemo, useState } from 'react';
 import { useIntl } from 'react-intl';
-import { useRouter } from 'next/router';
 import {
 	B,
 	brandColors,
 	Button,
 	Flex,
+	FlexCenter,
 	IconCaretDown16,
 	IconRefresh16,
+	IconWalletOutline24,
 	neutralColors,
 	semanticColors,
 } from '@giveth/ui-design-system';
@@ -63,9 +64,8 @@ import SanctionModal from '@/components/modals/SanctionedModal';
 import { useTokenPrice } from '@/hooks/useTokenPrice';
 
 const CryptoDonation: FC<{
-	setIsQRDonation: (isQRDonation: boolean) => void;
 	acceptedTokens: IProjectAcceptedToken[] | undefined;
-}> = ({ acceptedTokens, setIsQRDonation }) => {
+}> = ({ acceptedTokens }) => {
 	const {
 		chain,
 		walletChainType,
@@ -74,7 +74,6 @@ const CryptoDonation: FC<{
 	} = useGeneralWallet();
 
 	const { formatMessage } = useIntl();
-	const router = useRouter();
 	const { isSignedIn } = useAppSelector(state => state.user);
 
 	const { project, hasActiveQFRound, selectedOneTimeToken } = useDonateData();
@@ -146,9 +145,7 @@ const CryptoDonation: FC<{
 
 	const isOnEligibleNetworks =
 		networkId && activeStartedRound?.eligibleNetworks?.includes(networkId);
-	const hasStellarAddress = addresses?.some(
-		address => address.chainType === ChainType.STELLAR,
-	);
+
 	const tokenPrice = useTokenPrice(selectedOneTimeToken);
 
 	useEffect(() => {
@@ -302,20 +299,6 @@ const CryptoDonation: FC<{
 		selectedOneTimeToken?.address,
 	]);
 
-	const handleQRDonation = () => {
-		setIsQRDonation(true);
-		router.push(
-			{
-				query: {
-					...router.query,
-					chain: ChainType.STELLAR.toLowerCase(),
-				},
-			},
-			undefined,
-			{ shallow: true },
-		);
-	};
-
 	useEffect(() => {
 		if (
 			amount > selectedTokenBalance - gasfee &&
@@ -417,20 +400,27 @@ const CryptoDonation: FC<{
 				/>
 			)}
 			<SaveGasFees acceptedChains={acceptedChains} />
-			{hasStellarAddress && (
-				<QRToastLink onClick={handleQRDonation}>
-					{config.NETWORKS_CONFIG[ChainType.STELLAR]?.chainLogo(32)}
+			{!isConnected && (
+				<ConnectWallet>
+					<IconWalletOutline24 color={neutralColors.gray[700]} />
 					{formatMessage({
-						id: 'label.try_donating_wuth_stellar',
+						id: 'label.please_connect_your_wallet',
 					})}
-				</QRToastLink>
+				</ConnectWallet>
 			)}
-			<Flex $flexDirection='column' gap='8px'>
+			<FlexStyled
+				$flexDirection='column'
+				gap='8px'
+				disabled={!isConnected}
+			>
 				<InputWrapper>
 					<SelectTokenWrapper
 						$alignItems='center'
 						$justifyContent='space-between'
-						onClick={() => setShowSelectTokenModal(true)}
+						onClick={() =>
+							isConnected && setShowSelectTokenModal(true)
+						}
+						disabled={!isConnected}
 					>
 						{selectedOneTimeToken ? (
 							<Flex gap='8px' $alignItems='center'>
@@ -458,7 +448,11 @@ const CryptoDonation: FC<{
 						decimals={selectedOneTimeToken?.decimals}
 					/>
 				</InputWrapper>
-				<Flex gap='4px' $alignItems='center'>
+				<FlexStyled
+					gap='4px'
+					$alignItems='center'
+					disabled={!selectedOneTimeToken}
+				>
 					<GLinkStyled
 						size='Small'
 						onClick={() => setAmount(selectedTokenBalance - gasfee)}
@@ -487,18 +481,20 @@ const CryptoDonation: FC<{
 					{insufficientGasFee && (
 						<WarnError>{amountErrorText}</WarnError>
 					)}
-				</Flex>
-			</Flex>
+				</FlexStyled>
+			</FlexStyled>
 			{hasActiveQFRound && !isOnEligibleNetworks && walletChainType && (
 				<DonateQFEligibleNetworks />
 			)}
-			{hasActiveQFRound && isOnEligibleNetworks && (
-				<EstimatedMatchingToast
-					projectData={project}
-					token={selectedOneTimeToken}
-					amount={amount}
-				/>
-			)}
+			{hasActiveQFRound &&
+				isOnEligibleNetworks &&
+				selectedTokenBalance && (
+					<EstimatedMatchingToast
+						projectData={project}
+						token={selectedOneTimeToken}
+						amount={amount}
+					/>
+				)}
 			{!noDonationSplit ? (
 				<DonateToGiveth
 					setDonationToGiveth={setDonationToGiveth}
@@ -561,12 +557,15 @@ const CryptoDonation: FC<{
 					checked={anonymous}
 					onChange={() => setAnonymous(!anonymous)}
 					size={14}
+					disabled={!isConnected || !selectedOneTimeToken}
 				/>
-				<div>
+				<DonateAnonymously
+					disabled={!isConnected || !selectedOneTimeToken}
+				>
 					{formatMessage({
 						id: 'component.tooltip.donate_anonymously',
 					})}
-				</div>
+				</DonateAnonymously>
 			</CheckBoxContainer>
 			{showSelectTokenModal && (
 				<SelectTokenModal
@@ -580,6 +579,32 @@ const CryptoDonation: FC<{
 		</MainContainer>
 	);
 };
+
+const FlexStyled = styled(Flex)<{ disabled: boolean }>`
+	${props =>
+		props.disabled &&
+		`
+		opacity: 0.5;
+		pointer-events: none;
+	`}
+`;
+
+const DonateAnonymously = styled.div<{ disabled: boolean }>`
+	color: ${props =>
+		props.disabled ? neutralColors.gray[600] + ' !important' : 'inherit'};
+`;
+
+const ConnectWallet = styled(FlexCenter)`
+	background: ${neutralColors.gray[200]};
+	color: ${neutralColors.gray[700]};
+	border-radius: 8px;
+	gap: 8px;
+	border: 1px solid ${neutralColors.gray[400]};
+	padding: 4px;
+	margin: 12px 0 24px;
+	font-size: 12px;
+	font-weight: 500;
+`;
 
 const WarnError = styled.div`
 	color: ${semanticColors.punch[500]};
@@ -619,20 +644,6 @@ export const CheckBoxContainer = styled.div`
 		margin-top: 3px;
 		margin-left: 24px;
 	}
-`;
-
-const QRToastLink = styled(Flex)`
-	cursor: pointer;
-	align-items: center;
-	gap: 12px;
-	padding-block: 8px;
-	padding-left: 16px;
-	margin-block: 16px;
-	background-color: ${semanticColors.blueSky[100]};
-	color: ${semanticColors.blueSky[700]};
-	border-radius: 8px;
-	border: 1px solid ${semanticColors.blueSky[300]};
-	font-weight: 500;
 `;
 
 export default CryptoDonation;

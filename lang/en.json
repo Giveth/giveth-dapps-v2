@@ -1242,7 +1242,7 @@
 	"page.project.we_are_supporting_stellar": "This Project supports Donations on Stellar",
 	"page.project.you_can_try_donating": "Try out making donations using the Stellar Network.",
 	"page.project.donate_with_stellar": "Donate with Stellar",
-	"label.try_donating_wuth_stellar": "Try donating with Stellar.",
+	"label.try_donating_with_stellar": "Try donating with Stellar. You don’t need to connect your wallet.",
 	"label.check_donations": "View Donation Receipt",
 	"label.check_donation": "View Donation",
 	"error.enter_amount": "Amount must be greater than 0",
