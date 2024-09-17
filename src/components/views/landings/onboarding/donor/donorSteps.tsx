@@ -18,7 +18,7 @@ const donorSteps = [
 	{
 		title: 'Fund Your Wallet',
 		description:
-			'Next up, try donating to a project on Giveth! We’ve got over 1,800 to choose from in categories ranging from Disaster Relief, Art & Culture, Education, Health & Wellness and more!',
+			'Next up, try donating to a project on Giveth! We’ve thousands to choose from in categories ranging from Disaster Relief, Art & Culture, Education, Health & Wellness and more!',
 		element: (
 			<iframe
 				width='100%'

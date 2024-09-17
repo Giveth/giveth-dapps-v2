@@ -38,7 +38,7 @@
 	"component.end_stream_modal.confirm_question": "Está a punto de finalizar una donación recurrente activa. Este proyecto ya no se beneficiará de su apoyo continuo. ¿Está seguro?",
 	"component.end_stream_modal.ended_description": "{name} ya no se beneficiará de su donación recurrente.",
 	"component.end_stream_modal.ended_title": "Ha finalizado una donación recurrente",
-	"component.givback_eligible.desc": "Cuando donas a proyectos verificados, tienes derecho a recibir GIVtokens. A través de GIVbacks, GIV otorga a los donantes derechos de gobernanza a través del GIVgarden.",
+	"component.givback_eligible.desc": "Cuando donas a proyectos elegibles para GIVbacks, calificas para recibir tokens GIV. A través de GIVbacks, GIV empodera a los donantes con derechos de gobernanza a través del GIVgarden.",
 	"component.givback_toast.desc": "Obtienes GIVbacks al donar a este proyecto.",
 	"component.improve_tip.categories": "Asegúrate de que los donantes entiendan el propósito de tu proyecto eligiendo al menos una categoría.",
 	"component.improve_tip.desc": "La descripción del proyecto es demasiado corta, usa al menos 1200 caracteres para describir tu proyecto.",

@@ -90,7 +90,7 @@ export const ConnectCard: FC<IClaimViewCardProps> = ({ index }) => {
 			desc = (
 				<span>
 					But there are more ways to get GIV! Try another address or
-					donate to verified projects to qualify for{' '}
+					donate to GIVbacks eligible projects to qualify for{' '}
 					<Link href={Routes.GIVbacks}>
 						<ClickableStrong>GIVbacks</ClickableStrong>
 					</Link>

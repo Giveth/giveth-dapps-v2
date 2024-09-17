@@ -40,7 +40,7 @@ const WhatIsGiveth = () => {
 					<H5Styled>Get rewarded for donating</H5Styled>
 					<LeadStyled>
 						: Earn crypto rewards every time you donate to a
-						verified project on Giveth.
+						GIVbacks eligible project on Giveth.
 					</LeadStyled>
 				</li>
 			</Bullets>
