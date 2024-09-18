@@ -41,14 +41,14 @@ export const projectsMetatags = {
 };
 
 export const givbacksMetatags = {
-	title: 'GIVbacks: Get rewarded for donating to verified projects',
+	title: 'GIVbacks: Get rewarded for donating to public goods',
 	desc: 'When you make a donation of $5 or more to a GIVbacks eligible project you qualify to get GIV!',
 	image: 'https://i.ibb.co/HTbdCdd/Thumbnail.png',
 	url: 'https://giveth.io/givbacks',
 };
 
 export const giveconomyMetatags = {
-	title: 'GIVeconomy: Empowering our collective to build the Future of Giving.',
+	title: 'GIVeconomy: Empowering our collective to build the Future of Giving',
 	desc: 'Giveth is a donor owned and governed economy. With GIVbacks, we reward donors to GIVbacks eligible projects on Giveth with GIV. ',
 	image: 'https://i.ibb.co/HTbdCdd/Thumbnail.png',
 	url: 'https://giveth.io/giveconomy',
