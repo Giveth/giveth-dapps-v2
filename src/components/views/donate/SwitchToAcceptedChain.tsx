@@ -2,12 +2,12 @@ import React, { FC } from 'react';
 import { useIntl } from 'react-intl';
 import { Caption } from '@giveth/ui-design-system';
 import { Chain } from 'viem';
-import { getNetworkNames } from '@/components/views/donate/helpers';
+import { getNetworkNames } from '@/components/views/donate/common/helpers';
 import {
 	NetworkToast,
 	SwitchCaption,
-} from '@/components/views/donate/common.styled';
-import { INetworkIdWithChain } from './common.types'; // Import the type
+} from '@/components/views/donate/common/common.styled';
+import { INetworkIdWithChain } from './common/common.types'; // Import the type
 import { useGeneralWallet } from '@/providers/generalWalletProvider';
 import { ChainType } from '@/types/config';
 

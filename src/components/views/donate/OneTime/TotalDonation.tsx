@@ -3,7 +3,7 @@ import { Caption, neutralColors, Flex } from '@giveth/ui-design-system';
 import { FC } from 'react';
 import { useIntl } from 'react-intl';
 import { formatPrice } from '@/lib/helpers';
-import { calcDonationShare } from '@/components/views/donate/helpers';
+import { calcDonationShare } from '@/components/views/donate/common/helpers';
 import { IProjectAcceptedToken } from '@/apollo/types/gqlTypes';
 
 interface ITotalDonation {

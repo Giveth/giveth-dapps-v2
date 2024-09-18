@@ -8,7 +8,7 @@ import { EDonationFailedType } from '@/components/modals/FailedDonation';
 import { EDonationStatus } from '@/apollo/types/gqlEnums';
 import { isAddressENS } from '@/lib/wallet';
 import { IOnTxHash, saveDonation, updateDonation } from '@/services/donation';
-import { ICreateDonation } from '@/components/views/donate/helpers';
+import { ICreateDonation } from '@/components/views/donate/common/helpers';
 import { getTxFromSafeTxId } from '@/lib/safe';
 import { retryFetchEVMTransaction } from '@/lib/transaction';
 import { useIsSafeEnvironment } from './useSafeAutoConnect';

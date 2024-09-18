@@ -8,7 +8,7 @@ import {
 	RENEW_DRAFT_DONATION_EXPIRATION,
 	VERIFY_QR_DONATION_TRANSACTION,
 } from '@/apollo/gql/gqlDonations';
-import { ICreateDraftDonation } from '@/components/views/donate/helpers';
+import { ICreateDraftDonation } from '@/components/views/donate/common/helpers';
 import StorageLabel from '@/lib/localStorage';
 import { IDraftDonation } from '@/apollo/types/gqlTypes';
 import { IProject } from '@/apollo/types/types';

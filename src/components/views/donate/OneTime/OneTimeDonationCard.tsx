@@ -6,20 +6,15 @@ import {
 	brandColors,
 	Button,
 	Flex,
-	FlexCenter,
 	IconCaretDown16,
-	IconGIVBack24,
-	IconQFNew,
 	IconRefresh16,
 	IconWalletOutline24,
-	mediaQueries,
 	neutralColors,
 	semanticColors,
 } from '@giveth/ui-design-system';
 // @ts-ignore
 import { Address, Chain, formatUnits, zeroAddress } from 'viem';
 import { useBalance, useEstimateFeesPerGas, useEstimateGas } from 'wagmi';
-import { ethers } from 'ethers';
 import { setShowWelcomeModal } from '@/features/modal/modal.slice';
 import CheckBox from '@/components/Checkbox';
 
@@ -33,7 +28,7 @@ import { IProjectAcceptedToken } from '@/apollo/types/gqlTypes';
 import {
 	calcDonationShare,
 	prepareTokenList,
-} from '@/components/views/donate/helpers';
+} from '@/components/views/donate/common/helpers';
 import GIVBackToast from '@/components/views/donate/GIVBackToast';
 import { DonateWrongNetwork } from '@/components/modals/DonateWrongNetwork';
 import { useAppDispatch, useAppSelector } from '@/features/hooks';
@@ -46,10 +41,10 @@ import DonateQFEligibleNetworks from './DonateQFEligibleNetworks';
 import { getActiveRound } from '@/helpers/qf';
 import { useGeneralWallet } from '@/providers/generalWalletProvider';
 import { ChainType } from '@/types/config';
-import { INetworkIdWithChain } from '../common.types';
+import { INetworkIdWithChain } from '../common/common.types';
 import DonateModal from './DonateModal';
 import QFModal from './QFModal';
-import EstimatedMatchingToast from '@/components/views/donate/OnTime/EstimatedMatchingToast';
+import EstimatedMatchingToast from '@/components/views/donate/OneTime/EstimatedMatchingToast';
 import TotalDonation from './TotalDonation';
 import {
 	GLinkStyled,
@@ -66,7 +61,8 @@ import { useSolanaBalance } from '@/hooks/useSolanaBalance';
 import { isWalletSanctioned } from '@/services/donation';
 import SanctionModal from '@/components/modals/SanctionedModal';
 import { useTokenPrice } from '@/hooks/useTokenPrice';
-import { GIVBACKS_DONATION_QUALIFICATION_VALUE_USD } from '@/lib/constants/constants';
+import { BadgesBase } from '@/components/views/donate/common/common.styled';
+import EligibilityBadges from '@/components/views/donate/common/EligibilityBadges';
 
 const CryptoDonation: FC<{
 	acceptedTokens: IProjectAcceptedToken[] | undefined;
@@ -353,19 +349,8 @@ const CryptoDonation: FC<{
 		selectedOneTimeToken?.decimals ?? 18,
 	);
 
-	const donationUsdValue =
-		(tokenPrice || 0) * Number(ethers.utils.formatEther(amount));
-
-	const isDonationMatched =
-		!!activeStartedRound &&
-		donationUsdValue >= (activeStartedRound?.minimumValidUsdValue || 0);
-
 	const isTokenGivbacksEligible = selectedOneTimeToken?.isGivbackEligible;
 	const isProjectGivbacksEligible = !!verified;
-	const isGivbacksEligible =
-		isTokenGivbacksEligible &&
-		isProjectGivbacksEligible &&
-		donationUsdValue >= GIVBACKS_DONATION_QUALIFICATION_VALUE_USD;
 
 	return (
 		<MainContainer>
@@ -426,50 +411,12 @@ const CryptoDonation: FC<{
 					})}
 				</ConnectWallet>
 			)}
-			{isConnected && (
-				<EligibilityBadgeWrapper>
-					{activeStartedRound && isOnQFEligibleNetworks && (
-						<QFEligibilityBadge active={isDonationMatched}>
-							<IconQFNew size={30} />
-							{formatMessage(
-								{
-									id: isDonationMatched
-										? 'page.donate.donations_will_be_matched'
-										: 'page.donate.donate_$_to_get_matched',
-								},
-								{
-									value: activeStartedRound?.minimumValidUsdValue,
-								},
-							)}
-						</QFEligibilityBadge>
-					)}
-					<GivbacksEligibilityBadge active={isGivbacksEligible}>
-						<IconGIVBack24
-							color={
-								isGivbacksEligible
-									? semanticColors.jade[500]
-									: neutralColors.gray[700]
-							}
-						/>
-						{formatMessage(
-							{
-								id: isGivbacksEligible
-									? 'page.donate.givbacks_eligible'
-									: !isProjectGivbacksEligible
-										? 'page.donate.project_not_givbacks_eligible'
-										: selectedOneTimeToken &&
-											  !isTokenGivbacksEligible
-											? 'page.donate.token_not_givbacks_eligible'
-											: 'page.donate.donate_$_to_be_eligible',
-							},
-							{
-								value: GIVBACKS_DONATION_QUALIFICATION_VALUE_USD,
-								token: selectedOneTimeToken?.symbol,
-							},
-						)}
-					</GivbacksEligibilityBadge>
-				</EligibilityBadgeWrapper>
-			)}
+			<EligibilityBadges
+				token={selectedOneTimeToken}
+				amount={amount}
+				tokenPrice={tokenPrice}
+				style={{ margin: '12px 0 24px' }}
+			/>
 			<FlexStyled
 				$flexDirection='column'
 				gap='8px'
@@ -642,38 +589,6 @@ const CryptoDonation: FC<{
 		</MainContainer>
 	);
 };
-
-const BadgesBase = styled(FlexCenter)<{ active?: boolean }>`
-	gap: 8px;
-	font-size: 12px;
-	font-weight: 500;
-	background: ${neutralColors.gray[200]};
-	color: ${props =>
-		props.active ? semanticColors.jade[500] : neutralColors.gray[700]};
-	border-radius: 8px;
-	border: 1px solid
-		${props =>
-			props.active ? semanticColors.jade[400] : neutralColors.gray[400]};
-	padding: 4px;
-`;
-
-const EligibilityBadgeWrapper = styled(Flex)`
-	margin: 12px 0 24px;
-	gap: 16px;
-	justify-content: center;
-	flex-direction: column;
-	> div {
-		height: 36px;
-	}
-	${mediaQueries.tablet} {
-		flex-direction: row;
-		justify-content: flex-start;
-	}
-`;
-
-const GivbacksEligibilityBadge = styled(BadgesBase)``;
-
-const QFEligibilityBadge = styled(BadgesBase)``;
 
 const FlexStyled = styled(Flex)<{ disabled: boolean }>`
 	${props =>

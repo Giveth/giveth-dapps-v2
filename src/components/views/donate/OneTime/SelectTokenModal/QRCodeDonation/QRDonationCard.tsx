@@ -1,15 +1,17 @@
 import React, { FC, useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
-import Image from 'next/image';
 import styled from 'styled-components';
 import {
 	B,
 	P,
-	Button,
 	Flex,
 	neutralColors,
 	IconArrowLeft,
 	mediaQueries,
+	IconWalletOutline24,
+	OutlineButton,
+	IconArrowRight16,
+	Button,
 } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
 import { formatUnits } from 'viem';
@@ -39,7 +41,10 @@ import InlineToast, { EToastType } from '@/components/toasts/InlineToast';
 import { useAppSelector } from '@/features/hooks';
 import { useModalCallback } from '@/hooks/useModalCallback';
 import links from '@/lib/constants/links';
-import DonateQFEligibleNetworks from '@/components/views/donate/OnTime/DonateQFEligibleNetworks';
+import DonateQFEligibleNetworks from '@/components/views/donate/OneTime/DonateQFEligibleNetworks';
+import { BadgesBase } from '@/components/views/donate/common/common.styled';
+import { useGeneralWallet } from '@/providers/generalWalletProvider';
+import EligibilityBadges from '@/components/views/donate/common/EligibilityBadges';
 
 interface QRDonationCardProps extends IDonationCardProps {
 	qrAcceptedTokens: IProjectAcceptedToken[];
@@ -68,6 +73,7 @@ export const QRDonationCard: FC<QRDonationCardProps> = ({
 	const { modalCallback: signInThenDonate } = useModalCallback(() =>
 		setShowDonateModal(true),
 	);
+	const { isConnected } = useGeneralWallet();
 
 	const {
 		project,
@@ -291,6 +297,21 @@ export const QRDonationCard: FC<QRDonationCardProps> = ({
 					})}
 				/>
 			)}
+			{!isConnected && hasActiveQFRound && (
+				<ConnectWallet>
+					<IconWalletOutline24 color={neutralColors.gray[700]} />
+					{formatMessage({
+						id: 'label.please_connect_your_wallet_to_get_matched',
+					})}
+				</ConnectWallet>
+			)}
+			<EligibilityBadges
+				amount={amount}
+				token={stellarToken}
+				tokenPrice={tokenPrice}
+				style={{ marginBottom: '-15px' }}
+				isStellar
+			/>
 			{!showQRCode && !isSignedIn && stellarToken?.isGivbackEligible && (
 				<InlineToast
 					noIcon
@@ -363,21 +384,21 @@ export const QRDonationCard: FC<QRDonationCardProps> = ({
 							</B>
 							<B>{formatAmountToDisplay(amount)}</B>
 						</FlexStyled>
-						<Button
-							label='Next'
-							color='primary'
-							icon={
-								<Image
-									src='/images/rarrow.svg'
-									alt='Next'
-									width={16}
-									height={16}
-									style={{ marginLeft: '8px' }} // Add margin to the right of the icon
-								/>
-							}
-							onClick={handleNext}
-							disabled={amount === 0n}
-						/>
+						{amount === 0n ? (
+							<OutlineButton
+								label='Next'
+								color='primary'
+								icon={<IconArrowRight16 />}
+								disabled
+							/>
+						) : (
+							<Button
+								label='Next'
+								color='primary'
+								icon={<IconArrowRight16 />}
+								onClick={handleNext}
+							/>
+						)}
 					</CardBottom>
 				</>
 			) : (
@@ -394,6 +415,10 @@ export const QRDonationCard: FC<QRDonationCardProps> = ({
 		</>
 	);
 };
+
+const ConnectWallet = styled(BadgesBase)`
+	margin-bottom: -15px;
+`;
 
 const CardHead = styled(Flex)`
 	align-items: center;

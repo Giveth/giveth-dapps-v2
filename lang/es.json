@@ -727,6 +727,7 @@
 	"label.photo_by": "Foto por",
 	"label.please_confirm_your_email": "Por favor confirma tu e-mail",
 	"label.please_connect_your_wallet": "Por favor conecta tu billetera",
+	"label.please_connect_your_wallet_to_get_matched": "Conecta tu billetera para igualar tu donación.",
 	"label.please_contact_support_team": "Por favor contacta al equipo de soporte.",
 	"label.please_do_not_enter_exchange_deposit": "¡Por favor, NO introduzcas una dirección de depósito de intercambio, o podrías perder tus fondos! Usa una cuenta que controles en esta red. Recomendamos usar Metamask.",
 	"label.please_enter_full_link": "Por favor, introduzca el enlace completo",

@@ -36,7 +36,7 @@ import { ChainType } from '@/types/config';
 import { IProject, IWalletAddress } from '@/apollo/types/types';
 import { useCreateSolanaDonation } from '@/hooks/useCreateSolanaDonation';
 import { useTokenPrice } from '@/hooks/useTokenPrice';
-import { calcDonationShare } from '@/components/views/donate/helpers';
+import { calcDonationShare } from '@/components/views/donate/common/helpers';
 import { Spinner } from '@/components/Spinner';
 import { FETCH_GIVETH_PROJECT_BY_ID } from '@/apollo/gql/gqlProjects';
 import createGoogleTagEventPurchase from '@/helpers/googleAnalytics';

@@ -19,7 +19,7 @@ import { useAppSelector } from '@/features/hooks';
 import config from '@/configuration';
 import { ETheme } from '@/features/general/general.slice';
 import { getChainName } from '@/lib/network';
-import { INetworkIdWithChain } from '../views/donate/common.types';
+import { INetworkIdWithChain } from '../views/donate/common/common.types';
 import { useGeneralWallet } from '@/providers/generalWalletProvider';
 import { ChainType } from '@/types/config';
 

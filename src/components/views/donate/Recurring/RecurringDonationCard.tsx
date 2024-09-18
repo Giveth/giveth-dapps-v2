@@ -47,7 +47,7 @@ import { WrongNetworkLayer } from '../WrongNetworkLayer';
 import { ModifySuperTokenModal } from './ModifySuperToken/ModifySuperTokenModal';
 import { limitFraction } from '@/helpers/number';
 import CheckBox from '@/components/Checkbox';
-import { CheckBoxContainer } from '../OnTime/OneTimeDonationCard';
+import { CheckBoxContainer } from '@/components/views/donate/OneTime/OneTimeDonationCard';
 import AlloProtocolFirstDonationModal from './AlloProtocolFirstDonationModal';
 import links from '@/lib/constants/links';
 import Routes from '@/lib/constants/Routes';

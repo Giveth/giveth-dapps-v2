@@ -34,7 +34,7 @@ import ProjectCardImage from '@/components/project-card/ProjectCardImage';
 import { useGeneralWallet } from '@/providers/generalWalletProvider';
 import { DonatePageProjectDescription } from './DonatePageProjectDescription';
 import { getActiveRound } from '@/helpers/qf';
-import QRDonationDetails from './OnTime/SelectTokenModal/QRCodeDonation/QRDonationDetails';
+import QRDonationDetails from '@/components/views/donate/OneTime/SelectTokenModal/QRCodeDonation/QRDonationDetails';
 import InlineToast, { EToastType } from '@/components/toasts/InlineToast';
 import { client } from '@/apollo/apolloClient';
 import { FETCH_DONATION_BY_ID } from '@/apollo/gql/gqlDonations';
