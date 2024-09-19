@@ -11,8 +11,6 @@ import {
 	Flex,
 	B,
 	Button,
-	H3,
-	H5,
 	H4,
 } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
