@@ -47,7 +47,6 @@ export const DonatePageProjectDescription: FC<
 		organization,
 		estimatedMatching,
 	} = projectData || {};
-	
 
 	const { allProjectsSum, matchingPool, projectDonationsSqrtRootSum } =
 		estimatedMatching || {};
@@ -81,7 +80,7 @@ export const DonatePageProjectDescription: FC<
 					<VerifiedBadge />
 				</Flex>
 			)}
-			{(isQRDonation && isStellarIncludedInQF) ? (
+			{isQRDonation && isStellarIncludedInQF ? (
 				<>
 					<AmountRaisedText>
 						<Subline color={neutralColors.gray[700]}>

@@ -277,7 +277,8 @@ const DonateIndex: FC = () => {
 										/>
 
 										<ImageWrapper>
-											{isQRDonation && isStellarIncludedInQF ? (
+											{isQRDonation &&
+											isStellarIncludedInQF ? (
 												<>
 													<ProjectImage
 														src={
