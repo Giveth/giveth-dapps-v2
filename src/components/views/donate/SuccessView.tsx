@@ -40,7 +40,7 @@ import { ChainType } from '@/types/config';
 interface ISuccessView {
 	isStellar?: boolean;
 }
-export const SuccessView: FC<ISuccessView> = ({ isStellar }) => {
+export const SuccessView: FC<ISuccessView> = ({isStellar}) => {
 	const { formatMessage } = useIntl();
 	const { successDonation, hasActiveQFRound, project } = useDonateData();
 	const {
@@ -78,9 +78,10 @@ export const SuccessView: FC<ISuccessView> = ({ isStellar }) => {
 	const stellarNetworkId =
 		config.NON_EVM_NETWORKS_CONFIG[ChainType.STELLAR].networkId;
 
-	const isOnEligibleNetworks = activeStartedRound?.eligibleNetworks?.includes(
-		(isStellar ? stellarNetworkId : chainId) || 0,
-	);
+	const isOnEligibleNetworks =
+		activeStartedRound?.eligibleNetworks?.includes(
+			(isStellar ? stellarNetworkId : chainId) || 0,
+		);
 
 	useEffect(() => {
 		if (!hasMultipleTxs) return;

@@ -23,6 +23,7 @@ import { ProjectCardUserName } from '@/components/project-card/ProjectCardUserNa
 import { ORGANIZATION } from '@/lib/constants/organizations';
 import { useDonateData } from '@/context/donate.context';
 import { ChainType } from '@/types/config';
+import config from '@/configuration';
 import { calculateTotalEstimatedMatching, getActiveRound } from '@/helpers/qf';
 
 interface IDonatePageProjectDescriptionProps {
@@ -46,6 +47,7 @@ export const DonatePageProjectDescription: FC<
 		organization,
 		estimatedMatching,
 	} = projectData || {};
+	
 
 	const { allProjectsSum, matchingPool, projectDonationsSqrtRootSum } =
 		estimatedMatching || {};
@@ -60,6 +62,12 @@ export const DonatePageProjectDescription: FC<
 	const { activeStartedRound, activeQFRound } = getActiveRound(
 		project.qfRounds,
 	);
+
+	const stellarNetworkId =
+		config.NON_EVM_NETWORKS_CONFIG[ChainType.STELLAR].networkId;
+	const isStellarIncludedInQF =
+		activeStartedRound?.eligibleNetworks?.includes(stellarNetworkId);
+
 	const {
 		allocatedFundUSDPreferred,
 		allocatedFundUSD,
@@ -73,7 +81,7 @@ export const DonatePageProjectDescription: FC<
 					<VerifiedBadge />
 				</Flex>
 			)}
-			{isQRDonation ? (
+			{(isQRDonation && isStellarIncludedInQF) ? (
 				<>
 					<AmountRaisedText>
 						<Subline color={neutralColors.gray[700]}>
