@@ -65,7 +65,6 @@ export const QRDonationCard: FC<QRDonationCardProps> = ({
 	const { formatMessage } = useIntl();
 	const router = useRouter();
 	const { isSignedIn, isEnabled } = useAppSelector(state => state.user);
-	const isQRDonation = router.query.chain === ChainType.STELLAR.toLowerCase();
 	const [_showDonateModal, setShowDonateModal] = useState(false);
 	const { modalCallback: signInThenDonate } = useModalCallback(() =>
 		setShowDonateModal(true),
@@ -294,7 +293,7 @@ export const QRDonationCard: FC<QRDonationCardProps> = ({
 					})}
 				/>
 			)}
-			{!isConnected && hasActiveQFRound && (
+			{!showQRCode && !isConnected && hasActiveQFRound && (
 				<ConnectWallet>
 					<IconWalletOutline24 color={neutralColors.gray[700]} />
 					{formatMessage({
@@ -302,13 +301,15 @@ export const QRDonationCard: FC<QRDonationCardProps> = ({
 					})}
 				</ConnectWallet>
 			)}
-			<EligibilityBadges
-				amount={amount}
-				token={stellarToken}
-				tokenPrice={tokenPrice}
-				style={{ marginBottom: '5px' }}
-				isStellar
-			/>
+			{!showQRCode && (
+				<EligibilityBadges
+					amount={amount}
+					token={stellarToken}
+					tokenPrice={tokenPrice}
+					style={{ marginBottom: '5px' }}
+					isStellar
+				/>
+			)}
 			{!showQRCode ? (
 				<>
 					<StyledInputWrapper>

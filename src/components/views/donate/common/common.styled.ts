@@ -49,7 +49,7 @@ export const BadgesBase = styled(FlexCenter)<{
 				: props.warning
 					? semanticColors.golden[400]
 					: neutralColors.gray[400]};
-	padding: 4px;
+	padding: 4px 8px 4px 4px;
 `;
 
 export const EligibilityBadgeWrapper = styled(Flex)`
