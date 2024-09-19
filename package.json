@@ -18,7 +18,7 @@
 	},
 	"dependencies": {
 		"@apollo/client": "^3.10.4",
-		"@giveth/ui-design-system": "^1.11.35",
+		"@giveth/ui-design-system": "^1.11.36",
 		"@next/third-parties": "^14.2.5",
 		"@react-google-maps/api": "^2.19.3",
 		"@reduxjs/toolkit": "^2.2.4",

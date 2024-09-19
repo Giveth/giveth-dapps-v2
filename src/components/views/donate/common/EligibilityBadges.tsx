@@ -1,6 +1,7 @@
 import {
 	IconGIVBack24,
 	IconQFNew,
+	IconQFNotEligible24,
 	neutralColors,
 	semanticColors,
 } from '@giveth/ui-design-system';
@@ -51,6 +52,14 @@ const EligibilityBadges: FC<IEligibilityBadges> = props => {
 
 	return isConnected ? (
 		<EligibilityBadgeWrapper style={style}>
+			{isStellar && !isOnQFEligibleNetworks && (
+				<BadgesBase active={isDonationMatched}>
+					<IconQFNotEligible24 />
+					{formatMessage({
+						id: 'label.stellar_donations_arent_eligible',
+					})}
+				</BadgesBase>
+			)}
 			{activeStartedRound && isOnQFEligibleNetworks && (
 				<BadgesBase active={isDonationMatched}>
 					<IconQFNew size={30} />

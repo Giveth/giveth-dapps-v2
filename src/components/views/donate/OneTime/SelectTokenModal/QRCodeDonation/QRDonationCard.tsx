@@ -39,7 +39,6 @@ import StorageLabel from '@/lib/localStorage';
 import InlineToast, { EToastType } from '@/components/toasts/InlineToast';
 import { useAppSelector } from '@/features/hooks';
 import { useModalCallback } from '@/hooks/useModalCallback';
-import DonateQFEligibleNetworks from '@/components/views/donate/OneTime/DonateQFEligibleNetworks';
 import { BadgesBase } from '@/components/views/donate/common/common.styled';
 import { useGeneralWallet } from '@/providers/generalWalletProvider';
 import EligibilityBadges from '@/components/views/donate/common/EligibilityBadges';
@@ -340,9 +339,6 @@ export const QRDonationCard: FC<QRDonationCardProps> = ({
 							<UsdAmountCard>$ {usdAmount}</UsdAmountCard>
 						</QRDonationInput>
 					</StyledInputWrapper>
-					{hasActiveQFRound && isQRDonation && (
-						<DonateQFEligibleNetworks goBack={goBack} />
-					)}
 					<CardBottom>
 						<FlexStyled
 							$justifyContent='space-between'
