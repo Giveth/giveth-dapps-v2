@@ -29,7 +29,6 @@ import {
 	calcDonationShare,
 	prepareTokenList,
 } from '@/components/views/donate/common/helpers';
-import GIVBackToast from '@/components/views/donate/GIVBackToast';
 import { DonateWrongNetwork } from '@/components/modals/DonateWrongNetwork';
 import { useAppDispatch, useAppSelector } from '@/features/hooks';
 import DonateToGiveth from '@/components/views/donate/DonateToGiveth';
@@ -516,12 +515,6 @@ const CryptoDonation: FC<{
 				/>
 			) : (
 				<br />
-			)}
-			{selectedOneTimeToken && (
-				<GIVBackToast
-					projectEligible={isProjectGivbacksEligible}
-					tokenEligible={isTokenGivbacksEligible}
-				/>
 			)}
 			{!noDonationSplit ? (
 				<TotalDonation
