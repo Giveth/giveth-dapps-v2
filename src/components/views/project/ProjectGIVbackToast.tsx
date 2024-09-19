@@ -221,9 +221,18 @@ const ProjectGIVbackToast = () => {
 		title = formatMessage({
 			id: `${useIntlTitle}verified_public_not_eligible`,
 		});
-		description = formatMessage({
-			id: `${useIntlDescription}verified_public_not_eligible`,
-		});
+		description = formatMessage(
+			{
+				id: `${useIntlDescription}verified_public_not_eligible`,
+			},
+			{
+				stakeLock: (
+					<InnerLink href={Routes.GIVeconomy} target='_blank'>
+						{formatMessage({ id: 'label.stake_and_lock' })}{' '}
+					</InnerLink>
+				),
+			},
+		);
 		link = links.GIVPOWER_DOC;
 		Button = (
 			<OutlineButton
@@ -396,6 +405,11 @@ const Wrapper = styled(Flex)`
 	${mediaQueries.tablet} {
 		flex-direction: row;
 	}
+`;
+
+const InnerLink = styled.a`
+	cursor: pointer;
+	color: ${neutralColors.gray[900]};
 `;
 
 export default ProjectGIVbackToast;
