@@ -27,7 +27,6 @@ import { ChainType } from '@/types/config';
 import config from '@/configuration';
 import {
 	truncateToDecimalPlaces,
-	capitalizeAllWords,
 	formatBalance,
 	showToastError,
 } from '@/lib/helpers';
@@ -40,7 +39,6 @@ import StorageLabel from '@/lib/localStorage';
 import InlineToast, { EToastType } from '@/components/toasts/InlineToast';
 import { useAppSelector } from '@/features/hooks';
 import { useModalCallback } from '@/hooks/useModalCallback';
-import links from '@/lib/constants/links';
 import DonateQFEligibleNetworks from '@/components/views/donate/OneTime/DonateQFEligibleNetworks';
 import { BadgesBase } from '@/components/views/donate/common/common.styled';
 import { useGeneralWallet } from '@/providers/generalWalletProvider';
@@ -309,24 +307,9 @@ export const QRDonationCard: FC<QRDonationCardProps> = ({
 				amount={amount}
 				token={stellarToken}
 				tokenPrice={tokenPrice}
-				style={{ marginBottom: '-15px' }}
+				style={{ marginBottom: '5px' }}
 				isStellar
 			/>
-			{!showQRCode && !isSignedIn && stellarToken?.isGivbackEligible && (
-				<InlineToast
-					noIcon
-					type={EToastType.Hint}
-					message={formatMessage({
-						id: 'label.sign_in_with_your_eth_wallet_for_givebacks',
-					})}
-					link={links.GIVBACK_DOC}
-					linkText={capitalizeAllWords(
-						formatMessage({
-							id: 'label.learn_more',
-						}),
-					)}
-				/>
-			)}
 			{!showQRCode ? (
 				<>
 					<StyledInputWrapper>
@@ -417,7 +400,7 @@ export const QRDonationCard: FC<QRDonationCardProps> = ({
 };
 
 const ConnectWallet = styled(BadgesBase)`
-	margin-bottom: -15px;
+	margin-bottom: 5px;
 `;
 
 const CardHead = styled(Flex)`
