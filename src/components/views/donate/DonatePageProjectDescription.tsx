@@ -8,6 +8,7 @@ import {
 	mediaQueries,
 	Flex,
 	H5,
+	semanticColors,
 } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
 import styled from 'styled-components';
@@ -22,7 +23,7 @@ import { ProjectCardUserName } from '@/components/project-card/ProjectCardUserNa
 import { ORGANIZATION } from '@/lib/constants/organizations';
 import { useDonateData } from '@/context/donate.context';
 import { ChainType } from '@/types/config';
-import { getActiveRound } from '@/helpers/qf';
+import { calculateTotalEstimatedMatching, getActiveRound } from '@/helpers/qf';
 
 interface IDonatePageProjectDescriptionProps {
 	projectData?: IProject;
@@ -37,14 +38,17 @@ export const DonatePageProjectDescription: FC<
 	const {
 		totalDonations,
 		sumDonationValueUsdForActiveQfRound,
-		countUniqueDonors,
+		countUniqueDonorsForActiveQfRound,
 		slug,
 		title,
 		descriptionSummary,
 		adminUser,
 		organization,
+		estimatedMatching,
 	} = projectData || {};
 
+	const { allProjectsSum, matchingPool, projectDonationsSqrtRootSum } =
+		estimatedMatching || {};
 	const isQRDonation = router.query.chain === ChainType.STELLAR.toLowerCase();
 	const orgLabel = organization?.label;
 	const isForeignOrg =
@@ -53,7 +57,14 @@ export const DonatePageProjectDescription: FC<
 	const projectLink = slugToProjectView(slug!);
 	const { project } = useDonateData();
 
-	const { activeStartedRound } = getActiveRound(project.qfRounds);
+	const { activeStartedRound, activeQFRound } = getActiveRound(
+		project.qfRounds,
+	);
+	const {
+		allocatedFundUSDPreferred,
+		allocatedFundUSD,
+		allocatedTokenSymbol,
+	} = activeQFRound || {};
 
 	return (
 		<DonationSectionWrapper gap='16px'>
@@ -83,6 +94,7 @@ export const DonatePageProjectDescription: FC<
 							locale,
 						)}
 					</PriceText>
+					
 					<div>
 						<LightSubline>
 							{formatMessage({
@@ -91,7 +103,7 @@ export const DonatePageProjectDescription: FC<
 						</LightSubline>
 						<Subline style={{ display: 'inline-block' }}>
 							&nbsp;
-							{countUniqueDonors || 0}
+							{countUniqueDonorsForActiveQfRound || 0}
 							&nbsp;
 						</Subline>
 						<LightSubline>
@@ -100,11 +112,30 @@ export const DonatePageProjectDescription: FC<
 									id: 'label.contributors',
 								},
 								{
-									count: countUniqueDonors,
+									count: countUniqueDonorsForActiveQfRound,
 								},
 							)}
 						</LightSubline>
 					</div>
+						<EstimatedMatchingPrice>
+							+&nbsp;{formatDonation(
+								calculateTotalEstimatedMatching(
+									projectDonationsSqrtRootSum,
+									allProjectsSum,
+									allocatedFundUSDPreferred
+										? allocatedFundUSD
+										: matchingPool,
+									activeStartedRound?.maximumReward,
+								),
+								allocatedFundUSDPreferred ? '$' : '',
+								locale,
+								true,
+							)}
+							{allocatedFundUSDPreferred
+								? ''
+								: ` ${allocatedTokenSymbol}`}
+						</EstimatedMatchingPrice>
+					
 				</>
 			) : (
 				<>
@@ -200,8 +231,7 @@ const LearnLink = styled(Flex)`
 const AmountRaisedText = styled(Subline)`
 	color: ${neutralColors.gray[700]};
 	background-color: ${neutralColors.gray[300]};
-	padding: 2px 8px;
-	border-radius: 4px;
+	padding: 2px px;
 	width: fit-content;
 	> span {
 		font-weight: 500;
@@ -217,4 +247,8 @@ const PriceText = styled(H5)`
 const LightSubline = styled(Subline)`
 	display: inline-block;
 	color: ${neutralColors.gray[700]};
+`;
+
+const EstimatedMatchingPrice = styled(H5)`
+	color: ${semanticColors.jade[500]};
 `;
