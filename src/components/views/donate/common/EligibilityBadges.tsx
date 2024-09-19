@@ -1,5 +1,6 @@
 import {
 	IconGIVBack24,
+	IconNoGiveback24,
 	IconQFNew,
 	IconQFNotEligible24,
 	neutralColors,
@@ -46,9 +47,13 @@ const EligibilityBadges: FC<IEligibilityBadges> = props => {
 	const donationUsdValue =
 		(tokenPrice || 0) * Number(ethers.utils.formatEther(amount));
 
+	const qfEligibleWarning = !activeStartedRound || !isOnQFEligibleNetworks;
 	const isDonationMatched =
 		!!activeStartedRound &&
+		isOnQFEligibleNetworks &&
 		donationUsdValue >= (activeStartedRound?.minimumValidUsdValue || 0);
+	const givbacksEligibleWarning =
+		(tokenPrice && !isTokenGivbacksEligible) || !isProjectGivbacksEligible;
 	const isGivbacksEligible =
 		isTokenGivbacksEligible &&
 		isProjectGivbacksEligible &&
@@ -56,37 +61,45 @@ const EligibilityBadges: FC<IEligibilityBadges> = props => {
 
 	return isConnected ? (
 		<EligibilityBadgeWrapper style={style}>
-			{isStellar && !isOnQFEligibleNetworks && (
-				<BadgesBase warning>
-					<IconQFNotEligible24 />
-					{formatMessage({
-						id: 'label.stellar_donations_arent_eligible',
-					})}
-				</BadgesBase>
-			)}
-			{activeStartedRound && isOnQFEligibleNetworks && (
-				<BadgesBase active={isDonationMatched}>
+			<BadgesBase warning={qfEligibleWarning} active={isDonationMatched}>
+				{!qfEligibleWarning ? (
 					<IconQFNew size={30} />
-					{formatMessage(
-						{
-							id: isDonationMatched
-								? 'page.donate.donations_will_be_matched'
-								: 'page.donate.donate_$_to_get_matched',
-						},
-						{
-							value: activeStartedRound?.minimumValidUsdValue,
-						},
-					)}
-				</BadgesBase>
-			)}
-			<BadgesBase active={isGivbacksEligible}>
-				<IconGIVBack24
-					color={
-						isGivbacksEligible
-							? semanticColors.jade[500]
-							: neutralColors.gray[700]
-					}
-				/>
+				) : (
+					<IconQFNotEligible24 />
+				)}
+				{formatMessage(
+					{
+						id: isDonationMatched
+							? 'page.donate.donations_will_be_matched'
+							: !activeStartedRound
+								? 'page.donate.project_not_eligible_for_qf'
+								: !isOnQFEligibleNetworks
+									? 'page.donate.network_not_eligible_for_qf'
+									: 'page.donate.donate_$_to_get_matched',
+					},
+					{
+						value: activeStartedRound?.minimumValidUsdValue,
+						network: isStellar
+							? 'Stellar'
+							: config.NETWORKS_CONFIG[networkId].name,
+					},
+				)}
+			</BadgesBase>
+			<BadgesBase
+				warning={givbacksEligibleWarning}
+				active={isGivbacksEligible}
+			>
+				{!givbacksEligibleWarning ? (
+					<IconGIVBack24
+						color={
+							isGivbacksEligible
+								? semanticColors.jade[500]
+								: neutralColors.gray[700]
+						}
+					/>
+				) : (
+					<IconNoGiveback24 />
+				)}
 				{formatMessage(
 					{
 						id: isGivbacksEligible

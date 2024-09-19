@@ -1350,6 +1350,8 @@
 	"page.donate.donate_$_to_be_eligible": "Fes una donació de ${value} per ser elegible per a GIVbacks",
 	"page.donate.donate_$_to_get_matched": "Dona ${value} per igualar la teva donació",
 	"page.donate.donations_will_be_matched": "La donació serà igualada",
+	"page.donate.project_not_eligible_for_qf": "El projecte no és elegible per a la concordança QF.",
+	"page.donate.network_not_eligible_for_qf": "{network} no són aptes per a la concordança",
 	"page.donate.givbacks_eligible": "GIVbacks elegibles",
 	"page.donate.project_not_givbacks_eligible": "El projecte no és elegible per a GIVbacks",
 	"page.donate.token_not_givbacks_eligible": "{token} no és apte per a GIVbacks",

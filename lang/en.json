@@ -1355,6 +1355,8 @@
 	"page.donate.donate_$_to_be_eligible": "Donate ${value} to be eligible for GIVbacks",
 	"page.donate.donate_$_to_get_matched": "Donate ${value} to get your donation matched",
 	"page.donate.donations_will_be_matched": "Donation will be matched",
+	"page.donate.project_not_eligible_for_qf": "The project is not eligible for QF matching.",
+	"page.donate.network_not_eligible_for_qf": "{network} aren’t eligible for matching",
 	"page.donate.givbacks_eligible": "GIVbacks eligible",
 	"page.donate.project_not_givbacks_eligible": "Project is not GIVbacks eligible",
 	"page.donate.token_not_givbacks_eligible": "{token} is not eligible for GIVbacks",
