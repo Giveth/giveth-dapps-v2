@@ -67,12 +67,13 @@ export const DonatePageProjectDescription: FC<
 			</Link>
 			{isQRDonation ? (
 				<>
-					<Subline color={neutralColors.gray[700]}>
-						{formatMessage({
-							id: 'label.amount_raised_in_this_round',
-						})}
-					</Subline>
-
+					<AmountRaisedText>
+						<Subline color={neutralColors.gray[700]}>
+							{formatMessage({
+								id: 'label.amount_raised_in_this_round',
+							})}
+						</Subline>
+					</AmountRaisedText>
 					<PriceText>
 						{formatDonation(
 							(activeStartedRound
