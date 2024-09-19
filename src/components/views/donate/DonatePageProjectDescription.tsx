@@ -73,9 +73,6 @@ export const DonatePageProjectDescription: FC<
 					<VerifiedBadge />
 				</Flex>
 			)}
-			<Link href={projectLink}>
-				<CustomH5>{title}</CustomH5>
-			</Link>
 			{isQRDonation ? (
 				<>
 					<AmountRaisedText>
@@ -94,7 +91,7 @@ export const DonatePageProjectDescription: FC<
 							locale,
 						)}
 					</PriceText>
-					
+
 					<div>
 						<LightSubline>
 							{formatMessage({
@@ -117,28 +114,31 @@ export const DonatePageProjectDescription: FC<
 							)}
 						</LightSubline>
 					</div>
-						<EstimatedMatchingPrice>
-							+&nbsp;{formatDonation(
-								calculateTotalEstimatedMatching(
-									projectDonationsSqrtRootSum,
-									allProjectsSum,
-									allocatedFundUSDPreferred
-										? allocatedFundUSD
-										: matchingPool,
-									activeStartedRound?.maximumReward,
-								),
-								allocatedFundUSDPreferred ? '$' : '',
-								locale,
-								true,
-							)}
-							{allocatedFundUSDPreferred
-								? ''
-								: ` ${allocatedTokenSymbol}`}
-						</EstimatedMatchingPrice>
-					
+					<EstimatedMatchingPrice>
+						+&nbsp;
+						{formatDonation(
+							calculateTotalEstimatedMatching(
+								projectDonationsSqrtRootSum,
+								allProjectsSum,
+								allocatedFundUSDPreferred
+									? allocatedFundUSD
+									: matchingPool,
+								activeStartedRound?.maximumReward,
+							),
+							allocatedFundUSDPreferred ? '$' : '',
+							locale,
+							true,
+						)}
+						{allocatedFundUSDPreferred
+							? ''
+							: ` ${allocatedTokenSymbol}`}
+					</EstimatedMatchingPrice>
 				</>
 			) : (
 				<>
+					<Link href={projectLink}>
+						<CustomH5>{title}</CustomH5>
+					</Link>
 					<ProjectCardUserName
 						name={adminUser?.name}
 						adminUser={adminUser!}
