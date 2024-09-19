@@ -21,7 +21,6 @@ import useDetectDevice from '@/hooks/useDetectDevice';
 import { useIsSafeEnvironment } from '@/hooks/useSafeAutoConnect';
 import { useDonateData } from '@/context/donate.context';
 import { EContentType } from '@/lib/constants/shareContent';
-import { PassportBanner } from '@/components/PassportBanner';
 import { useAlreadyDonatedToProject } from '@/hooks/useAlreadyDonatedToProject';
 import { Shadow } from '@/components/styled-components/Shadow';
 import { useAppDispatch, useAppSelector } from '@/features/hooks';
@@ -46,6 +45,7 @@ import EndaomentProjectsInfo from '@/components/views/project/EndaomentProjectsI
 import { IDraftDonation } from '@/apollo/types/gqlTypes';
 import StorageLabel from '@/lib/localStorage';
 import DonationByProjectOwner from '@/components/modals/DonationByProjectOwner';
+import { PassportBanner } from '@/components/PassportBanner';
 
 const DonateIndex: FC = () => {
 	const { formatMessage } = useIntl();
@@ -222,102 +222,114 @@ const DonateIndex: FC = () => {
 	) : (
 		<>
 			<DonateHeader />
-			<DonateContainer>
-				{showDonationByProjectOwner && (
-					<DonationByProjectOwner
-						setShowDonationByProjectOwner={
-							setShowDonationByProjectOwner
-						}
-					/>
-				)}
-				{alreadyDonated && !isQRDonation && (
-					<AlreadyDonatedWrapper>
-						<IconDonation24 />
-						<SublineBold>
-							{formatMessage({
-								id: 'component.already_donated.incorrect_estimate',
-							})}
-						</SublineBold>
-					</AlreadyDonatedWrapper>
-				)}
+			<Wrapper>
 				{!isSafeEnv &&
 					hasActiveQFRound &&
 					!isOnSolana &&
 					!isQRDonation && <PassportBanner />}
-				<NiceBanner />
-				<Row>
-					<Col xs={12} lg={6}>
-						<DonationCard
-							setShowQRCode={setShowQRCode}
-							showQRCode={showQRCode}
+				<DonateContainer>
+					{showDonationByProjectOwner && (
+						<DonationByProjectOwner
+							setShowDonationByProjectOwner={
+								setShowDonationByProjectOwner
+							}
 						/>
-					</Col>
-					<Col xs={12} lg={6}>
-						<InfoWrapper
-							style={{ marginBottom: isFailedOperation ? 24 : 0 }}
-						>
-							{showQRCode ? (
-								<QRDonationDetails />
-							) : (
-								<>
-									<EndaomentProjectsInfo
-										orgLabel={project?.organization?.label}
-									/>
-									<ImageWrapper>
-										<ProjectCardImage
-											image={project.image}
+					)}
+					{alreadyDonated && !isQRDonation && (
+						<AlreadyDonatedWrapper>
+							<IconDonation24 />
+							<SublineBold>
+								{formatMessage({
+									id: 'component.already_donated.incorrect_estimate',
+								})}
+							</SublineBold>
+						</AlreadyDonatedWrapper>
+					)}
+					<NiceBanner />
+					<Row>
+						<Col xs={12} lg={6}>
+							<DonationCard
+								setShowQRCode={setShowQRCode}
+								showQRCode={showQRCode}
+							/>
+						</Col>
+						<Col xs={12} lg={6}>
+							<InfoWrapper
+								style={{
+									marginBottom: isFailedOperation ? 24 : 0,
+								}}
+							>
+								{showQRCode ? (
+									<QRDonationDetails />
+								) : (
+									<>
+										<EndaomentProjectsInfo
+											orgLabel={
+												project?.organization?.label
+											}
 										/>
-									</ImageWrapper>
-									{!isMobile ? (
-										(!isQRDonation &&
-											!isRecurringTab &&
-											hasActiveQFRound) ||
-										(isRecurringTab &&
-											isOnEligibleNetworks) ? (
-											<QFSection projectData={project} />
-										) : (
-											<DonatePageProjectDescription
-												projectData={project}
+										<ImageWrapper>
+											<ProjectCardImage
+												image={project.image}
 											/>
-										)
-									) : null}
-								</>
+										</ImageWrapper>
+										{!isMobile ? (
+											(!isQRDonation &&
+												!isRecurringTab &&
+												hasActiveQFRound) ||
+											(isRecurringTab &&
+												isOnEligibleNetworks) ? (
+												<QFSection
+													projectData={project}
+												/>
+											) : (
+												<DonatePageProjectDescription
+													projectData={project}
+												/>
+											)
+										) : null}
+									</>
+								)}
+							</InfoWrapper>
+							{isFailedOperation && (
+								<QRRetryWrapper style={{ gap: 20 }}>
+									<B>
+										{formatMessage({
+											id: 'label.need_a_new_qr_code',
+										})}
+									</B>
+									<InlineToast
+										type={EToastType.Warning}
+										message={formatMessage({
+											id: 'label.new_qr_code_needed',
+										})}
+									/>
+									<ButtonStyled
+										label={formatMessage({
+											id: 'label.update_qr_code',
+										})}
+										onClick={updateQRCode}
+									/>
+								</QRRetryWrapper>
 							)}
-						</InfoWrapper>
-						{isFailedOperation && (
-							<QRRetryWrapper style={{ gap: 20 }}>
-								<B>
-									{formatMessage({
-										id: 'label.need_a_new_qr_code',
-									})}
-								</B>
-								<InlineToast
-									type={EToastType.Warning}
-									message={formatMessage({
-										id: 'label.new_qr_code_needed',
-									})}
-								/>
-								<ButtonStyled
-									label={formatMessage({
-										id: 'label.update_qr_code',
-									})}
-									onClick={updateQRCode}
-								/>
-							</QRRetryWrapper>
-						)}
-					</Col>
-				</Row>
-				{!isMobile && (
-					<SocialBox
-						contentType={EContentType.thisProject}
-						project={project}
-						isDonateFooter
-					/>
-				)}
-			</DonateContainer>
+						</Col>
+					</Row>
+					{!isMobile && (
+						<SocialBox
+							contentType={EContentType.thisProject}
+							project={project}
+							isDonateFooter
+						/>
+					)}
+				</DonateContainer>
+			</Wrapper>
 		</>
 	);
 };
+
+const Wrapper = styled.div`
+	margin-top: 91px;
+`;
 
 const AlreadyDonatedWrapper = styled(Flex)`
 	margin-bottom: 16px;
@@ -332,7 +344,7 @@ const AlreadyDonatedWrapper = styled(Flex)`
 
 const DonateContainer = styled(Container)`
 	text-align: center;
-	padding-top: 110px;
+	padding-top: 10px;
 	padding-bottom: 64px;
 	position: relative;
 `;
