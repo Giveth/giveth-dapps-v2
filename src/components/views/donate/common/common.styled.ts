@@ -31,7 +31,10 @@ export const SwitchCaption = styled(Caption)`
 	margin: 0 auto;
 `;
 
-export const BadgesBase = styled(FlexCenter)<{ active?: boolean }>`
+export const BadgesBase = styled(FlexCenter)<{
+	active?: boolean;
+	warning?: boolean;
+}>`
 	gap: 8px;
 	font-size: 12px;
 	font-weight: 500;
@@ -41,8 +44,12 @@ export const BadgesBase = styled(FlexCenter)<{ active?: boolean }>`
 	border-radius: 8px;
 	border: 1px solid
 		${props =>
-			props.active ? semanticColors.jade[400] : neutralColors.gray[400]};
-	padding: 4px;
+			props.active
+				? semanticColors.jade[400]
+				: props.warning
+					? semanticColors.golden[400]
+					: neutralColors.gray[400]};
+	padding: 4px 8px 4px 4px;
 `;
 
 export const EligibilityBadgeWrapper = styled(Flex)`

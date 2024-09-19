@@ -32,7 +32,6 @@ import QFSection from '../project/projectActionCard/QFSection';
 import ProjectCardImage from '@/components/project-card/ProjectCardImage';
 import { useGeneralWallet } from '@/providers/generalWalletProvider';
 import { DonatePageProjectDescription } from './DonatePageProjectDescription';
-import { getActiveRound } from '@/helpers/qf';
 import QRDonationDetails from '@/components/views/donate/OneTime/SelectTokenModal/QRCodeDonation/QRDonationDetails';
 import InlineToast, { EToastType } from '@/components/toasts/InlineToast';
 import { client } from '@/apollo/apolloClient';
@@ -60,6 +59,7 @@ const DonateIndex: FC = () => {
 		setQRDonationStatus,
 		setDraftDonationData,
 		setPendingDonationExists,
+		activeStartedRound,
 		startTimer,
 	} = useDonateData();
 	const { renewExpirationDate, retrieveDraftDonation } =
@@ -81,6 +81,10 @@ const DonateIndex: FC = () => {
 	const [stopTimer, setStopTimer] = React.useState<void | (() => void)>();
 
 	const isQRDonation = router.query.chain === ChainType.STELLAR.toLowerCase();
+	const stellarNetworkId =
+		config.NON_EVM_NETWORKS_CONFIG[ChainType.STELLAR].networkId;
+	const isStellarIncludedInQF =
+		activeStartedRound?.eligibleNetworks?.includes(stellarNetworkId);
 
 	useEffect(() => {
 		dispatch(setShowHeader(false));
@@ -135,7 +139,6 @@ const DonateIndex: FC = () => {
 	}, [qrDonationStatus]);
 
 	const isRecurringTab = router.query.tab?.toString() === ETabs.RECURRING;
-	const { activeStartedRound } = getActiveRound(project.qfRounds);
 	const isOnEligibleNetworks =
 		chainId && activeStartedRound?.eligibleNetworks?.includes(chainId);
 	const isFailedOperation = ['expired', 'failed'].includes(qrDonationStatus);
@@ -226,7 +229,10 @@ const DonateIndex: FC = () => {
 				{!isSafeEnv &&
 					hasActiveQFRound &&
 					!isOnSolana &&
-					!isQRDonation && <PassportBanner />}
+					(!isQRDonation ||
+						(isQRDonation && isStellarIncludedInQF)) && (
+						<PassportBanner />
+					)}
 				<DonateContainer>
 					{showDonationByProjectOwner && (
 						<DonationByProjectOwner
