@@ -301,7 +301,7 @@ export const QRDonationCard: FC<QRDonationCardProps> = ({
 				<ConnectWallet>
 					<IconWalletOutline24 color={neutralColors.gray[700]} />
 					{formatMessage({
-						id: 'label.please_connect_your_wallet_to_get_matched',
+						id: 'label.please_connect_your_wallet_to_win_givbacks',
 					})}
 				</ConnectWallet>
 			)}
