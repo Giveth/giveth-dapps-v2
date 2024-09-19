@@ -17,6 +17,8 @@ import { GIVBACKS_DONATION_QUALIFICATION_VALUE_USD } from '@/lib/constants/const
 import { useGeneralWallet } from '@/providers/generalWalletProvider';
 import { useDonateData } from '@/context/donate.context';
 import { IProjectAcceptedToken } from '@/apollo/types/gqlTypes';
+import config from '@/configuration';
+import { ChainType } from '@/types/config';
 
 interface IEligibilityBadges {
 	isStellar?: boolean;
@@ -35,9 +37,11 @@ const EligibilityBadges: FC<IEligibilityBadges> = props => {
 	const networkId = (chain as Chain)?.id;
 	const isTokenGivbacksEligible = token?.isGivbackEligible;
 	const isProjectGivbacksEligible = !!verified;
+	const stellarNetworkId =
+		config.NON_EVM_NETWORKS_CONFIG[ChainType.STELLAR].networkId;
 	const isOnQFEligibleNetworks =
 		activeStartedRound?.eligibleNetworks?.includes(
-			(isStellar ? token?.networkId : networkId) || 0,
+			(isStellar ? stellarNetworkId : networkId) || 0,
 		);
 	const donationUsdValue =
 		(tokenPrice || 0) * Number(ethers.utils.formatEther(amount));
@@ -53,7 +57,7 @@ const EligibilityBadges: FC<IEligibilityBadges> = props => {
 	return isConnected ? (
 		<EligibilityBadgeWrapper style={style}>
 			{isStellar && !isOnQFEligibleNetworks && (
-				<BadgesBase active={isDonationMatched}>
+				<BadgesBase>
 					<IconQFNotEligible24 />
 					{formatMessage({
 						id: 'label.stellar_donations_arent_eligible',
