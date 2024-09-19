@@ -2,17 +2,14 @@ import styled from 'styled-components';
 import {
 	B,
 	Caption,
+	FlexCenter,
 	IconHelpFilled16,
-	IconAlertTriangleFilled,
 	neutralColors,
 	semanticColors,
-	Subline,
-	FlexCenter,
 } from '@giveth/ui-design-system';
 import React from 'react';
 import { useIntl } from 'react-intl';
 import { formatUnits } from 'viem';
-import Divider from '@/components/Divider';
 import { TooltipContent } from '@/components/modals/HarvestAll.sc';
 import { IconWithTooltip } from '@/components/IconWithToolTip';
 import { IProject } from '@/apollo/types/types';
@@ -22,7 +19,7 @@ import {
 } from '@/helpers/qf';
 import { IProjectAcceptedToken } from '@/apollo/types/gqlTypes';
 import { formatDonation } from '@/helpers/number';
-import { formatBalance, truncateToDecimalPlaces } from '@/lib/helpers';
+import { truncateToDecimalPlaces } from '@/lib/helpers';
 
 interface IEstimatedMatchingToast {
 	projectData: IProject;
@@ -70,93 +67,53 @@ const EstimatedMatchingToast: React.FC<IEstimatedMatchingToast> = ({
 			? amountInUsd >= minimumValidUsdValue
 			: true;
 
-	const borderColor = isAboveMinValidUsdValue
-		? semanticColors.jade['500']
-		: semanticColors.golden['500'];
+	const formattedDonation = `${formatDonation(
+		esMatching,
+		allocatedFundUSDPreferred ? '$' : '',
+		locale,
+		true,
+	)} ${allocatedFundUSDPreferred ? '' : ` ${allocatedTokenSymbol}`}`;
 
-	const textColor = isAboveMinValidUsdValue
-		? semanticColors.jade['700']
-		: semanticColors.golden['500'];
-
-	const tooltipIcon = isAboveMinValidUsdValue ? (
-		<IconHelpFilled16 color={textColor} />
-	) : (
-		<IconAlertTriangleFilled color={textColor} />
-	);
-
-	const formattedDonation = isAboveMinValidUsdValue
-		? `${formatDonation(
-				esMatching,
-				allocatedFundUSDPreferred ? '$' : '',
-				locale,
-				true,
-			)} ${allocatedFundUSDPreferred ? '' : ` ${allocatedTokenSymbol}`}`
-		: '---';
-
-	const bottomText = isAboveMinValidUsdValue
-		? formatMessage({ id: 'page.donate.matching_toast.bottom_valid' })
-		: formatMessage({
-				id: 'page.donate.matching_toast.bottom_invalid_p1',
-			}) +
-			' $' +
-			formatBalance(minimumValidUsdValue) +
-			' ' +
-			formatMessage({
-				id: 'page.donate.matching_toast.bottom_invalid_p2',
-			});
+	if (!isAboveMinValidUsdValue) return null;
 
 	return (
-		<Wrapper style={{ borderColor }}>
-			<Upper style={{ color: textColor }}>
-				<EstimatedMatching>
-					<Caption $medium>
-						{formatMessage({
-							id: isAboveMinValidUsdValue
-								? 'page.donate.matching_toast.upper_valid'
-								: 'page.donate.matching_toast.upper_invalid',
-						})}
-					</Caption>
-					<IconWithTooltip icon={tooltipIcon} direction='top'>
-						{isAboveMinValidUsdValue && (
-							<TooltipContent>
-								{formatMessage({
-									id: 'component.qf-section.tooltip_polygon',
-								})}
-							</TooltipContent>
-						)}
-					</IconWithTooltip>
-				</EstimatedMatching>
-				<B>{formattedDonation}</B>
-			</Upper>
-			<Divider />
-			<Bottom>{bottomText}</Bottom>
+		<Wrapper>
+			<FlexCenter gap='5px'>
+				<Caption $medium>
+					{formatMessage({
+						id: isAboveMinValidUsdValue
+							? 'page.donate.matching_toast.upper_valid'
+							: 'page.donate.matching_toast.upper_invalid',
+					})}
+				</Caption>
+				<IconWithTooltip
+					style={{ marginBottom: '-5px' }}
+					icon={<IconHelpFilled16 />}
+					direction='top'
+				>
+					{isAboveMinValidUsdValue && (
+						<TooltipContent>
+							{formatMessage({
+								id: 'component.qf-section.tooltip_polygon',
+							})}
+						</TooltipContent>
+					)}
+				</IconWithTooltip>
+			</FlexCenter>
+			<B>{formattedDonation}</B>
 		</Wrapper>
 	);
 };
 
-const EstimatedMatching = styled(FlexCenter)`
-	gap: 4px;
-	> *:last-child {
-		margin-top: 3px;
-	}
-`;
-
-const Bottom = styled(Subline)`
-	color: ${neutralColors.gray['800']};
-	margin-top: 4px;
-`;
-
-const Upper = styled.div`
-	margin-bottom: 4px;
-	display: flex;
-	justify-content: space-between;
-`;
-
 const Wrapper = styled.div`
-	border: 1px solid;
-	border-radius: 8px;
-	padding: 16px;
-	margin-top: 8px;
+	display: flex;
+	padding: 4px 16px 8px 16px;
+	justify-content: space-between;
+	align-items: center;
+	border-radius: 8px 8px 0 0;
+	background: ${neutralColors.gray[200]};
+	color: ${semanticColors.jade[700]};
+	margin-bottom: -5px;
 `;
 
 export default EstimatedMatchingToast;

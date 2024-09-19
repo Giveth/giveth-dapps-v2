@@ -417,6 +417,16 @@ const CryptoDonation: FC<{
 				tokenPrice={tokenPrice}
 				style={{ margin: '12px 0 24px' }}
 			/>
+			{hasActiveQFRound &&
+				isOnQFEligibleNetworks &&
+				selectedTokenBalance && (
+					<EstimatedMatchingToast
+						projectData={project}
+						token={selectedOneTimeToken}
+						amount={amount}
+						tokenPrice={tokenPrice}
+					/>
+				)}
 			<FlexStyled
 				$flexDirection='column'
 				gap='8px'
@@ -495,16 +505,6 @@ const CryptoDonation: FC<{
 			{hasActiveQFRound && !isOnQFEligibleNetworks && walletChainType && (
 				<DonateQFEligibleNetworks />
 			)}
-			{hasActiveQFRound &&
-				isOnQFEligibleNetworks &&
-				selectedTokenBalance && (
-					<EstimatedMatchingToast
-						projectData={project}
-						token={selectedOneTimeToken}
-						amount={amount}
-						tokenPrice={tokenPrice}
-					/>
-				)}
 			{!noDonationSplit ? (
 				<DonateToGiveth
 					setDonationToGiveth={setDonationToGiveth}
@@ -591,6 +591,8 @@ const CryptoDonation: FC<{
 };
 
 const FlexStyled = styled(Flex)<{ disabled: boolean }>`
+	border-radius: 8px;
+	background-color: white;
 	${props =>
 		props.disabled &&
 		`
