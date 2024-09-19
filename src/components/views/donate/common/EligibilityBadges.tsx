@@ -57,7 +57,7 @@ const EligibilityBadges: FC<IEligibilityBadges> = props => {
 	return isConnected ? (
 		<EligibilityBadgeWrapper style={style}>
 			{isStellar && !isOnQFEligibleNetworks && (
-				<BadgesBase>
+				<BadgesBase warning>
 					<IconQFNotEligible24 />
 					{formatMessage({
 						id: 'label.stellar_donations_arent_eligible',
