@@ -220,7 +220,7 @@ const DonateIndex: FC = () => {
 		<>
 			<DonateHeader />
 			<DonateContainer>
-				<SuccessView />
+				<SuccessView isStellar={isQRDonation} />
 			</DonateContainer>
 		</>
 	) : (
