@@ -13,6 +13,7 @@ import { useIntl } from 'react-intl';
 import styled from 'styled-components';
 import { type FC } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 import { formatDonation } from '@/helpers/number';
 import { IProject } from '@/apollo/types/types';
 import { VerifiedBadge } from '@/components/badges/VerifiedBadge';
@@ -20,6 +21,8 @@ import { slugToProjectView } from '@/lib/routeCreators';
 import { ProjectCardUserName } from '@/components/project-card/ProjectCardUserName';
 import { ORGANIZATION } from '@/lib/constants/organizations';
 import { useDonateData } from '@/context/donate.context';
+import { ChainType } from '@/types/config';
+import { getActiveRound } from '@/helpers/qf';
 
 interface IDonatePageProjectDescriptionProps {
 	projectData?: IProject;
@@ -30,8 +33,11 @@ export const DonatePageProjectDescription: FC<
 	IDonatePageProjectDescriptionProps
 > = ({ projectData, showRaised = true }) => {
 	const { formatMessage, locale } = useIntl();
+	const router = useRouter();
 	const {
 		totalDonations,
+		sumDonationValueUsdForActiveQfRound,
+		countUniqueDonors,
 		slug,
 		title,
 		descriptionSummary,
@@ -39,12 +45,15 @@ export const DonatePageProjectDescription: FC<
 		organization,
 	} = projectData || {};
 
+	const isQRDonation = router.query.chain === ChainType.STELLAR.toLowerCase();
 	const orgLabel = organization?.label;
 	const isForeignOrg =
 		orgLabel !== ORGANIZATION.trace && orgLabel !== ORGANIZATION.giveth;
 
 	const projectLink = slugToProjectView(slug!);
 	const { project } = useDonateData();
+
+	const { activeStartedRound } = getActiveRound(project.qfRounds);
 
 	return (
 		<DonationSectionWrapper gap='16px'>
@@ -56,49 +65,96 @@ export const DonatePageProjectDescription: FC<
 			<Link href={projectLink}>
 				<CustomH5>{title}</CustomH5>
 			</Link>
-			<ProjectCardUserName
-				name={adminUser?.name}
-				adminUser={adminUser!}
-				slug={slug!}
-				isForeignOrg={isForeignOrg}
-				sidePadding='0'
-			/>
-			{showRaised && (
-				<P>
-					{formatMessage({ id: 'label.raised' })}:{' '}
-					{formatDonation(totalDonations || 0, '$', locale)}
-				</P>
-			)}
-			<DescriptionSummary>{descriptionSummary}</DescriptionSummary>
-			{project?.organization?.label === ORGANIZATION.endaoment ? null : (
-				<DonateDescription $flexDirection='column' gap='8px'>
-					<B>
+			{isQRDonation ? (
+				<>
+					<Subline color={neutralColors.gray[700]}>
 						{formatMessage({
-							id: 'component.donation_section.100_to_the_project',
+							id: 'label.amount_raised_in_this_round',
 						})}
-					</B>
-					<B></B>
-					<P>
-						{formatMessage({
-							id: 'component.donation_section.desc',
-						})}
-					</P>
-					<a
-						href='https://docs.giveth.io/whatisgiveth/zero-fees'
-						target='_blank'
-						referrerPolicy='no-referrer'
-						rel='noreferrer'
-					>
-						<LearnLink $alignItems='center' gap='2px'>
-							<Subline>
+					</Subline>
+
+					<PriceText>
+						{formatDonation(
+							(activeStartedRound
+								? sumDonationValueUsdForActiveQfRound // TODO: add recurring donation amount
+								: totalDonations) || 0,
+							'$',
+							locale,
+						)}
+					</PriceText>
+					<div>
+						<LightSubline>
+							{formatMessage({
+								id: 'label.raised_from',
+							})}{' '}
+						</LightSubline>
+						<Subline style={{ display: 'inline-block' }}>
+							&nbsp;
+							{countUniqueDonors || 0}
+							&nbsp;
+						</Subline>
+						<LightSubline>
+							{formatMessage(
+								{
+									id: 'label.contributors',
+								},
+								{
+									count: countUniqueDonors,
+								},
+							)}
+						</LightSubline>
+					</div>
+				</>
+			) : (
+				<>
+					<ProjectCardUserName
+						name={adminUser?.name}
+						adminUser={adminUser!}
+						slug={slug!}
+						isForeignOrg={isForeignOrg}
+						sidePadding='0'
+					/>
+					{showRaised && (
+						<P>
+							{formatMessage({ id: 'label.raised' })}:{' '}
+							{formatDonation(totalDonations || 0, '$', locale)}
+						</P>
+					)}
+					<DescriptionSummary>
+						{descriptionSummary}
+					</DescriptionSummary>
+					{project?.organization?.label ===
+					ORGANIZATION.endaoment ? null : (
+						<DonateDescription $flexDirection='column' gap='8px'>
+							<B>
 								{formatMessage({
-									id: 'component.donation_section.learn_zero_fee',
+									id: 'component.donation_section.100_to_the_project',
 								})}
-							</Subline>
-							<IconChevronRight16 />
-						</LearnLink>
-					</a>
-				</DonateDescription>
+							</B>
+							<B></B>
+							<P>
+								{formatMessage({
+									id: 'component.donation_section.desc',
+								})}
+							</P>
+							<a
+								href='https://docs.giveth.io/whatisgiveth/zero-fees'
+								target='_blank'
+								referrerPolicy='no-referrer'
+								rel='noreferrer'
+							>
+								<LearnLink $alignItems='center' gap='2px'>
+									<Subline>
+										{formatMessage({
+											id: 'component.donation_section.learn_zero_fee',
+										})}
+									</Subline>
+									<IconChevronRight16 />
+								</LearnLink>
+							</a>
+						</DonateDescription>
+					)}
+				</>
 			)}
 		</DonationSectionWrapper>
 	);
@@ -139,4 +195,25 @@ const LearnLink = styled(Flex)`
 	&:hover {
 		color: ${brandColors.pinky[700]};
 	}
+`;
+const AmountRaisedText = styled(Subline)`
+	color: ${neutralColors.gray[700]};
+	background-color: ${neutralColors.gray[300]};
+	padding: 2px 8px;
+	border-radius: 4px;
+	width: fit-content;
+	> span {
+		font-weight: 500;
+	}
+`;
+
+const PriceText = styled(H5)`
+	display: inline;
+	color: ${neutralColors.gray[900]};
+	font-weight: 700;
+`;
+
+const LightSubline = styled(Subline)`
+	display: inline-block;
+	color: ${neutralColors.gray[700]};
 `;
