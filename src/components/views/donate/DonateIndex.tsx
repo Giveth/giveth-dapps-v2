@@ -242,7 +242,7 @@ const DonateIndex: FC = () => {
 							}
 						/>
 					)}
-					{alreadyDonated && !isQRDonation && (
+					{alreadyDonated && (
 						<AlreadyDonatedWrapper>
 							<IconDonation24 />
 							<SublineBold>
@@ -277,29 +277,9 @@ const DonateIndex: FC = () => {
 										/>
 
 										<ImageWrapper>
-											{isQRDonation &&
-											isStellarIncludedInQF ? (
-												<>
-													<ProjectImage
-														src={
-															project.image ||
-															'/images/backgrounds/project-bg.png'
-														}
-														alt='test'
-														loading='lazy'
-													/>
-													<GradientOverlay />
-													<Title color='white'>
-														<div>
-															{project.title}
-														</div>
-													</Title>
-												</>
-											) : (
-												<ProjectCardImage
-													image={project.image}
-												/>
-											)}
+											<ProjectCardImage
+												image={project.image}
+											/>
 										</ImageWrapper>
 
 										{!isMobile ? (

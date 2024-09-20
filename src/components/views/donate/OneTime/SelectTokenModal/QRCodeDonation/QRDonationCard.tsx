@@ -42,6 +42,7 @@ import { useModalCallback } from '@/hooks/useModalCallback';
 import { BadgesBase } from '@/components/views/donate/common/common.styled';
 import { useGeneralWallet } from '@/providers/generalWalletProvider';
 import EligibilityBadges from '@/components/views/donate/common/EligibilityBadges';
+import EstimatedMatchingToast from '../../EstimatedMatchingToast';
 
 interface QRDonationCardProps extends IDonationCardProps {
 	qrAcceptedTokens: IProjectAcceptedToken[];
@@ -74,6 +75,7 @@ export const QRDonationCard: FC<QRDonationCardProps> = ({
 	const {
 		project,
 		hasActiveQFRound,
+		activeStartedRound,
 		setQRDonationStatus,
 		setDraftDonationData,
 		setPendingDonationExists,
@@ -310,6 +312,19 @@ export const QRDonationCard: FC<QRDonationCardProps> = ({
 					isStellar
 				/>
 			)}
+			{!showQRCode &&
+				hasActiveQFRound &&
+				activeStartedRound?.eligibleNetworks?.includes(
+					config.NON_EVM_NETWORKS_CONFIG[ChainType.STELLAR].networkId,
+				) &&
+				amount && (
+					<EstimatedMatchingToast
+						projectData={project}
+						token={stellarToken}
+						amount={amount}
+						tokenPrice={tokenPrice}
+					/>
+				)}
 			{!showQRCode ? (
 				<>
 					<StyledInputWrapper>

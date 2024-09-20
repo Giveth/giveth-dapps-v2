@@ -9,6 +9,7 @@ import {
 	Flex,
 	H5,
 	semanticColors,
+	H4,
 } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
 import styled from 'styled-components';
@@ -80,79 +81,89 @@ export const DonatePageProjectDescription: FC<
 					<VerifiedBadge />
 				</Flex>
 			)}
-			{isQRDonation && isStellarIncludedInQF ? (
+			<Link href={projectLink}>
+				<CustomH5>{title}</CustomH5>
+			</Link>
+			<ProjectCardUserName
+				name={adminUser?.name}
+				adminUser={adminUser!}
+				slug={slug!}
+				isForeignOrg={isForeignOrg}
+				sidePadding='0'
+			/>
+			{isQRDonation && isStellarIncludedInQF && showRaised ? (
 				<>
-					<AmountRaisedText>
-						<Subline color={neutralColors.gray[700]}>
-							{formatMessage({
-								id: 'label.amount_raised_in_this_round',
-							})}
-						</Subline>
-					</AmountRaisedText>
-					<PriceText>
-						{formatDonation(
-							(activeStartedRound
-								? sumDonationValueUsdForActiveQfRound // TODO: add recurring donation amount
-								: totalDonations) || 0,
-							'$',
-							locale,
-						)}
-					</PriceText>
+					{totalDonations || 0 ? (
+						<>
+							<AmountRaisedText>
+								<Subline color={neutralColors.gray[700]}>
+									{formatMessage({
+										id: 'label.amount_raised_in_this_round',
+									})}
+								</Subline>
+							</AmountRaisedText>
+							<PriceText>
+								{formatDonation(
+									totalDonations || 0,
+									'$',
+									locale,
+								)}
+							</PriceText>
 
-					<div>
-						<LightSubline>
-							{formatMessage({
-								id: 'label.raised_from',
-							})}{' '}
-						</LightSubline>
-						<Subline style={{ display: 'inline-block' }}>
-							&nbsp;
-							{countUniqueDonorsForActiveQfRound || 0}
-							&nbsp;
-						</Subline>
-						<LightSubline>
-							{formatMessage(
-								{
-									id: 'label.contributors',
-								},
-								{
-									count: countUniqueDonorsForActiveQfRound,
-								},
-							)}
-						</LightSubline>
-					</div>
-					<EstimatedMatchingPrice>
-						+&nbsp;
-						{formatDonation(
-							calculateTotalEstimatedMatching(
-								projectDonationsSqrtRootSum,
-								allProjectsSum,
-								allocatedFundUSDPreferred
-									? allocatedFundUSD
-									: matchingPool,
-								activeStartedRound?.maximumReward,
-							),
-							allocatedFundUSDPreferred ? '$' : '',
-							locale,
-							true,
-						)}
-						{allocatedFundUSDPreferred
-							? ''
-							: ` ${allocatedTokenSymbol}`}
-					</EstimatedMatchingPrice>
+							<div>
+								<LightSubline>
+									{formatMessage({
+										id: 'label.raised_from',
+									})}{' '}
+								</LightSubline>
+								<Subline style={{ display: 'inline-block' }}>
+									&nbsp;
+									{countUniqueDonorsForActiveQfRound || 0}
+									&nbsp;
+								</Subline>
+								<LightSubline>
+									{formatMessage(
+										{
+											id: 'label.contributors',
+										},
+										{
+											count: countUniqueDonorsForActiveQfRound,
+										},
+									)}
+								</LightSubline>
+							</div>
+							<EstimatedMatchingPrice>
+								+&nbsp;
+								{formatDonation(
+									calculateTotalEstimatedMatching(
+										projectDonationsSqrtRootSum,
+										allProjectsSum,
+										allocatedFundUSDPreferred
+											? allocatedFundUSD
+											: matchingPool,
+										activeStartedRound?.maximumReward,
+									),
+									allocatedFundUSDPreferred ? '$' : '',
+									locale,
+									true,
+								)}
+								{allocatedFundUSDPreferred
+									? ''
+									: ` ${allocatedTokenSymbol}`}
+							</EstimatedMatchingPrice>
+						</>
+					) : (
+						<DonateInfo>
+							<NoFund weight={700}>
+								{formatMessage({
+									id: 'label.donate_first_lead_the_way',
+								})}
+							</NoFund>
+						</DonateInfo>
+					)}
 				</>
 			) : (
 				<>
-					<Link href={projectLink}>
-						<CustomH5>{title}</CustomH5>
-					</Link>
-					<ProjectCardUserName
-						name={adminUser?.name}
-						adminUser={adminUser!}
-						slug={slug!}
-						isForeignOrg={isForeignOrg}
-						sidePadding='0'
-					/>
 					{showRaised && (
 						<P>
 							{formatMessage({ id: 'label.raised' })}:{' '}
@@ -258,4 +269,13 @@ const LightSubline = styled(Subline)`
 
 const EstimatedMatchingPrice = styled(H5)`
 	color: ${semanticColors.jade[500]};
+`;
+
+const DonateInfo = styled.div`
+	height: 130px;
+`;
+
+const NoFund = styled(H4)`
+	color: ${neutralColors.gray[800]};
+	margin-top: 16px;
 `;
