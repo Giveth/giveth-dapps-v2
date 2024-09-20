@@ -1231,6 +1231,7 @@
 	"label.raise_a_ticket": "Obre un tiquet",
 	"label.need_a_new_qr_code": "Necessites un nou codi QR?",
 	"label.valid_for": "Vàlid per",
+	"label.vote_proposals": "Vota en propostes amb GIVpower",
 	"label.new_qr_code_needed": "Si no ho has aconseguit a temps, has de generar un nou codi QR.",
 	"label.please_wait_for_you_donation_to_come_through": "Espera que la teva donació es processi!",
 	"label.please_wait": "Espera",

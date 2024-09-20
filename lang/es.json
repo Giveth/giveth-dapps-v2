@@ -1230,6 +1230,7 @@
 	"label.raise_a_ticket": "Levantar un ticket",
 	"label.need_a_new_qr_code": "¿Necesitas un nuevo código QR?",
 	"label.valid_for": "Válido por",
+	"label.vote_proposals": "Vota en propuestas con GIVpower",
 	"label.new_qr_code_needed": "Si no lo lograste a tiempo, necesitas generar un nuevo código QR.",
 	"label.please_wait_for_you_donation_to_come_through": "¡Por favor espera a que tu donación se procese!",
 	"label.please_wait": "Por favor espera",
