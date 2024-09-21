@@ -19,7 +19,6 @@ import { Address, Chain, formatUnits, zeroAddress } from 'viem';
 import { useBalance, useEstimateFeesPerGas, useEstimateGas } from 'wagmi';
 import { ethers } from 'ethers';
 import { setShowWelcomeModal } from '@/features/modal/modal.slice';
-import CheckBox from '@/components/Checkbox';
 
 import { InsufficientFundModal } from '@/components/modals/InsufficientFund';
 import config from '@/configuration';
@@ -65,6 +64,7 @@ import SanctionModal from '@/components/modals/SanctionedModal';
 import { useTokenPrice } from '@/hooks/useTokenPrice';
 import { BadgesBase } from '@/components/views/donate/common/common.styled';
 import EligibilityBadges from '@/components/views/donate/common/EligibilityBadges';
+import ToggleSwitch from '@/components/ToggleSwitch';
 
 const CryptoDonation: FC<{
 	acceptedTokens: IProjectAcceptedToken[] | undefined;
@@ -580,13 +580,14 @@ const CryptoDonation: FC<{
 				/>
 			)}
 			<CheckBoxContainer>
-				<CheckBox
+				<ToggleSwitch
+					isOn={anonymous}
+					toggleOnOff={setAnonymous}
+					size='small'
+					theme='purple-gray'
 					label={formatMessage({
 						id: 'label.make_it_anonymous',
 					})}
-					checked={anonymous}
-					onChange={() => setAnonymous(!anonymous)}
-					size={14}
 					disabled={!isConnected || !selectedOneTimeToken}
 				/>
 				<DonateAnonymously
@@ -671,12 +672,17 @@ const MainButton = styled(Button)`
 `;
 
 export const CheckBoxContainer = styled.div`
-	margin-top: 16px;
+	margin-top: 24px;
+	border-radius: 8px;
+	border: 1px solid ${neutralColors.gray[300]};
+	padding: 16px;
+	> div:first-child {
+		margin-left: -14px;
+	}
 	> div:nth-child(2) {
 		color: ${neutralColors.gray[900]};
 		font-size: 12px;
-		margin-top: 3px;
-		margin-left: 24px;
+		margin-top: 9px;
 	}
 `;
 
