@@ -10,6 +10,7 @@ import {
 	IconRefresh16,
 	IconWalletOutline24,
 	neutralColors,
+	OutlineButton,
 	semanticColors,
 } from '@giveth/ui-design-system';
 // @ts-ignore
@@ -439,6 +440,12 @@ const CryptoDonation: FC<{
 							isConnected && setShowSelectTokenModal(true)
 						}
 						disabled={!isConnected}
+						style={{
+							color:
+								selectedOneTimeToken || !isConnected
+									? 'inherit'
+									: brandColors.giv[500],
+						}}
 					>
 						{selectedOneTimeToken ? (
 							<Flex gap='8px' $alignItems='center'>
@@ -466,40 +473,46 @@ const CryptoDonation: FC<{
 						decimals={selectedOneTimeToken?.decimals}
 					/>
 				</InputWrapper>
-				<FlexStyled
-					gap='4px'
-					$alignItems='center'
-					disabled={!selectedOneTimeToken}
-				>
-					<GLinkStyled
-						size='Small'
-						onClick={() => setAmount(selectedTokenBalance - gasfee)}
+				{selectedOneTimeToken ? (
+					<FlexStyled
+						gap='4px'
+						$alignItems='center'
+						disabled={!selectedOneTimeToken}
 					>
-						{formatMessage({
-							id: 'label.available',
-						})}
-						:{' '}
-						{selectedOneTimeToken
-							? truncateToDecimalPlaces(
-									formatUnits(
-										selectedTokenBalance,
-										tokenDecimals,
-									),
-									tokenDecimals / 3,
-								)
-							: 0.0}
-					</GLinkStyled>
-					<IconWrapper onClick={() => !isRefetching && refetch()}>
-						{isRefetching ? (
-							<Spinner size={16} />
-						) : (
-							<IconRefresh16 />
+						<GLinkStyled
+							size='Small'
+							onClick={() =>
+								setAmount(selectedTokenBalance - gasfee)
+							}
+						>
+							{formatMessage({
+								id: 'label.available',
+							})}
+							:{' '}
+							{selectedOneTimeToken
+								? truncateToDecimalPlaces(
+										formatUnits(
+											selectedTokenBalance,
+											tokenDecimals,
+										),
+										tokenDecimals / 3,
+									)
+								: 0.0}
+						</GLinkStyled>
+						<IconWrapper onClick={() => !isRefetching && refetch()}>
+							{isRefetching ? (
+								<Spinner size={16} />
+							) : (
+								<IconRefresh16 />
+							)}
+						</IconWrapper>
+						{insufficientGasFee && (
+							<WarnError>{amountErrorText}</WarnError>
 						)}
-					</IconWrapper>
-					{insufficientGasFee && (
-						<WarnError>{amountErrorText}</WarnError>
-					)}
-				</FlexStyled>
+					</FlexStyled>
+				) : (
+					<div style={{ height: '21.5px' }} />
+				)}
 			</FlexStyled>
 			{hasActiveQFRound && !isOnQFEligibleNetworks && walletChainType && (
 				<DonateQFEligibleNetworks />
@@ -535,15 +548,21 @@ const CryptoDonation: FC<{
 					})}
 				/>
 			)}
-			{isConnected && (
-				<MainButton
-					id='Donate_Final'
-					label={formatMessage({ id: 'label.donate' })}
-					disabled={donationDisabled}
-					size='medium'
-					onClick={handleDonate}
-				/>
-			)}
+			{isConnected &&
+				(donationDisabled ? (
+					<OutlineButton
+						label={formatMessage({ id: 'label.donate' })}
+						disabled
+						size='medium'
+					/>
+				) : (
+					<MainButton
+						id='Donate_Final'
+						label={formatMessage({ id: 'label.donate' })}
+						size='medium'
+						onClick={handleDonate}
+					/>
+				))}
 			{!isConnected && (
 				<MainButton
 					label={formatMessage({

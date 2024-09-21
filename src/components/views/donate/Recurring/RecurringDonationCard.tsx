@@ -831,7 +831,10 @@ export const InputWrapper = styled(Flex)`
 	align-items: center;
 `;
 
-export const Input = styled(AmountInput)`
+export const Input = styled(AmountInput)<{ disabled?: boolean }>`
+	background-color: ${props =>
+		props.disabled ? neutralColors.gray[300] : 'white'};
+	opacity: ${props => (props.disabled ? 0.4 : 1)};
 	width: 100%;
 	border-left: 2px solid ${neutralColors.gray[300]};
 	#amount-input {
