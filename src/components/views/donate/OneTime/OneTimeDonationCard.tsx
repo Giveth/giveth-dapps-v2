@@ -12,10 +12,12 @@ import {
 	neutralColors,
 	OutlineButton,
 	semanticColors,
+	SublineBold,
 } from '@giveth/ui-design-system';
 // @ts-ignore
 import { Address, Chain, formatUnits, zeroAddress } from 'viem';
 import { useBalance, useEstimateFeesPerGas, useEstimateGas } from 'wagmi';
+import { ethers } from 'ethers';
 import { setShowWelcomeModal } from '@/features/modal/modal.slice';
 import CheckBox from '@/components/Checkbox';
 
@@ -284,7 +286,7 @@ const CryptoDonation: FC<{
 	const { data: estimatedGasPrice } =
 		useEstimateFeesPerGas(estimatedGasFeeObj);
 
-	const gasfee = useMemo((): bigint => {
+	const gasFee = useMemo((): bigint => {
 		if (
 			selectedOneTimeToken?.address !== zeroAddress ||
 			!estimatedGas ||
@@ -301,16 +303,16 @@ const CryptoDonation: FC<{
 
 	useEffect(() => {
 		if (
-			amount > selectedTokenBalance - gasfee &&
+			amount > selectedTokenBalance - gasFee &&
 			amount < selectedTokenBalance &&
 			selectedOneTimeToken?.address === zeroAddress &&
-			gasfee > 0n
+			gasFee > 0n
 		) {
 			setInsufficientGasFee(true);
 		} else {
 			setInsufficientGasFee(false);
 		}
-	}, [selectedTokenBalance, amount, selectedOneTimeToken?.address, gasfee]);
+	}, [selectedTokenBalance, amount, selectedOneTimeToken?.address, gasFee]);
 
 	const validateSanctions = async () => {
 		if (project?.organization?.label === 'endaoment' && address) {
@@ -324,7 +326,7 @@ const CryptoDonation: FC<{
 	};
 
 	const amountErrorText = useMemo(() => {
-		const totalAmount = Number(formatUnits(gasfee, tokenDecimals)).toFixed(
+		const totalAmount = Number(formatUnits(gasFee, tokenDecimals)).toFixed(
 			10,
 		);
 		const tokenSymbol = selectedOneTimeToken?.symbol;
@@ -335,7 +337,7 @@ const CryptoDonation: FC<{
 				tokenSymbol,
 			},
 		);
-	}, [gasfee, tokenDecimals, selectedOneTimeToken?.symbol, formatMessage]);
+	}, [gasFee, tokenDecimals, selectedOneTimeToken?.symbol, formatMessage]);
 
 	// We need givethDonationAmount here because we need to calculate the donation share
 	// for Giveth. If user want to donate minimal amount to projecct, the donation share for Giveth
@@ -349,8 +351,9 @@ const CryptoDonation: FC<{
 		selectedOneTimeToken?.decimals ?? 18,
 	);
 
-	const isTokenGivbacksEligible = selectedOneTimeToken?.isGivbackEligible;
 	const isProjectGivbacksEligible = !!verified;
+	const donationUsdValue =
+		(tokenPrice || 0) * Number(ethers.utils.formatEther(amount));
 
 	return (
 		<MainContainer>
@@ -472,6 +475,11 @@ const CryptoDonation: FC<{
 						disabled={selectedOneTimeToken === undefined}
 						decimals={selectedOneTimeToken?.decimals}
 					/>
+					<DonationPrice
+						disabled={!selectedOneTimeToken || !isConnected}
+					>
+						{'$ ' + donationUsdValue.toFixed(2)}
+					</DonationPrice>
 				</InputWrapper>
 				{selectedOneTimeToken ? (
 					<FlexStyled
@@ -482,7 +490,7 @@ const CryptoDonation: FC<{
 						<GLinkStyled
 							size='Small'
 							onClick={() =>
-								setAmount(selectedTokenBalance - gasfee)
+								setAmount(selectedTokenBalance - gasFee)
 							}
 						>
 							{formatMessage({
@@ -601,6 +609,16 @@ const CryptoDonation: FC<{
 		</MainContainer>
 	);
 };
+
+const DonationPrice = styled(SublineBold)<{ disabled?: boolean }>`
+	position: absolute;
+	right: 16px;
+	border-radius: 4px;
+	background: ${neutralColors.gray[300]};
+	padding: 2px 8px;
+	color: ${neutralColors.gray[700]};
+	opacity: ${props => (props.disabled ? 0.4 : 1)};
+`;
 
 const FlexStyled = styled(Flex)<{ disabled: boolean }>`
 	border-radius: 8px;
