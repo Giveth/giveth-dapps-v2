@@ -125,7 +125,7 @@ export const DonateProvider: FC<IProviderProps> = ({ children, project }) => {
 		ISelectTokenWithBalance | undefined
 	>();
 	const isModalStatusChecked = useRef<
-		Map<DonateModalPriorityValues, Boolean>
+		Map<DonateModalPriorityValues, boolean>
 	>(new Map());
 	const [highestModalPriorityUnchecked, setHighestModalPriorityUnchecked] =
 		useState<DonateModalPriorityValues | 'All Checked'>(
@@ -154,18 +154,18 @@ export const DonateProvider: FC<IProviderProps> = ({ children, project }) => {
 				let highestModalStatusUnchecked =
 					DonateModalPriorityValues.None;
 				let isAllChecked = true;
-				const modals = Object.values(DonateModalPriorityValues).filter(
+				const modals: DonateModalPriorityValues[] = Object.values(
+					DonateModalPriorityValues,
+				).filter(
 					modal => typeof modal !== 'string',
-				);
+				) as DonateModalPriorityValues[];
 				for (const modalStatus of modals) {
 					if (!isModalStatusChecked.current.get(modalStatus)) {
 						highestModalStatusUnchecked = modalStatus;
 					}
 					isAllChecked =
 						isAllChecked &&
-						isModalStatusChecked.current.get(modalStatus)
-							? true
-							: false;
+						!!isModalStatusChecked.current.get(modalStatus);
 				}
 				setHighestModalPriorityUnchecked(
 					isAllChecked ? 'All Checked' : highestModalStatusUnchecked,
