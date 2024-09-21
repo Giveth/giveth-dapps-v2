@@ -8,6 +8,7 @@ import {
 	useCallback,
 	type Dispatch,
 	useEffect,
+	useRef,
 } from 'react';
 import { useAccount } from 'wagmi';
 import { IProject } from '@/apollo/types/types';
@@ -49,6 +50,10 @@ interface IDonateContext {
 	setSelectedRecurringToken: Dispatch<
 		SetStateAction<ISelectTokenWithBalance | undefined>
 	>;
+	setIsModalPriorityChecked: (
+		modalChecked: DonateModalPriorityValues,
+	) => void;
+	highestModalPriorityUnchecked: DonateModalPriorityValues | 'All Checked';
 	fetchProject: () => Promise<void>;
 	draftDonationData?: IDraftDonation;
 	fetchDraftDonation?: (
@@ -79,8 +84,10 @@ const DonateContext = createContext<IDonateContext>({
 	setSuccessDonation: () => {},
 	setSelectedOneTimeToken: () => {},
 	setSelectedRecurringToken: () => {},
+	setIsModalPriorityChecked: (modalChecked: DonateModalPriorityValues) => {},
 	project: {} as IProject,
 	currentDonateModal: DonateModalPriorityValues.None,
+	highestModalPriorityUnchecked: DonateModalPriorityValues.None,
 	tokenStreams: {},
 	fetchProject: async () => {},
 	setDonateModalByPriority: (
@@ -117,6 +124,13 @@ export const DonateProvider: FC<IProviderProps> = ({ children, project }) => {
 	const [selectedRecurringToken, setSelectedRecurringToken] = useState<
 		ISelectTokenWithBalance | undefined
 	>();
+	const isModalStatusChecked = useRef<
+		Map<DonateModalPriorityValues, Boolean>
+	>(new Map());
+	const [highestModalPriorityUnchecked, setHighestModalPriorityUnchecked] =
+		useState<DonateModalPriorityValues | 'All Checked'>(
+			DonateModalPriorityValues.None,
+		);
 
 	const [successDonation, setSuccessDonation] = useState<ISuccessDonation>();
 	const [projectData, setProjectData] = useState<IProject>(project);
@@ -129,6 +143,37 @@ export const DonateProvider: FC<IProviderProps> = ({ children, project }) => {
 		setSelectedOneTimeToken(undefined);
 		setSelectedRecurringToken(undefined);
 	}, [chain]);
+
+	const setIsModalPriorityChecked = useCallback(
+		(modalChecked: DonateModalPriorityValues): void => {
+			if (
+				highestModalPriorityUnchecked != 'All Checked' &&
+				modalChecked > highestModalPriorityUnchecked
+			) {
+				isModalStatusChecked.current.set(modalChecked, true);
+				let highestModalStatusUnchecked =
+					DonateModalPriorityValues.None;
+				let isAllChecked = true;
+				const modals = Object.values(DonateModalPriorityValues).filter(
+					modal => typeof modal !== 'string',
+				);
+				for (const modalStatus of modals) {
+					if (!isModalStatusChecked.current.get(modalStatus)) {
+						highestModalStatusUnchecked = modalStatus;
+					}
+					isAllChecked =
+						isAllChecked &&
+						isModalStatusChecked.current.get(modalStatus)
+							? true
+							: false;
+				}
+				setHighestModalPriorityUnchecked(
+					isAllChecked ? 'All Checked' : highestModalStatusUnchecked,
+				);
+			}
+		},
+		[],
+	);
 
 	const setDonateModalByPriority = useCallback(
 		(changeModal: DonateModalPriorityValues) => {
@@ -190,6 +235,8 @@ export const DonateProvider: FC<IProviderProps> = ({ children, project }) => {
 				startTimer,
 				setQRDonationStatus: setStatus,
 				setPendingDonationExists,
+				highestModalPriorityUnchecked,
+				setIsModalPriorityChecked,
 				draftDonationLoading: loading,
 			}}
 		>
