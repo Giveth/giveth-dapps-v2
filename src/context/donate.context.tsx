@@ -127,10 +127,9 @@ export const DonateProvider: FC<IProviderProps> = ({ children, project }) => {
 	const isModalStatusChecked = useRef<
 		Map<DonateModalPriorityValues, boolean>
 	>(new Map());
-	const [highestModalPriorityUnchecked, setHighestModalPriorityUnchecked] =
-		useState<DonateModalPriorityValues | 'All Checked'>(
-			DonateModalPriorityValues.None,
-		);
+	const highestModalPriorityUnchecked = useRef<
+		DonateModalPriorityValues | 'All Checked'
+	>(DonateModalPriorityValues.None);
 
 	const [successDonation, setSuccessDonation] = useState<ISuccessDonation>();
 	const [projectData, setProjectData] = useState<IProject>(project);
@@ -147,8 +146,10 @@ export const DonateProvider: FC<IProviderProps> = ({ children, project }) => {
 	const setIsModalPriorityChecked = useCallback(
 		(modalChecked: DonateModalPriorityValues): void => {
 			if (
-				highestModalPriorityUnchecked != 'All Checked' &&
-				modalChecked > highestModalPriorityUnchecked
+				highestModalPriorityUnchecked.current != 'All Checked' &&
+				(modalChecked <= highestModalPriorityUnchecked.current ||
+					highestModalPriorityUnchecked.current ===
+						DonateModalPriorityValues.None)
 			) {
 				isModalStatusChecked.current.set(modalChecked, true);
 				let highestModalStatusUnchecked =
@@ -164,12 +165,13 @@ export const DonateProvider: FC<IProviderProps> = ({ children, project }) => {
 						highestModalStatusUnchecked = modalStatus;
 					}
 					isAllChecked =
-						isAllChecked &&
-						!!isModalStatusChecked.current.get(modalStatus);
+						(isAllChecked &&
+							!!isModalStatusChecked.current.get(modalStatus)) ||
+						modalStatus === DonateModalPriorityValues.None;
 				}
-				setHighestModalPriorityUnchecked(
-					isAllChecked ? 'All Checked' : highestModalStatusUnchecked,
-				);
+				highestModalPriorityUnchecked.current = isAllChecked
+					? 'All Checked'
+					: highestModalStatusUnchecked;
 			}
 		},
 		[],
@@ -235,7 +237,8 @@ export const DonateProvider: FC<IProviderProps> = ({ children, project }) => {
 				startTimer,
 				setQRDonationStatus: setStatus,
 				setPendingDonationExists,
-				highestModalPriorityUnchecked,
+				highestModalPriorityUnchecked:
+					highestModalPriorityUnchecked.current,
 				setIsModalPriorityChecked,
 				draftDonationLoading: loading,
 			}}
