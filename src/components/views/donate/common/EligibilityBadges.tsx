@@ -20,6 +20,7 @@ import { useDonateData } from '@/context/donate.context';
 import { IProjectAcceptedToken } from '@/apollo/types/gqlTypes';
 import config from '@/configuration';
 import { ChainType } from '@/types/config';
+import { useAppSelector } from '@/features/hooks';
 
 interface IEligibilityBadges {
 	isStellar?: boolean;
@@ -31,10 +32,11 @@ interface IEligibilityBadges {
 
 const EligibilityBadges: FC<IEligibilityBadges> = props => {
 	const { tokenPrice, amount, token, style, isStellar } = props;
+	const { activeQFRound } = useAppSelector(state => state.general);
 	const { isConnected, chain } = useGeneralWallet();
 	const { activeStartedRound, project } = useDonateData();
-	const { verified } = project || {};
 	const { formatMessage } = useIntl();
+	const { verified } = project || {};
 	const networkId = (chain as Chain)?.id;
 	const isTokenGivbacksEligible = token?.isGivbackEligible;
 	const isProjectGivbacksEligible = !!verified;
@@ -61,30 +63,35 @@ const EligibilityBadges: FC<IEligibilityBadges> = props => {
 
 	return isConnected ? (
 		<EligibilityBadgeWrapper style={style}>
-			<BadgesBase warning={qfEligibleWarning} active={isDonationMatched}>
-				{!qfEligibleWarning ? (
-					<IconQFNew size={30} />
-				) : (
-					<IconQFNotEligible24 />
-				)}
-				{formatMessage(
-					{
-						id: isDonationMatched
-							? 'page.donate.donations_will_be_matched'
-							: !activeStartedRound
-								? 'page.donate.project_not_eligible_for_qf'
-								: !isOnQFEligibleNetworks
-									? 'page.donate.network_not_eligible_for_qf'
-									: 'page.donate.donate_$_to_get_matched',
-					},
-					{
-						value: activeStartedRound?.minimumValidUsdValue,
-						network: isStellar
-							? 'Stellar'
-							: config.NETWORKS_CONFIG[networkId].name,
-					},
-				)}
-			</BadgesBase>
+			{activeQFRound && (
+				<BadgesBase
+					warning={qfEligibleWarning}
+					active={isDonationMatched}
+				>
+					{!qfEligibleWarning ? (
+						<IconQFNew size={30} />
+					) : (
+						<IconQFNotEligible24 />
+					)}
+					{formatMessage(
+						{
+							id: isDonationMatched
+								? 'page.donate.donations_will_be_matched'
+								: !activeStartedRound
+									? 'page.donate.project_not_eligible_for_qf'
+									: !isOnQFEligibleNetworks
+										? 'page.donate.network_not_eligible_for_qf'
+										: 'page.donate.donate_$_to_get_matched',
+						},
+						{
+							value: activeStartedRound?.minimumValidUsdValue,
+							network: isStellar
+								? 'Stellar'
+								: config.NETWORKS_CONFIG[networkId].name,
+						},
+					)}
+				</BadgesBase>
+			)}
 			<BadgesBase
 				warning={givbacksEligibleWarning}
 				active={isGivbacksEligible}
