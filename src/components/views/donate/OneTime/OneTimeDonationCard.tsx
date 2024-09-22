@@ -38,7 +38,6 @@ import SaveGasFees from './SaveGasFees';
 import SwitchToAcceptedChain from '@/components/views/donate/SwitchToAcceptedChain';
 import { useDonateData } from '@/context/donate.context';
 import { useModalCallback } from '@/hooks/useModalCallback';
-import DonateQFEligibleNetworks from './DonateQFEligibleNetworks';
 import { getActiveRound } from '@/helpers/qf';
 import { useGeneralWallet } from '@/providers/generalWalletProvider';
 import { ChainType } from '@/types/config';
@@ -424,17 +423,18 @@ const CryptoDonation: FC<{
 				tokenPrice={tokenPrice}
 				style={{ margin: '12px 0 24px' }}
 			/>
-			{hasActiveQFRound &&
-				isOnQFEligibleNetworks &&
-				selectedTokenBalance &&
-				isDonationMatched && (
-					<EstimatedMatchingToast
-						projectData={project}
-						token={selectedOneTimeToken}
-						amount={amount}
-						tokenPrice={tokenPrice}
-					/>
-				)}
+			<EstimatedMatchingToast
+				projectData={project}
+				token={selectedOneTimeToken}
+				amount={amount}
+				tokenPrice={tokenPrice}
+				show={
+					hasActiveQFRound &&
+					!!isOnQFEligibleNetworks &&
+					!!selectedTokenBalance &&
+					!!isDonationMatched
+				}
+			/>
 			<FlexStyled
 				$flexDirection='column'
 				gap='8px'
@@ -527,9 +527,6 @@ const CryptoDonation: FC<{
 					<div style={{ height: '21.5px' }} />
 				)}
 			</FlexStyled>
-			{hasActiveQFRound && !isOnQFEligibleNetworks && walletChainType && (
-				<DonateQFEligibleNetworks />
-			)}
 			{!noDonationSplit ? (
 				<DonateToGiveth
 					setDonationToGiveth={setDonationToGiveth}

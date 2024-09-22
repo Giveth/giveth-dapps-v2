@@ -330,23 +330,24 @@ export const QRDonationCard: FC<QRDonationCardProps> = ({
 				/>
 			)}
 			<div>
-				{!showQRCode &&
-					chain &&
-					hasActiveQFRound &&
-					activeStartedRound?.eligibleNetworks?.includes(
-						config.NON_EVM_NETWORKS_CONFIG[ChainType.STELLAR]
-							.networkId,
-					) &&
-					isDonationMatched &&
-					amount && (
-						<EstimatedMatchingToast
-							projectData={project}
-							token={stellarToken}
-							amount={amount}
-							tokenPrice={tokenPrice}
-							isStellar
-						/>
-					)}
+				<EstimatedMatchingToast
+					projectData={project}
+					token={stellarToken}
+					amount={amount}
+					tokenPrice={tokenPrice}
+					isStellar
+					show={
+						!showQRCode &&
+						!!chain &&
+						hasActiveQFRound &&
+						!!activeStartedRound?.eligibleNetworks?.includes(
+							config.NON_EVM_NETWORKS_CONFIG[ChainType.STELLAR]
+								.networkId,
+						) &&
+						isDonationMatched &&
+						!!amount
+					}
+				/>
 				{!showQRCode ? (
 					<>
 						<StyledInputWrapper>

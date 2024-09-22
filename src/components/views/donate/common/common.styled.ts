@@ -101,6 +101,8 @@ export const Input = styled(AmountInput)<{ disabled?: boolean }>`
 
 export const SelectTokenWrapper = styled(Flex)<{ disabled?: boolean }>`
 	cursor: ${({ disabled }) => (disabled ? 'default' : 'pointer')};
+	background-color: white;
+	border-radius: 8px;
 	gap: 16px;
 `;
 
@@ -111,6 +113,7 @@ export const SelectTokenPlaceHolder = styled(B)`
 export const InputWrapper = styled(Flex)`
 	border: 2px solid ${neutralColors.gray[300]};
 	border-radius: 8px;
+	background-color: white;
 	& > * {
 		padding: 13px 16px;
 	}

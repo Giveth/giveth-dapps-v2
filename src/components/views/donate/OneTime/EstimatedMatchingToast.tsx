@@ -7,7 +7,7 @@ import {
 	neutralColors,
 	semanticColors,
 } from '@giveth/ui-design-system';
-import React from 'react';
+import React, { FC } from 'react';
 import { useIntl } from 'react-intl';
 import { formatUnits } from 'viem';
 import { TooltipContent } from '@/components/modals/HarvestAll.sc';
@@ -27,14 +27,16 @@ interface IEstimatedMatchingToast {
 	token?: IProjectAcceptedToken;
 	tokenPrice?: number;
 	isStellar?: boolean;
+	show?: boolean;
 }
 
-const EstimatedMatchingToast: React.FC<IEstimatedMatchingToast> = ({
+const EstimatedMatchingToast: FC<IEstimatedMatchingToast> = ({
 	projectData,
 	token,
 	amount,
 	tokenPrice,
 	isStellar,
+	show,
 }) => {
 	const { formatMessage, locale } = useIntl();
 	const { estimatedMatching, qfRounds } = projectData || {};
@@ -76,17 +78,11 @@ const EstimatedMatchingToast: React.FC<IEstimatedMatchingToast> = ({
 		true,
 	)} ${allocatedFundUSDPreferred ? '' : ` ${allocatedTokenSymbol}`}`;
 
-	if (!isAboveMinValidUsdValue) return null;
-
 	return (
-		<Wrapper>
+		<Wrapper show={show && isAboveMinValidUsdValue}>
 			<FlexCenter gap='5px'>
 				<Caption $medium>
-					{formatMessage({
-						id: isAboveMinValidUsdValue
-							? 'page.donate.matching_toast.upper_valid'
-							: 'page.donate.matching_toast.upper_invalid',
-					})}
+					{formatMessage({ id: 'label.estimated_matching' })}
 				</Caption>
 				<IconWithTooltip
 					style={{ marginBottom: '-5px' }}
@@ -107,7 +103,7 @@ const EstimatedMatchingToast: React.FC<IEstimatedMatchingToast> = ({
 	);
 };
 
-const Wrapper = styled.div`
+const Wrapper = styled.div<{ show?: boolean }>`
 	display: flex;
 	padding: 4px 16px 8px 16px;
 	justify-content: space-between;
@@ -116,7 +112,10 @@ const Wrapper = styled.div`
 	background: ${neutralColors.gray[200]};
 	color: ${semanticColors.jade[700]};
 	margin-bottom: -5px;
-	transition: height 0.5s;
+	transform: translateY(${props => (props.show ? '0' : '100%')});
+	transition:
+		transform 0.5s ease,
+		opacity 0.5s ease;
 `;
 
 export default EstimatedMatchingToast;
