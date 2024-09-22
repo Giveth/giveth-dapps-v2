@@ -20,7 +20,8 @@ import { ethers } from 'ethers';
 import {
 	InputWrapper,
 	SelectTokenWrapper,
-} from '../../../Recurring/RecurringDonationCard';
+	BadgesBase,
+} from '../../../common/common.styled';
 import { TokenIconWithGIVBack } from '../../../TokenIcon/TokenIconWithGIVBack';
 import { IProjectAcceptedToken } from '@/apollo/types/gqlTypes';
 import { fetchPriceWithCoingeckoId } from '@/services/token';
@@ -40,7 +41,6 @@ import StorageLabel from '@/lib/localStorage';
 import InlineToast, { EToastType } from '@/components/toasts/InlineToast';
 import { useAppSelector } from '@/features/hooks';
 import { useModalCallback } from '@/hooks/useModalCallback';
-import { BadgesBase } from '@/components/views/donate/common/common.styled';
 import { useGeneralWallet } from '@/providers/generalWalletProvider';
 import EligibilityBadges from '@/components/views/donate/common/EligibilityBadges';
 import EstimatedMatchingToast from '../../EstimatedMatchingToast';

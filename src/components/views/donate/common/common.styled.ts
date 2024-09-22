@@ -1,13 +1,16 @@
 import styled from 'styled-components';
 import {
+	B,
 	brandColors,
 	Caption,
-	neutralColors,
 	Flex,
 	FlexCenter,
-	semanticColors,
+	GLink,
 	mediaQueries,
+	neutralColors,
+	semanticColors,
 } from '@giveth/ui-design-system';
+import { AmountInput } from '@/components/AmountInput/AmountInput';
 
 export const NetworkToast = styled(Flex)`
 	gap: 10px;
@@ -62,5 +65,72 @@ export const EligibilityBadgeWrapper = styled(Flex)`
 	${mediaQueries.tablet} {
 		flex-direction: row;
 		justify-content: flex-start;
+	}
+`;
+
+export const IconWrapper = styled.div`
+	cursor: pointer;
+	color: ${brandColors.giv[500]};
+`;
+
+export const GLinkStyled = styled(GLink)`
+	&&:hover {
+		cursor: pointer;
+		text-decoration: underline;
+	}
+`;
+
+export const Input = styled(AmountInput)<{ disabled?: boolean }>`
+	background-color: ${props =>
+		props.disabled ? neutralColors.gray[300] : 'white'};
+	opacity: ${props => (props.disabled ? 0.4 : 1)};
+	width: 100%;
+	border-left: 2px solid ${neutralColors.gray[300]};
+	border-radius: 0 8px 8px 0;
+	#amount-input {
+		border: none;
+		flex: 1;
+		font-family: Red Hat Text;
+		font-size: 16px;
+		font-style: normal;
+		font-weight: 500;
+		line-height: 150%; /* 24px */
+		width: 100%;
+	}
+`;
+
+export const SelectTokenWrapper = styled(Flex)<{ disabled?: boolean }>`
+	cursor: ${({ disabled }) => (disabled ? 'default' : 'pointer')};
+	gap: 16px;
+`;
+
+export const SelectTokenPlaceHolder = styled(B)`
+	white-space: nowrap;
+`;
+
+export const InputWrapper = styled(Flex)`
+	border: 2px solid ${neutralColors.gray[300]};
+	border-radius: 8px;
+	& > * {
+		padding: 13px 16px;
+	}
+	align-items: center;
+	position: relative;
+`;
+
+export const CheckBoxContainer = styled.div`
+	margin-top: 24px;
+	border-radius: 8px;
+	border: 1px solid ${neutralColors.gray[300]};
+	padding: 16px;
+
+	> div:first-child {
+		margin-left: -14px;
+	}
+
+	> div:nth-child(2) {
+		color: ${neutralColors.gray[900]};
+		font-size: 12px;
+		margin-top: 9px;
 	}
 `;
