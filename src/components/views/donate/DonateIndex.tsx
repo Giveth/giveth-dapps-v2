@@ -352,10 +352,10 @@ const AlreadyDonatedWrapper = styled(Flex)`
 `;
 
 const DonateSuccessContainer = styled(Container)`
-text-align: center;
-padding-top: 110px;
-padding-bottom: 64px;
-position: relative;
+	text-align: center;
+	padding-top: 110px;
+	padding-bottom: 64px;
+	position: relative;
 `;
 
 const DonateContainer = styled(Container)`
