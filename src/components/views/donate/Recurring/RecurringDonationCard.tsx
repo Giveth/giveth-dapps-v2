@@ -46,7 +46,6 @@ import config from '@/configuration';
 import { WrongNetworkLayer } from '../WrongNetworkLayer';
 import { ModifySuperTokenModal } from './ModifySuperToken/ModifySuperTokenModal';
 import { limitFraction } from '@/helpers/number';
-import CheckBox from '@/components/Checkbox';
 import { CheckBoxContainer } from '@/components/views/donate/OneTime/OneTimeDonationCard';
 import AlloProtocolFirstDonationModal from './AlloProtocolFirstDonationModal';
 import links from '@/lib/constants/links';
@@ -56,6 +55,7 @@ import { useAppSelector } from '@/features/hooks';
 import { findAnchorContractAddress } from '@/helpers/superfluid';
 import GIVBackToast from '../GIVBackToast';
 import { useGeneralWallet } from '@/providers/generalWalletProvider';
+import ToggleSwitch from '@/components/ToggleSwitch';
 
 // These two functions are used to make the slider more user-friendly by mapping the slider's value to a new range.
 /**
@@ -731,13 +731,15 @@ export const RecurringDonationCard = () => {
 				/>
 			</Flex>
 			<CheckBoxContainer>
-				<CheckBox
+				<ToggleSwitch
+					isOn={anonymous}
+					toggleOnOff={setAnonymous}
+					size='small'
+					theme='purple-gray'
 					label={formatMessage({
 						id: 'label.make_it_anonymous',
 					})}
-					checked={anonymous}
-					onChange={() => setAnonymous(!anonymous)}
-					size={14}
+					disabled={!isConnected}
 				/>
 				<div>
 					{formatMessage({
@@ -831,7 +833,10 @@ export const InputWrapper = styled(Flex)`
 	align-items: center;
 `;
 
-export const Input = styled(AmountInput)`
+export const Input = styled(AmountInput)<{ disabled?: boolean }>`
+	background-color: ${props =>
+		props.disabled ? neutralColors.gray[300] : 'white'};
+	opacity: ${props => (props.disabled ? 0.4 : 1)};
 	width: 100%;
 	border-left: 2px solid ${neutralColors.gray[300]};
 	#amount-input {

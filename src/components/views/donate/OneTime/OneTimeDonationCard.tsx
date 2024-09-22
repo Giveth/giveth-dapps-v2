@@ -10,13 +10,15 @@ import {
 	IconRefresh16,
 	IconWalletOutline24,
 	neutralColors,
+	OutlineButton,
 	semanticColors,
+	SublineBold,
 } from '@giveth/ui-design-system';
 // @ts-ignore
 import { Address, Chain, formatUnits, zeroAddress } from 'viem';
 import { useBalance, useEstimateFeesPerGas, useEstimateGas } from 'wagmi';
+import { ethers } from 'ethers';
 import { setShowWelcomeModal } from '@/features/modal/modal.slice';
-import CheckBox from '@/components/Checkbox';
 
 import { InsufficientFundModal } from '@/components/modals/InsufficientFund';
 import config from '@/configuration';
@@ -62,6 +64,7 @@ import SanctionModal from '@/components/modals/SanctionedModal';
 import { useTokenPrice } from '@/hooks/useTokenPrice';
 import { BadgesBase } from '@/components/views/donate/common/common.styled';
 import EligibilityBadges from '@/components/views/donate/common/EligibilityBadges';
+import ToggleSwitch from '@/components/ToggleSwitch';
 
 const CryptoDonation: FC<{
 	acceptedTokens: IProjectAcceptedToken[] | undefined;
@@ -283,7 +286,7 @@ const CryptoDonation: FC<{
 	const { data: estimatedGasPrice } =
 		useEstimateFeesPerGas(estimatedGasFeeObj);
 
-	const gasfee = useMemo((): bigint => {
+	const gasFee = useMemo((): bigint => {
 		if (
 			selectedOneTimeToken?.address !== zeroAddress ||
 			!estimatedGas ||
@@ -300,16 +303,16 @@ const CryptoDonation: FC<{
 
 	useEffect(() => {
 		if (
-			amount > selectedTokenBalance - gasfee &&
+			amount > selectedTokenBalance - gasFee &&
 			amount < selectedTokenBalance &&
 			selectedOneTimeToken?.address === zeroAddress &&
-			gasfee > 0n
+			gasFee > 0n
 		) {
 			setInsufficientGasFee(true);
 		} else {
 			setInsufficientGasFee(false);
 		}
-	}, [selectedTokenBalance, amount, selectedOneTimeToken?.address, gasfee]);
+	}, [selectedTokenBalance, amount, selectedOneTimeToken?.address, gasFee]);
 
 	const validateSanctions = async () => {
 		if (project?.organization?.label === 'endaoment' && address) {
@@ -323,7 +326,7 @@ const CryptoDonation: FC<{
 	};
 
 	const amountErrorText = useMemo(() => {
-		const totalAmount = Number(formatUnits(gasfee, tokenDecimals)).toFixed(
+		const totalAmount = Number(formatUnits(gasFee, tokenDecimals)).toFixed(
 			10,
 		);
 		const tokenSymbol = selectedOneTimeToken?.symbol;
@@ -334,7 +337,7 @@ const CryptoDonation: FC<{
 				tokenSymbol,
 			},
 		);
-	}, [gasfee, tokenDecimals, selectedOneTimeToken?.symbol, formatMessage]);
+	}, [gasFee, tokenDecimals, selectedOneTimeToken?.symbol, formatMessage]);
 
 	// We need givethDonationAmount here because we need to calculate the donation share
 	// for Giveth. If user want to donate minimal amount to projecct, the donation share for Giveth
@@ -348,8 +351,9 @@ const CryptoDonation: FC<{
 		selectedOneTimeToken?.decimals ?? 18,
 	);
 
-	const isTokenGivbacksEligible = selectedOneTimeToken?.isGivbackEligible;
 	const isProjectGivbacksEligible = !!verified;
+	const donationUsdValue =
+		(tokenPrice || 0) * Number(ethers.utils.formatEther(amount));
 
 	return (
 		<MainContainer>
@@ -439,6 +443,12 @@ const CryptoDonation: FC<{
 							isConnected && setShowSelectTokenModal(true)
 						}
 						disabled={!isConnected}
+						style={{
+							color:
+								selectedOneTimeToken || !isConnected
+									? 'inherit'
+									: brandColors.giv[500],
+						}}
 					>
 						{selectedOneTimeToken ? (
 							<Flex gap='8px' $alignItems='center'>
@@ -465,41 +475,52 @@ const CryptoDonation: FC<{
 						disabled={selectedOneTimeToken === undefined}
 						decimals={selectedOneTimeToken?.decimals}
 					/>
-				</InputWrapper>
-				<FlexStyled
-					gap='4px'
-					$alignItems='center'
-					disabled={!selectedOneTimeToken}
-				>
-					<GLinkStyled
-						size='Small'
-						onClick={() => setAmount(selectedTokenBalance - gasfee)}
+					<DonationPrice
+						disabled={!selectedOneTimeToken || !isConnected}
 					>
-						{formatMessage({
-							id: 'label.available',
-						})}
-						:{' '}
-						{selectedOneTimeToken
-							? truncateToDecimalPlaces(
-									formatUnits(
-										selectedTokenBalance,
-										tokenDecimals,
-									),
-									tokenDecimals / 3,
-								)
-							: 0.0}
-					</GLinkStyled>
-					<IconWrapper onClick={() => !isRefetching && refetch()}>
-						{isRefetching ? (
-							<Spinner size={16} />
-						) : (
-							<IconRefresh16 />
+						{'$ ' + donationUsdValue.toFixed(2)}
+					</DonationPrice>
+				</InputWrapper>
+				{selectedOneTimeToken ? (
+					<FlexStyled
+						gap='4px'
+						$alignItems='center'
+						disabled={!selectedOneTimeToken}
+					>
+						<GLinkStyled
+							size='Small'
+							onClick={() =>
+								setAmount(selectedTokenBalance - gasFee)
+							}
+						>
+							{formatMessage({
+								id: 'label.available',
+							})}
+							:{' '}
+							{selectedOneTimeToken
+								? truncateToDecimalPlaces(
+										formatUnits(
+											selectedTokenBalance,
+											tokenDecimals,
+										),
+										tokenDecimals / 3,
+									)
+								: 0.0}
+						</GLinkStyled>
+						<IconWrapper onClick={() => !isRefetching && refetch()}>
+							{isRefetching ? (
+								<Spinner size={16} />
+							) : (
+								<IconRefresh16 />
+							)}
+						</IconWrapper>
+						{insufficientGasFee && (
+							<WarnError>{amountErrorText}</WarnError>
 						)}
-					</IconWrapper>
-					{insufficientGasFee && (
-						<WarnError>{amountErrorText}</WarnError>
-					)}
-				</FlexStyled>
+					</FlexStyled>
+				) : (
+					<div style={{ height: '21.5px' }} />
+				)}
 			</FlexStyled>
 			{hasActiveQFRound && !isOnQFEligibleNetworks && walletChainType && (
 				<DonateQFEligibleNetworks />
@@ -535,15 +556,21 @@ const CryptoDonation: FC<{
 					})}
 				/>
 			)}
-			{isConnected && (
-				<MainButton
-					id='Donate_Final'
-					label={formatMessage({ id: 'label.donate' })}
-					disabled={donationDisabled}
-					size='medium'
-					onClick={handleDonate}
-				/>
-			)}
+			{isConnected &&
+				(donationDisabled ? (
+					<OutlineButton
+						label={formatMessage({ id: 'label.donate' })}
+						disabled
+						size='medium'
+					/>
+				) : (
+					<MainButton
+						id='Donate_Final'
+						label={formatMessage({ id: 'label.donate' })}
+						size='medium'
+						onClick={handleDonate}
+					/>
+				))}
 			{!isConnected && (
 				<MainButton
 					label={formatMessage({
@@ -553,13 +580,14 @@ const CryptoDonation: FC<{
 				/>
 			)}
 			<CheckBoxContainer>
-				<CheckBox
+				<ToggleSwitch
+					isOn={anonymous}
+					toggleOnOff={setAnonymous}
+					size='small'
+					theme='purple-gray'
 					label={formatMessage({
 						id: 'label.make_it_anonymous',
 					})}
-					checked={anonymous}
-					onChange={() => setAnonymous(!anonymous)}
-					size={14}
 					disabled={!isConnected || !selectedOneTimeToken}
 				/>
 				<DonateAnonymously
@@ -582,6 +610,16 @@ const CryptoDonation: FC<{
 		</MainContainer>
 	);
 };
+
+const DonationPrice = styled(SublineBold)<{ disabled?: boolean }>`
+	position: absolute;
+	right: 16px;
+	border-radius: 4px;
+	background: ${neutralColors.gray[300]};
+	padding: 2px 8px;
+	color: ${neutralColors.gray[700]};
+	opacity: ${props => (props.disabled ? 0.4 : 1)};
+`;
 
 const FlexStyled = styled(Flex)<{ disabled: boolean }>`
 	border-radius: 8px;
@@ -634,12 +672,17 @@ const MainButton = styled(Button)`
 `;
 
 export const CheckBoxContainer = styled.div`
-	margin-top: 16px;
+	margin-top: 24px;
+	border-radius: 8px;
+	border: 1px solid ${neutralColors.gray[300]};
+	padding: 16px;
+	> div:first-child {
+		margin-left: -14px;
+	}
 	> div:nth-child(2) {
 		color: ${neutralColors.gray[900]};
 		font-size: 12px;
-		margin-top: 3px;
-		margin-left: 24px;
+		margin-top: 9px;
 	}
 `;
 
