@@ -83,7 +83,7 @@ const QFEligibleNetworks = () => {
 };
 
 const IconsWrapper = styled.div`
-	margin: 16px 0;
+	margin-top: 16px;
 	display: flex;
 	gap: 4px;
 	img {
@@ -98,6 +98,7 @@ const IconsWrapper = styled.div`
 `;
 
 const ButtonsWrapper = styled.div`
+	margin-top: 16px;
 	display: flex;
 	gap: 16px;
 	button {
