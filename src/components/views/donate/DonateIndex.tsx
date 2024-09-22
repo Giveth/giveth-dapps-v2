@@ -219,9 +219,9 @@ const DonateIndex: FC = () => {
 	return successDonation ? (
 		<>
 			<DonateHeader />
-			<DonateContainer>
+			<DonateSuccessContainer>
 				<SuccessView isStellar={isQRDonation} />
-			</DonateContainer>
+			</DonateSuccessContainer>
 		</>
 	) : (
 		<>
@@ -351,9 +351,16 @@ const AlreadyDonatedWrapper = styled(Flex)`
 	align-items: center;
 `;
 
+const DonateSuccessContainer = styled(Container)`
+text-align: center;
+padding-top: 110px;
+padding-bottom: 64px;
+position: relative;
+`;
+
 const DonateContainer = styled(Container)`
 	text-align: center;
-	padding-top: 110px;
+	padding-top: 10px;
 	padding-bottom: 64px;
 	position: relative;
 `;
