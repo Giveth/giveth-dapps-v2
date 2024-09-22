@@ -125,3 +125,5 @@ export const WeiPerEther = 1e18;
 export const PROFILE_PHOTO_PLACEHOLDER = '/images/placeholders/profile.svg';
 
 export const solanaNativeAddress = '11111111111111111111111111111111';
+
+export const GIVBACKS_DONATION_QUALIFICATION_VALUE_USD = 5;

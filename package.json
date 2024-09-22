@@ -1,6 +1,6 @@
 {
 	"name": "givethdapp",
-	"version": "2.30.0",
+	"version": "2.31.1",
 	"private": true,
 	"scripts": {
 		"build": "next build",
@@ -12,13 +12,13 @@
 		"cypress": "cypress open"
 	},
 	"resolutions": {
-		"styled-components": "^6",
+		"styled-components": "^6.1.12",
 		"@types/react": "^18.0.15",
 		"@types/react-dom": "^18.0.6"
 	},
 	"dependencies": {
 		"@apollo/client": "^3.10.4",
-		"@giveth/ui-design-system": "^1.11.34",
+		"@giveth/ui-design-system": "^1.11.35",
 		"@next/third-parties": "^14.2.5",
 		"@react-google-maps/api": "^2.19.3",
 		"@reduxjs/toolkit": "^2.2.4",
@@ -35,7 +35,7 @@
 		"@tanstack/react-query": "^5.45.1",
 		"@vercel/speed-insights": "^1.0.9",
 		"@web3auth/sign-in-with-solana": "^3.0.0",
-		"@web3modal/wagmi": "^5.0.7",
+		"@web3modal/wagmi": "^5.1.7",
 		"apollo-upload-client": "^18.0.1",
 		"base58": "^2.0.1",
 		"bignumber.js": "^9.1.2",
@@ -68,11 +68,11 @@
 		"react-share": "^5.0.3",
 		"sharp": "^0.33.3",
 		"siwe": "^2.3.2",
-		"styled-components": "^6.1.11",
+		"styled-components": "^6.1.12",
 		"swiper": "^11.1.3",
 		"unsplash-js": "^7.0.19",
 		"viem": "^2.16.1",
-		"wagmi": "^2.11.3"
+		"wagmi": "^2.12.10"
 	},
 	"devDependencies": {
 		"@babel/preset-typescript": "^7.23.3",

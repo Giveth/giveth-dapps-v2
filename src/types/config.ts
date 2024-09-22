@@ -215,7 +215,7 @@ export interface EnvConfig {
 	BASE_NETWORK_NUMBER: number;
 	CLASSIC_NETWORK_NUMBER: number;
 	ZKEVM_NETWORK_NUMBER: number;
-	// STELLAR_NETWORK_NUMBER: number;
+	STELLAR_NETWORK_NUMBER: number;
 	MAINNET_CONFIG: MainnetNetworkConfig | SepoliaNetworkConfig;
 	GNOSIS_CONFIG: GnosisNetworkConfig;
 	POLYGON_CONFIG: NetworkConfig;
@@ -230,7 +230,7 @@ export interface EnvConfig {
 	MICROSERVICES: MicroservicesConfig;
 	RARIBLE_ADDRESS: string;
 	SOLANA_CONFIG: NonEVMNetworkConfig;
-	// STELLAR_CONFIG: NonEVMNetworkConfig;
+	STELLAR_CONFIG: NonEVMNetworkConfig;
 }
 
 export interface GlobalConfig extends EnvConfig {

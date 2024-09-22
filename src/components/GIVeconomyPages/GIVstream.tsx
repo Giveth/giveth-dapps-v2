@@ -10,7 +10,6 @@ import {
 	IconGIVStream,
 	IconHelpFilled16,
 	IconPraise24,
-	IconSpark,
 	P,
 	Container,
 	Row,
@@ -45,8 +44,6 @@ import {
 	HistoryTitle,
 	HistoryTitleRow,
 	HistoryTooltip,
-	IncreaseSection,
-	IncreaseSectionTitle,
 	NoData,
 	PercentageRow,
 	TxHash,
@@ -66,7 +63,6 @@ import { ITokenAllocation } from '@/types/subgraph';
 import { IconGIV } from '../Icons/GIV';
 import { givEconomySupportedNetworks } from '@/lib/constants/constants';
 import Pagination from '../Pagination';
-import GivEconomyProjectCards from '../cards/GivEconomyProjectCards';
 import { SubgraphDataHelper } from '@/lib/subgraph/subgraphDataHelper';
 
 export const TabGIVstreamTop = () => {
@@ -291,15 +287,6 @@ export const TabGIVstreamBottom = () => {
 				</HistoryTitleRow>
 				<GIVstreamHistory />
 			</Container>
-			<IncreaseSection ref={increaseSecRef}>
-				<Container>
-					<IncreaseSectionTitle>
-						{formatMessage({ id: 'label.increase_your_givstream' })}
-						<IconSpark size={32} color={brandColors.mustard[500]} />
-					</IncreaseSectionTitle>
-					<GivEconomyProjectCards />
-				</Container>
-			</IncreaseSection>
 		</GIVstreamBottomContainer>
 	);
 };

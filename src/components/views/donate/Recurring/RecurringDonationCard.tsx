@@ -55,8 +55,9 @@ import { useModalCallback } from '@/hooks/useModalCallback';
 import { useAppSelector } from '@/features/hooks';
 import { findAnchorContractAddress } from '@/helpers/superfluid';
 import GIVBackToast from '../GIVBackToast';
+import { useGeneralWallet } from '@/providers/generalWalletProvider';
 
-// These two functions are used to make the slider more user friendly by mapping the slider's value to a new range.
+// These two functions are used to make the slider more user-friendly by mapping the slider's value to a new range.
 /**
  * The mapValue function takes a value from the slider (0 to 100) and maps it to a new range.
  * If the slider value is between 0 and 90, it maps it to a range of 0 to 50.
@@ -114,6 +115,8 @@ export const RecurringDonationCard = () => {
 	const { modalCallback: signInThenCreateAllo } = useModalCallback(() =>
 		setShowAlloProtocolModal(true),
 	);
+
+	const { isConnected } = useGeneralWallet();
 
 	const {
 		data: balance,
@@ -278,6 +281,7 @@ export const RecurringDonationCard = () => {
 							$alignItems='center'
 							$justifyContent='space-between'
 							onClick={() => setShowSelectTokenModal(true)}
+							disabled={!isConnected}
 						>
 							{selectedRecurringToken ? (
 								<Flex gap='8px' $alignItems='center'>
@@ -809,8 +813,8 @@ const RecurringSection = styled(Flex)`
 	text-align: left;
 `;
 
-export const SelectTokenWrapper = styled(Flex)`
-	cursor: pointer;
+export const SelectTokenWrapper = styled(Flex)<{ disabled?: boolean }>`
+	cursor: ${({ disabled }) => (disabled ? 'default' : 'pointer')};
 	gap: 16px;
 `;
 
