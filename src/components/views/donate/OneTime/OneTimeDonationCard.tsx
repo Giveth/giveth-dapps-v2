@@ -64,7 +64,6 @@ import { isWalletSanctioned } from '@/services/donation';
 import SanctionModal from '@/components/modals/SanctionedModal';
 import { useTokenPrice } from '@/hooks/useTokenPrice';
 import EligibilityBadges from '@/components/views/donate/common/EligibilityBadges';
-
 import DonateAnonymously from '@/components/views/donate/common/DonateAnonymously';
 
 const CryptoDonation: FC<{
@@ -200,7 +199,7 @@ const CryptoDonation: FC<{
 						return false;
 				}
 			});
-			const acceptedChainsWithChaintypeAndNetworkId: INetworkIdWithChain[] =
+			const acceptedChainsWithChainTypeAndNetworkId: INetworkIdWithChain[] =
 				[];
 			addresses?.forEach(a => {
 				if (
@@ -208,20 +207,20 @@ const CryptoDonation: FC<{
 					a.chainType === ChainType.EVM
 				) {
 					if (acceptedEvmTokensNetworkIds.has(a.networkId!)) {
-						acceptedChainsWithChaintypeAndNetworkId.push({
+						acceptedChainsWithChainTypeAndNetworkId.push({
 							networkId: a.networkId!,
 							chainType: ChainType.EVM,
 						});
 					}
 				} else if (acceptedNonEvmTokenChainTypes.has(a.chainType)) {
-					acceptedChainsWithChaintypeAndNetworkId.push({
+					acceptedChainsWithChainTypeAndNetworkId.push({
 						networkId: a.networkId!,
 						chainType: a.chainType!,
 					});
 				}
 			});
 
-			setAcceptedChains(acceptedChainsWithChaintypeAndNetworkId);
+			setAcceptedChains(acceptedChainsWithChainTypeAndNetworkId);
 			if (filteredTokens.length < 1) {
 				setShowChangeNetworkModal(true);
 			}

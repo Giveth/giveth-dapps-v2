@@ -12,6 +12,7 @@ import {
 	OutlineButton,
 	IconArrowRight16,
 	Button,
+	SublineBold,
 } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
 import { Chain, formatUnits } from 'viem';
@@ -461,13 +462,14 @@ const TokenSymbol = styled(B)`
 	white-space: nowrap;
 `;
 
-export const UsdAmountCard = styled.div`
-	padding: 4px 16px;
-	margin-inline: 4px;
+export const UsdAmountCard = styled(SublineBold)`
+	padding: 2px 8px;
 	white-space: nowrap;
 	background: ${neutralColors.gray[300]};
-	border-radius: 16px;
-	color: ${neutralColors.gray[700]};
+	border-radius: 4px;
+	color: ${neutralColors.gray[700]} !important;
+	display: flex;
+	align-items: center;
 `;
 
 const CardBottom = styled.div`
@@ -505,7 +507,7 @@ const Input = styled(AmountInput)`
 const QRDonationInput = styled(Flex)`
 	width: 100%;
 	border-top: 2px solid ${neutralColors.gray[300]};
-
+	padding-right: 8px;
 	${mediaQueries.tablet} {
 		border-left: 2px solid ${neutralColors.gray[300]};
 		border-top: none;
@@ -514,7 +516,7 @@ const QRDonationInput = styled(Flex)`
 
 const StyledInputWrapper = styled(InputWrapper)`
 	flex-direction: column;
-
+	background-color: white;
 	${mediaQueries.tablet} {
 		flex-direction: row;
 	}

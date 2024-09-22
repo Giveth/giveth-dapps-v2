@@ -30,7 +30,7 @@ import {
 } from '@/apollo/types/gqlTypes';
 
 export enum ETabs {
-	ONE_TIME = 'on-time',
+	ONE_TIME = 'one-time',
 	RECURRING = 'recurring',
 }
 
