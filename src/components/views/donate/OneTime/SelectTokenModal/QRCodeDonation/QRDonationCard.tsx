@@ -323,6 +323,7 @@ export const QRDonationCard: FC<QRDonationCardProps> = ({
 						token={stellarToken}
 						amount={amount}
 						tokenPrice={tokenPrice}
+						isStellar
 					/>
 				)}
 			{!showQRCode ? (
