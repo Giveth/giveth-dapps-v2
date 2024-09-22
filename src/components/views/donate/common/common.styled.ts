@@ -120,3 +120,11 @@ export const InputWrapper = styled(Flex)`
 	align-items: center;
 	position: relative;
 `;
+
+export const ForEstimatedMatchingAnimation = styled.div<{
+	showEstimatedMatching?: boolean;
+}>`
+	transform: ${props =>
+		props.showEstimatedMatching ? 'none' : 'translateY(-36px)'};
+	transition: transform 0.5s ease;
+`;

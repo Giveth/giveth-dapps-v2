@@ -22,6 +22,7 @@ import {
 	InputWrapper,
 	SelectTokenWrapper,
 	BadgesBase,
+	ForEstimatedMatchingAnimation,
 } from '../../../common/common.styled';
 import { TokenIconWithGIVBack } from '../../../TokenIcon/TokenIconWithGIVBack';
 import { IProjectAcceptedToken } from '@/apollo/types/gqlTypes';
@@ -290,6 +291,16 @@ export const QRDonationCard: FC<QRDonationCardProps> = ({
 		fetchTokenPrice();
 	}, []);
 
+	const showEstimatedMatching =
+		!showQRCode &&
+		!!chain &&
+		hasActiveQFRound &&
+		!!activeStartedRound?.eligibleNetworks?.includes(
+			config.NON_EVM_NETWORKS_CONFIG[ChainType.STELLAR].networkId,
+		) &&
+		isDonationMatched &&
+		!!amount;
+
 	return (
 		<>
 			<CardHead>
@@ -336,20 +347,11 @@ export const QRDonationCard: FC<QRDonationCardProps> = ({
 					amount={amount}
 					tokenPrice={tokenPrice}
 					isStellar
-					show={
-						!showQRCode &&
-						!!chain &&
-						hasActiveQFRound &&
-						!!activeStartedRound?.eligibleNetworks?.includes(
-							config.NON_EVM_NETWORKS_CONFIG[ChainType.STELLAR]
-								.networkId,
-						) &&
-						isDonationMatched &&
-						!!amount
-					}
 				/>
 				{!showQRCode ? (
-					<>
+					<ForEstimatedMatchingAnimation
+						showEstimatedMatching={showEstimatedMatching}
+					>
 						<StyledInputWrapper>
 							<SelectTokenWrapper
 								$alignItems='center'
@@ -420,7 +422,7 @@ export const QRDonationCard: FC<QRDonationCardProps> = ({
 								/>
 							)}
 						</CardBottom>
-					</>
+					</ForEstimatedMatchingAnimation>
 				) : (
 					<QRDonationCardContent
 						tokenData={stellarToken}

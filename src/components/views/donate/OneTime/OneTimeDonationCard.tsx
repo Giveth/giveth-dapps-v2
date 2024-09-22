@@ -48,6 +48,7 @@ import EstimatedMatchingToast from '@/components/views/donate/OneTime/EstimatedM
 import TotalDonation from './TotalDonation';
 import {
 	BadgesBase,
+	ForEstimatedMatchingAnimation,
 	GLinkStyled,
 	IconWrapper,
 	Input,
@@ -357,6 +358,11 @@ const CryptoDonation: FC<{
 		!!activeStartedRound &&
 		isOnQFEligibleNetworks &&
 		donationUsdValue >= (activeStartedRound?.minimumValidUsdValue || 0);
+	const showEstimatedMatching =
+		hasActiveQFRound &&
+		!!isOnQFEligibleNetworks &&
+		!!selectedTokenBalance &&
+		!!isDonationMatched;
 
 	return (
 		<MainContainer>
@@ -428,174 +434,180 @@ const CryptoDonation: FC<{
 				token={selectedOneTimeToken}
 				amount={amount}
 				tokenPrice={tokenPrice}
-				show={
-					hasActiveQFRound &&
-					!!isOnQFEligibleNetworks &&
-					!!selectedTokenBalance &&
-					!!isDonationMatched
-				}
 			/>
-			<FlexStyled
-				$flexDirection='column'
-				gap='8px'
-				disabled={!isConnected}
+			<ForEstimatedMatchingAnimation
+				showEstimatedMatching={showEstimatedMatching}
 			>
-				<InputWrapper>
-					<SelectTokenWrapper
-						$alignItems='center'
-						$justifyContent='space-between'
-						onClick={() =>
-							isConnected && setShowSelectTokenModal(true)
-						}
-						disabled={!isConnected}
-						style={{
-							color:
-								selectedOneTimeToken || !isConnected
-									? 'inherit'
-									: brandColors.giv[500],
-						}}
-					>
-						{selectedOneTimeToken ? (
-							<Flex gap='8px' $alignItems='center'>
-								<TokenIcon
-									symbol={selectedOneTimeToken.symbol}
-									size={24}
-								/>
-								<TokenSymbol>
-									{selectedOneTimeToken.symbol}
-								</TokenSymbol>
-							</Flex>
-						) : (
-							<SelectTokenPlaceHolder>
-								{formatMessage({
-									id: 'label.select_token',
-								})}
-							</SelectTokenPlaceHolder>
-						)}
-						<IconCaretDown16 />
-					</SelectTokenWrapper>
-					<Input
-						amount={amount}
-						setAmount={setAmount}
-						disabled={selectedOneTimeToken === undefined}
-						decimals={selectedOneTimeToken?.decimals}
-					/>
-					<DonationPrice
-						disabled={!selectedOneTimeToken || !isConnected}
-					>
-						{'$ ' + donationUsdValue.toFixed(2)}
-					</DonationPrice>
-				</InputWrapper>
-				{selectedOneTimeToken ? (
-					<FlexStyled
-						gap='4px'
-						$alignItems='center'
-						disabled={!selectedOneTimeToken}
-					>
-						<GLinkStyled
-							size='Small'
+				<FlexStyled
+					$flexDirection='column'
+					gap='8px'
+					disabled={!isConnected}
+				>
+					<InputWrapper>
+						<SelectTokenWrapper
+							$alignItems='center'
+							$justifyContent='space-between'
 							onClick={() =>
-								setAmount(selectedTokenBalance - gasFee)
+								isConnected && setShowSelectTokenModal(true)
 							}
+							disabled={!isConnected}
+							style={{
+								color:
+									selectedOneTimeToken || !isConnected
+										? 'inherit'
+										: brandColors.giv[500],
+							}}
 						>
-							{formatMessage({
-								id: 'label.available',
-							})}
-							:{' '}
-							{selectedOneTimeToken
-								? truncateToDecimalPlaces(
-										formatUnits(
-											selectedTokenBalance,
-											tokenDecimals,
-										),
-										tokenDecimals / 3,
-									)
-								: 0.0}
-						</GLinkStyled>
-						<IconWrapper onClick={() => !isRefetching && refetch()}>
-							{isRefetching ? (
-								<Spinner size={16} />
+							{selectedOneTimeToken ? (
+								<Flex gap='8px' $alignItems='center'>
+									<TokenIcon
+										symbol={selectedOneTimeToken.symbol}
+										size={24}
+									/>
+									<TokenSymbol>
+										{selectedOneTimeToken.symbol}
+									</TokenSymbol>
+								</Flex>
 							) : (
-								<IconRefresh16 />
+								<SelectTokenPlaceHolder>
+									{formatMessage({
+										id: 'label.select_token',
+									})}
+								</SelectTokenPlaceHolder>
 							)}
-						</IconWrapper>
-						{insufficientGasFee && (
-							<WarnError>{amountErrorText}</WarnError>
-						)}
-					</FlexStyled>
+							<IconCaretDown16 />
+						</SelectTokenWrapper>
+						<Input
+							amount={amount}
+							setAmount={setAmount}
+							disabled={selectedOneTimeToken === undefined}
+							decimals={selectedOneTimeToken?.decimals}
+						/>
+						<DonationPrice
+							disabled={!selectedOneTimeToken || !isConnected}
+						>
+							{'$ ' + donationUsdValue.toFixed(2)}
+						</DonationPrice>
+					</InputWrapper>
+					{selectedOneTimeToken ? (
+						<FlexStyled
+							gap='4px'
+							$alignItems='center'
+							disabled={!selectedOneTimeToken}
+						>
+							<GLinkStyled
+								size='Small'
+								onClick={() =>
+									setAmount(selectedTokenBalance - gasFee)
+								}
+							>
+								{formatMessage({
+									id: 'label.available',
+								})}
+								:{' '}
+								{selectedOneTimeToken
+									? truncateToDecimalPlaces(
+											formatUnits(
+												selectedTokenBalance,
+												tokenDecimals,
+											),
+											tokenDecimals / 3,
+										)
+									: 0.0}
+							</GLinkStyled>
+							<IconWrapper
+								onClick={() => !isRefetching && refetch()}
+							>
+								{isRefetching ? (
+									<Spinner size={16} />
+								) : (
+									<IconRefresh16 />
+								)}
+							</IconWrapper>
+							{insufficientGasFee && (
+								<WarnError>{amountErrorText}</WarnError>
+							)}
+						</FlexStyled>
+					) : (
+						<div style={{ height: '21.5px' }} />
+					)}
+				</FlexStyled>
+				{!noDonationSplit ? (
+					<DonateToGiveth
+						setDonationToGiveth={setDonationToGiveth}
+						donationToGiveth={donationToGiveth}
+						title={
+							formatMessage({ id: 'label.donate_to' }) + ' Giveth'
+						}
+						disabled={!selectedOneTimeToken || !isConnected}
+					/>
 				) : (
-					<div style={{ height: '21.5px' }} />
+					<br />
 				)}
-			</FlexStyled>
-			{!noDonationSplit ? (
-				<DonateToGiveth
-					setDonationToGiveth={setDonationToGiveth}
-					donationToGiveth={donationToGiveth}
-					title={formatMessage({ id: 'label.donate_to' }) + ' Giveth'}
-					disabled={!selectedOneTimeToken || !isConnected}
-				/>
-			) : (
-				<br />
-			)}
-			{!noDonationSplit ? (
-				<TotalDonation
-					donationToGiveth={donationToGiveth}
-					totalDonation={amount}
-					projectTitle={projectTitle}
-					token={selectedOneTimeToken}
-					isActive={!donationDisabled}
-				/>
-			) : (
-				<EmptySpace />
-			)}
-			{!isActive && (
-				<InlineToast
-					type={EToastType.Warning}
-					message={formatMessage({
-						id: 'label.this_project_is_not_active',
-					})}
-				/>
-			)}
-			{isConnected &&
-				(donationDisabled ? (
-					<OutlineButton
-						label={formatMessage({ id: 'label.donate' })}
-						disabled
-						size='medium'
+				{!noDonationSplit ? (
+					<TotalDonation
+						donationToGiveth={donationToGiveth}
+						totalDonation={amount}
+						projectTitle={projectTitle}
+						token={selectedOneTimeToken}
+						isActive={!donationDisabled}
 					/>
 				) : (
-					<MainButton
-						id='Donate_Final'
-						label={formatMessage({ id: 'label.donate' })}
-						size='medium'
-						onClick={handleDonate}
+					<EmptySpace />
+				)}
+				{!isActive && (
+					<InlineToast
+						type={EToastType.Warning}
+						message={formatMessage({
+							id: 'label.this_project_is_not_active',
+						})}
 					/>
-				))}
-			{!isConnected && (
-				<MainButton
-					label={formatMessage({
-						id: 'component.button.connect_wallet',
-					})}
-					onClick={() => dispatch(setShowWelcomeModal(true))}
+				)}
+				{isConnected &&
+					(donationDisabled ? (
+						<OutlineButtonStyled
+							label={formatMessage({ id: 'label.donate' })}
+							disabled
+							size='medium'
+						/>
+					) : (
+						<MainButton
+							id='Donate_Final'
+							label={formatMessage({ id: 'label.donate' })}
+							size='medium'
+							onClick={handleDonate}
+						/>
+					))}
+				{!isConnected && (
+					<MainButton
+						label={formatMessage({
+							id: 'component.button.connect_wallet',
+						})}
+						onClick={() => dispatch(setShowWelcomeModal(true))}
+					/>
+				)}
+				<DonateAnonymously
+					anonymous={anonymous}
+					setAnonymous={setAnonymous}
+					selectedToken={selectedOneTimeToken}
 				/>
-			)}
-			<DonateAnonymously
-				anonymous={anonymous}
-				setAnonymous={setAnonymous}
-				selectedToken={selectedOneTimeToken}
-			/>
-			{showSelectTokenModal && (
-				<SelectTokenModal
-					setShowModal={setShowSelectTokenModal}
-					tokens={erc20List}
-					acceptCustomToken={
-						project.organization?.supportCustomTokens
-					}
-				/>
-			)}
+				{showSelectTokenModal && (
+					<SelectTokenModal
+						setShowModal={setShowSelectTokenModal}
+						tokens={erc20List}
+						acceptCustomToken={
+							project.organization?.supportCustomTokens
+						}
+					/>
+				)}
+			</ForEstimatedMatchingAnimation>
 		</MainContainer>
 	);
 };
+
+const OutlineButtonStyled = styled(OutlineButton)`
+	width: 100%;
+`;
 
 const DonationPrice = styled(SublineBold)<{ disabled?: boolean }>`
 	position: absolute;

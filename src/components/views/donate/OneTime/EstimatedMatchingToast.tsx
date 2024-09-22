@@ -27,7 +27,6 @@ interface IEstimatedMatchingToast {
 	token?: IProjectAcceptedToken;
 	tokenPrice?: number;
 	isStellar?: boolean;
-	show?: boolean;
 }
 
 const EstimatedMatchingToast: FC<IEstimatedMatchingToast> = ({
@@ -36,7 +35,6 @@ const EstimatedMatchingToast: FC<IEstimatedMatchingToast> = ({
 	amount,
 	tokenPrice,
 	isStellar,
-	show,
 }) => {
 	const { formatMessage, locale } = useIntl();
 	const { estimatedMatching, qfRounds } = projectData || {};
@@ -48,7 +46,6 @@ const EstimatedMatchingToast: FC<IEstimatedMatchingToast> = ({
 		allocatedFundUSDPreferred,
 		allocatedFundUSD,
 		allocatedTokenSymbol,
-		minimumValidUsdValue,
 		maximumReward,
 	} = activeStartedRound || {};
 
@@ -66,11 +63,6 @@ const EstimatedMatchingToast: FC<IEstimatedMatchingToast> = ({
 		maximumReward,
 	);
 
-	const isAboveMinValidUsdValue =
-		minimumValidUsdValue != null
-			? amountInUsd >= minimumValidUsdValue
-			: true;
-
 	const formattedDonation = `${formatDonation(
 		esMatching,
 		allocatedFundUSDPreferred ? '$' : '',
@@ -79,7 +71,7 @@ const EstimatedMatchingToast: FC<IEstimatedMatchingToast> = ({
 	)} ${allocatedFundUSDPreferred ? '' : ` ${allocatedTokenSymbol}`}`;
 
 	return (
-		<Wrapper show={show && isAboveMinValidUsdValue}>
+		<Wrapper>
 			<FlexCenter gap='5px'>
 				<Caption $medium>
 					{formatMessage({ id: 'label.estimated_matching' })}
@@ -89,13 +81,11 @@ const EstimatedMatchingToast: FC<IEstimatedMatchingToast> = ({
 					icon={<IconHelpFilled16 />}
 					direction='top'
 				>
-					{isAboveMinValidUsdValue && (
-						<TooltipContent>
-							{formatMessage({
-								id: 'component.qf-section.tooltip_polygon',
-							})}
-						</TooltipContent>
-					)}
+					<TooltipContent>
+						{formatMessage({
+							id: 'component.qf-section.tooltip_polygon',
+						})}
+					</TooltipContent>
 				</IconWithTooltip>
 			</FlexCenter>
 			<B>{formattedDonation}</B>
@@ -103,7 +93,7 @@ const EstimatedMatchingToast: FC<IEstimatedMatchingToast> = ({
 	);
 };
 
-const Wrapper = styled.div<{ show?: boolean }>`
+const Wrapper = styled.div`
 	display: flex;
 	padding: 4px 16px 8px 16px;
 	justify-content: space-between;
@@ -112,10 +102,6 @@ const Wrapper = styled.div<{ show?: boolean }>`
 	background: ${neutralColors.gray[200]};
 	color: ${semanticColors.jade[700]};
 	margin-bottom: -5px;
-	transform: translateY(${props => (props.show ? '0' : '100%')});
-	transition:
-		transform 0.5s ease,
-		opacity 0.5s ease;
 `;
 
 export default EstimatedMatchingToast;
