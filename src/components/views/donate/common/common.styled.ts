@@ -115,4 +115,5 @@ export const InputWrapper = styled(Flex)`
 		padding: 13px 16px;
 	}
 	align-items: center;
+	position: relative;
 `;

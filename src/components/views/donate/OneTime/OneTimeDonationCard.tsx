@@ -355,6 +355,10 @@ const CryptoDonation: FC<{
 	const isProjectGivbacksEligible = !!verified;
 	const donationUsdValue =
 		(tokenPrice || 0) * Number(ethers.utils.formatEther(amount));
+	const isDonationMatched =
+		!!activeStartedRound &&
+		isOnQFEligibleNetworks &&
+		donationUsdValue >= (activeStartedRound?.minimumValidUsdValue || 0);
 
 	return (
 		<MainContainer>
@@ -423,7 +427,8 @@ const CryptoDonation: FC<{
 			/>
 			{hasActiveQFRound &&
 				isOnQFEligibleNetworks &&
-				selectedTokenBalance && (
+				selectedTokenBalance &&
+				isDonationMatched && (
 					<EstimatedMatchingToast
 						projectData={project}
 						token={selectedOneTimeToken}
@@ -602,6 +607,7 @@ const DonationPrice = styled(SublineBold)<{ disabled?: boolean }>`
 	border-radius: 4px;
 	background: ${neutralColors.gray[300]};
 	padding: 2px 8px !important;
+	margin: 16px 0px;
 	color: ${neutralColors.gray[700]} !important;
 	opacity: ${props => (props.disabled ? 0.4 : 1)};
 	height: 22px;

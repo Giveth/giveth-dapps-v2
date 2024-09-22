@@ -283,11 +283,8 @@ const DonateIndex: FC = () => {
 										</ImageWrapper>
 
 										{!isMobile ? (
-											(!isQRDonation &&
-												!isRecurringTab &&
-												hasActiveQFRound) ||
-											(isRecurringTab &&
-												isOnEligibleNetworks) ? (
+											isRecurringTab &&
+											isOnEligibleNetworks ? (
 												<QFSection
 													projectData={project}
 												/>

@@ -116,6 +116,7 @@ const Wrapper = styled.div`
 	background: ${neutralColors.gray[200]};
 	color: ${semanticColors.jade[700]};
 	margin-bottom: -5px;
+	transition: height 0.5s;
 `;
 
 export default EstimatedMatchingToast;
