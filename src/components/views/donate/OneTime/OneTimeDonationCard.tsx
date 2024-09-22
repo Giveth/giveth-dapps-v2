@@ -48,13 +48,14 @@ import QFModal from './QFModal';
 import EstimatedMatchingToast from '@/components/views/donate/OneTime/EstimatedMatchingToast';
 import TotalDonation from './TotalDonation';
 import {
+	BadgesBase,
 	GLinkStyled,
 	IconWrapper,
 	Input,
 	InputWrapper,
 	SelectTokenPlaceHolder,
 	SelectTokenWrapper,
-} from '../Recurring/RecurringDonationCard';
+} from '../common/common.styled';
 import { TokenIcon } from '../TokenIcon/TokenIcon';
 import { SelectTokenModal } from './SelectTokenModal/SelectTokenModal';
 import { Spinner } from '@/components/Spinner';
@@ -62,9 +63,9 @@ import { useSolanaBalance } from '@/hooks/useSolanaBalance';
 import { isWalletSanctioned } from '@/services/donation';
 import SanctionModal from '@/components/modals/SanctionedModal';
 import { useTokenPrice } from '@/hooks/useTokenPrice';
-import { BadgesBase } from '@/components/views/donate/common/common.styled';
 import EligibilityBadges from '@/components/views/donate/common/EligibilityBadges';
-import ToggleSwitch from '@/components/ToggleSwitch';
+
+import DonateAnonymously from '@/components/views/donate/common/DonateAnonymously';
 
 const CryptoDonation: FC<{
 	acceptedTokens: IProjectAcceptedToken[] | undefined;
@@ -579,25 +580,11 @@ const CryptoDonation: FC<{
 					onClick={() => dispatch(setShowWelcomeModal(true))}
 				/>
 			)}
-			<CheckBoxContainer>
-				<ToggleSwitch
-					isOn={anonymous}
-					toggleOnOff={setAnonymous}
-					size='small'
-					theme='purple-gray'
-					label={formatMessage({
-						id: 'label.make_it_anonymous',
-					})}
-					disabled={!isConnected || !selectedOneTimeToken}
-				/>
-				<DonateAnonymously
-					disabled={!isConnected || !selectedOneTimeToken}
-				>
-					{formatMessage({
-						id: 'component.tooltip.donate_anonymously',
-					})}
-				</DonateAnonymously>
-			</CheckBoxContainer>
+			<DonateAnonymously
+				anonymous={anonymous}
+				setAnonymous={setAnonymous}
+				selectedToken={selectedOneTimeToken}
+			/>
 			{showSelectTokenModal && (
 				<SelectTokenModal
 					setShowModal={setShowSelectTokenModal}
@@ -616,9 +603,10 @@ const DonationPrice = styled(SublineBold)<{ disabled?: boolean }>`
 	right: 16px;
 	border-radius: 4px;
 	background: ${neutralColors.gray[300]};
-	padding: 2px 8px;
-	color: ${neutralColors.gray[700]};
+	padding: 2px 8px !important;
+	color: ${neutralColors.gray[700]} !important;
 	opacity: ${props => (props.disabled ? 0.4 : 1)};
+	height: 22px;
 `;
 
 const FlexStyled = styled(Flex)<{ disabled: boolean }>`
@@ -630,11 +618,6 @@ const FlexStyled = styled(Flex)<{ disabled: boolean }>`
 		opacity: 0.5;
 		pointer-events: none;
 	`}
-`;
-
-const DonateAnonymously = styled.div<{ disabled: boolean }>`
-	color: ${props =>
-		props.disabled ? neutralColors.gray[600] + ' !important' : 'inherit'};
 `;
 
 const ConnectWallet = styled(BadgesBase)`
@@ -669,21 +652,6 @@ const MainButton = styled(Button)`
 		props.disabled ? brandColors.giv[200] : brandColors.giv[500]};
 	color: white;
 	text-transform: uppercase;
-`;
-
-export const CheckBoxContainer = styled.div`
-	margin-top: 24px;
-	border-radius: 8px;
-	border: 1px solid ${neutralColors.gray[300]};
-	padding: 16px;
-	> div:first-child {
-		margin-left: -14px;
-	}
-	> div:nth-child(2) {
-		color: ${neutralColors.gray[900]};
-		font-size: 12px;
-		margin-top: 9px;
-	}
 `;
 
 export default CryptoDonation;
