@@ -93,7 +93,7 @@ export const DonatePageProjectDescription: FC<
 			/>
 			{isQRDonation && isStellarIncludedInQF && showRaised ? (
 				<>
-					{totalDonations || 0 ? (
+					{sumDonationValueUsdForActiveQfRound || 0 ? (
 						<>
 							<AmountRaisedText>
 								<Subline color={neutralColors.gray[700]}>
@@ -104,7 +104,7 @@ export const DonatePageProjectDescription: FC<
 							</AmountRaisedText>
 							<PriceText>
 								{formatDonation(
-									totalDonations || 0,
+									sumDonationValueUsdForActiveQfRound || 0,
 									'$',
 									locale,
 								)}
