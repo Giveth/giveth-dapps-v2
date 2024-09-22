@@ -353,7 +353,7 @@ const AlreadyDonatedWrapper = styled(Flex)`
 
 const DonateContainer = styled(Container)`
 	text-align: center;
-	padding-top: 10px;
+	padding-top: 110px;
 	padding-bottom: 64px;
 	position: relative;
 `;
