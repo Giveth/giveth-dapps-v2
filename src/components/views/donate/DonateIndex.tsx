@@ -46,6 +46,7 @@ import { IDraftDonation } from '@/apollo/types/gqlTypes';
 import StorageLabel from '@/lib/localStorage';
 import DonationByProjectOwner from '@/components/modals/DonationByProjectOwner';
 import { PassportBanner } from '@/components/PassportBanner';
+import QFEligibleNetworks from '@/components/views/donate/QFEligibleNetworks';
 
 const DonateIndex: FC = () => {
 	const { formatMessage } = useIntl();
@@ -275,7 +276,9 @@ const DonateIndex: FC = () => {
 												project?.organization?.label
 											}
 										/>
-
+										{activeStartedRound && (
+											<QFEligibleNetworks />
+										)}
 										<ImageWrapper>
 											<ProjectCardImage
 												image={project.image}
