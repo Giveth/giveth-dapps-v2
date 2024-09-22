@@ -826,6 +826,7 @@ export const SelectTokenPlaceHolder = styled(B)`
 
 export const InputWrapper = styled(Flex)`
 	border: 2px solid ${neutralColors.gray[300]};
+	position: relative;
 	border-radius: 8px;
 	& > * {
 		padding: 13px 16px;

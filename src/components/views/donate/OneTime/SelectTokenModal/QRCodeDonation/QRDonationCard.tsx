@@ -14,8 +14,9 @@ import {
 	Button,
 } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
-import { formatUnits } from 'viem';
+import { Chain, formatUnits } from 'viem';
 
+import { ethers } from 'ethers';
 import {
 	InputWrapper,
 	SelectTokenWrapper,
@@ -70,7 +71,7 @@ export const QRDonationCard: FC<QRDonationCardProps> = ({
 	const { modalCallback: signInThenDonate } = useModalCallback(() =>
 		setShowDonateModal(true),
 	);
-	const { isConnected } = useGeneralWallet();
+	const { isConnected, chain } = useGeneralWallet();
 
 	const {
 		project,
@@ -104,6 +105,21 @@ export const QRDonationCard: FC<QRDonationCardProps> = ({
 	const projectAddress = addresses?.find(
 		address => address.chainType === ChainType.STELLAR,
 	);
+	const stellarNetworkId =
+		config.NON_EVM_NETWORKS_CONFIG[ChainType.STELLAR].networkId;
+
+	const networkId = (chain as Chain)?.id;
+	const isQRDonation = router.query.chain === ChainType.STELLAR.toLowerCase();
+	const isOnEligibleNetworks = activeStartedRound?.eligibleNetworks?.includes(
+		(isQRDonation ? stellarNetworkId : networkId) || 0,
+	);
+
+	const donationUsdValue =
+		(tokenPrice || 0) * Number(ethers.utils.formatEther(amount));
+	const isDonationMatched =
+		!!activeStartedRound &&
+		isOnEligibleNetworks &&
+		donationUsdValue >= (activeStartedRound?.minimumValidUsdValue || 0);
 
 	useEffect(() => {
 		const eventSource = new EventSource(
@@ -312,102 +328,111 @@ export const QRDonationCard: FC<QRDonationCardProps> = ({
 					isStellar
 				/>
 			)}
-			{!showQRCode &&
-				hasActiveQFRound &&
-				activeStartedRound?.eligibleNetworks?.includes(
-					config.NON_EVM_NETWORKS_CONFIG[ChainType.STELLAR].networkId,
-				) &&
-				amount && (
-					<EstimatedMatchingToast
-						projectData={project}
-						token={stellarToken}
-						amount={amount}
-						tokenPrice={tokenPrice}
-						isStellar
+			<div>
+				{!showQRCode &&
+					chain &&
+					hasActiveQFRound &&
+					activeStartedRound?.eligibleNetworks?.includes(
+						config.NON_EVM_NETWORKS_CONFIG[ChainType.STELLAR]
+							.networkId,
+					) &&
+					isDonationMatched &&
+					amount && (
+						<EstimatedMatchingToast
+							projectData={project}
+							token={stellarToken}
+							amount={amount}
+							tokenPrice={tokenPrice}
+							isStellar
+						/>
+					)}
+				{!showQRCode ? (
+					<>
+						<StyledInputWrapper>
+							<SelectTokenWrapper
+								$alignItems='center'
+								$justifyContent='space-between'
+							>
+								<Flex gap='8px' $alignItems='center'>
+									<TokenIconWithGIVBack
+										showGiveBack={
+											stellarToken?.isGivbackEligible
+										}
+										symbol={stellarToken?.symbol}
+										size={32}
+									/>
+									<TokenSymbol>
+										{
+											config.NETWORKS_CONFIG[
+												ChainType.STELLAR
+											].name
+										}{' '}
+										({stellarToken?.symbol})
+									</TokenSymbol>
+								</Flex>
+							</SelectTokenWrapper>
+							<QRDonationInput>
+								<Input amount={amount} setAmount={setAmount} />
+								<UsdAmountCard>$ {usdAmount}</UsdAmountCard>
+							</QRDonationInput>
+						</StyledInputWrapper>
+						<CardBottom>
+							<FlexStyled
+								$justifyContent='space-between'
+								$color={neutralColors.gray[100]}
+							>
+								<P>
+									{formatMessage({ id: 'label.donating_to' })}{' '}
+									<strong
+										style={{ textTransform: 'capitalize' }}
+									>
+										{project.title || '--'}
+									</strong>
+								</P>
+								<B>{formatAmountToDisplay(amount)}</B>
+							</FlexStyled>
+							<FlexStyled
+								$justifyContent='space-between'
+								$color={neutralColors.gray[300]}
+							>
+								<B>
+									{formatMessage({
+										id: 'label.your_total_donation',
+									})}
+								</B>
+								<B>{formatAmountToDisplay(amount)}</B>
+							</FlexStyled>
+							{amount === 0n ? (
+								<OutlineButton
+									label='Next'
+									color='primary'
+									icon={<IconArrowRight16 />}
+									disabled
+								/>
+							) : (
+								<Button
+									label='Next'
+									color='primary'
+									icon={<IconArrowRight16 />}
+									onClick={handleNext}
+								/>
+							)}
+						</CardBottom>
+					</>
+				) : (
+					<QRDonationCardContent
+						tokenData={stellarToken}
+						usdAmount={calculateUsdAmount(
+							draftDonationData?.amount,
+						)}
+						amount={draftDonationData?.amount?.toString() ?? '0.00'}
+						qrDonationStatus={qrDonationStatus}
+						draftDonationData={draftDonationData}
+						projectAddress={projectAddress}
+						draftDonationLoading={draftDonationLoading}
 					/>
 				)}
-			{!showQRCode ? (
-				<>
-					<StyledInputWrapper>
-						<SelectTokenWrapper
-							$alignItems='center'
-							$justifyContent='space-between'
-						>
-							<Flex gap='8px' $alignItems='center'>
-								<TokenIconWithGIVBack
-									showGiveBack={
-										stellarToken?.isGivbackEligible
-									}
-									symbol={stellarToken?.symbol}
-									size={32}
-								/>
-								<TokenSymbol>
-									{
-										config.NETWORKS_CONFIG[
-											ChainType.STELLAR
-										].name
-									}{' '}
-									({stellarToken?.symbol})
-								</TokenSymbol>
-							</Flex>
-						</SelectTokenWrapper>
-						<QRDonationInput>
-							<Input amount={amount} setAmount={setAmount} />
-							<UsdAmountCard>$ {usdAmount}</UsdAmountCard>
-						</QRDonationInput>
-					</StyledInputWrapper>
-					<CardBottom>
-						<FlexStyled
-							$justifyContent='space-between'
-							$color={neutralColors.gray[100]}
-						>
-							<P>
-								{formatMessage({ id: 'label.donating_to' })}{' '}
-								<strong style={{ textTransform: 'capitalize' }}>
-									{project.title || '--'}
-								</strong>
-							</P>
-							<B>{formatAmountToDisplay(amount)}</B>
-						</FlexStyled>
-						<FlexStyled
-							$justifyContent='space-between'
-							$color={neutralColors.gray[300]}
-						>
-							<B>
-								{formatMessage({
-									id: 'label.your_total_donation',
-								})}
-							</B>
-							<B>{formatAmountToDisplay(amount)}</B>
-						</FlexStyled>
-						{amount === 0n ? (
-							<OutlineButton
-								label='Next'
-								color='primary'
-								icon={<IconArrowRight16 />}
-								disabled
-							/>
-						) : (
-							<Button
-								label='Next'
-								color='primary'
-								icon={<IconArrowRight16 />}
-								onClick={handleNext}
-							/>
-						)}
-					</CardBottom>
-				</>
-			) : (
-				<QRDonationCardContent
-					tokenData={stellarToken}
-					usdAmount={calculateUsdAmount(draftDonationData?.amount)}
-					amount={draftDonationData?.amount?.toString() ?? '0.00'}
-					qrDonationStatus={qrDonationStatus}
-					draftDonationData={draftDonationData}
-					projectAddress={projectAddress}
-					draftDonationLoading={draftDonationLoading}
-				/>
-			)}
+			</div>
 		</>
 	);
 };
