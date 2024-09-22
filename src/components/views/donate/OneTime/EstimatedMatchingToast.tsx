@@ -19,7 +19,7 @@ import {
 } from '@/helpers/qf';
 import { IProjectAcceptedToken } from '@/apollo/types/gqlTypes';
 import { formatDonation } from '@/helpers/number';
-import { formatBalance, truncateToDecimalPlaces } from '@/lib/helpers';
+import { truncateToDecimalPlaces } from '@/lib/helpers';
 
 interface IEstimatedMatchingToast {
 	projectData: IProject;
@@ -34,7 +34,7 @@ const EstimatedMatchingToast: React.FC<IEstimatedMatchingToast> = ({
 	token,
 	amount,
 	tokenPrice,
-	isStellar
+	isStellar,
 }) => {
 	const { formatMessage, locale } = useIntl();
 	const { estimatedMatching, qfRounds } = projectData || {};
@@ -50,7 +50,7 @@ const EstimatedMatchingToast: React.FC<IEstimatedMatchingToast> = ({
 		maximumReward,
 	} = activeStartedRound || {};
 
-	const decimals = isStellar? 18: token?.decimals || 18;
+	const decimals = isStellar ? 18 : token?.decimals || 18;
 
 	const amountInUsd =
 		(tokenPrice || 0) *
