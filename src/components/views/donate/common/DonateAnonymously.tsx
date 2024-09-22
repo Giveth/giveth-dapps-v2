@@ -2,7 +2,6 @@ import React, { FC } from 'react';
 import styled from 'styled-components';
 import { neutralColors } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
-import { CheckBoxContainer } from '@/components/views/donate/common/common.styled';
 import ToggleSwitch, {
 	EToggleSwitchSizes,
 	EToggleSwitchThemes,
@@ -32,6 +31,7 @@ const DonateAnonymously: FC<IDonateAnonymously> = props => {
 					id: 'label.make_it_anonymous',
 				})}
 				disabled={!isConnected || !selectedToken}
+				style={{ marginLeft: '-14px' }}
 			/>
 			<Caption disabled={!isConnected || !selectedToken}>
 				{formatMessage({
@@ -41,6 +41,18 @@ const DonateAnonymously: FC<IDonateAnonymously> = props => {
 		</CheckBoxContainer>
 	);
 };
+
+const CheckBoxContainer = styled.div`
+	margin-top: 24px;
+	border-radius: 8px;
+	border: 1px solid ${neutralColors.gray[300]};
+	padding: 16px;
+	> div:nth-child(2) {
+		color: ${neutralColors.gray[900]};
+		font-size: 12px;
+		margin-top: 9px;
+	}
+`;
 
 const Caption = styled.div<{ disabled: boolean }>`
 	color: ${props =>

@@ -116,20 +116,3 @@ export const InputWrapper = styled(Flex)`
 	}
 	align-items: center;
 `;
-
-export const CheckBoxContainer = styled.div`
-	margin-top: 24px;
-	border-radius: 8px;
-	border: 1px solid ${neutralColors.gray[300]};
-	padding: 16px;
-
-	> div:first-child {
-		margin-left: -14px;
-	}
-
-	> div:nth-child(2) {
-		color: ${neutralColors.gray[900]};
-		font-size: 12px;
-		margin-top: 9px;
-	}
-`;

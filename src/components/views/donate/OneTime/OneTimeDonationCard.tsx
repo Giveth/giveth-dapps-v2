@@ -530,10 +530,8 @@ const CryptoDonation: FC<{
 				<DonateToGiveth
 					setDonationToGiveth={setDonationToGiveth}
 					donationToGiveth={donationToGiveth}
-					givethDonationAmount={givethDonationAmount}
-					title={
-						formatMessage({ id: 'label.donation_to' }) + ' Giveth'
-					}
+					title={formatMessage({ id: 'label.donate_to' }) + ' Giveth'}
+					disabled={!selectedOneTimeToken || !isConnected}
 				/>
 			) : (
 				<br />

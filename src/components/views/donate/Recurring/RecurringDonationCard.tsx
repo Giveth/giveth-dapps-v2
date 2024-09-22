@@ -616,8 +616,12 @@ export const RecurringDonationCard = () => {
 								setDonationToGiveth={e => {
 									setDonationToGiveth(e);
 								}}
+								disabled={!selectedRecurringToken}
 								donationToGiveth={donationToGiveth}
-								title='Add a recurring donation to Giveth'
+								title={
+									formatMessage({ id: 'label.donate_to' }) +
+									' Giveth'
+								}
 							/>
 						</GivethSection>
 					)}

@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import { brandColors, neutralColors, P, Flex } from '@giveth/ui-design-system';
-import { FC } from 'react';
+import { CSSProperties, FC } from 'react';
 
 export enum EToggleSwitchSizes {
 	SMALL = 'small',
@@ -19,6 +19,7 @@ interface IToggleButton {
 	className?: string;
 	size?: EToggleSwitchSizes;
 	theme?: EToggleSwitchThemes;
+	style?: CSSProperties;
 }
 
 const ToggleSwitch: FC<IToggleButton> = ({
@@ -29,6 +30,7 @@ const ToggleSwitch: FC<IToggleButton> = ({
 	className,
 	size,
 	theme,
+	style,
 }) => {
 	const handleClick = () => {
 		toggleOnOff(!isOn);
@@ -38,6 +40,7 @@ const ToggleSwitch: FC<IToggleButton> = ({
 			onClick={handleClick}
 			$disabled={disabled}
 			className={className}
+			style={style}
 		>
 			<InputStyled checked={isOn} type='checkbox' onChange={() => {}} />
 			<Switch size={size} theme={theme} $isOn={isOn}>
@@ -114,7 +117,7 @@ const Caption = styled(P)<{ size?: EToggleSwitchSizes }>`
 	color: ${neutralColors.gray[800]};
 	font-weight: 500;
 	font-size: ${props =>
-		props.size === EToggleSwitchSizes.SMALL ? '14px' : '16px'};
+		props.size === EToggleSwitchSizes.SMALL ? '14px !important' : '16px'};
 `;
 
 const Container = styled(Flex)<{ $disabled?: boolean }>`
