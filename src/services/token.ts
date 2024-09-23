@@ -102,7 +102,7 @@ export const fetchTokenBalances = async (
 		// Map ERC20 results to balances
 		const erc20Balances = erc20Results.map((result, index) => ({
 			token: erc20Tokens[index],
-			balance: result?.result || undefined,
+			balance: (result?.result as bigint) || undefined,
 		}));
 
 		// Combine ERC20 and native token balances
