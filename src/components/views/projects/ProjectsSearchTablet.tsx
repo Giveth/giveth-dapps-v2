@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import { useRouter } from 'next/router';
 import Input from '@/components/Input';
 import { useProjectsContext } from '@/context/projects.context';
+import { EProjectsSortBy } from '@/apollo/types/gqlEnums';
 
 const ProjectsSearchTablet = () => {
 	const { variables } = useProjectsContext();
@@ -14,6 +15,7 @@ const ProjectsSearchTablet = () => {
 		const updatedQuery = {
 			...router.query,
 			searchTerm,
+			sort: EProjectsSortBy.BestMatch,
 		};
 		router.push({
 			pathname: router.pathname,
@@ -27,6 +29,8 @@ const ProjectsSearchTablet = () => {
 			...router.query,
 		};
 		delete updatedQuery.searchTerm;
+		if (router.query.sort === EProjectsSortBy.BestMatch)
+			delete updatedQuery.sort;
 		router.push({
 			pathname: router.pathname,
 			query: updatedQuery,
