@@ -27,6 +27,7 @@ interface IEstimatedMatchingToast {
 	token?: IProjectAcceptedToken;
 	tokenPrice?: number;
 	isStellar?: boolean;
+	show?: boolean;
 }
 
 const EstimatedMatchingToast: FC<IEstimatedMatchingToast> = ({
@@ -35,6 +36,7 @@ const EstimatedMatchingToast: FC<IEstimatedMatchingToast> = ({
 	amount,
 	tokenPrice,
 	isStellar,
+	show,
 }) => {
 	const { formatMessage, locale } = useIntl();
 	const { estimatedMatching, qfRounds } = projectData || {};
@@ -71,7 +73,7 @@ const EstimatedMatchingToast: FC<IEstimatedMatchingToast> = ({
 	)} ${allocatedFundUSDPreferred ? '' : ` ${allocatedTokenSymbol}`}`;
 
 	return (
-		<Wrapper>
+		<Wrapper show={show}>
 			<FlexCenter gap='5px'>
 				<Caption $medium>
 					{formatMessage({ id: 'label.estimated_matching' })}
@@ -93,7 +95,7 @@ const EstimatedMatchingToast: FC<IEstimatedMatchingToast> = ({
 	);
 };
 
-const Wrapper = styled.div`
+const Wrapper = styled.div<{ show?: boolean }>`
 	display: flex;
 	padding: 4px 16px 8px 16px;
 	justify-content: space-between;
@@ -102,6 +104,7 @@ const Wrapper = styled.div`
 	background: ${neutralColors.gray[200]};
 	color: ${semanticColors.jade[700]};
 	margin-bottom: -5px;
+	opacity: ${({ show }) => (show ? 1 : 0)};
 `;
 
 export default EstimatedMatchingToast;

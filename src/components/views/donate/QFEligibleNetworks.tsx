@@ -18,9 +18,11 @@ import { useDonateData } from '@/context/donate.context';
 import { ChainType } from '@/types/config';
 import config from '@/configuration';
 import { IconWithTooltip } from '@/components/IconWithToolTip';
+import { useGeneralWallet } from '@/providers/generalWalletProvider';
 
 const QFEligibleNetworks = () => {
 	const [showModal, setShowModal] = useState(false);
+	const { isConnected } = useGeneralWallet();
 	const { formatMessage } = useIntl();
 	const { activeStartedRound } = useDonateData();
 	const router = useRouter();
@@ -42,9 +44,13 @@ const QFEligibleNetworks = () => {
 			<IconsWrapper>
 				{eligibleNetworksWithChainType?.map(network => (
 					<IconWithTooltip
-						icon={config.NETWORKS_CONFIG[
-							network.networkId
-						]?.chainLogo(24)}
+						icon={
+							<TooltipIconWrapper>
+								{config.NETWORKS_CONFIG[
+									network.networkId
+								]?.chainLogo(24)}
+							</TooltipIconWrapper>
+						}
 						direction='top'
 						align='top'
 						key={network.networkId}
@@ -55,7 +61,7 @@ const QFEligibleNetworks = () => {
 					</IconWithTooltip>
 				))}
 			</IconsWrapper>
-			{!isQRDonation && (
+			{!isQRDonation && isConnected && (
 				<ButtonsWrapper>
 					<OutlineButton
 						onClick={() => setShowModal(true)}
@@ -82,8 +88,12 @@ const QFEligibleNetworks = () => {
 	);
 };
 
+const TooltipIconWrapper = styled.div`
+	margin-top: 4px;
+`;
+
 const IconsWrapper = styled.div`
-	margin-top: 16px;
+	margin-top: 14px;
 	display: flex;
 	gap: 4px;
 	img {

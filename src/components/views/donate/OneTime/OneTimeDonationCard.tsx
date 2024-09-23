@@ -434,6 +434,7 @@ const CryptoDonation: FC<{
 				token={selectedOneTimeToken}
 				amount={amount}
 				tokenPrice={tokenPrice}
+				show={showEstimatedMatching}
 			/>
 			<ForEstimatedMatchingAnimation
 				showEstimatedMatching={showEstimatedMatching}
