@@ -29,12 +29,22 @@ const QFEligibleNetworks = () => {
 	const isQRDonation = router.query.chain === ChainType.STELLAR.toLowerCase();
 	const stellarNetworkId =
 		config.NON_EVM_NETWORKS_CONFIG[ChainType.STELLAR].networkId;
+	const solanaNetworkId =
+		config.NON_EVM_NETWORKS_CONFIG[ChainType.SOLANA].networkId;
 	const eligibleNetworks = activeStartedRound?.eligibleNetworks.map(
 		network => ({
 			networkId: network,
 			chainType: config.EVM_NETWORKS_CONFIG[network]
 				? ChainType.EVM
-				: ChainType.SOLANA,
+				: network === stellarNetworkId
+					? ChainType.STELLAR
+					: ChainType.SOLANA,
+			configId:
+				network === stellarNetworkId
+					? ChainType.STELLAR
+					: network === solanaNetworkId
+						? ChainType.SOLANA
+						: network,
 		}),
 	);
 	console.log('eligibleNetworks', eligibleNetworks, activeStartedRound);
@@ -53,7 +63,7 @@ const QFEligibleNetworks = () => {
 						icon={
 							<TooltipIconWrapper>
 								{config.NETWORKS_CONFIG[
-									network.networkId
+									network.configId
 								]?.chainLogo(24)}
 							</TooltipIconWrapper>
 						}
@@ -62,7 +72,7 @@ const QFEligibleNetworks = () => {
 						key={network.networkId}
 					>
 						<SublineBold>
-							{config.NETWORKS_CONFIG[network.networkId]?.name}
+							{config.NETWORKS_CONFIG[network.configId]?.name}
 						</SublineBold>
 					</IconWithTooltip>
 				))}
