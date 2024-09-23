@@ -345,7 +345,6 @@ export const QRDonationCard: FC<QRDonationCardProps> = ({
 					token={stellarToken}
 					tokenPrice={tokenPrice}
 					style={{ marginBottom: '5px' }}
-					isStellar
 				/>
 			)}
 			<div>

@@ -23,7 +23,6 @@ import { ChainType } from '@/types/config';
 import { useAppSelector } from '@/features/hooks';
 
 interface IEligibilityBadges {
-	isStellar?: boolean;
 	tokenPrice?: number;
 	token?: IProjectAcceptedToken;
 	amount: bigint;
@@ -31,7 +30,7 @@ interface IEligibilityBadges {
 }
 
 const EligibilityBadges: FC<IEligibilityBadges> = props => {
-	const { tokenPrice, amount, token, style, isStellar } = props;
+	const { tokenPrice, amount, token, style } = props;
 	const { activeQFRound } = useAppSelector(state => state.general);
 	const { isConnected, chain } = useGeneralWallet();
 	const { activeStartedRound, project } = useDonateData();
@@ -42,10 +41,16 @@ const EligibilityBadges: FC<IEligibilityBadges> = props => {
 	const isProjectGivbacksEligible = !!verified;
 	const stellarNetworkId =
 		config.NON_EVM_NETWORKS_CONFIG[ChainType.STELLAR].networkId;
+	const solanaNetworkId =
+		config.NON_EVM_NETWORKS_CONFIG[ChainType.SOLANA].networkId;
+	const configId =
+		networkId === stellarNetworkId
+			? ChainType.STELLAR
+			: networkId === solanaNetworkId
+				? ChainType.SOLANA
+				: networkId;
 	const isOnQFEligibleNetworks =
-		activeStartedRound?.eligibleNetworks?.includes(
-			(isStellar ? stellarNetworkId : networkId) || 0,
-		);
+		activeStartedRound?.eligibleNetworks?.includes(Number(configId) || 0);
 	const donationUsdValue =
 		(tokenPrice || 0) * Number(ethers.utils.formatEther(amount));
 
@@ -85,9 +90,7 @@ const EligibilityBadges: FC<IEligibilityBadges> = props => {
 						},
 						{
 							value: activeStartedRound?.minimumValidUsdValue,
-							network: isStellar
-								? 'Stellar'
-								: config.NETWORKS_CONFIG[networkId]?.name,
+							network: config.NETWORKS_CONFIG[configId]?.name,
 						},
 					)}
 				</BadgesBase>
