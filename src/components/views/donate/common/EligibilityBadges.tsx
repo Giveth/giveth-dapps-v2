@@ -87,7 +87,7 @@ const EligibilityBadges: FC<IEligibilityBadges> = props => {
 							value: activeStartedRound?.minimumValidUsdValue,
 							network: isStellar
 								? 'Stellar'
-								: config.NETWORKS_CONFIG[networkId].name,
+								: config.NETWORKS_CONFIG[networkId]?.name,
 						},
 					)}
 				</BadgesBase>
