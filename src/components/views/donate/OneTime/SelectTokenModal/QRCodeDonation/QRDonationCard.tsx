@@ -15,7 +15,7 @@ import {
 	SublineBold,
 } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
-import { Chain, formatUnits } from 'viem';
+import { formatUnits } from 'viem';
 
 import { ethers } from 'ethers';
 import {
@@ -107,20 +107,15 @@ export const QRDonationCard: FC<QRDonationCardProps> = ({
 	const projectAddress = addresses?.find(
 		address => address.chainType === ChainType.STELLAR,
 	);
-	const stellarNetworkId =
-		config.NON_EVM_NETWORKS_CONFIG[ChainType.STELLAR].networkId;
 
-	const networkId = (chain as Chain)?.id;
-	const isQRDonation = router.query.chain === ChainType.STELLAR.toLowerCase();
 	const isOnEligibleNetworks = activeStartedRound?.eligibleNetworks?.includes(
-		(isQRDonation ? stellarNetworkId : networkId) || 0,
+		config.STELLAR_NETWORK_NUMBER,
 	);
 	const isProjectGivbacksEligible = !!verified;
 	const isInQF = !!isOnEligibleNetworks;
-	const showConnectWallet =
-		hasActiveQFRound || isProjectGivbacksEligible || isInQF;
+	const showConnectWallet = isProjectGivbacksEligible || isInQF;
 	const textToDisplayOnConnect =
-		hasActiveQFRound && isProjectGivbacksEligible && isInQF
+		isProjectGivbacksEligible && isInQF
 			? 'label.please_connect_your_wallet_to_win_givbacks_and_match'
 			: isProjectGivbacksEligible
 				? 'label.please_connect_your_wallet_to_win_givbacks'

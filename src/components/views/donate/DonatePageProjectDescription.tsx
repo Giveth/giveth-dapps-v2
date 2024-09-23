@@ -63,10 +63,10 @@ export const DonatePageProjectDescription: FC<
 		project.qfRounds,
 	);
 
-	const stellarNetworkId =
-		config.NON_EVM_NETWORKS_CONFIG[ChainType.STELLAR].networkId;
 	const isStellarIncludedInQF =
-		activeStartedRound?.eligibleNetworks?.includes(stellarNetworkId);
+		activeStartedRound?.eligibleNetworks?.includes(
+			config.STELLAR_NETWORK_NUMBER,
+		);
 
 	const {
 		allocatedFundUSDPreferred,
@@ -249,7 +249,7 @@ const LearnLink = styled(Flex)`
 const AmountRaisedText = styled(Subline)`
 	color: ${neutralColors.gray[700]};
 	background-color: ${neutralColors.gray[300]};
-	padding: 2px px;
+	padding: 2px 0;
 	width: fit-content;
 	> span {
 		font-weight: 500;

@@ -84,10 +84,10 @@ const DonateIndex: FC = () => {
 	const [stopTimer, setStopTimer] = React.useState<void | (() => void)>();
 
 	const isQRDonation = router.query.chain === ChainType.STELLAR.toLowerCase();
-	const stellarNetworkId =
-		config.NON_EVM_NETWORKS_CONFIG[ChainType.STELLAR].networkId;
 	const isStellarIncludedInQF =
-		activeStartedRound?.eligibleNetworks?.includes(stellarNetworkId);
+		activeStartedRound?.eligibleNetworks?.includes(
+			config.STELLAR_NETWORK_NUMBER,
+		);
 
 	useEffect(() => {
 		dispatch(setShowHeader(false));

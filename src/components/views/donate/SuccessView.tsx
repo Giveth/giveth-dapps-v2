@@ -35,7 +35,6 @@ import QFToast from './QFToast';
 import { DonationInfo } from './DonationInfo';
 import { ManageRecurringDonation } from './Recurring/ManageRecurringDonation';
 import EndaomentProjectsInfo from '../project/EndaomentProjectsInfo';
-import { ChainType } from '@/types/config';
 
 interface ISuccessView {
 	isStellar?: boolean;
@@ -75,11 +74,8 @@ export const SuccessView: FC<ISuccessView> = ({ isStellar }) => {
 
 	const { activeStartedRound } = getActiveRound(project.qfRounds);
 
-	const stellarNetworkId =
-		config.NON_EVM_NETWORKS_CONFIG[ChainType.STELLAR].networkId;
-
 	const isOnEligibleNetworks = activeStartedRound?.eligibleNetworks?.includes(
-		(isStellar ? stellarNetworkId : chainId) || 0,
+		(isStellar ? config.STELLAR_NETWORK_NUMBER : chainId) || 0,
 	);
 
 	useEffect(() => {

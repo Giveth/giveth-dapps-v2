@@ -27,30 +27,14 @@ const QFEligibleNetworks = () => {
 	const { activeStartedRound } = useDonateData();
 	const router = useRouter();
 	const isQRDonation = router.query.chain === ChainType.STELLAR.toLowerCase();
-	const stellarNetworkId =
-		config.NON_EVM_NETWORKS_CONFIG[ChainType.STELLAR].networkId;
-	const solanaNetworkId =
-		config.NON_EVM_NETWORKS_CONFIG[ChainType.SOLANA].networkId;
-	const eligibleNetworks = activeStartedRound?.eligibleNetworks.map(
-		network => ({
+	const eligibleNetworksWithoutStellar = activeStartedRound?.eligibleNetworks
+		.filter(network => network !== config.STELLAR_NETWORK_NUMBER)
+		.map(network => ({
 			networkId: network,
 			chainType: config.EVM_NETWORKS_CONFIG[network]
 				? ChainType.EVM
-				: network === stellarNetworkId
-					? ChainType.STELLAR
-					: ChainType.SOLANA,
-			configId:
-				network === stellarNetworkId
-					? ChainType.STELLAR
-					: network === solanaNetworkId
-						? ChainType.SOLANA
-						: network,
-		}),
-	);
-	console.log('eligibleNetworks', eligibleNetworks, activeStartedRound);
-	const eligibleNetworksWithoutStellar = eligibleNetworks?.filter(
-		network => network.networkId !== stellarNetworkId,
-	);
+				: ChainType.SOLANA,
+		}));
 	if (!activeStartedRound) return null;
 	return (
 		<Wrapper>
@@ -58,21 +42,21 @@ const QFEligibleNetworks = () => {
 				{formatMessage({ id: 'label.eligible_networks_for_matching' })}
 			</Caption>
 			<IconsWrapper>
-				{eligibleNetworks?.map(network => (
+				{activeStartedRound?.eligibleNetworks?.map(network => (
 					<IconWithTooltip
 						icon={
 							<TooltipIconWrapper>
-								{config.NETWORKS_CONFIG[
-									network.configId
+								{config.NETWORKS_CONFIG_WITH_ID[
+									network
 								]?.chainLogo(24)}
 							</TooltipIconWrapper>
 						}
 						direction='top'
 						align='top'
-						key={network.networkId}
+						key={network}
 					>
 						<SublineBold>
-							{config.NETWORKS_CONFIG[network.configId]?.name}
+							{config.NETWORKS_CONFIG_WITH_ID[network]?.name}
 						</SublineBold>
 					</IconWithTooltip>
 				))}

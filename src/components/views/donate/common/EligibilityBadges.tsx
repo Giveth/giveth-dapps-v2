@@ -10,6 +10,7 @@ import React, { CSSProperties, FC } from 'react';
 import { useIntl } from 'react-intl';
 import { Chain } from 'viem';
 import { ethers } from 'ethers';
+import { useRouter } from 'next/router';
 import {
 	BadgesBase,
 	EligibilityBadgeWrapper,
@@ -36,21 +37,17 @@ const EligibilityBadges: FC<IEligibilityBadges> = props => {
 	const { activeStartedRound, project } = useDonateData();
 	const { formatMessage } = useIntl();
 	const { verified } = project || {};
-	const networkId = (chain as Chain)?.id;
+	const router = useRouter();
+	const isStellar = router.query.chain === ChainType.STELLAR.toLowerCase();
 	const isTokenGivbacksEligible = token?.isGivbackEligible;
 	const isProjectGivbacksEligible = !!verified;
-	const stellarNetworkId =
-		config.NON_EVM_NETWORKS_CONFIG[ChainType.STELLAR].networkId;
-	const solanaNetworkId =
-		config.NON_EVM_NETWORKS_CONFIG[ChainType.SOLANA].networkId;
-	const configId =
-		networkId === stellarNetworkId
-			? ChainType.STELLAR
-			: networkId === solanaNetworkId
-				? ChainType.SOLANA
-				: networkId;
+	const networkId = isStellar
+		? config.STELLAR_NETWORK_NUMBER
+		: (chain as Chain)?.id
+			? (chain as Chain)?.id
+			: config.SOLANA_CONFIG.networkId;
 	const isOnQFEligibleNetworks =
-		activeStartedRound?.eligibleNetworks?.includes(Number(configId) || 0);
+		activeStartedRound?.eligibleNetworks?.includes(networkId || 0);
 	const donationUsdValue =
 		(tokenPrice || 0) * Number(ethers.utils.formatEther(amount));
 
@@ -90,7 +87,8 @@ const EligibilityBadges: FC<IEligibilityBadges> = props => {
 						},
 						{
 							value: activeStartedRound?.minimumValidUsdValue,
-							network: config.NETWORKS_CONFIG[configId]?.name,
+							network:
+								config.NETWORKS_CONFIG_WITH_ID[networkId]?.name,
 						},
 					)}
 				</BadgesBase>
