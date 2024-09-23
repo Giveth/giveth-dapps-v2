@@ -1,6 +1,6 @@
 import { captureException } from '@sentry/nextjs';
 import { type Address } from 'viem';
-import { getPublicClient } from 'wagmi/actions';
+import { getPublicClient, multicall, getBalance } from 'wagmi/actions';
 import { erc20Abi } from 'viem';
 import { readContract } from '@wagmi/core';
 import BigNumber from 'bignumber.js';
@@ -12,6 +12,7 @@ import {
 	FETCH_GNOSIS_TOKEN_PRICES,
 	FETCH_MAINNET_TOKEN_PRICES,
 } from '@/apollo/gql/gqlPrice';
+import { IProjectAcceptedToken } from '@/apollo/types/gqlTypes';
 
 export const fetchPrice = async (
 	chainId: number | ChainType,
@@ -52,6 +53,65 @@ export const fetchBalance = async (
 	} catch (error) {
 		console.error('error on fetchBalance', { error });
 		return;
+	}
+};
+
+export const fetchTokenBalances = async (
+	tokens: IProjectAcceptedToken[],
+	walletAddress: string,
+) => {
+	if (!walletAddress || !tokens || tokens.length === 0) return [];
+
+	// Filter out native tokens
+	const erc20Tokens: IProjectAcceptedToken[] = [];
+	const nativeTokens: IProjectAcceptedToken[] = [];
+	tokens.forEach(token => {
+		token.address !== AddressZero
+			? erc20Tokens.push(token)
+			: nativeTokens.push(token);
+	});
+
+	const erc20Calls = erc20Tokens.map(token => ({
+		address: token.address,
+		abi: erc20Abi,
+		functionName: 'balanceOf',
+		args: [walletAddress],
+	}));
+
+	try {
+		// Fetch balances for ERC20 tokens via multicall
+		const erc20Results = await multicall(wagmiConfig, {
+			contracts: erc20Calls,
+			allowFailure: true,
+		});
+
+		// Fetch balances for native tokens (e.g., ETH)
+		const nativeTokenBalances = await Promise.all(
+			nativeTokens.map(async nativeToken => {
+				const balance = await getBalance(wagmiConfig, {
+					address: walletAddress as Address,
+				});
+				return {
+					token: nativeToken,
+					balance: balance.value || undefined,
+				};
+			}),
+		);
+		console.log('nativeTokenBalances', nativeTokenBalances);
+
+		// Map ERC20 results to balances
+		const erc20Balances = erc20Results.map((result, index) => ({
+			token: erc20Tokens[index],
+			balance: result?.result || undefined,
+		}));
+
+		// Combine ERC20 and native token balances
+		return [...erc20Balances, ...nativeTokenBalances];
+	} catch (error) {
+		console.error('Error fetching token balances:', error);
+
+		// Return undefined balances in case of failure
+		return tokens.map(token => ({ token, balance: undefined }));
 	}
 };
 
