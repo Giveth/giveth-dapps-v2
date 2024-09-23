@@ -327,15 +327,9 @@ export const QRDonationCard: FC<QRDonationCardProps> = ({
 				<ConnectWallet>
 					<IconWalletOutline24 color={neutralColors.gray[700]} />
 					{formatMessage({
-						id:
-							hasActiveQFRound &&
-							!!activeStartedRound?.eligibleNetworks?.includes(
-								config.NON_EVM_NETWORKS_CONFIG[
-									ChainType.STELLAR
-								].networkId,
-							)
-								? 'label.please_connect_your_wallet_to_win_givbacks_and_match'
-								: 'label.please_connect_your_wallet_to_win_givbacks',
+						id: hasActiveQFRound
+							? 'label.please_connect_your_wallet_to_win_givbacks_and_match'
+							: 'label.please_connect_your_wallet_to_win_givbacks',
 					})}
 				</ConnectWallet>
 			)}
