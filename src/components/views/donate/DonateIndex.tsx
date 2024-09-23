@@ -47,6 +47,7 @@ import StorageLabel from '@/lib/localStorage';
 import DonationByProjectOwner from '@/components/modals/DonationByProjectOwner';
 import { PassportBanner } from '@/components/PassportBanner';
 import QFEligibleNetworks from '@/components/views/donate/QFEligibleNetworks';
+import { GIVBACKS_DONATION_QUALIFICATION_VALUE_USD } from '@/lib/constants/constants';
 
 const DonateIndex: FC = () => {
 	const { formatMessage } = useIntl();
@@ -120,7 +121,11 @@ const DonateIndex: FC = () => {
 					getDonationById;
 
 				if (!transactionId) return;
-
+				const includeInQF =
+					activeStartedRound &&
+					!!getDonationById.valueUsd &&
+					getDonationById.valueUsd >=
+						(activeStartedRound?.minimumValidUsdValue || 0);
 				setSuccessDonation({
 					txHash: [
 						{
@@ -128,11 +133,14 @@ const DonateIndex: FC = () => {
 							chainType: ChainType.STELLAR,
 						},
 					],
+					excludeFromQF: !includeInQF,
 					givBackEligible:
 						isTokenEligibleForGivback &&
 						project.verified &&
 						isSignedIn &&
-						isEnabled,
+						isEnabled &&
+						getDonationById.amount >=
+							GIVBACKS_DONATION_QUALIFICATION_VALUE_USD,
 					chainId: config.STELLAR_NETWORK_NUMBER,
 				});
 			}
@@ -148,14 +156,6 @@ const DonateIndex: FC = () => {
 		alreadyDonated &&
 		(isQRDonation ? isStellarIncludedInQF : isOnEligibleNetworks);
 
-	console.log(
-		isQRDonation,
-		isOnEligibleNetworks,
-		alreadyDonated,
-		showAlreadyDonatedWrapper,
-		activeStartedRound?.eligibleNetworks,
-		stellarNetworkId,
-	);
 	const updateQRCode = async () => {
 		if (!draftDonationData?.id) return;
 

@@ -65,6 +65,7 @@ import SanctionModal from '@/components/modals/SanctionedModal';
 import { useTokenPrice } from '@/hooks/useTokenPrice';
 import EligibilityBadges from '@/components/views/donate/common/EligibilityBadges';
 import DonateAnonymously from '@/components/views/donate/common/DonateAnonymously';
+import { GIVBACKS_DONATION_QUALIFICATION_VALUE_USD } from '@/lib/constants/constants';
 
 const CryptoDonation: FC<{
 	acceptedTokens: IProjectAcceptedToken[] | undefined;
@@ -404,7 +405,8 @@ const CryptoDonation: FC<{
 						isProjectGivbacksEligible &&
 						selectedOneTimeToken.isGivbackEligible &&
 						tokenPrice !== undefined &&
-						tokenPrice * projectDonationAmount >= 4
+						tokenPrice * projectDonationAmount >=
+							GIVBACKS_DONATION_QUALIFICATION_VALUE_USD
 					}
 				/>
 			)}
