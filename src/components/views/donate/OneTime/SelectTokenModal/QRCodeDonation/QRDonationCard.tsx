@@ -341,14 +341,16 @@ export const QRDonationCard: FC<QRDonationCardProps> = ({
 				/>
 			)}
 			<div>
-				<EstimatedMatchingToast
-					projectData={project}
-					token={stellarToken}
-					amount={amount}
-					tokenPrice={tokenPrice}
-					show={showEstimatedMatching}
-					isStellar
-				/>
+				{!showQRCode && (
+					<EstimatedMatchingToast
+						projectData={project}
+						token={stellarToken}
+						amount={amount}
+						tokenPrice={tokenPrice}
+						show={showEstimatedMatching}
+						isStellar
+					/>
+				)}
 				{!showQRCode ? (
 					<ForEstimatedMatchingAnimation
 						showEstimatedMatching={showEstimatedMatching}

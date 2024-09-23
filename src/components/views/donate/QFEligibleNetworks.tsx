@@ -29,12 +29,15 @@ const QFEligibleNetworks = () => {
 	const isQRDonation = router.query.chain === ChainType.STELLAR.toLowerCase();
 	const stellarNetworkId =
 		config.NON_EVM_NETWORKS_CONFIG[ChainType.STELLAR].networkId;
-	const eligibleNetworksWithChainType = activeStartedRound?.eligibleNetworks
-		.filter(network => network !== stellarNetworkId)
-		.map(network => ({
+	const eligibleNetworks = activeStartedRound?.eligibleNetworks.map(
+		network => ({
 			networkId: network,
 			chainType: ChainType.EVM,
-		}));
+		}),
+	);
+	const eligibleNetworksWithoutStellar = eligibleNetworks?.filter(
+		network => network.networkId !== stellarNetworkId,
+	);
 	if (!activeStartedRound) return null;
 	return (
 		<Wrapper>
@@ -42,7 +45,7 @@ const QFEligibleNetworks = () => {
 				{formatMessage({ id: 'label.eligible_networks_for_matching' })}
 			</Caption>
 			<IconsWrapper>
-				{eligibleNetworksWithChainType?.map(network => (
+				{eligibleNetworks?.map(network => (
 					<IconWithTooltip
 						icon={
 							<TooltipIconWrapper>
@@ -81,7 +84,7 @@ const QFEligibleNetworks = () => {
 			{showModal && (
 				<SwitchNetwork
 					setShowModal={setShowModal}
-					customNetworks={eligibleNetworksWithChainType}
+					customNetworks={eligibleNetworksWithoutStellar}
 				/>
 			)}
 		</Wrapper>
