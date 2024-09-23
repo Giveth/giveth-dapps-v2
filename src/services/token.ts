@@ -58,7 +58,7 @@ export const fetchBalance = async (
 
 export const fetchTokenBalances = async (
 	tokens: IProjectAcceptedToken[],
-	walletAddress: string,
+	walletAddress: string | null,
 ) => {
 	if (!walletAddress || !tokens || tokens.length === 0) return [];
 
