@@ -81,7 +81,8 @@ const CryptoDonation: FC<{
 		project,
 		hasActiveQFRound,
 		selectedOneTimeToken,
-		shouldRenderModal,
+		currentDonateModal,
+		highestModalPriorityUnchecked,
 		setDonateModalByPriority,
 		setIsModalPriorityChecked,
 	} = useDonateData();
@@ -370,14 +371,17 @@ const CryptoDonation: FC<{
 					setShowModal={setShowQFModal}
 				/>
 			)}
-			{shouldRenderModal(DonateModalPriorityValues.ShowNetworkModal) && (
-				<DonateWrongNetwork
-					setShowModal={setShowChangeNetworkModal}
-					acceptedChains={acceptedChains.filter(
-						chain => chain.chainType !== ChainType.STELLAR,
-					)}
-				/>
-			)}
+			{(highestModalPriorityUnchecked == 'All Checked' ||
+				currentDonateModal >= highestModalPriorityUnchecked) &&
+				currentDonateModal ===
+					DonateModalPriorityValues.ShowNetworkModal && (
+					<DonateWrongNetwork
+						setShowModal={setShowChangeNetworkModal}
+						acceptedChains={acceptedChains.filter(
+							chain => chain.chainType !== ChainType.STELLAR,
+						)}
+					/>
+				)}
 			{showInsufficientModal && (
 				<InsufficientFundModal
 					setShowModal={setShowInsufficientModal}
