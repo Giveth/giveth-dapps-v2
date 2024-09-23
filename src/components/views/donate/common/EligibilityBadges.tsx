@@ -55,7 +55,7 @@ const EligibilityBadges: FC<IEligibilityBadges> = props => {
 		isOnQFEligibleNetworks &&
 		donationUsdValue >= (activeStartedRound?.minimumValidUsdValue || 0);
 	const givbacksEligibleWarning =
-		(tokenPrice && !isTokenGivbacksEligible) || !isProjectGivbacksEligible;
+		(token && !isTokenGivbacksEligible) || !isProjectGivbacksEligible;
 	const isGivbacksEligible =
 		isTokenGivbacksEligible &&
 		isProjectGivbacksEligible &&
@@ -81,7 +81,7 @@ const EligibilityBadges: FC<IEligibilityBadges> = props => {
 									? 'page.donate.project_not_eligible_for_qf'
 									: !isOnQFEligibleNetworks
 										? 'page.donate.network_not_eligible_for_qf'
-										: 'page.donate.donate_$_to_get_matched',
+										: 'page.donate.unlocks_matching_funds',
 						},
 						{
 							value: activeStartedRound?.minimumValidUsdValue,
@@ -115,7 +115,7 @@ const EligibilityBadges: FC<IEligibilityBadges> = props => {
 								? 'page.donate.project_not_givbacks_eligible'
 								: token && !isTokenGivbacksEligible
 									? 'page.donate.token_not_givbacks_eligible'
-									: 'page.donate.donate_$_to_be_eligible',
+									: 'page.donate.makes_you_eligible_for_givbacks',
 					},
 					{
 						value: GIVBACKS_DONATION_QUALIFICATION_VALUE_USD,
