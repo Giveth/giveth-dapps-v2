@@ -144,9 +144,18 @@ const DonateIndex: FC = () => {
 	const isOnEligibleNetworks =
 		chainId && activeStartedRound?.eligibleNetworks?.includes(chainId);
 	const isFailedOperation = ['expired', 'failed'].includes(qrDonationStatus);
-	const showAlreadyDonatedWrapper = alreadyDonated && (isQRDonation?isStellarIncludedInQF:isOnEligibleNetworks);
+	const showAlreadyDonatedWrapper =
+		alreadyDonated &&
+		(isQRDonation ? isStellarIncludedInQF : isOnEligibleNetworks);
 
-	console.log(isQRDonation, isOnEligibleNetworks, alreadyDonated, showAlreadyDonatedWrapper, activeStartedRound?.eligibleNetworks, stellarNetworkId)
+	console.log(
+		isQRDonation,
+		isOnEligibleNetworks,
+		alreadyDonated,
+		showAlreadyDonatedWrapper,
+		activeStartedRound?.eligibleNetworks,
+		stellarNetworkId,
+	);
 	const updateQRCode = async () => {
 		if (!draftDonationData?.id) return;
 
