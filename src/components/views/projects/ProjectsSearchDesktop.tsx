@@ -12,6 +12,7 @@ import Input from '@/components/Input';
 import IconEnter from '../../../../public/images/icons/enter.svg';
 import { useProjectsContext } from '@/context/projects.context';
 import useFocus from '@/hooks/useFocus';
+import { EProjectsSortBy } from '@/apollo/types/gqlEnums';
 
 const ProjectsSearchDesktop = () => {
 	const { variables } = useProjectsContext();
@@ -23,6 +24,7 @@ const ProjectsSearchDesktop = () => {
 		const updatedQuery = {
 			...router.query,
 			searchTerm: searchTerm,
+			sort: EProjectsSortBy.BestMatch,
 		};
 		router.push({
 			pathname: router.pathname,
@@ -38,6 +40,8 @@ const ProjectsSearchDesktop = () => {
 			...router.query,
 		};
 		delete updatedQuery.searchTerm;
+		if (router.query.sort === EProjectsSortBy.BestMatch)
+			delete updatedQuery.sort;
 		router.push({
 			pathname: router.pathname,
 			query: updatedQuery,

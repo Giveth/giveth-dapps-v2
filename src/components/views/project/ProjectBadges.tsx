@@ -5,6 +5,7 @@ import {
 	neutralColors,
 	semanticColors,
 	Flex,
+	IconGIVBack16,
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import { useIntl } from 'react-intl';
@@ -15,7 +16,8 @@ import { hasActiveRound } from '@/helpers/qf';
 const ProjectBadges = () => {
 	const { projectData } = useProjectContext();
 
-	const { verified, qfRounds, campaigns } = projectData || {};
+	const { verified, isGivbackEligible, qfRounds, campaigns } =
+		projectData || {};
 	const { formatMessage } = useIntl();
 	const isQF = hasActiveRound(qfRounds);
 
@@ -28,12 +30,23 @@ const ProjectBadges = () => {
 			{verified && (
 				<ProjectBadge
 					badgeText={formatMessage({
-						id: 'label.verified',
+						id: 'label.vouched',
 					})}
 					wrapperColor={semanticColors.jade[700]}
 					BadgeIcon={<IconVerifiedBadge16 />}
 				/>
 			)}
+			{isGivbackEligible && (
+				<ProjectBadge
+					badgeText={formatMessage({
+						id: 'label.isGivbackEligible',
+					})}
+					textColor={brandColors.giv[500]}
+					wrapperColor={'white'}
+					BadgeIcon={<IconGIVBack16 color={brandColors.giv[500]} />}
+				/>
+			)}
+
 			{isQF && (
 				<ProjectBadge
 					badgeText={formatMessage({

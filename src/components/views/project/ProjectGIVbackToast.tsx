@@ -41,12 +41,18 @@ const ProjectGIVbackToast = () => {
 	const { projectData, isAdmin, activateProject } = useProjectContext();
 	const verStatus = projectData?.verificationFormStatus;
 	const projectStatus = projectData?.status.name;
-	const verified = projectData?.verified;
+	const isVerified = projectData?.verified;
+	const isGivbackEligible = projectData?.isGivbackEligible;
 	const { givbackFactor } = projectData || {};
-	const isOwnerVerified = verified && isAdmin;
-	const isOwnerNotVerified = !verified && isAdmin;
-	const isPublicVerified = verified && !isAdmin;
-	const color = isOwnerVerified
+	const isOwnerGivbackEligible = isGivbackEligible && isAdmin;
+	const isOwnerNotVerified = !isVerified && isAdmin;
+	const isPublicGivbackEligible = isGivbackEligible && !isAdmin;
+	const isPublicVerifiedNotEligible =
+		isVerified && !isAdmin && !isGivbackEligible;
+	const isOwnerVerifiedNotEligible =
+		isVerified && isAdmin && !isGivbackEligible;
+
+	const color = isOwnerGivbackEligible
 		? semanticColors.golden[600]
 		: neutralColors.gray[900];
 	const { formatMessage, locale } = useIntl();
@@ -84,7 +90,7 @@ const ProjectGIVbackToast = () => {
 	let title = '';
 	let description, Button;
 
-	if (isOwnerVerified) {
+	if (isOwnerGivbackEligible) {
 		if (givbackFactor !== 0) {
 			title =
 				formatMessage({
@@ -211,7 +217,46 @@ const ProjectGIVbackToast = () => {
 				/>
 			);
 		}
-	} else if (isPublicVerified) {
+	} else if (isPublicVerifiedNotEligible) {
+		title = formatMessage({
+			id: `${useIntlTitle}verified_public_not_eligible`,
+		});
+		description = formatMessage(
+			{
+				id: `${useIntlDescription}verified_public_not_eligible`,
+			},
+			{
+				stakeLock: (
+					<InnerLink href={Routes.GIVeconomy} target='_blank'>
+						{formatMessage({ id: 'label.stake_and_lock' })}{' '}
+					</InnerLink>
+				),
+			},
+		);
+		link = links.GIVPOWER_DOC;
+		Button = (
+			<OutlineButton
+				onClick={handleBoostClick}
+				label='Boost'
+				icon={<IconRocketInSpace16 />}
+			/>
+		);
+	} else if (isOwnerVerifiedNotEligible) {
+		title = formatMessage({
+			id: `${useIntlTitle}verified_owner_not_eligible`,
+		});
+		description = formatMessage({
+			id: `${useIntlDescription}verified_owner_not_eligible`,
+		});
+		link = links.GIVPOWER_DOC;
+		Button = (
+			<OutlineButton
+				onClick={handleBoostClick}
+				label='Boost'
+				icon={<IconRocketInSpace16 />}
+			/>
+		);
+	} else if (isPublicGivbackEligible) {
 		if (givbackFactor !== 0) {
 			title =
 				formatMessage({
@@ -259,7 +304,7 @@ const ProjectGIVbackToast = () => {
 					<div>
 						<Title color={color}>{title}</Title>
 						<Description>{description}</Description>
-						{isOwnerVerified && (
+						{isOwnerGivbackEligible && (
 							<Note>
 								<span>
 									{formatMessage({
@@ -272,7 +317,10 @@ const ProjectGIVbackToast = () => {
 							</Note>
 						)}
 						{link && (
-							<ExternalLink href={link}>
+							<ExternalLink
+								color={brandColors.pinky[500]}
+								href={link}
+							>
 								<LearnMore>
 									{formatMessage({ id: 'label.learn_more' })}
 									<IconChevronRight size={24} />
@@ -357,6 +405,12 @@ const Wrapper = styled(Flex)`
 	${mediaQueries.tablet} {
 		flex-direction: row;
 	}
+`;
+
+const InnerLink = styled.a`
+	cursor: pointer;
+	text-decoration: underline;
+	color: ${neutralColors.gray[900]};
 `;
 
 export default ProjectGIVbackToast;

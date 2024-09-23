@@ -20,6 +20,7 @@ import { slugToProjectView } from '@/lib/routeCreators';
 import { ProjectCardUserName } from '@/components/project-card/ProjectCardUserName';
 import { ORGANIZATION } from '@/lib/constants/organizations';
 import { useDonateData } from '@/context/donate.context';
+import { GivBackBadge } from '@/components/badges/GivBackBadge';
 
 interface IDonatePageProjectDescriptionProps {
 	projectData?: IProject;
@@ -48,6 +49,11 @@ export const DonatePageProjectDescription: FC<
 
 	return (
 		<DonationSectionWrapper gap='16px'>
+			{projectData?.isGivbackEligible && (
+				<Flex>
+					<GivBackBadge />
+				</Flex>
+			)}
 			{projectData?.verified && (
 				<Flex>
 					<VerifiedBadge />
