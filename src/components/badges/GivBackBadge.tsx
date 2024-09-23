@@ -1,18 +1,19 @@
 import {
-	IconVerifiedBadge,
 	Overline,
 	FlexCenter,
+	brandColors,
+	IconGIVBack,
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import { useIntl } from 'react-intl';
 
-export const VerifiedBadge = () => {
+export const GivBackBadge = () => {
 	const { formatMessage } = useIntl();
 	return (
 		<Wrapper>
-			<IconVerifiedBadge />
+			<IconGIVBack color='white' />
 			<TextBadge $styleType='Small'>
-				{formatMessage({ id: 'label.vouched' })}
+				{formatMessage({ id: 'label.isGivbackEligible' })}
 			</TextBadge>
 		</Wrapper>
 	);
@@ -20,10 +21,11 @@ export const VerifiedBadge = () => {
 
 const Wrapper = styled(FlexCenter)`
 	height: 30px;
-	background: rgba(9, 17, 57, 0.6);
+	background: ${brandColors.giv[500]};
 	border-radius: 56px;
 	color: white;
-	padding: 0 12px 0 10px;
+	padding: 2px 12px 0 10px;
+	justify-content: center;
 	margin-right: 8px;
 `;
 

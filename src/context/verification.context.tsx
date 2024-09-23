@@ -84,7 +84,7 @@ export const VerificationProvider = ({ children }: { children: ReactNode }) => {
 				}
 			} catch (error: any) {
 				switch (error?.message) {
-					case 'There is not any project verification form for this project':
+					case 'There is not any givbacks eligiblity form for this project':
 						setStep(0);
 						break;
 

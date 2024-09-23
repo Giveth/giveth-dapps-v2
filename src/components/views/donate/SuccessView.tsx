@@ -115,7 +115,7 @@ export const SuccessView: FC = () => {
 						</ImageWrapper>
 						<DonatePageProjectDescription
 							projectData={project}
-							showRaised={false}
+							showRaised={true}
 						/>
 					</InfoWrapper>
 				</Col>

@@ -20,13 +20,13 @@ const HowGIVbacksWork = () => {
 			</H5>
 			<OrderedBullets>
 				<li>
-					<b>Select a Verified Project:</b> Browse through our list of
-					impactful and vetted projects. Project Verification​.
-					'Verified' is a seal of approval for legitimate projects on
-					Giveth. If you are a project owner, when you get your
-					project verified, your donors become eligible to receive
-					GIVbacks. On Giveth verified projects receive more
-					donations.
+					<b>Select a GIVbacks Eligible Project:</b> Browse through
+					our list of impactful and vetted projects. Project
+					Verification​. 'Verified' is a seal of approval for
+					legitimate projects on Giveth. If you are a project owner,
+					when you get your project verified, your donors become
+					eligible to receive GIVbacks. On Giveth GIVbacks eligible
+					projects receive more donations.
 				</li>
 				<li>
 					<b>Donate Directly:</b> Once you've chosen a project that
