@@ -191,7 +191,6 @@ const SelectTokenInnerModal: FC<ISelectTokenModalProps> = ({
 								};
 							}),
 						);
-				console.log('balances', balances);
 				setTokenBalances(balances);
 			} catch (error) {
 				console.error('error on fetchTokenBalances', { error });

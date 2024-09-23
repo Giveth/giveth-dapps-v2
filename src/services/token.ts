@@ -97,7 +97,6 @@ export const fetchTokenBalances = async (
 				};
 			}),
 		);
-		console.log('nativeTokenBalances', nativeTokenBalances);
 
 		// Map ERC20 results to balances
 		const erc20Balances = erc20Results.map((result, index) => ({
