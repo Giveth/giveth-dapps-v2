@@ -61,8 +61,7 @@ const DonateIndex: FC = () => {
 		qrDonationStatus,
 		draftDonationData,
 		hasActiveQFRound,
-		currentDonateModal,
-		highestModalPriorityUnchecked,
+		shouldRenderModal,
 		setSuccessDonation,
 		setQRDonationStatus,
 		setDraftDonationData,
@@ -258,31 +257,29 @@ const DonateIndex: FC = () => {
 		<>
 			<DonateHeader />
 			<DonateContainer>
-				{(highestModalPriorityUnchecked == 'All Checked' ||
-					currentDonateModal >= highestModalPriorityUnchecked) &&
-					currentDonateModal ===
-						DonateModalPriorityValues.DonationByProjectOwner && (
-						<DonationByProjectOwner
-							closeModal={() => {
-								setDonateModalByPriority(
-									DonateModalPriorityValues.None,
-								);
-							}}
-						/>
-					)}
+				{shouldRenderModal(
+					DonateModalPriorityValues.DonationByProjectOwner,
+				) && (
+					<DonationByProjectOwner
+						closeModal={() => {
+							setDonateModalByPriority(
+								DonateModalPriorityValues.None,
+							);
+						}}
+					/>
+				)}
 
-				{(highestModalPriorityUnchecked == 'All Checked' ||
-					currentDonateModal >= highestModalPriorityUnchecked) &&
-					currentDonateModal ===
-						DonateModalPriorityValues.OFACSanctionListModal && (
-						<SanctionModal
-							closeModal={() => {
-								setDonateModalByPriority(
-									DonateModalPriorityValues.None,
-								);
-							}}
-						/>
-					)}
+				{shouldRenderModal(
+					DonateModalPriorityValues.OFACSanctionListModal,
+				) && (
+					<SanctionModal
+						closeModal={() => {
+							setDonateModalByPriority(
+								DonateModalPriorityValues.None,
+							);
+						}}
+					/>
+				)}
 
 				{alreadyDonated && (
 					<AlreadyDonatedWrapper>
