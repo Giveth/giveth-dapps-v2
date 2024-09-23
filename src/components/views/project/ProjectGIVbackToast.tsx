@@ -409,6 +409,7 @@ const Wrapper = styled(Flex)`
 
 const InnerLink = styled.a`
 	cursor: pointer;
+	text-decoration: underline;
 	color: ${neutralColors.gray[900]};
 `;
 
