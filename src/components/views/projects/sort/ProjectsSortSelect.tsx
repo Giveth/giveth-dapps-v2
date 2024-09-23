@@ -15,6 +15,7 @@ import {
 	IconPublish16,
 	IconEstimated16,
 	IconGIVBack16,
+	IconSpark16,
 } from '@giveth/ui-design-system';
 import Select, {
 	components,
@@ -49,8 +50,10 @@ export const DropdownIndicator: ComponentType<
 const ProjectsSortSelect = () => {
 	const { formatMessage } = useIntl();
 	const { isQF } = useProjectsContext();
+	const router = useRouter();
 
-	let sortByOptions: ISelectedSort[] = [
+	// Default sortByOptions without Best Match
+	const initialSortByOptions: ISelectedSort[] = [
 		{
 			label: formatMessage({ id: 'label.givpower' }),
 			value: EProjectsSortBy.INSTANT_BOOSTING,
@@ -87,27 +90,58 @@ const ProjectsSortSelect = () => {
 		},
 	];
 
-	isQF &&
-		sortByOptions.splice(
-			sortByOptions.length - 1,
-			0,
-			{
-				label: formatMessage({ id: 'label.amount_raised_in_qf' }),
-				value: EProjectsSortBy.ActiveQfRoundRaisedFunds,
-				icon: <IconIncrease16 />,
-				color: semanticColors.jade[500],
-			},
-			{
-				label: formatMessage({ id: 'label.estimated_matching' }),
-				value: EProjectsSortBy.EstimatedMatching,
-				icon: <IconEstimated16 />,
-				color: semanticColors.jade[500],
-			},
-		);
-
+	const [sortByOptions, setSortByOptions] =
+		useState<ISelectedSort[]>(initialSortByOptions);
 	const [value, setValue] = useState(sortByOptions[0]);
 	const { isMobile } = useDetectDevice();
-	const router = useRouter();
+
+	// Update sortByOptions based on the existence of searchTerm
+	useEffect(() => {
+		const hasSearchTerm = !!router.query.searchTerm;
+
+		let updatedOptions = [...initialSortByOptions];
+
+		// Conditionally add the "Best Match" option if searchTerm exists
+		if (hasSearchTerm) {
+			const bestMatchOption = {
+				label: capitalizeFirstLetter(
+					formatMessage({ id: 'label.best_match' }),
+				),
+				value: EProjectsSortBy.BestMatch,
+				icon: <IconSpark16 />,
+			};
+			// Check if the Best Match option already exists before adding
+			const bestMatchExists = updatedOptions.some(
+				option => option.value === EProjectsSortBy.BestMatch,
+			);
+
+			if (!bestMatchExists) {
+				updatedOptions.push(bestMatchOption);
+			}
+		}
+
+		// Add QF-specific options if isQF is true
+		if (isQF) {
+			updatedOptions.splice(
+				updatedOptions.length - 1,
+				0,
+				{
+					label: formatMessage({ id: 'label.amount_raised_in_qf' }),
+					value: EProjectsSortBy.ActiveQfRoundRaisedFunds,
+					icon: <IconIncrease16 />,
+					color: semanticColors.jade[500],
+				},
+				{
+					label: formatMessage({ id: 'label.estimated_matching' }),
+					value: EProjectsSortBy.EstimatedMatching,
+					icon: <IconEstimated16 />,
+					color: semanticColors.jade[500],
+				},
+			);
+		}
+
+		setSortByOptions(updatedOptions);
+	}, [router.query.searchTerm, isQF]);
 
 	useEffect(() => {
 		if (router.query.sort) {
@@ -120,7 +154,7 @@ const ProjectsSortSelect = () => {
 		} else {
 			setValue(sortByOptions[0]);
 		}
-	}, [router.query.sort]);
+	}, [router.query.sort, sortByOptions]);
 
 	return (
 		<Flex

@@ -21,6 +21,7 @@ export enum EProjectsSortBy {
 	INSTANT_BOOSTING = 'InstantBoosting',
 	ActiveQfRoundRaisedFunds = 'ActiveQfRoundRaisedFunds',
 	EstimatedMatching = 'EstimatedMatching',
+	BestMatch = 'BestMatch',
 }
 
 export enum EQFRoundsSortBy {
