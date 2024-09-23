@@ -23,7 +23,7 @@ interface IFilterMenuProps {
 
 const projectsFeatures = [
 	{
-		label: { id: 'label.vouched' },
+		label: { id: 'label.givbacks' },
 		value: EProjectsFilter.VERIFIED,
 	},
 ];
