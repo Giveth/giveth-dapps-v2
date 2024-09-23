@@ -732,6 +732,7 @@
 	"label.please_connect_your_wallet": "Si us plau, connecta la teva cartera",
 	"label.please_connect_your_wallet_to_win_givbacks": "Connecta la teva cartera per guanyar GIVbacks.",
 	"label.please_connect_your_wallet_to_win_givbacks_and_match": "Connecta la teva cartera per guanyar GIVbacks i igualar la teva donació en QF.",
+	"label.please_connect_your_wallet_to_match": "Connecteu la vostra cartera per igualar la vostra donació a QF",
 	"label.stellar_donations_arent_eligible": "Les donacions estel·lars no es poden igualar",
 	"label.please_contact_support_team": "Si us plau, contacteu l'equip de suport.",
 	"label.please_do_not_enter_exchange_deposit": "Si us plau, NO introduïu una adreça de dipòsit d'intercanvi, o els vostres fons podrien perdre's! Utilitzeu un compte que controleu en aquesta xarxa. Recomanem utilitzar Metamask.",

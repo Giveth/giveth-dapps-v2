@@ -95,7 +95,7 @@ export const QRDonationCard: FC<QRDonationCardProps> = ({
 		retrieveDraftDonation,
 	} = useQRCodeDonation(project);
 
-	const { addresses, id } = project;
+	const { addresses, id, verified } = project;
 	const draftDonationId = Number(router.query.draft_donation!);
 	const [amount, setAmount] = useState(0n);
 	const [usdAmount, setUsdAmount] = useState('0.00');
@@ -115,7 +115,16 @@ export const QRDonationCard: FC<QRDonationCardProps> = ({
 	const isOnEligibleNetworks = activeStartedRound?.eligibleNetworks?.includes(
 		(isQRDonation ? stellarNetworkId : networkId) || 0,
 	);
-
+	const isProjectGivbacksEligible = !!verified;
+	const isInQF = !!isOnEligibleNetworks;
+	const showConnectWallet =
+		hasActiveQFRound || isProjectGivbacksEligible || isInQF;
+	const textToDisplayOnConnect =
+		hasActiveQFRound && isProjectGivbacksEligible && isInQF
+			? 'label.please_connect_your_wallet_to_win_givbacks_and_match'
+			: isProjectGivbacksEligible
+				? 'label.please_connect_your_wallet_to_win_givbacks'
+				: 'label.please_connect_your_wallet_to_match';
 	const donationUsdValue =
 		(tokenPrice || 0) * Number(ethers.utils.formatEther(amount));
 	const isDonationMatched =
@@ -323,19 +332,11 @@ export const QRDonationCard: FC<QRDonationCardProps> = ({
 					})}
 				/>
 			)}
-			{!showQRCode && !isConnected && (
+			{!showQRCode && !isConnected && showConnectWallet && (
 				<ConnectWallet>
 					<IconWalletOutline24 color={neutralColors.gray[700]} />
 					{formatMessage({
-						id:
-							hasActiveQFRound &&
-							!!activeStartedRound?.eligibleNetworks?.includes(
-								config.NON_EVM_NETWORKS_CONFIG[
-									ChainType.STELLAR
-								].networkId,
-							)
-								? 'label.please_connect_your_wallet_to_win_givbacks_and_match'
-								: 'label.please_connect_your_wallet_to_win_givbacks',
+						id: textToDisplayOnConnect,
 					})}
 				</ConnectWallet>
 			)}
