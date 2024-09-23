@@ -3,13 +3,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { Flex } from '@giveth/ui-design-system';
 import { useAppSelector } from '@/features/hooks';
-import {
-	HeaderLink,
-	HeaderLinks,
-	HeaderPlaceHolder,
-	Logo,
-	StyledHeader,
-} from './Header.sc';
+import { HeaderLink, HeaderLinks, Logo, StyledHeader } from './Header.sc';
 import Routes from '@/lib/constants/Routes';
 
 const Header = dynamic(() => import('./Header'), {
@@ -49,7 +43,6 @@ export const HeaderWrapper = () => {
 	const showHeader = useAppSelector(state => state.general.showHeader);
 	return showHeader ? (
 		<>
-			<HeaderPlaceHolder />
 			<Header />
 		</>
 	) : null;

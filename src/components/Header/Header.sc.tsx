@@ -6,6 +6,7 @@ import {
 	Button,
 	GLink,
 	Flex,
+	semanticColors,
 } from '@giveth/ui-design-system';
 import { zIndex, mediaQueries } from '@/lib/constants/constants';
 import { Button as CButton } from '@/components/styled-components/Button';
@@ -19,9 +20,7 @@ interface IStyledHeader extends IHeader {
 }
 
 export const StyledHeader = styled(Flex)<IStyledHeader>`
-	position: fixed;
-	left: 0;
-	right: 0;
+	position: sticky;
 	top: ${props => (props.$show ? 0 : '-100px')};
 	z-index: ${zIndex.HEADER};
 	transition: top 0.3s ease;
@@ -341,4 +340,40 @@ export const UserName = styled(GLink)`
 export const GLinkNoWrap = styled(GLink)`
 	text-overflow: ellipsis;
 	white-space: nowrap;
+`;
+
+export const NoVerifiedEmailWarning = styled(Flex)<IStyledHeader>`
+	flex-wrap: wrap;
+	background-color: ${semanticColors.golden[200]};
+	position: sticky;
+	top: 92px;
+	left: 0;
+	right: 0;
+	padding: 16px;
+	z-index: 99;
+	top: ${props => (props.$show ? '92px' : '-100px')};
+	transition: top 0.3s ease;
+	gap: 8px;
+
+	svg {
+		color: ${semanticColors.golden[500]};
+	}
+
+	p {
+		margin: 0;
+		color: ${neutralColors.gray[900]};
+		font-size: 16px;
+		font-weight: 400;
+		line-height: 24px;
+		text-align: center;
+	}
+
+	span {
+		color: ${brandColors.giv[500]};
+		font-size: 16px;
+		font-weight: 400;
+		line-height: 21.17px;
+		text-align: center;
+		cursor: pointer;
+	}
 `;

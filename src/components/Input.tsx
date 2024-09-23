@@ -45,7 +45,7 @@ interface IInputLabelProps {
 
 interface IInput extends InputHTMLAttributes<HTMLInputElement> {
 	label?: string;
-	caption?: string;
+	caption?: string | ReactElement;
 	isValidating?: boolean;
 	size?: InputSize;
 	LeftIcon?: ReactElement<IIconProps>;
@@ -81,13 +81,14 @@ const InputSizeToLinkSize = (size: InputSize) => {
 	}
 };
 
-type InputType =
+type InputType = (
 	| IInputWithRegister
 	| ({
 			registerName?: never;
 			register?: never;
 			registerOptions?: never;
-	  } & IInput);
+	  } & IInput)
+) & { customFixedComponent?: React.ReactNode };
 
 const Input = forwardRef<HTMLInputElement, InputType>((props, inputRef) => {
 	const {
@@ -168,22 +169,30 @@ const Input = forwardRef<HTMLInputElement, InputType>((props, inputRef) => {
 					}}
 					data-testid='styled-input'
 				/>
-				<SuffixWrapper
-					style={{
-						left: calcLeft() + 'px',
-						top: `${inputSizeToVerticalPadding(size)}px`,
-					}}
-				>
-					{suffix}
-				</SuffixWrapper>
-				<Absolute>
-					{isValidating && <Spinner size={40} />}
-					{maxLength && (
-						<CharLength>
-							{value ? String(value)?.length : 0}/{maxLength}
-						</CharLength>
-					)}
-				</Absolute>
+				{!!props.customFixedComponent && (
+					<Absolute>{props.customFixedComponent}</Absolute>
+				)}
+				{!props.customFixedComponent && (
+					<>
+						<SuffixWrapper
+							style={{
+								left: calcLeft() + 'px',
+								top: `${inputSizeToVerticalPadding(size)}px`,
+							}}
+						>
+							{suffix}
+						</SuffixWrapper>
+						<Absolute>
+							{isValidating && <Spinner size={40} />}
+							{maxLength && (
+								<CharLength>
+									{value ? String(value)?.length : 0}/
+									{maxLength}
+								</CharLength>
+							)}
+						</Absolute>
+					</>
+				)}
 			</InputWrapper>
 			{error?.message ? (
 				<InputValidation
