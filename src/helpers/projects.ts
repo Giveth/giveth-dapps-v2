@@ -20,6 +20,7 @@ export const sortMap = {
 		EProjectsSortBy.ActiveQfRoundRaisedFunds,
 	[EProjectsSortBy.EstimatedMatching.toLowerCase()]:
 		EProjectsSortBy.EstimatedMatching,
+	[EProjectsSortBy.BestMatch.toLowerCase()]: EProjectsSortBy.BestMatch,
 };
 
 /**
