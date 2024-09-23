@@ -1352,7 +1352,7 @@
 	"page.donate.unlocks_matching_funds": "${value} desbloquegen fons coincidents",
 	"page.donate.donations_will_be_matched": "La donació serà igualada",
 	"page.donate.project_not_eligible_for_qf": "El projecte no és elegible per a la concordança QF.",
-	"page.donate.network_not_eligible_for_qf": "{network} no són aptes per a la concordança",
+	"page.donate.network_not_eligible_for_qf": "Les donacions a {network} no es poden igualar",
 	"page.donate.givbacks_eligible": "GIVbacks elegibles",
 	"page.donate.project_not_givbacks_eligible": "El projecte no és elegible per a GIVbacks",
 	"page.donate.token_not_givbacks_eligible": "{token} no és apte per a GIVbacks",
