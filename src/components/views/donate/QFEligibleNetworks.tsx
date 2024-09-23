@@ -32,9 +32,12 @@ const QFEligibleNetworks = () => {
 	const eligibleNetworks = activeStartedRound?.eligibleNetworks.map(
 		network => ({
 			networkId: network,
-			chainType: ChainType.EVM,
+			chainType: config.EVM_NETWORKS_CONFIG[network]
+				? ChainType.EVM
+				: ChainType.SOLANA,
 		}),
 	);
+	console.log('eligibleNetworks', eligibleNetworks, activeStartedRound);
 	const eligibleNetworksWithoutStellar = eligibleNetworks?.filter(
 		network => network.networkId !== stellarNetworkId,
 	);

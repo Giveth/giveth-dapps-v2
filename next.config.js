@@ -7,10 +7,8 @@ const { withSentryConfig } = require('@sentry/nextjs');
 const withBundleAnalyzer = require('@next/bundle-analyzer')({
 	enabled: process.env.ANALYZE === 'true',
 });
-var pjson = require('./package.json');
-const generateRobotsTxt = require('./scripts/generate-robots-txt');
 
-const isProduction = process.env.NEXT_PUBLIC_ENV === 'production';
+const generateRobotsTxt = require('./scripts/generate-robots-txt');
 
 const defaultLocale = 'en';
 const locales = ['ca', 'en', 'es'];

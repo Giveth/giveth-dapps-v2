@@ -323,11 +323,13 @@ export const QRDonationCard: FC<QRDonationCardProps> = ({
 					})}
 				/>
 			)}
-			{!showQRCode && !isConnected && hasActiveQFRound && (
+			{!showQRCode && !isConnected && (
 				<ConnectWallet>
 					<IconWalletOutline24 color={neutralColors.gray[700]} />
 					{formatMessage({
-						id: 'label.please_connect_your_wallet_to_win_givbacks',
+						id: hasActiveQFRound
+							? 'label.please_connect_your_wallet_to_win_givbacks_and_match'
+							: 'label.please_connect_your_wallet_to_win_givbacks',
 					})}
 				</ConnectWallet>
 			)}
