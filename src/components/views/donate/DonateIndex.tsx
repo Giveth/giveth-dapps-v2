@@ -61,8 +61,7 @@ const DonateIndex: FC = () => {
 		qrDonationStatus,
 		draftDonationData,
 		hasActiveQFRound,
-		currentDonateModal,
-		highestModalPriorityUnchecked,
+		shouldRenderModal,
 		setSuccessDonation,
 		setQRDonationStatus,
 		setDraftDonationData,
@@ -107,9 +106,11 @@ const DonateIndex: FC = () => {
 				return;
 			}
 		}
-		setIsModalPriorityChecked(
-			DonateModalPriorityValues.OFACSanctionListModal,
-		);
+		setTimeout(() => {
+			setIsModalPriorityChecked(
+				DonateModalPriorityValues.OFACSanctionListModal,
+			);
+		}, 0);
 	};
 
 	useEffect(() => {
@@ -125,9 +126,11 @@ const DonateIndex: FC = () => {
 				DonateModalPriorityValues.DonationByProjectOwner,
 			);
 		}
-		setIsModalPriorityChecked(
-			DonateModalPriorityValues.DonationByProjectOwner,
-		);
+		setTimeout(() => {
+			setIsModalPriorityChecked(
+				DonateModalPriorityValues.DonationByProjectOwner,
+			);
+		}, 0);
 	}, [userData?.id, project.adminUser]);
 
 	useEffect(() => {
@@ -258,31 +261,29 @@ const DonateIndex: FC = () => {
 		<>
 			<DonateHeader />
 			<DonateContainer>
-				{(highestModalPriorityUnchecked == 'All Checked' ||
-					currentDonateModal >= highestModalPriorityUnchecked) &&
-					currentDonateModal ===
-						DonateModalPriorityValues.DonationByProjectOwner && (
-						<DonationByProjectOwner
-							closeModal={() => {
-								setDonateModalByPriority(
-									DonateModalPriorityValues.None,
-								);
-							}}
-						/>
-					)}
+				{shouldRenderModal(
+					DonateModalPriorityValues.DonationByProjectOwner,
+				) && (
+					<DonationByProjectOwner
+						closeModal={() => {
+							setDonateModalByPriority(
+								DonateModalPriorityValues.None,
+							);
+						}}
+					/>
+				)}
 
-				{(highestModalPriorityUnchecked == 'All Checked' ||
-					currentDonateModal >= highestModalPriorityUnchecked) &&
-					currentDonateModal ===
-						DonateModalPriorityValues.OFACSanctionListModal && (
-						<SanctionModal
-							closeModal={() => {
-								setDonateModalByPriority(
-									DonateModalPriorityValues.None,
-								);
-							}}
-						/>
-					)}
+				{shouldRenderModal(
+					DonateModalPriorityValues.OFACSanctionListModal,
+				) && (
+					<SanctionModal
+						closeModal={() => {
+							setDonateModalByPriority(
+								DonateModalPriorityValues.None,
+							);
+						}}
+					/>
+				)}
 
 				{alreadyDonated && (
 					<AlreadyDonatedWrapper>

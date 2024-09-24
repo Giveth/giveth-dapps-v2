@@ -43,7 +43,6 @@ interface IDonateContext {
 	setSelectedOneTimeToken: Dispatch<
 		SetStateAction<IProjectAcceptedToken | undefined>
 	>;
-	currentDonateModal: DonateModalPriorityValues;
 	setDonateModalByPriority: (
 		changeCurrentModal: DonateModalPriorityValues,
 	) => void;
@@ -53,7 +52,7 @@ interface IDonateContext {
 	setIsModalPriorityChecked: (
 		modalChecked: DonateModalPriorityValues,
 	) => void;
-	highestModalPriorityUnchecked: DonateModalPriorityValues | 'All Checked';
+	shouldRenderModal: (modalRender: DonateModalPriorityValues) => boolean;
 	fetchProject: () => Promise<void>;
 	draftDonationData?: IDraftDonation;
 	fetchDraftDonation?: (
@@ -86,13 +85,12 @@ const DonateContext = createContext<IDonateContext>({
 	setSelectedRecurringToken: () => {},
 	setIsModalPriorityChecked: (modalChecked: DonateModalPriorityValues) => {},
 	project: {} as IProject,
-	currentDonateModal: DonateModalPriorityValues.None,
-	highestModalPriorityUnchecked: DonateModalPriorityValues.None,
 	tokenStreams: {},
 	fetchProject: async () => {},
 	setDonateModalByPriority: (
 		changeCurrentModal: DonateModalPriorityValues,
 	) => {},
+	shouldRenderModal: (modalRender: DonateModalPriorityValues) => false,
 	draftDonationData: {} as IDraftDonation,
 	fetchDraftDonation: async () => {},
 	qrDonationStatus: 'waiting',
@@ -188,6 +186,18 @@ export const DonateProvider: FC<IProviderProps> = ({ children, project }) => {
 		[currentDonateModal],
 	);
 
+	const shouldRenderModal = useCallback(
+		(modalRender: DonateModalPriorityValues) => {
+			return (
+				(highestModalPriorityUnchecked.current == 'All Checked' ||
+					currentDonateModal >=
+						highestModalPriorityUnchecked.current) &&
+				currentDonateModal === modalRender
+			);
+		},
+		[currentDonateModal],
+	);
+
 	const fetchProject = useCallback(async () => {
 		const { data } = (await client.query({
 			query: FETCH_PROJECT_BY_SLUG_DONATION,
@@ -225,8 +235,8 @@ export const DonateProvider: FC<IProviderProps> = ({ children, project }) => {
 				pendingDonationExists,
 				selectedRecurringToken,
 				setDonateModalByPriority,
-				currentDonateModal,
 				setSelectedOneTimeToken,
+				shouldRenderModal,
 				setSelectedRecurringToken,
 				tokenStreams,
 				fetchProject,
@@ -237,8 +247,6 @@ export const DonateProvider: FC<IProviderProps> = ({ children, project }) => {
 				startTimer,
 				setQRDonationStatus: setStatus,
 				setPendingDonationExists,
-				highestModalPriorityUnchecked:
-					highestModalPriorityUnchecked.current,
 				setIsModalPriorityChecked,
 				draftDonationLoading: loading,
 			}}
