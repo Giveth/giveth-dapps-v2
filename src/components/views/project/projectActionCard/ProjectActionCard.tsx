@@ -4,7 +4,6 @@ import {
 	Flex,
 	brandColors,
 } from '@giveth/ui-design-system';
-import Link from 'next/link';
 import styled from 'styled-components';
 import { useIntl } from 'react-intl';
 import { ProjectStats } from './ProjectStats';
@@ -16,7 +15,6 @@ import MobileDonateFooter from './MobileDonateFooter';
 import QFSection from './QFSection';
 import { DonateSection } from './DonationSection';
 import { ProjectPublicActions } from './ProjectPublicActions';
-import Routes from '@/lib/constants/Routes';
 
 export const ProjectActionCard = () => {
 	const isMobile = !useMediaQuery(device.tablet);
