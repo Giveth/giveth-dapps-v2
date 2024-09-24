@@ -9,7 +9,6 @@ import {
 import React, { CSSProperties, FC } from 'react';
 import { useIntl } from 'react-intl';
 import { Chain, formatUnits } from 'viem';
-import { ethers } from 'ethers';
 import { useRouter } from 'next/router';
 import {
 	BadgesBase,
@@ -52,7 +51,8 @@ const EligibilityBadges: FC<IEligibilityBadges> = props => {
 	const decimals = token?.decimals || 18;
 
 	const donationUsdValue =
-		(tokenPrice || 0) * (truncateToDecimalPlaces(formatUnits(amount, decimals), decimals) || 0);
+		(tokenPrice || 0) *
+		(truncateToDecimalPlaces(formatUnits(amount, decimals), decimals) || 0);
 
 	const qfEligibleWarning = !activeStartedRound || !isOnQFEligibleNetworks;
 	const isDonationMatched =
