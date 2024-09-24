@@ -2,9 +2,7 @@ import {
 	mediaQueries,
 	neutralColors,
 	Flex,
-	Subline,
 	brandColors,
-	IconChevronRight16,
 } from '@giveth/ui-design-system';
 import Link from 'next/link';
 import styled from 'styled-components';
@@ -57,20 +55,7 @@ const ProjectActionInnerCard = () => {
 			)}
 			{!isMobile && !isAdmin && <ProjectPublicActions />}
 			{isAdmin && <ProjectStats />}
-			<Link href={Routes.Onboarding + '/donors'}>
-				<LearnLink
-					$alignItems='center'
-					$justifyContent='center'
-					gap='2px'
-				>
-					<Subline>
-						{formatMessage({
-							id: 'label.learn_more_about_donating_on_giveth',
-						})}
-					</Subline>
-					<IconChevronRight16 />
-				</LearnLink>
-			</Link>
+			<Link href={Routes.Onboarding + '/donors'}></Link>
 		</>
 	);
 };

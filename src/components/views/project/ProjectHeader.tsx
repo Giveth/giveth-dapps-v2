@@ -56,7 +56,7 @@ const ProjectImage = styled.img`
 	border-radius: 16px;
 	width: 100%;
 	object-fit: cover; // Ensures the image covers the entire container
-	height: 380px;
+	height: 430px;
 	position: relative;
 `;
 
@@ -65,7 +65,7 @@ const GradientOverlay = styled.div`
 	top: 0;
 	left: 0;
 	width: 100%;
-	height: 380px;
+	height: 430px;
 	background: linear-gradient(
 		to top,
 		rgba(1, 1, 27, 0.6),
