@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
 import {
 	brandColors,
@@ -26,11 +26,18 @@ const SwitchToAcceptedChain: FC<ISwitchToAcceptedChain> = ({
 }) => {
 	const { formatMessage } = useIntl();
 	const { chain, walletChainType } = useGeneralWallet();
+	const [show, setShow] = useState(false);
 
 	const networkId = (chain as Chain)?.id || config.SOLANA_CONFIG.networkId;
 	const networkName = config.NETWORKS_CONFIG_WITH_ID[networkId]?.name;
 
+	useEffect(() => {
+		// To prevent SwitchToAcceptedChain flickering
+		setTimeout(() => setShow(true), 1000);
+	}, []);
+
 	if (
+		!show ||
 		!acceptedChains ||
 		acceptedChains.some(
 			chain =>
