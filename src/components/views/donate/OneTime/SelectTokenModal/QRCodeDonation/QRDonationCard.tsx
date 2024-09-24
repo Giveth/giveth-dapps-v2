@@ -52,8 +52,8 @@ interface QRDonationCardProps extends IDonationCardProps {
 	setIsQRDonation: (isQRDonation: boolean) => void;
 }
 
+const decimals = 18;
 const formatAmountToDisplay = (amount: bigint) => {
-	const decimals = 18;
 	return truncateToDecimalPlaces(
 		formatUnits(amount, decimals),
 		decimals / 3,
@@ -98,7 +98,7 @@ export const QRDonationCard: FC<QRDonationCardProps> = ({
 	const { addresses, id, verified } = project;
 	const draftDonationId = Number(router.query.draft_donation!);
 	const [amount, setAmount] = useState(0n);
-	const [usdAmount, setUsdAmount] = useState('0.00');
+	const [usdAmount, setUsdAmount] = useState(0);
 	const [tokenPrice, setTokenPrice] = useState(0);
 
 	const stellarToken = qrAcceptedTokens.find(
@@ -266,14 +266,6 @@ export const QRDonationCard: FC<QRDonationCardProps> = ({
 		}
 	};
 
-	const convertAmountToUSD = (amount: bigint) => {
-		if (!stellarToken || !tokenPrice) return '0.00';
-
-		const priceBigInt = BigInt(Math.floor(tokenPrice * 100));
-		const amountInUsd = (amount * priceBigInt) / 100n;
-		return formatBalance(formatAmountToDisplay(amountInUsd));
-	};
-
 	const calculateUsdAmount = (amount?: number) => {
 		if (!tokenPrice || !amount) return '0.00';
 
@@ -281,7 +273,11 @@ export const QRDonationCard: FC<QRDonationCardProps> = ({
 	};
 
 	useEffect(() => {
-		setUsdAmount(convertAmountToUSD(amount));
+		const donationUsdValue =
+			(tokenPrice || 0) *
+			(truncateToDecimalPlaces(formatUnits(amount, decimals), decimals) ||
+				0);
+		setUsdAmount(donationUsdValue);
 	}, [amount, tokenPrice]);
 
 	useEffect(() => {
@@ -383,7 +379,9 @@ export const QRDonationCard: FC<QRDonationCardProps> = ({
 							</SelectTokenWrapper>
 							<QRDonationInput>
 								<Input amount={amount} setAmount={setAmount} />
-								<UsdAmountCard>$ {usdAmount}</UsdAmountCard>
+								<UsdAmountCard>
+									$ {usdAmount.toFixed(2)}
+								</UsdAmountCard>
 							</QRDonationInput>
 						</StyledInputWrapper>
 						<CardBottom>
