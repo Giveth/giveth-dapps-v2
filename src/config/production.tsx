@@ -64,7 +64,7 @@ const SOLANA_NETWORK: NonEVMChain = {
 	},
 };
 
-const STELLAR_NOTWORK: NonEVMChain = {
+const STELLAR_NETWORK: NonEVMChain = {
 	id: STELLAR_NETWORK_NUMBER,
 	networkId: STELLAR_NETWORK_NUMBER,
 	chainType: ChainType.STELLAR,
@@ -94,7 +94,7 @@ const EVM_CHAINS = [
 	polygonZkEvm,
 ] as readonly [Chain, ...Chain[]];
 
-const NON_EVM_CHAINS: NonEVMChain[] = [STELLAR_NOTWORK, SOLANA_NETWORK];
+const NON_EVM_CHAINS: NonEVMChain[] = [STELLAR_NETWORK, SOLANA_NETWORK];
 
 const BASE_ROUTE =
 	process.env.NEXT_PUBLIC_BASE_ROUTE || 'https://mainnet.serve.giveth.io';
@@ -615,7 +615,7 @@ const config: EnvConfig = {
 		chainLogo: (logoSize?: number) => <IconSolana size={logoSize} />,
 	},
 	STELLAR_CONFIG: {
-		...STELLAR_NOTWORK,
+		...STELLAR_NETWORK,
 		coingeckoChainName: 'stellar',
 		chainLogo: (logoSize?: number) => <IconStellar size={logoSize} />,
 	},

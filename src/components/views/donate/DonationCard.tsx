@@ -15,12 +15,12 @@ import { captureException } from '@sentry/nextjs';
 import Image from 'next/image';
 import { Shadow } from '@/components/styled-components/Shadow';
 import { RecurringDonationCard } from './Recurring/RecurringDonationCard';
-import OneTimeDonationCard from './OnTime/OneTimeDonationCard';
+import OneTimeDonationCard from '@/components/views/donate/OneTime/OneTimeDonationCard';
 import config from '@/configuration';
 import { useDonateData } from '@/context/donate.context';
 import { ChainType } from '@/types/config';
 import { IconWithTooltip } from '@/components/IconWithToolTip';
-import { QRDonationCard } from './OnTime/SelectTokenModal/QRCodeDonation/QRDonationCard';
+import { QRDonationCard } from '@/components/views/donate/OneTime/SelectTokenModal/QRCodeDonation/QRDonationCard';
 import { client } from '@/apollo/apolloClient';
 import { PROJECT_ACCEPTED_TOKENS } from '@/apollo/gql/gqlProjects';
 import { showToastError } from '@/lib/helpers';
@@ -30,7 +30,7 @@ import {
 } from '@/apollo/types/gqlTypes';
 
 export enum ETabs {
-	ONE_TIME = 'on-time',
+	ONE_TIME = 'one-time',
 	RECURRING = 'recurring',
 }
 

@@ -1,12 +1,11 @@
 import {
 	brandColors,
-	Caption,
+	Flex,
 	GLink,
 	IconHelpFilled16,
 	mediaQueries,
 	neutralColors,
 	Subline,
-	Flex,
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import { ChangeEvent, FC } from 'react';
@@ -14,32 +13,30 @@ import { useIntl } from 'react-intl';
 import { IconWithTooltip } from '@/components/IconWithToolTip';
 import Input, { InputSize } from '@/components/Input';
 import { InputSuffix } from '@/components/styled-components/Input';
-import CheckBox from '@/components/Checkbox';
-import { useGeneralWallet } from '@/providers/generalWalletProvider';
-import { useDonateData } from '@/context/donate.context';
+import ToggleSwitch, {
+	EToggleSwitchSizes,
+	EToggleSwitchThemes,
+} from '@/components/ToggleSwitch';
 
 interface IDonateToGiveth {
 	donationToGiveth: number;
-	givethDonationAmount?: number;
 	setDonationToGiveth: (donationToGiveth: number) => void;
 	title: string;
+	disabled?: boolean;
 }
 
 const givethDonationOptions = [5, 10, 15, 20];
 
 const DonateToGiveth: FC<IDonateToGiveth> = ({
 	donationToGiveth,
-	givethDonationAmount,
 	setDonationToGiveth,
 	title,
+	disabled,
 }) => {
 	const { formatMessage } = useIntl();
 
-	const { selectedOneTimeToken } = useDonateData();
-
-	const { isConnected } = useGeneralWallet();
-
 	const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+		if (disabled) return;
 		const newPercentage = +e.target.value;
 		if (isNaN(newPercentage) || newPercentage < 0 || newPercentage > 90)
 			return;
@@ -47,32 +44,44 @@ const DonateToGiveth: FC<IDonateToGiveth> = ({
 	};
 
 	const handleCheckbox = (e: boolean) => {
-		setDonationToGiveth(e ? 0 : 5);
+		setDonationToGiveth(e ? 5 : 0);
 	};
 
-	// If givethDonationAmount props provided check if it's 0 and set donationToGiveth to 0
-	// because we disabled percentage amount for minimal allowed main donation amount
-	if (givethDonationAmount !== undefined) {
-		donationToGiveth = givethDonationAmount === 0 ? 0 : donationToGiveth;
-	}
-
 	return (
-		<Container disabled={!isConnected || !selectedOneTimeToken}>
+		<Container>
 			<Flex $alignItems='center' gap='4px'>
-				<Caption $medium>{title}</Caption>
-				<IconWithTooltip icon={<IconHelpFilled16 />} direction='top'>
+				<ToggleSwitch
+					isOn={donationToGiveth !== 0}
+					toggleOnOff={handleCheckbox}
+					label={title}
+					size={EToggleSwitchSizes.SMALL}
+					theme={EToggleSwitchThemes.PURPLE_GRAY}
+					style={{ marginLeft: '-14px' }}
+					disabled={disabled}
+				/>
+				<IconWithTooltip
+					style={{
+						marginBottom: '-5px',
+						opacity: disabled ? 0.4 : 1,
+					}}
+					icon={<IconHelpFilled16 />}
+					direction='top'
+				>
 					<TooltipContainer>
 						{formatMessage({ id: 'label.support_giveth_with' })}
 					</TooltipContainer>
 				</IconWithTooltip>
 			</Flex>
-			<UserInput>
+			<UserInput disabled={disabled}>
 				<Options>
 					{givethDonationOptions.map(option => (
 						<OptionWrapper
 							$isSelected={donationToGiveth === option}
+							size='Small'
 							key={option}
-							onClick={() => setDonationToGiveth(option)}
+							onClick={() =>
+								!disabled && setDonationToGiveth(option)
+							}
 						>
 							{option}%
 						</OptionWrapper>
@@ -87,15 +96,6 @@ const DonateToGiveth: FC<IDonateToGiveth> = ({
 					}
 				/>
 			</UserInput>
-			<CheckBox
-				size={14}
-				checked={donationToGiveth === 0}
-				onChange={handleCheckbox}
-				label={formatMessage({
-					id: 'label.i_dont_want_to_support_giveth',
-				})}
-				labelSize='Small'
-			/>
 		</Container>
 	);
 };
@@ -107,16 +107,23 @@ const TooltipContainer = styled(Subline)`
 	padding: 0 10px;
 `;
 
-const UserInput = styled(Flex)`
-	margin-top: 16px;
+const UserInput = styled(Flex)<{ disabled?: boolean }>`
+	margin-top: 12px;
 	justify-content: space-between;
 	gap: 10px;
 	flex-wrap: wrap;
+	opacity: ${props => (props.disabled ? 0.4 : 1)};
 `;
 
 const StyledInput = styled(Input)`
-	width: 90px;
+	width: 50px;
 	flex: none;
+	margin-bottom: -20px;
+	input {
+		color: ${neutralColors.gray[900]};
+		border-radius: 8px !important;
+		border: 1px solid ${neutralColors.gray[300]} !important;
+	}
 `;
 
 const Percentage = styled(InputSuffix)`
@@ -135,17 +142,19 @@ const OptionWrapper = styled(GLink)<{ $isSelected: boolean }>`
 	display: flex !important;
 	justify-content: center;
 	align-items: center;
-	color: ${brandColors.giv[500]};
+	color: ${brandColors.giv[500]} !important;
 	cursor: pointer;
 `;
 
 const Options = styled(Flex)`
-	gap: 8px;
+	gap: 16px;
 `;
 
-const Container = styled.div<{ disabled?: boolean }>`
+const Container = styled.div`
 	margin: 16px 0 13px;
-	opacity: ${props => (props.disabled ? 0.4 : 1)};
+	border-radius: 8px;
+	border: 1px solid ${neutralColors.gray[300]};
+	padding: 16px;
 `;
 
 export default DonateToGiveth;

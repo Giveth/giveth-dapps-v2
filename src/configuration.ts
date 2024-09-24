@@ -8,6 +8,7 @@ import {
 } from './types/config';
 
 export const isProduction = process.env.NEXT_PUBLIC_ENV === 'production';
+console.log('isProduction', process.env.NEXT_PUBLIC_ENV, isProduction);
 export const isDeleteProjectEnabled =
 	process.env.NEXT_PUBLIC_DELETE_PROJECT_ENABLED === 'true';
 
@@ -30,9 +31,20 @@ const EVM_NETWORKS_CONFIG = {
 };
 
 const NON_EVM_NETWORKS_CONFIG: { [key: string]: NonEVMNetworkConfig } = {};
+const NON_EVM_NETWORKS_CONFIG_WITH_ID: { [key: number]: NonEVMNetworkConfig } =
+	{};
 
 NON_EVM_NETWORKS_CONFIG[ChainType.SOLANA] = envConfig.SOLANA_CONFIG;
 NON_EVM_NETWORKS_CONFIG[ChainType.STELLAR] = envConfig.STELLAR_CONFIG;
+NON_EVM_NETWORKS_CONFIG_WITH_ID[envConfig.SOLANA_CONFIG.networkId] =
+	envConfig.SOLANA_CONFIG; // 103
+if (!isProduction) {
+	// Cause Solana IDs are different in staging BE env
+	NON_EVM_NETWORKS_CONFIG_WITH_ID[101] = envConfig.SOLANA_CONFIG;
+	NON_EVM_NETWORKS_CONFIG_WITH_ID[102] = envConfig.SOLANA_CONFIG;
+}
+NON_EVM_NETWORKS_CONFIG_WITH_ID[envConfig.STELLAR_CONFIG.networkId] =
+	envConfig.STELLAR_CONFIG;
 
 const config: GlobalConfig = {
 	TOKEN_NAME: 'DRGIV',
@@ -47,6 +59,10 @@ const config: GlobalConfig = {
 	EVM_NETWORKS_CONFIG,
 	NON_EVM_NETWORKS_CONFIG,
 	NETWORKS_CONFIG: { ...EVM_NETWORKS_CONFIG, ...NON_EVM_NETWORKS_CONFIG },
+	NETWORKS_CONFIG_WITH_ID: {
+		...EVM_NETWORKS_CONFIG,
+		...NON_EVM_NETWORKS_CONFIG_WITH_ID,
+	},
 	CHAINS_WITH_SUBGRAPH: Object.entries(envConfig)
 		.filter(([key, value]) => value?.subgraphAddress)
 		.map(([key, value]) => value as NetworkConfig),

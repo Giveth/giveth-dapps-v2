@@ -1,19 +1,18 @@
 import {
 	B,
+	brandColors,
 	Button,
 	Caption,
-	GLink,
+	Flex,
 	H6,
 	IconCaretDown16,
 	IconChevronRight16,
 	IconHelpFilled16,
 	IconPlus16,
 	IconRefresh16,
-	P,
-	brandColors,
 	neutralColors,
+	P,
 	semanticColors,
-	Flex,
 } from '@giveth/ui-design-system';
 import React, { useEffect, useMemo, useState } from 'react';
 import styled from 'styled-components';
@@ -46,8 +45,6 @@ import config from '@/configuration';
 import { WrongNetworkLayer } from '../WrongNetworkLayer';
 import { ModifySuperTokenModal } from './ModifySuperToken/ModifySuperTokenModal';
 import { limitFraction } from '@/helpers/number';
-import CheckBox from '@/components/Checkbox';
-import { CheckBoxContainer } from '../OnTime/OneTimeDonationCard';
 import AlloProtocolFirstDonationModal from './AlloProtocolFirstDonationModal';
 import links from '@/lib/constants/links';
 import Routes from '@/lib/constants/Routes';
@@ -56,6 +53,16 @@ import { useAppSelector } from '@/features/hooks';
 import { findAnchorContractAddress } from '@/helpers/superfluid';
 import GIVBackToast from '../GIVBackToast';
 import { useGeneralWallet } from '@/providers/generalWalletProvider';
+
+import {
+	GLinkStyled,
+	IconWrapper,
+	Input,
+	InputWrapper,
+	SelectTokenPlaceHolder,
+	SelectTokenWrapper,
+} from '@/components/views/donate/common/common.styled';
+import DonateAnonymously from '@/components/views/donate/common/DonateAnonymously';
 
 // These two functions are used to make the slider more user-friendly by mapping the slider's value to a new range.
 /**
@@ -374,7 +381,7 @@ export const RecurringDonationCard = () => {
 							})}
 						</Caption>
 						<Flex gap='16px' $alignItems='center'>
-							<StyledSlider
+							<Slider
 								min={0}
 								max={100}
 								step={0.1}
@@ -609,8 +616,12 @@ export const RecurringDonationCard = () => {
 								setDonationToGiveth={e => {
 									setDonationToGiveth(e);
 								}}
+								disabled={!selectedRecurringToken}
 								donationToGiveth={donationToGiveth}
-								title='Add a recurring donation to Giveth'
+								title={
+									formatMessage({ id: 'label.donate_to' }) +
+									' Giveth'
+								}
 							/>
 						</GivethSection>
 					)}
@@ -730,21 +741,11 @@ export const RecurringDonationCard = () => {
 					alt='Superfluid logo'
 				/>
 			</Flex>
-			<CheckBoxContainer>
-				<CheckBox
-					label={formatMessage({
-						id: 'label.make_it_anonymous',
-					})}
-					checked={anonymous}
-					onChange={() => setAnonymous(!anonymous)}
-					size={14}
-				/>
-				<div>
-					{formatMessage({
-						id: 'component.tooltip.donate_anonymously',
-					})}
-				</div>
-			</CheckBoxContainer>
+			<DonateAnonymously
+				anonymous={anonymous}
+				setAnonymous={setAnonymous}
+				selectedToken={selectedRecurringToken}
+			/>
 			{showSelectTokenModal && (
 				<SelectTokenModal setShowModal={setShowSelectTokenModal} />
 			)}
@@ -813,39 +814,6 @@ const RecurringSection = styled(Flex)`
 	text-align: left;
 `;
 
-export const SelectTokenWrapper = styled(Flex)<{ disabled?: boolean }>`
-	cursor: ${({ disabled }) => (disabled ? 'default' : 'pointer')};
-	gap: 16px;
-`;
-
-export const SelectTokenPlaceHolder = styled(B)`
-	white-space: nowrap;
-`;
-
-export const InputWrapper = styled(Flex)`
-	border: 2px solid ${neutralColors.gray[300]};
-	border-radius: 8px;
-	& > * {
-		padding: 13px 16px;
-	}
-	align-items: center;
-`;
-
-export const Input = styled(AmountInput)`
-	width: 100%;
-	border-left: 2px solid ${neutralColors.gray[300]};
-	#amount-input {
-		border: none;
-		flex: 1;
-		font-family: Red Hat Text;
-		font-size: 16px;
-		font-style: normal;
-		font-weight: 500;
-		line-height: 150%; /* 24px */
-		width: 100%;
-	}
-`;
-
 const RecurringMessage = styled(P)`
 	font-size: 12px;
 	font-style: normal;
@@ -853,20 +821,6 @@ const RecurringMessage = styled(P)`
 	line-height: 18px;
 	color: #e6492d;
 `;
-
-export const IconWrapper = styled.div`
-	cursor: pointer;
-	color: ${brandColors.giv[500]};
-`;
-
-export const GLinkStyled = styled(GLink)`
-	&&:hover {
-		cursor: pointer;
-		text-decoration: underline;
-	}
-`;
-
-const StyledSlider = styled(Slider)``;
 
 const InputSlider = styled(AmountInput)`
 	width: 27%;
