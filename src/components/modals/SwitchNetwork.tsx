@@ -1,4 +1,4 @@
-import React, { FC, useState, useEffect } from 'react';
+import React, { FC } from 'react';
 import {
 	B,
 	brandColors,
@@ -45,7 +45,6 @@ const SwitchNetwork: FC<ISwitchNetworkModal> = ({
 	const {
 		walletChainType,
 		handleSingOutAndSignInWithEVM,
-		pendingNetworkId,
 		setPendingNetworkId,
 		chain,
 	} = useGeneralWallet();

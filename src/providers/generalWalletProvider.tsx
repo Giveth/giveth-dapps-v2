@@ -58,7 +58,6 @@ interface IGeneralWalletContext {
 	handleSignOutAndShowWelcomeModal: () => Promise<void>;
 	isOnSolana: boolean;
 	isOnEVM: boolean;
-	pendingNetworkId: number | null;
 	setPendingNetworkId: (id: number | null) => void;
 }
 // Create the context
@@ -78,7 +77,6 @@ export const GeneralWalletContext = createContext<IGeneralWalletContext>({
 	handleSignOutAndShowWelcomeModal: async () => {},
 	isOnSolana: false,
 	isOnEVM: false,
-	pendingNetworkId: null,
 	setPendingNetworkId: () => {},
 });
 
@@ -423,7 +421,6 @@ export const GeneralWalletProvider: React.FC<{
 		handleSignOutAndShowWelcomeModal,
 		isOnSolana,
 		isOnEVM,
-		pendingNetworkId,
 		setPendingNetworkId,
 	};
 
