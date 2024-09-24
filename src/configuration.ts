@@ -7,7 +7,8 @@ import {
 	NonEVMNetworkConfig,
 } from './types/config';
 
-export const isProduction = process.env.NEXT_PUBLIC_ENV === 'production';
+export const isProduction = process.env.NEXT_PUBLIC_ENV !== 'production';
+console.log('isProduction', process.env.NEXT_PUBLIC_ENV, isProduction);
 export const isDeleteProjectEnabled =
 	process.env.NEXT_PUBLIC_DELETE_PROJECT_ENABLED === 'true';
 
