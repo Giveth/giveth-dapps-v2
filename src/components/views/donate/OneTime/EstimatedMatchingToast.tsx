@@ -52,7 +52,6 @@ const EstimatedMatchingToast: FC<IEstimatedMatchingToast> = ({
 	} = activeStartedRound || {};
 
 	const decimals = isStellar ? 18 : token?.decimals || 18;
-
 	const amountInUsd =
 		(tokenPrice || 0) *
 		(truncateToDecimalPlaces(formatUnits(amount, decimals), decimals) || 0);

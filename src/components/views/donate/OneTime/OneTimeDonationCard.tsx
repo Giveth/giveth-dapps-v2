@@ -17,7 +17,6 @@ import {
 // @ts-ignore
 import { Address, Chain, formatUnits, zeroAddress } from 'viem';
 import { useBalance, useEstimateFeesPerGas, useEstimateGas } from 'wagmi';
-import { ethers } from 'ethers';
 import { setShowWelcomeModal } from '@/features/modal/modal.slice';
 
 import { InsufficientFundModal } from '@/components/modals/InsufficientFund';
@@ -353,8 +352,11 @@ const CryptoDonation: FC<{
 	);
 
 	const isProjectGivbacksEligible = !!verified;
+
+	const decimals = selectedOneTimeToken?.decimals || 18;
 	const donationUsdValue =
-		(tokenPrice || 0) * Number(ethers.utils.formatEther(amount));
+		(tokenPrice || 0) *
+		(truncateToDecimalPlaces(formatUnits(amount, decimals), decimals) || 0);
 	const isDonationMatched =
 		!!activeStartedRound &&
 		isOnQFEligibleNetworks &&
