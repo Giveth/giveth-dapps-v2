@@ -48,7 +48,7 @@ const EligibilityBadges: FC<IEligibilityBadges> = props => {
 			: config.SOLANA_CONFIG.networkId;
 	const isOnQFEligibleNetworks =
 		activeStartedRound?.eligibleNetworks?.includes(networkId || 0);
-	const decimals = isStellar? 18: token?.decimals || 18;
+	const decimals = isStellar ? 18 : token?.decimals || 18;
 
 	const donationUsdValue =
 		(tokenPrice || 0) *
