@@ -95,7 +95,7 @@ const ProjectCard = (props: IProjectCard) => {
 		estimatedMatching || {};
 
 	const { activeStartedRound, activeQFRound } = getActiveRound(qfRounds);
-	const hasFooter = activeStartedRound || verified;
+	const hasFooter = activeStartedRound || verified || isGivbackEligible;
 
 	const {
 		allocatedFundUSDPreferred,
