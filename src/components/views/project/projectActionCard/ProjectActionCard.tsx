@@ -32,7 +32,7 @@ export const ProjectActionCard = () => {
 	return (
 		<ProjectActionCardWrapper
 			$flexDirection='column'
-			$justifyContent='space-between'
+			$justifyContent='space-evenly'
 		>
 			<ProjectActionInnerCard />
 		</ProjectActionCardWrapper>
@@ -55,7 +55,6 @@ const ProjectActionInnerCard = () => {
 			)}
 			{!isMobile && !isAdmin && <ProjectPublicActions />}
 			{isAdmin && <ProjectStats />}
-			<Link href={Routes.Onboarding + '/donors'}></Link>
 		</>
 	);
 };
