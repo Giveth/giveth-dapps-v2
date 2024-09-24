@@ -12,6 +12,7 @@ import { useIntl } from 'react-intl';
 import { useProjectContext } from '@/context/project.context';
 import ProjectBadge from './ProjectBadge';
 import { hasActiveRound } from '@/helpers/qf';
+import { IconWithTooltip } from '@/components/IconWithToolTip';
 
 const ProjectBadges = () => {
 	const { projectData } = useProjectContext();
@@ -28,23 +29,45 @@ const ProjectBadges = () => {
 	return (
 		<CustomFlex gap='16px'>
 			{verified && (
-				<ProjectBadge
-					badgeText={formatMessage({
-						id: 'label.vouched',
-					})}
-					wrapperColor={semanticColors.jade[700]}
-					BadgeIcon={<IconVerifiedBadge16 />}
-				/>
+				<IconWithTooltip
+					delay
+					icon={
+						<ProjectBadge
+							badgeText={formatMessage({
+								id: 'label.vouched',
+							})}
+							wrapperColor={semanticColors.jade[700]}
+							BadgeIcon={<IconVerifiedBadge16 />}
+						/>
+					}
+					direction='top'
+				>
+					<TooltipContent>
+						{formatMessage({ id: 'tooltip.vouched' })}
+					</TooltipContent>
+				</IconWithTooltip>
 			)}
 			{isGivbackEligible && (
-				<ProjectBadge
-					badgeText={formatMessage({
-						id: 'label.isGivbackEligible',
-					})}
-					textColor={brandColors.giv[500]}
-					wrapperColor={'white'}
-					BadgeIcon={<IconGIVBack16 color={brandColors.giv[500]} />}
-				/>
+				<IconWithTooltip
+					delay
+					icon={
+						<ProjectBadge
+							badgeText={formatMessage({
+								id: 'label.isGivbackEligible',
+							})}
+							textColor={brandColors.giv[500]}
+							wrapperColor={'white'}
+							BadgeIcon={
+								<IconGIVBack16 color={brandColors.giv[500]} />
+							}
+						/>
+					}
+					direction='top'
+				>
+					<TooltipContent>
+						{formatMessage({ id: 'tooltip.givback_eligible' })}
+					</TooltipContent>
+				</IconWithTooltip>
 			)}
 
 			{isQF && (
@@ -72,6 +95,14 @@ const CustomFlex = styled(Flex)`
 	overflow-y: hidden;
 	white-space: nowrap;
 	margin-bottom: 24px;
+`;
+
+export const TooltipContent = styled.div`
+	color: ${neutralColors.gray[100]};
+	cursor: default;
+	text-align: center;
+	width: 150px;
+	font-size: 0.8em;
 `;
 
 export default ProjectBadges;

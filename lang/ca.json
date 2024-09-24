@@ -1714,6 +1714,8 @@
 	"tooltip.donation.matching": "Aquesta estimació es basa en les donacions fetes fins ara aquesta ronda de finançament quadràtic i no considera l'anàlisi de frau. La quantitat real d'emparellament pot variar.",
 	"tooltip.flowrate": "Les donacions recurrents es prenen del teu Saldo de Transmissió. Diposita tokens i mantén el teu saldo per habilitar les donacions recurrents.",
 	"tooltip.withdraw_stream_balance": "Si teniu donacions recurrents actives, el vostre saldo disponible per retirar serà lleugerament inferior al vostre saldo actual.",
+	"tooltip.vouched": "Aquest projecte ha estat avalat com a legítim pels verificadors de Giveth",
+	"tooltip.givback_eligible": "Aquest projecte ha estat verificat com un Bé Públic per Giveth",
 	"ubi": "Renta bàsica",
 	"water-and-sanitation": "Aigua i Sanejament"
 }

@@ -1714,6 +1714,8 @@
 	"tooltip.donation.matching": "Esta estimación se basa en las donaciones realizadas hasta ahora en esta ronda de financiamiento cuadrático y no tiene en cuenta el análisis de fraude. El monto real de fondos complementarios puede variar.",
 	"tooltip.flowrate": "Las donaciones recurrentes se toman de tu Saldo de Transmisión. Deposita tokens y mantén tu saldo para habilitar las donaciones recurrentes.",
 	"tooltip.withdraw_stream_balance": "Si tiene donaciones recurrentes activas, su saldo disponible para retirar será ligeramente menor que su saldo actual.",
+	"tooltip.vouched": "Este proyecto ha sido avalado como legítimo por los verificadores de Giveth",
+	"tooltip.givback_eligible": "Este proyecto ha sido verificado como un Bien Público por Giveth",
 	"ubi": "RBI",
 	"water-and-sanitation": "Agua & Saneamiento"
 }
