@@ -2,8 +2,6 @@ import { parseUnits } from 'viem';
 import { IProjectAcceptedToken } from '@/apollo/types/gqlTypes';
 import { MAX_TOKEN_ORDER } from '@/lib/constants/tokens';
 import { EDonationFailedType } from '@/components/modals/FailedDonation';
-import { INetworkIdWithChain } from './common.types';
-import { getChainName } from '@/lib/network';
 import { formatCrypto } from '@/helpers/number';
 
 export const prepareTokenList = (tokens: IProjectAcceptedToken[]) => {
@@ -19,24 +17,6 @@ export const prepareTokenList = (tokens: IProjectAcceptedToken[]) => {
 		return t2Order > t1Order ? -1 : 1;
 	});
 	return _tokens;
-};
-
-export const getNetworkNames = (
-	networks: INetworkIdWithChain[],
-	text: string,
-) => {
-	return networks.map((network, index) => {
-		// Access the network name using networkId or chainType based on the chainType
-		const name = getChainName(network.networkId, network.chainType);
-
-		const lastLoop = networks.length === index + 1;
-		return (
-			<span key={network.networkId}>
-				{name}
-				{!lastLoop && ' ' + text + ' '}
-			</span>
-		);
-	});
 };
 
 export interface ICreateDonation {
