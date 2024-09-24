@@ -44,6 +44,7 @@ export const BadgesBase = styled(FlexCenter)<{
 	background: ${neutralColors.gray[200]};
 	color: ${props =>
 		props.active ? semanticColors.jade[500] : neutralColors.gray[700]};
+	transition: color 0.5s ease;
 	border-radius: 8px;
 	border: 1px solid
 		${props =>

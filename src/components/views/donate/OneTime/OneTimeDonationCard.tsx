@@ -366,6 +366,7 @@ const CryptoDonation: FC<{
 		!!isOnQFEligibleNetworks &&
 		!!selectedTokenBalance &&
 		!!isDonationMatched;
+	const selectTokenDisabled = !isConnected || erc20List?.length === 0;
 
 	return (
 		<MainContainer>
@@ -427,12 +428,14 @@ const CryptoDonation: FC<{
 					})}
 				</ConnectWallet>
 			)}
-			<EligibilityBadges
-				token={selectedOneTimeToken}
-				amount={amount}
-				tokenPrice={tokenPrice}
-				style={{ margin: '12px 0 24px' }}
-			/>
+			{!selectTokenDisabled && (
+				<EligibilityBadges
+					token={selectedOneTimeToken}
+					amount={amount}
+					tokenPrice={tokenPrice}
+					style={{ margin: '12px 0 24px' }}
+				/>
+			)}
 			<EstimatedMatchingToast
 				projectData={project}
 				token={selectedOneTimeToken}
@@ -446,19 +449,20 @@ const CryptoDonation: FC<{
 				<FlexStyled
 					$flexDirection='column'
 					gap='8px'
-					disabled={!isConnected}
+					disabled={selectTokenDisabled}
 				>
 					<InputWrapper>
 						<SelectTokenWrapper
 							$alignItems='center'
 							$justifyContent='space-between'
 							onClick={() =>
-								isConnected && setShowSelectTokenModal(true)
+								!selectTokenDisabled &&
+								setShowSelectTokenModal(true)
 							}
-							disabled={!isConnected}
+							disabled={selectTokenDisabled}
 							style={{
 								color:
-									selectedOneTimeToken || !isConnected
+									selectedOneTimeToken || selectTokenDisabled
 										? 'inherit'
 										: brandColors.giv[500],
 							}}
