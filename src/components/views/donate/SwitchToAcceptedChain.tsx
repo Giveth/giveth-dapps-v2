@@ -44,7 +44,7 @@ const SwitchToAcceptedChain: FC<ISwitchToAcceptedChain> = ({
 
 	return (
 		<NetworkToast>
-			<FlexCenter>
+			<FlexCenter gap='4px'>
 				<IconWrongNetwork24 color={semanticColors.punch[500]} />
 				<SublineBold>
 					{formatMessage({
