@@ -8,7 +8,7 @@ import {
 } from '@giveth/ui-design-system';
 import React, { CSSProperties, FC } from 'react';
 import { useIntl } from 'react-intl';
-import { Chain } from 'viem';
+import { Chain, formatUnits } from 'viem';
 import { ethers } from 'ethers';
 import { useRouter } from 'next/router';
 import {
@@ -22,6 +22,7 @@ import { IProjectAcceptedToken } from '@/apollo/types/gqlTypes';
 import config from '@/configuration';
 import { ChainType } from '@/types/config';
 import { useAppSelector } from '@/features/hooks';
+import { truncateToDecimalPlaces } from '@/lib/helpers';
 
 interface IEligibilityBadges {
 	tokenPrice?: number;
@@ -48,8 +49,10 @@ const EligibilityBadges: FC<IEligibilityBadges> = props => {
 			: config.SOLANA_CONFIG.networkId;
 	const isOnQFEligibleNetworks =
 		activeStartedRound?.eligibleNetworks?.includes(networkId || 0);
+	const decimals = token?.decimals || 18;
+
 	const donationUsdValue =
-		(tokenPrice || 0) * Number(ethers.utils.formatEther(amount));
+		(tokenPrice || 0) * (truncateToDecimalPlaces(formatUnits(amount, decimals), decimals) || 0);
 
 	const qfEligibleWarning = !activeStartedRound || !isOnQFEligibleNetworks;
 	const isDonationMatched =
