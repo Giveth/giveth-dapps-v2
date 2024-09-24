@@ -1164,7 +1164,7 @@
 	"label.valid_for": "Vàlid per",
 	"label.verification_process": "procés de verificació",
 	"label.verification_rejected": "Verificació rebutjada",
-	"label.verification_status": "Estat de verificació",
+	"label.verification_status": "Estat d'elegibilitat de GIVbacks",
 	"label.verified": "Verificat",
 	"label.verified_projects": "Projectes Avaluats",
 	"label.verified_status_for": "Elegibilitat per a GIVbacks per a",
