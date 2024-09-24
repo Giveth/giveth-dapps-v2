@@ -98,7 +98,7 @@ const VerificationRoute = () => {
 	return (
 		<VerificationProvider>
 			<Head>
-				<title>Verify a Project | Giveth</title>
+				<title>GIVbacks Eligibility Application | Giveth</title>
 			</Head>
 			<VerificationIndex />
 		</VerificationProvider>
