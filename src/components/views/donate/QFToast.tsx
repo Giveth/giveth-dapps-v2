@@ -10,9 +10,9 @@ import {
 	FlexCenter,
 } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
+import { useRouter } from 'next/router';
 import { EQFElegibilityState, usePassport } from '@/hooks/usePassport';
 import PassportModal from '@/components/modals/PassportModal';
-import { useRouter } from 'next/router';
 
 const QFToast = () => {
 	const { formatMessage, locale } = useIntl();
@@ -55,15 +55,18 @@ const QFToast = () => {
 			}) +
 			' ' +
 			currentRound?.name +
-			'.'
+			'.';
 	} else {
 		description = (
 			<>
-				{formatMessage({
-					id: 'page.donate.passport_toast.description.non_eligible',
-				},{
-					usd_value: currentRound?.minimumValidUsdValue,
-				})}{' '}
+				{formatMessage(
+					{
+						id: 'page.donate.passport_toast.description.non_eligible',
+					},
+					{
+						usd_value: currentRound?.minimumValidUsdValue,
+					},
+				)}{' '}
 				<span>{endDate}</span>
 			</>
 		);
@@ -85,7 +88,7 @@ const QFToast = () => {
 							buttonType='primary'
 							size='small'
 							icon={<IconExternalLink16 />}
-							onClick={() => router.push("/qf")}
+							onClick={() => router.push('/qf')}
 						/>
 					</FlexCenter>
 				) : (
