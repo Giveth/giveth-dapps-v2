@@ -1,4 +1,4 @@
-import { B, Lead, Container, Flex } from '@giveth/ui-design-system';
+import { B, Lead, Container } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
 import Image from 'next/image';
 import { useState, useEffect } from 'react';
@@ -9,7 +9,8 @@ import {
 	ActiveStyledCol,
 	Desc,
 	Title,
-	Sponsor,
+	CustomSponsors,
+	// Sponsor,
 	ActiveStyledRow,
 	// SmallerSponsor,
 	// BottomSponsors,
@@ -31,6 +32,8 @@ export const ActiveQFProjectsBanner = () => {
 	const { formatMessage } = useIntl();
 	const { activeQFRound } = useAppSelector(state => state.general);
 
+	// Image format is being bad formatted so managing locally instead
+	const isGIVPalooza = activeQFRound?.name === 'GIV-a-Palooza';
 	useEffect(() => {
 		if (!activeQFRound) return setState(ERoundStatus.NO_ACTIVE);
 		const _startDate = new Date(activeQFRound?.beginDate).getTime();
@@ -78,8 +81,10 @@ export const ActiveQFProjectsBanner = () => {
 		<BannerContainer>
 			<Image
 				src={
-					activeQFRound?.bannerBgImage ||
-					'/images/banners/qf-round/bg.svg'
+					isGIVPalooza
+						? '/images/banners/giv-palooza-bg1.svg'
+						: activeQFRound?.bannerBgImage ||
+							'/images/banners/qf-round/bg.svg'
 				}
 				style={{ objectFit: 'cover' }}
 				fill
@@ -118,18 +123,18 @@ export const ActiveQFProjectsBanner = () => {
 						md={6}
 						style={{ alignItems: 'center' }}
 					>
-						{/*<Flex>*/}
-						{/*	{topSponsors.map(s => (*/}
-						{/*		<SmallerSponsor*/}
-						{/*			key={s.title}*/}
-						{/*			src={s.image}*/}
-						{/*			alt={s.title}*/}
-						{/*			width={120}*/}
-						{/*			height={120}*/}
-						{/*		/>*/}
-						{/*	))}*/}
-						{/*</Flex>*/}
-						<Flex>
+						{/* <Flex>
+							{topSponsors.map(s => (
+								<SmallerSponsor
+									key={s.title}
+									src={s.image}
+									alt={s.title}
+									width={120}
+									height={120}
+								/>
+							))}
+						</Flex> */}
+						{/* <Flex>
 							{sponsors.map(s => (
 								<Sponsor
 									key={s.title}
@@ -139,7 +144,17 @@ export const ActiveQFProjectsBanner = () => {
 									height={188}
 								/>
 							))}
-						</Flex>
+						</Flex> */}
+						<CustomSponsors>
+							<Image
+								src={'/images/banners/qf-round/giv-palooza.svg'}
+								style={{
+									objectFit: 'contain',
+								}}
+								fill
+								alt='QF Sponsors'
+							/>
+						</CustomSponsors>
 						{/* <BottomSponsors>
 							{bottomSponsors.map(s => (
 								<SmallerSponsor
@@ -158,38 +173,38 @@ export const ActiveQFProjectsBanner = () => {
 	);
 };
 
-const sponsors = [
-	{
-		title: '@Giveth',
-		image: '/images/banners/qf-round/Giveth.svg',
-	},
-	{
-		title: '@ThankArbitrum',
-		image: '/images/banners/qf-round/ThankArbitrum.svg',
-	},
-	// {
-	// 	title: '@celo',
-	// 	image: '/images/banners/qf-round/celo.svg',
-	// },
-	// {
-	// 	title: '@realMaskNetwork',
-	// 	image: '/images/banners/qf-round/realMaskNetwork.svg',
-	// },
-];
+// const sponsors = [
+// 	{
+// 		title: '@Giveth',
+// 		image: '/images/banners/qf-round/Giveth.svg',
+// 	},
+// {
+// 	title: '@ThankArbitrum',
+// 	image: '/images/banners/qf-round/ThankArbitrum.svg',
+// },
+// {
+// 	title: '@celo',
+// 	image: '/images/banners/qf-round/celo.svg',
+// },
+// 	{
+// 		title: '@realMaskNetwork',
+// 		image: '/images/banners/qf-round/realMaskNetwork.svg',
+// 	},
+// ];
 
 // const topSponsors = [
-// 	{
-// 		title: '@Arbitrum',
-// 		image: '/images/banners/qf-round/sponsor3.svg',
-// 	},
-// 	{
-// 		title: '@GloDollar',
-// 		image: '/images/banners/qf-round/sponsor6.svg',
-// 	},
-// 	{
-// 		title: '@LottoPGF',
-// 		image: '/images/banners/qf-round/sponsor7.svg',
-// 	},
+// {
+// 	title: '@Arbitrum',
+// 	image: '/images/banners/qf-round/sponsor3.svg',
+// },
+// {
+// 	title: '@GloDollar',
+// 	image: '/images/banners/qf-round/sponsor6.svg',
+// },
+// {
+// 	title: '@LottoPGF',
+// 	image: '/images/banners/qf-round/sponsor7.svg',
+// },
 // 	{
 // 		title: '@Open_Dollar',
 // 		image: '/images/banners/qf-round/sponsor8.svg',
@@ -197,20 +212,20 @@ const sponsors = [
 // ];
 
 // const bottomSponsors = [
-// 	{
-// 		title: '@Glodollar',
-// 		image: '/images/banners/qf-round/Glodollar.svg',
-// 	},
-// 	{
-// 		title: '@OctantApp',
-// 		image: '/images/banners/qf-round/OctantApp.svg',
-// 	},
-// 	{
-// 		title: '@maearthmedia',
-// 		image: '/images/banners/qf-round/maearthmedia.svg',
-// 	},
-// 	{
-// 		title: '@RegenToken',
-// 		image: '/images/banners/qf-round/regenToken.svg',
-// 	},
+// {
+// 	title: '@Glodollar',
+// 	image: '/images/banners/qf-round/Glodollar.svg',
+// },
+// {
+// 	title: '@OctantApp',
+// 	image: '/images/banners/qf-round/OctantApp.svg',
+// },
+// {
+// 	title: '@maearthmedia',
+// 	image: '/images/banners/qf-round/maearthmedia.svg',
+// },
+// {
+// 	title: '@RegenToken',
+// 	image: '/images/banners/qf-round/regenToken.svg',
+// },
 // ];

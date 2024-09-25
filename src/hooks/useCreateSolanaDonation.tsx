@@ -16,7 +16,7 @@ import {
 import { EDonationFailedType } from '@/components/modals/FailedDonation';
 import { EDonationStatus } from '@/apollo/types/gqlEnums';
 import { IOnTxHash, saveDonation, updateDonation } from '@/services/donation';
-import { ICreateDonation } from '@/components/views/donate/helpers';
+import { ICreateDonation } from '@/components/views/donate/common/helpers';
 import { retryFetchSolanaTransaction } from '@/lib/transaction';
 import { ChainType } from '@/types/config';
 import { useGeneralWallet } from '@/providers/generalWalletProvider';

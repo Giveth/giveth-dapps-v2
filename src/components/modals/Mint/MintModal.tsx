@@ -10,6 +10,7 @@ import {
 } from '@giveth/ui-design-system';
 import { useAccount } from 'wagmi';
 import { writeContract } from '@wagmi/core';
+import { Abi } from 'viem';
 import { IModal } from '@/types/common';
 import { Modal } from '../Modal';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
@@ -18,16 +19,19 @@ import { formatWeiHelper } from '@/helpers/number';
 import { waitForTransaction } from '@/lib/transaction';
 import { approveERC20tokenTransfer } from '@/lib/stakingPool';
 import config from '@/configuration';
-import { abi as PFP_ABI } from '@/artifacts/pfpGiver.json';
+import PFP_ARTIFACTS from '@/artifacts/pfpGiver.json';
+
 import { EPFPMinSteps, usePFPMintData } from '@/context/pfpmint.context';
 import { MintSteps } from './MintSteps';
 import { wagmiConfig } from '@/wagmiConfigs';
+
 export enum MintStep {
 	APPROVE,
 	APPROVING,
 	MINT,
 	MINTING,
 }
+const PFP_ABI = PFP_ARTIFACTS.abi as Abi;
 
 interface IMintModalProps extends IModal {
 	qty: number;

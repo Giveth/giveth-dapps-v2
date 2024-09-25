@@ -1,7 +1,6 @@
 import styled from 'styled-components';
 import React, { FC, useEffect, useMemo, useState } from 'react';
 import { useIntl } from 'react-intl';
-import { useRouter } from 'next/router';
 import {
 	B,
 	brandColors,
@@ -9,14 +8,16 @@ import {
 	Flex,
 	IconCaretDown16,
 	IconRefresh16,
+	IconWalletOutline24,
 	neutralColors,
+	OutlineButton,
 	semanticColors,
+	SublineBold,
 } from '@giveth/ui-design-system';
 // @ts-ignore
 import { Address, Chain, formatUnits, zeroAddress } from 'viem';
 import { useBalance, useEstimateFeesPerGas, useEstimateGas } from 'wagmi';
 import { setShowWelcomeModal } from '@/features/modal/modal.slice';
-import CheckBox from '@/components/Checkbox';
 
 import { InsufficientFundModal } from '@/components/modals/InsufficientFund';
 import config from '@/configuration';
@@ -28,8 +29,7 @@ import { IProjectAcceptedToken } from '@/apollo/types/gqlTypes';
 import {
 	calcDonationShare,
 	prepareTokenList,
-} from '@/components/views/donate/helpers';
-import GIVBackToast from '@/components/views/donate/GIVBackToast';
+} from '@/components/views/donate/common/helpers';
 import { DonateWrongNetwork } from '@/components/modals/DonateWrongNetwork';
 import { useAppDispatch, useAppSelector } from '@/features/hooks';
 import DonateToGiveth from '@/components/views/donate/DonateToGiveth';
@@ -37,32 +37,38 @@ import SaveGasFees from './SaveGasFees';
 import SwitchToAcceptedChain from '@/components/views/donate/SwitchToAcceptedChain';
 import { useDonateData } from '@/context/donate.context';
 import { useModalCallback } from '@/hooks/useModalCallback';
-import DonateQFEligibleNetworks from './DonateQFEligibleNetworks';
 import { getActiveRound } from '@/helpers/qf';
 import { useGeneralWallet } from '@/providers/generalWalletProvider';
 import { ChainType } from '@/types/config';
-import { INetworkIdWithChain } from '../common.types';
+import { INetworkIdWithChain } from '../common/common.types';
 import DonateModal from './DonateModal';
 import QFModal from './QFModal';
-import EstimatedMatchingToast from '@/components/views/donate/OnTime/EstimatedMatchingToast';
+import EstimatedMatchingToast from '@/components/views/donate/OneTime/EstimatedMatchingToast';
 import TotalDonation from './TotalDonation';
 import {
+	BadgesBase,
+	ForEstimatedMatchingAnimation,
 	GLinkStyled,
 	IconWrapper,
 	Input,
 	InputWrapper,
 	SelectTokenPlaceHolder,
 	SelectTokenWrapper,
-} from '../Recurring/RecurringDonationCard';
+} from '../common/common.styled';
 import { TokenIcon } from '../TokenIcon/TokenIcon';
 import { SelectTokenModal } from './SelectTokenModal/SelectTokenModal';
 import { Spinner } from '@/components/Spinner';
 import { useSolanaBalance } from '@/hooks/useSolanaBalance';
+import { isWalletSanctioned } from '@/services/donation';
+import SanctionModal from '@/components/modals/SanctionedModal';
+import { useTokenPrice } from '@/hooks/useTokenPrice';
+import EligibilityBadges from '@/components/views/donate/common/EligibilityBadges';
+import DonateAnonymously from '@/components/views/donate/common/DonateAnonymously';
+import { GIVBACKS_DONATION_QUALIFICATION_VALUE_USD } from '@/lib/constants/constants';
 
 const CryptoDonation: FC<{
-	setIsQRDonation: (isQRDonation: boolean) => void;
 	acceptedTokens: IProjectAcceptedToken[] | undefined;
-}> = ({ acceptedTokens, setIsQRDonation }) => {
+}> = ({ acceptedTokens }) => {
 	const {
 		chain,
 		walletChainType,
@@ -71,7 +77,6 @@ const CryptoDonation: FC<{
 	} = useGeneralWallet();
 
 	const { formatMessage } = useIntl();
-	const router = useRouter();
 	const { isSignedIn } = useAppSelector(state => state.user);
 
 	const { project, hasActiveQFRound, selectedOneTimeToken } = useDonateData();
@@ -95,6 +100,7 @@ const CryptoDonation: FC<{
 	const [showDonateModal, setShowDonateModal] = useState(false);
 	const [showInsufficientModal, setShowInsufficientModal] = useState(false);
 	const [showChangeNetworkModal, setShowChangeNetworkModal] = useState(false);
+	const [isSanctioned, setIsSanctioned] = useState<boolean>(false);
 	const [acceptedChains, setAcceptedChains] = useState<INetworkIdWithChain[]>(
 		[],
 	);
@@ -136,15 +142,17 @@ const CryptoDonation: FC<{
 	});
 
 	const tokenDecimals = selectedOneTimeToken?.decimals || 18;
-	const projectIsGivBackEligible = !!verified;
 	const { activeStartedRound } = getActiveRound(project.qfRounds);
 	const networkId = (chain as Chain)?.id;
 
-	const isOnEligibleNetworks =
+	const isOnQFEligibleNetworks =
 		networkId && activeStartedRound?.eligibleNetworks?.includes(networkId);
-	const hasStellarAddress = addresses?.some(
-		address => address.chainType === ChainType.STELLAR,
-	);
+
+	const tokenPrice = useTokenPrice(selectedOneTimeToken);
+
+	useEffect(() => {
+		validateSanctions();
+	}, [project, address]);
 
 	useEffect(() => {
 		if (
@@ -191,7 +199,7 @@ const CryptoDonation: FC<{
 						return false;
 				}
 			});
-			const acceptedChainsWithChaintypeAndNetworkId: INetworkIdWithChain[] =
+			const acceptedChainsWithChainTypeAndNetworkId: INetworkIdWithChain[] =
 				[];
 			addresses?.forEach(a => {
 				if (
@@ -199,20 +207,20 @@ const CryptoDonation: FC<{
 					a.chainType === ChainType.EVM
 				) {
 					if (acceptedEvmTokensNetworkIds.has(a.networkId!)) {
-						acceptedChainsWithChaintypeAndNetworkId.push({
+						acceptedChainsWithChainTypeAndNetworkId.push({
 							networkId: a.networkId!,
 							chainType: ChainType.EVM,
 						});
 					}
 				} else if (acceptedNonEvmTokenChainTypes.has(a.chainType)) {
-					acceptedChainsWithChaintypeAndNetworkId.push({
+					acceptedChainsWithChainTypeAndNetworkId.push({
 						networkId: a.networkId!,
 						chainType: a.chainType!,
 					});
 				}
 			});
 
-			setAcceptedChains(acceptedChainsWithChaintypeAndNetworkId);
+			setAcceptedChains(acceptedChainsWithChainTypeAndNetworkId);
 			if (filteredTokens.length < 1) {
 				setShowChangeNetworkModal(true);
 			}
@@ -242,7 +250,7 @@ const CryptoDonation: FC<{
 		}
 		if (
 			hasActiveQFRound &&
-			!isOnEligibleNetworks &&
+			!isOnQFEligibleNetworks &&
 			selectedOneTimeToken?.chainType === ChainType.EVM
 		) {
 			setShowQFModal(true);
@@ -278,7 +286,7 @@ const CryptoDonation: FC<{
 	const { data: estimatedGasPrice } =
 		useEstimateFeesPerGas(estimatedGasFeeObj);
 
-	const gasfee = useMemo(() => {
+	const gasFee = useMemo((): bigint => {
 		if (
 			selectedOneTimeToken?.address !== zeroAddress ||
 			!estimatedGas ||
@@ -293,35 +301,32 @@ const CryptoDonation: FC<{
 		selectedOneTimeToken?.address,
 	]);
 
-	const handleQRDonation = () => {
-		setIsQRDonation(true);
-		router.push(
-			{
-				query: {
-					...router.query,
-					chain: ChainType.STELLAR.toLowerCase(),
-				},
-			},
-			undefined,
-			{ shallow: true },
-		);
-	};
-
 	useEffect(() => {
 		if (
-			amount > selectedTokenBalance - gasfee &&
+			amount > selectedTokenBalance - gasFee &&
 			amount < selectedTokenBalance &&
 			selectedOneTimeToken?.address === zeroAddress &&
-			gasfee > 0n
+			gasFee > 0n
 		) {
 			setInsufficientGasFee(true);
 		} else {
 			setInsufficientGasFee(false);
 		}
-	}, [selectedTokenBalance, amount, selectedOneTimeToken?.address, gasfee]);
+	}, [selectedTokenBalance, amount, selectedOneTimeToken?.address, gasFee]);
+
+	const validateSanctions = async () => {
+		if (project?.organization?.label === 'endaoment' && address) {
+			// We just need to check if the wallet is sanctioned for endaoment projects
+			const sanctioned = await isWalletSanctioned(address);
+			if (sanctioned) {
+				setIsSanctioned(true);
+				return;
+			}
+		}
+	};
 
 	const amountErrorText = useMemo(() => {
-		const totalAmount = Number(formatUnits(gasfee, tokenDecimals)).toFixed(
+		const totalAmount = Number(formatUnits(gasFee, tokenDecimals)).toFixed(
 			10,
 		);
 		const tokenSymbol = selectedOneTimeToken?.symbol;
@@ -332,26 +337,53 @@ const CryptoDonation: FC<{
 				tokenSymbol,
 			},
 		);
-	}, [gasfee, tokenDecimals, selectedOneTimeToken?.symbol, formatMessage]);
+	}, [gasFee, tokenDecimals, selectedOneTimeToken?.symbol, formatMessage]);
 
 	// We need givethDonationAmount here because we need to calculate the donation share
 	// for Giveth. If user want to donate minimal amount to projecct, the donation share for Giveth
 	// has to be 0, disabled in UI and DonationModal
-	const { givethDonation: givethDonationAmount } = calcDonationShare(
+	const {
+		givethDonation: givethDonationAmount,
+		projectDonation: projectDonationAmount,
+	} = calcDonationShare(
 		amount,
 		donationToGiveth,
 		selectedOneTimeToken?.decimals ?? 18,
 	);
 
+	const isProjectGivbacksEligible = !!verified;
+
+	const decimals = selectedOneTimeToken?.decimals || 18;
+	const donationUsdValue =
+		(tokenPrice || 0) *
+		(truncateToDecimalPlaces(formatUnits(amount, decimals), decimals) || 0);
+	const isDonationMatched =
+		!!activeStartedRound &&
+		isOnQFEligibleNetworks &&
+		donationUsdValue >= (activeStartedRound?.minimumValidUsdValue || 0);
+	const showEstimatedMatching =
+		hasActiveQFRound &&
+		!!isOnQFEligibleNetworks &&
+		!!selectedTokenBalance &&
+		!!isDonationMatched;
+	const selectTokenDisabled = !isConnected || erc20List?.length === 0;
+
 	return (
 		<MainContainer>
+			{isSanctioned && (
+				<SanctionModal
+					closeModal={() => {
+						setIsSanctioned(false);
+					}}
+				/>
+			)}
 			{showQFModal && (
 				<QFModal
 					donateWithoutMatching={donateWithoutMatching}
 					setShowModal={setShowQFModal}
 				/>
 			)}
-			{showChangeNetworkModal && acceptedChains && (
+			{!isSanctioned && showChangeNetworkModal && acceptedChains && (
 				<DonateWrongNetwork
 					setShowModal={setShowChangeNetworkModal}
 					acceptedChains={acceptedChains.filter(
@@ -373,8 +405,11 @@ const CryptoDonation: FC<{
 					givethDonationAmount={givethDonationAmount}
 					anonymous={anonymous}
 					givBackEligible={
-						projectIsGivBackEligible &&
-						selectedOneTimeToken.isGivbackEligible
+						isProjectGivbacksEligible &&
+						selectedOneTimeToken.isGivbackEligible &&
+						tokenPrice !== undefined &&
+						tokenPrice * projectDonationAmount >=
+							GIVBACKS_DONATION_QUALIFICATION_VALUE_USD
 					}
 				/>
 			)}
@@ -385,169 +420,230 @@ const CryptoDonation: FC<{
 				/>
 			)}
 			<SaveGasFees acceptedChains={acceptedChains} />
-			{hasStellarAddress && (
-				<QRToastLink onClick={handleQRDonation}>
-					{config.NETWORKS_CONFIG[ChainType.STELLAR]?.chainLogo(32)}
+			{!isConnected && (
+				<ConnectWallet>
+					<IconWalletOutline24 color={neutralColors.gray[700]} />
 					{formatMessage({
-						id: 'label.try_donating_wuth_stellar',
+						id: 'label.please_connect_your_wallet',
 					})}
-				</QRToastLink>
+				</ConnectWallet>
 			)}
-			<Flex $flexDirection='column' gap='8px'>
-				<InputWrapper>
-					<SelectTokenWrapper
-						$alignItems='center'
-						$justifyContent='space-between'
-						onClick={() => setShowSelectTokenModal(true)}
-					>
-						{selectedOneTimeToken ? (
-							<Flex gap='8px' $alignItems='center'>
-								<TokenIcon
-									symbol={selectedOneTimeToken.symbol}
-									size={24}
-								/>
-								<TokenSymbol>
-									{selectedOneTimeToken.symbol}
-								</TokenSymbol>
-							</Flex>
-						) : (
-							<SelectTokenPlaceHolder>
-								{formatMessage({
-									id: 'label.select_token',
-								})}
-							</SelectTokenPlaceHolder>
-						)}
-						<IconCaretDown16 />
-					</SelectTokenWrapper>
-					<Input
-						amount={amount}
-						setAmount={setAmount}
-						disabled={selectedOneTimeToken === undefined}
-						decimals={selectedOneTimeToken?.decimals}
-					/>
-				</InputWrapper>
-				<Flex gap='4px' $alignItems='center'>
-					<GLinkStyled
-						size='Small'
-						onClick={() => setAmount(selectedTokenBalance - gasfee)}
-					>
-						{formatMessage({
-							id: 'label.available',
-						})}
-						:{' '}
-						{selectedOneTimeToken
-							? truncateToDecimalPlaces(
-									formatUnits(
-										selectedTokenBalance,
-										tokenDecimals,
-									),
-									tokenDecimals / 3,
-								)
-							: 0.0}
-					</GLinkStyled>
-					<IconWrapper onClick={() => !isRefetching && refetch()}>
-						{isRefetching ? (
-							<Spinner size={16} />
-						) : (
-							<IconRefresh16 />
-						)}
-					</IconWrapper>
-					{insufficientGasFee && (
-						<WarnError>{amountErrorText}</WarnError>
-					)}
-				</Flex>
-			</Flex>
-			{hasActiveQFRound && !isOnEligibleNetworks && walletChainType && (
-				<DonateQFEligibleNetworks />
-			)}
-			{hasActiveQFRound && isOnEligibleNetworks && (
-				<EstimatedMatchingToast
-					projectData={project}
+			{!selectTokenDisabled && (
+				<EligibilityBadges
 					token={selectedOneTimeToken}
 					amount={amount}
+					tokenPrice={tokenPrice}
+					style={{ margin: '12px 0 24px' }}
 				/>
 			)}
-			{!noDonationSplit ? (
-				<DonateToGiveth
-					setDonationToGiveth={setDonationToGiveth}
-					donationToGiveth={donationToGiveth}
-					givethDonationAmount={givethDonationAmount}
-					title={
-						formatMessage({ id: 'label.donation_to' }) + ' Giveth'
-					}
+			<EstimatedMatchingToast
+				projectData={project}
+				token={selectedOneTimeToken}
+				amount={amount}
+				tokenPrice={tokenPrice}
+				show={showEstimatedMatching}
+			/>
+			<ForEstimatedMatchingAnimation
+				showEstimatedMatching={showEstimatedMatching}
+			>
+				<FlexStyled
+					$flexDirection='column'
+					gap='8px'
+					disabled={selectTokenDisabled}
+				>
+					<InputWrapper>
+						<SelectTokenWrapper
+							$alignItems='center'
+							$justifyContent='space-between'
+							onClick={() =>
+								!selectTokenDisabled &&
+								setShowSelectTokenModal(true)
+							}
+							disabled={selectTokenDisabled}
+							style={{
+								color:
+									selectedOneTimeToken || selectTokenDisabled
+										? 'inherit'
+										: brandColors.giv[500],
+							}}
+						>
+							{selectedOneTimeToken ? (
+								<Flex gap='8px' $alignItems='center'>
+									<TokenIcon
+										symbol={selectedOneTimeToken.symbol}
+										size={24}
+									/>
+									<TokenSymbol>
+										{selectedOneTimeToken.symbol}
+									</TokenSymbol>
+								</Flex>
+							) : (
+								<SelectTokenPlaceHolder>
+									{formatMessage({
+										id: 'label.select_token',
+									})}
+								</SelectTokenPlaceHolder>
+							)}
+							<IconCaretDown16 />
+						</SelectTokenWrapper>
+						<Input
+							amount={amount}
+							setAmount={setAmount}
+							disabled={selectedOneTimeToken === undefined}
+							decimals={selectedOneTimeToken?.decimals}
+						/>
+						<DonationPrice
+							disabled={!selectedOneTimeToken || !isConnected}
+						>
+							{'$ ' + donationUsdValue.toFixed(2)}
+						</DonationPrice>
+					</InputWrapper>
+					{selectedOneTimeToken ? (
+						<FlexStyled
+							gap='4px'
+							$alignItems='center'
+							disabled={!selectedOneTimeToken}
+						>
+							<GLinkStyled
+								size='Small'
+								onClick={() =>
+									setAmount(selectedTokenBalance - gasFee)
+								}
+							>
+								{formatMessage({
+									id: 'label.available',
+								})}
+								:{' '}
+								{selectedOneTimeToken
+									? truncateToDecimalPlaces(
+											formatUnits(
+												selectedTokenBalance,
+												tokenDecimals,
+											),
+											tokenDecimals / 3,
+										)
+									: 0.0}
+							</GLinkStyled>
+							<IconWrapper
+								onClick={() => !isRefetching && refetch()}
+							>
+								{isRefetching ? (
+									<Spinner size={16} />
+								) : (
+									<IconRefresh16 />
+								)}
+							</IconWrapper>
+							{insufficientGasFee && (
+								<WarnError>{amountErrorText}</WarnError>
+							)}
+						</FlexStyled>
+					) : (
+						<div style={{ height: '21.5px' }} />
+					)}
+				</FlexStyled>
+				{!noDonationSplit ? (
+					<DonateToGiveth
+						setDonationToGiveth={setDonationToGiveth}
+						donationToGiveth={donationToGiveth}
+						title={
+							formatMessage({ id: 'label.donate_to' }) + ' Giveth'
+						}
+						disabled={!selectedOneTimeToken || !isConnected}
+					/>
+				) : (
+					<br />
+				)}
+				{!noDonationSplit ? (
+					<TotalDonation
+						donationToGiveth={donationToGiveth}
+						totalDonation={amount}
+						projectTitle={projectTitle}
+						token={selectedOneTimeToken}
+						isActive={!donationDisabled}
+					/>
+				) : (
+					<EmptySpace />
+				)}
+				{!isActive && (
+					<InlineToast
+						type={EToastType.Warning}
+						message={formatMessage({
+							id: 'label.this_project_is_not_active',
+						})}
+					/>
+				)}
+				{isConnected &&
+					(donationDisabled ? (
+						<OutlineButtonStyled
+							label={formatMessage({ id: 'label.donate' })}
+							disabled
+							size='medium'
+						/>
+					) : (
+						<MainButton
+							id='Donate_Final'
+							label={formatMessage({ id: 'label.donate' })}
+							size='medium'
+							onClick={handleDonate}
+						/>
+					))}
+				{!isConnected && (
+					<MainButton
+						label={formatMessage({
+							id: 'component.button.connect_wallet',
+						})}
+						onClick={() => dispatch(setShowWelcomeModal(true))}
+					/>
+				)}
+				<DonateAnonymously
+					anonymous={anonymous}
+					setAnonymous={setAnonymous}
+					selectedToken={selectedOneTimeToken}
 				/>
-			) : (
-				<br />
-			)}
-			{selectedOneTimeToken && (
-				<GIVBackToast
-					projectEligible={projectIsGivBackEligible}
-					tokenEligible={selectedOneTimeToken.isGivbackEligible}
-				/>
-			)}
-			{!noDonationSplit ? (
-				<TotalDonation
-					donationToGiveth={donationToGiveth}
-					totalDonation={amount}
-					projectTitle={projectTitle}
-					token={selectedOneTimeToken}
-					isActive={!donationDisabled}
-				/>
-			) : (
-				<EmptySpace />
-			)}
-			{!isActive && (
-				<InlineToast
-					type={EToastType.Warning}
-					message={formatMessage({
-						id: 'label.this_project_is_not_active',
-					})}
-				/>
-			)}
-			{isConnected && (
-				<MainButton
-					id='Donate_Final'
-					label={formatMessage({ id: 'label.donate' })}
-					disabled={donationDisabled}
-					size='medium'
-					onClick={handleDonate}
-				/>
-			)}
-			{!isConnected && (
-				<MainButton
-					label={formatMessage({
-						id: 'component.button.connect_wallet',
-					})}
-					onClick={() => dispatch(setShowWelcomeModal(true))}
-				/>
-			)}
-			<CheckBoxContainer>
-				<CheckBox
-					label={formatMessage({
-						id: 'label.make_it_anonymous',
-					})}
-					checked={anonymous}
-					onChange={() => setAnonymous(!anonymous)}
-					size={14}
-				/>
-				<div>
-					{formatMessage({
-						id: 'component.tooltip.donate_anonymously',
-					})}
-				</div>
-			</CheckBoxContainer>
-			{showSelectTokenModal && (
-				<SelectTokenModal
-					setShowModal={setShowSelectTokenModal}
-					tokens={erc20List}
-					acceptCustomToken={
-						project.organization?.supportCustomTokens
-					}
-				/>
-			)}
+				{showSelectTokenModal && (
+					<SelectTokenModal
+						setShowModal={setShowSelectTokenModal}
+						tokens={erc20List}
+						acceptCustomToken={
+							project.organization?.supportCustomTokens
+						}
+					/>
+				)}
+			</ForEstimatedMatchingAnimation>
 		</MainContainer>
 	);
 };
+
+const OutlineButtonStyled = styled(OutlineButton)`
+	width: 100%;
+`;
+
+const DonationPrice = styled(SublineBold)<{ disabled?: boolean }>`
+	position: absolute;
+	right: 16px;
+	border-radius: 4px;
+	background: ${neutralColors.gray[300]};
+	padding: 2px 8px !important;
+	margin: 16px 0px;
+	color: ${neutralColors.gray[700]} !important;
+	opacity: ${props => (props.disabled ? 0.4 : 1)};
+	height: 22px;
+`;
+
+const FlexStyled = styled(Flex)<{ disabled: boolean }>`
+	border-radius: 8px;
+	background-color: white;
+	${props =>
+		props.disabled &&
+		`
+		opacity: 0.5;
+		pointer-events: none;
+	`}
+`;
+
+const ConnectWallet = styled(BadgesBase)`
+	margin: 12px 0 24px;
+`;
 
 const WarnError = styled.div`
 	color: ${semanticColors.punch[500]};
@@ -577,30 +673,6 @@ const MainButton = styled(Button)`
 		props.disabled ? brandColors.giv[200] : brandColors.giv[500]};
 	color: white;
 	text-transform: uppercase;
-`;
-
-export const CheckBoxContainer = styled.div`
-	margin-top: 16px;
-	> div:nth-child(2) {
-		color: ${neutralColors.gray[900]};
-		font-size: 12px;
-		margin-top: 3px;
-		margin-left: 24px;
-	}
-`;
-
-const QRToastLink = styled(Flex)`
-	cursor: pointer;
-	align-items: center;
-	gap: 12px;
-	padding-block: 8px;
-	padding-left: 16px;
-	margin-block: 16px;
-	background-color: ${semanticColors.blueSky[100]};
-	color: ${semanticColors.blueSky[700]};
-	border-radius: 8px;
-	border: 1px solid ${semanticColors.blueSky[300]};
-	font-weight: 500;
 `;
 
 export default CryptoDonation;

@@ -13,7 +13,7 @@ import {
 } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
 import { mediaQueries } from '@/lib/constants/constants';
-import { UsdAmountCard } from '@/components/views/donate/OnTime/SelectTokenModal/QRCodeDonation/QRDonationCard';
+import { UsdAmountCard } from '@/components/views/donate/OneTime/SelectTokenModal/QRCodeDonation/QRDonationCard';
 import { TokenIcon } from '@/components/views/donate/TokenIcon/TokenIcon';
 import config from '@/configuration';
 import { smallDashedFormatDate } from '@/lib/helpers';
@@ -26,8 +26,21 @@ import links from '@/lib/constants/links';
 import { useQRCodeDonation } from '@/hooks/useQRCodeDonation';
 import { client } from '@/apollo/apolloClient';
 import { MARK_DRAFT_DONATION_AS_FAILED } from '@/apollo/gql/gqlDonations';
+import { useDonateData } from '@/context/donate.context';
+import { slugToProjectView } from '@/lib/routeCreators';
 
 type IColor = 'golden' | 'jade' | 'punch' | 'blueSky';
+
+interface TimerProps {
+	status: TQRStatus;
+	endDate: Date;
+	locale: string;
+	draftDonationId: number;
+	setStatus: (status: TQRStatus) => void;
+	checkDraftDonationStatus: (
+		draftDonationId: number,
+	) => Promise<IDraftDonation | null>;
+}
 
 const StatusMap: Record<string, { color: IColor; text: string }> = {
 	pending: {
@@ -94,16 +107,14 @@ const formatTime = (date: Date, locale: string) => {
 };
 
 // Timer that keep counting time before the donation expires (mm Minutes ss Seconds) format
-const Timer = (
-	status: TQRStatus,
-	endDate: Date,
-	locale: string,
-	draftDonationId: number,
-	setStatus: (status: TQRStatus) => void,
-	checkDraftDonationStatus: (
-		draftDonationId: number,
-	) => Promise<IDraftDonation | null>,
-) => {
+const Timer: React.FC<TimerProps> = ({
+	status,
+	endDate,
+	locale,
+	draftDonationId,
+	setStatus,
+	checkDraftDonationStatus,
+}) => {
 	const _endDate = new Date(endDate.toLocaleString(locale));
 
 	const calculateTimeLeft = () => {
@@ -135,11 +146,12 @@ const Timer = (
 			}
 		};
 
-		const tick = () => {
+		const tick = async () => {
 			const timeLeft = calculateTimeLeft();
 
 			if (timeLeft.minutes === 0 && timeLeft.seconds === 0) {
-				handleTimeout();
+				await handleTimeout();
+				clearInterval(interval); // Stop the interval after handling timeout
 				return;
 			}
 
@@ -149,22 +161,30 @@ const Timer = (
 		const interval = setInterval(tick, 1000);
 
 		return () => clearInterval(interval);
-	}, [_endDate]);
+	}, [
+		_endDate,
+		draftDonationId,
+		status,
+		locale,
+		checkDraftDonationStatus,
+		setStatus,
+	]);
 
 	return (time.minutes === 0 && time.seconds === 0) || status === 'failed' ? (
 		<FlexWrap $alignItems='center' gap='8px'>
-			<P>{'15 Minutes'}</P>
+			<B>{'15 Minutes'}</B>
 			<TextBox>{'Expired at ' + formatTime(_endDate, locale)}</TextBox>
 		</FlexWrap>
 	) : (
-		<P>
+		<TextBox>
 			{time.minutes.toString().padStart(2, '0')} {' Minutes '}
 			{time.seconds.toString().padStart(2, '0')} {' Seconds '}
-		</P>
+		</TextBox>
 	);
 };
 
-const transactionLink = 'https://stellar.expert/explorer/public/tx/';
+const STELLAR_TRANSACTION_LINK = 'https://stellar.expert/explorer/public/tx/';
+const STELLAR_ADDRESS_LINK = 'https://stellar.expert/explorer/public/account/';
 
 const formatComponent = (date: string | undefined, locale: string) => {
 	const timePassed = getHowManyPassed(new Date(date ?? ''), locale);
@@ -173,14 +193,14 @@ const formatComponent = (date: string | undefined, locale: string) => {
 		<FlexWrap $alignItems='center' gap='8px'>
 			{date ? (
 				<>
-					<P style={{ minWidth: 'fit-content' }}>
+					<B style={{ minWidth: 'fit-content' }}>
 						{timePassed.value} {timePassed.unit} ago
-					</P>
+					</B>
 					<TextBox>{smallDashedFormatDate(new Date(date))}</TextBox>
 					<TextBox>{formatTime(new Date(date), locale)}</TextBox>
 				</>
 			) : (
-				'NA'
+				<B>NA</B>
 			)}
 		</FlexWrap>
 	);
@@ -194,7 +214,8 @@ const DonationStatusSection: FC<TDonationStatusSectionProps> = ({
 	setStatus,
 }) => {
 	const { locale, formatMessage } = useIntl();
-	const { checkDraftDonationStatus } = useQRCodeDonation();
+	const { project } = useDonateData();
+	const { checkDraftDonationStatus } = useQRCodeDonation(project);
 
 	return (
 		<DetailsWapper>
@@ -219,14 +240,14 @@ const DonationStatusSection: FC<TDonationStatusSectionProps> = ({
 					<FlexWrap $alignItems='center' gap='8px'>
 						<B>{draftDonationData?.amount}</B>
 						<UsdAmountCard>$ {usdAmount}</UsdAmountCard>
-						<TokenIcon
-							symbol={
-								config.NETWORKS_CONFIG[ChainType.STELLAR]
-									.nativeCurrency.symbol
-							}
-							size={32}
-						/>
 						<TokenSymbol>
+							<TokenIcon
+								symbol={
+									config.NETWORKS_CONFIG[ChainType.STELLAR]
+										.nativeCurrency.symbol
+								}
+								size={32}
+							/>
 							{
 								config.NETWORKS_CONFIG[ChainType.STELLAR]
 									.nativeCurrency.symbol
@@ -235,30 +256,46 @@ const DonationStatusSection: FC<TDonationStatusSectionProps> = ({
 						</TokenSymbol>
 					</FlexWrap>
 				</FlexWrap>
-				<FlexWrap $alignItems='center'>
+				<FlexAddress $alignItems='center'>
 					<Label>{formatMessage({ id: 'label.from' })}</Label>
 					{donationData?.fromWalletAddress ? (
-						<Link>{donationData.fromWalletAddress}</Link>
+						<ExternalLink
+							href={`${STELLAR_ADDRESS_LINK}${donationData.fromWalletAddress}`}
+						>
+							<Link>{donationData.fromWalletAddress}</Link>
+						</ExternalLink>
 					) : (
 						<B>{'NA'}</B>
 					)}
-				</FlexWrap>
+				</FlexAddress>
 				<FlexWrap $alignItems='center'>
 					<Label>{formatMessage({ id: 'label.donating_to' })}</Label>
 					{draftDonationData?.project?.title ? (
-						<Link>{draftDonationData.project.title}</Link>
+						<ExternalLink
+							href={slugToProjectView(
+								draftDonationData.project.slug,
+							)}
+						>
+							<Link>{draftDonationData.project.title}</Link>
+						</ExternalLink>
 					) : (
 						<B>{'NA'}</B>
 					)}
 				</FlexWrap>
-				<FlexWrap $alignItems='center'>
+				<FlexAddress $alignItems='center' style={{ width: '100%' }}>
 					<Label $capitalize>
 						{formatMessage({ id: 'label.recipient_address' })}
 					</Label>
-					<B style={{ wordBreak: 'break-word' }}>
-						{draftDonationData?.toWalletAddress ?? 'NA'}
-					</B>
-				</FlexWrap>
+					{draftDonationData?.toWalletAddress ? (
+						<ExternalLink
+							href={`${STELLAR_ADDRESS_LINK}${draftDonationData?.toWalletAddress}`}
+						>
+							<Link>{draftDonationData?.toWalletAddress}</Link>
+						</ExternalLink>
+					) : (
+						<B>{'NA'}</B>
+					)}
+				</FlexAddress>
 				<FlexWrap $alignItems='center'>
 					<Label>{formatMessage({ id: 'label.memo' })}</Label>
 					<B>{draftDonationData?.toWalletMemo ?? 'NA'}</B>
@@ -279,12 +316,14 @@ const DonationStatusSection: FC<TDonationStatusSectionProps> = ({
 						donationData?.transactionId ? (
 							<Flex $alignItems='center' gap='8px'>
 								<ExternalLink
-									href={`${transactionLink}${donationData.transactionId}`}
-									title={formatMessage({
-										id: 'label.view_details',
-									})}
-									color={brandColors.pinky[500]}
-								/>
+									href={`${STELLAR_TRANSACTION_LINK}${donationData.transactionId}`}
+								>
+									<Link color={brandColors.pinky[500]}>
+										{formatMessage({
+											id: 'label.transaction_detail',
+										})}
+									</Link>
+								</ExternalLink>
 								<IconExternalLink
 									color={brandColors.pinky[500]}
 								/>
@@ -294,14 +333,16 @@ const DonationStatusSection: FC<TDonationStatusSectionProps> = ({
 						)
 					) : (
 						<B>
-							{Timer(
+							{Timer({
 								status,
-								new Date(draftDonationData?.expiresAt!),
+								endDate: new Date(
+									draftDonationData?.expiresAt!,
+								),
 								locale,
-								Number(draftDonationData.id),
+								draftDonationId: Number(draftDonationData.id),
 								setStatus,
 								checkDraftDonationStatus,
-							)}
+							})}
 						</B>
 					)}
 				</FlexWrap>
@@ -401,7 +442,10 @@ const ColorfulDot = styled.div<{ status: string }>`
 		semanticColors[StatusMap[status].color][700]};
 `;
 
-const TokenSymbol = styled(B)`
+const TokenSymbol = styled(Flex)`
+	align-items: center;
+	gap: 8px;
+	font-weight: 500;
 	white-space: nowrap;
 `;
 
@@ -420,7 +464,11 @@ const Label = styled(B)<{ $capitalize?: boolean }>`
 	width: 50%;
 	text-transform: ${({ $capitalize }) =>
 		$capitalize ? 'capitalize' : 'none'};
-	color: ${neutralColors.gray[700]};
+	color: ${neutralColors.gray[700]} !important;
+
+	${mediaQueries.tablet} {
+		width: 30%;
+	}
 
 	${mediaQueries.laptopS} {
 		width: 19%;
@@ -431,12 +479,6 @@ const Hr = styled.div`
 	width: 100%;
 	height: 1px;
 	background-color: ${neutralColors.gray[300]};
-`;
-
-const Link = styled(B)`
-	color: ${semanticColors.blueSky[500]};
-	cursor: pointer;
-	word-break: break-word;
 `;
 
 const TextBox = styled(P)`
@@ -454,6 +496,32 @@ const ButtonStyled = styled(Button)`
 
 const FlexWrap = styled(Flex)`
 	flex-wrap: wrap;
+	gap: 10px;
+`;
+
+const FlexAddress = styled(Flex)`
+	flex-wrap: wrap;
+	gap: 10px;
+
+	${mediaQueries.tablet} {
+		flex-wrap: nowrap;
+	}
+
+	> :last-child {
+		width: 100% !important;
+	}
+
+	${mediaQueries.laptopL} {
+		> :last-child {
+			width: 81% !important;
+		}
+	}
+
+	${mediaQueries.tablet} {
+		> :last-child {
+			width: 50% !important;
+		}
+	}
 `;
 
 const FlexDirection = styled(Flex)`
@@ -463,6 +531,12 @@ const FlexDirection = styled(Flex)`
 	${mediaQueries.tablet} {
 		flex-direction: row;
 	}
+`;
+
+const Link = styled(B)<{ color?: string }>`
+	color: ${({ color }) => color || semanticColors.blueSky[500]} !important;
+	word-break: break-all;
+	font-weight: 500 !important;
 `;
 
 export default DonationStatusSection;

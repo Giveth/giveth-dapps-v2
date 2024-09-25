@@ -8,11 +8,14 @@ import {
 	mediaQueries,
 	Flex,
 	H5,
+	semanticColors,
+	H4,
 } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
 import styled from 'styled-components';
 import { type FC } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 import { formatDonation } from '@/helpers/number';
 import { IProject } from '@/apollo/types/types';
 import { VerifiedBadge } from '@/components/badges/VerifiedBadge';
@@ -20,6 +23,9 @@ import { slugToProjectView } from '@/lib/routeCreators';
 import { ProjectCardUserName } from '@/components/project-card/ProjectCardUserName';
 import { ORGANIZATION } from '@/lib/constants/organizations';
 import { useDonateData } from '@/context/donate.context';
+import { ChainType } from '@/types/config';
+import config from '@/configuration';
+import { calculateTotalEstimatedMatching, getActiveRound } from '@/helpers/qf';
 
 interface IDonatePageProjectDescriptionProps {
 	projectData?: IProject;
@@ -30,21 +36,43 @@ export const DonatePageProjectDescription: FC<
 	IDonatePageProjectDescriptionProps
 > = ({ projectData, showRaised = true }) => {
 	const { formatMessage, locale } = useIntl();
+	const router = useRouter();
 	const {
 		totalDonations,
+		sumDonationValueUsdForActiveQfRound,
+		countUniqueDonorsForActiveQfRound,
 		slug,
 		title,
 		descriptionSummary,
 		adminUser,
 		organization,
+		estimatedMatching,
 	} = projectData || {};
 
+	const { allProjectsSum, matchingPool, projectDonationsSqrtRootSum } =
+		estimatedMatching || {};
+	const isQRDonation = router.query.chain === ChainType.STELLAR.toLowerCase();
 	const orgLabel = organization?.label;
 	const isForeignOrg =
 		orgLabel !== ORGANIZATION.trace && orgLabel !== ORGANIZATION.giveth;
 
 	const projectLink = slugToProjectView(slug!);
 	const { project } = useDonateData();
+
+	const { activeStartedRound, activeQFRound } = getActiveRound(
+		project.qfRounds,
+	);
+
+	const isStellarIncludedInQF =
+		activeStartedRound?.eligibleNetworks?.includes(
+			config.STELLAR_NETWORK_NUMBER,
+		);
+
+	const {
+		allocatedFundUSDPreferred,
+		allocatedFundUSD,
+		allocatedTokenSymbol,
+	} = activeQFRound || {};
 
 	return (
 		<DonationSectionWrapper gap='16px'>
@@ -63,42 +91,120 @@ export const DonatePageProjectDescription: FC<
 				isForeignOrg={isForeignOrg}
 				sidePadding='0'
 			/>
-			{showRaised && (
-				<P>
-					{formatMessage({ id: 'label.raised' })}:{' '}
-					{formatDonation(totalDonations || 0, '$', locale)}
-				</P>
-			)}
-			<DescriptionSummary>{descriptionSummary}</DescriptionSummary>
-			{project?.organization?.label === ORGANIZATION.endaoment ? null : (
-				<DonateDescription $flexDirection='column' gap='8px'>
-					<B>
-						{formatMessage({
-							id: 'component.donation_section.100_to_the_project',
-						})}
-					</B>
-					<B></B>
-					<P>
-						{formatMessage({
-							id: 'component.donation_section.desc',
-						})}
-					</P>
-					<a
-						href='https://docs.giveth.io/whatisgiveth/zero-fees'
-						target='_blank'
-						referrerPolicy='no-referrer'
-						rel='noreferrer'
-					>
-						<LearnLink $alignItems='center' gap='2px'>
-							<Subline>
+			{isQRDonation && isStellarIncludedInQF && showRaised ? (
+				<>
+					{sumDonationValueUsdForActiveQfRound || 0 ? (
+						<>
+							<AmountRaisedText>
+								<Subline color={neutralColors.gray[700]}>
+									{formatMessage({
+										id: 'label.amount_raised_in_this_round',
+									})}
+								</Subline>
+							</AmountRaisedText>
+							<PriceText>
+								{formatDonation(
+									sumDonationValueUsdForActiveQfRound || 0,
+									'$',
+									locale,
+								)}
+							</PriceText>
+
+							<div>
+								<LightSubline>
+									{formatMessage({
+										id: 'label.raised_from',
+									})}{' '}
+								</LightSubline>
+								<Subline style={{ display: 'inline-block' }}>
+									&nbsp;
+									{countUniqueDonorsForActiveQfRound || 0}
+									&nbsp;
+								</Subline>
+								<LightSubline>
+									{formatMessage(
+										{
+											id: 'label.contributors',
+										},
+										{
+											count: countUniqueDonorsForActiveQfRound,
+										},
+									)}
+								</LightSubline>
+							</div>
+							<EstimatedMatchingPrice>
+								+&nbsp;
+								{formatDonation(
+									calculateTotalEstimatedMatching(
+										projectDonationsSqrtRootSum,
+										allProjectsSum,
+										allocatedFundUSDPreferred
+											? allocatedFundUSD
+											: matchingPool,
+										activeStartedRound?.maximumReward,
+									),
+									allocatedFundUSDPreferred ? '$' : '',
+									locale,
+									true,
+								)}
+								{allocatedFundUSDPreferred
+									? ''
+									: ` ${allocatedTokenSymbol}`}
+							</EstimatedMatchingPrice>
+						</>
+					) : (
+						<DonateInfo>
+							<NoFund weight={700}>
 								{formatMessage({
-									id: 'component.donation_section.learn_zero_fee',
+									id: 'label.donate_first_lead_the_way',
 								})}
-							</Subline>
-							<IconChevronRight16 />
-						</LearnLink>
-					</a>
-				</DonateDescription>
+							</NoFund>
+						</DonateInfo>
+					)}
+				</>
+			) : (
+				<>
+					{showRaised && (
+						<P>
+							{formatMessage({ id: 'label.raised' })}:{' '}
+							{formatDonation(totalDonations || 0, '$', locale)}
+						</P>
+					)}
+					<DescriptionSummary>
+						{descriptionSummary}
+					</DescriptionSummary>
+					{project?.organization?.label ===
+					ORGANIZATION.endaoment ? null : (
+						<DonateDescription $flexDirection='column' gap='8px'>
+							<B>
+								{formatMessage({
+									id: 'component.donation_section.100_to_the_project',
+								})}
+							</B>
+							<B></B>
+							<P>
+								{formatMessage({
+									id: 'component.donation_section.desc',
+								})}
+							</P>
+							<a
+								href='https://docs.giveth.io/whatisgiveth/zero-fees'
+								target='_blank'
+								referrerPolicy='no-referrer'
+								rel='noreferrer'
+							>
+								<LearnLink $alignItems='center' gap='2px'>
+									<Subline>
+										{formatMessage({
+											id: 'component.donation_section.learn_zero_fee',
+										})}
+									</Subline>
+									<IconChevronRight16 />
+								</LearnLink>
+							</a>
+						</DonateDescription>
+					)}
+				</>
 			)}
 		</DonationSectionWrapper>
 	);
@@ -139,4 +245,37 @@ const LearnLink = styled(Flex)`
 	&:hover {
 		color: ${brandColors.pinky[700]};
 	}
+`;
+const AmountRaisedText = styled(Subline)`
+	color: ${neutralColors.gray[700]};
+	background-color: ${neutralColors.gray[300]};
+	padding: 2px 0;
+	width: fit-content;
+	> span {
+		font-weight: 500;
+	}
+`;
+
+const PriceText = styled(H5)`
+	display: inline;
+	color: ${neutralColors.gray[900]};
+	font-weight: 700;
+`;
+
+const LightSubline = styled(Subline)`
+	display: inline-block;
+	color: ${neutralColors.gray[700]};
+`;
+
+const EstimatedMatchingPrice = styled(H5)`
+	color: ${semanticColors.jade[500]};
+`;
+
+const DonateInfo = styled.div`
+	height: 130px;
+`;
+
+const NoFund = styled(H4)`
+	color: ${neutralColors.gray[800]};
+	margin-top: 16px;
 `;

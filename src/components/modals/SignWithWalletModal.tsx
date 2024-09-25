@@ -243,7 +243,7 @@ export const SignWithWalletModal: FC<IProps> = ({
 						})}
 					</Description>
 				)}
-				{!multisigState.lastStep && (
+				{!multisigState.lastStep && isSafeEnv && (
 					<NoteDescription color='red'>
 						{formatMessage({
 							id: isGSafeConnector

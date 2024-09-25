@@ -10,8 +10,8 @@ import {
 	useEffect,
 } from 'react';
 import { useAccount } from 'wagmi';
-import { IProject } from '@/apollo/types/types';
-import { hasActiveRound } from '@/helpers/qf';
+import { IProject, IQFRound } from '@/apollo/types/types';
+import { getActiveRound, hasActiveRound } from '@/helpers/qf';
 import { ISuperfluidStream, IToken } from '@/types/superFluid';
 import { ChainType } from '@/types/config';
 import { useUserStreams } from '@/hooks/useUserStreams';
@@ -33,6 +33,7 @@ interface ISuccessDonation {
 
 interface IDonateContext {
 	hasActiveQFRound?: boolean;
+	activeStartedRound?: IQFRound;
 	project: IProject;
 	successDonation?: ISuccessDonation;
 	tokenStreams: ITokenStreams;
@@ -135,14 +136,18 @@ export const DonateProvider: FC<IProviderProps> = ({ children, project }) => {
 		setStatus,
 		loading,
 		setDraftDonation,
-	} = useQRCodeDonation();
+	} = useQRCodeDonation(project);
 
 	const hasActiveQFRound = hasActiveRound(project?.qfRounds);
+	const activeStartedRound = getActiveRound(
+		project?.qfRounds,
+	).activeStartedRound;
 
 	return (
 		<DonateContext.Provider
 			value={{
 				hasActiveQFRound,
+				activeStartedRound,
 				project: projectData,
 				successDonation,
 				setSuccessDonation,

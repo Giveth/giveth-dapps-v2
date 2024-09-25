@@ -1,5 +1,5 @@
 import { cookieStorage, createConfig, createStorage } from 'wagmi';
-import { walletConnect, coinbaseWallet } from '@wagmi/connectors';
+import { walletConnect, coinbaseWallet, safe } from '@wagmi/connectors';
 
 import { createClient, http } from 'viem';
 import configuration from './configuration';
@@ -28,6 +28,9 @@ export const wagmiConfig = createConfig({
 			metadata,
 		}),
 		coinbaseWallet({ appName: 'Giveth', version: '3' }),
+		safe({
+			allowedDomains: [/app.safe.global$/],
+		}),
 	],
 	ssr: true,
 	storage: createStorage({

@@ -75,11 +75,10 @@ export const AdminActions = () => {
 			cb: () => router.push(idToProjectEdit(projectData?.id || '')),
 		},
 		{
-			label: capitalizeAllWords(
-				formatMessage({
-					id: 'label.verify_your_project',
-				}),
-			),
+			label: formatMessage({
+				id: 'label.verify_your_project',
+			}),
+
 			type: EOptionType.ITEM,
 			icon: <IconVerifiedBadge16 />,
 			cb: () => setShowVerificationModal(true),

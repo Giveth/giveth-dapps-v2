@@ -29,11 +29,11 @@ import { useModalCallback } from '@/hooks/useModalCallback';
 import { isSSRMode } from '@/lib/helpers';
 import BoostModal from '@/components/modals/Boost/BoostModal';
 import { useAppSelector } from '@/features/hooks';
-import { formatDonation } from '@/helpers/number';
 import { EProjectStatus } from '@/apollo/types/gqlEnums';
 import { EVerificationStatus } from '@/apollo/types/types';
 import Routes from '@/lib/constants/Routes';
 import { VerificationModal } from '@/components/modals/VerificationModal';
+import { GIVBACKS_DONATION_QUALIFICATION_VALUE_USD } from '@/lib/constants/constants';
 
 const ProjectGIVbackToast = () => {
 	const [showBoost, setShowBoost] = useState(false);
@@ -49,7 +49,7 @@ const ProjectGIVbackToast = () => {
 	const color = isOwnerVerified
 		? semanticColors.golden[600]
 		: neutralColors.gray[900];
-	const { formatMessage, locale } = useIntl();
+	const { formatMessage } = useIntl();
 	const { open: openConnectModal } = useWeb3Modal();
 	const {
 		isEnabled,
@@ -84,22 +84,19 @@ const ProjectGIVbackToast = () => {
 	let title = '';
 	let description, Button;
 
+	const givbackFactorPercent = ((givbackFactor || 0) * 100).toFixed();
+
 	if (isOwnerVerified) {
 		if (givbackFactor !== 0) {
-			title =
-				formatMessage({
-					id: `${useIntlTitle}verified_owner_1`,
-				}) +
-				formatDonation(
-					(givbackFactor || 0) * 100,
-					undefined,
-					locale,
-					true,
-				) +
-				'%' +
-				formatMessage({
-					id: `${useIntlTitle}verified_owner_2`,
-				});
+			title = formatMessage(
+				{
+					id: `${useIntlTitle}verified_owner`,
+				},
+				{
+					percent: givbackFactorPercent,
+					value: GIVBACKS_DONATION_QUALIFICATION_VALUE_USD,
+				},
+			);
 		}
 		description = formatMessage({
 			id: `${useIntlDescription}verified_owner`,
@@ -156,7 +153,7 @@ const ProjectGIVbackToast = () => {
 			Button = (
 				<ExternalLink href={`${Routes.Verification}/${slug}`}>
 					<OutlineButton
-						label='Resume verification'
+						label='Resume GIVbacks Form'
 						icon={<IconVerifiedBadge16 />}
 					/>
 				</ExternalLink>
@@ -223,9 +220,14 @@ const ProjectGIVbackToast = () => {
 					id: `${useIntlTitle}verified_public_2`,
 				});
 		}
-		description = formatMessage({
-			id: `${useIntlDescription}verified_public`,
-		});
+		description = formatMessage(
+			{
+				id: `${useIntlDescription}verified_public`,
+			},
+			{
+				value: GIVBACKS_DONATION_QUALIFICATION_VALUE_USD,
+			},
+		);
 		Button = (
 			<OutlineButton
 				onClick={handleBoostClick}
@@ -259,18 +261,6 @@ const ProjectGIVbackToast = () => {
 					<div>
 						<Title color={color}>{title}</Title>
 						<Description>{description}</Description>
-						{isOwnerVerified && (
-							<Note>
-								<span>
-									{formatMessage({
-										id: 'label.note',
-									}) + ' '}
-								</span>
-								{formatMessage({
-									id: 'project.givback_toast.description.verified_owner.note',
-								})}
-							</Note>
-						)}
 						{link && (
 							<ExternalLink href={link}>
 								<LearnMore>
@@ -296,17 +286,10 @@ const ProjectGIVbackToast = () => {
 	);
 };
 
-const Note = styled(P)`
-	color: ${neutralColors.gray[800]};
-	> span {
-		font-weight: 500;
-	}
-`;
-
 const LearnMore = styled(Caption)`
 	display: flex;
 	gap: 2px;
-	color: ${brandColors.pinky[500]};
+	color: ${brandColors.pinky[500]} !important;
 `;
 
 const Description = styled(P)`
@@ -327,7 +310,7 @@ const ButtonWrapper = styled.div`
 		flex-direction: row-reverse;
 		color: ${brandColors.giv[500]};
 		gap: 0;
-		width: 194px;
+		min-width: 180px;
 		svg {
 			margin-right: 8px;
 			flex-shrink: 0;
@@ -354,7 +337,7 @@ const Wrapper = styled(Flex)`
 	border-radius: 16px;
 	margin-top: 12px;
 	flex-direction: column;
-	${mediaQueries.tablet} {
+	${mediaQueries.laptopL} {
 		flex-direction: row;
 	}
 `;

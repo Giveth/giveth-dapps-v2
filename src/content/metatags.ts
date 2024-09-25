@@ -42,7 +42,7 @@ export const projectsMetatags = {
 
 export const givbacksMetatags = {
 	title: 'GIVbacks: Get rewarded for donating to verified projects',
-	desc: 'GIVbacks rewards donors to verified projects with GIV, super-charging Giveth as a donor-driven force for good. GIVbacks is only available on Gnosis Chain.',
+	desc: 'When you make a donation of $5 or more to a GIVbacks eligible project you qualify to get GIV!',
 	image: 'https://i.ibb.co/HTbdCdd/Thumbnail.png',
 	url: 'https://giveth.io/givbacks',
 };
