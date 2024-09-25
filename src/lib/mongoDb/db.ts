@@ -3,7 +3,7 @@ import * as mongoDB from 'mongodb';
 let mongoClient: mongoDB.MongoClient;
 
 export async function connectToMongo() {
-	const url = process.env.MONGO_DOATION_CONNECTION_URI;
+	const url = process.env.MONGO_DONATION_CONNECTION_URI;
 	if (!url) {
 		throw new Error('MONGODB_CONNECTION_URL is not set');
 	}
