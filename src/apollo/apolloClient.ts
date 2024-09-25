@@ -1,7 +1,6 @@
 import { useMemo } from 'react';
 import { ApolloClient, InMemoryCache, ApolloLink } from '@apollo/client';
 import { RetryLink } from '@apollo/client/link/retry';
-
 import { setContext } from '@apollo/client/link/context';
 import { onError } from '@apollo/client/link/error';
 import gql from 'graphql-tag';
@@ -95,7 +94,7 @@ function createApolloClient() {
 	const httpLink = createUploadLink({
 		uri: config.BACKEND_LINK,
 		fetch: customFetch as any,
-	}) as unknown as ApolloLink;
+	});
 
 	const authLink = setContext((_, { headers }) => {
 		let locale: string | null = !ssrMode
@@ -149,9 +148,12 @@ function createApolloClient() {
 		}
 	});
 
+	// Combine all links using ApolloLink.from to fix terminating link error
+	const link = ApolloLink.from([errorLink, authLink, retryLink, httpLink]);
+
 	return new ApolloClient({
 		ssrMode,
-		link: errorLink.concat(authLink.concat(httpLink.concat(retryLink))),
+		link: link,
 		cache: new InMemoryCache({
 			addTypename: false,
 		}),
@@ -161,7 +163,6 @@ function createApolloClient() {
 			},
 			query: {
 				fetchPolicy: 'cache-first',
-				// nextFetchPolicy: 'cache-first',
 			},
 		},
 		typeDefs: gql`

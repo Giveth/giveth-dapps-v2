@@ -21,7 +21,7 @@ import { mediaQueries } from '@/lib/constants/constants';
 import { Modal } from './Modal';
 import { IModal } from '@/types/common';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
-import { INetworkIdWithChain } from '@/components/views/donate/common.types';
+import { INetworkIdWithChain } from '@/components/views/donate/common/common.types';
 import config from '@/configuration';
 import NetworkLogo from '../NetworkLogo';
 import { NetworkItem, SelectedNetwork } from './SwitchNetwork';

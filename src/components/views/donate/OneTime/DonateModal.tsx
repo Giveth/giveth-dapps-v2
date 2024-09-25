@@ -9,10 +9,15 @@ import {
 	FlexCenter,
 } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
-import { Chain } from 'viem';
+import { Chain, formatUnits } from 'viem';
 import StorageLabel, { getWithExpiry } from '@/lib/localStorage';
 import { Modal } from '@/components/modals/Modal';
-import { compareAddresses, formatTxLink, showToastError } from '@/lib/helpers';
+import {
+	compareAddresses,
+	formatTxLink,
+	showToastError,
+	truncateToDecimalPlaces,
+} from '@/lib/helpers';
 import { mediaQueries } from '@/lib/constants/constants';
 import { IMeGQL, IProjectAcceptedToken } from '@/apollo/types/gqlTypes';
 import { IModal } from '@/types/common';
@@ -36,7 +41,7 @@ import { ChainType } from '@/types/config';
 import { IProject, IWalletAddress } from '@/apollo/types/types';
 import { useCreateSolanaDonation } from '@/hooks/useCreateSolanaDonation';
 import { useTokenPrice } from '@/hooks/useTokenPrice';
-import { calcDonationShare } from '@/components/views/donate/helpers';
+import { calcDonationShare } from '@/components/views/donate/common/helpers';
 import { Spinner } from '@/components/Spinner';
 import { FETCH_GIVETH_PROJECT_BY_ID } from '@/apollo/gql/gqlProjects';
 import createGoogleTagEventPurchase from '@/helpers/googleAnalytics';
@@ -82,13 +87,14 @@ const DonateModal: FC<IDonateModalProps> = props => {
 		walletChainType,
 		walletAddress: address,
 	} = useGeneralWallet();
+
 	const chainId = (chain as Chain)?.id;
 	const chainName = (chain as Chain)?.name;
 	const dispatch = useAppDispatch();
 	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
 	const isDonatingToGiveth = donationToGiveth > 0 && givethDonationAmount > 0;
 	const { formatMessage } = useIntl();
-	const { setSuccessDonation, project } = useDonateData();
+	const { setSuccessDonation, project, activeStartedRound } = useDonateData();
 
 	const [donating, setDonating] = useState(false);
 	const [secondTxStatus, setSecondTxStatus] = useState<EToastType>();
@@ -123,6 +129,19 @@ const DonateModal: FC<IDonateModalProps> = props => {
 
 	const tokenPrice = useTokenPrice(token);
 
+	const isOnEligibleNetworks = activeStartedRound?.eligibleNetworks?.includes(
+		(chain as Chain).id,
+	);
+	const donationUsdValue =
+		(tokenPrice || 0) *
+		(truncateToDecimalPlaces(
+			formatUnits(amount, token.decimals),
+			token.decimals,
+		) || 0);
+	const includeInQF =
+		activeStartedRound &&
+		isOnEligibleNetworks &&
+		donationUsdValue >= (activeStartedRound.minimumValidUsdValue || 0);
 	const chainvineReferred = getWithExpiry(StorageLabel.CHAINVINEREFERRED);
 	const { title, addresses } = project || {};
 
@@ -189,6 +208,7 @@ const DonateModal: FC<IDonateModalProps> = props => {
 			closeModal();
 			setSuccessDonation({
 				txHash: txHashArray,
+				excludeFromQF: !includeInQF,
 				givBackEligible,
 				chainId,
 			});

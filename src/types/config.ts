@@ -251,6 +251,9 @@ export interface GlobalConfig extends EnvConfig {
 	NETWORKS_CONFIG: {
 		[key: number | string]: NetworkConfig | NonEVMNetworkConfig;
 	};
+	NETWORKS_CONFIG_WITH_ID: {
+		[key: number]: NetworkConfig | NonEVMNetworkConfig;
+	};
 	CHAINS_WITH_SUBGRAPH: NetworkConfig[];
 	INFURA_API_KEY: string | undefined;
 	BLOCKNATIVE_DAPP_ID: string | undefined;
