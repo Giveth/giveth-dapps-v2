@@ -200,10 +200,17 @@ const SelectTokenInnerModal: FC<ISelectTokenModalProps> = ({
 				console.error('error on fetchTokenBalances', { error });
 			}
 		};
-    if (isConnected) {
-      fetchBalances();
-    }
-  }, [tokens, connection, filteredTokens, isConnected, isOnEVM, walletAddress]);
+		if (isConnected) {
+			fetchBalances();
+		}
+	}, [
+		tokens,
+		connection,
+		filteredTokens,
+		isConnected,
+		isOnEVM,
+		walletAddress,
+	]);
 
 	// Sort tokens by balance
 	const sortedTokens = tokenBalances.sort(

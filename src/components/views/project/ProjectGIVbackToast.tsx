@@ -92,7 +92,7 @@ const ProjectGIVbackToast = () => {
 
 	const givbackFactorPercent = ((givbackFactor || 0) * 100).toFixed();
 
-  if (isOwnerGivbackEligible) {
+	if (isOwnerGivbackEligible) {
 		if (givbackFactor !== 0) {
 			title = formatMessage(
 				{
