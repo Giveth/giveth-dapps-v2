@@ -3,7 +3,7 @@ import { Caption, neutralColors, Flex } from '@giveth/ui-design-system';
 import { FC } from 'react';
 import { useIntl } from 'react-intl';
 import { formatPrice } from '@/lib/helpers';
-import { calcDonationShare } from '@/components/views/donate/helpers';
+import { calcDonationShare } from '@/components/views/donate/common/helpers';
 import { IProjectAcceptedToken } from '@/apollo/types/gqlTypes';
 
 interface ITotalDonation {
@@ -44,11 +44,11 @@ const TotalDonation: FC<ITotalDonation> = props => {
 					{formatMessage({ id: 'label.donating_to' })}
 					<b>{' ' + titleSummary(projectTitle)}</b>
 				</Caption>
-				{isActive && (
-					<Caption>
-						{formatPrice(projectDonation) + ' ' + symbol}
-					</Caption>
-				)}
+				<Caption>
+					{isActive
+						? formatPrice(projectDonation) + ' ' + symbol
+						: '---'}
+				</Caption>
 			</TableRow>
 			<TableRow>
 				<Caption>
@@ -57,23 +57,23 @@ const TotalDonation: FC<ITotalDonation> = props => {
 					{formatMessage({ id: 'label.to_lowercase' })}
 					<b> Giveth</b>
 				</Caption>
-				{isActive && (
-					<Caption>
-						{formatPrice(givethDonation) + ' ' + symbol}
-					</Caption>
-				)}
+				<Caption>
+					{isActive
+						? formatPrice(givethDonation) + ' ' + symbol
+						: '---'}
+				</Caption>
 			</TableRow>
 			<Total>
 				<Caption $medium>
 					{formatMessage({ id: 'label.your_total_donation' })}
 				</Caption>
-				{isActive && (
-					<Caption $medium>
-						{formatPrice(projectDonation + givethDonation) +
+				<Caption $medium>
+					{isActive
+						? formatPrice(projectDonation + givethDonation) +
 							' ' +
-							symbol}
-					</Caption>
-				)}
+							symbol
+						: '---'}
+				</Caption>
 			</Total>
 		</Container>
 	);

@@ -21,7 +21,7 @@ import useGIVTokenDistroHelper from '@/hooks/useGIVTokenDistroHelper';
 import NetworkLogo from './NetworkLogo';
 import { ScaleRate, ScaleRateBig } from '@/lib/constants/constants';
 import { getChainName } from '@/lib/network';
-import { INetworkIdWithChain } from './views/donate/common.types';
+import { INetworkIdWithChain } from './views/donate/common/common.types';
 import { ChainType } from '@/types/config';
 import { EVMWrongNetworkSwitchModal } from './modals/WrongNetworkInnerModal';
 import { useFetchGIVPrice } from '@/hooks/useGivPrice';

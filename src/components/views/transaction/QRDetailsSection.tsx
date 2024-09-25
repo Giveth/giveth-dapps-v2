@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import { neutralColors, Flex } from '@giveth/ui-design-system';
 import { mediaQueries } from '@/lib/constants/constants';
-import QRDonationCardContent from '@/components/views/donate/OnTime/SelectTokenModal/QRCodeDonation/QRDonationCardContent';
+import QRDonationCardContent from '@/components/views/donate/OneTime/SelectTokenModal/QRCodeDonation/QRDonationCardContent';
 import { IDraftDonation, IProjectAcceptedToken } from '@/apollo/types/gqlTypes';
 import { ChainType } from '@/types/config';
 
