@@ -142,7 +142,6 @@ const CryptoDonation: FC<{
 	});
 
 	const tokenDecimals = selectedOneTimeToken?.decimals || 18;
-	const projectIsGivBackEligible = !!isGivbackEligible;
 	const { activeStartedRound } = getActiveRound(project.qfRounds);
 	const networkId = (chain as Chain)?.id;
 
@@ -352,8 +351,6 @@ const CryptoDonation: FC<{
 		selectedOneTimeToken?.decimals ?? 18,
 	);
 
-	const isProjectGivbacksEligible = !!verified;
-
 	const decimals = selectedOneTimeToken?.decimals || 18;
 	const donationUsdValue =
 		(tokenPrice || 0) *
@@ -406,7 +403,7 @@ const CryptoDonation: FC<{
 					givethDonationAmount={givethDonationAmount}
 					anonymous={anonymous}
 					givBackEligible={
-						isProjectGivbacksEligible &&
+						isGivbackEligible &&
 						selectedOneTimeToken.isGivbackEligible &&
 						tokenPrice !== undefined &&
 						tokenPrice * projectDonationAmount >=
