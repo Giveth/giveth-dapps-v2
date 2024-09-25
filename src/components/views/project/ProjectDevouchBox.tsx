@@ -38,12 +38,12 @@ const ProjectDevouchBox = () => {
 				<TextContent>
 					<Title>
 						{formatMessage({
-							id: 'label.devouch.view_this_project',
+							id: 'label.devouch.title.vouch_this_project',
 						})}
 					</Title>
 					<Description>
 						{formatMessage({
-							id: 'label.devouch.if_you_are_eligible',
+							id: 'label.devouch.description.vouch_this_project',
 						})}{' '}
 						<ExternalLink href={links.DEVOUCH_DOCS}>
 							<LearnMore>
@@ -62,7 +62,7 @@ const ProjectDevouchBox = () => {
 			>
 				<OutlineButton
 					label={formatMessage({
-						id: 'label.devouch.attest_on_devouch',
+						id: 'label.devouch.go_to_devouch',
 					})}
 					leftIcon={
 						<IconExternalLink
