@@ -58,6 +58,7 @@ const moduleExports = withBundleAnalyzer({
 			},
 			{ protocol: 'https', port: '', hostname: 'ipfs.io' },
 			{ protocol: 'https', port: '', hostname: '*.amazonaws.com' },
+			{ protocol: 'https', port: '', hostname: 'giveth.io' },
 		],
 	},
 	compiler: {
