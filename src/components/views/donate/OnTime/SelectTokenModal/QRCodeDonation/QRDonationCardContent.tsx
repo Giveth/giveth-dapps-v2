@@ -148,7 +148,7 @@ const QRDonationCardContent: FC<IQRDonationCardContentProps> = ({
 					<>
 						<B>
 							{formatMessage({
-								id: 'label.copy_the_mnemo_to_use_in_your_app',
+								id: 'label.copy_the_memo_to_use_in_your_app',
 							})}
 						</B>
 						<CopyConatainer text={projectAddress.memo ?? ''} />
