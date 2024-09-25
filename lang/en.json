@@ -283,7 +283,7 @@
 	"label.conviction_voting": "Conviction Voting",
 	"label.copied": "Copied!",
 	"label.copy_link": "Copy Link",
-	"label.copy_the_mnemo_to_use_in_your_app": "Copy the memo to use in your wallet app.",
+	"label.copy_the_memo_to_use_in_your_app": "Copy the memo to use in your wallet app.",
 	"label.covenant": "Covenant",
 	"label.created_at": "Created at",
 	"label.create_a_project": "Create a Project",
@@ -1714,6 +1714,8 @@
 	"tooltip.donation.matching": "This estimation is based on the donations made so far this quadratic funding round and is not considering fraud analysis. Actual matching amount vary.",
 	"tooltip.flowrate": "Recurring donations are taken out of your Stream Balance. Deposit tokens & maintain your balance to enable recurring donations.",
 	"tooltip.withdraw_stream_balance": "If you have active recurring donations your available stream balance to withdraw will be slightly less than your actual balance.",
+	"tooltip.vouched": "This project has been Vouched for as legitimate by Giveth Verifiers",
+	"tooltip.givback_eligible": "This project has been verified as a Public Good by Giveth",
 	"ubi": "UBI",
 	"water-and-sanitation": "Water & Sanitation"
 }

@@ -409,8 +409,7 @@ const Wrapper = styled(Flex)`
 
 const InnerLink = styled.a`
 	cursor: pointer;
-	text-decoration: underline;
-	color: ${neutralColors.gray[900]};
+	color: ${brandColors.pinky[500]};
 `;
 
 export default ProjectGIVbackToast;
