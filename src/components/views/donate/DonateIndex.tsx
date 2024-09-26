@@ -71,6 +71,7 @@ const DonateIndex: FC = () => {
 		activeStartedRound,
 		startTimer,
 		setDonateModalByPriority,
+		setIsModalPriorityChecked,
 	} = useDonateData();
 	const { renewExpirationDate, retrieveDraftDonation } =
 		useQRCodeDonation(project);
@@ -114,6 +115,7 @@ const DonateIndex: FC = () => {
 				return;
 			}
 		}
+		setIsModalPriorityChecked(DonateModalPriorityValues.OFACSanctionListModal);
 	};
 
 	useEffect(() => {
@@ -129,6 +131,7 @@ const DonateIndex: FC = () => {
 				DonateModalPriorityValues.DonationByProjectOwner,
 			);
 		}
+		setIsModalPriorityChecked(DonateModalPriorityValues.DonationByProjectOwner);
 	}, [userData?.id, project.adminUser]);
 
 	useEffect(() => {

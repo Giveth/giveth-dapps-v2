@@ -50,6 +50,7 @@ interface IDonateContext {
 	setSelectedRecurringToken: Dispatch<
 		SetStateAction<ISelectTokenWithBalance | undefined>
 	>;
+	setIsModalPriorityChecked: (modal: DonateModalPriorityValues) => void;
 	shouldRenderModal: (modalRender: DonateModalPriorityValues) => boolean;
 	fetchProject: () => Promise<void>;
 	draftDonationData?: IDraftDonation;
@@ -85,9 +86,10 @@ const DonateContext = createContext<IDonateContext>({
 	tokenStreams: {},
 	fetchProject: async () => {},
 	setDonateModalByPriority: (
-		changeCurrentModal: DonateModalPriorityValues,
+		changeModal: DonateModalPriorityValues,
 	) => {},
 	shouldRenderModal: (modalRender: DonateModalPriorityValues) => false,
+	setIsModalPriorityChecked: (modal: DonateModalPriorityValues) => {},
 	draftDonationData: {} as IDraftDonation,
 	fetchDraftDonation: async () => {},
 	qrDonationStatus: 'waiting',
@@ -242,6 +244,7 @@ export const DonateProvider: FC<IProviderProps> = ({ children, project }) => {
 				setSelectedOneTimeToken,
 				shouldRenderModal,
 				setSelectedRecurringToken,
+				setIsModalPriorityChecked,
 				tokenStreams,
 				fetchProject,
 				draftDonationData: draftDonation as IDraftDonation,
