@@ -8,7 +8,7 @@ This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next
 
 ## Getting Started
 
-First, set these envirnment variables in `env.local` file
+First, set these envirnment variables in `env.local` file.
 
 ```
 NEXT_PUBLIC_ENV=

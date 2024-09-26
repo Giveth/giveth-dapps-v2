@@ -13,7 +13,7 @@ import {
 } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
 import { mediaQueries } from '@/lib/constants/constants';
-import { UsdAmountCard } from '@/components/views/donate/OnTime/SelectTokenModal/QRCodeDonation/QRDonationCard';
+import { UsdAmountCard } from '@/components/views/donate/OneTime/SelectTokenModal/QRCodeDonation/QRDonationCard';
 import { TokenIcon } from '@/components/views/donate/TokenIcon/TokenIcon';
 import config from '@/configuration';
 import { smallDashedFormatDate } from '@/lib/helpers';

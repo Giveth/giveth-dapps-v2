@@ -25,7 +25,8 @@ const itemPerPage = 10;
 const ProjectGIVPowerIndex: FC<IProjectGIVPowerIndexProps> = () => {
 	const [page, setPage] = useState(0);
 
-	const { isBoostingsLoading, boostersData } = useProjectContext();
+	const { isBoostingsLoading, boostersData, projectData } =
+		useProjectContext();
 	const hasGivPower = boostersData ? boostersData.totalCount > 0 : false;
 
 	if (isBoostingsLoading) return <WrappedSpinner size={250} />;
@@ -56,9 +57,11 @@ const ProjectGIVPowerIndex: FC<IProjectGIVPowerIndexProps> = () => {
 						/>
 					</Flex>
 				</Col>
-				<Col lg={4}>
-					<GIVpowerCard />
-				</Col>
+				{projectData?.isGivbackEligible && (
+					<Col lg={4}>
+						<GIVpowerCard />
+					</Col>
+				)}
 			</Row>
 		</>
 	) : (
