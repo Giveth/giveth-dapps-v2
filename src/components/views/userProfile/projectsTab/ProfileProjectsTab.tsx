@@ -1,15 +1,12 @@
 import { neutralColors, Col, Row, Flex } from '@giveth/ui-design-system';
-import { FC, useEffect, useState } from 'react';
+import { FC, useState } from 'react';
 import styled from 'styled-components';
 
 import { useIntl } from 'react-intl';
+import { keepPreviousData, useQuery } from '@tanstack/react-query';
 import { IUserProfileView, EOrderBy, IOrder } from '../UserProfile.view';
 import { EDirection } from '@/apollo/types/gqlEnums';
 import NothingToSee from '@/components/views/userProfile/NothingToSee';
-import { client } from '@/apollo/apolloClient';
-import { FETCH_USER_PROJECTS } from '@/apollo/gql/gqlUser';
-import { IUserProjects } from '@/apollo/types/gqlTypes';
-import { IProject } from '@/apollo/types/types';
 import Pagination from '@/components/Pagination';
 import ProjectCard from '@/components/project-card/ProjectCard';
 import { UserContributeTitle, UserProfileTab } from '../common.sc';
@@ -17,13 +14,11 @@ import { ProjectsContributeCard } from '@/components/ContributeCard';
 import { useProfileContext } from '@/context/profile.context';
 import ProjectItem from './ProjectItem';
 import { getUserName } from '@/helpers/user';
+import { fetchUserProjects } from './services';
 
 const itemPerPage = 12;
 
 const ProfileProjectsTab: FC<IUserProfileView> = () => {
-	const [loading, setLoading] = useState(false);
-	const [projects, setProjects] = useState<IProject[]>([]);
-	const [totalCount, setTotalCount] = useState<number>(0);
 	const [page, setPage] = useState(0);
 	const [order, setOrder] = useState<IOrder>({
 		by: EOrderBy.CreationDate,
@@ -33,30 +28,12 @@ const ProfileProjectsTab: FC<IUserProfileView> = () => {
 	const { formatMessage } = useIntl();
 	const userName = getUserName(user);
 
-	useEffect(() => {
-		if (!user) return;
-		const fetchUserProjects = async () => {
-			setLoading(true);
-			const { data: userProjects } = await client.query({
-				query: FETCH_USER_PROJECTS,
-				variables: {
-					userId: parseFloat(user.id || '') || -1,
-					take: itemPerPage,
-					skip: page * itemPerPage,
-					orderBy: order.by,
-					direction: order.direction,
-				},
-			});
-			setLoading(false);
-			if (userProjects?.projectsByUserId) {
-				const projectsByUserId: IUserProjects =
-					userProjects.projectsByUserId;
-				setProjects(projectsByUserId.projects);
-				setTotalCount(projectsByUserId.totalCount);
-			}
-		};
-		fetchUserProjects().then();
-	}, [user, page, order.by, order.direction]);
+	const { data, isLoading } = useQuery({
+		queryKey: [user.id, 'projects', page, order],
+		queryFn: () => fetchUserProjects(user.id!, page, order),
+		placeholderData: keepPreviousData,
+		enabled: !!user, // only fetch if user exists
+	});
 
 	return (
 		<UserProfileTab>
@@ -80,7 +57,7 @@ const ProfileProjectsTab: FC<IUserProfileView> = () => {
 				</UserContributeTitle>
 			)}
 			<ProjectsContainer>
-				{!loading && totalCount === 0 ? (
+				{!isLoading && data?.totalCount === 0 ? (
 					<NothingWrapper>
 						<NothingToSee
 							title={`${
@@ -96,24 +73,24 @@ const ProfileProjectsTab: FC<IUserProfileView> = () => {
 					</NothingWrapper>
 				) : myAccount ? (
 					<Flex $flexDirection='column' gap='18px'>
-						{projects.map(project => (
+						{data?.projects.map(project => (
 							<ProjectItem project={project} key={project.id} />
 						))}
 					</Flex>
 				) : (
 					<Row>
-						{projects.map(project => (
+						{data?.projects.map(project => (
 							<Col key={project.id} md={6} lg={4}>
 								<ProjectCard project={project} />
 							</Col>
 						))}
 					</Row>
 				)}
-				{loading && <Loading />}
+				{isLoading && <Loading />}
 			</ProjectsContainer>
 			<Pagination
 				currentPage={page}
-				totalCount={totalCount}
+				totalCount={data?.totalCount || 0}
 				setPage={setPage}
 				itemPerPage={itemPerPage}
 			/>
