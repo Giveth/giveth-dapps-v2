@@ -27,6 +27,12 @@ export function campaignLinkGenerator(campaign: ICampaign) {
 				case ECampaignFilterField.Verified:
 					params.append('filter', EProjectsFilter.VERIFIED);
 					break;
+				case ECampaignFilterField.IsGivbackEligible:
+					params.append(
+						'filter',
+						EProjectsFilter.IS_GIVBACK_ELIGIBLE,
+					);
+					break;
 				case ECampaignFilterField.Endaoment:
 					params.append('filter', EProjectsFilter.Endaoment);
 					break;

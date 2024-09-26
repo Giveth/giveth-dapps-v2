@@ -11,8 +11,8 @@ import {
 	useRef,
 } from 'react';
 import { useAccount } from 'wagmi';
-import { IProject } from '@/apollo/types/types';
-import { hasActiveRound } from '@/helpers/qf';
+import { IProject, IQFRound } from '@/apollo/types/types';
+import { getActiveRound, hasActiveRound } from '@/helpers/qf';
 import { ISuperfluidStream, IToken } from '@/types/superFluid';
 import { ChainType } from '@/types/config';
 import { useUserStreams } from '@/hooks/useUserStreams';
@@ -34,6 +34,7 @@ interface ISuccessDonation {
 
 interface IDonateContext {
 	hasActiveQFRound?: boolean;
+	activeStartedRound?: IQFRound;
 	project: IProject;
 	successDonation?: ISuccessDonation;
 	tokenStreams: ITokenStreams;
@@ -49,9 +50,6 @@ interface IDonateContext {
 	setSelectedRecurringToken: Dispatch<
 		SetStateAction<ISelectTokenWithBalance | undefined>
 	>;
-	setIsModalPriorityChecked: (
-		modalChecked: DonateModalPriorityValues,
-	) => void;
 	shouldRenderModal: (modalRender: DonateModalPriorityValues) => boolean;
 	fetchProject: () => Promise<void>;
 	draftDonationData?: IDraftDonation;
@@ -83,7 +81,6 @@ const DonateContext = createContext<IDonateContext>({
 	setSuccessDonation: () => {},
 	setSelectedOneTimeToken: () => {},
 	setSelectedRecurringToken: () => {},
-	setIsModalPriorityChecked: (modalChecked: DonateModalPriorityValues) => {},
 	project: {} as IProject,
 	tokenStreams: {},
 	fetchProject: async () => {},
@@ -177,6 +174,9 @@ export const DonateProvider: FC<IProviderProps> = ({ children, project }) => {
 
 	const setDonateModalByPriority = useCallback(
 		(changeModal: DonateModalPriorityValues) => {
+			if(!isModalStatusChecked.current.get(changeModal)) {
+				setIsModalPriorityChecked(changeModal);
+			}
 			if (changeModal === DonateModalPriorityValues.None) {
 				setCurrentDonateModal(DonateModalPriorityValues.None);
 			} else if (changeModal > currentDonateModal) {
@@ -223,11 +223,15 @@ export const DonateProvider: FC<IProviderProps> = ({ children, project }) => {
 	} = useQRCodeDonation(project);
 
 	const hasActiveQFRound = hasActiveRound(project?.qfRounds);
+	const activeStartedRound = getActiveRound(
+		project?.qfRounds,
+	).activeStartedRound;
 
 	return (
 		<DonateContext.Provider
 			value={{
 				hasActiveQFRound,
+				activeStartedRound,
 				project: projectData,
 				successDonation,
 				setSuccessDonation,
@@ -247,7 +251,6 @@ export const DonateProvider: FC<IProviderProps> = ({ children, project }) => {
 				startTimer,
 				setQRDonationStatus: setStatus,
 				setPendingDonationExists,
-				setIsModalPriorityChecked,
 				draftDonationLoading: loading,
 			}}
 		>
