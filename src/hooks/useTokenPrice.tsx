@@ -32,7 +32,7 @@ export const useTokenPrice = (token?: ITokenPrice) => {
 	const { walletChainType } = useGeneralWallet();
 	const { chain } = useAccount();
 	const chainId = chain?.id;
-	const { data: givPrice } = useFetchGIVPrice(chainId);
+	const { data: givPrice } = useFetchGIVPrice();
 	const givTokenPrice = givPrice ? new BigNumber(givPrice).toNumber() : 0;
 	const isMainnet = chainId === config.MAINNET_NETWORK_NUMBER;
 
@@ -44,8 +44,8 @@ export const useTokenPrice = (token?: ITokenPrice) => {
 					stableCoins.includes(token.symbol.toUpperCase()))
 			) {
 				setTokenPrice(1);
-			} else if (token?.symbol === 'GIV') {
-				setTokenPrice(givTokenPrice || 0);
+			} else if (token?.symbol === 'GIV' && givTokenPrice) {
+				setTokenPrice(givTokenPrice);
 			} else if (token?.coingeckoId) {
 				setTokenPrice(
 					(await fetchPriceWithCoingeckoId(token.coingeckoId)) || 0,
