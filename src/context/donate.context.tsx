@@ -174,7 +174,7 @@ export const DonateProvider: FC<IProviderProps> = ({ children, project }) => {
 
 	const setDonateModalByPriority = useCallback(
 		(changeModal: DonateModalPriorityValues) => {
-			if(!isModalStatusChecked.current.get(changeModal)) {
+			if (!isModalStatusChecked.current.get(changeModal)) {
 				setIsModalPriorityChecked(changeModal);
 			}
 			if (changeModal === DonateModalPriorityValues.None) {
