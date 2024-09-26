@@ -274,7 +274,7 @@ export const TabGIVbacksBottom = () => {
 												{givbackAllocations &&
 												givbackAllocations.allocatedGivTokens
 													? `${givbackAllocations.allocatedGivTokens} GIV`
-													: '?'}
+													: 'TBD'}
 											</NoWrap>
 										</GivAllocated>
 									</RoundInfoTallRow>

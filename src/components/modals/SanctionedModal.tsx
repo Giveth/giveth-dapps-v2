@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {
 	brandColors,
 	Button,
@@ -21,11 +21,25 @@ interface SanctionModalProps {
 
 export const SanctionModal: React.FC<SanctionModalProps> = ({ closeModal }) => {
 	const { formatMessage } = useIntl();
+	const [isRedirecting, setIsRedirecting] = useState(false);
 	const router = useRouter();
 	const navigateToAllProjects = () => {
+		setIsRedirecting(true);
 		router.push(Routes.AllProjects);
-		closeModal();
 	};
+
+	useEffect(() => {
+		const handleRouteChangeComplete = () => {
+			closeModal();
+			setIsRedirecting(false);
+		};
+		if (isRedirecting) {
+			router.events.on('routeChangeComplete', handleRouteChangeComplete);
+		}
+		return () => {
+			router.events.off('routeChangeComplete', handleRouteChangeComplete);
+		};
+	}, [isRedirecting]);
 
 	return (
 		<Modal

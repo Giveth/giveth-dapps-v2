@@ -167,12 +167,12 @@ const ProjectActions: FC<IProjectActions> = ({
 	if (
 		(verificationStatus === EVerificationStatus.DRAFT ||
 			!verificationStatus) &&
-		!project.verified
+		!project.isGivbackEligible
 	) {
 		options.push({
 			label: formatMessage({
 				id:
-					!project.verified &&
+					!project.isGivbackEligible &&
 					project.projectVerificationForm?.status !==
 						EVerificationStatus.DRAFT
 						? 'label.project_verify'

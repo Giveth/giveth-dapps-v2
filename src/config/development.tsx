@@ -78,7 +78,7 @@ const SOLANA_NETWORK: NonEVMChain = {
 	},
 };
 
-const STELLAR_NOTWORK: NonEVMChain = {
+const STELLAR_NETWORK: NonEVMChain = {
 	id: STELLAR_NETWORK_NUMBER,
 	networkId: STELLAR_NETWORK_NUMBER,
 	chainType: ChainType.STELLAR,
@@ -128,7 +128,7 @@ const EVM_CHAINS = [
 	polygonZkEvmCardona,
 ] as readonly [Chain, ...Chain[]];
 
-const NON_EVM_CHAINS: NonEVMChain[] = [STELLAR_NOTWORK, SOLANA_NETWORK];
+const NON_EVM_CHAINS: NonEVMChain[] = [STELLAR_NETWORK, SOLANA_NETWORK];
 
 const config: EnvConfig = {
 	GIVETH_PROJECT_ID: 1,
@@ -463,7 +463,7 @@ const config: EnvConfig = {
 		},
 	},
 	STELLAR_CONFIG: {
-		...STELLAR_NOTWORK,
+		...STELLAR_NETWORK,
 		chainType: ChainType.STELLAR,
 		coingeckoChainName: 'stellar',
 		chainLogo: (logoSize?: number) => <IconStellar size={logoSize} />,

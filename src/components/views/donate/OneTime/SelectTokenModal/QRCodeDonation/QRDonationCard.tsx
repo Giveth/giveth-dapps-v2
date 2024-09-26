@@ -1,23 +1,29 @@
 import React, { FC, useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
-import Image from 'next/image';
 import styled from 'styled-components';
 import {
 	B,
 	P,
-	Button,
 	Flex,
 	neutralColors,
 	IconArrowLeft,
 	mediaQueries,
+	IconWalletOutline24,
+	OutlineButton,
+	IconArrowRight16,
+	Button,
+	SublineBold,
 } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
 import { formatUnits } from 'viem';
 
+import { ethers } from 'ethers';
 import {
 	InputWrapper,
 	SelectTokenWrapper,
-} from '../../../Recurring/RecurringDonationCard';
+	BadgesBase,
+	ForEstimatedMatchingAnimation,
+} from '../../../common/common.styled';
 import { TokenIconWithGIVBack } from '../../../TokenIcon/TokenIconWithGIVBack';
 import { IProjectAcceptedToken } from '@/apollo/types/gqlTypes';
 import { fetchPriceWithCoingeckoId } from '@/services/token';
@@ -25,7 +31,6 @@ import { ChainType } from '@/types/config';
 import config from '@/configuration';
 import {
 	truncateToDecimalPlaces,
-	capitalizeAllWords,
 	formatBalance,
 	showToastError,
 } from '@/lib/helpers';
@@ -38,15 +43,17 @@ import StorageLabel from '@/lib/localStorage';
 import InlineToast, { EToastType } from '@/components/toasts/InlineToast';
 import { useAppSelector } from '@/features/hooks';
 import { useModalCallback } from '@/hooks/useModalCallback';
-import links from '@/lib/constants/links';
+import { useGeneralWallet } from '@/providers/generalWalletProvider';
+import EligibilityBadges from '@/components/views/donate/common/EligibilityBadges';
+import EstimatedMatchingToast from '../../EstimatedMatchingToast';
 
 interface QRDonationCardProps extends IDonationCardProps {
 	qrAcceptedTokens: IProjectAcceptedToken[];
 	setIsQRDonation: (isQRDonation: boolean) => void;
 }
 
+const decimals = 18;
 const formatAmountToDisplay = (amount: bigint) => {
-	const decimals = 18;
 	return truncateToDecimalPlaces(
 		formatUnits(amount, decimals),
 		decimals / 3,
@@ -62,13 +69,16 @@ export const QRDonationCard: FC<QRDonationCardProps> = ({
 	const { formatMessage } = useIntl();
 	const router = useRouter();
 	const { isSignedIn, isEnabled } = useAppSelector(state => state.user);
-	const [showDonateModal, setShowDonateModal] = useState(false);
+	const [_showDonateModal, setShowDonateModal] = useState(false);
 	const { modalCallback: signInThenDonate } = useModalCallback(() =>
 		setShowDonateModal(true),
 	);
+	const { isConnected, chain } = useGeneralWallet();
 
 	const {
 		project,
+		hasActiveQFRound,
+		activeStartedRound,
 		setQRDonationStatus,
 		setDraftDonationData,
 		setPendingDonationExists,
@@ -85,10 +95,10 @@ export const QRDonationCard: FC<QRDonationCardProps> = ({
 		retrieveDraftDonation,
 	} = useQRCodeDonation(project);
 
-	const { addresses, id } = project;
+	const { addresses, id, verified } = project;
 	const draftDonationId = Number(router.query.draft_donation!);
 	const [amount, setAmount] = useState(0n);
-	const [usdAmount, setUsdAmount] = useState('0.00');
+	const [usdAmount, setUsdAmount] = useState(0);
 	const [tokenPrice, setTokenPrice] = useState(0);
 
 	const stellarToken = qrAcceptedTokens.find(
@@ -97,6 +107,25 @@ export const QRDonationCard: FC<QRDonationCardProps> = ({
 	const projectAddress = addresses?.find(
 		address => address.chainType === ChainType.STELLAR,
 	);
+
+	const isOnEligibleNetworks = activeStartedRound?.eligibleNetworks?.includes(
+		config.STELLAR_NETWORK_NUMBER,
+	);
+	const isProjectGivbacksEligible = !!verified;
+	const isInQF = !!isOnEligibleNetworks;
+	const showConnectWallet = isProjectGivbacksEligible || isInQF;
+	const textToDisplayOnConnect =
+		isProjectGivbacksEligible && isInQF
+			? 'label.please_connect_your_wallet_to_win_givbacks_and_match'
+			: isProjectGivbacksEligible
+				? 'label.please_connect_your_wallet_to_win_givbacks'
+				: 'label.please_connect_your_wallet_to_match';
+	const donationUsdValue =
+		(tokenPrice || 0) * Number(ethers.utils.formatEther(amount));
+	const isDonationMatched =
+		!!activeStartedRound &&
+		isOnEligibleNetworks &&
+		donationUsdValue >= (activeStartedRound?.minimumValidUsdValue || 0);
 
 	useEffect(() => {
 		const eventSource = new EventSource(
@@ -136,20 +165,42 @@ export const QRDonationCard: FC<QRDonationCardProps> = ({
 	}, [draftDonationId]);
 
 	const goBack = async () => {
+		const prevQuery = router.query;
+
+		const updateQuery = (excludeKey: string) =>
+			Object.keys(prevQuery).reduce((acc, key) => {
+				return key !== excludeKey
+					? { ...acc, [key]: prevQuery[key] }
+					: acc;
+			}, {});
+
 		if (showQRCode) {
 			const draftDonation =
 				await checkDraftDonationStatus(draftDonationId);
+
 			if (draftDonation?.status === 'matched') {
 				setQRDonationStatus('success');
 				setDraftDonationData(draftDonation);
 				return;
 			}
+
 			await markDraftDonationAsFailed(draftDonationId);
 			setPendingDonationExists?.(false);
 			setShowQRCode(false);
+
+			await router.push(
+				{ query: updateQuery('draft_donation') },
+				undefined,
+				{ shallow: true },
+			);
 		} else {
 			setIsQRDonation(false);
+
+			await router.push({ query: updateQuery('chain') }, undefined, {
+				shallow: true,
+			});
 		}
+
 		setQRDonationStatus('waiting');
 	};
 
@@ -215,14 +266,6 @@ export const QRDonationCard: FC<QRDonationCardProps> = ({
 		}
 	};
 
-	const convertAmountToUSD = (amount: bigint) => {
-		if (!stellarToken || !tokenPrice) return '0.00';
-
-		const priceBigInt = BigInt(Math.floor(tokenPrice * 100));
-		const amountInUsd = (amount * priceBigInt) / 100n;
-		return formatBalance(formatAmountToDisplay(amountInUsd));
-	};
-
 	const calculateUsdAmount = (amount?: number) => {
 		if (!tokenPrice || !amount) return '0.00';
 
@@ -230,7 +273,11 @@ export const QRDonationCard: FC<QRDonationCardProps> = ({
 	};
 
 	useEffect(() => {
-		setUsdAmount(convertAmountToUSD(amount));
+		const donationUsdValue =
+			(tokenPrice || 0) *
+			(truncateToDecimalPlaces(formatUnits(amount, decimals), decimals) ||
+				0);
+		setUsdAmount(donationUsdValue);
 	}, [amount, tokenPrice]);
 
 	useEffect(() => {
@@ -243,6 +290,16 @@ export const QRDonationCard: FC<QRDonationCardProps> = ({
 
 		fetchTokenPrice();
 	}, []);
+
+	const showEstimatedMatching =
+		!showQRCode &&
+		!!chain &&
+		hasActiveQFRound &&
+		!!activeStartedRound?.eligibleNetworks?.includes(
+			config.NON_EVM_NETWORKS_CONFIG[ChainType.STELLAR].networkId,
+		) &&
+		isDonationMatched &&
+		!!amount;
 
 	return (
 		<>
@@ -266,106 +323,131 @@ export const QRDonationCard: FC<QRDonationCardProps> = ({
 					})}
 				/>
 			)}
-			{!showQRCode && !isSignedIn && stellarToken?.isGivbackEligible && (
-				<InlineToast
-					noIcon
-					type={EToastType.Hint}
-					message={formatMessage({
-						id: 'label.sign_in_with_your_eth_wallet_for_givebacks',
+			{!showQRCode && !isConnected && showConnectWallet && (
+				<ConnectWallet>
+					<IconWalletOutline24 color={neutralColors.gray[700]} />
+					{formatMessage({
+						id: textToDisplayOnConnect,
 					})}
-					link={links.GIVBACK_DOC}
-					linkText={capitalizeAllWords(
-						formatMessage({
-							id: 'label.learn_more',
-						}),
-					)}
+				</ConnectWallet>
+			)}
+			{!showQRCode && (
+				<EligibilityBadges
+					amount={amount}
+					token={stellarToken}
+					tokenPrice={tokenPrice}
+					style={{ marginBottom: '5px' }}
 				/>
 			)}
-			{!showQRCode ? (
-				<>
-					<StyledInputWrapper>
-						<SelectTokenWrapper
-							$alignItems='center'
-							$justifyContent='space-between'
-						>
-							<Flex gap='8px' $alignItems='center'>
-								<TokenIconWithGIVBack
-									showGiveBack={
-										stellarToken?.isGivbackEligible
-									}
-									symbol={stellarToken?.symbol}
-									size={32}
+			<div>
+				{!showQRCode && (
+					<EstimatedMatchingToast
+						projectData={project}
+						token={stellarToken}
+						amount={amount}
+						tokenPrice={tokenPrice}
+						show={showEstimatedMatching}
+						isStellar
+					/>
+				)}
+				{!showQRCode ? (
+					<ForEstimatedMatchingAnimation
+						showEstimatedMatching={showEstimatedMatching}
+					>
+						<StyledInputWrapper>
+							<SelectTokenWrapper
+								$alignItems='center'
+								$justifyContent='space-between'
+							>
+								<Flex gap='8px' $alignItems='center'>
+									<TokenIconWithGIVBack
+										showGiveBack={
+											stellarToken?.isGivbackEligible
+										}
+										symbol={stellarToken?.symbol}
+										size={32}
+									/>
+									<TokenSymbol>
+										{
+											config.NETWORKS_CONFIG[
+												ChainType.STELLAR
+											].name
+										}{' '}
+										({stellarToken?.symbol})
+									</TokenSymbol>
+								</Flex>
+							</SelectTokenWrapper>
+							<QRDonationInput>
+								<Input amount={amount} setAmount={setAmount} />
+								<UsdAmountCard>
+									$ {usdAmount.toFixed(2)}
+								</UsdAmountCard>
+							</QRDonationInput>
+						</StyledInputWrapper>
+						<CardBottom>
+							<FlexStyled
+								$justifyContent='space-between'
+								$color={neutralColors.gray[100]}
+							>
+								<P>
+									{formatMessage({ id: 'label.donating_to' })}{' '}
+									<strong
+										style={{ textTransform: 'capitalize' }}
+									>
+										{project.title || '--'}
+									</strong>
+								</P>
+								<B>{formatAmountToDisplay(amount)}</B>
+							</FlexStyled>
+							<FlexStyled
+								$justifyContent='space-between'
+								$color={neutralColors.gray[300]}
+							>
+								<B>
+									{formatMessage({
+										id: 'label.your_total_donation',
+									})}
+								</B>
+								<B>{formatAmountToDisplay(amount)}</B>
+							</FlexStyled>
+							{amount === 0n ? (
+								<OutlineButton
+									label='Next'
+									color='primary'
+									icon={<IconArrowRight16 />}
+									disabled
 								/>
-								<TokenSymbol>
-									{
-										config.NETWORKS_CONFIG[
-											ChainType.STELLAR
-										].name
-									}{' '}
-									({stellarToken?.symbol})
-								</TokenSymbol>
-							</Flex>
-						</SelectTokenWrapper>
-						<QRDonationInput>
-							<Input amount={amount} setAmount={setAmount} />
-							<UsdAmountCard>$ {usdAmount}</UsdAmountCard>
-						</QRDonationInput>
-					</StyledInputWrapper>
-					<CardBottom>
-						<FlexStyled
-							$justifyContent='space-between'
-							$color={neutralColors.gray[100]}
-						>
-							<P>
-								{formatMessage({ id: 'label.donating_to' })}{' '}
-								<strong style={{ textTransform: 'capitalize' }}>
-									{project.title || '--'}
-								</strong>
-							</P>
-							<B>{formatAmountToDisplay(amount)}</B>
-						</FlexStyled>
-						<FlexStyled
-							$justifyContent='space-between'
-							$color={neutralColors.gray[300]}
-						>
-							<B>
-								{formatMessage({
-									id: 'label.your_total_donation',
-								})}
-							</B>
-							<B>{formatAmountToDisplay(amount)}</B>
-						</FlexStyled>
-						<Button
-							label='Next'
-							color='primary'
-							icon={
-								<Image
-									src='/images/rarrow.svg'
-									alt='Next'
-									width={16}
-									height={16}
-									style={{ marginLeft: '8px' }} // Add margin to the right of the icon
+							) : (
+								<Button
+									label='Next'
+									color='primary'
+									icon={<IconArrowRight16 />}
+									onClick={handleNext}
 								/>
-							}
-							onClick={handleNext}
-							disabled={amount === 0n}
-						/>
-					</CardBottom>
-				</>
-			) : (
-				<QRDonationCardContent
-					tokenData={stellarToken}
-					usdAmount={calculateUsdAmount(draftDonationData?.amount)}
-					amount={draftDonationData?.amount?.toString() ?? '0.00'}
-					qrDonationStatus={qrDonationStatus}
-					draftDonationData={draftDonationData}
-					projectAddress={projectAddress}
-					draftDonationLoading={draftDonationLoading}
-				/>
-			)}
+							)}
+						</CardBottom>
+					</ForEstimatedMatchingAnimation>
+				) : (
+					<QRDonationCardContent
+						tokenData={stellarToken}
+						usdAmount={calculateUsdAmount(
+							draftDonationData?.amount,
+						)}
+						amount={draftDonationData?.amount?.toString() ?? '0.00'}
+						qrDonationStatus={qrDonationStatus}
+						draftDonationData={draftDonationData}
+						projectAddress={projectAddress}
+						draftDonationLoading={draftDonationLoading}
+					/>
+				)}
+			</div>
 		</>
 	);
 };
+
+const ConnectWallet = styled(BadgesBase)`
+	margin-bottom: 5px;
+`;
 
 const CardHead = styled(Flex)`
 	align-items: center;
@@ -387,13 +469,14 @@ const TokenSymbol = styled(B)`
 	white-space: nowrap;
 `;
 
-export const UsdAmountCard = styled.div`
-	padding: 4px 16px;
-	margin-inline: 4px;
+export const UsdAmountCard = styled(SublineBold)`
+	padding: 2px 8px;
 	white-space: nowrap;
 	background: ${neutralColors.gray[300]};
-	border-radius: 16px;
-	color: ${neutralColors.gray[700]};
+	border-radius: 4px;
+	color: ${neutralColors.gray[700]} !important;
+	display: flex;
+	align-items: center;
 `;
 
 const CardBottom = styled.div`
@@ -431,7 +514,7 @@ const Input = styled(AmountInput)`
 const QRDonationInput = styled(Flex)`
 	width: 100%;
 	border-top: 2px solid ${neutralColors.gray[300]};
-
+	padding-right: 8px;
 	${mediaQueries.tablet} {
 		border-left: 2px solid ${neutralColors.gray[300]};
 		border-top: none;
@@ -440,7 +523,7 @@ const QRDonationInput = styled(Flex)`
 
 const StyledInputWrapper = styled(InputWrapper)`
 	flex-direction: column;
-
+	background-color: white;
 	${mediaQueries.tablet} {
 		flex-direction: row;
 	}

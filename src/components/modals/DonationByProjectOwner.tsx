@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {
 	brandColors,
 	Button,
@@ -12,26 +12,36 @@ import { useRouter } from 'next/router';
 import { Modal } from '@/components/modals/Modal';
 import Routes from '@/lib/constants/Routes';
 import { mediaQueries } from '@/lib/constants/constants';
-import { useModalAnimation } from '@/hooks/useModalAnimation';
 
 // Define the props interface
 interface DonationByProjectOwnerProps {
-	setShowDonationByProjectOwner: (
-		showDonationByProjectOwner: boolean,
-	) => void;
+	closeModal: () => void;
 }
 
 export const DonationByProjectOwner: React.FC<DonationByProjectOwnerProps> = ({
-	setShowDonationByProjectOwner,
+	closeModal,
 }) => {
 	const { formatMessage } = useIntl();
 	const router = useRouter();
-	const { closeModal } = useModalAnimation(setShowDonationByProjectOwner);
+	const [isRedirecting, setIsRedirecting] = useState(false);
 
 	const navigateToAllProjects = () => {
+		setIsRedirecting(true);
 		router.push(Routes.AllProjects);
-		closeModal();
 	};
+
+	useEffect(() => {
+		const handleRouteChangeComplete = () => {
+			closeModal();
+			setIsRedirecting(false);
+		};
+		if (isRedirecting) {
+			router.events.on('routeChangeComplete', handleRouteChangeComplete);
+		}
+		return () => {
+			router.events.off('routeChangeComplete', handleRouteChangeComplete);
+		};
+	}, [isRedirecting]);
 
 	return (
 		<Modal

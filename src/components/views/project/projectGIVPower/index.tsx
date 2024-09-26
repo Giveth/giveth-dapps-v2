@@ -59,7 +59,7 @@ const ProjectGIVPowerIndex: FC<IProjectGIVPowerIndexProps> = () => {
 						/>
 					</Flex>
 				</Col>
-				{!isVerifiedNotGivbacksEligible && (
+				{projectData?.isGivbackEligible && (
 					<Col lg={4}>
 						<GIVpowerCard />
 					</Col>
