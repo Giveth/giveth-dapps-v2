@@ -35,7 +35,10 @@ import { useAppDispatch, useAppSelector } from '@/features/hooks';
 import DonateToGiveth from '@/components/views/donate/DonateToGiveth';
 import SaveGasFees from './SaveGasFees';
 import SwitchToAcceptedChain from '@/components/views/donate/SwitchToAcceptedChain';
-import { useDonateData } from '@/context/donate.context';
+import {
+	DonateModalPriorityValues,
+	useDonateData,
+} from '@/context/donate.context';
 import { useModalCallback } from '@/hooks/useModalCallback';
 import { getActiveRound } from '@/helpers/qf';
 import { useGeneralWallet } from '@/providers/generalWalletProvider';
@@ -59,8 +62,6 @@ import { TokenIcon } from '../TokenIcon/TokenIcon';
 import { SelectTokenModal } from './SelectTokenModal/SelectTokenModal';
 import { Spinner } from '@/components/Spinner';
 import { useSolanaBalance } from '@/hooks/useSolanaBalance';
-import { isWalletSanctioned } from '@/services/donation';
-import SanctionModal from '@/components/modals/SanctionedModal';
 import { useTokenPrice } from '@/hooks/useTokenPrice';
 import EligibilityBadges from '@/components/views/donate/common/EligibilityBadges';
 import DonateAnonymously from '@/components/views/donate/common/DonateAnonymously';
@@ -79,7 +80,14 @@ const CryptoDonation: FC<{
 	const { formatMessage } = useIntl();
 	const { isSignedIn } = useAppSelector(state => state.user);
 
-	const { project, hasActiveQFRound, selectedOneTimeToken } = useDonateData();
+	const {
+		project,
+		hasActiveQFRound,
+		selectedOneTimeToken,
+		shouldRenderModal,
+		setDonateModalByPriority,
+		setIsModalPriorityChecked,
+	} = useDonateData();
 	const dispatch = useAppDispatch();
 
 	const {
@@ -100,7 +108,6 @@ const CryptoDonation: FC<{
 	const [showDonateModal, setShowDonateModal] = useState(false);
 	const [showInsufficientModal, setShowInsufficientModal] = useState(false);
 	const [showChangeNetworkModal, setShowChangeNetworkModal] = useState(false);
-	const [isSanctioned, setIsSanctioned] = useState<boolean>(false);
 	const [acceptedChains, setAcceptedChains] = useState<INetworkIdWithChain[]>(
 		[],
 	);
@@ -149,10 +156,6 @@ const CryptoDonation: FC<{
 		networkId && activeStartedRound?.eligibleNetworks?.includes(networkId);
 
 	const tokenPrice = useTokenPrice(selectedOneTimeToken);
-
-	useEffect(() => {
-		validateSanctions();
-	}, [project, address]);
 
 	useEffect(() => {
 		if (
@@ -314,17 +317,6 @@ const CryptoDonation: FC<{
 		}
 	}, [selectedTokenBalance, amount, selectedOneTimeToken?.address, gasFee]);
 
-	const validateSanctions = async () => {
-		if (project?.organization?.label === 'endaoment' && address) {
-			// We just need to check if the wallet is sanctioned for endaoment projects
-			const sanctioned = await isWalletSanctioned(address);
-			if (sanctioned) {
-				setIsSanctioned(true);
-				return;
-			}
-		}
-	};
-
 	const amountErrorText = useMemo(() => {
 		const totalAmount = Number(formatUnits(gasFee, tokenDecimals)).toFixed(
 			10,
@@ -338,6 +330,15 @@ const CryptoDonation: FC<{
 			},
 		);
 	}, [gasFee, tokenDecimals, selectedOneTimeToken?.symbol, formatMessage]);
+
+	useEffect(() => {
+		if (showChangeNetworkModal && acceptedChains) {
+			setDonateModalByPriority(
+				DonateModalPriorityValues.ShowNetworkModal,
+			);
+		}
+		setIsModalPriorityChecked(DonateModalPriorityValues.ShowNetworkModal);
+	}, [showChangeNetworkModal, acceptedChains]);
 
 	// We need givethDonationAmount here because we need to calculate the donation share
 	// for Giveth. If user want to donate minimal amount to projecct, the donation share for Giveth
@@ -368,20 +369,13 @@ const CryptoDonation: FC<{
 
 	return (
 		<MainContainer>
-			{isSanctioned && (
-				<SanctionModal
-					closeModal={() => {
-						setIsSanctioned(false);
-					}}
-				/>
-			)}
 			{showQFModal && (
 				<QFModal
 					donateWithoutMatching={donateWithoutMatching}
 					setShowModal={setShowQFModal}
 				/>
 			)}
-			{!isSanctioned && showChangeNetworkModal && acceptedChains && (
+			{shouldRenderModal(DonateModalPriorityValues.ShowNetworkModal) && (
 				<DonateWrongNetwork
 					setShowModal={setShowChangeNetworkModal}
 					acceptedChains={acceptedChains.filter(

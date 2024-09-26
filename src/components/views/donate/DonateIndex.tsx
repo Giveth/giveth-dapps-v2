@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useState } from 'react';
+import React, { FC, useEffect } from 'react';
 import styled from 'styled-components';
 import {
 	Col,
@@ -20,7 +20,10 @@ import SocialBox from '../../DonateSocialBox';
 import NiceBanner from './NiceBanner';
 import useDetectDevice from '@/hooks/useDetectDevice';
 import { useIsSafeEnvironment } from '@/hooks/useSafeAutoConnect';
-import { useDonateData } from '@/context/donate.context';
+import {
+	DonateModalPriorityValues,
+	useDonateData,
+} from '@/context/donate.context';
 import { EContentType } from '@/lib/constants/shareContent';
 import { useAlreadyDonatedToProject } from '@/hooks/useAlreadyDonatedToProject';
 import { Shadow } from '@/components/styled-components/Shadow';
@@ -45,6 +48,8 @@ import EndaomentProjectsInfo from '@/components/views/project/EndaomentProjectsI
 import { IDraftDonation } from '@/apollo/types/gqlTypes';
 import StorageLabel from '@/lib/localStorage';
 import DonationByProjectOwner from '@/components/modals/DonationByProjectOwner';
+import { isWalletSanctioned } from '@/services/donation';
+import SanctionModal from '@/components/modals/SanctionedModal';
 import { PassportBanner } from '@/components/PassportBanner';
 import QFEligibleNetworks from '@/components/views/donate/QFEligibleNetworks';
 import { GIVBACKS_DONATION_QUALIFICATION_VALUE_USD } from '@/lib/constants/constants';
@@ -58,12 +63,15 @@ const DonateIndex: FC = () => {
 		qrDonationStatus,
 		draftDonationData,
 		hasActiveQFRound,
+		shouldRenderModal,
 		setSuccessDonation,
 		setQRDonationStatus,
 		setDraftDonationData,
 		setPendingDonationExists,
 		activeStartedRound,
 		startTimer,
+		setDonateModalByPriority,
+		setIsModalPriorityChecked,
 	} = useDonateData();
 	const { renewExpirationDate, retrieveDraftDonation } =
 		useQRCodeDonation(project);
@@ -71,8 +79,7 @@ const DonateIndex: FC = () => {
 
 	const alreadyDonated = useAlreadyDonatedToProject(project);
 	const { userData } = useAppSelector(state => state.user);
-	const [showDonationByProjectOwner, setShowDonationByProjectOwner] =
-		useState<boolean | undefined>(false);
+
 	const dispatch = useAppDispatch();
 	const isSafeEnv = useIsSafeEnvironment();
 	const { isOnSolana } = useGeneralWallet();
@@ -81,6 +88,7 @@ const DonateIndex: FC = () => {
 	const [showQRCode, setShowQRCode] = React.useState(
 		!!router.query.draft_donation,
 	);
+	const { walletAddress: address } = useGeneralWallet();
 	const [stopTimer, setStopTimer] = React.useState<void | (() => void)>();
 
 	const isQRDonation = router.query.chain === ChainType.STELLAR.toLowerCase();
@@ -96,9 +104,37 @@ const DonateIndex: FC = () => {
 		};
 	}, [dispatch]);
 
+	const validateSanctions = async () => {
+		if (project.organization?.label === 'endaoment' && address) {
+			// We just need to check if the wallet is sanctioned for endaoment projects
+			const sanctioned = await isWalletSanctioned(address);
+			if (sanctioned) {
+				setDonateModalByPriority(
+					DonateModalPriorityValues.OFACSanctionListModal,
+				);
+				return;
+			}
+		}
+		setIsModalPriorityChecked(
+			DonateModalPriorityValues.OFACSanctionListModal,
+		);
+	};
+
 	useEffect(() => {
-		setShowDonationByProjectOwner(
-			userData?.id !== undefined && userData?.id === project.adminUser.id,
+		validateSanctions();
+	}, [project, address]);
+
+	useEffect(() => {
+		if (
+			userData?.id !== undefined &&
+			userData?.id === project.adminUser.id
+		) {
+			setDonateModalByPriority(
+				DonateModalPriorityValues.DonationByProjectOwner,
+			);
+		}
+		setIsModalPriorityChecked(
+			DonateModalPriorityValues.DonationByProjectOwner,
 		);
 	}, [userData?.id, project.adminUser]);
 
@@ -136,7 +172,7 @@ const DonateIndex: FC = () => {
 					excludeFromQF: !includeInQF,
 					givBackEligible:
 						isTokenEligibleForGivback &&
-						project.isGivbackEligible &&
+						project.verified &&
 						isSignedIn &&
 						isEnabled &&
 						getDonationById.amount >=
@@ -239,21 +275,31 @@ const DonateIndex: FC = () => {
 		<>
 			<DonateHeader />
 			<Wrapper>
-				{!isSafeEnv &&
-					hasActiveQFRound &&
-					!isOnSolana &&
-					(!isQRDonation ||
-						(isQRDonation && isStellarIncludedInQF)) && (
-						<PassportBanner />
-					)}
 				<DonateContainer>
-					{showDonationByProjectOwner && (
+					{shouldRenderModal(
+						DonateModalPriorityValues.DonationByProjectOwner,
+					) && (
 						<DonationByProjectOwner
-							setShowDonationByProjectOwner={
-								setShowDonationByProjectOwner
-							}
+							closeModal={() => {
+								setDonateModalByPriority(
+									DonateModalPriorityValues.None,
+								);
+							}}
 						/>
 					)}
+
+					{shouldRenderModal(
+						DonateModalPriorityValues.OFACSanctionListModal,
+					) && (
+						<SanctionModal
+							closeModal={() => {
+								setDonateModalByPriority(
+									DonateModalPriorityValues.None,
+								);
+							}}
+						/>
+					)}
+
 					{showAlreadyDonatedWrapper && (
 						<AlreadyDonatedWrapper>
 							<IconDonation24 />
@@ -264,6 +310,13 @@ const DonateIndex: FC = () => {
 							</SublineBold>
 						</AlreadyDonatedWrapper>
 					)}
+					{!isSafeEnv &&
+						hasActiveQFRound &&
+						!isOnSolana &&
+						(!isQRDonation ||
+							(isQRDonation && isStellarIncludedInQF)) && (
+							<PassportBanner />
+						)}
 					<NiceBanner />
 					<Row>
 						<Col xs={12} lg={6}>
