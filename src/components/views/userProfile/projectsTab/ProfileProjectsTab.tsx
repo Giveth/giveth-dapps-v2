@@ -3,9 +3,8 @@ import { FC, useState } from 'react';
 import styled from 'styled-components';
 
 import { useIntl } from 'react-intl';
-import { keepPreviousData, useQuery } from '@tanstack/react-query';
-import { IUserProfileView, EOrderBy, IOrder } from '../UserProfile.view';
-import { EDirection } from '@/apollo/types/gqlEnums';
+import { useQuery } from '@tanstack/react-query';
+import { IUserProfileView } from '../UserProfile.view';
 import NothingToSee from '@/components/views/userProfile/NothingToSee';
 import Pagination from '@/components/Pagination';
 import ProjectCard from '@/components/project-card/ProjectCard';
@@ -15,24 +14,19 @@ import { useProfileContext } from '@/context/profile.context';
 import ProjectItem from './ProjectItem';
 import { getUserName } from '@/helpers/user';
 import { fetchUserProjects } from './services';
-
-const itemPerPage = 12;
+import { projectsOrder, userProjectsPerPage } from './constants';
 
 const ProfileProjectsTab: FC<IUserProfileView> = () => {
 	const [page, setPage] = useState(0);
-	const [order, setOrder] = useState<IOrder>({
-		by: EOrderBy.CreationDate,
-		direction: EDirection.DESC,
-	});
 	const { user, myAccount } = useProfileContext();
 	const { formatMessage } = useIntl();
 	const userName = getUserName(user);
 
-	const { data, isLoading } = useQuery({
-		queryKey: [user.id, 'projects', page, order],
-		queryFn: () => fetchUserProjects(user.id!, page, order),
-		placeholderData: keepPreviousData,
-		enabled: !!user, // only fetch if user exists
+	// Set staleTime: 0 to force refetch when invalidating queries
+	const { data, isLoading, refetch } = useQuery({
+		queryKey: ['dashboard-projects', user.id, page, projectsOrder],
+		queryFn: () => fetchUserProjects(user.id!, page, projectsOrder),
+		enabled: !!user.id,
 	});
 
 	return (
@@ -74,7 +68,11 @@ const ProfileProjectsTab: FC<IUserProfileView> = () => {
 				) : myAccount ? (
 					<Flex $flexDirection='column' gap='18px'>
 						{data?.projects.map(project => (
-							<ProjectItem project={project} key={project.id} />
+							<ProjectItem
+								project={project}
+								key={project.id}
+								refetchProjects={refetch}
+							/>
 						))}
 					</Flex>
 				) : (
@@ -92,7 +90,7 @@ const ProfileProjectsTab: FC<IUserProfileView> = () => {
 				currentPage={page}
 				totalCount={data?.totalCount || 0}
 				setPage={setPage}
-				itemPerPage={itemPerPage}
+				itemPerPage={userProjectsPerPage}
 			/>
 		</UserProfileTab>
 	);

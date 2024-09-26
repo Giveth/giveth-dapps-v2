@@ -26,6 +26,7 @@ import DeleteProjectModal from './DeleteProjectModal';
 
 interface IProjectItem {
 	project: IProject;
+	refetchProjects: () => void;
 }
 
 const ProjectItem: FC<IProjectItem> = props => {
@@ -142,6 +143,7 @@ const ProjectItem: FC<IProjectItem> = props => {
 				<DeleteProjectModal
 					setShowModal={setShowDeleteModal}
 					project={selectedProject}
+					refetchProjects={props.refetchProjects}
 				/>
 			)}
 		</ProjectContainer>
