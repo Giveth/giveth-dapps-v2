@@ -86,6 +86,7 @@ const CryptoDonation: FC<{
 		selectedOneTimeToken,
 		shouldRenderModal,
 		setDonateModalByPriority,
+		setIsModalPriorityChecked,
 	} = useDonateData();
 	const dispatch = useAppDispatch();
 
@@ -336,6 +337,7 @@ const CryptoDonation: FC<{
 				DonateModalPriorityValues.ShowNetworkModal,
 			);
 		}
+		setIsModalPriorityChecked(DonateModalPriorityValues.ShowNetworkModal);
 	}, [showChangeNetworkModal, acceptedChains]);
 
 	// We need givethDonationAmount here because we need to calculate the donation share
