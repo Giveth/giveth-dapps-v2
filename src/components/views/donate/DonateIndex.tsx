@@ -115,7 +115,9 @@ const DonateIndex: FC = () => {
 				return;
 			}
 		}
-		setIsModalPriorityChecked(DonateModalPriorityValues.OFACSanctionListModal);
+		setIsModalPriorityChecked(
+			DonateModalPriorityValues.OFACSanctionListModal,
+		);
 	};
 
 	useEffect(() => {
@@ -131,7 +133,9 @@ const DonateIndex: FC = () => {
 				DonateModalPriorityValues.DonationByProjectOwner,
 			);
 		}
-		setIsModalPriorityChecked(DonateModalPriorityValues.DonationByProjectOwner);
+		setIsModalPriorityChecked(
+			DonateModalPriorityValues.DonationByProjectOwner,
+		);
 	}, [userData?.id, project.adminUser]);
 
 	useEffect(() => {

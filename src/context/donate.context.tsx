@@ -85,9 +85,7 @@ const DonateContext = createContext<IDonateContext>({
 	project: {} as IProject,
 	tokenStreams: {},
 	fetchProject: async () => {},
-	setDonateModalByPriority: (
-		changeModal: DonateModalPriorityValues,
-	) => {},
+	setDonateModalByPriority: (changeModal: DonateModalPriorityValues) => {},
 	shouldRenderModal: (modalRender: DonateModalPriorityValues) => false,
 	setIsModalPriorityChecked: (modal: DonateModalPriorityValues) => {},
 	draftDonationData: {} as IDraftDonation,
