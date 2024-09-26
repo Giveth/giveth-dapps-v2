@@ -43,7 +43,7 @@ const ProjectItem: FC<IProjectItem> = props => {
 				$alignItems='center'
 				gap='24px'
 			>
-				<div>
+				<Header>
 					<Subline>
 						<Flex $alignItems='center'>
 							<IconPublish16 />
@@ -56,9 +56,9 @@ const ProjectItem: FC<IProjectItem> = props => {
 						</Flex>
 					</Subline>
 					<Link href={`/project/${project.slug}`}>
-						<H2>{project.title}</H2>
+						<Title>{project.title}</Title>
 					</Link>
-				</div>
+				</Header>
 				<StyledProjectActions
 					setSelectedProject={setSelectedProject}
 					setShowAddressModal={setShowAddressModal}
@@ -151,6 +151,17 @@ const ProjectItem: FC<IProjectItem> = props => {
 const ProjectContainer = styled.div`
 	padding: 24px;
 	background-color: ${neutralColors.gray[100]};
+	overflow: hidden;
+`;
+
+const Header = styled.div`
+	max-width: 100%;
+	overflow: hidden;
+`;
+
+const Title = styled(H2)`
+	text-overflow: ellipsis;
+	overflow: hidden;
 `;
 
 const StyledProjectActions = styled(ProjectActions)`
