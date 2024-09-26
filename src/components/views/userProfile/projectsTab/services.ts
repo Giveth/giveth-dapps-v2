@@ -1,5 +1,5 @@
 import { client } from '@/apollo/apolloClient';
-import { IOrder } from '../UserProfile.view';
+import { IOrder } from './type';
 import { FETCH_USER_PROJECTS } from '@/apollo/gql/gqlUser';
 import { userProjectsPerPage } from './constants';
 import { IProject } from '@/apollo/types/types';
@@ -18,6 +18,7 @@ export const fetchUserProjects = async (
 			orderBy: order.by,
 			direction: order.direction,
 		},
+		fetchPolicy: 'network-only',
 	});
 	return data.projectsByUserId as {
 		projects: IProject[];
