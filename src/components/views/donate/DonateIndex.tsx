@@ -268,54 +268,54 @@ const DonateIndex: FC = () => {
 		<>
 			<DonateHeader />
 			<Wrapper>
-			<DonateContainer>
-				{shouldRenderModal(
-					DonateModalPriorityValues.DonationByProjectOwner,
-				) && (
-					<DonationByProjectOwner
-						closeModal={() => {
-							setDonateModalByPriority(
-								DonateModalPriorityValues.None,
-							);
-						}}
-					/>
-				)}
-
-				{shouldRenderModal(
-					DonateModalPriorityValues.OFACSanctionListModal,
-				) && (
-					<SanctionModal
-						closeModal={() => {
-							setDonateModalByPriority(
-								DonateModalPriorityValues.None,
-							);
-						}}
-					/>
-				)}
-
-				{showAlreadyDonatedWrapper && (
-					<AlreadyDonatedWrapper>
-						<IconDonation24 />
-						<SublineBold>
-							{formatMessage({
-								id: 'component.already_donated.incorrect_estimate',
-							})}
-						</SublineBold>
-					</AlreadyDonatedWrapper>
-				)}
-				{!isSafeEnv &&
-					hasActiveQFRound &&
-					!isOnSolana &&
-					(!isQRDonation ||
-						(isQRDonation && isStellarIncludedInQF)) && (
-						<PassportBanner />
+				<DonateContainer>
+					{shouldRenderModal(
+						DonateModalPriorityValues.DonationByProjectOwner,
+					) && (
+						<DonationByProjectOwner
+							closeModal={() => {
+								setDonateModalByPriority(
+									DonateModalPriorityValues.None,
+								);
+							}}
+						/>
 					)}
-				<NiceBanner />
-				<Row>
-					<Col xs={12} lg={6}>
-						<DonationCard
-							setShowQRCode={setShowQRCode}
-							showQRCode={showQRCode}
+
+					{shouldRenderModal(
+						DonateModalPriorityValues.OFACSanctionListModal,
+					) && (
+						<SanctionModal
+							closeModal={() => {
+								setDonateModalByPriority(
+									DonateModalPriorityValues.None,
+								);
+							}}
+						/>
+					)}
+
+					{showAlreadyDonatedWrapper && (
+						<AlreadyDonatedWrapper>
+							<IconDonation24 />
+							<SublineBold>
+								{formatMessage({
+									id: 'component.already_donated.incorrect_estimate',
+								})}
+							</SublineBold>
+						</AlreadyDonatedWrapper>
+					)}
+					{!isSafeEnv &&
+						hasActiveQFRound &&
+						!isOnSolana &&
+						(!isQRDonation ||
+							(isQRDonation && isStellarIncludedInQF)) && (
+							<PassportBanner />
+						)}
+					<NiceBanner />
+					<Row>
+						<Col xs={12} lg={6}>
+							<DonationCard
+								setShowQRCode={setShowQRCode}
+								showQRCode={showQRCode}
 							/>
 						</Col>
 						<Col xs={12} lg={6}>
