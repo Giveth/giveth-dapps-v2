@@ -1,11 +1,13 @@
 import styled from 'styled-components';
-import { type FC } from 'react';
+import { useCallback, type FC } from 'react';
 import { Button, Flex, IconTrash32, P } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
 import { IProject } from '@/apollo/types/types';
 import { Modal } from '@/components/modals/Modal';
 import { IModal } from '@/types/common';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
+import { client } from '@/apollo/apolloClient';
+import { DELETE_DRAFT_PROJECT } from '@/apollo/gql/gqlProjects';
 
 interface IDeleteProjectModal extends IModal {
 	project: IProject;
@@ -17,6 +19,15 @@ const DeleteProjectModal: FC<IDeleteProjectModal> = ({
 }) => {
 	const { formatMessage } = useIntl();
 	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
+
+	const handleRemoveProject = useCallback(async () => {
+		client.mutate({
+			mutation: DELETE_DRAFT_PROJECT,
+			variables: {
+				id: project.id,
+			},
+		});
+	}, [project.id]);
 
 	return (
 		<Modal
@@ -44,7 +55,7 @@ const DeleteProjectModal: FC<IDeleteProjectModal> = ({
 							id: 'component.delete_project.yes',
 						})}
 						size='small'
-						onClick={() => setShowModal(true)}
+						onClick={handleRemoveProject}
 					/>
 					<Button
 						buttonType='texty-gray'
