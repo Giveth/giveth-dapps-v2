@@ -15,7 +15,7 @@ const HowGIVbacksWork = () => {
 		<Wrapper>
 			<H4 weight={700}>How Do GIVbacks Work?</H4>
 			<H5>
-				Givbacks are built on the principles of transparency, trust, and
+				GIVbacks are built on the principles of transparency, trust, and
 				reward:
 			</H5>
 			<OrderedBullets>

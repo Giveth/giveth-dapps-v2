@@ -10,7 +10,9 @@ interface IProps {
 const VerificationBadge: FC<IProps> = ({ isVerified, verificationStatus }) => {
 	const verStatus = isVerified
 		? EVerificationStatus.VERIFIED
-		: verificationStatus;
+		: verificationStatus !== EVerificationStatus.VERIFIED
+			? verificationStatus
+			: '';
 
 	let label, badgeStatus;
 	switch (verStatus) {
@@ -22,11 +24,10 @@ const VerificationBadge: FC<IProps> = ({ isVerified, verificationStatus }) => {
 			label = 'Submitted';
 			badgeStatus = EBadgeStatus.GIVETH;
 			break;
-		// NOTE: Commenting this as we should only display according to GIVback eligibility
-		// case EVerificationStatus.VERIFIED:
-		// 	label = 'Eligible';
-		// 	badgeStatus = EBadgeStatus.SUCCESS;
-		// 	break;
+		case EVerificationStatus.VERIFIED:
+			label = 'Eligible';
+			badgeStatus = EBadgeStatus.SUCCESS;
+			break;
 		case EVerificationStatus.DRAFT:
 			label = 'Incomplete';
 			badgeStatus = EBadgeStatus.WARNING;
