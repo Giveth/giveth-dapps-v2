@@ -97,7 +97,7 @@ const EVM_CHAINS = [
 const NON_EVM_CHAINS: NonEVMChain[] = [STELLAR_NETWORK, SOLANA_NETWORK];
 
 const BASE_ROUTE =
-	process.env.NEXT_PUBLIC_BASE_ROUTE || 'https://mainnet.serve.giveth.io';
+	process.env.NEXT_PUBLIC_BASE_ROUTE || 'https://impact-graph.serve.giveth.io';
 const BACKEND_LINK =
 	process.env.NEXT_PUBLIC_BACKEND_LINK || `${BASE_ROUTE}/graphql`;
 const FRONTEND_LINK =
@@ -536,6 +536,21 @@ const config: EnvConfig = {
 				symbol: 'USDCx',
 				isSuperToken: true,
 				coingeckoId: 'usd-coin',
+			},
+			{
+				underlyingToken: {
+					decimals: 18,
+					id: '0x4F604735c1cF31399C6E711D5962b2B3E0225AD3',
+					name: 'Glo Dollar',
+					symbol: 'USDGLO',
+					coingeckoId: 'glo-dollar',
+				},
+				decimals: 18,
+				id: '0x9F41d0AA24E599fd8D0c180Ee3C0F609dc41c622',
+				name: 'Super Glo Dollar',
+				symbol: 'USDGLOx',
+				isSuperToken: true,
+				coingeckoId: 'glo-dollar',
 			},
 		],
 	},
