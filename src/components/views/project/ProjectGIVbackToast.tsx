@@ -45,7 +45,7 @@ const ProjectGIVbackToast = () => {
 	const isGivbackEligible = projectData?.isGivbackEligible;
 	const { givbackFactor } = projectData || {};
 	const isOwnerGivbackEligible = isGivbackEligible && isAdmin;
-	const isOwnerNotVerified = !isVerified && isAdmin;
+	const isOwnerNotVerified = !isGivbackEligible && isAdmin;
 	const isPublicGivbackEligible = isGivbackEligible && !isAdmin;
 	const isPublicVerifiedNotEligible =
 		isVerified && !isAdmin && !isGivbackEligible;
@@ -92,7 +92,35 @@ const ProjectGIVbackToast = () => {
 
 	const givbackFactorPercent = ((givbackFactor || 0) * 100).toFixed();
 
-	if (isOwnerGivbackEligible) {
+	if (isPublicGivbackEligible) {
+		if (givbackFactor !== 0) {
+			title = formatMessage(
+				{
+					id: `${useIntlTitle}verified_public_3`,
+				},
+				{
+					percent: givbackFactorPercent,
+					// value: GIVBACKS_DONATION_QUALIFICATION_VALUE_USD,
+				},
+			);
+		}
+		description = formatMessage(
+			{
+				id: `${useIntlDescription}verified_public`,
+			},
+			{
+				value: GIVBACKS_DONATION_QUALIFICATION_VALUE_USD,
+			},
+		);
+		link = links.GIVPOWER_DOC;
+		Button = (
+			<OutlineButton
+				onClick={handleBoostClick}
+				label='Boost'
+				icon={<IconRocketInSpace16 />}
+			/>
+		);
+	} else if (isOwnerGivbackEligible) {
 		if (givbackFactor !== 0) {
 			title = formatMessage(
 				{
@@ -246,33 +274,6 @@ const ProjectGIVbackToast = () => {
 			id: `${useIntlDescription}verified_owner_not_eligible`,
 		});
 		link = links.GIVPOWER_DOC;
-		Button = (
-			<OutlineButton
-				onClick={handleBoostClick}
-				label='Boost'
-				icon={<IconRocketInSpace16 />}
-			/>
-		);
-	} else if (isPublicGivbackEligible) {
-		if (givbackFactor !== 0) {
-			title =
-				formatMessage({
-					id: `${useIntlTitle}verified_public_1`,
-				}) +
-				Math.round(+(givbackFactor || 0) * 100) +
-				'%' +
-				formatMessage({
-					id: `${useIntlTitle}verified_public_2`,
-				});
-		}
-		description = formatMessage(
-			{
-				id: `${useIntlDescription}verified_public`,
-			},
-			{
-				value: GIVBACKS_DONATION_QUALIFICATION_VALUE_USD,
-			},
-		);
 		Button = (
 			<OutlineButton
 				onClick={handleBoostClick}
