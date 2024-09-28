@@ -22,7 +22,6 @@ const ProfileProjectsTab: FC<IUserProfileView> = () => {
 	const { formatMessage } = useIntl();
 	const userName = getUserName(user);
 
-	// Set staleTime: 0 to force refetch when invalidating queries
 	const { data, isLoading, refetch } = useQuery({
 		queryKey: ['dashboard-projects', user.id, page, projectsOrder],
 		queryFn: () => fetchUserProjects(user.id!, page, projectsOrder),
