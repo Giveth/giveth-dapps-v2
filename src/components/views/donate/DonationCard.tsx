@@ -62,7 +62,6 @@ export const DonationCard: FC<IDonationCardProps> = ({
 				address.networkId === config.OPTIMISM_NETWORK_NUMBER,
 		);
 	const isEndaomentProject = project?.organization?.label === 'endaoment';
-
 	const isOwnerOnEVM =
 		project?.adminUser?.walletAddress &&
 		isAddress(project.adminUser?.walletAddress);
