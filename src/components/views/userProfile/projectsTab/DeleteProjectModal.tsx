@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { type FC } from 'react';
+import { useState, type FC } from 'react';
 import { Button, Flex, IconTrash32, P } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
 import { useMutation } from '@tanstack/react-query';
@@ -23,6 +23,7 @@ const DeleteProjectModal: FC<IDeleteProjectModal> = ({
 	project,
 	refetchProjects,
 }) => {
+	const [isLoading, setIsLoading] = useState(false);
 	const { formatMessage } = useIntl();
 	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
 	const dispatch = useAppDispatch();
@@ -34,18 +35,21 @@ const DeleteProjectModal: FC<IDeleteProjectModal> = ({
 				mutation: DELETE_DRAFT_PROJECT,
 				variables: { projectId: projectId },
 			}),
-		// On success, refetch the user's projects
 		onSuccess: async () => {
+			setIsLoading(true);
 			await refetchProjects();
 			walletAddress &&
 				(await dispatch(fetchUserByAddress(walletAddress)));
+			setIsLoading(false);
 			closeModal();
 		},
 	});
 
 	const handleRemoveProject = async () => {
-		deleteProject(parseFloat(project.id));
+		deleteProject(Number(project.id));
 	};
+
+	const loading = isPending || isLoading;
 
 	return (
 		<Modal
@@ -74,7 +78,7 @@ const DeleteProjectModal: FC<IDeleteProjectModal> = ({
 						})}
 						size='small'
 						onClick={handleRemoveProject}
-						loading={isPending}
+						loading={loading}
 					/>
 					<Button
 						buttonType='texty-gray'
@@ -83,7 +87,7 @@ const DeleteProjectModal: FC<IDeleteProjectModal> = ({
 						})}
 						size='small'
 						onClick={() => setShowModal(false)}
-						disabled={isPending}
+						disabled={loading}
 					/>
 				</Flex>
 			</ModalContainer>
