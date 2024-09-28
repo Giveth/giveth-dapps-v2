@@ -9,6 +9,9 @@ import { IModal } from '@/types/common';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
 import { client } from '@/apollo/apolloClient';
 import { DELETE_DRAFT_PROJECT } from '@/apollo/gql/gqlProjects';
+import { useAppDispatch } from '@/features/hooks';
+import { fetchUserByAddress } from '@/features/user/user.thunks';
+import { useGeneralWallet } from '@/providers/generalWalletProvider';
 
 interface IDeleteProjectModal extends IModal {
 	project: IProject;
@@ -22,6 +25,8 @@ const DeleteProjectModal: FC<IDeleteProjectModal> = ({
 }) => {
 	const { formatMessage } = useIntl();
 	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
+	const dispatch = useAppDispatch();
+	const { walletAddress } = useGeneralWallet();
 
 	const { mutate: deleteProject, isPending } = useMutation({
 		mutationFn: (projectId: number) =>
@@ -31,7 +36,9 @@ const DeleteProjectModal: FC<IDeleteProjectModal> = ({
 			}),
 		// On success, refetch the user's projects
 		onSuccess: async () => {
-			const res = await refetchProjects();
+			await refetchProjects();
+			walletAddress &&
+				(await dispatch(fetchUserByAddress(walletAddress)));
 			closeModal();
 		},
 	});
