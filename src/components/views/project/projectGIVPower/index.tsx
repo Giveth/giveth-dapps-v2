@@ -28,9 +28,6 @@ const ProjectGIVPowerIndex: FC<IProjectGIVPowerIndexProps> = () => {
 	const { isBoostingsLoading, boostersData, projectData } =
 		useProjectContext();
 	const hasGivPower = boostersData ? boostersData.totalCount > 0 : false;
-	const isVerified = projectData?.verified;
-	const isGivbackEligible = projectData?.isGivbackEligible;
-	const isVerifiedNotGivbacksEligible = isVerified && !isGivbackEligible;
 	if (isBoostingsLoading) return <WrappedSpinner size={250} />;
 
 	return hasGivPower ? (
