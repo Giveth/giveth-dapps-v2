@@ -10,6 +10,7 @@ import {
 	FlexCenter,
 } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
+import { useRouter } from 'next/router';
 import { EQFElegibilityState, usePassport } from '@/hooks/usePassport';
 import PassportModal from '@/components/modals/PassportModal';
 
@@ -20,6 +21,7 @@ const QFToast = () => {
 	const { qfEligibilityState, passportState, passportScore, currentRound } =
 		info;
 	const [showModal, setShowModal] = useState<boolean>(false);
+	const router = useRouter();
 
 	const isEligible = qfEligibilityState === EQFElegibilityState.ELIGIBLE;
 
@@ -46,23 +48,25 @@ const QFToast = () => {
 			formatMessage({
 				id: 'page.donate.passport_toast.description.eligible',
 			}) +
+			currentRound?.minimumValidUsdValue +
 			' ' +
-			currentRound?.name +
-			' ' +
-			formatMessage({
-				id: 'label.ends_on',
-			}) +
-			' ' +
-			endDate +
 			formatMessage({
 				id: 'page.donate.passport_toast.description.eligible_2',
-			});
+			}) +
+			' ' +
+			currentRound?.name +
+			'.';
 	} else {
 		description = (
 			<>
-				{formatMessage({
-					id: 'page.donate.passport_toast.description.non_eligible',
-				})}{' '}
+				{formatMessage(
+					{
+						id: 'page.donate.passport_toast.description.non_eligible',
+					},
+					{
+						usd_value: currentRound?.minimumValidUsdValue,
+					},
+				)}{' '}
 				<span>{endDate}</span>
 			</>
 		);
@@ -75,7 +79,19 @@ const QFToast = () => {
 					{title}
 				</Title>
 				<Description>{description}</Description>
-				{!isEligible && (
+				{isEligible ? (
+					<FlexCenter>
+						<Button
+							label={formatMessage({
+								id: 'qf_donor_eligibility.banner.link.back_to_project',
+							})}
+							buttonType='primary'
+							size='small'
+							icon={<IconExternalLink16 />}
+							onClick={() => router.push('/qf')}
+						/>
+					</FlexCenter>
+				) : (
 					<FlexCenter>
 						<Button
 							label={formatMessage({
