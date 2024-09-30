@@ -18,6 +18,7 @@ export const QF_ROUNDS_QUERY = `
 			allocatedFundUSDPreferred
 			allocatedTokenSymbol
 			minMBDScore
+			minimumValidUsdValue
 		}
 `;
 
