@@ -198,7 +198,7 @@ export const QFDonorEligibilityCard = () => {
 									size={10}
 								/>
 							) : (
-								(passportScore ?? '--')
+								passportScore ?? '--'
 							)}
 						</ScoreBox>
 					</ScoreCard>
