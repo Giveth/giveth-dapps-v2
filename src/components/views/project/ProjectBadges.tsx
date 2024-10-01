@@ -92,11 +92,9 @@ const ProjectBadges = () => {
 };
 
 const CustomFlex = styled(Flex)`
-	overflow-x: scroll;
 	overflow-y: hidden;
 	white-space: nowrap;
-	margin-bottom: -3px;
-	padding-top: 8px;
+	margin-bottom: 24px;
 `;
 
 export const TooltipContent = styled.div`

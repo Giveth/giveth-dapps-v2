@@ -180,7 +180,7 @@ const ProjectIndex: FC<IProjectBySlug> = () => {
 					orgLabel={projectData?.organization?.label}
 				/>
 				<Row>
-					<Col xs={12} md={8} lg={8.5}>
+					<Col xs={12} md={8} lg={8.5} style={{ margin: '0' }}>
 						<ProjectHeader />
 						{isMobile && isAdmin && (
 							<MobileActionsContainer
@@ -202,7 +202,7 @@ const ProjectIndex: FC<IProjectBySlug> = () => {
 						)}
 						<ProjectGIVbackToast />
 					</Col>
-					<Col xs={12} md={4} lg={3.5}>
+					<Col xs={12} md={4} lg={3.5} style={{ margin: '0' }}>
 						<ProjectActionCard />
 					</Col>
 					{isDraft && (
