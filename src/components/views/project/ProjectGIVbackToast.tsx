@@ -224,7 +224,7 @@ const ProjectGIVbackToast = () => {
 			},
 			{
 				stakeLock: (
-					<InnerLink href={Routes.GIVeconomy} target='_blank'>
+					<InnerLink href={Routes.GIVfarm} target='_blank'>
 						{formatMessage({ id: 'label.stake_and_lock' })}{' '}
 					</InnerLink>
 				),
@@ -242,9 +242,18 @@ const ProjectGIVbackToast = () => {
 		title = formatMessage({
 			id: `${useIntlTitle}verified_owner_not_eligible`,
 		});
-		description = formatMessage({
-			id: `${useIntlDescription}verified_owner_not_eligible`,
-		});
+		description = formatMessage(
+			{
+				id: `${useIntlDescription}verified_owner_not_eligible`,
+			},
+			{
+				stakeLock: (
+					<InnerLink href={Routes.GIVfarm} target='_blank'>
+						{formatMessage({ id: 'label.stake_and_lock' })}{' '}
+					</InnerLink>
+				),
+			},
+		);
 		link = links.GIVPOWER_DOC;
 		Button = (
 			<OutlineButton
