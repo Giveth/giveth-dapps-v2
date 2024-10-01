@@ -68,6 +68,7 @@ export const ProjectStats = () => {
 						</IconWithTooltip>
 					</Flex>
 					<VerificationBadge
+						
 						isGivbackEligible={projectData?.isGivbackEligible}
 						verificationStatus={projectData?.verificationFormStatus}
 					/>
