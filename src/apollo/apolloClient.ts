@@ -1,5 +1,10 @@
 import { useMemo } from 'react';
-import { ApolloClient, InMemoryCache, ApolloLink } from '@apollo/client';
+import {
+	ApolloClient,
+	InMemoryCache,
+	ApolloLink,
+	NormalizedCacheObject,
+} from '@apollo/client';
 import { RetryLink } from '@apollo/client/link/retry';
 import { setContext } from '@apollo/client/link/context';
 import { onError } from '@apollo/client/link/error';
@@ -14,20 +19,21 @@ import { signOut } from '@/features/user/user.thunks';
 import config from '@/configuration';
 import { setShowSignWithWallet } from '@/features/modal/modal.slice';
 
-let apolloClient: any;
+let apolloClient: ApolloClient<NormalizedCacheObject> | undefined;
 
 const ssrMode = isSSRMode;
 
 export const APOLLO_STATE_PROP_NAME = '__APOLLO_STATE__';
 
-const parseHeaders = (rawHeaders: any) => {
+// Parses headers into the Headers object
+const parseHeaders = (rawHeaders: string) => {
 	const headers = new Headers();
 	// Replace instances of \r\n and \n followed by at least one space or horizontal tab with a space
 	// https://tools.ietf.org/html/rfc7230#section-3.2
 	const preProcessedHeaders = rawHeaders.replace(/\r?\n[\t ]+/g, ' ');
-	preProcessedHeaders.split(/\r?\n/).forEach((line: any) => {
+	preProcessedHeaders.split(/\r?\n/).forEach((line: string) => {
 		const parts = line.split(':');
-		const key = parts.shift().trim();
+		const key = parts.shift()?.trim();
 		if (key) {
 			const value = parts.join(':').trim();
 			headers.append(key, value);
@@ -36,6 +42,7 @@ const parseHeaders = (rawHeaders: any) => {
 	return headers;
 };
 
+// Custom fetch logic with file upload handling
 const uploadFetch = (url: string, options: any) =>
 	new Promise((resolve, reject) => {
 		const xhr = new XMLHttpRequest();
@@ -49,8 +56,11 @@ const uploadFetch = (url: string, options: any) =>
 				'responseURL' in xhr
 					? xhr.responseURL
 					: opts.headers.get('X-Request-URL');
+			// TypeScript fix: Explicitly cast `xhr` to `XMLHttpRequest` to access responseText
 			const body =
-				'response' in xhr ? xhr.response : (xhr as any).responseText;
+				'response' in xhr
+					? xhr.response
+					: (xhr as XMLHttpRequest).responseText;
 			resolve(new Response(body, opts));
 		};
 		xhr.onerror = () => {
@@ -76,14 +86,16 @@ const uploadFetch = (url: string, options: any) =>
 		xhr.send(options.body);
 	});
 
-const customFetch = (uri: any, options: any) => {
+// Custom fetch function to determine when to use upload fetch or standard fetch
+const customFetch = (uri: string, options: any) => {
 	if (options.useUpload) {
 		return uploadFetch(uri, options);
 	}
 	return fetch(uri, options);
 };
 
-function createApolloClient() {
+// Creates the Apollo Client with the custom link setup
+function createApolloClient(): ApolloClient<NormalizedCacheObject> {
 	let userWalletAddress: string | null;
 	if (!ssrMode) {
 		userWalletAddress = localStorage.getItem(StorageLabel.USER);
@@ -91,11 +103,13 @@ function createApolloClient() {
 
 	const retryLink = new RetryLink();
 
+	// Custom link for handling file uploads
 	const httpLink = createUploadLink({
 		uri: config.BACKEND_LINK,
 		fetch: customFetch as any,
 	});
 
+	// Auth link to add Authorization and locale headers
 	const authLink = setContext((_, { headers }) => {
 		let locale: string | null = !ssrMode
 			? localStorage.getItem(StorageLabel.LOCALE)
@@ -117,12 +131,13 @@ function createApolloClient() {
 		};
 	});
 
+	// Error handling link
 	const errorLink = onError(({ graphQLErrors, networkError, operation }) => {
 		if (graphQLErrors) {
 			console.log('operation', operation);
 			graphQLErrors.forEach(err => {
 				console.error('err', JSON.stringify(err));
-				const { message, locations, path } = err;
+				const { message } = err;
 				if (message.toLowerCase().includes('authentication required')) {
 					console.log(Date.now(), 'sign out from graphQL');
 					//   removes token and user from store
@@ -190,7 +205,10 @@ function createApolloClient() {
 	});
 }
 
-export function initializeApollo(initialState = null) {
+// Initialize Apollo Client for SSR and client-side rendering
+export function initializeApollo(
+	initialState: any = null,
+): ApolloClient<NormalizedCacheObject> {
 	const _apolloClient = apolloClient ?? createApolloClient();
 
 	// If your page has Next.js data fetching methods that use Apollo Client, the initial state
@@ -202,7 +220,7 @@ export function initializeApollo(initialState = null) {
 		// Merge the existing cache into data passed from getStaticProps/getServerSideProps
 		const data = merge(initialState, existingCache, {
 			// combine arrays using object equality (like in sets)
-			arrayMerge: (destinationArray, sourceArray) => [
+			arrayMerge: (destinationArray: any[], sourceArray: any[]) => [
 				...sourceArray,
 				...destinationArray.filter(d =>
 					sourceArray.every(s => !isEqual(d, s)),
@@ -221,7 +239,11 @@ export function initializeApollo(initialState = null) {
 	return _apolloClient;
 }
 
-export function addApolloState(client: any, pageProps: any) {
+// Adds Apollo Client's state to pageProps
+export function addApolloState(
+	client: ApolloClient<NormalizedCacheObject>,
+	pageProps: any,
+) {
 	if (pageProps?.props) {
 		pageProps.props[APOLLO_STATE_PROP_NAME] = client.cache.extract();
 	}
@@ -229,10 +251,12 @@ export function addApolloState(client: any, pageProps: any) {
 	return pageProps;
 }
 
+// Custom React hook to use Apollo Client
 export function useApollo(pageProps: any) {
 	const state = pageProps[APOLLO_STATE_PROP_NAME];
 
 	return useMemo(() => initializeApollo(state), [state]);
 }
 
-export const client = initializeApollo();
+// Export the client instance
+export const client: ApolloClient<NormalizedCacheObject> = initializeApollo();
