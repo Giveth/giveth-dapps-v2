@@ -47,7 +47,7 @@ export const AdminActions = () => {
 		useProjectContext();
 	const project = projectData!;
 
-	const { slug, verified, verificationFormStatus } = project;
+	const { slug, isGivbackEligible, verificationFormStatus } = project;
 	const { formatMessage } = useIntl();
 	const router = useRouter();
 	const isMobile = !useMediaQuery(device.tablet);
@@ -56,7 +56,7 @@ export const AdminActions = () => {
 	const chainId = chain?.id;
 
 	const isVerificationDisabled =
-		verified ||
+		isGivbackEligible ||
 		verificationFormStatus === EVerificationStatus.SUBMITTED ||
 		verificationFormStatus === EVerificationStatus.REJECTED ||
 		!isActive;

@@ -10,7 +10,10 @@ interface IProps {
 const VerificationBadge: FC<IProps> = ({ isVerified, verificationStatus }) => {
 	const verStatus = isVerified
 		? EVerificationStatus.VERIFIED
-		: verificationStatus;
+		: verificationStatus !== EVerificationStatus.VERIFIED
+			? verificationStatus
+			: '';
+
 	let label, badgeStatus;
 	switch (verStatus) {
 		case EVerificationStatus.REJECTED:

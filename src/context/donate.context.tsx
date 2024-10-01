@@ -8,10 +8,11 @@ import {
 	useCallback,
 	type Dispatch,
 	useEffect,
+	useRef,
 } from 'react';
 import { useAccount } from 'wagmi';
-import { IProject } from '@/apollo/types/types';
-import { hasActiveRound } from '@/helpers/qf';
+import { IProject, IQFRound } from '@/apollo/types/types';
+import { getActiveRound, hasActiveRound } from '@/helpers/qf';
 import { ISuperfluidStream, IToken } from '@/types/superFluid';
 import { ChainType } from '@/types/config';
 import { useUserStreams } from '@/hooks/useUserStreams';
@@ -33,6 +34,7 @@ interface ISuccessDonation {
 
 interface IDonateContext {
 	hasActiveQFRound?: boolean;
+	activeStartedRound?: IQFRound;
 	project: IProject;
 	successDonation?: ISuccessDonation;
 	tokenStreams: ITokenStreams;
@@ -42,9 +44,14 @@ interface IDonateContext {
 	setSelectedOneTimeToken: Dispatch<
 		SetStateAction<IProjectAcceptedToken | undefined>
 	>;
+	setDonateModalByPriority: (
+		changeCurrentModal: DonateModalPriorityValues,
+	) => void;
 	setSelectedRecurringToken: Dispatch<
 		SetStateAction<ISelectTokenWithBalance | undefined>
 	>;
+	setIsModalPriorityChecked: (modal: DonateModalPriorityValues) => void;
+	shouldRenderModal: (modalRender: DonateModalPriorityValues) => boolean;
 	fetchProject: () => Promise<void>;
 	draftDonationData?: IDraftDonation;
 	fetchDraftDonation?: (
@@ -64,6 +71,13 @@ interface IProviderProps {
 	project: IProject;
 }
 
+export enum DonateModalPriorityValues {
+	None,
+	ShowNetworkModal,
+	DonationByProjectOwner,
+	OFACSanctionListModal,
+}
+
 const DonateContext = createContext<IDonateContext>({
 	setSuccessDonation: () => {},
 	setSelectedOneTimeToken: () => {},
@@ -71,6 +85,9 @@ const DonateContext = createContext<IDonateContext>({
 	project: {} as IProject,
 	tokenStreams: {},
 	fetchProject: async () => {},
+	setDonateModalByPriority: (changeModal: DonateModalPriorityValues) => {},
+	shouldRenderModal: (modalRender: DonateModalPriorityValues) => false,
+	setIsModalPriorityChecked: (modal: DonateModalPriorityValues) => {},
 	draftDonationData: {} as IDraftDonation,
 	fetchDraftDonation: async () => {},
 	qrDonationStatus: 'waiting',
@@ -102,9 +119,17 @@ export const DonateProvider: FC<IProviderProps> = ({ children, project }) => {
 	const [selectedRecurringToken, setSelectedRecurringToken] = useState<
 		ISelectTokenWithBalance | undefined
 	>();
+	const isModalStatusChecked = useRef<
+		Map<DonateModalPriorityValues, boolean>
+	>(new Map());
+	const highestModalPriorityUnchecked = useRef<
+		DonateModalPriorityValues | 'All Checked'
+	>(DonateModalPriorityValues.None);
 
 	const [successDonation, setSuccessDonation] = useState<ISuccessDonation>();
 	const [projectData, setProjectData] = useState<IProject>(project);
+	const [currentDonateModal, setCurrentDonateModal] =
+		useState<DonateModalPriorityValues>(DonateModalPriorityValues.None);
 
 	const { chain } = useAccount();
 
@@ -112,6 +137,66 @@ export const DonateProvider: FC<IProviderProps> = ({ children, project }) => {
 		setSelectedOneTimeToken(undefined);
 		setSelectedRecurringToken(undefined);
 	}, [chain]);
+
+	const setIsModalPriorityChecked = useCallback(
+		(modalChecked: DonateModalPriorityValues): void => {
+			if (
+				highestModalPriorityUnchecked.current != 'All Checked' &&
+				(modalChecked <= highestModalPriorityUnchecked.current ||
+					highestModalPriorityUnchecked.current ===
+						DonateModalPriorityValues.None)
+			) {
+				isModalStatusChecked.current.set(modalChecked, true);
+				let highestModalStatusUnchecked =
+					DonateModalPriorityValues.None;
+				let isAllChecked = true;
+				const modals: DonateModalPriorityValues[] = Object.values(
+					DonateModalPriorityValues,
+				).filter(
+					modal => typeof modal !== 'string',
+				) as DonateModalPriorityValues[];
+				for (const modalStatus of modals) {
+					if (!isModalStatusChecked.current.get(modalStatus)) {
+						highestModalStatusUnchecked = modalStatus;
+					}
+					isAllChecked =
+						(isAllChecked &&
+							!!isModalStatusChecked.current.get(modalStatus)) ||
+						modalStatus === DonateModalPriorityValues.None;
+				}
+				highestModalPriorityUnchecked.current = isAllChecked
+					? 'All Checked'
+					: highestModalStatusUnchecked;
+			}
+		},
+		[],
+	);
+
+	const setDonateModalByPriority = useCallback(
+		(changeModal: DonateModalPriorityValues) => {
+			if (!isModalStatusChecked.current.get(changeModal)) {
+				setIsModalPriorityChecked(changeModal);
+			}
+			if (changeModal === DonateModalPriorityValues.None) {
+				setCurrentDonateModal(DonateModalPriorityValues.None);
+			} else if (changeModal > currentDonateModal) {
+				setCurrentDonateModal(changeModal);
+			}
+		},
+		[currentDonateModal],
+	);
+
+	const shouldRenderModal = useCallback(
+		(modalRender: DonateModalPriorityValues) => {
+			return (
+				(highestModalPriorityUnchecked.current == 'All Checked' ||
+					currentDonateModal >=
+						highestModalPriorityUnchecked.current) &&
+				currentDonateModal === modalRender
+			);
+		},
+		[currentDonateModal],
+	);
 
 	const fetchProject = useCallback(async () => {
 		const { data } = (await client.query({
@@ -138,19 +223,26 @@ export const DonateProvider: FC<IProviderProps> = ({ children, project }) => {
 	} = useQRCodeDonation(project);
 
 	const hasActiveQFRound = hasActiveRound(project?.qfRounds);
+	const activeStartedRound = getActiveRound(
+		project?.qfRounds,
+	).activeStartedRound;
 
 	return (
 		<DonateContext.Provider
 			value={{
 				hasActiveQFRound,
+				activeStartedRound,
 				project: projectData,
 				successDonation,
 				setSuccessDonation,
 				selectedOneTimeToken,
 				pendingDonationExists,
 				selectedRecurringToken,
+				setDonateModalByPriority,
 				setSelectedOneTimeToken,
+				shouldRenderModal,
 				setSelectedRecurringToken,
+				setIsModalPriorityChecked,
 				tokenStreams,
 				fetchProject,
 				draftDonationData: draftDonation as IDraftDonation,

@@ -31,8 +31,6 @@ const YourApp = () => {
 		})),
 	});
 
-	console.log('subgraphValues', subgraphValues);
-
 	// Solana wallet hooks
 	const {
 		publicKey,
