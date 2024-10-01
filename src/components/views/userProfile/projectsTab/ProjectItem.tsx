@@ -92,7 +92,7 @@ const ProjectItem: FC<IProjectItem> = props => {
 						</P>
 						<div>
 							<VerificationBadge
-								isVerified={project?.isGivbackEligible}
+								isGivbackEligible={project?.isGivbackEligible}
 								verificationStatus={
 									project.projectVerificationForm?.status
 								}
