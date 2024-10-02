@@ -38,6 +38,7 @@ interface IDonateContext {
 	project: IProject;
 	successDonation?: ISuccessDonation;
 	tokenStreams: ITokenStreams;
+	currentDonateModal: DonateModalPriorityValues;
 	setSuccessDonation: (successDonation?: ISuccessDonation) => void;
 	selectedOneTimeToken?: IProjectAcceptedToken;
 	selectedRecurringToken?: ISelectTokenWithBalance;
@@ -82,6 +83,7 @@ const DonateContext = createContext<IDonateContext>({
 	setSuccessDonation: () => {},
 	setSelectedOneTimeToken: () => {},
 	setSelectedRecurringToken: () => {},
+	currentDonateModal: DonateModalPriorityValues.None,
 	project: {} as IProject,
 	tokenStreams: {},
 	fetchProject: async () => {},
@@ -244,6 +246,7 @@ export const DonateProvider: FC<IProviderProps> = ({ children, project }) => {
 				setSelectedRecurringToken,
 				setIsModalPriorityChecked,
 				tokenStreams,
+				currentDonateModal,
 				fetchProject,
 				draftDonationData: draftDonation as IDraftDonation,
 				setDraftDonationData: setDraftDonation,

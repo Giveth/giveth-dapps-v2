@@ -63,6 +63,7 @@ const DonateIndex: FC = () => {
 		qrDonationStatus,
 		draftDonationData,
 		hasActiveQFRound,
+		currentDonateModal,
 		shouldRenderModal,
 		setSuccessDonation,
 		setQRDonationStatus,
@@ -122,7 +123,7 @@ const DonateIndex: FC = () => {
 
 	useEffect(() => {
 		validateSanctions();
-	}, [project, address]);
+	}, [project, address, currentDonateModal]);
 
 	useEffect(() => {
 		if (
@@ -133,10 +134,15 @@ const DonateIndex: FC = () => {
 				DonateModalPriorityValues.DonationByProjectOwner,
 			);
 		}
+		else {
+			setDonateModalByPriority(
+				DonateModalPriorityValues.None,
+			)
+		}
 		setIsModalPriorityChecked(
 			DonateModalPriorityValues.DonationByProjectOwner,
 		);
-	}, [userData?.id, project.adminUser]);
+	}, [userData?.id, project.adminUser, currentDonateModal]);
 
 	useEffect(() => {
 		const fetchDonation = async () => {
