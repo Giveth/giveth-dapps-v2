@@ -133,11 +133,8 @@ const DonateIndex: FC = () => {
 			setDonateModalByPriority(
 				DonateModalPriorityValues.DonationByProjectOwner,
 			);
-		}
-		else {
-			setDonateModalByPriority(
-				DonateModalPriorityValues.None,
-			)
+		} else {
+			setDonateModalByPriority(DonateModalPriorityValues.None);
 		}
 		setIsModalPriorityChecked(
 			DonateModalPriorityValues.DonationByProjectOwner,

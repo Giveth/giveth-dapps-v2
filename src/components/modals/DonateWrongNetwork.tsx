@@ -61,7 +61,7 @@ export const DonateWrongNetwork: FC<IDonateWrongNetwork> = props => {
 	const router = useRouter();
 	const { switchChain } = useSwitchChain();
 	const isSafeEnv = useIsSafeEnvironment();
-	const { setDonateModalByPriority,currentDonateModal } = useDonateData();
+	const { setDonateModalByPriority, currentDonateModal } = useDonateData();
 	const closeNetworkModal = useCallback(() => {
 		setDonateModalByPriority(DonateModalPriorityValues.None);
 		closeModal();
