@@ -13,9 +13,7 @@ const VerificationBadge: FC<IProps> = ({
 }) => {
 	const verStatus = isGivbackEligible
 		? EVerificationStatus.VERIFIED
-		: verificationStatus !== EVerificationStatus.VERIFIED
-			? verificationStatus
-			: '';
+		: verificationStatus;
 
 	let label, badgeStatus;
 	switch (verStatus) {
