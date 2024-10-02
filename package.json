@@ -1,6 +1,6 @@
 {
 	"name": "givethdapp",
-	"version": "2.32.1",
+	"version": "2.32.2",
 	"private": true,
 	"scripts": {
 		"build": "next build",
@@ -78,6 +78,7 @@
 	"devDependencies": {
 		"@babel/preset-typescript": "^7.23.3",
 		"@next/bundle-analyzer": "^14.1.0",
+		"@tanstack/react-query-devtools": "^5.58.0",
 		"@testing-library/cypress": "^10.0.1",
 		"@testing-library/jest-dom": "^6.4.2",
 		"@testing-library/react": "^14.2.1",

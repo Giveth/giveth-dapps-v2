@@ -149,7 +149,7 @@ export const ProjectPublicActions = () => {
 					{reaction?.userId && reaction?.userId === user?.id ? (
 						<IconBookmarkFilled16 color={brandColors.pinky[500]} />
 					) : (
-						<IconBookmark16 />
+						<IconBookmark16 color='#525f7f' />
 					)}
 				</StyledBadgeButton>
 			</BadgeWrapper>

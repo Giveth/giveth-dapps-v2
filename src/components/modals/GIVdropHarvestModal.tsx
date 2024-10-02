@@ -90,7 +90,7 @@ export const GIVdropHarvestModal: FC<IGIVdropHarvestModal> = ({
 	const chainId = chain?.id;
 	const sdh = new SubgraphDataHelper(currentValues.data);
 	const givTokenDistroBalance = sdh.getGIVTokenDistroBalance();
-	const { data: givPrice } = useFetchGIVPrice(chainId);
+	const { data: givPrice } = useFetchGIVPrice();
 
 	useEffect(() => {
 		const bnGIVback = BigInt(givTokenDistroBalance.givback);

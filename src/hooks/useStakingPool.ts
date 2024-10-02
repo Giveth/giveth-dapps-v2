@@ -30,10 +30,11 @@ export const useStakingPool = (
 		notStakedAmount: 0n,
 		stakedAmount: 0n,
 	});
-	const { chain, address } = useAccount();
+	const { address } = useAccount();
 	const currentValues = useQuery({
-		queryKey: ['subgraph', chain?.id, address],
-		queryFn: async () => await fetchSubgraphData(chain?.id, address),
+		queryKey: ['subgraph', poolStakingConfig.network, address],
+		queryFn: async () =>
+			await fetchSubgraphData(poolStakingConfig.network, address),
 		enabled: !hold,
 		staleTime: config.SUBGRAPH_POLLING_INTERVAL,
 	});

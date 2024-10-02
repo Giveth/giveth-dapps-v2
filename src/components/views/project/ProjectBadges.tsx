@@ -17,12 +17,22 @@ import { IconWithTooltip } from '@/components/IconWithToolTip';
 const ProjectBadges = () => {
 	const { projectData } = useProjectContext();
 
-	const { verified, isGivbackEligible, qfRounds, campaigns } =
-		projectData || {};
+	const {
+		verified: projectVerified,
+		isGivbackEligible,
+		qfRounds,
+		campaigns,
+	} = projectData || {};
 	const { formatMessage } = useIntl();
 	const isQF = hasActiveRound(qfRounds);
+	const verified = projectVerified || isGivbackEligible;
 
-	if (!verified && !isQF && (!campaigns || campaigns.length === 0)) {
+	if (
+		!verified &&
+		!isGivbackEligible &&
+		!isQF &&
+		(!campaigns || campaigns.length === 0)
+	) {
 		return null;
 	}
 
@@ -92,11 +102,9 @@ const ProjectBadges = () => {
 };
 
 const CustomFlex = styled(Flex)`
-	overflow-x: scroll;
 	overflow-y: hidden;
 	white-space: nowrap;
-	margin-bottom: -3px;
-	padding-top: 8px;
+	margin-bottom: 24px;
 `;
 
 export const TooltipContent = styled.div`
