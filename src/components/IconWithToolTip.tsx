@@ -7,6 +7,7 @@ interface IIconWithTooltipProps extends ITooltipDirection {
 	icon: ReactNode;
 	children: ReactNode;
 	style?: CSSProperties;
+	delay?: boolean;
 }
 
 export const IconWithTooltip: FC<IIconWithTooltipProps> = ({
@@ -14,26 +15,48 @@ export const IconWithTooltip: FC<IIconWithTooltipProps> = ({
 	direction,
 	align = 'center',
 	children,
+	delay = false,
 	style,
 }) => {
 	const [show, setShow] = useState(false);
 	const elRef = useRef<HTMLDivElement>(null);
+	const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+	const showTooltip = () => {
+		if (delay) {
+			timeoutRef.current = setTimeout(() => {
+				setShow(true);
+			}, 500); // 0.5 second delay
+		} else {
+			setShow(true);
+		}
+	};
+
+	const hideTooltip = () => {
+		if (timeoutRef.current) {
+			clearTimeout(timeoutRef.current);
+		}
+		setShow(false);
+	};
 
 	useEffect(() => {
 		function handleRemoveTooltip() {
-			setShow(false);
+			hideTooltip();
 		}
 		window.addEventListener('scroll', handleRemoveTooltip);
 
 		return () => {
 			window.removeEventListener('scroll', handleRemoveTooltip);
+			if (timeoutRef.current) {
+				clearTimeout(timeoutRef.current);
+			}
 		};
 	}, []);
 
 	return (
 		<IconWithTooltipContainer
-			onMouseEnter={() => setShow(true)}
-			onMouseLeave={() => setShow(false)}
+			onMouseEnter={showTooltip}
+			onMouseLeave={hideTooltip}
 			onClick={e => {
 				e.stopPropagation(); // make tooltip content clickable without affecting parent
 			}}

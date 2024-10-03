@@ -26,6 +26,7 @@ import { useDonateData } from '@/context/donate.context';
 import { ChainType } from '@/types/config';
 import config from '@/configuration';
 import { calculateTotalEstimatedMatching, getActiveRound } from '@/helpers/qf';
+import { GivBackBadge } from '@/components/badges/GivBackBadge';
 
 interface IDonatePageProjectDescriptionProps {
 	projectData?: IProject;
@@ -76,6 +77,11 @@ export const DonatePageProjectDescription: FC<
 
 	return (
 		<DonationSectionWrapper gap='16px'>
+			{projectData?.isGivbackEligible && (
+				<Flex>
+					<GivBackBadge />
+				</Flex>
+			)}
 			{projectData?.verified && (
 				<Flex>
 					<VerifiedBadge />

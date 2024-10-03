@@ -163,7 +163,7 @@ export const TabGIVbacksBottom = () => {
 		async function fetchAllocatedGivbacks() {
 			const { data } = await client.query({
 				query: FETCH_ALLOCATED_GIVBACKS,
-				fetchPolicy: 'network-only',
+				fetchPolicy: 'no-cache',
 			});
 			setGivbackAllocations(data?.allocatedGivbacks);
 		}

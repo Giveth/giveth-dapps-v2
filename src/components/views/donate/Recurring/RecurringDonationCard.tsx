@@ -177,7 +177,7 @@ export const RecurringDonationCard = () => {
 		? semanticColors.punch
 		: brandColors.giv;
 
-	const projectIsGivBackEligible = !!project.verified;
+	const projectIsGivBackEligible = !!project.isGivbackEligible;
 
 	const handleDonate = () => {
 		if (anchorContractAddress) {

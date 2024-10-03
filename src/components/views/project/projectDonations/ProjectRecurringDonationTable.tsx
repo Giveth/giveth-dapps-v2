@@ -31,7 +31,7 @@ import { ONE_MONTH_SECONDS } from '@/lib/constants/constants';
 import ExternalLink from '@/components/ExternalLink';
 import { ChainType } from '@/types/config';
 import NetworkLogo from '@/components/NetworkLogo';
-import { EOrderBy } from '../../userProfile/UserProfile.view';
+import { EOrderBy } from '../../userProfile/projectsTab/type';
 
 const itemPerPage = 10;
 

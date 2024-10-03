@@ -23,6 +23,7 @@ interface ITooltipProps extends ITooltipDirection {
 }
 
 const ARROW_SIZE = 0;
+const MARGIN = 4;
 
 export const Tooltip: FC<ITooltipProps> = ({
 	parentRef,
@@ -124,13 +125,13 @@ const tooltipStyleCalc = (
 	let translateY;
 	if (isMobile && direction !== 'bottom') {
 		style = {
-			top: parentRect.top - ARROW_SIZE - 50,
+			top: parentRect.top - ARROW_SIZE - 50 - MARGIN,
 			left: 10,
 			width: '95vw',
 		};
 	} else if (isMobile && direction === 'bottom') {
 		style = {
-			top: parentRect.bottom + ARROW_SIZE,
+			top: parentRect.bottom + ARROW_SIZE + MARGIN,
 			left: 10,
 			width: '95vw',
 		};
@@ -139,7 +140,7 @@ const tooltipStyleCalc = (
 			case 'top':
 				translateX = translateXForTopBottom(align, parentRect);
 				style = {
-					top: parentRect.top - ARROW_SIZE,
+					top: parentRect.top - ARROW_SIZE - MARGIN,
 					left: parentRect.left,
 					transform: `translate(${translateX}, -100%)`,
 				};
@@ -147,7 +148,7 @@ const tooltipStyleCalc = (
 			case 'bottom':
 				translateX = translateXForTopBottom(align, parentRect);
 				style = {
-					top: parentRect.bottom + ARROW_SIZE,
+					top: parentRect.bottom + ARROW_SIZE + MARGIN,
 					left: parentRect.left,
 					transform: `translate(${translateX}, 0)`,
 				};
@@ -157,7 +158,7 @@ const tooltipStyleCalc = (
 				translateY = translateYForRightLeft(align, parentRect);
 				style = {
 					top: parentRect.bottom,
-					left: parentRect.right + ARROW_SIZE,
+					left: parentRect.right + ARROW_SIZE + MARGIN,
 					transform: `translate(0, ${translateY})`,
 				};
 				break;
@@ -165,7 +166,7 @@ const tooltipStyleCalc = (
 				translateY = translateYForRightLeft(align, parentRect);
 				style = {
 					top: parentRect.bottom,
-					left: parentRect.left - ARROW_SIZE,
+					left: parentRect.left - ARROW_SIZE - MARGIN,
 					transform: `translate(-100%, ${translateY})`,
 				};
 				break;

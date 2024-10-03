@@ -27,6 +27,7 @@ import { wagmiConfig } from '@/wagmiConfigs';
 import { ChainType } from '@/types/config';
 import { getBalanceForToken } from './services';
 import { fetchTokenBalances } from '@/services/token';
+import { Spinner } from '@/components/Spinner';
 
 export interface ISelectTokenModalProps extends IModal {
 	tokens?: IProjectAcceptedToken[];
@@ -84,6 +85,7 @@ const SelectTokenInnerModal: FC<ISelectTokenModalProps> = ({
 	const { setSelectedOneTimeToken } = useDonateData();
 	const { walletAddress, isOnEVM, isConnected } = useGeneralWallet();
 	const { chain: evmChain } = useAccount();
+	const [balanceIsLoading, setBalanceIsLoading] = useState<boolean>(false);
 
 	useEffect(() => {
 		if (tokens) {
@@ -177,6 +179,7 @@ const SelectTokenInnerModal: FC<ISelectTokenModalProps> = ({
 	useEffect(() => {
 		const fetchBalances = async () => {
 			try {
+				setBalanceIsLoading(true);
 				const balances = isOnEVM
 					? await fetchTokenBalances(filteredTokens, walletAddress)
 					: await Promise.all(
@@ -192,15 +195,22 @@ const SelectTokenInnerModal: FC<ISelectTokenModalProps> = ({
 							}),
 						);
 				setTokenBalances(balances);
+				setBalanceIsLoading(true);
 			} catch (error) {
 				console.error('error on fetchTokenBalances', { error });
 			}
 		};
-
 		if (isConnected) {
 			fetchBalances();
 		}
-	}, [connection, filteredTokens, isConnected, isOnEVM, walletAddress]);
+	}, [
+		tokens,
+		connection,
+		filteredTokens,
+		isConnected,
+		isOnEVM,
+		walletAddress,
+	]);
 
 	// Sort tokens by balance
 	const sortedTokens = tokenBalances.sort(
@@ -253,6 +263,8 @@ const SelectTokenInnerModal: FC<ISelectTokenModalProps> = ({
 							}}
 						/>
 					))
+				) : balanceIsLoading ? (
+					<Spinner />
 				) : (
 					<div>No token supported on this chain</div>
 				)}

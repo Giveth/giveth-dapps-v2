@@ -138,7 +138,7 @@ const QFSection: FC<IQFSectionProps> = ({ projectData }) => {
 	);
 
 	return (
-		<DonationSectionWrapper gap={isOnDonatePage ? '8px' : '24px'}>
+		<DonationSectionWrapper gap={'8px'}>
 			{isOnDonatePage && (
 				<>
 					<Link href={projectLink}>
@@ -302,7 +302,6 @@ const Amount = styled(H3)`
 
 const Description = styled(Caption)`
 	color: ${neutralColors.gray[700]};
-	margin-bottom: 24px;
 	white-space: nowrap;
 	& > div {
 		color: ${neutralColors.gray[900]};

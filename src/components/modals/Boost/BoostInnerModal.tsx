@@ -160,6 +160,7 @@ const BoostInnerModal: FC<IInnerBoostModalProps> = ({
 					skip: 0,
 					userId: parseFloat(user.id || '') || -1,
 				},
+				fetchPolicy: 'no-cache',
 			});
 
 			setLoading(false);
@@ -186,7 +187,7 @@ const BoostInnerModal: FC<IInnerBoostModalProps> = ({
 			}
 		};
 		fetchUserBoosts();
-	}, [user]);
+	}, [user, isSaving]);
 
 	const confirmAllocation = async () => {
 		setIsSaving(true);

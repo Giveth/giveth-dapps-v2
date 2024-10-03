@@ -29,7 +29,6 @@ import {
 	isUserRegistered,
 	shortenAddress,
 } from '@/lib/helpers';
-import { EDirection } from '@/apollo/types/gqlEnums';
 import ExternalLink from '@/components/ExternalLink';
 import IncompleteProfileToast from '@/components/views/userProfile/IncompleteProfileToast';
 import { useAppDispatch, useAppSelector } from '@/features/hooks';
@@ -44,18 +43,6 @@ import { buildUsersPfpInfoQuery } from '@/lib/subgraph/pfpQueryBuilder';
 import { IGiverPFPToken } from '@/apollo/types/types';
 import { useProfileContext } from '@/context/profile.context';
 import { useGeneralWallet } from '@/providers/generalWalletProvider';
-
-export enum EOrderBy {
-	TokenAmount = 'TokenAmount',
-	UsdAmount = 'UsdAmount',
-	CreationDate = 'CreationDate',
-	Donations = 'Donations',
-}
-
-export interface IOrder {
-	by: EOrderBy;
-	direction: EDirection;
-}
 
 export interface IUserProfileView {}
 

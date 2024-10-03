@@ -41,12 +41,18 @@ const ProjectGIVbackToast = () => {
 	const { projectData, isAdmin, activateProject } = useProjectContext();
 	const verStatus = projectData?.verificationFormStatus;
 	const projectStatus = projectData?.status.name;
-	const verified = projectData?.verified;
+	const isVerified = projectData?.verified;
+	const isGivbackEligible = projectData?.isGivbackEligible;
 	const { givbackFactor } = projectData || {};
-	const isOwnerVerified = verified && isAdmin;
-	const isOwnerNotVerified = !verified && isAdmin;
-	const isPublicVerified = verified && !isAdmin;
-	const color = isOwnerVerified
+	const isOwnerGivbackEligible = isGivbackEligible && isAdmin;
+	const isOwnerNotVerified = !isGivbackEligible && isAdmin;
+	const isPublicGivbackEligible = isGivbackEligible && !isAdmin;
+	const isPublicVerifiedNotEligible =
+		isVerified && !isAdmin && !isGivbackEligible;
+	const isOwnerVerifiedNotEligible =
+		isVerified && isAdmin && !isGivbackEligible;
+
+	const color = isOwnerGivbackEligible
 		? semanticColors.golden[600]
 		: neutralColors.gray[900];
 	const { formatMessage } = useIntl();
@@ -86,7 +92,35 @@ const ProjectGIVbackToast = () => {
 
 	const givbackFactorPercent = ((givbackFactor || 0) * 100).toFixed();
 
-	if (isOwnerVerified) {
+	if (isPublicGivbackEligible) {
+		if (givbackFactor !== 0) {
+			title = formatMessage(
+				{
+					id: `${useIntlTitle}verified_public_3`,
+				},
+				{
+					percent: givbackFactorPercent,
+					// value: GIVBACKS_DONATION_QUALIFICATION_VALUE_USD,
+				},
+			);
+		}
+		description = formatMessage(
+			{
+				id: `${useIntlDescription}verified_public`,
+			},
+			{
+				value: GIVBACKS_DONATION_QUALIFICATION_VALUE_USD,
+			},
+		);
+		link = links.GIVPOWER_DOC;
+		Button = (
+			<OutlineButton
+				onClick={handleBoostClick}
+				label='Boost'
+				icon={<IconRocketInSpace16 />}
+			/>
+		);
+	} else if (isOwnerGivbackEligible) {
 		if (givbackFactor !== 0) {
 			title = formatMessage(
 				{
@@ -208,26 +242,47 @@ const ProjectGIVbackToast = () => {
 				/>
 			);
 		}
-	} else if (isPublicVerified) {
-		if (givbackFactor !== 0) {
-			title =
-				formatMessage({
-					id: `${useIntlTitle}verified_public_1`,
-				}) +
-				Math.round(+(givbackFactor || 0) * 100) +
-				'%' +
-				formatMessage({
-					id: `${useIntlTitle}verified_public_2`,
-				});
-		}
+	} else if (isPublicVerifiedNotEligible) {
+		title = formatMessage({
+			id: `${useIntlTitle}verified_public_not_eligible`,
+		});
 		description = formatMessage(
 			{
-				id: `${useIntlDescription}verified_public`,
+				id: `${useIntlDescription}verified_public_not_eligible`,
 			},
 			{
-				value: GIVBACKS_DONATION_QUALIFICATION_VALUE_USD,
+				stakeLock: (
+					<InnerLink href={Routes.GIVfarm} target='_blank'>
+						{formatMessage({ id: 'label.stake_and_lock' })}{' '}
+					</InnerLink>
+				),
 			},
 		);
+		link = links.GIVPOWER_DOC;
+		Button = (
+			<OutlineButton
+				onClick={handleBoostClick}
+				label='Boost'
+				icon={<IconRocketInSpace16 />}
+			/>
+		);
+	} else if (isOwnerVerifiedNotEligible) {
+		title = formatMessage({
+			id: `${useIntlTitle}verified_owner_not_eligible`,
+		});
+		description = formatMessage(
+			{
+				id: `${useIntlDescription}verified_owner_not_eligible`,
+			},
+			{
+				stakeLock: (
+					<InnerLink href={Routes.GIVfarm} target='_blank'>
+						{formatMessage({ id: 'label.stake_and_lock' })}{' '}
+					</InnerLink>
+				),
+			},
+		);
+		link = links.GIVPOWER_DOC;
 		Button = (
 			<OutlineButton
 				onClick={handleBoostClick}
@@ -262,7 +317,10 @@ const ProjectGIVbackToast = () => {
 						<Title color={color}>{title}</Title>
 						<Description>{description}</Description>
 						{link && (
-							<ExternalLink href={link}>
+							<ExternalLink
+								color={brandColors.pinky[500]}
+								href={link}
+							>
 								<LearnMore>
 									{formatMessage({ id: 'label.learn_more' })}
 									<IconChevronRight size={24} />
@@ -340,6 +398,11 @@ const Wrapper = styled(Flex)`
 	${mediaQueries.laptopL} {
 		flex-direction: row;
 	}
+`;
+
+const InnerLink = styled.a`
+	cursor: pointer;
+	color: ${brandColors.pinky[500]};
 `;
 
 export default ProjectGIVbackToast;
