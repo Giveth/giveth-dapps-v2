@@ -39,7 +39,6 @@ export const QfRoundSelector: FC<IQfRoundSelectorProps> = ({
 	const sortedRounds =
 		projectData?.qfRounds?.sort((a: IQFRound, b: IQFRound) => {
 			const activeFirstCompare = Number(b.isActive) - Number(a.isActive);
-			console.log(a.beginDate, b.beginDate);
 			if (activeFirstCompare === 0) {
 				return new Date(b.beginDate) > new Date(a.beginDate) ? 1 : -1;
 			}
