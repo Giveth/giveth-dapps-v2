@@ -33,6 +33,7 @@ const ProjectCard = (props: IProjectCard) => {
 		description,
 		image,
 		verified,
+		isGivbackEligible,
 		adminUser,
 		slug,
 		organization,
@@ -44,7 +45,7 @@ const ProjectCard = (props: IProjectCard) => {
 		adminUser?.walletAddress,
 		adminUser?.avatar,
 	);
-
+	const showVerifiedBadge = verified || isGivbackEligible;
 	return (
 		<Wrapper $isNew={isNew}>
 			<ImagePlaceholder>
@@ -58,7 +59,9 @@ const ProjectCard = (props: IProjectCard) => {
 				isAbsolute={true}
 			/>
 			{!isNew && (
-				<BadgeContainer>{verified && <VerifiedBadge />}</BadgeContainer>
+				<BadgeContainer>
+					{showVerifiedBadge && <VerifiedBadge />}
+				</BadgeContainer>
 			)}
 			<CardBody $isNew={isNew}>
 				<InternalLink href={slugToProjectView(slug)}>

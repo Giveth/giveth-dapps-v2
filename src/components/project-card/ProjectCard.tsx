@@ -96,7 +96,7 @@ const ProjectCard = (props: IProjectCard) => {
 
 	const { activeStartedRound, activeQFRound } = getActiveRound(qfRounds);
 	const hasFooter = activeStartedRound || verified || isGivbackEligible;
-
+	const showVerifiedBadge = verified || isGivbackEligible;
 	const {
 		allocatedFundUSDPreferred,
 		allocatedFundUSD,
@@ -341,17 +341,7 @@ const ProjectCard = (props: IProjectCard) => {
 						<Hr />
 						<PaddedRow $justifyContent='space-between'>
 							<Flex gap='16px'>
-								{isGivbackEligible && (
-									<Flex $alignItems='center' gap='4px'>
-										<IconGIVBack16
-											color={brandColors.giv[500]}
-										/>
-										<GivbackEligibleText>
-											GIVbacks
-										</GivbackEligibleText>
-									</Flex>
-								)}
-								{verified && (
+								{showVerifiedBadge && (
 									<Flex $alignItems='center' gap='4px'>
 										<IconVerifiedBadge16
 											color={semanticColors.jade[500]}
@@ -361,6 +351,16 @@ const ProjectCard = (props: IProjectCard) => {
 												id: 'label.vouched',
 											})}
 										</VerifiedText>
+									</Flex>
+								)}
+								{isGivbackEligible && (
+									<Flex $alignItems='center' gap='4px'>
+										<IconGIVBack16
+											color={brandColors.giv[500]}
+										/>
+										<GivbackEligibleText>
+											GIVbacks
+										</GivbackEligibleText>
 									</Flex>
 								)}
 								{activeStartedRound && (
