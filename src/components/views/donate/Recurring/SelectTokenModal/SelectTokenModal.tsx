@@ -126,6 +126,8 @@ const SelectTokenInnerModal: FC<ISelectTokenModalProps> = ({
 		},
 	);
 
+	console.log('token', tokens);
+
 	return (
 		<>
 			<Wrapper>
@@ -143,6 +145,11 @@ const SelectTokenInnerModal: FC<ISelectTokenModalProps> = ({
 							const token = superTokens.find(
 								token => token.id === tokenId,
 							) as IToken;
+							if (!token?.symbol) {
+								console.log('token', token);
+								return;
+							}
+
 							return (
 								<StreamInfo
 									key={tokenId}
