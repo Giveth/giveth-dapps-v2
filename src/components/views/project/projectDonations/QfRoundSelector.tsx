@@ -37,9 +37,14 @@ export const QfRoundSelector: FC<IQfRoundSelectorProps> = ({
 	const navigationNextRef = useRef(null);
 
 	const sortedRounds =
-		projectData?.qfRounds?.sort(
-			(a, b) => Number(b.isActive) - Number(a.isActive),
-		) || [];
+		projectData?.qfRounds?.sort((a: IQFRound, b: IQFRound) => {
+			const activeFirstCompare = Number(b.isActive) - Number(a.isActive);
+			console.log(a.beginDate, b.beginDate);
+			if (activeFirstCompare === 0) {
+				return new Date(b.beginDate) > new Date(a.beginDate) ? 1 : -1;
+			}
+			return activeFirstCompare;
+		}) || [];
 
 	const isRecurringSelected = projectDonationSwiperState.isRecurringSelected;
 	const selectedQF = projectDonationSwiperState.selectedQF;
