@@ -26,7 +26,7 @@ import { useGeneralWallet } from '@/providers/generalWalletProvider';
 import { wagmiConfig } from '@/wagmiConfigs';
 import { ChainType } from '@/types/config';
 import { getBalanceForToken } from './services';
-import { fetchTokenBalances } from '@/services/token';
+import { fetchEVMTokenBalances } from '@/services/token';
 import { Spinner } from '@/components/Spinner';
 
 export interface ISelectTokenModalProps extends IModal {
@@ -181,7 +181,7 @@ const SelectTokenInnerModal: FC<ISelectTokenModalProps> = ({
 			try {
 				setBalanceIsLoading(true);
 				const balances = isOnEVM
-					? await fetchTokenBalances(filteredTokens, walletAddress)
+					? await fetchEVMTokenBalances(filteredTokens, walletAddress)
 					: await Promise.all(
 							filteredTokens.map(async token => {
 								return {
