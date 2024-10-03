@@ -36,11 +36,11 @@ const EligibilityBadges: FC<IEligibilityBadges> = props => {
 	const { isConnected, chain } = useGeneralWallet();
 	const { activeStartedRound, project } = useDonateData();
 	const { formatMessage } = useIntl();
-	const { verified } = project || {};
+	const { isGivbackEligible } = project || {};
 	const router = useRouter();
 	const isStellar = router.query.chain === ChainType.STELLAR.toLowerCase();
 	const isTokenGivbacksEligible = token?.isGivbackEligible;
-	const isProjectGivbacksEligible = !!verified;
+	const isProjectGivbacksEligible = !!isGivbackEligible;
 	const networkId = isStellar
 		? config.STELLAR_NETWORK_NUMBER
 		: (chain as Chain)?.id

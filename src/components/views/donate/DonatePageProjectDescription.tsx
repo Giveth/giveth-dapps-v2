@@ -82,7 +82,7 @@ export const DonatePageProjectDescription: FC<
 					<GivBackBadge />
 				</Flex>
 			)}
-			{projectData?.verified && (
+			{(projectData?.verified || projectData?.isGivbackEligible) && (
 				<Flex>
 					<VerifiedBadge />
 				</Flex>

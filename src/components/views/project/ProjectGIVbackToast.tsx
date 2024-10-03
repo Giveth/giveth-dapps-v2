@@ -41,8 +41,8 @@ const ProjectGIVbackToast = () => {
 	const { projectData, isAdmin, activateProject } = useProjectContext();
 	const verStatus = projectData?.verificationFormStatus;
 	const projectStatus = projectData?.status.name;
-	const isVerified = projectData?.verified;
 	const isGivbackEligible = projectData?.isGivbackEligible;
+	const isVerified = projectData?.verified;
 	const { givbackFactor } = projectData || {};
 	const isOwnerGivbackEligible = isGivbackEligible && isAdmin;
 	const isOwnerNotVerified = !isGivbackEligible && isAdmin;
