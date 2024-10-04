@@ -1,10 +1,10 @@
-import { type CSSObjectWithLabel, StylesConfig } from 'react-select';
 import {
 	brandColors,
 	neutralColors,
 	semanticColors,
 } from '@giveth/ui-design-system';
 import { Shadow } from '@/components/styled-components/Shadow';
+import type { CSSObjectWithLabel, StylesConfig } from 'react-select';
 
 const selectCustomStyles: StylesConfig = {
 	control: (baseStyles, { isDisabled, selectProps }) =>
