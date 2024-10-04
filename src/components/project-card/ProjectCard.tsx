@@ -147,7 +147,6 @@ const ProjectCard = (props: IProjectCard) => {
 					);
 					setRecurringDonationSumInQF(totalAmountStreamed);
 				}
-				console.log(id, totalAmountStreamed);
 			}
 		};
 

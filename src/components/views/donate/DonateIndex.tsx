@@ -11,7 +11,6 @@ import {
 	Flex,
 	B,
 	Button,
-	H4,
 } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
 import { useRouter } from 'next/router';
@@ -457,43 +456,6 @@ const ImageWrapper = styled.div`
 const ButtonStyled = styled(Button)`
 	width: 100%;
 	text-transform: capitalize;
-`;
-
-const ProjectImage = styled.img`
-	border-radius: 16px;
-	width: 100%;
-	object-fit: cover; // Ensures the image covers the entire container
-	height: 380px;
-	position: relative;
-`;
-
-const GradientOverlay = styled.div`
-	position: absolute;
-	top: 0;
-	left: 0;
-	width: 100%;
-	height: 380px;
-	background: linear-gradient(
-		to top,
-		rgba(1, 1, 27, 0.6),
-		transparent
-	); /* Dark navy to transparent gradient */
-	border-radius: 16px;
-`;
-
-const Title = styled(H4)`
-	position: absolute;
-	bottom: 40px;
-	left: 40px;
-	color: #ffffff;
-	font-weight: bold;
-	text-align: left;
-	z-index: 1;
-	max-width: 90%; // Set max-width to a suitable percentage value based on your preference
-	white-space: pre-wrap; // Allows the text to wrap to the next line
-	> div:first-child {
-		margin-bottom: 4px;
-	}
 `;
 
 export default DonateIndex;
