@@ -160,7 +160,10 @@ function Rejected() {
 }
 
 const LinkHolder = styled.div`
-	${mediaQueries.tablet} {
+	${mediaQueries.mobileS} {
 		margin-bottom: 205px;
+	}
+	${mediaQueries.laptopS} {
+		margin-bottom: 0;
 	}
 `;

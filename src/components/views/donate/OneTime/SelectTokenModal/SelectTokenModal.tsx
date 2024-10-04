@@ -26,8 +26,8 @@ import { useGeneralWallet } from '@/providers/generalWalletProvider';
 import { wagmiConfig } from '@/wagmiConfigs';
 import { ChainType } from '@/types/config';
 import { getBalanceForToken } from './services';
-import { fetchTokenBalances } from '@/services/token';
-import { Spinner } from '@/components/Spinner';
+import { fetchEVMTokenBalances } from '@/services/token';
+import { WrappedSpinner } from '@/components/Spinner';
 
 export interface ISelectTokenModalProps extends IModal {
 	tokens?: IProjectAcceptedToken[];
@@ -181,7 +181,7 @@ const SelectTokenInnerModal: FC<ISelectTokenModalProps> = ({
 			try {
 				setBalanceIsLoading(true);
 				const balances = isOnEVM
-					? await fetchTokenBalances(filteredTokens, walletAddress)
+					? await fetchEVMTokenBalances(filteredTokens, walletAddress)
 					: await Promise.all(
 							filteredTokens.map(async token => {
 								return {
@@ -195,7 +195,7 @@ const SelectTokenInnerModal: FC<ISelectTokenModalProps> = ({
 							}),
 						);
 				setTokenBalances(balances);
-				setBalanceIsLoading(true);
+				setBalanceIsLoading(false);
 			} catch (error) {
 				console.error('error on fetchTokenBalances', { error });
 			}
@@ -264,7 +264,7 @@ const SelectTokenInnerModal: FC<ISelectTokenModalProps> = ({
 						/>
 					))
 				) : balanceIsLoading ? (
-					<Spinner />
+					<WrappedSpinner size={300} />
 				) : (
 					<div>No token supported on this chain</div>
 				)}

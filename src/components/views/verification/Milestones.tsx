@@ -150,9 +150,7 @@ export default function Milestones() {
 									id: 'label.select_a_date',
 								})}
 								disabled={!isDraft}
-								hasError={
-									!!errors?.foundationDate?.message ?? false
-								}
+								hasError={!!errors?.foundationDate?.message}
 							/>
 						)}
 					/>
