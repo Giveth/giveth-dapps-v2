@@ -123,7 +123,7 @@ export const fetchEVMTokenBalances = async <
 		// Combine ERC20 and native token balances
 		return [...erc20Balances, ...nativeTokenBalances];
 	} catch (error) {
-		console.error('Error fetching token balances:', error);
+		console.error('Error fetching EVM token balances:', error);
 
 		// Return undefined balances in case of failure
 		return tokens.map(token => ({ token, balance: undefined }));
