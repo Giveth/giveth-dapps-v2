@@ -108,7 +108,15 @@ export const SearchModal: FC<IModal> = ({ setShowModal }) => {
 
 	useEffect(() => {
 		if (term) {
-			router.push(`${Routes.AllProjects}?searchTerm=${term}`);
+			const updatedQuery = {
+				...router.query,
+				searchTerm: term,
+				sort: EProjectsSortBy.BestMatch,
+			};
+			router.push({
+				pathname: Routes.AllProjects,
+				query: updatedQuery,
+			});
 			closeModal();
 		}
 	}, [closeModal, router, term]);
