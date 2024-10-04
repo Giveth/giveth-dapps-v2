@@ -129,7 +129,7 @@ const SelectTokenInnerModal: FC<ISelectTokenModalProps> = ({
 							const token = superTokens.find(
 								token => token.id === tokenId,
 							) as IToken;
-							return (
+							return token ? (
 								<StreamInfo
 									key={tokenId}
 									stream={tokenStreams[tokenId]}
@@ -147,7 +147,7 @@ const SelectTokenInnerModal: FC<ISelectTokenModalProps> = ({
 									}}
 									isSuperToken={!!token.isSuperToken}
 								/>
-							);
+							) : null;
 						})}
 						{superTokens.map(token =>
 							tokenStreams[token.id] ||
