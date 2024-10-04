@@ -17,6 +17,7 @@ import {
 	semanticColors,
 	Flex,
 	IconGIVBack24,
+	IconExternalLink,
 } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
 import { useEffect, useState } from 'react';
@@ -297,6 +298,24 @@ const ProjectGIVbackToast = () => {
 		description = formatMessage({
 			id: `${useIntlDescription}non_verified_public`,
 		});
+		link = links.VERIFICATION_DOCS;
+		Button = (
+			<ExternalLink
+				href={`${links.DEVOUCH}/project/giveth/${projectData?.id}`}
+			>
+				<OutlineButton
+					label={formatMessage({
+						id: 'label.devouch.go_to_devouch',
+					})}
+					icon={
+						<IconExternalLink
+							size={16}
+							color={brandColors.giv[500]}
+						/>
+					}
+				/>
+			</ExternalLink>
+		);
 	}
 
 	useEffect(() => {
