@@ -17,7 +17,7 @@ import { Modal } from '@/components/modals/Modal';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
 import config from '@/configuration';
 import { TokenInfo } from './TokenInfo';
-import { fetchBalance } from '@/services/token';
+import { fetchEVMTokenBalances } from '@/services/token';
 import { ISuperToken, IToken } from '@/types/superFluid';
 import { StreamInfo } from './StreamInfo';
 import { useDonateData } from '@/context/donate.context';
@@ -65,20 +65,6 @@ const SelectTokenInnerModal: FC<ISelectTokenModalProps> = ({
 			return;
 		}
 
-		// A helper function to fetch balance for a single token
-		const fetchTokenBalance = async (token: IToken) => {
-			try {
-				const balance = await fetchBalance(token.id, address);
-				return { symbol: token.symbol, balance };
-			} catch (error) {
-				console.error(
-					`Error fetching balance for ${token.symbol}:`,
-					error,
-				);
-				return { symbol: token.symbol, balance: undefined };
-			}
-		};
-
 		// Initiate all balance fetches concurrently
 		const fetchAllBalances = async () => {
 			const _allTokens = superTokens.reduce((acc, token) => {
@@ -87,18 +73,13 @@ const SelectTokenInnerModal: FC<ISelectTokenModalProps> = ({
 				return acc;
 			}, [] as IToken[]);
 
-			// Create an array of promises for each token balance fetch
-			const balancePromises = _allTokens.map(token =>
-				fetchTokenBalance(token),
-			);
-
 			// Wait for all promises to settle
-			const results = await Promise.all(balancePromises);
+			const results = await fetchEVMTokenBalances(_allTokens, address);
 
 			// Process results into a new balances object
-			const newBalances = results.reduce((acc, { symbol, balance }) => {
+			const newBalances = results.reduce((acc, { token, balance }) => {
 				if (balance !== undefined) {
-					acc[symbol] = balance;
+					acc[token.symbol] = balance;
 				}
 				return acc;
 			}, {} as IBalances);
