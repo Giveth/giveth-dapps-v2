@@ -537,6 +537,21 @@ const config: EnvConfig = {
 				isSuperToken: true,
 				coingeckoId: 'usd-coin',
 			},
+			{
+				underlyingToken: {
+					decimals: 18,
+					id: '0x4F604735c1cF31399C6E711D5962b2B3E0225AD3',
+					name: 'Glo Dollar',
+					symbol: 'USDGLO',
+					coingeckoId: 'glo-dollar',
+				},
+				decimals: 18,
+				id: '0x9F41d0AA24E599fd8D0c180Ee3C0F609dc41c622',
+				name: 'Super Glo Dollar',
+				symbol: 'USDGLOx',
+				isSuperToken: true,
+				coingeckoId: 'glo-dollar',
+			},
 		],
 	},
 
