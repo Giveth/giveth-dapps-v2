@@ -5,6 +5,8 @@ import {
 	Flex,
 	SublineBold,
 	brandColors,
+	IconSpark,
+	semanticColors,
 } from '@giveth/ui-design-system';
 import React, { FC, useState, useEffect } from 'react';
 import styled, { css } from 'styled-components';
@@ -192,6 +194,10 @@ export const DonationCard: FC<IDonationCardProps> = ({
 								{formatMessage({
 									id: 'label.recurring_donation',
 								})}
+								<IconSpark
+									size={28}
+									color={semanticColors.golden[500]}
+								/>
 							</Tab>
 						) : (
 							!disableRecurringDonations && (
@@ -284,6 +290,8 @@ interface ITab {
 
 const Tab = styled(BaseTab)<ITab>`
 	font-weight: 500 !important;
+	display: flex;
+	align-items: center;
 	cursor: pointer;
 	${props =>
 		props.$selected &&
