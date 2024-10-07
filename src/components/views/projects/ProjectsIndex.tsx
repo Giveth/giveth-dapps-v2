@@ -39,6 +39,7 @@ import { DefaultQFBanner } from '@/components/DefaultQFBanner';
 import NotAvailable from '@/components/NotAvailable';
 import { fetchProjects, IQueries } from './services';
 import { IProject } from '@/apollo/types/types';
+import { LAST_PROJECT_CLICKED } from './constants';
 
 export interface IProjectsView {
 	projects: IProject[];
@@ -167,14 +168,14 @@ const ProjectsIndex = (props: IProjectsView) => {
 
 	// Save last clicked project
 	const handleProjectClick = (slug: string) => {
-		localStorage.setItem('lastProjectClicked', slug);
+		sessionStorage.setItem(LAST_PROJECT_CLICKED, slug);
 	};
 
 	// Scroll to last clicked project
 	useEffect(() => {
 		if (!isFetching && !isFetchingNextPage) {
 			const lastProjectClicked =
-				localStorage.getItem('lastProjectClicked');
+				sessionStorage.getItem(LAST_PROJECT_CLICKED);
 			if (lastProjectClicked) {
 				const element = document.getElementById(lastProjectClicked);
 				if (element) {
@@ -183,7 +184,7 @@ const ProjectsIndex = (props: IProjectsView) => {
 						behavior: 'smooth',
 					});
 				}
-				localStorage.removeItem('lastProjectClicked');
+				sessionStorage.removeItem(LAST_PROJECT_CLICKED);
 			}
 		}
 	}, [isFetching, isFetchingNextPage]);
