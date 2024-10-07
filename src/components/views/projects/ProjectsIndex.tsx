@@ -1,24 +1,23 @@
-import { Fragment, useCallback, useEffect, useRef, useState } from 'react';
+// components/ProjectsIndex.tsx
+
+import { Fragment, useCallback, useEffect, useRef } from 'react';
 import { useRouter } from 'next/router';
 import {
 	brandColors,
-	OutlineButton,
-	FlexCenter,
 	Container,
 	deviceSize,
+	FlexCenter,
+	mediaQueries,
+	OutlineButton,
 } from '@giveth/ui-design-system';
-import styled from 'styled-components';
 import { useIntl } from 'react-intl';
 import { captureException } from '@sentry/nextjs';
-import { QueryFunctionContext, useInfiniteQuery } from '@tanstack/react-query';
+import { useInfiniteQuery } from '@tanstack/react-query';
+import styled from 'styled-components';
 import ProjectCard from '@/components/project-card/ProjectCard';
 import Routes from '@/lib/constants/Routes';
 import { isUserRegistered, showToastError } from '@/lib/helpers';
-import { FETCH_ALL_PROJECTS } from '@/apollo/gql/gqlProjects';
-import { client } from '@/apollo/apolloClient';
-import { IProject } from '@/apollo/types/types';
 import ProjectsNoResults from '@/components/views/projects/ProjectsNoResults';
-import { mediaQueries } from '@/lib/constants/constants';
 import { useAppDispatch, useAppSelector } from '@/features/hooks';
 import { setShowCompleteProfile } from '@/features/modal/modal.slice';
 import { ProjectsBanner } from './ProjectsBanner';
@@ -29,7 +28,6 @@ import { PassportBanner } from '@/components/PassportBanner';
 import { QFProjectsMiddleBanner } from './MiddleBanners/QFMiddleBanner';
 import { QFNoResultBanner } from './MiddleBanners/QFNoResultBanner';
 import { Spinner } from '@/components/Spinner';
-import { getMainCategorySlug } from '@/helpers/projects';
 import { FilterContainer } from './filter/FilterContainer';
 import { SortContainer } from './sort/SortContainer';
 import { ArchivedQFRoundStats } from './ArchivedQFRoundStats';
@@ -39,145 +37,87 @@ import useMediaQuery from '@/hooks/useMediaQuery';
 import { QFHeader } from '@/components/views/archivedQFRounds/QFHeader';
 import { DefaultQFBanner } from '@/components/DefaultQFBanner';
 import NotAvailable from '@/components/NotAvailable';
+import { fetchProjects, IQueries } from './services';
+import { IProject } from '@/apollo/types/types';
 
 export interface IProjectsView {
 	projects: IProject[];
 	totalCount: number;
 }
 
-interface IQueries {
-	skip?: number;
-	limit?: number;
-	connectedWalletUserId?: number;
-}
-
-/**
- * A page of projects - return type in fetchProjects function
- */
-interface Page {
-	data: IProject[];
-	previousCursor?: number;
-	nextCursor?: number;
-}
-
 const ProjectsIndex = (props: IProjectsView) => {
 	const { formatMessage } = useIntl();
 	const { projects, totalCount: _totalCount } = props;
-	const [projectsData, setProjectsData] = useState<{
-		projects: IProject[];
-		totalPages: number;
-		totalCount: number;
-	}>({
-		projects: projects,
-		totalPages: Math.ceil(_totalCount / projects.length),
-		totalCount: _totalCount,
-	});
 	const user = useAppSelector(state => state.user.userData);
-
 	const { activeQFRound, mainCategories } = useAppSelector(
 		state => state.general,
 	);
-	const [isNotFound, setIsNotFound] = useState(false);
-
 	const isMobile = useMediaQuery(`(max-width: ${deviceSize.tablet - 1}px)`);
-
 	const dispatch = useAppDispatch();
-
 	const {
 		variables: contextVariables,
 		selectedMainCategory,
 		isQF,
 		isArchivedQF,
 	} = useProjectsContext();
-
 	const router = useRouter();
 	const lastElementRef = useRef<HTMLDivElement>(null);
 	const isInfiniteScrolling = useRef(true);
 
-	const fetchProjects = useCallback(
-		async (pageParam: number | unknown): Promise<Page> => {
-			const currentPage = typeof pageParam === 'number' ? pageParam : 0;
+	// Define the fetch function for React Query
+	const fetchProjectsPage = async ({ pageParam = 0 }) => {
+		const variables: IQueries = {
+			limit: 20, // Adjust the limit as needed
+			skip: 20 * pageParam,
+		};
 
-			const variables: IQueries = {
-				limit: projects.length,
-				skip: projects.length * (currentPage || 0),
-			};
+		if (user?.id) {
+			variables.connectedWalletUserId = Number(user.id);
+		}
 
-			if (user?.id) {
-				variables.connectedWalletUserId = Number(user?.id);
-			}
-
-			const res = await client.query({
-				query: FETCH_ALL_PROJECTS,
-				variables: {
-					...variables,
-					...contextVariables,
-					mainCategory: isArchivedQF
-						? undefined
-						: getMainCategorySlug(selectedMainCategory),
-					qfRoundSlug: isArchivedQF ? router.query.slug : null,
-				},
-			});
-
-			const dataProjects = res.data?.allProjects?.projects;
-			const count = res.data?.allProjects?.totalCount;
-
-			// Calculate the total number of pages
-			const totalPages = Math.ceil(
-				count / (projectsData.projects.length || 1),
-			);
-
-			setProjectsData(prevState => ({
-				projects: [...prevState.projects, ...dataProjects],
-				totalPages: totalPages,
-				totalCount: count,
-			}));
-
-			return {
-				data: dataProjects,
-				previousCursor: currentPage - 1,
-				nextCursor: currentPage + 1,
-			};
-		},
-		[
+		return await fetchProjects(
+			pageParam,
+			variables,
 			contextVariables,
 			isArchivedQF,
-			projects.length,
-			projectsData.projects.length,
-			router.query.slug,
 			selectedMainCategory,
-			user?.id,
-		],
-	);
+			router.query.slug,
+		);
+	};
 
+	// Use the useInfiniteQuery hook with the new v5 API
 	const {
 		data,
 		error,
 		fetchNextPage,
+		hasNextPage,
 		isError,
 		isFetching,
 		isFetchingNextPage,
-	} = useInfiniteQuery<Page, Error>({
+	} = useInfiniteQuery({
 		queryKey: [
 			'projects',
 			contextVariables,
 			isArchivedQF,
 			selectedMainCategory,
 		],
-		queryFn: ({ pageParam = 0 }: QueryFunctionContext) =>
-			fetchProjects(pageParam),
-		getNextPageParam: lastPage => {
-			return lastPage.nextCursor;
-		},
+		queryFn: fetchProjectsPage,
+		getNextPageParam: lastPage => lastPage.nextCursor,
+		getPreviousPageParam: firstPage => firstPage.previousCursor,
 		initialPageParam: 0,
+		// placeholderData: keepPreviousData,
+		placeholderData: {
+			pageParams: [0],
+			pages: [{ data: projects, totalCount: _totalCount }],
+		},
 	});
 
-	// Function that triggers when you scroll down - infinite loading
+	// Function to load more data when scrolling
 	const loadMore = useCallback(() => {
-		if (projectsData.totalCount > (data?.pages?.length || 0)) {
+		if (hasNextPage) {
 			fetchNextPage();
 		}
-	}, [data?.pages.length, fetchNextPage, projectsData.totalCount]);
+	}, [fetchNextPage, hasNextPage]);
 
 	const handleCreateButton = () => {
 		if (isUserRegistered(user)) {
@@ -187,32 +127,28 @@ const ProjectsIndex = (props: IProjectsView) => {
 		}
 	};
 
-	// Check if there any active QF
 	const onProjectsPageOrActiveQFPage = !isQF || (isQF && activeQFRound);
 
-	/*
-	 * This function will be called when the observed elements intersect with the viewport.
-	 * Observed element is last project on the list that trigger another fetch projects to load.
-	 */
+	// Intersection Observer for infinite scrolling
 	useEffect(() => {
-		const handleObserver = (entities: any) => {
+		const handleObserver = (entries: IntersectionObserverEntry[]) => {
 			if (!isInfiniteScrolling.current) return;
-			const target = entities[0];
+			const target = entries[0];
 			if (target.isIntersecting) {
 				loadMore();
 			}
 		};
 		const option = {
 			root: null,
-			threshold: 1,
+			threshold: 1.0,
 		};
 		const observer = new IntersectionObserver(handleObserver, option);
 		if (lastElementRef.current) {
 			observer.observe(lastElementRef.current);
 		}
 		return () => {
-			if (observer) {
-				observer.disconnect();
+			if (observer && lastElementRef.current) {
+				observer.unobserve(lastElementRef.current);
 			}
 		};
 	}, [loadMore]);
@@ -223,7 +159,9 @@ const ProjectsIndex = (props: IProjectsView) => {
 			!selectedMainCategory &&
 			!isArchivedQF
 		) {
-			setIsNotFound(true);
+			isInfiniteScrolling.current = false;
+		} else {
+			isInfiniteScrolling.current = true;
 		}
 	}, [selectedMainCategory, mainCategories.length, isArchivedQF]);
 
@@ -232,33 +170,46 @@ const ProjectsIndex = (props: IProjectsView) => {
 		localStorage.setItem('lastProjectClicked', slug);
 	};
 
-	// Handle last clicked project, if it exist scroll to that position
+	// Scroll to last clicked project
 	useEffect(() => {
 		if (!isFetching && !isFetchingNextPage) {
 			const lastProjectClicked =
 				localStorage.getItem('lastProjectClicked');
 			if (lastProjectClicked) {
-				window.scrollTo({
-					top: document.getElementById(lastProjectClicked)?.offsetTop,
-					behavior: 'smooth',
-				});
+				const element = document.getElementById(lastProjectClicked);
+				if (element) {
+					window.scrollTo({
+						top: element.offsetTop,
+						behavior: 'smooth',
+					});
+				}
 				localStorage.removeItem('lastProjectClicked');
 			}
 		}
 	}, [isFetching, isFetchingNextPage]);
 
+	// Handle errors
+	useEffect(() => {
+		if (isError && error) {
+			showToastError(error);
+			captureException(error, {
+				tags: {
+					section: 'fetchAllProjects',
+				},
+			});
+		}
+	}, [isError, error]);
+
+	// Determine if no results should be shown
+	const isNotFound =
+		(mainCategories.length > 0 && !selectedMainCategory && !isArchivedQF) ||
+		(!isQF && data?.pages?.[0]?.data.length === 0);
+
 	if (isNotFound)
 		return <NotAvailable description='Oops! Page Not Found...' />;
 
-	// Handle fetching errors from React Query
-	if (isError) {
-		showToastError(error);
-		captureException(error, {
-			tags: {
-				section: 'fetchAllProjects',
-			},
-		});
-	}
+	const totalCount = data?.pages[data.pages.length - 1].totalCount || 0;
+	console.log('data', totalCount, data);
 
 	return (
 		<>
@@ -294,11 +245,11 @@ const ProjectsIndex = (props: IProjectsView) => {
 				)}
 				{onProjectsPageOrActiveQFPage && (
 					<SortingContainer>
-						<SortContainer totalCount={projectsData.totalCount} />
+						<SortContainer totalCount={totalCount} />
 					</SortingContainer>
 				)}
 				{isFetchingNextPage && <Loader className='dot-flashing' />}
-				{projectsData.projects.length > 0 ? (
+				{data?.pages.some(page => page.data.length > 0) ? (
 					<ProjectsWrapper>
 						<ProjectsContainer>
 							{isQF ? (
@@ -306,7 +257,7 @@ const ProjectsIndex = (props: IProjectsView) => {
 							) : (
 								<ProjectsMiddleBanner />
 							)}
-							{data?.pages.map((page, pageIndex) => (
+							{data.pages.map((page, pageIndex) => (
 								<Fragment key={pageIndex}>
 									{page.data.map((project, idx) => (
 										<div
@@ -317,7 +268,6 @@ const ProjectsIndex = (props: IProjectsView) => {
 											}
 										>
 											<ProjectCard
-												key={project.id}
 												project={project}
 												order={idx}
 											/>
@@ -333,39 +283,35 @@ const ProjectsIndex = (props: IProjectsView) => {
 				) : (
 					<ProjectsNoResults />
 				)}
-				{projectsData.totalCount > projectsData.projects.length && (
-					<div ref={lastElementRef} />
+				{hasNextPage && <div ref={lastElementRef} />}
+				{!isFetching && !isFetchingNextPage && hasNextPage && (
+					<>
+						<StyledButton
+							onClick={() => fetchNextPage()}
+							label={
+								isFetchingNextPage
+									? ''
+									: formatMessage({
+											id: 'component.button.load_more',
+										})
+							}
+							icon={
+								isFetchingNextPage && (
+									<LoadingDotIcon>
+										<div className='dot-flashing' />
+									</LoadingDotIcon>
+								)
+							}
+						/>
+						<StyledButton
+							onClick={handleCreateButton}
+							label={formatMessage({
+								id: 'component.button.create_project',
+							})}
+							$transparent
+						/>
+					</>
 				)}
-				{!isFetching &&
-					!isFetchingNextPage &&
-					projectsData.totalPages > (data?.pages?.length || 0) && (
-						<>
-							<StyledButton
-								onClick={loadMore}
-								label={
-									isFetchingNextPage
-										? ''
-										: formatMessage({
-												id: 'component.button.load_more',
-											})
-								}
-								icon={
-									isFetchingNextPage && (
-										<LoadingDotIcon>
-											<div className='dot-flashing' />
-										</LoadingDotIcon>
-									)
-								}
-							/>
-							<StyledButton
-								onClick={handleCreateButton}
-								label={formatMessage({
-									id: 'component.button.create_project',
-								})}
-								$transparent
-							/>
-						</>
-					)}
 			</Wrapper>
 		</>
 	);
