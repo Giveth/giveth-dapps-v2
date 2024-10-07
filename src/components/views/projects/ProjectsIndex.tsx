@@ -10,11 +10,7 @@ import {
 import styled from 'styled-components';
 import { useIntl } from 'react-intl';
 import { captureException } from '@sentry/nextjs';
-import {
-	QueryFunctionContext,
-	useInfiniteQuery,
-	useQueryClient,
-} from '@tanstack/react-query';
+import { QueryFunctionContext, useInfiniteQuery } from '@tanstack/react-query';
 import ProjectCard from '@/components/project-card/ProjectCard';
 import Routes from '@/lib/constants/Routes';
 import { isUserRegistered, showToastError } from '@/lib/helpers';
@@ -65,21 +61,24 @@ interface Page {
 }
 
 const ProjectsIndex = (props: IProjectsView) => {
-	const queryClient = useQueryClient();
 	const { formatMessage } = useIntl();
 	const { projects, totalCount: _totalCount } = props;
+	const [projectsData, setProjectsData] = useState<{
+		projects: IProject[];
+		totalPages: number;
+		totalCount: number;
+	}>({
+		projects: projects,
+		totalPages: Math.ceil(_totalCount / projects.length),
+		totalCount: _totalCount,
+	});
 	const user = useAppSelector(state => state.user.userData);
 
 	const { activeQFRound, mainCategories } = useAppSelector(
 		state => state.general,
 	);
 	const [isNotFound, setIsNotFound] = useState(false);
-	const [filteredProjects, setFilteredProjects] =
-		useState<IProject[]>(projects);
-	const [totalPages, setTotalPages] = useState(
-		Math.ceil(_totalCount / projects.length),
-	);
-	const [totalCount, setTotalCount] = useState(_totalCount);
+
 	const isMobile = useMediaQuery(`(max-width: ${deviceSize.tablet - 1}px)`);
 
 	const dispatch = useAppDispatch();
@@ -120,19 +119,22 @@ const ProjectsIndex = (props: IProjectsView) => {
 				},
 			});
 
-			const data = res.data?.allProjects?.projects;
+			const dataProjects = res.data?.allProjects?.projects;
 			const count = res.data?.allProjects?.totalCount;
-			const totalPages = Math.ceil(count / projects.length);
-			setTotalPages(totalPages);
-			setTotalCount(count);
 
-			setFilteredProjects(prevProjects => [
-				...prevProjects,
-				data.allProjects?.projects,
-			]);
+			// Calculate the total number of pages
+			const totalPages = Math.ceil(
+				count / (projectsData.projects.length || 1),
+			);
+
+			setProjectsData(prevState => ({
+				projects: [...prevState.projects, ...dataProjects],
+				totalPages: totalPages,
+				totalCount: count,
+			}));
 
 			return {
-				data: data,
+				data: dataProjects,
 				previousCursor: currentPage - 1,
 				nextCursor: currentPage + 1,
 			};
@@ -141,6 +143,7 @@ const ProjectsIndex = (props: IProjectsView) => {
 			contextVariables,
 			isArchivedQF,
 			projects.length,
+			projectsData.projects.length,
 			router.query.slug,
 			selectedMainCategory,
 			user?.id,
@@ -163,9 +166,7 @@ const ProjectsIndex = (props: IProjectsView) => {
 		],
 		queryFn: ({ pageParam = 0 }: QueryFunctionContext) =>
 			fetchProjects(pageParam),
-		getNextPageParam: (lastPage, someData) => {
-			console.log('lastPage', lastPage);
-			console.log('someData', someData);
+		getNextPageParam: lastPage => {
 			return lastPage.nextCursor;
 		},
 		initialPageParam: 0,
@@ -173,10 +174,10 @@ const ProjectsIndex = (props: IProjectsView) => {
 
 	// Function that triggers when you scroll down - infinite loading
 	const loadMore = useCallback(() => {
-		if (totalPages > (data?.pages?.length || 0)) {
+		if (projectsData.totalCount > (data?.pages?.length || 0)) {
 			fetchNextPage();
 		}
-	}, [data?.pages.length, fetchNextPage, totalPages]);
+	}, [data?.pages.length, fetchNextPage, projectsData.totalCount]);
 
 	const handleCreateButton = () => {
 		if (isUserRegistered(user)) {
@@ -293,11 +294,11 @@ const ProjectsIndex = (props: IProjectsView) => {
 				)}
 				{onProjectsPageOrActiveQFPage && (
 					<SortingContainer>
-						<SortContainer totalCount={totalCount} />
+						<SortContainer totalCount={projectsData.totalCount} />
 					</SortingContainer>
 				)}
 				{isFetchingNextPage && <Loader className='dot-flashing' />}
-				{filteredProjects?.length > 0 ? (
+				{projectsData.projects.length > 0 ? (
 					<ProjectsWrapper>
 						<ProjectsContainer>
 							{isQF ? (
@@ -332,12 +333,12 @@ const ProjectsIndex = (props: IProjectsView) => {
 				) : (
 					<ProjectsNoResults />
 				)}
-				{_totalCount > filteredProjects?.length && (
+				{projectsData.totalCount > projectsData.projects.length && (
 					<div ref={lastElementRef} />
 				)}
 				{!isFetching &&
 					!isFetchingNextPage &&
-					totalPages > (data?.pages?.length || 0) && (
+					projectsData.totalPages > (data?.pages?.length || 0) && (
 						<>
 							<StyledButton
 								onClick={loadMore}
