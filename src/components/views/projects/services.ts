@@ -17,6 +17,7 @@ export interface Page {
 	data: IProject[];
 	previousCursor?: number;
 	nextCursor?: number;
+	totalCount?: number;
 }
 
 export const fetchProjects = async (
@@ -42,11 +43,11 @@ export const fetchProjects = async (
 	});
 
 	const dataProjects: IProject[] = res.data?.allProjects?.projects;
-	const count: number = res.data?.allProjects?.totalCount;
 
 	return {
 		data: dataProjects,
 		previousCursor: currentPage > 0 ? currentPage - 1 : undefined,
 		nextCursor: dataProjects.length > 0 ? currentPage + 1 : undefined,
+		totalCount: res.data?.allProjects?.totalCount,
 	};
 };
