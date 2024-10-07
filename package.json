@@ -4,7 +4,7 @@
 	"private": true,
 	"scripts": {
 		"build": "next build",
-		"dev": "next dev",
+		"dev": "next dev && node src/sitemap.ts",
 		"lint": "eslint . --ext .ts --ext .tsx",
 		"lint:fix": "eslint . --ext .ts --ext .tsx --fix",
 		"start": "next start",
