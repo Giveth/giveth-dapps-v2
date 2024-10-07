@@ -12,7 +12,7 @@ export const VerifiedBadge = () => {
 		<Wrapper>
 			<IconVerifiedBadge />
 			<TextBadge $styleType='Small'>
-				{formatMessage({ id: 'label.verified' })}
+				{formatMessage({ id: 'label.vouched' })}
 			</TextBadge>
 		</Wrapper>
 	);

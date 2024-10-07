@@ -68,7 +68,7 @@ export const ProjectStats = () => {
 						</IconWithTooltip>
 					</Flex>
 					<VerificationBadge
-						isVerified={projectData?.verified}
+						isGivbackEligible={projectData?.isGivbackEligible}
 						verificationStatus={projectData?.verificationFormStatus}
 					/>
 				</StatRow>

@@ -7,10 +7,8 @@ const { withSentryConfig } = require('@sentry/nextjs');
 const withBundleAnalyzer = require('@next/bundle-analyzer')({
 	enabled: process.env.ANALYZE === 'true',
 });
-var pjson = require('./package.json');
-const generateRobotsTxt = require('./scripts/generate-robots-txt');
 
-const isProduction = process.env.NEXT_PUBLIC_ENV === 'production';
+const generateRobotsTxt = require('./scripts/generate-robots-txt');
 
 const defaultLocale = 'en';
 const locales = ['ca', 'en', 'es'];
@@ -26,6 +24,7 @@ const moduleExports = withBundleAnalyzer({
 			{ protocol: 'https', port: '', hostname: 'images.unsplash.com' },
 			{ protocol: 'https', port: '', hostname: 'unicorn.mypinata.cloud' },
 			{ protocol: 'https', port: '', hostname: 'images.ctfassets.net' },
+			{ protocol: 'https', port: '', hostname: 'giveth.io' },
 			{
 				protocol: 'https',
 				port: '',
@@ -60,6 +59,7 @@ const moduleExports = withBundleAnalyzer({
 			},
 			{ protocol: 'https', port: '', hostname: 'ipfs.io' },
 			{ protocol: 'https', port: '', hostname: '*.amazonaws.com' },
+			{ protocol: 'https', port: '', hostname: 'giveth.io' },
 		],
 	},
 	compiler: {

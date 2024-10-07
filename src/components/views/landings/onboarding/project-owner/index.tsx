@@ -29,7 +29,7 @@ const OnboardingOwnerIndex = () => {
 const content = {
 	title: 'Become a project Owner on Giveth',
 	description:
-		'We may be biased, but we really believe that Giveth is the best donation platform in the world. When you raise funds for your project on Giveth, you receive 100% of every cent that was donated to you since Giveth takes zero fees. Not only that, but you can also earn rewards when you refer others to donate on Giveth! Check out our resources below to learn how to quickly and easily launch your project on Giveth and join us in the Future of Giving',
+		'We may be biased, but we really believe that Giveth is the best donation platform in the world. When you raise funds for your project on Giveth, you receive 100% of every cent that was donated to you since Giveth takes zero fees. Not only that, but you can also earn rewards when you refer others to donate on Giveth! Check out our resources below to learn how to quickly and easily launch your project on Giveth and join us in the Future of Giving.',
 	steps: projectOwnerSteps,
 	buttonLink: Routes.CreateProject,
 	buttonText: 'CREATE PROJECT',

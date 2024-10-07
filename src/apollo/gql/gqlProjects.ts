@@ -8,6 +8,7 @@ export const PROJECT_CORE_FIELDS = gql`
 		image
 		slug
 		verified
+		isGivbackEligible
 		totalDonations
 		qfRounds {
 			id
@@ -142,6 +143,7 @@ export const FETCH_PROJECT_BY_SLUG_DONATION = gql`
 			slug
 			descriptionSummary
 			verified
+			isGivbackEligible
 			totalDonations
 			sumDonationValueUsdForActiveQfRound
 			countUniqueDonorsForActiveQfRound
@@ -211,6 +213,7 @@ export const FETCH_PROJECT_BY_SLUG_SINGLE_PROJECT = gql`
 			image
 			slug
 			verified
+			isGivbackEligible
 			totalDonations
 			description
 			addresses {
@@ -493,7 +496,7 @@ export const UPLOAD_IMAGE = gql`
 export const WALLET_ADDRESS_IS_VALID = gql`
 	query WalletAddressIsValid(
 		$address: String!
-		$chainType: String
+		$chainType: ChainType
 		$memo: String
 	) {
 		walletAddressIsValid(
@@ -595,6 +598,7 @@ export const ADD_RECIPIENT_ADDRESS_TO_PROJECT = gql`
 			listed
 			reviewStatus
 			verified
+			isGivbackEligible
 			slugHistory
 			creationDate
 			adminUserId
@@ -798,5 +802,11 @@ export const FETCH_RECURRING_DONATIONS_BY_DATE = gql`
 			}
 			totalCount
 		}
+	}
+`;
+
+export const DELETE_DRAFT_PROJECT = gql`
+	mutation ($projectId: Float!) {
+		deleteDraftProject(projectId: $projectId)
 	}
 `;

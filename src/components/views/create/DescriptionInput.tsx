@@ -81,7 +81,12 @@ const DescriptionInput = ({
 				{formatMessage({ id: 'label.tell_us_about_your_project' })}
 			</H5>
 			<CaptionContainer>
-				{formatMessage({ id: 'label.aim_for_200_500_words' })}{' '}
+				{formatMessage(
+					{ id: 'label.provide_minimum_characters' },
+					{
+						min: DESCRIPTION_MIN_LIMIT,
+					},
+				)}{' '}
 				<span onClick={() => setShowModal(true)}>
 					{formatMessage({
 						id: 'label.how_to_write_a_good_project_desc',

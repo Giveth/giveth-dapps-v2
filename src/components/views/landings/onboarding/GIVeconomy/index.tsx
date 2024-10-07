@@ -28,7 +28,7 @@ const OnboardingGIVeconomyIndex = () => {
 const content = {
 	title: 'What else can you do on Giveth?',
 	description:
-		"Giveth is more than just a crypto donation platform. With GIV tokens you can take part in governance of the Giveth DAO, earn yield in our GIVfarm pools, boost project rankings with GIVpower and refer friends to Giveth to earn even more rewards. Start exploring everything that's possible in the GIVeconomy!",
+		"Giveth is more than just a crypto donation platform. With GIV tokens you can take part in governance of the Giveth DAO, earn yield in our GIVfarm pools and boost project rankings with GIVpower. Start exploring everything that's possible in the GIVeconomy!",
 	steps: GIVeconomySteps,
 	buttonLink: Routes.GIVeconomy,
 	buttonText: 'EXPLORE GIVeconomy',

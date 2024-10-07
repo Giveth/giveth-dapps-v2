@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useState } from 'react';
+import React, { FC, useEffect } from 'react';
 import styled from 'styled-components';
 import {
 	Col,
@@ -19,9 +19,11 @@ import SocialBox from '../../DonateSocialBox';
 import NiceBanner from './NiceBanner';
 import useDetectDevice from '@/hooks/useDetectDevice';
 import { useIsSafeEnvironment } from '@/hooks/useSafeAutoConnect';
-import { useDonateData } from '@/context/donate.context';
+import {
+	DonateModalPriorityValues,
+	useDonateData,
+} from '@/context/donate.context';
 import { EContentType } from '@/lib/constants/shareContent';
-import { PassportBanner } from '@/components/PassportBanner';
 import { useAlreadyDonatedToProject } from '@/hooks/useAlreadyDonatedToProject';
 import { Shadow } from '@/components/styled-components/Shadow';
 import { useAppDispatch, useAppSelector } from '@/features/hooks';
@@ -33,8 +35,7 @@ import QFSection from '../project/projectActionCard/QFSection';
 import ProjectCardImage from '@/components/project-card/ProjectCardImage';
 import { useGeneralWallet } from '@/providers/generalWalletProvider';
 import { DonatePageProjectDescription } from './DonatePageProjectDescription';
-import { getActiveRound } from '@/helpers/qf';
-import QRDonationDetails from './OnTime/SelectTokenModal/QRCodeDonation/QRDonationDetails';
+import QRDonationDetails from '@/components/views/donate/OneTime/SelectTokenModal/QRCodeDonation/QRDonationDetails';
 import InlineToast, { EToastType } from '@/components/toasts/InlineToast';
 import { client } from '@/apollo/apolloClient';
 import { FETCH_DONATION_BY_ID } from '@/apollo/gql/gqlDonations';
@@ -46,6 +47,11 @@ import EndaomentProjectsInfo from '@/components/views/project/EndaomentProjectsI
 import { IDraftDonation } from '@/apollo/types/gqlTypes';
 import StorageLabel from '@/lib/localStorage';
 import DonationByProjectOwner from '@/components/modals/DonationByProjectOwner';
+import { isWalletSanctioned } from '@/services/donation';
+import SanctionModal from '@/components/modals/SanctionedModal';
+import { PassportBanner } from '@/components/PassportBanner';
+import QFEligibleNetworks from '@/components/views/donate/QFEligibleNetworks';
+import { GIVBACKS_DONATION_QUALIFICATION_VALUE_USD } from '@/lib/constants/constants';
 
 const DonateIndex: FC = () => {
 	const { formatMessage } = useIntl();
@@ -56,11 +62,15 @@ const DonateIndex: FC = () => {
 		qrDonationStatus,
 		draftDonationData,
 		hasActiveQFRound,
+		shouldRenderModal,
 		setSuccessDonation,
 		setQRDonationStatus,
 		setDraftDonationData,
 		setPendingDonationExists,
+		activeStartedRound,
 		startTimer,
+		setDonateModalByPriority,
+		setIsModalPriorityChecked,
 	} = useDonateData();
 	const { renewExpirationDate, retrieveDraftDonation } =
 		useQRCodeDonation(project);
@@ -68,8 +78,7 @@ const DonateIndex: FC = () => {
 
 	const alreadyDonated = useAlreadyDonatedToProject(project);
 	const { userData } = useAppSelector(state => state.user);
-	const [showDonationByProjectOwner, setShowDonationByProjectOwner] =
-		useState<boolean | undefined>(false);
+
 	const dispatch = useAppDispatch();
 	const isSafeEnv = useIsSafeEnvironment();
 	const { isOnSolana } = useGeneralWallet();
@@ -78,7 +87,14 @@ const DonateIndex: FC = () => {
 	const [showQRCode, setShowQRCode] = React.useState(
 		!!router.query.draft_donation,
 	);
+	const { walletAddress: address } = useGeneralWallet();
 	const [stopTimer, setStopTimer] = React.useState<void | (() => void)>();
+
+	const isQRDonation = router.query.chain === ChainType.STELLAR.toLowerCase();
+	const isStellarIncludedInQF =
+		activeStartedRound?.eligibleNetworks?.includes(
+			config.STELLAR_NETWORK_NUMBER,
+		);
 
 	useEffect(() => {
 		dispatch(setShowHeader(false));
@@ -87,9 +103,37 @@ const DonateIndex: FC = () => {
 		};
 	}, [dispatch]);
 
+	const validateSanctions = async () => {
+		if (project.organization?.label === 'endaoment' && address) {
+			// We just need to check if the wallet is sanctioned for endaoment projects
+			const sanctioned = await isWalletSanctioned(address);
+			if (sanctioned) {
+				setDonateModalByPriority(
+					DonateModalPriorityValues.OFACSanctionListModal,
+				);
+				return;
+			}
+		}
+		setIsModalPriorityChecked(
+			DonateModalPriorityValues.OFACSanctionListModal,
+		);
+	};
+
 	useEffect(() => {
-		setShowDonationByProjectOwner(
-			userData?.id !== undefined && userData?.id === project.adminUser.id,
+		validateSanctions();
+	}, [project, address]);
+
+	useEffect(() => {
+		if (
+			userData?.id !== undefined &&
+			userData?.id === project.adminUser.id
+		) {
+			setDonateModalByPriority(
+				DonateModalPriorityValues.DonationByProjectOwner,
+			);
+		}
+		setIsModalPriorityChecked(
+			DonateModalPriorityValues.DonationByProjectOwner,
 		);
 	}, [userData?.id, project.adminUser]);
 
@@ -112,7 +156,11 @@ const DonateIndex: FC = () => {
 					getDonationById;
 
 				if (!transactionId) return;
-
+				const includeInQF =
+					activeStartedRound &&
+					!!getDonationById.valueUsd &&
+					getDonationById.valueUsd >=
+						(activeStartedRound?.minimumValidUsdValue || 0);
 				setSuccessDonation({
 					txHash: [
 						{
@@ -120,11 +168,14 @@ const DonateIndex: FC = () => {
 							chainType: ChainType.STELLAR,
 						},
 					],
+					excludeFromQF: !includeInQF,
 					givBackEligible:
 						isTokenEligibleForGivback &&
 						project.verified &&
 						isSignedIn &&
-						isEnabled,
+						isEnabled &&
+						getDonationById.amount >=
+							GIVBACKS_DONATION_QUALIFICATION_VALUE_USD,
 					chainId: config.STELLAR_NETWORK_NUMBER,
 				});
 			}
@@ -133,10 +184,12 @@ const DonateIndex: FC = () => {
 	}, [qrDonationStatus]);
 
 	const isRecurringTab = router.query.tab?.toString() === ETabs.RECURRING;
-	const { activeStartedRound } = getActiveRound(project.qfRounds);
 	const isOnEligibleNetworks =
 		chainId && activeStartedRound?.eligibleNetworks?.includes(chainId);
 	const isFailedOperation = ['expired', 'failed'].includes(qrDonationStatus);
+	const showAlreadyDonatedWrapper =
+		alreadyDonated &&
+		(isQRDonation ? isStellarIncludedInQF : isOnEligibleNetworks);
 
 	const updateQRCode = async () => {
 		if (!draftDonationData?.id) return;
@@ -213,106 +266,142 @@ const DonateIndex: FC = () => {
 	return successDonation ? (
 		<>
 			<DonateHeader />
-			<DonateContainer>
-				<SuccessView />
-			</DonateContainer>
+			<DonateSuccessContainer>
+				<SuccessView isStellar={isQRDonation} />
+			</DonateSuccessContainer>
 		</>
 	) : (
 		<>
 			<DonateHeader />
-			<DonateContainer>
-				{showDonationByProjectOwner && (
-					<DonationByProjectOwner
-						setShowDonationByProjectOwner={
-							setShowDonationByProjectOwner
-						}
-					/>
-				)}
-				{alreadyDonated && (
-					<AlreadyDonatedWrapper>
-						<IconDonation24 />
-						<SublineBold>
-							{formatMessage({
-								id: 'component.already_donated.incorrect_estimate',
-							})}
-						</SublineBold>
-					</AlreadyDonatedWrapper>
-				)}
-				{!isSafeEnv && hasActiveQFRound && !isOnSolana && (
-					<PassportBanner />
-				)}
-				<NiceBanner />
-				<Row>
-					<Col xs={12} lg={6}>
-						<DonationCard
-							setShowQRCode={setShowQRCode}
-							showQRCode={showQRCode}
+			<Wrapper>
+				<DonateContainer>
+					{shouldRenderModal(
+						DonateModalPriorityValues.DonationByProjectOwner,
+					) && (
+						<DonationByProjectOwner
+							closeModal={() => {
+								setDonateModalByPriority(
+									DonateModalPriorityValues.None,
+								);
+							}}
 						/>
-					</Col>
-					<Col xs={12} lg={6}>
-						<InfoWrapper
-							style={{ marginBottom: isFailedOperation ? 24 : 0 }}
-						>
-							{showQRCode ? (
-								<QRDonationDetails />
-							) : (
-								<>
-									<EndaomentProjectsInfo
-										orgLabel={project?.organization?.label}
-									/>
-									<ImageWrapper>
-										<ProjectCardImage
-											image={project.image}
-										/>
-									</ImageWrapper>
-									{!isMobile ? (
-										(!isRecurringTab && hasActiveQFRound) ||
-										(isRecurringTab &&
-											isOnEligibleNetworks) ? (
-											<QFSection projectData={project} />
-										) : (
-											<DonatePageProjectDescription
-												projectData={project}
-											/>
-										)
-									) : null}
-								</>
-							)}
-						</InfoWrapper>
-						{isFailedOperation && (
-							<QRRetryWrapper style={{ gap: 20 }}>
-								<B>
-									{formatMessage({
-										id: 'label.need_a_new_qr_code',
-									})}
-								</B>
-								<InlineToast
-									type={EToastType.Warning}
-									message={formatMessage({
-										id: 'label.new_qr_code_needed',
-									})}
-								/>
-								<ButtonStyled
-									label={formatMessage({
-										id: 'label.update_qr_code',
-									})}
-									onClick={updateQRCode}
-								/>
-							</QRRetryWrapper>
+					)}
+
+					{shouldRenderModal(
+						DonateModalPriorityValues.OFACSanctionListModal,
+					) && (
+						<SanctionModal
+							closeModal={() => {
+								setDonateModalByPriority(
+									DonateModalPriorityValues.None,
+								);
+							}}
+						/>
+					)}
+
+					{showAlreadyDonatedWrapper && (
+						<AlreadyDonatedWrapper>
+							<IconDonation24 />
+							<SublineBold>
+								{formatMessage({
+									id: 'component.already_donated.incorrect_estimate',
+								})}
+							</SublineBold>
+						</AlreadyDonatedWrapper>
+					)}
+					{!isSafeEnv &&
+						hasActiveQFRound &&
+						!isOnSolana &&
+						(!isQRDonation ||
+							(isQRDonation && isStellarIncludedInQF)) && (
+							<PassportBanner />
 						)}
-					</Col>
-				</Row>
-				{!isMobile && (
-					<SocialBox
-						contentType={EContentType.thisProject}
-						project={project}
-						isDonateFooter
-					/>
-				)}
-			</DonateContainer>
+					<NiceBanner />
+					<Row>
+						<Col xs={12} lg={6}>
+							<DonationCard
+								setShowQRCode={setShowQRCode}
+								showQRCode={showQRCode}
+							/>
+						</Col>
+						<Col xs={12} lg={6}>
+							<InfoWrapper
+								style={{
+									marginBottom: isFailedOperation ? 24 : 0,
+								}}
+							>
+								{showQRCode ? (
+									<QRDonationDetails />
+								) : (
+									<>
+										<EndaomentProjectsInfo
+											orgLabel={
+												project?.organization?.label
+											}
+										/>
+										{activeStartedRound && (
+											<QFEligibleNetworks />
+										)}
+										<ImageWrapper>
+											<ProjectCardImage
+												image={project.image}
+											/>
+										</ImageWrapper>
+
+										{!isMobile ? (
+											isRecurringTab &&
+											isOnEligibleNetworks ? (
+												<QFSection
+													projectData={project}
+												/>
+											) : (
+												<DonatePageProjectDescription
+													projectData={project}
+												/>
+											)
+										) : null}
+									</>
+								)}
+							</InfoWrapper>
+							{isFailedOperation && (
+								<QRRetryWrapper style={{ gap: 20 }}>
+									<B>
+										{formatMessage({
+											id: 'label.need_a_new_qr_code',
+										})}
+									</B>
+									<InlineToast
+										type={EToastType.Warning}
+										message={formatMessage({
+											id: 'label.new_qr_code_needed',
+										})}
+									/>
+									<ButtonStyled
+										label={formatMessage({
+											id: 'label.update_qr_code',
+										})}
+										onClick={updateQRCode}
+									/>
+								</QRRetryWrapper>
+							)}
+						</Col>
+					</Row>
+					{!isMobile && (
+						<SocialBox
+							contentType={EContentType.thisProject}
+							project={project}
+							isDonateFooter
+						/>
+					)}
+				</DonateContainer>
+			</Wrapper>
 		</>
 	);
 };
+
+const Wrapper = styled.div`
+	margin-top: 91px;
+`;
 
 const AlreadyDonatedWrapper = styled(Flex)`
 	margin-bottom: 16px;
@@ -325,9 +414,16 @@ const AlreadyDonatedWrapper = styled(Flex)`
 	align-items: center;
 `;
 
-const DonateContainer = styled(Container)`
+const DonateSuccessContainer = styled(Container)`
 	text-align: center;
 	padding-top: 110px;
+	padding-bottom: 64px;
+	position: relative;
+`;
+
+const DonateContainer = styled(Container)`
+	text-align: center;
+	padding-top: 10px;
 	padding-bottom: 64px;
 	position: relative;
 `;

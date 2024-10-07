@@ -36,7 +36,10 @@ import { DonationInfo } from './DonationInfo';
 import { ManageRecurringDonation } from './Recurring/ManageRecurringDonation';
 import EndaomentProjectsInfo from '../project/EndaomentProjectsInfo';
 
-export const SuccessView: FC = () => {
+interface ISuccessView {
+	isStellar?: boolean;
+}
+export const SuccessView: FC<ISuccessView> = ({ isStellar }) => {
 	const { formatMessage } = useIntl();
 	const { successDonation, hasActiveQFRound, project } = useDonateData();
 	const {
@@ -71,8 +74,9 @@ export const SuccessView: FC = () => {
 
 	const { activeStartedRound } = getActiveRound(project.qfRounds);
 
-	const isOnEligibleNetworks =
-		chainId && activeStartedRound?.eligibleNetworks?.includes(chainId);
+	const isOnEligibleNetworks = activeStartedRound?.eligibleNetworks?.includes(
+		(isStellar ? config.STELLAR_NETWORK_NUMBER : chainId) || 0,
+	);
 
 	useEffect(() => {
 		if (!hasMultipleTxs) return;
@@ -115,7 +119,7 @@ export const SuccessView: FC = () => {
 						</ImageWrapper>
 						<DonatePageProjectDescription
 							projectData={project}
-							showRaised={false}
+							showRaised={true}
 						/>
 					</InfoWrapper>
 				</Col>

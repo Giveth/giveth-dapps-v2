@@ -40,6 +40,7 @@ export const useFetchPowerBoostingInfo = (user: IUser) => {
 					orderBy: { field: order.by, direction: order.direction },
 					userId: parseFloat(user.id || '') || -1,
 				},
+				fetchPolicy: 'no-cache',
 			});
 			setTotalCount(data?.getPowerBoosting.totalCount || 0);
 			setLoading(false);

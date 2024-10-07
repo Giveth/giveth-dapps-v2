@@ -14,6 +14,7 @@ import {
 	H5,
 	Flex,
 	IconHelpFilled16,
+	IconGIVBack16,
 } from '@giveth/ui-design-system';
 import Link from 'next/link';
 import { useIntl } from 'react-intl';
@@ -61,6 +62,7 @@ interface IRecurringDonation {
 }
 const ProjectCard = (props: IProjectCard) => {
 	const { project, className } = props;
+
 	const {
 		id,
 		title,
@@ -72,6 +74,7 @@ const ProjectCard = (props: IProjectCard) => {
 		sumDonationValueUsdForActiveQfRound,
 		organization,
 		verified,
+		isGivbackEligible,
 		latestUpdateCreationDate,
 		countUniqueDonors,
 		qfRounds,
@@ -92,8 +95,8 @@ const ProjectCard = (props: IProjectCard) => {
 		estimatedMatching || {};
 
 	const { activeStartedRound, activeQFRound } = getActiveRound(qfRounds);
-	const hasFooter = activeStartedRound || verified;
-
+	const hasFooter = activeStartedRound || verified || isGivbackEligible;
+	const showVerifiedBadge = verified || isGivbackEligible;
 	const {
 		allocatedFundUSDPreferred,
 		allocatedFundUSD,
@@ -144,7 +147,6 @@ const ProjectCard = (props: IProjectCard) => {
 					);
 					setRecurringDonationSumInQF(totalAmountStreamed);
 				}
-				console.log(id, totalAmountStreamed);
 			}
 		};
 
@@ -339,16 +341,26 @@ const ProjectCard = (props: IProjectCard) => {
 						<Hr />
 						<PaddedRow $justifyContent='space-between'>
 							<Flex gap='16px'>
-								{verified && (
+								{showVerifiedBadge && (
 									<Flex $alignItems='center' gap='4px'>
 										<IconVerifiedBadge16
 											color={semanticColors.jade[500]}
 										/>
 										<VerifiedText>
 											{formatMessage({
-												id: 'label.verified',
+												id: 'label.vouched',
 											})}
 										</VerifiedText>
+									</Flex>
+								)}
+								{isGivbackEligible && (
+									<Flex $alignItems='center' gap='4px'>
+										<IconGIVBack16
+											color={brandColors.giv[500]}
+										/>
+										<GivbackEligibleText>
+											GIVbacks
+										</GivbackEligibleText>
 									</Flex>
 								)}
 								{activeStartedRound && (
@@ -423,6 +435,11 @@ const EstimatedMatching = styled(Subline)`
 const VerifiedText = styled(Subline)`
 	text-transform: uppercase;
 	color: ${semanticColors.jade[500]};
+`;
+
+const GivbackEligibleText = styled(Subline)`
+	text-transform: uppercase;
+	color: ${brandColors.giv[500]};
 `;
 
 const LastUpdatedContainer = styled(Subline)<{ $isHover?: boolean }>`

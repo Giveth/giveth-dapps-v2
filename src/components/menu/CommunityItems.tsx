@@ -31,6 +31,12 @@ export const communityItems = [
 		href: Routes.Onboarding,
 	},
 	{
+		title: 'label.governance',
+		label: 'label.vote_proposals',
+		href: links.GIVERNANCE_VOTING,
+	},
+
+	{
 		title: `label.leave_feedback`,
 		label: `label.tell_us_how_we_are_doing`,
 		href: links.FEEDBACK,

@@ -48,6 +48,7 @@ export interface IProject {
 	impactLocation?: string;
 	qualityScore?: number;
 	verified?: boolean;
+	isGivbackEligible?: boolean;
 	verificationStatus?: EProjectVerificationStatus;
 	listed?: boolean | null;
 	categories: ICategory[];
@@ -88,6 +89,7 @@ export interface IProject {
 export enum EProjectsFilter {
 	ACCEPT_GIV = 'AcceptGiv',
 	VERIFIED = 'Verified',
+	IS_GIVBACK_ELIGIBLE = 'IsGivbackEligible',
 	BOOSTED_WITH_GIVPOWER = 'BoostedWithGivPower',
 	GIVING_BLOCK = 'GivingBlock',
 	Endaoment = 'Endaoment',
@@ -114,6 +116,7 @@ export enum ECampaignType {
 
 export enum ECampaignFilterField {
 	Verified = 'verified',
+	IsGivbackEligible = 'isGivbackEligible',
 	AcceptGiv = 'givingBlocksId',
 	GivingBlock = 'fromGivingBlock',
 	Endaoment = 'fromEndaoment',

@@ -1,4 +1,5 @@
 import React, { FC, useEffect, useState } from 'react';
+import styled from 'styled-components';
 import { useIntl } from 'react-intl';
 import { brandColors, H6, Lead, ButtonLink } from '@giveth/ui-design-system';
 import Link from 'next/link';
@@ -9,6 +10,7 @@ import check_stars from '/public/images/icons/check_stars.svg';
 import failed_stars from '/public/images/icons/failed_stars.svg';
 import { SEND_EMAIL_VERIFICATION_TOKEN } from '@/apollo/gql/gqlVerification';
 import { client } from '@/apollo/apolloClient';
+import { mediaQueries } from '@/lib/constants/constants';
 import { slugToVerification } from '@/lib/routeCreators';
 import {
 	VCImageContainer,
@@ -96,16 +98,18 @@ function Verified() {
 					id: 'label.you_can_now_close_this_page_and_continue_verifying',
 				})}
 			</Lead>
-			<Link href={slugToVerification(slug as string)}>
-				<ButtonLink
-					size='small'
-					label={
-						formatMessage({
-							id: 'label.continue_verification',
-						})!
-					}
-				/>
-			</Link>
+			<LinkHolder>
+				<Link href={slugToVerification(slug as string)}>
+					<ButtonLink
+						size='small'
+						label={
+							formatMessage({
+								id: 'label.continue_verification',
+							})!
+						}
+					/>
+				</Link>
+			</LinkHolder>
 			<VCImageContainer>
 				<Link href='/'>
 					<Image
@@ -154,3 +158,12 @@ function Rejected() {
 		</>
 	);
 }
+
+const LinkHolder = styled.div`
+	${mediaQueries.mobileS} {
+		margin-bottom: 205px;
+	}
+	${mediaQueries.laptopS} {
+		margin-bottom: 0;
+	}
+`;

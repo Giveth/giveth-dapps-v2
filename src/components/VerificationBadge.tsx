@@ -3,14 +3,18 @@ import { EVerificationStatus } from '@/apollo/types/types';
 import { Badge, EBadgeStatus } from './Badge';
 
 interface IProps {
-	isVerified?: boolean;
+	isGivbackEligible?: boolean;
 	verificationStatus?: EVerificationStatus;
 }
 
-const VerificationBadge: FC<IProps> = ({ isVerified, verificationStatus }) => {
-	const verStatus = isVerified
+const VerificationBadge: FC<IProps> = ({
+	isGivbackEligible,
+	verificationStatus,
+}) => {
+	const verStatus = isGivbackEligible
 		? EVerificationStatus.VERIFIED
 		: verificationStatus;
+
 	let label, badgeStatus;
 	switch (verStatus) {
 		case EVerificationStatus.REJECTED:

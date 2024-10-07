@@ -19,7 +19,7 @@ import { useAppSelector } from '@/features/hooks';
 import config from '@/configuration';
 import { ETheme } from '@/features/general/general.slice';
 import { getChainName } from '@/lib/network';
-import { INetworkIdWithChain } from '../views/donate/common.types';
+import { INetworkIdWithChain } from '../views/donate/common/common.types';
 import { useGeneralWallet } from '@/providers/generalWalletProvider';
 import { ChainType } from '@/types/config';
 
@@ -42,8 +42,12 @@ const SwitchNetwork: FC<ISwitchNetworkModal> = ({
 
 	const { switchChain } = useSwitchChain();
 	const { formatMessage } = useIntl();
-	const { walletChainType, handleSingOutAndSignInWithEVM, chain } =
-		useGeneralWallet();
+	const {
+		walletChainType,
+		handleSingOutAndSignInWithEVM,
+		handleSignOutAndSignInWithSolana,
+		chain,
+	} = useGeneralWallet();
 	const chainId = (chain as Chain)?.id;
 	const theme = useAppSelector(state => state.general.theme);
 
@@ -71,7 +75,14 @@ const SwitchNetwork: FC<ISwitchNetworkModal> = ({
 							if (walletChainType === ChainType.SOLANA) {
 								handleSingOutAndSignInWithEVM();
 							}
-							switchChain?.({ chainId: networkId });
+							if (
+								walletChainType === ChainType.EVM &&
+								chainType === ChainType.SOLANA
+							) {
+								handleSignOutAndSignInWithSolana();
+							} else {
+								switchChain?.({ chainId: networkId });
+							}
 							closeModal();
 						}}
 						$isSelected={networkId === chainId}

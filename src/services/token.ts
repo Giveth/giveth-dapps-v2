@@ -1,6 +1,6 @@
 import { captureException } from '@sentry/nextjs';
 import { type Address } from 'viem';
-import { getPublicClient } from 'wagmi/actions';
+import { getPublicClient, multicall, getBalance } from 'wagmi/actions';
 import { erc20Abi } from 'viem';
 import { readContract } from '@wagmi/core';
 import BigNumber from 'bignumber.js';
@@ -12,6 +12,8 @@ import {
 	FETCH_GNOSIS_TOKEN_PRICES,
 	FETCH_MAINNET_TOKEN_PRICES,
 } from '@/apollo/gql/gqlPrice';
+import { IProjectAcceptedToken } from '@/apollo/types/gqlTypes';
+import { IToken } from '@/types/superFluid';
 
 export const fetchPrice = async (
 	chainId: number | ChainType,
@@ -52,6 +54,79 @@ export const fetchBalance = async (
 	} catch (error) {
 		console.error('error on fetchBalance', { error });
 		return;
+	}
+};
+
+export const fetchEVMTokenBalances = async <
+	T extends IProjectAcceptedToken | IToken,
+>(
+	tokens: T[], // Generic type constrained to IProjectAcceptedToken or IToken
+	walletAddress: string | null,
+): Promise<{ token: T; balance: bigint | undefined }[]> => {
+	if (!walletAddress || !tokens || tokens.length === 0) return [];
+
+	// Filter out native tokens
+	const erc20Tokens: T[] = [];
+	const nativeTokens: T[] = [];
+
+	// Use the correct property name based on the generic token type
+	const addressLabel = 'address' in tokens[0] ? 'address' : 'id';
+
+	tokens.forEach(token => {
+		const tokenAddress = token[addressLabel as keyof T] as string;
+
+		if (tokenAddress !== AddressZero) {
+			erc20Tokens.push(token);
+		} else {
+			nativeTokens.push(token);
+		}
+	});
+
+	const erc20Calls = erc20Tokens.map(token => {
+		const tokenAddress = token[addressLabel as keyof T] as string;
+
+		// Ensure the tokenAddress is cast as Address (format starting with 0x)
+		return {
+			address: tokenAddress as Address, // Cast to wagmi Address type
+			abi: erc20Abi,
+			functionName: 'balanceOf',
+			args: [walletAddress],
+		};
+	});
+
+	try {
+		// Fetch balances for ERC20 tokens via multicall
+		const erc20Results = await multicall(wagmiConfig, {
+			contracts: erc20Calls,
+			allowFailure: true,
+		});
+
+		// Fetch balances for native tokens (e.g., ETH)
+		const nativeTokenBalances = await Promise.all(
+			nativeTokens.map(async nativeToken => {
+				const balance = await getBalance(wagmiConfig, {
+					address: walletAddress as Address,
+				});
+				return {
+					token: nativeToken,
+					balance: balance.value || 0n,
+				};
+			}),
+		);
+
+		// Map ERC20 results to balances
+		const erc20Balances = erc20Results.map((result, index) => ({
+			token: erc20Tokens[index],
+			balance: (result?.result as bigint) || 0n,
+		}));
+
+		// Combine ERC20 and native token balances
+		return [...erc20Balances, ...nativeTokenBalances];
+	} catch (error) {
+		console.error('Error fetching EVM token balances:', error);
+
+		// Return undefined balances in case of failure
+		return tokens.map(token => ({ token, balance: undefined }));
 	}
 };
 
