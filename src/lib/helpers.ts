@@ -376,7 +376,7 @@ async function handleErc20Transfer(
 	params: TransactionParams,
 	contractAddress: Address,
 ): Promise<Address> {
-	// 'viem' ABI contract for USDT donation fails on mainnet
+	// 'viem' ABI contract for USDT donation fails on mainnet 
 	// so we use the USDT mainnet ABI instead and put inside usdtMainnetABI.json file
 	// update for 'viem' package to fix this issue doesn't work
 	const ABItoUse =
