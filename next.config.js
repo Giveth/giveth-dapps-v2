@@ -136,8 +136,8 @@ const moduleExports = withBundleAnalyzer({
 	rewrites: async () => {
 		return [
 			{
-				source: '/qacc/:path',
-				destination: 'https://q-acc.vercel.app/:path',
+				source: '/qacc/:path*',
+				destination: 'https://q-acc.vercel.app/:path*',
 			},
 		];
 	},
