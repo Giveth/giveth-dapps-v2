@@ -1,0 +1,8 @@
+{
+	"rewrites": [
+		{
+			"source": "/qacc/kyc",
+			"destination": "https://q-acc.vercel.app/kyc"
+		}
+	]
+}
