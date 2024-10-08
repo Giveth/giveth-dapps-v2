@@ -18,7 +18,7 @@ import { client } from '@/apollo/apolloClient';
 import { CREATE_DRAFT_DONATION } from '@/apollo/gql/gqlDonations';
 
 export const useCreateEvmDonation = () => {
-	const [txHash, setTxHash] = useState<`0x${string}` | undefined>();
+	const [txHash, setTxHash] = useState<`0x${string}` | Address | undefined>();
 	const [donationSaved, setDonationSaved] = useState<boolean>(false);
 	const [donationMinted, setDonationMinted] = useState<boolean>(false);
 	const [donationId, setDonationId] = useState<number>(0);
@@ -30,7 +30,7 @@ export const useCreateEvmDonation = () => {
 	const isSafeEnv = useIsSafeEnvironment();
 
 	const { status } = useWaitForTransactionReceipt({
-		hash: txHash,
+		hash: txHash as `0x${string}`,
 		onReplaced(data) {
 			console.log('Transaction Updated', data);
 			setTxHash(data.transaction.hash);
