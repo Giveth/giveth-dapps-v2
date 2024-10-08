@@ -148,14 +148,13 @@ const SelectTokenInnerModal: FC<ISelectTokenModalProps> = ({
 				}
 			} else {
 				setCustomToken(undefined);
+				const sQuery: string = searchQuery;
 				const filtered = tokens.filter(
 					token =>
 						token.symbol
 							.toLowerCase()
-							.includes(searchQuery.toLowerCase()) ||
-						token.name
-							.toLowerCase()
-							.includes(searchQuery.toLowerCase()),
+							.includes(sQuery.toLowerCase()) ||
+						token.name.toLowerCase().includes(sQuery.toLowerCase()),
 				);
 				setFilteredTokens(filtered);
 			}
