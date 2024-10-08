@@ -133,6 +133,14 @@ const moduleExports = withBundleAnalyzer({
 
 		return redirects;
 	},
+	rewrites: async () => {
+		return [
+			{
+				source: '/qacc/:path',
+				destination: 'https://q-acc.vercel.app/:path',
+			},
+		];
+	},
 	webpack: (config, { isServer, dev }) => {
 		if (isServer && !dev) {
 			generateRobotsTxt();
