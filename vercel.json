@@ -1,0 +1,8 @@
+{
+	"rewrites": [
+		{
+			"source": "/qacc/:path",
+			"destination": "https://q-acc.vercel.app/:path"
+		}
+	]
+}
