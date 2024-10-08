@@ -135,9 +135,15 @@ const moduleExports = withBundleAnalyzer({
 	},
 	rewrites: async () => {
 		return [
+			// {
+			// 	source: '/qacc/_next/:path*',
+			// 	destination:
+			// 		'https://q-acc-git-move-to-sub-url-givethio.vercel.app/_next/:path*',
+			// },
 			{
 				source: '/qacc/:path*',
-				destination: 'https://q-acc.vercel.app/:path*',
+				destination:
+					'https://q-acc-git-move-to-sub-url-givethio.vercel.app/:path*',
 			},
 		];
 	},
