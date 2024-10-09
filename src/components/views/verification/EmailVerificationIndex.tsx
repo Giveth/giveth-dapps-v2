@@ -160,7 +160,7 @@ function Rejected() {
 }
 
 const LinkHolder = styled.div`
-	positionn: relative;
+	position: relative;
 	z-index: 1000;
 	${mediaQueries.mobileS} {
 		margin-bottom: 205px;
