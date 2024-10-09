@@ -1,37 +1,33 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
+// components/ProjectsIndex.tsx
+
+import { Fragment, useCallback, useEffect, useRef } from 'react';
 import { useRouter } from 'next/router';
 import {
 	brandColors,
-	OutlineButton,
-	FlexCenter,
 	Container,
 	deviceSize,
+	FlexCenter,
+	mediaQueries,
+	OutlineButton,
 } from '@giveth/ui-design-system';
-import styled from 'styled-components';
 import { useIntl } from 'react-intl';
 import { captureException } from '@sentry/nextjs';
-
+import { useInfiniteQuery } from '@tanstack/react-query';
+import styled from 'styled-components';
 import ProjectCard from '@/components/project-card/ProjectCard';
 import Routes from '@/lib/constants/Routes';
 import { isUserRegistered, showToastError } from '@/lib/helpers';
-import { FETCH_ALL_PROJECTS } from '@/apollo/gql/gqlProjects';
-import { client } from '@/apollo/apolloClient';
-import { IProject } from '@/apollo/types/types';
-import { IFetchAllProjects } from '@/apollo/types/gqlTypes';
 import ProjectsNoResults from '@/components/views/projects/ProjectsNoResults';
-import { BACKEND_QUERY_LIMIT, mediaQueries } from '@/lib/constants/constants';
 import { useAppDispatch, useAppSelector } from '@/features/hooks';
 import { setShowCompleteProfile } from '@/features/modal/modal.slice';
 import { ProjectsBanner } from './ProjectsBanner';
 import { useProjectsContext } from '@/context/projects.context';
-
 import { ProjectsMiddleBanner } from './MiddleBanners/ProjectsMiddleBanner';
 import { ActiveQFProjectsBanner } from './qfBanner/ActiveQFProjectsBanner';
 import { PassportBanner } from '@/components/PassportBanner';
 import { QFProjectsMiddleBanner } from './MiddleBanners/QFMiddleBanner';
 import { QFNoResultBanner } from './MiddleBanners/QFNoResultBanner';
 import { Spinner } from '@/components/Spinner';
-import { getMainCategorySlug } from '@/helpers/projects';
 import { FilterContainer } from './filter/FilterContainer';
 import { SortContainer } from './sort/SortContainer';
 import { ArchivedQFRoundStats } from './ArchivedQFRoundStats';
@@ -41,16 +37,13 @@ import useMediaQuery from '@/hooks/useMediaQuery';
 import { QFHeader } from '@/components/views/archivedQFRounds/QFHeader';
 import { DefaultQFBanner } from '@/components/DefaultQFBanner';
 import NotAvailable from '@/components/NotAvailable';
+import { fetchProjects, IQueries } from './services';
+import { IProject } from '@/apollo/types/types';
+import { LAST_PROJECT_CLICKED } from './constants';
 
 export interface IProjectsView {
 	projects: IProject[];
 	totalCount: number;
-}
-
-interface IQueries {
-	skip?: number;
-	limit?: number;
-	connectedWalletUserId?: number;
 }
 
 const ProjectsIndex = (props: IProjectsView) => {
@@ -60,110 +53,72 @@ const ProjectsIndex = (props: IProjectsView) => {
 	const { activeQFRound, mainCategories } = useAppSelector(
 		state => state.general,
 	);
-	const [isLoading, setIsLoading] = useState(false);
-	const [isNotFound, setIsNotFound] = useState(false);
-	const [filteredProjects, setFilteredProjects] =
-		useState<IProject[]>(projects);
-	const [totalCount, setTotalCount] = useState(_totalCount);
 	const isMobile = useMediaQuery(`(max-width: ${deviceSize.tablet - 1}px)`);
-
 	const dispatch = useAppDispatch();
-
 	const {
 		variables: contextVariables,
 		selectedMainCategory,
 		isQF,
 		isArchivedQF,
 	} = useProjectsContext();
-
 	const router = useRouter();
-	const pageNum = useRef(0);
 	const lastElementRef = useRef<HTMLDivElement>(null);
 	const isInfiniteScrolling = useRef(true);
 
-	router?.events?.on('routeChangeStart', () => setIsLoading(true));
+	// Define the fetch function for React Query
+	const fetchProjectsPage = async ({ pageParam = 0 }) => {
+		const variables: IQueries = {
+			limit: 20, // Adjust the limit as needed
+			skip: 20 * pageParam,
+		};
 
-	const fetchProjects = useCallback(
-		(isLoadMore?: boolean, loadNum?: number, userIdChanged = false) => {
-			const variables: IQueries = {
-				limit: userIdChanged
-					? filteredProjects.length > 50
-						? BACKEND_QUERY_LIMIT
-						: filteredProjects.length
-					: projects.length,
-				skip: userIdChanged ? 0 : projects.length * (loadNum || 0),
-			};
+		if (user?.id) {
+			variables.connectedWalletUserId = Number(user.id);
+		}
 
-			if (user?.id) {
-				variables.connectedWalletUserId = Number(user?.id);
-			}
-
-			setIsLoading(true);
-			if (
-				contextVariables.mainCategory !== router.query?.slug?.toString()
-			)
-				return;
-
-			client
-				.query({
-					query: FETCH_ALL_PROJECTS,
-					variables: {
-						...variables,
-						...contextVariables,
-						mainCategory: isArchivedQF
-							? undefined
-							: getMainCategorySlug(selectedMainCategory),
-						qfRoundSlug: isArchivedQF ? router.query.slug : null,
-					},
-				})
-				.then((res: { data: { allProjects: IFetchAllProjects } }) => {
-					const data = res.data?.allProjects?.projects;
-					const count = res.data?.allProjects?.totalCount;
-					setTotalCount(count);
-
-					setFilteredProjects(prevProjects => {
-						isInfiniteScrolling.current =
-							(data.length + prevProjects.length) % 45 !== 0;
-						return isLoadMore ? [...prevProjects, ...data] : data;
-					});
-					setIsLoading(false);
-				})
-				.catch((err: any) => {
-					setIsLoading(false);
-					showToastError(err);
-					captureException(err, {
-						tags: {
-							section: 'fetchAllProjects',
-						},
-					});
-				});
-		},
-		[
+		return await fetchProjects(
+			pageParam,
+			variables,
 			contextVariables,
-			filteredProjects.length,
 			isArchivedQF,
-			projects.length,
-			router.query.slug,
 			selectedMainCategory,
-			user?.id,
+			router.query.slug,
+		);
+	};
+
+	// Use the useInfiniteQuery hook with the new v5 API
+	const {
+		data,
+		error,
+		fetchNextPage,
+		hasNextPage,
+		isError,
+		isFetching,
+		isFetchingNextPage,
+	} = useInfiniteQuery({
+		queryKey: [
+			'projects',
+			contextVariables,
+			isArchivedQF,
+			selectedMainCategory,
 		],
-	);
+		queryFn: fetchProjectsPage,
+		getNextPageParam: lastPage => lastPage.nextCursor,
+		getPreviousPageParam: firstPage => firstPage.previousCursor,
+		initialPageParam: 0,
+		// placeholderData: keepPreviousData,
+		placeholderData: {
+			pageParams: [0],
+			pages: [{ data: projects, totalCount: _totalCount }],
+		},
+	});
 
-	useEffect(() => {
-		pageNum.current = 0;
-		fetchProjects(false, 0, true);
-	}, [user?.id]);
-
-	useEffect(() => {
-		pageNum.current = 0;
-		fetchProjects(false, 0);
-	}, [contextVariables]);
-
+	// Function to load more data when scrolling
 	const loadMore = useCallback(() => {
-		if (isLoading) return;
-		fetchProjects(true, pageNum.current + 1);
-		pageNum.current = pageNum.current + 1;
-	}, [fetchProjects, isLoading]);
+		if (hasNextPage) {
+			fetchNextPage();
+		}
+	}, [fetchNextPage, hasNextPage]);
 
 	const handleCreateButton = () => {
 		if (isUserRegistered(user)) {
@@ -173,30 +128,28 @@ const ProjectsIndex = (props: IProjectsView) => {
 		}
 	};
 
-	const showLoadMore =
-		totalCount > filteredProjects?.length && !isInfiniteScrolling.current;
-
 	const onProjectsPageOrActiveQFPage = !isQF || (isQF && activeQFRound);
 
+	// Intersection Observer for infinite scrolling
 	useEffect(() => {
-		const handleObserver = (entities: any) => {
+		const handleObserver = (entries: IntersectionObserverEntry[]) => {
 			if (!isInfiniteScrolling.current) return;
-			const target = entities[0];
+			const target = entries[0];
 			if (target.isIntersecting) {
 				loadMore();
 			}
 		};
 		const option = {
 			root: null,
-			threshold: 1,
+			threshold: 1.0,
 		};
 		const observer = new IntersectionObserver(handleObserver, option);
 		if (lastElementRef.current) {
 			observer.observe(lastElementRef.current);
 		}
 		return () => {
-			if (observer) {
-				observer.disconnect();
+			if (observer && lastElementRef.current) {
+				observer.unobserve(lastElementRef.current);
 			}
 		};
 	}, [loadMore]);
@@ -207,16 +160,61 @@ const ProjectsIndex = (props: IProjectsView) => {
 			!selectedMainCategory &&
 			!isArchivedQF
 		) {
-			setIsNotFound(true);
+			isInfiniteScrolling.current = false;
+		} else {
+			isInfiniteScrolling.current = true;
 		}
-	}, [selectedMainCategory, mainCategories.length]);
+	}, [selectedMainCategory, mainCategories.length, isArchivedQF]);
+
+	// Save last clicked project
+	const handleProjectClick = (slug: string) => {
+		sessionStorage.setItem(LAST_PROJECT_CLICKED, slug);
+	};
+
+	// Scroll to last clicked project
+	useEffect(() => {
+		if (!isFetching && !isFetchingNextPage) {
+			const lastProjectClicked =
+				sessionStorage.getItem(LAST_PROJECT_CLICKED);
+			if (lastProjectClicked) {
+				const element = document.getElementById(lastProjectClicked);
+				if (element) {
+					window.scrollTo({
+						top: element.offsetTop,
+						behavior: 'smooth',
+					});
+				}
+				sessionStorage.removeItem(LAST_PROJECT_CLICKED);
+			}
+		}
+	}, [isFetching, isFetchingNextPage]);
+
+	// Handle errors
+	useEffect(() => {
+		if (isError && error) {
+			showToastError(error);
+			captureException(error, {
+				tags: {
+					section: 'fetchAllProjects',
+				},
+			});
+		}
+	}, [isError, error]);
+
+	// Determine if no results should be shown
+	const isNotFound =
+		(mainCategories.length > 0 && !selectedMainCategory && !isArchivedQF) ||
+		(!isQF && data?.pages?.[0]?.data.length === 0);
 
 	if (isNotFound)
 		return <NotAvailable description='Oops! Page Not Found...' />;
 
+	const totalCount = data?.pages[data.pages.length - 1].totalCount || 0;
+	console.log('data', totalCount, data);
+
 	return (
 		<>
-			{isLoading && (
+			{(isFetching || isFetchingNextPage) && (
 				<Loading>
 					<Spinner />
 				</Loading>
@@ -251,8 +249,8 @@ const ProjectsIndex = (props: IProjectsView) => {
 						<SortContainer totalCount={totalCount} />
 					</SortingContainer>
 				)}
-				{isLoading && <Loader className='dot-flashing' />}
-				{filteredProjects?.length > 0 ? (
+				{isFetchingNextPage && <Loader className='dot-flashing' />}
+				{data?.pages.some(page => page.data.length > 0) ? (
 					<ProjectsWrapper>
 						<ProjectsContainer>
 							{isQF ? (
@@ -260,12 +258,23 @@ const ProjectsIndex = (props: IProjectsView) => {
 							) : (
 								<ProjectsMiddleBanner />
 							)}
-							{filteredProjects.map((project, idx) => (
-								<ProjectCard
-									key={project.id}
-									project={project}
-									order={idx}
-								/>
+							{data.pages.map((page, pageIndex) => (
+								<Fragment key={pageIndex}>
+									{page.data.map((project, idx) => (
+										<div
+											key={project.id}
+											id={project.slug}
+											onClick={() =>
+												handleProjectClick(project.slug)
+											}
+										>
+											<ProjectCard
+												project={project}
+												order={idx}
+											/>
+										</div>
+									))}
+								</Fragment>
 							))}
 						</ProjectsContainer>
 						{/* <FloatingButtonReferral /> */}
@@ -275,22 +284,20 @@ const ProjectsIndex = (props: IProjectsView) => {
 				) : (
 					<ProjectsNoResults />
 				)}
-				{totalCount > filteredProjects?.length && (
-					<div ref={lastElementRef} />
-				)}
-				{showLoadMore && (
+				{hasNextPage && <div ref={lastElementRef} />}
+				{!isFetching && !isFetchingNextPage && hasNextPage && (
 					<>
 						<StyledButton
-							onClick={loadMore}
+							onClick={() => fetchNextPage()}
 							label={
-								isLoading
+								isFetchingNextPage
 									? ''
 									: formatMessage({
 											id: 'component.button.load_more',
 										})
 							}
 							icon={
-								isLoading && (
+								isFetchingNextPage && (
 									<LoadingDotIcon>
 										<div className='dot-flashing' />
 									</LoadingDotIcon>
