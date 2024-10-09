@@ -138,12 +138,12 @@ function Rejected() {
 				This link is expired or not exist anymore, you have to verify
 				your email again.
 			</Lead>
-			<VCLeadContainer>
+			<VCLeadContainerHolder>
 				<Lead>
 					please go to the verify status form under personal info and
 					request a new verification email!
 				</Lead>
-			</VCLeadContainer>
+			</VCLeadContainerHolder>
 
 			<VCImageContainer>
 				<Link href='/'>
@@ -160,6 +160,17 @@ function Rejected() {
 }
 
 const LinkHolder = styled.div`
+	position: relative;
+	z-index: 1000;
+	${mediaQueries.mobileS} {
+		margin-bottom: 205px;
+	}
+	${mediaQueries.laptopS} {
+		margin-bottom: 0;
+	}
+`;
+
+const VCLeadContainerHolder = styled(VCLeadContainer)`
 	${mediaQueries.mobileS} {
 		margin-bottom: 205px;
 	}
