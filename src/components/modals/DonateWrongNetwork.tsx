@@ -172,7 +172,6 @@ export const DonateWrongNetwork: FC<IDonateWrongNetwork> = props => {
 												switchChain?.({
 													chainId: _chainId,
 												});
-												closeModal();
 											}
 										}}
 										$isSelected={_chainId === networkId}
