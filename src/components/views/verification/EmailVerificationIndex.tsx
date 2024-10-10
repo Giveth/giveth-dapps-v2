@@ -78,9 +78,19 @@ export default function EmailVerificationIndex() {
 }
 
 function Verified() {
+	const [querySlug, setQuerySlug] = useState<string | undefined>(undefined);
 	const router = useRouter();
 	const { slug } = router.query;
 	const { formatMessage } = useIntl();
+
+	// we must wait for the router to be ready to get the slug from the query
+	useEffect(() => {
+		if (router.isReady) {
+			if (typeof slug === 'string') {
+				setQuerySlug(slug);
+			}
+		}
+	}, [router.isReady, slug]);
 
 	return (
 		<>
@@ -99,7 +109,7 @@ function Verified() {
 				})}
 			</Lead>
 			<LinkHolder>
-				<Link href={slugToVerification(slug as string)}>
+				<Link href={slugToVerification(querySlug as string)}>
 					<ButtonLink
 						size='small'
 						label={
