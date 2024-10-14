@@ -1,18 +1,28 @@
-import { B, P, neutralColors, Flex } from '@giveth/ui-design-system';
-import { FC, useState, useEffect } from 'react';
+import {
+	B,
+	P,
+	neutralColors,
+	Flex,
+	SublineBold,
+	brandColors,
+	IconSpark,
+	semanticColors,
+} from '@giveth/ui-design-system';
+import React, { FC, useState, useEffect } from 'react';
 import styled, { css } from 'styled-components';
 import { useIntl } from 'react-intl';
 import { useRouter } from 'next/router';
 import { isAddress } from 'viem';
 import { captureException } from '@sentry/nextjs';
+import Image from 'next/image';
 import { Shadow } from '@/components/styled-components/Shadow';
 import { RecurringDonationCard } from './Recurring/RecurringDonationCard';
-import OneTimeDonationCard from './OnTime/OneTimeDonationCard';
+import OneTimeDonationCard from '@/components/views/donate/OneTime/OneTimeDonationCard';
 import config from '@/configuration';
 import { useDonateData } from '@/context/donate.context';
 import { ChainType } from '@/types/config';
 import { IconWithTooltip } from '@/components/IconWithToolTip';
-import { QRDonationCard } from './OnTime/SelectTokenModal/QRCodeDonation/QRDonationCard';
+import { QRDonationCard } from '@/components/views/donate/OneTime/SelectTokenModal/QRCodeDonation/QRDonationCard';
 import { client } from '@/apollo/apolloClient';
 import { PROJECT_ACCEPTED_TOKENS } from '@/apollo/gql/gqlProjects';
 import { showToastError } from '@/lib/helpers';
@@ -22,7 +32,7 @@ import {
 } from '@/apollo/types/gqlTypes';
 
 export enum ETabs {
-	ONE_TIME = 'on-time',
+	ONE_TIME = 'one-time',
 	RECURRING = 'recurring',
 }
 
@@ -53,7 +63,7 @@ export const DonationCard: FC<IDonationCardProps> = ({
 				address.chainType === ChainType.EVM &&
 				address.networkId === config.OPTIMISM_NETWORK_NUMBER,
 		);
-
+	const isEndaomentProject = project?.organization?.label === 'endaoment';
 	const isOwnerOnEVM =
 		project?.adminUser?.walletAddress &&
 		isAddress(project.adminUser?.walletAddress);
@@ -64,6 +74,24 @@ export const DonationCard: FC<IDonationCardProps> = ({
 		useState<IProjectAcceptedToken[]>();
 
 	const disableRecurringDonations = organization?.disableRecurringDonations;
+
+	const hasStellarAddress = addresses?.some(
+		address => address.chainType === ChainType.STELLAR,
+	);
+
+	const handleQRDonation = () => {
+		setIsQRDonation(true);
+		router.push(
+			{
+				query: {
+					...router.query,
+					chain: ChainType.STELLAR.toLowerCase(),
+				},
+			},
+			undefined,
+			{ shallow: true },
+		);
+	};
 
 	useEffect(() => {
 		client
@@ -93,16 +121,31 @@ export const DonationCard: FC<IDonationCardProps> = ({
 	// Check if the 'tab' query parameter is not present in the URL and project 'hasOpAddress' is true.
 	// If both conditions are met, set the active tab to 'RECURRING' using the setTab function.
 	// This ensures that the 'RECURRING' tab is active by default if project has Op Address.
-	useEffect(() => {
-		if (!router.query.tab && hasOpAddress) {
-			setTab(ETabs.RECURRING);
-		}
-	}, [router.query, hasOpAddress]);
+	//
+	// this feature needs some more polish, commenting this out for now --mitch
+	// useEffect(() => {
+	// 	if (!router.query.tab && hasOpAddress && !isEndaomentProject) {
+	// 		setTab(ETabs.RECURRING);
+	// 	}
+	// }, [router.query, hasOpAddress, isEndaomentProject]);
 
 	return (
 		<DonationCardWrapper>
 			{!isQRDonation ? (
 				<>
+					{hasStellarAddress && (
+						<QRToastLink onClick={handleQRDonation}>
+							<Image
+								src='/images/logo/stellar.svg'
+								alt='stellar'
+								width={24}
+								height={24}
+							/>
+							{formatMessage({
+								id: 'label.try_donating_with_stellar',
+							})}
+						</QRToastLink>
+					)}
 					<Title id='donation-visit'>
 						{formatMessage({
 							id: 'label.how_do_you_want_to_donate',
@@ -151,6 +194,10 @@ export const DonationCard: FC<IDonationCardProps> = ({
 								{formatMessage({
 									id: 'label.recurring_donation',
 								})}
+								<IconSpark
+									size={28}
+									color={semanticColors.golden[500]}
+								/>
 							</Tab>
 						) : (
 							!disableRecurringDonations && (
@@ -177,7 +224,6 @@ export const DonationCard: FC<IDonationCardProps> = ({
 					<TabWrapper>
 						{tab === ETabs.ONE_TIME && (
 							<OneTimeDonationCard
-								setIsQRDonation={setIsQRDonation}
 								acceptedTokens={acceptedTokens}
 							/>
 						)}
@@ -196,12 +242,28 @@ export const DonationCard: FC<IDonationCardProps> = ({
 	);
 };
 
+const QRToastLink = styled(SublineBold)`
+	cursor: pointer;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: 12px;
+	padding-block: 8px;
+	padding-left: 16px;
+	margin-block: 16px;
+	margin-top: 0;
+	background-color: transparent;
+	border: 1px solid ${neutralColors.gray[400]};
+	color: ${brandColors.giv[500]} !important;
+	border-radius: 8px;
+	font-weight: 500 !important;
+`;
+
 export const DonationCardWrapper = styled(Flex)`
 	flex-direction: column;
 	gap: 16px;
 	padding: 24px;
 	border-radius: 16px;
-	align-items: flex-start;
 	background: ${neutralColors.gray[100]};
 	box-shadow: ${Shadow.Neutral[400]};
 	align-items: stretch;
@@ -209,7 +271,7 @@ export const DonationCardWrapper = styled(Flex)`
 `;
 
 const Title = styled(B)`
-	color: ${neutralColors.gray[800]};
+	color: ${neutralColors.gray[800]} !important;
 	text-align: left;
 `;
 
@@ -227,6 +289,9 @@ interface ITab {
 }
 
 const Tab = styled(BaseTab)<ITab>`
+	font-weight: 500 !important;
+	display: flex;
+	align-items: center;
 	cursor: pointer;
 	${props =>
 		props.$selected &&

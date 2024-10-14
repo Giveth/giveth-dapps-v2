@@ -1,11 +1,12 @@
 import styled from 'styled-components';
-import { useEffect, useRef, useState } from 'react';
+import { CSSProperties, useEffect, useRef, useState } from 'react';
 import { ITooltipDirection, Tooltip } from './Tooltip';
 import type { FC, ReactNode } from 'react';
 
 interface IIconWithTooltipProps extends ITooltipDirection {
 	icon: ReactNode;
 	children: ReactNode;
+	style?: CSSProperties;
 	delay?: boolean;
 }
 
@@ -15,6 +16,7 @@ export const IconWithTooltip: FC<IIconWithTooltipProps> = ({
 	align = 'center',
 	children,
 	delay = false,
+	style,
 }) => {
 	const [show, setShow] = useState(false);
 	const elRef = useRef<HTMLDivElement>(null);
@@ -59,6 +61,7 @@ export const IconWithTooltip: FC<IIconWithTooltipProps> = ({
 				e.stopPropagation(); // make tooltip content clickable without affecting parent
 			}}
 			ref={elRef}
+			style={style}
 		>
 			{icon}
 			{show && (

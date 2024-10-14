@@ -13,10 +13,6 @@ import { smallFormatDate, formatTxLink } from '@/lib/helpers';
 import { slugToProjectView } from '@/lib/routeCreators';
 import ExternalLink from '@/components/ExternalLink';
 import { IWalletDonation } from '@/apollo/types/types';
-import {
-	EOrderBy,
-	IOrder,
-} from '@/components/views/userProfile/UserProfile.view';
 import SortIcon from '@/components/SortIcon';
 import DonationStatus from '@/components/badges/DonationStatusBadge';
 import {
@@ -27,6 +23,7 @@ import {
 import { Badge, EBadgeStatus } from '@/components/Badge';
 import { formatDonation } from '@/helpers/number';
 import NetworkLogo from '@/components/NetworkLogo';
+import { EOrderBy, IOrder } from '../../projectsTab/type';
 
 interface OneTimeDonationTable {
 	donations: IWalletDonation[];

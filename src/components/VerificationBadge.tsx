@@ -3,12 +3,15 @@ import { EVerificationStatus } from '@/apollo/types/types';
 import { Badge, EBadgeStatus } from './Badge';
 
 interface IProps {
-	isVerified?: boolean;
+	isGivbackEligible?: boolean;
 	verificationStatus?: EVerificationStatus;
 }
 
-const VerificationBadge: FC<IProps> = ({ isVerified, verificationStatus }) => {
-	const verStatus = isVerified
+const VerificationBadge: FC<IProps> = ({
+	isGivbackEligible,
+	verificationStatus,
+}) => {
+	const verStatus = isGivbackEligible
 		? EVerificationStatus.VERIFIED
 		: verificationStatus;
 
@@ -22,11 +25,10 @@ const VerificationBadge: FC<IProps> = ({ isVerified, verificationStatus }) => {
 			label = 'Submitted';
 			badgeStatus = EBadgeStatus.GIVETH;
 			break;
-		// NOTE: Commenting this as we should only display according to GIVback eligibility
-		// case EVerificationStatus.VERIFIED:
-		// 	label = 'Eligible';
-		// 	badgeStatus = EBadgeStatus.SUCCESS;
-		// 	break;
+		case EVerificationStatus.VERIFIED:
+			label = 'Eligible';
+			badgeStatus = EBadgeStatus.SUCCESS;
+			break;
 		case EVerificationStatus.DRAFT:
 			label = 'Incomplete';
 			badgeStatus = EBadgeStatus.WARNING;

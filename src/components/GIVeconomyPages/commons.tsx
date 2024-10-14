@@ -13,7 +13,7 @@ export const TopContainer = styled(Flex)`
 	background-image: url('/images/backgrounds/givup.svg');
 	height: auto;
 	${mediaQueries.tablet} {
-		height: 370px;
+		height: 400px;
 	}
 `;
 

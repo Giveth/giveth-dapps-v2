@@ -6,7 +6,7 @@ import {
 	UPDATE_DONATION_STATUS,
 } from '@/apollo/gql/gqlDonations';
 import { client } from '@/apollo/apolloClient';
-import { ICreateDonation } from '@/components/views/donate/helpers';
+import { ICreateDonation } from '@/components/views/donate/common/helpers';
 import { EDonationStatus } from '@/apollo/types/gqlEnums';
 import { FETCH_USER_STREAMS } from '@/apollo/gql/gqlUser';
 import { ITokenStreams } from '@/context/donate.context';

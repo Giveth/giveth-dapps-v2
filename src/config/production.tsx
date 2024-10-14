@@ -64,7 +64,7 @@ const SOLANA_NETWORK: NonEVMChain = {
 	},
 };
 
-const STELLAR_NOTWORK: NonEVMChain = {
+const STELLAR_NETWORK: NonEVMChain = {
 	id: STELLAR_NETWORK_NUMBER,
 	networkId: STELLAR_NETWORK_NUMBER,
 	chainType: ChainType.STELLAR,
@@ -94,7 +94,7 @@ const EVM_CHAINS = [
 	polygonZkEvm,
 ] as readonly [Chain, ...Chain[]];
 
-const NON_EVM_CHAINS: NonEVMChain[] = [STELLAR_NOTWORK, SOLANA_NETWORK];
+const NON_EVM_CHAINS: NonEVMChain[] = [STELLAR_NETWORK, SOLANA_NETWORK];
 
 const BASE_ROUTE =
 	process.env.NEXT_PUBLIC_BASE_ROUTE || 'https://mainnet.serve.giveth.io';
@@ -537,6 +537,21 @@ const config: EnvConfig = {
 				isSuperToken: true,
 				coingeckoId: 'usd-coin',
 			},
+			{
+				underlyingToken: {
+					decimals: 18,
+					id: '0x4F604735c1cF31399C6E711D5962b2B3E0225AD3',
+					name: 'Glo Dollar',
+					symbol: 'USDGLO',
+					coingeckoId: 'glo-dollar',
+				},
+				decimals: 18,
+				id: '0x9F41d0AA24E599fd8D0c180Ee3C0F609dc41c622',
+				name: 'Super Glo Dollar',
+				symbol: 'USDGLOx',
+				isSuperToken: true,
+				coingeckoId: 'glo-dollar',
+			},
 		],
 	},
 
@@ -615,7 +630,7 @@ const config: EnvConfig = {
 		chainLogo: (logoSize?: number) => <IconSolana size={logoSize} />,
 	},
 	STELLAR_CONFIG: {
-		...STELLAR_NOTWORK,
+		...STELLAR_NETWORK,
 		coingeckoChainName: 'stellar',
 		chainLogo: (logoSize?: number) => <IconStellar size={logoSize} />,
 	},

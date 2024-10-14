@@ -7,8 +7,8 @@ import config from '@/configuration';
 import {
 	NetworkToast,
 	SwitchCaption,
-} from '@/components/views/donate/common.styled';
-import { INetworkIdWithChain } from '../common.types'; // Import the type
+} from '@/components/views/donate/common/common.styled';
+import { INetworkIdWithChain } from '../common/common.types'; // Import the type
 import SwitchNetwork from '@/components/modals/SwitchNetwork';
 
 const SaveGasFees: FC<{ acceptedChains: INetworkIdWithChain[] }> = ({

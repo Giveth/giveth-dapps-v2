@@ -60,6 +60,7 @@ export const BaseInput = memo(
 BaseInput.displayName = 'BaseInput';
 
 const Input = styled.input`
+	background-color: inherit;
 	border: 0;
 	flex: 1;
 	font-size: 18px;

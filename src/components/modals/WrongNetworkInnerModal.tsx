@@ -7,7 +7,7 @@ import { mediaQueries } from '@/lib/constants/constants';
 import { jointItems } from '@/helpers/text';
 import SwitchNetwork from './SwitchNetwork';
 import { getChainName } from '@/lib/network';
-import { INetworkIdWithChain } from '../views/donate/common.types';
+import { INetworkIdWithChain } from '../views/donate/common/common.types';
 import { useGeneralWallet } from '@/providers/generalWalletProvider';
 import { ChainType } from '@/types/config';
 
