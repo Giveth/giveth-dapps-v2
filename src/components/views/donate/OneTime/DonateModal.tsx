@@ -138,10 +138,7 @@ const DonateModal: FC<IDonateModalProps> = props => {
 			formatUnits(amount, token.decimals),
 			token.decimals,
 		) || 0);
-	const includeInQF =
-		activeStartedRound &&
-		isOnEligibleNetworks &&
-		donationUsdValue >= (activeStartedRound.minimumValidUsdValue || 0);
+	const includeInQF = activeStartedRound && isOnEligibleNetworks;
 	const chainvineReferred = getWithExpiry(StorageLabel.CHAINVINEREFERRED);
 	const { title, addresses } = project || {};
 

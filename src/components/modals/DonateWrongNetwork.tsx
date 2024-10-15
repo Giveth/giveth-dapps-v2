@@ -1,4 +1,4 @@
-import React, { FC, useEffect } from 'react';
+import React, { FC, useCallback, useEffect } from 'react';
 import styled from 'styled-components';
 import {
 	B,
@@ -30,6 +30,10 @@ import Routes from '@/lib/constants/Routes';
 import { ChainType } from '@/types/config';
 import { useGeneralWallet } from '@/providers/generalWalletProvider';
 import { useIsSafeEnvironment } from '@/hooks/useSafeAutoConnect';
+import {
+	DonateModalPriorityValues,
+	useDonateData,
+} from '@/context/donate.context';
 
 interface IDonateWrongNetwork extends IModal {
 	acceptedChains?: INetworkIdWithChain[];
@@ -57,6 +61,11 @@ export const DonateWrongNetwork: FC<IDonateWrongNetwork> = props => {
 	const router = useRouter();
 	const { switchChain } = useSwitchChain();
 	const isSafeEnv = useIsSafeEnvironment();
+	const { setDonateModalByPriority } = useDonateData();
+	const closeNetworkModal = useCallback(() => {
+		setDonateModalByPriority(DonateModalPriorityValues.None);
+		closeModal();
+	}, []);
 
 	const {
 		walletChainType,
@@ -84,7 +93,7 @@ export const DonateWrongNetwork: FC<IDonateWrongNetwork> = props => {
 				acceptedChain => acceptedChain.networkId === networkId,
 			)
 		) {
-			closeModal();
+			closeNetworkModal();
 		}
 	}, [networkId, acceptedChains]);
 
@@ -163,7 +172,6 @@ export const DonateWrongNetwork: FC<IDonateWrongNetwork> = props => {
 												switchChain?.({
 													chainId: _chainId,
 												});
-												closeModal();
 											}
 										}}
 										$isSelected={_chainId === networkId}

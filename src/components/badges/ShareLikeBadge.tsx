@@ -54,7 +54,7 @@ const Wrapper = styled(FlexCenter)`
 const BadgeText = styled(ButtonText)<{ $fromDonate?: boolean | null }>`
 	color: ${props =>
 		props.$fromDonate ? brandColors.pinky[500] : neutralColors.gray[700]};
-	text-transform: ${props => (props.$fromDonate ? 'none' : 'uppercase')};
+	text-transform: ${props => (props.$fromDonate ? 'none' : '')};
 	margin: 0 auto;
 `;
 

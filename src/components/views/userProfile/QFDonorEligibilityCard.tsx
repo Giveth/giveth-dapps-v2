@@ -191,14 +191,13 @@ export const QFDonorEligibilityCard = () => {
 						{formatMessage({
 							id: 'profile.qf_donor_eligibility.your_passport_score',
 						})}
+						{/* TODO: No reason why this is failing at build... may fix later */}
+						{/* prettier-ignore */}
 						<ScoreBox>
 							{passportState === EPassportState.LOADING_SCORE ? (
-								<Spinner
-									color={neutralColors.gray[100]}
-									size={10}
-								/>
+								<Spinner color={neutralColors.gray[100]} size={10} />
 							) : (
-								passportScore ?? '--'
+								(passportScore ?? '--')
 							)}
 						</ScoreBox>
 					</ScoreCard>

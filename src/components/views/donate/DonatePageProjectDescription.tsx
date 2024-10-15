@@ -5,7 +5,6 @@ import {
 	P,
 	IconChevronRight16,
 	brandColors,
-	mediaQueries,
 	Flex,
 	H5,
 	semanticColors,
@@ -82,7 +81,7 @@ export const DonatePageProjectDescription: FC<
 					<GivBackBadge />
 				</Flex>
 			)}
-			{projectData?.verified && (
+			{(projectData?.verified || projectData?.isGivbackEligible) && (
 				<Flex>
 					<VerifiedBadge />
 				</Flex>
@@ -230,12 +229,6 @@ const DescriptionSummary = styled(P)`
 const DonationSectionWrapper = styled(Flex)`
 	justify-content: space-between;
 	flex-direction: column;
-	${mediaQueries.tablet} {
-		flex-direction: row;
-	}
-	${mediaQueries.laptopS} {
-		flex-direction: column;
-	}
 `;
 
 const DonateDescription = styled(Flex)`

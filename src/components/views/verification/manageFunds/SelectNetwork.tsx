@@ -10,19 +10,18 @@ import {
 	semanticColors,
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
-import Select, {
-	components,
+import Select, { components } from 'react-select';
+import { FieldError } from 'react-hook-form';
+import { ISelectedNetwork } from '@/components/views/verification/manageFunds/types';
+import selectCustomStyles from '@/lib/constants/selectCustomStyles';
+import NetworkLogo from '@/components/NetworkLogo';
+import type {
 	OptionProps,
 	StylesConfig,
 	DropdownIndicatorProps,
 	GroupBase,
-	type CSSObjectWithLabel,
+	CSSObjectWithLabel,
 } from 'react-select';
-import { FieldError } from 'react-hook-form';
-
-import { ISelectedNetwork } from '@/components/views/verification/manageFunds/types';
-import selectCustomStyles from '@/lib/constants/selectCustomStyles';
-import NetworkLogo from '@/components/NetworkLogo';
 
 declare module 'react-select/dist/declarations/src/Select' {
 	export interface Props<

@@ -296,7 +296,7 @@ const PassportModal: FC<PassportModalProps> = props => {
 										size={10}
 									/>
 								) : (
-									passportScore ?? '--'
+									(passportScore ?? '--')
 								)}
 							</ScoreBox>
 						</ScoreCard>

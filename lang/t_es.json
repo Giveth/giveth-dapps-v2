@@ -117,7 +117,6 @@
 	"page.project.preview_hint": "Esta es una vista previa de tu proyecto.",
 	"project.givback_toast.description.non_verified_owner": "¿Puedes demostrar que tu proyecto está proporcionando un bien público? ¡La verificación te da acceso a una gran cantidad de beneficios como recompensas para los donantes, mayor visibilidad y formas adicionales de recaudar fondos!",
 	"project.givback_toast.description.non_verified_public": "Los GIVbacks se otorgan actualmente solo por donaciones realizadas a proyectos verificados. ¡Tu contribución sigue siendo importante, incluso si no genera GIVbacks!",
-	"project.givback_toast.description.verified_owner": "¡Impulsa tu proyecto para aumentar su porcentaje de recompensas y hacerlo más visible en la página de proyectos!",
 	"project.givback_toast.description.verified_public": "Los donantes a proyectos verificados son recompensados con GIV. ¡Impulsa este proyecto para aumentar su porcentaje de recompensas y hacerlo más visible en la página de proyectos!",
 	"project.givback_toast.title.non_verified_owner": "¡Lleva tu proyecto al siguiente nivel con la Verificación!",
 	"project.givback_toast.title.non_verified_public": "¿Por qué no hay GIVbacks?",

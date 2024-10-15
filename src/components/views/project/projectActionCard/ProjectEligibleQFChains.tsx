@@ -1,30 +1,46 @@
-import { Caption, neutralColors } from '@giveth/ui-design-system';
+import { Caption, neutralColors, SublineBold } from '@giveth/ui-design-system';
 import React from 'react';
 import styled from 'styled-components';
 import { useIntl } from 'react-intl';
 import { getActiveRound } from '@/helpers/qf';
-import { getChainName } from '@/lib/network';
 import { useProjectContext } from '@/context/project.context';
+import { IconWithTooltip } from '@/components/IconWithToolTip';
+import config from '@/configuration';
 
 const ProjectEligibleQFChains = () => {
 	const { projectData } = useProjectContext();
 	const { formatMessage } = useIntl();
 
 	const { activeStartedRound } = getActiveRound(projectData?.qfRounds);
-
-	const eligibleChainNames = activeStartedRound?.eligibleNetworks.map(
-		network => getChainName(network),
-	);
-
-	const chainsString = eligibleChainNames?.join(' & ');
-
 	return (
 		<Container>
-			<MakeDonationDescription>
-				{formatMessage({ id: 'label.donations_made_on' })}
-				&nbsp;<BoldCaption>{chainsString}</BoldCaption>&nbsp;
-				{formatMessage({ id: 'label.are_eligible_to_be_matched' })}
-			</MakeDonationDescription>
+			<Wrapper>
+				<Caption $medium>
+					{formatMessage({
+						id: 'label.eligible_networks_for_matching',
+					})}
+				</Caption>
+				<IconsWrapper>
+					{activeStartedRound?.eligibleNetworks?.map(network => (
+						<IconWithTooltip
+							icon={
+								<TooltipIconWrapper>
+									{config.NETWORKS_CONFIG_WITH_ID[
+										network
+									]?.chainLogo(24)}
+								</TooltipIconWrapper>
+							}
+							direction='top'
+							align='top'
+							key={network}
+						>
+							<SublineBold>
+								{config.NETWORKS_CONFIG_WITH_ID[network]?.name}
+							</SublineBold>
+						</IconWithTooltip>
+					))}
+				</IconsWrapper>
+			</Wrapper>
 		</Container>
 	);
 };
@@ -34,15 +50,28 @@ const Container = styled.div`
 	padding: 16px 0;
 `;
 
-const MakeDonationDescription = styled(Caption)`
-	width: 100%;
-	display: inline-block;
-	color: ${neutralColors.gray[700]};
+const TooltipIconWrapper = styled.div`
+	margin-top: 4px;
 `;
 
-const BoldCaption = styled(Caption)`
-	font-weight: 500;
-	display: inline;
+const IconsWrapper = styled.div`
+	margin-top: 14px;
+	display: flex;
+	gap: 8px;
+	img {
+		filter: grayscale(100%);
+		opacity: 0.4;
+		transition: all 0.3s;
+		&:hover {
+			filter: grayscale(0);
+			opacity: 1;
+		}
+	}
 `;
 
+const Wrapper = styled.div`
+	border-radius: 8px;
+	background: ${neutralColors.gray[100]};
+	color: ${neutralColors.gray[800]};
+`;
 export default ProjectEligibleQFChains;

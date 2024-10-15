@@ -17,14 +17,7 @@ import {
 	IconGIVBack16,
 	IconSpark16,
 } from '@giveth/ui-design-system';
-import Select, {
-	components,
-	OptionProps,
-	DropdownIndicatorProps,
-	StylesConfig,
-	ControlProps,
-	type CSSObjectWithLabel,
-} from 'react-select';
+import Select, { components } from 'react-select';
 import styled from 'styled-components';
 import { useRouter } from 'next/router';
 import { useIntl } from 'react-intl';
@@ -33,6 +26,13 @@ import selectCustomStyles from '@/lib/constants/selectCustomStyles';
 import { useProjectsContext } from '@/context/projects.context';
 import useDetectDevice from '@/hooks/useDetectDevice';
 import { capitalizeFirstLetter } from '@/lib/helpers';
+import type {
+	OptionProps,
+	DropdownIndicatorProps,
+	StylesConfig,
+	ControlProps,
+	CSSObjectWithLabel,
+} from 'react-select';
 
 export interface ISelectedSort {
 	icon: ReactElement;
