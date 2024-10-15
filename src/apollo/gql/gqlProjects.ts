@@ -8,6 +8,7 @@ export const PROJECT_CORE_FIELDS = gql`
 		image
 		slug
 		verified
+		isGivbackEligible
 		totalDonations
 		qfRounds {
 			id
@@ -143,6 +144,7 @@ export const FETCH_PROJECT_BY_SLUG_DONATION = gql`
 			descriptionSummary
 			verified
 			totalDonations
+			isGivbackEligible
 			sumDonationValueUsdForActiveQfRound
 			countUniqueDonorsForActiveQfRound
 			categories {
@@ -212,6 +214,7 @@ export const FETCH_PROJECT_BY_SLUG_SINGLE_PROJECT = gql`
 			slug
 			verified
 			totalDonations
+			isGivbackEligible
 			description
 			addresses {
 				address
@@ -596,6 +599,7 @@ export const ADD_RECIPIENT_ADDRESS_TO_PROJECT = gql`
 			reviewStatus
 			verified
 			slugHistory
+			isGivbackEligible
 			creationDate
 			adminUserId
 			walletAddress
@@ -686,6 +690,7 @@ export const PROJECT_ACCEPTED_TOKENS = gql`
 			decimals
 			mainnetAddress
 			order
+			isGivbackEligible
 			isStableCoin
 			coingeckoId
 			isQR
