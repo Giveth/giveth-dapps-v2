@@ -163,6 +163,14 @@ const moduleExports = withBundleAnalyzer({
 						key: 'Access-Control-Allow-Headers',
 						value: 'X-Requested-With, content-type, Authorization',
 					},
+					{
+						key: 'X-Frame-Options',
+						value: 'SAMEORIGIN',
+					},
+					{
+						key: 'Content-Security-Policy',
+						value: "frame-ancestors 'self'",
+					},
 				],
 			},
 		];
