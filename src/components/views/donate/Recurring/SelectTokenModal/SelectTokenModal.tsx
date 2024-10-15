@@ -136,7 +136,7 @@ const SelectTokenInnerModal: FC<ISelectTokenModalProps> = ({
 								return;
 							}
 
-							return token? (
+							return token ? (
 								<StreamInfo
 									key={tokenId}
 									stream={tokenStreams[tokenId]}
