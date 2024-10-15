@@ -48,6 +48,7 @@ export const AddNewAddress: FC<IAddNewAddress> = ({
 		'chainType' in selectedChain ? selectedChain.chainType : undefined;
 
 	const isStellarChain = chainType === ChainType.STELLAR;
+	const isSolanaChain = chainType === ChainType.SOLANA;
 
 	const handleAdd = async (formData: IAddressForm) => {
 		setLoading(true);
@@ -137,7 +138,13 @@ export const AddNewAddress: FC<IAddNewAddress> = ({
 					...requiredOptions?.walletAddress,
 					validate: validateAddress,
 				}}
-				placeholder={isStellarChain ? 'G...' : '0x...'}
+				placeholder={
+					isStellarChain
+						? 'G...'
+						: isSolanaChain
+							? 'xxxx...xxxx'
+							: '0x...'
+				}
 				defaultValue={suggestNewAddress(
 					project.addresses!,
 					selectedChain,
