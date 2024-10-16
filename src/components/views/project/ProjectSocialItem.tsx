@@ -4,6 +4,7 @@ import { B, Flex, neutralColors } from '@giveth/ui-design-system';
 import { IProjectSocialMedia } from '@/apollo/types/types';
 import { Shadow } from '@/components/styled-components/Shadow';
 import { socialMediasArray } from '../create/SocialMediaBox/SocialMedias';
+import { ensureHttps, getSocialMediaHandle } from '@/helpers/url';
 
 interface IProjectSocialMediaItem {
 	socialMedia: IProjectSocialMedia;
@@ -22,32 +23,6 @@ const socialMediaColor: { [key: string]: string } = {
 	github: '#1D1E1F',
 };
 
-const removeHttpsAndWwwFromUrl = (socialMediaUrl: string) => {
-	return socialMediaUrl.replace('https://', '').replace('www.', '');
-};
-
-/**
- * Ensures that a given URL uses the https:// protocol.
- * If the URL starts with http://, it will be replaced with https://.
- * If the URL does not start with any protocol, https:// will be added.
- * If the URL already starts with https://, it will remain unchanged.
- *
- * @param {string} url - The URL to be checked and possibly modified.
- * @returns {string} - The modified URL with https://.
- */
-function ensureHttps(url: string): string {
-	if (!url.startsWith('https://')) {
-		if (url.startsWith('http://')) {
-			// Replace http:// with https://
-			url = url.replace('http://', 'https://');
-		} else {
-			// Add https:// if no protocol is present
-			url = 'https://' + url;
-		}
-	}
-	return url;
-}
-
 const ProjectSocialItem = ({ socialMedia }: IProjectSocialMediaItem) => {
 	const item = socialMediasArray.find(item => {
 		return item.type.toLocaleLowerCase() === socialMedia.type.toLowerCase();
@@ -63,7 +38,7 @@ const ProjectSocialItem = ({ socialMedia }: IProjectSocialMediaItem) => {
 						<IconComponent
 							color={
 								socialMediaColor[
-									item.name.toLocaleLowerCase() || 'website'
+									item?.name.toLocaleLowerCase() || 'website'
 								]
 							}
 						/>
@@ -76,7 +51,11 @@ const ProjectSocialItem = ({ socialMedia }: IProjectSocialMediaItem) => {
 							],
 						}}
 					>
-						{removeHttpsAndWwwFromUrl(socialMedia.link)}
+						{/* Use the updated function to show a cleaner link or username */}
+						{getSocialMediaHandle(
+							socialMedia.link,
+							socialMedia.type,
+						)}
 					</B>
 				</Flex>
 			</SocialItemContainer>
