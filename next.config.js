@@ -153,6 +153,7 @@ const moduleExports = withBundleAnalyzer({
 			{
 				// Adding CORS headers for /manifest.json
 				source: '/manifest.json',
+				locale: false,
 				headers: [
 					{
 						key: 'Access-Control-Allow-Origin',
