@@ -148,7 +148,7 @@ const moduleExports = withBundleAnalyzer({
 		locales,
 		defaultLocale,
 	},
-	headers: () => {
+	headers: async () => {
 		return [
 			{
 				// Adding CORS headers for /manifest.json
