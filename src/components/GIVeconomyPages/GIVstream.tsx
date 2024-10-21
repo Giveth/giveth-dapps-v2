@@ -71,10 +71,8 @@ export const TabGIVstreamTop = () => {
 	const [rewardLiquidPart, setRewardLiquidPart] = useState(0n);
 	const [rewardStream, setRewardStream] = useState(0n);
 	const { givTokenDistroHelper } = useGIVTokenDistroHelper(showModal);
-	const { chain } = useAccount();
+	const { chainId } = useAccount();
 	const currentValues = useSubgraphInfo();
-
-	const chainId = chain?.id;
 	const sdh = new SubgraphDataHelper(currentValues.data);
 	const { allocatedTokens, claimed, givback } =
 		sdh.getGIVTokenDistroBalance();
@@ -164,7 +162,7 @@ export const TabGIVstreamTop = () => {
 };
 
 export const TabGIVstreamBottom = () => {
-	const { chain, address } = useAccount();
+	const { chainId } = useAccount();
 	const { givTokenDistroHelper } = useGIVTokenDistroHelper();
 	const { formatMessage } = useIntl();
 
@@ -174,7 +172,6 @@ export const TabGIVstreamBottom = () => {
 	const [streamAmount, setStreamAmount] = useState(0n);
 	const currentValues = useSubgraphInfo();
 
-	const chainId = chain?.id;
 	const sdh = new SubgraphDataHelper(currentValues.data);
 	const givTokenDistroBalance = sdh.getGIVTokenDistroBalance();
 	const increaseSecRef = useRef<HTMLDivElement>(null);
