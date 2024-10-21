@@ -7,12 +7,12 @@ import { useFetchSubgraphDataForAllChains } from '@/hooks/useFetchSubgraphDataFo
 import { useInteractedBlockNumber } from '@/hooks/useInteractedBlockNumber';
 
 const SubgraphController: React.FC = () => {
-	const { address, chain } = useAccount();
+	const { address } = useAccount();
 	const queryClient = useQueryClient();
 	const pollingTimeoutsRef = useRef<{ [key: number]: NodeJS.Timeout }>({});
 	const refetchedChainsRef = useRef<Set<number>>(new Set());
 	useFetchSubgraphDataForAllChains();
-	useInteractedBlockNumber(chain?.id);
+	useInteractedBlockNumber();
 
 	useEffect(() => {
 		const handleEvent = (
