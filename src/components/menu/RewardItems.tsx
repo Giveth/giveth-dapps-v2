@@ -10,7 +10,6 @@ import { useIntl } from 'react-intl';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useAccount } from 'wagmi';
-import { useQuery } from '@tanstack/react-query';
 import config from '@/configuration';
 import useGIVTokenDistroHelper from '@/hooks/useGIVTokenDistroHelper';
 import { formatWeiHelper } from '@/helpers/number';
@@ -37,7 +36,7 @@ import { setShowSwitchNetworkModal } from '@/features/modal/modal.slice';
 import { getChainName } from '@/lib/network';
 import { getNetworkConfig } from '@/helpers/givpower';
 import { useIsSafeEnvironment } from '@/hooks/useSafeAutoConnect';
-import { fetchSubgraphData } from '@/services/subgraph.service';
+import { useSubgraphInfo } from '@/hooks/useSubgraphInfo';
 
 export interface IRewardItemsProps {
 	showWhatIsGIVstreamModal: boolean;
@@ -55,17 +54,10 @@ export const RewardItems: FC<IRewardItemsProps> = ({
 	const [givStreamLiquidPart, setGIVstreamLiquidPart] = useState(0n);
 	const [flowRateNow, setFlowRateNow] = useState(0n);
 
-	const { address, chain } = useAccount();
-	const currentValues = useQuery({
-		queryKey: ['subgraph', chain?.id, address],
-		queryFn: async () => await fetchSubgraphData(chain?.id, address),
-		enabled: !!chain,
-		staleTime: config.SUBGRAPH_POLLING_INTERVAL,
-	});
+	const { chainId } = useAccount();
+	const currentValues = useSubgraphInfo();
 	const { givTokenDistroHelper } = useGIVTokenDistroHelper();
 	const dispatch = useAppDispatch();
-
-	const chainId = chain?.id;
 	const sdh = new SubgraphDataHelper(currentValues.data);
 
 	const tokenDistroBalance = sdh.getGIVTokenDistroBalance();

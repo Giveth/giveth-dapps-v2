@@ -19,7 +19,6 @@ import {
 } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
 import { useAccount } from 'wagmi';
-import { useQuery } from '@tanstack/react-query';
 import {
 	Bar,
 	FlowRateRow,
@@ -52,7 +51,7 @@ import {
 	GridWrapper,
 } from './GIVstream.sc';
 import { IconWithTooltip } from '../IconWithToolTip';
-import { getHistory, fetchSubgraphData } from '@/services/subgraph.service';
+import { getHistory } from '@/services/subgraph.service';
 import { formatWeiHelper } from '@/helpers/number';
 import config from '@/configuration';
 import { durationToString, shortenAddress } from '@/lib/helpers';
@@ -64,6 +63,7 @@ import { IconGIV } from '../Icons/GIV';
 import { givEconomySupportedNetworks } from '@/lib/constants/constants';
 import Pagination from '../Pagination';
 import { SubgraphDataHelper } from '@/lib/subgraph/subgraphDataHelper';
+import { useSubgraphInfo } from '@/hooks/useSubgraphInfo';
 
 export const TabGIVstreamTop = () => {
 	const { formatMessage } = useIntl();
@@ -71,13 +71,8 @@ export const TabGIVstreamTop = () => {
 	const [rewardLiquidPart, setRewardLiquidPart] = useState(0n);
 	const [rewardStream, setRewardStream] = useState(0n);
 	const { givTokenDistroHelper } = useGIVTokenDistroHelper(showModal);
-	const { chain, address } = useAccount();
-	const currentValues = useQuery({
-		queryKey: ['subgraph', chain?.id, address],
-		queryFn: async () => await fetchSubgraphData(chain?.id, address),
-		enabled: !!chain,
-		staleTime: config.SUBGRAPH_POLLING_INTERVAL,
-	});
+	const { chain } = useAccount();
+	const currentValues = useSubgraphInfo();
 
 	const chainId = chain?.id;
 	const sdh = new SubgraphDataHelper(currentValues.data);
@@ -177,12 +172,7 @@ export const TabGIVstreamBottom = () => {
 	const [remain, setRemain] = useState('');
 	useState(0n);
 	const [streamAmount, setStreamAmount] = useState(0n);
-	const currentValues = useQuery({
-		queryKey: ['subgraph', chain?.id, address],
-		queryFn: async () => await fetchSubgraphData(chain?.id, address),
-		enabled: !!chain,
-		staleTime: config.SUBGRAPH_POLLING_INTERVAL,
-	});
+	const currentValues = useSubgraphInfo();
 
 	const chainId = chain?.id;
 	const sdh = new SubgraphDataHelper(currentValues.data);
@@ -388,12 +378,7 @@ export const GIVstreamHistory: FC = () => {
 	const [loading, setLoading] = useState(true);
 	const [page, setPage] = useState(0);
 
-	const currentValue = useQuery({
-		queryKey: ['subgraph', chain?.id, address],
-		queryFn: async () => await fetchSubgraphData(chain?.id, address),
-		enabled: !!chain,
-		staleTime: config.SUBGRAPH_POLLING_INTERVAL,
-	});
+	const currentValue = useSubgraphInfo();
 
 	const chainId = chain?.id;
 	const sdh = new SubgraphDataHelper(currentValue.data);

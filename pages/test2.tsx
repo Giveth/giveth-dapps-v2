@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useQueries, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useAccount } from 'wagmi';
 import {
 	PublicKey,
@@ -14,23 +14,14 @@ import FailedDonation, {
 } from '@/components/modals/FailedDonation';
 import { getTotalGIVpower } from '@/helpers/givpower';
 import { formatWeiHelper } from '@/helpers/number';
-import config from '@/configuration';
-import { fetchSubgraphData } from '@/services/subgraph.service';
+import { useFetchSubgraphDataForAllChains } from '@/hooks/useFetchSubgraphDataForAllChains';
 
 const YourApp = () => {
 	const [failedModalType, setFailedModalType] =
 		useState<EDonationFailedType>();
 	const queryClient = useQueryClient();
 	const { address, chain } = useAccount();
-	const subgraphValues = useQueries({
-		queries: config.CHAINS_WITH_SUBGRAPH.map(chain => ({
-			queryKey: ['subgraph', chain.id, address],
-			queryFn: async () => {
-				return await fetchSubgraphData(chain.id, address);
-			},
-			staleTime: config.SUBGRAPH_POLLING_INTERVAL,
-		})),
-	});
+	const subgraphValues = useFetchSubgraphDataForAllChains();
 
 	const { data } = useQuery({
 		queryKey: ['interactedBlockNumber', chain?.id],
