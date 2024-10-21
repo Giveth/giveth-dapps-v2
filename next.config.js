@@ -151,6 +151,20 @@ const moduleExports = withBundleAnalyzer({
 	headers: async () => {
 		return [
 			{
+				source: '/:path*',
+				locale: false,
+				headers: [
+					{
+						key: 'X-Frame-Options',
+						value: 'SAMEORIGIN',
+					},
+					{
+						key: 'Content-Security-Policy',
+						value: "frame-ancestors 'self'",
+					},
+				],
+			},
+			{
 				// Adding CORS headers for /manifest.json
 				source: '/manifest.json',
 				locale: false,
@@ -163,14 +177,6 @@ const moduleExports = withBundleAnalyzer({
 					{
 						key: 'Access-Control-Allow-Headers',
 						value: 'X-Requested-With, content-type, Authorization',
-					},
-					{
-						key: 'X-Frame-Options',
-						value: 'SAMEORIGIN',
-					},
-					{
-						key: 'Content-Security-Policy',
-						value: "frame-ancestors 'self'",
 					},
 				],
 			},
