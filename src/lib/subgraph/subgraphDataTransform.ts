@@ -198,6 +198,10 @@ export const transformUserGIVLocked = (info: any = {}): ITokenBalance => {
 	};
 };
 
+const transformIndexedBlockInfo = (info: any = {}): number => {
+	return info?.block?.number || 0;
+};
+
 export const transformSubgraphData = (data: any = {}): ISubgraphState => {
 	const result: ISubgraphState = {};
 	Object.entries(data).forEach(([key, value]) => {
@@ -228,6 +232,9 @@ export const transformSubgraphData = (data: any = {}): ISubgraphState => {
 
 			case key === 'userGIVLocked':
 				result[key] = transformUserGIVLocked(value);
+				break;
+			case key === '_meta':
+				result['indexedBlockNumber'] = transformIndexedBlockInfo(value);
 				break;
 
 			default:
