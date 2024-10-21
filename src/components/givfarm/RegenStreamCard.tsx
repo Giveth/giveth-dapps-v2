@@ -20,7 +20,6 @@ import BigNumber from 'bignumber.js';
 import styled from 'styled-components';
 import { useIntl } from 'react-intl';
 import { useAccount } from 'wagmi';
-import { useQuery } from '@tanstack/react-query';
 import { durationToString } from '@/lib/helpers';
 import { Bar, GsPTooltip } from '@/components/GIVeconomyPages/GIVstream.sc';
 import { IconWithTooltip } from '@/components/IconWithToolTip';
@@ -35,9 +34,9 @@ import { TokenDistroHelper } from '@/lib/contractHelper/TokenDistroHelper';
 import { Relative } from '../styled-components/Position';
 import { ArchiveAndNetworkCover } from '../ArchiveAndNetworkCover/ArchiveAndNetworkCover';
 import { getSubgraphChainId } from '@/helpers/network';
-import { fetchSubgraphData } from '@/services/subgraph.service';
 import { useFetchMainnetThirdPartyTokensPrice } from '@/hooks/useFetchMainnetThirdPartyTokensPrice';
 import { useFetchGnosisThirdPartyTokensPrice } from '@/hooks/useFetchGnosisThirdPartyTokensPrice';
+import { useSubgraphInfo } from '@/hooks/useSubgraphInfo';
 
 interface RegenStreamProps {
 	streamConfig: RegenStreamConfig;
@@ -63,13 +62,9 @@ export const RegenStreamCard: FC<RegenStreamProps> = ({ streamConfig }) => {
 	const [lockedAmount, setLockedAmount] = useState(0n);
 	const [claimedAmount, setClaimedAmount] = useState(0n);
 
-	const { address, chain } = useAccount();
+	const { chain } = useAccount();
 	const subgraphChainId = getSubgraphChainId(streamConfig.network);
-	const currentValues = useQuery({
-		queryKey: ['subgraph', subgraphChainId, address],
-		queryFn: async () => await fetchSubgraphData(subgraphChainId, address),
-		staleTime: config.SUBGRAPH_POLLING_INTERVAL,
-	});
+	const currentValues = useSubgraphInfo(subgraphChainId);
 	const chainId = chain?.id;
 
 	const {

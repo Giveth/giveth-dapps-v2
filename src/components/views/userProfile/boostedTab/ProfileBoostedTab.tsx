@@ -4,7 +4,6 @@ import { captureException } from '@sentry/nextjs';
 
 import { Col, Row } from '@giveth/ui-design-system';
 import { useAccount } from 'wagmi';
-import { useQueries } from '@tanstack/react-query';
 import { IUserProfileView } from '../UserProfile.view';
 import BoostsTable from './BoostsTable';
 import { IPowerBoosting } from '@/apollo/types/types';
@@ -29,8 +28,7 @@ import { formatWeiHelper } from '@/helpers/number';
 import InlineToast, { EToastType } from '@/components/toasts/InlineToast';
 import { useFetchPowerBoostingInfo } from './useFetchPowerBoostingInfo';
 import { useProfileContext } from '@/context/profile.context';
-import { fetchSubgraphData } from '@/services/subgraph.service';
-import config from '@/configuration';
+import { useFetchSubgraphDataForAllChains } from '@/hooks/useFetchSubgraphDataForAllChains';
 
 export const ProfileBoostedTab: FC<IUserProfileView> = () => {
 	const { user } = useProfileContext();
@@ -39,15 +37,7 @@ export const ProfileBoostedTab: FC<IUserProfileView> = () => {
 	const { address, chain } = useAccount();
 	const { userData } = useAppSelector(state => state.user);
 	const boostedProjectsCount = userData?.boostedProjectsCount ?? 0;
-	const subgraphValues = useQueries({
-		queries: config.CHAINS_WITH_SUBGRAPH.map(chain => ({
-			queryKey: ['subgraph', chain.id, address],
-			queryFn: async () => {
-				return await fetchSubgraphData(chain.id, address);
-			},
-			staleTime: config.SUBGRAPH_POLLING_INTERVAL,
-		})),
-	});
+	const subgraphValues = useFetchSubgraphDataForAllChains();
 	const givPower = getTotalGIVpower(subgraphValues, address);
 	const isZeroGivPower = givPower.total.isZero();
 	const dispatch = useAppDispatch();

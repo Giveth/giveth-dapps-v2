@@ -7,7 +7,6 @@ import { captureException } from '@sentry/nextjs';
 import { useIntl } from 'react-intl';
 import { formatEther } from 'viem';
 import { useAccount } from 'wagmi';
-import { useQuery } from '@tanstack/react-query';
 import {
 	APRRow,
 	ArrowButton,
@@ -35,7 +34,7 @@ import useGIVTokenDistroHelper from '@/hooks/useGIVTokenDistroHelper';
 import { IClaimViewCardProps } from '../Claim.view';
 import { WeiPerEther } from '@/lib/constants/constants';
 import { InputWithUnit } from '@/components/input/InputWithUnit';
-import { fetchSubgraphData } from '@/services/subgraph.service';
+import { useSubgraphInfo } from '@/hooks/useSubgraphInfo';
 
 const GovernCardContainer = styled(Card)`
 	padding-left: 254px;
@@ -109,15 +108,9 @@ const GovernCard: FC<IClaimViewCardProps> = ({ index }) => {
 	const [earnEstimate, setEarnEstimate] = useState(0n);
 	const [apr, setApr] = useState<APR>(null);
 
-	const { address, chain } = useAccount();
-	const chainId = chain?.id;
+	const { chainId } = useAccount();
 	const { givTokenDistroHelper } = useGIVTokenDistroHelper();
-	const gnosisValues = useQuery({
-		queryKey: ['subgraph', config.GNOSIS_NETWORK_NUMBER, address],
-		queryFn: async () =>
-			await fetchSubgraphData(config.GNOSIS_NETWORK_NUMBER, address),
-		staleTime: config.SUBGRAPH_POLLING_INTERVAL,
-	});
+	const gnosisValues = useSubgraphInfo(config.GNOSIS_NETWORK_NUMBER);
 
 	useEffect(() => {
 		let _stacked = 0;

@@ -4,8 +4,6 @@ import styled from 'styled-components';
 import BigNumber from 'bignumber.js';
 import { H2, H5, Lead, Flex } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
-import { useAccount } from 'wagmi';
-import { useQuery } from '@tanstack/react-query';
 import {
 	APRRow,
 	ArrowButton,
@@ -34,7 +32,7 @@ import { getNowUnixMS } from '@/helpers/time';
 import { IClaimViewCardProps } from '../Claim.view';
 import { WeiPerEther } from '@/lib/constants/constants';
 import { InputWithUnit } from '@/components/input/InputWithUnit';
-import { fetchSubgraphData } from '@/services/subgraph.service';
+import { useSubgraphInfo } from '@/hooks/useSubgraphInfo';
 
 const InvestCardContainer = styled(Card)`
 	&::before {
@@ -95,21 +93,9 @@ const InvestCard: FC<IClaimViewCardProps> = ({ index }) => {
 	const [earnEstimate, setEarnEstimate] = useState(0n);
 	const [APR, setAPR] = useState<BigNumber>(Zero);
 
-	const { address } = useAccount();
 	const { givTokenDistroHelper } = useGIVTokenDistroHelper();
-	const gnosisValues = useQuery({
-		queryKey: ['subgraph', config.GNOSIS_NETWORK_NUMBER, address],
-		queryFn: async () =>
-			await fetchSubgraphData(config.GNOSIS_NETWORK_NUMBER, address),
-		staleTime: config.SUBGRAPH_POLLING_INTERVAL,
-	});
-
-	const mainnetValues = useQuery({
-		queryKey: ['subgraph', config.MAINNET_NETWORK_NUMBER, address],
-		queryFn: async () =>
-			await fetchSubgraphData(config.MAINNET_NETWORK_NUMBER, address),
-		staleTime: config.SUBGRAPH_POLLING_INTERVAL,
-	});
+	const gnosisValues = useSubgraphInfo(config.GNOSIS_NETWORK_NUMBER);
+	const mainnetValues = useSubgraphInfo(config.MAINNET_NETWORK_NUMBER);
 
 	useEffect(() => {
 		if (totalAmount) {

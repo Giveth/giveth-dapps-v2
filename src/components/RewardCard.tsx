@@ -25,6 +25,7 @@ import { INetworkIdWithChain } from './views/donate/common/common.types';
 import { ChainType } from '@/types/config';
 import { EVMWrongNetworkSwitchModal } from './modals/WrongNetworkInnerModal';
 import { useFetchGIVPrice } from '@/hooks/useGivPrice';
+import { useSubgraphSyncInfo } from '@/hooks/useSubgraphSyncInfo';
 
 interface IRewardCardProps {
 	cardName: string;
@@ -63,6 +64,7 @@ export const RewardCard: FC<IRewardCardProps> = ({
 		useState(false);
 	const { data: givPrice } = useFetchGIVPrice();
 	const { givTokenDistroHelper } = useGIVTokenDistroHelper();
+	const subgraphSyncedInfo = useSubgraphSyncInfo(network);
 
 	useEffect(() => {
 		const price =
@@ -132,7 +134,10 @@ export const RewardCard: FC<IRewardCardProps> = ({
 								label={actionLabel}
 								onClick={actionCb}
 								buttonType='primary'
-								disabled={liquidAmount === 0n}
+								disabled={
+									liquidAmount === 0n ||
+									!subgraphSyncedInfo.isSynced
+								}
 							/>
 						) : (
 							<PlaceHolderButton />

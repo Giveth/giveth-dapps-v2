@@ -1,31 +1,18 @@
 import React, { useEffect, useRef } from 'react';
 import { useAccount } from 'wagmi';
-import { useQueries, useQueryClient } from '@tanstack/react-query';
+import { useQueryClient } from '@tanstack/react-query';
 import { Address } from 'viem';
-import config from '@/configuration';
-import {
-	fetchLatestIndexedBlock,
-	fetchSubgraphData,
-} from '@/services/subgraph.service';
+import { fetchLatestIndexedBlock } from '@/services/subgraph.service';
+import { useFetchSubgraphDataForAllChains } from '@/hooks/useFetchSubgraphDataForAllChains';
+import { useInteractedBlockNumber } from '@/hooks/useInteractedBlockNumber';
 
 const SubgraphController: React.FC = () => {
 	const { address } = useAccount();
 	const queryClient = useQueryClient();
 	const pollingTimeoutsRef = useRef<{ [key: number]: NodeJS.Timeout }>({});
 	const refetchedChainsRef = useRef<Set<number>>(new Set());
-
-	useQueries({
-		queries: config.CHAINS_WITH_SUBGRAPH.map(chain => ({
-			queryKey: ['subgraph', chain.id, address] as [
-				string,
-				number,
-				Address,
-			],
-			queryFn: async () => await fetchSubgraphData(chain.id, address),
-			staleTime: config.SUBGRAPH_POLLING_INTERVAL,
-			enabled: !!address,
-		})),
-	});
+	useFetchSubgraphDataForAllChains();
+	useInteractedBlockNumber();
 
 	useEffect(() => {
 		const handleEvent = (
@@ -49,6 +36,10 @@ const SubgraphController: React.FC = () => {
 
 				// Reset refetchedChainsRef for the current chain ID
 				refetchedChainsRef.current.delete(eventChainId);
+				queryClient.setQueryData(
+					['interactedBlockNumber', eventChainId],
+					blockNumber,
+				);
 
 				// Ensure any existing timeout is cleared
 				if (pollingTimeoutsRef.current[eventChainId]) {

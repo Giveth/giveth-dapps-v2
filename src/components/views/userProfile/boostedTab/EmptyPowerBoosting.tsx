@@ -9,26 +9,16 @@ import { useIntl } from 'react-intl';
 import Link from 'next/link';
 import { FC } from 'react';
 import { useAccount } from 'wagmi';
-import { useQueries } from '@tanstack/react-query';
 import Routes from '@/lib/constants/Routes';
 import { getTotalGIVpower } from '@/helpers/givpower';
-import config from '@/configuration';
-import { fetchSubgraphData } from '@/services/subgraph.service';
+import { useFetchSubgraphDataForAllChains } from '@/hooks/useFetchSubgraphDataForAllChains';
 interface IEmptyPowerBoosting {
 	myAccount?: boolean;
 }
 
 export const EmptyPowerBoosting: FC<IEmptyPowerBoosting> = ({ myAccount }) => {
 	const { address } = useAccount();
-	const subgraphValues = useQueries({
-		queries: config.CHAINS_WITH_SUBGRAPH.map(chain => ({
-			queryKey: ['subgraph', chain.id, address],
-			queryFn: async () => {
-				return await fetchSubgraphData(chain.id, address);
-			},
-			staleTime: config.SUBGRAPH_POLLING_INTERVAL,
-		})),
-	});
+	const subgraphValues = useFetchSubgraphDataForAllChains();
 	const givPower = getTotalGIVpower(subgraphValues, address);
 	const { formatMessage } = useIntl();
 

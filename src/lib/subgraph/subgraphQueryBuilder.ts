@@ -13,6 +13,15 @@ export class SubgraphQueryBuilder {
 		`;
 	};
 
+	static getIndexedBlockQuery = (): string => {
+		return `_meta {
+					block {
+						number
+					}
+				}
+		`;
+	};
+
 	static getBalanceQuery = (
 		networkConfig: NetworkConfig,
 		userAddress?: string,
@@ -233,6 +242,7 @@ export class SubgraphQueryBuilder {
 		const givpowerConfig = networkConfig?.GIVPOWER;
 		return `
 		{
+			${SubgraphQueryBuilder.getIndexedBlockQuery()}
 			${SubgraphQueryBuilder.getBalanceQuery(networkConfig, userAddress)}
 			${SubgraphQueryBuilder.generateTokenDistroQueries(networkConfig, userAddress)}
 			${SubgraphQueryBuilder.generateFarmingQueries(
