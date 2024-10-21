@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useQueries } from '@tanstack/react-query';
+import { useQueries, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useAccount } from 'wagmi';
 import {
 	PublicKey,
@@ -20,7 +20,8 @@ import { fetchSubgraphData } from '@/services/subgraph.service';
 const YourApp = () => {
 	const [failedModalType, setFailedModalType] =
 		useState<EDonationFailedType>();
-	const { address } = useAccount();
+	const queryClient = useQueryClient();
+	const { address, chain } = useAccount();
 	const subgraphValues = useQueries({
 		queries: config.CHAINS_WITH_SUBGRAPH.map(chain => ({
 			queryKey: ['subgraph', chain.id, address],
@@ -30,6 +31,14 @@ const YourApp = () => {
 			staleTime: config.SUBGRAPH_POLLING_INTERVAL,
 		})),
 	});
+
+	const { data } = useQuery({
+		queryKey: ['interactedBlockNumber', chain?.id],
+		queryFn: () => 0,
+		staleTime: Infinity,
+	});
+
+	console.log('data', data);
 
 	// Solana wallet hooks
 	const {
@@ -125,6 +134,22 @@ const YourApp = () => {
 				>
 					Test Button
 				</button>
+			</div>
+			<div>
+				{data}
+
+				{chain?.id && (
+					<button
+						onClick={() => {
+							queryClient.setQueryData(
+								['interactedBlockNumber', chain.id!],
+								12,
+							);
+						}}
+					>
+						update query data
+					</button>
+				)}
 			</div>
 			{failedModalType && (
 				<FailedDonation
