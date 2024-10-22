@@ -203,7 +203,7 @@ export const PassportBanner = () => {
 			  </GLink>
 			</StyledLink>
 		  )}
-		  {qfEligibilityState === EQFElegibilityState.NOT_SIGNED && (
+		  {qfEligibilityState === (EQFElegibilityState as any).NOT_SIGNED && (
 			<StyledLink onClick={() => setSignWithWallet(true)}>
 			  <GLink>
 				{formatMessage({
