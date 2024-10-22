@@ -113,162 +113,177 @@ export const PassportBannerData: IData = {
 };
 
 export const PassportBanner = () => {
-	const { info, updateState, fetchUserMBDScore, handleSign, refreshScore } = usePassport();
-	const { currentRound, passportState, passportScore, qfEligibilityState } = info;
+	const { info, updateState, fetchUserMBDScore, handleSign, refreshScore } =
+		usePassport();
+	const { currentRound, passportState, passportScore, qfEligibilityState } =
+		info;
 	const { formatMessage, locale } = useIntl();
 	const { connector } = useAccount();
 	const { isOnSolana, handleSingOutAndSignInWithEVM } = useGeneralWallet();
 	const [showModal, setShowModal] = useState<boolean>(false);
 	const [signWithWallet, setSignWithWallet] = useState<boolean>(false);
-  
+
 	const isGSafeConnector = connector?.id === 'safe';
-  
+
 	// Check if the eligibility state or current round is not loaded yet
 	const isLoading = !qfEligibilityState || !currentRound;
-  
+
 	// Only render the banner when the data is available
 	if (isLoading) {
-	  return null; // Or return a spinner or loading message if you'd like
+		return null; // Or return a spinner or loading message if you'd like
 	}
-  
+
 	return !isOnSolana ? (
-	  <>
-		<PassportBannerWrapper
-		  $bgColor={PassportBannerData[qfEligibilityState].bg}
-		>
-		  <Flex gap="8px" $alignItems="center">
-			<IconWrapper>
-			  {PassportBannerData[qfEligibilityState].icon}
-			</IconWrapper>
-			<P>
-			  {formatMessage(
-				{
-				  id: PassportBannerData[qfEligibilityState].content,
-				},
-				{
-				  data:
-					qfEligibilityState === EQFElegibilityState.NOT_STARTED &&
-					currentRound
-					  ? smallFormatDate(new Date(currentRound?.beginDate))
-					  : undefined,
-				}
-			  )}
-			  {currentRound && qfEligibilityState === EQFElegibilityState.RECHECK_ELIGIBILITY && (
-				<>
-				  {' '}
-				  <strong>
-					{new Date(currentRound.endDate)
-					  .toLocaleString(locale || 'en-US', {
-						day: 'numeric',
-						month: 'short',
-					  })
-					  .replace(/,/g, '')}
-				  </strong>
-				</>
-			  )}
-			</P>
-		  </Flex>
-		  {qfEligibilityState === EQFElegibilityState.CHECK_ELIGIBILITY && (
-			<StyledLink onClick={() => fetchUserMBDScore()}>
-			  <GLink>
-				{formatMessage({
-				  id: 'qf_donor_eligibility.banner.link.check_eligibility',
-				})}
-			  </GLink>
-			</StyledLink>
-		  )}
-		  {qfEligibilityState === EQFElegibilityState.RECHECK_ELIGIBILITY && (
-			<StyledLink onClick={() => setShowModal(true)}>
-			  <GLink>
-				{formatMessage({
-				  id: 'qf_donor_eligibility.banner.link.recheck_eligibility',
-				})}
-			  </GLink>
-			</StyledLink>
-		  )}
-		  {qfEligibilityState === EQFElegibilityState.PROCESSING && (
-			<StyledStatus>
-			  {formatMessage({
-				id: 'label.processing',
-			  })}
-			  <Spinner color={brandColors.mustard[600]} size={25} />
-			</StyledStatus>
-		  )}
-		  {qfEligibilityState === EQFElegibilityState.MORE_INFO_NEEDED && (
-			<StyledLink onClick={() => setShowModal(true)}>
-			  <GLink>
-				{formatMessage({
-				  id: 'label.add_more_info',
-				})}
-			  </GLink>
-			</StyledLink>
-		  )}
-		  {qfEligibilityState === (EQFElegibilityState as any).NOT_SIGNED && (
-			<StyledLink onClick={() => setSignWithWallet(true)}>
-			  <GLink>
-				{formatMessage({
-				  id: 'label.sign_message',
-				})}
-			  </GLink>
-			  <IconWalletOutline16 />
-			</StyledLink>
-		  )}
-		</PassportBannerWrapper>
-		{showModal && (
-		  <PassportModal
-			qfEligibilityState={qfEligibilityState}
-			passportState={passportState}
-			passportScore={passportScore}
-			currentRound={currentRound}
-			setShowModal={setShowModal}
-			updateState={updateState}
-			refreshScore={refreshScore}
-			handleSign={handleSign}
-		  />
-		)}
-		{signWithWallet && (
-		  <SignWithWalletModal
-			isGSafeConnector={isGSafeConnector}
-			setShowModal={() => {
-			  setSignWithWallet(false);
-			}}
-		  />
-		)}
-	  </>
+		<>
+			<PassportBannerWrapper
+				$bgColor={PassportBannerData[qfEligibilityState].bg}
+			>
+				<Flex gap='8px' $alignItems='center'>
+					<IconWrapper>
+						{PassportBannerData[qfEligibilityState].icon}
+					</IconWrapper>
+					<P>
+						{formatMessage(
+							{
+								id: PassportBannerData[qfEligibilityState]
+									.content,
+							},
+							{
+								data:
+									qfEligibilityState ===
+										EQFElegibilityState.NOT_STARTED &&
+									currentRound
+										? smallFormatDate(
+												new Date(
+													currentRound?.beginDate,
+												),
+											)
+										: undefined,
+							},
+						)}
+						{currentRound &&
+							qfEligibilityState ===
+								EQFElegibilityState.RECHECK_ELIGIBILITY && (
+								<>
+									{' '}
+									<strong>
+										{new Date(currentRound.endDate)
+											.toLocaleString(locale || 'en-US', {
+												day: 'numeric',
+												month: 'short',
+											})
+											.replace(/,/g, '')}
+									</strong>
+								</>
+							)}
+					</P>
+				</Flex>
+				{qfEligibilityState ===
+					EQFElegibilityState.CHECK_ELIGIBILITY && (
+					<StyledLink onClick={() => fetchUserMBDScore()}>
+						<GLink>
+							{formatMessage({
+								id: 'qf_donor_eligibility.banner.link.check_eligibility',
+							})}
+						</GLink>
+					</StyledLink>
+				)}
+				{qfEligibilityState ===
+					EQFElegibilityState.RECHECK_ELIGIBILITY && (
+					<StyledLink onClick={() => setShowModal(true)}>
+						<GLink>
+							{formatMessage({
+								id: 'qf_donor_eligibility.banner.link.recheck_eligibility',
+							})}
+						</GLink>
+					</StyledLink>
+				)}
+				{qfEligibilityState === EQFElegibilityState.PROCESSING && (
+					<StyledStatus>
+						{formatMessage({
+							id: 'label.processing',
+						})}
+						<Spinner color={brandColors.mustard[600]} size={25} />
+					</StyledStatus>
+				)}
+				{qfEligibilityState ===
+					EQFElegibilityState.MORE_INFO_NEEDED && (
+					<StyledLink onClick={() => setShowModal(true)}>
+						<GLink>
+							{formatMessage({
+								id: 'label.add_more_info',
+							})}
+						</GLink>
+					</StyledLink>
+				)}
+				{qfEligibilityState ===
+					(EQFElegibilityState as any).NOT_SIGNED && (
+					<StyledLink onClick={() => setSignWithWallet(true)}>
+						<GLink>
+							{formatMessage({
+								id: 'label.sign_message',
+							})}
+						</GLink>
+						<IconWalletOutline16 />
+					</StyledLink>
+				)}
+			</PassportBannerWrapper>
+			{showModal && (
+				<PassportModal
+					qfEligibilityState={qfEligibilityState}
+					passportState={passportState}
+					passportScore={passportScore}
+					currentRound={currentRound}
+					setShowModal={setShowModal}
+					updateState={updateState}
+					refreshScore={refreshScore}
+					handleSign={handleSign}
+				/>
+			)}
+			{signWithWallet && (
+				<SignWithWalletModal
+					isGSafeConnector={isGSafeConnector}
+					setShowModal={() => {
+						setSignWithWallet(false);
+					}}
+				/>
+			)}
+		</>
 	) : (
-	  <PassportBannerWrapper $bgColor={PassportBannerData[qfEligibilityState].bg}>
-		<P>
-		  {formatMessage({
-			id: 'label.to_activate_your_gitcoin_passport',
-		  })}
-		</P>
-		<StyledP onClick={handleSingOutAndSignInWithEVM}>
-		  {formatMessage({
-			id: 'label.switch_to_evm',
-		  })}
-		</StyledP>
-	  </PassportBannerWrapper>
+		<PassportBannerWrapper
+			$bgColor={PassportBannerData[qfEligibilityState].bg}
+		>
+			<P>
+				{formatMessage({
+					id: 'label.to_activate_your_gitcoin_passport',
+				})}
+			</P>
+			<StyledP onClick={handleSingOutAndSignInWithEVM}>
+				{formatMessage({
+					id: 'label.switch_to_evm',
+				})}
+			</StyledP>
+		</PassportBannerWrapper>
 	);
-  };
-  
+};
 
 interface IPassportBannerWrapperProps {
 	$bgColor: EPBGState;
 }
 
 export const PassportBannerWrapper = styled(Flex)<IPassportBannerWrapperProps>`
-  flex-direction: column;
-  background-color: ${props => bgColor[props.$bgColor]};
-  padding: 16px;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  position: sticky; /* Change this to sticky */
-  top: 0; /* This keeps it at the top as the user scrolls */
-  z-index: 1000; /* Ensure it stays above other content */
-  ${mediaQueries.tablet} {
-    flex-direction: row;
-  }
+	flex-direction: column;
+	background-color: ${props => bgColor[props.$bgColor]};
+	padding: 16px;
+	align-items: center;
+	justify-content: center;
+	gap: 8px;
+	position: sticky; /* Change this to sticky */
+	top: 0; /* This keeps it at the top as the user scrolls */
+	z-index: 1000; /* Ensure it stays above other content */
+	${mediaQueries.tablet} {
+		flex-direction: row;
+	}
 `;
 
 const IconWrapper = styled.div`

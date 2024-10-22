@@ -1,9 +1,12 @@
 # The Giveth DApp
 
 ### Build status:
-- Develop - [![build-develop](https://github.com/Giveth/giveth-dapps-v2/actions/workflows/Build.yml/badge.svg?branch=develop)](https://github.com/Giveth/giveth-dapps-v2/actions/workflows/Build.yml)
-- Main - [![build-main](https://github.com/Giveth/giveth-dapps-v2/actions/workflows/Build.yml/badge.svg?branch=main)](https://github.com/Giveth/giveth-dapps-v2/actions/workflows/Build.yml)
---------------
+
+-   Develop - [![build-develop](https://github.com/Giveth/giveth-dapps-v2/actions/workflows/Build.yml/badge.svg?branch=develop)](https://github.com/Giveth/giveth-dapps-v2/actions/workflows/Build.yml)
+-   Main - [![build-main](https://github.com/Giveth/giveth-dapps-v2/actions/workflows/Build.yml/badge.svg?branch=main)](https://github.com/Giveth/giveth-dapps-v2/actions/workflows/Build.yml)
+
+---
+
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
 ## Getting Started
@@ -30,15 +33,19 @@ npm run dev
 # or
 yarn dev
 ```
+
 ## Run locally with Docker
+
 You can run the image locally with docker using the below steps:
 
 1. Make a copy of the `.env.example` file and add your configurations there
+
 ```
 cp .env.example .env.local
 ```
 
 2. Run with `docker-compose`
+
 ```
 docker-compose up -d
 ```

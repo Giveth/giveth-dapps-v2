@@ -1,11 +1,11 @@
 ---
 name: User Story
-about: 'Smallest unit of work. It''s an end goal, expressed from the software user''s
-  perspective. '
+about:
+    "Smallest unit of work. It's an end goal, expressed from the software user's
+    perspective. "
 title: User Story
 labels: User Story
 assignees: ''
-
 ---
 
 **As a [_persona_], I [_want to_], [_so that_].**
