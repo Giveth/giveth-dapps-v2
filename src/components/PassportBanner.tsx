@@ -128,7 +128,7 @@ export const PassportBanner = () => {
 	// Check if the eligibility state or current round is not loaded yet
 	const isLoading = !qfEligibilityState || !currentRound;
 
-	// Only render the banner when the data is available
+	// Only render the banner when the data is available test
 	if (isLoading) {
 		return null; // Or return a spinner or loading message if you'd like
 	}
