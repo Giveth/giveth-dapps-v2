@@ -279,7 +279,7 @@ export const PassportBannerWrapper = styled(Flex)<IPassportBannerWrapperProps>`
 	gap: 8px;
 	position: sticky; /* Change this to sticky */
 	top: 0; /* This keeps it at the top as the user scrolls */
-	z-index: 1000; /* Ensure it stays above other content */
+	z-index: 5; /* Ensure it stays above other content */
 	${mediaQueries.tablet} {
 		flex-direction: row;
 	}
