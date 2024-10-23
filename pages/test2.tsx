@@ -6,7 +6,7 @@ import FailedDonation, {
 const YourApp = () => {
 	const [failedModalType, setFailedModalType] =
 		useState<EDonationFailedType>();
-
+	console.log('test');
 	return (
 		<div>
 			<w3m-button />
@@ -23,5 +23,4 @@ const YourApp = () => {
 		</div>
 	);
 };
-
 export default YourApp;
