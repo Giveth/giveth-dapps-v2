@@ -252,11 +252,19 @@ export const HarvestAllModal: FC<IHarvestAllModalProps> = ({
 				if (txResponse) {
 					setState(HarvestStates.SUBMITTED);
 					setTxHash(txResponse);
-					const { status } = await waitForTransaction(
+					const { status, blockNumber } = await waitForTransaction(
 						txResponse,
 						isSafeEnv,
 					);
-
+					const event = new CustomEvent('chainEvent', {
+						detail: {
+							type: 'success',
+							chainId: chainId,
+							blockNumber: blockNumber,
+							address: address,
+						},
+					});
+					window.dispatchEvent(event);
 					setState(
 						status ? HarvestStates.CONFIRMED : HarvestStates.ERROR,
 					);

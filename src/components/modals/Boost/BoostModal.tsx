@@ -1,7 +1,6 @@
 import { IconRocketInSpace32 } from '@giveth/ui-design-system';
 import { FC, useState } from 'react';
 import { useIntl } from 'react-intl';
-import { useQueries } from '@tanstack/react-query';
 import { useAccount } from 'wagmi';
 import { IModal } from '@/types/common';
 import { Modal } from '../Modal';
@@ -12,8 +11,7 @@ import { BoostModalContainer } from './BoostModal.sc';
 import BoostedInnerModal from './BoostedInnerModal';
 import BoostInnerModal from './BoostInnerModal';
 import { getTotalGIVpower } from '@/helpers/givpower';
-import config from '@/configuration';
-import { fetchSubgraphData } from '@/services/subgraph.service';
+import { useFetchSubgraphDataForAllChains } from '@/hooks/useFetchSubgraphDataForAllChains';
 
 interface IBoostModalProps extends IModal {
 	projectId: string;
@@ -31,15 +29,7 @@ const BoostModal: FC<IBoostModalProps> = ({ setShowModal, projectId }) => {
 	const [percentage, setPercentage] = useState(0);
 	const [state, setState] = useState(EBoostModalState.BOOSTING);
 	const { address } = useAccount();
-	const subgraphValues = useQueries({
-		queries: config.CHAINS_WITH_SUBGRAPH.map(chain => ({
-			queryKey: ['subgraph', chain.id, address],
-			queryFn: async () => {
-				return await fetchSubgraphData(chain.id, address);
-			},
-			staleTime: config.SUBGRAPH_POLLING_INTERVAL,
-		})),
-	});
+	const subgraphValues = useFetchSubgraphDataForAllChains();
 	const givPower = getTotalGIVpower(subgraphValues, address);
 
 	if (givPower.total.isZero()) {
