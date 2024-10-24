@@ -111,13 +111,11 @@ export const PassportBannerData: IData = {
 		icon: <IconInfoOutline24 color={semanticColors.golden[700]} />,
 	},
 };
-
 export const PassportBanner = () => {
 	const { info, updateState, fetchUserMBDScore, handleSign, refreshScore } =
 		usePassport();
 	const { currentRound, passportState, passportScore, qfEligibilityState } =
 		info;
-
 	const { formatMessage, locale } = useIntl();
 	const { connector } = useAccount();
 	const { isOnSolana, handleSingOutAndSignInWithEVM } = useGeneralWallet();
@@ -125,6 +123,14 @@ export const PassportBanner = () => {
 	const [signWithWallet, setSignWithWallet] = useState<boolean>(false);
 
 	const isGSafeConnector = connector?.id === 'safe';
+
+	// Check if the eligibility state or current round is not loaded yet
+	const isLoading = !qfEligibilityState || !currentRound;
+
+	// Only render the banner when the data is available
+	if (isLoading) {
+		return null; // Or return a spinner or loading message if you'd like
+	}
 
 	return !isOnSolana ? (
 		<>
@@ -209,7 +215,8 @@ export const PassportBanner = () => {
 						</GLink>
 					</StyledLink>
 				)}
-				{qfEligibilityState === EQFElegibilityState.NOT_SIGNED && (
+				{qfEligibilityState ===
+					(EQFElegibilityState as any).NOT_SIGNED && (
 					<StyledLink onClick={() => setSignWithWallet(true)}>
 						<GLink>
 							{formatMessage({
@@ -270,7 +277,9 @@ export const PassportBannerWrapper = styled(Flex)<IPassportBannerWrapperProps>`
 	align-items: center;
 	justify-content: center;
 	gap: 8px;
-	position: relative;
+	position: sticky; /* Change this to sticky */
+	top: 0; /* This keeps it at the top as the user scrolls */
+	z-index: 5; /* Ensure it stays above other content */
 	${mediaQueries.tablet} {
 		flex-direction: row;
 	}
