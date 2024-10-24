@@ -1,6 +1,27 @@
 import { GetServerSidePropsContext } from 'next';
 
 import config from '@/configuration';
+import {
+	homeMetatags,
+	projectsMetatags,
+	giveconomyMetatags,
+	givpowerMetatags,
+	givfarmMetatags,
+	aboutMetatags,
+	givstreamMetatags,
+	givbacksMetatags,
+	supportMetatags,
+	partnershipMetatags,
+	joinMetatags,
+	faqMetatags,
+	createProjectMetatags,
+	claimMetatags,
+	nftMetatags,
+	generalOnboardingMetaTags,
+	projectOnboardingMetaTags,
+	donorOnboardingMetaTags,
+	giveconomyOnboardingMetaTags,
+} from '@/content/metatags';
 
 const URL = config.FRONTEND_LINK;
 
@@ -10,18 +31,103 @@ function generateSiteMap() {
      	<!-- Add the static URLs manually -->
      	<url>
       	<loc>${URL}</loc>
-			  <title>Giveth: Future of Giving with Zero-Fee Crypto Donation</title>
-      	<description>Get rewarded for crypto donations to for-good projects with zero added fees and accepting crypto donations. Donate crypto directly to thousands of nonprofits &amp; charities!</description>
+			  <title>${homeMetatags.title}</title>
+      	<description>${homeMetatags.desc}</description>
      	</url>
      	<url>
       	<loc>${URL}/projects/all</loc>
-			  <title>Give directly to for-good projects with crypto &amp; zero fees</title>
-      	<description>Support for-good projects, nonprofits &amp; charities with crypto donations. Give directly with zero added fees. Get rewarded when you donate to GIVbacks eligible projects!</description>
+			  <title>${projectsMetatags.title}</title>
+      	<description>${projectsMetatags.desc}</description>
      	</url>
     	<url>
       	<loc>${URL}/giveconomy</loc>
-			  <title>GIVeconomy: Empowering our collective to build the Future of Giving</title>
-      	<description>Giveth is a donor owned and governed economy. With GIVbacks, we reward donors to GIVbacks eligible projects on Giveth with GIV.</description>
+			  <title>${giveconomyMetatags.title}</title>
+      	<description>${giveconomyMetatags.desc}</description>
+     	</url>
+    	<url>
+      	<loc>${URL}/givpower</loc>
+			  <title>${givpowerMetatags.title}</title>
+      	<description>${givpowerMetatags.desc}</description>
+     	</url>
+    	<url>
+      	<loc>${URL}/givfarm</loc>
+			  <title>${givfarmMetatags.title}</title>
+      	<description>${givfarmMetatags.desc}</description>
+     	</url>
+    	<url>
+      	<loc>${URL}/about</loc>
+			  <title>${aboutMetatags.title}</title>
+      	<description>${aboutMetatags.desc}</description>
+     	</url>
+    	<url>
+      	<loc>${URL}/about</loc>
+			  <title>${aboutMetatags.title}</title>
+      	<description>${aboutMetatags.desc}</description>
+     	</url>
+    	<url>
+      	<loc>${URL}/givstream</loc>
+			  <title>${givstreamMetatags.title}</title>
+      	<description>${givstreamMetatags.desc}</description>
+     	</url>
+    	<url>
+      	<loc>${URL}/givbacks</loc>
+			  <title>${givbacksMetatags.title}</title>
+      	<description>${givbacksMetatags.desc}</description>
+     	</url>
+    	<url>
+      	<loc>${URL}/support</loc>
+			  <title>${supportMetatags.title}</title>
+      	<description>${supportMetatags.desc}</description>
+     	</url>
+    	<url>
+      	<loc>${URL}/partnerships</loc>
+			  <title>${partnershipMetatags.title}</title>
+      	<description>${partnershipMetatags.desc}</description>
+     	</url>
+    	<url>
+      	<loc>${URL}/join</loc>
+			  <title>${joinMetatags.title}</title>
+      	<description>${joinMetatags.desc}</description>
+     	</url>
+    	<url>
+      	<loc>${URL}/faq</loc>
+			  <title>${faqMetatags.title}</title>
+      	<description>${faqMetatags.desc}</description>
+     	</url>
+    	<url>
+      	<loc>${URL}/create</loc>
+			  <title>${createProjectMetatags.title}</title>
+      	<description>${createProjectMetatags.desc}</description>
+     	</url>
+    	<url>
+      	<loc>${URL}/claim</loc>
+			  <title>${claimMetatags.title}</title>
+      	<description>${claimMetatags.desc}</description>
+     	</url>
+    	<url>
+      	<loc>${URL}/nft</loc>
+			  <title>${nftMetatags.title}</title>
+      	<description>${nftMetatags.desc}</description>
+     	</url>
+    	<url>
+      	<loc>${URL}/onboarding</loc>
+			  <title>${generalOnboardingMetaTags.title}</title>
+      	<description>${generalOnboardingMetaTags.desc}</description>
+     	</url>
+    	<url>
+      	<loc>${URL}/onboarding/projects</loc>
+			  <title>${projectOnboardingMetaTags.title}</title>
+      	<description>${projectOnboardingMetaTags.desc}</description>
+     	</url>
+    	<url>
+      	<loc>${URL}/donors/projects</loc>
+			  <title>${donorOnboardingMetaTags.title}</title>
+      	<description>${donorOnboardingMetaTags.desc}</description>
+     	</url>
+    	<url>
+      	<loc>${URL}/donors/giveconomy</loc>
+			  <title>${giveconomyOnboardingMetaTags.title}</title>
+      	<description>${giveconomyOnboardingMetaTags.desc}</description>
      	</url>
 			<url>
       	<loc>${URL}/projects/projects-sitemap.xml</loc>
