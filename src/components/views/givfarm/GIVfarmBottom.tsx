@@ -32,7 +32,6 @@ import StakingPoolCard from '@/components/cards/StakingCards/BaseStakingCard/Bas
 import { RegenStreamSection } from '@/components/givfarm/RegenStreamSection';
 import ToggleSwitch from '@/components/ToggleSwitch';
 import { getNetworkConfig } from '@/helpers/givpower';
-import { StakeTogetherCard } from '@/components/cards/StakingCards/BaseStakingCard/StakeTogetherCard';
 
 const renderPool = (pool: SimplePoolStakingConfig, id: number) => (
 	<Col sm={6} lg={4} key={`staking_pool_card_${pool.network}_${id}`}>
@@ -189,17 +188,7 @@ export const GIVfarmBottom = () => {
 						toggleOnOff={setShowArchivedPools}
 					/>
 				</GIVfarmToolBoxRow>
-				<PoolRow>
-					{renderPools(chainId, showArchivedPools)}
-					<Col
-						sm={6}
-						lg={4}
-						key='staking_together_card'
-						style={{ alignSelf: 'flex-start' }}
-					>
-						<StakeTogetherCard />
-					</Col>
-				</PoolRow>
+				<PoolRow>{renderPools(chainId, showArchivedPools)}</PoolRow>
 				<RegenStreamSection showArchivedPools={showArchivedPools} />
 				<DaoCard />
 			</Container>
