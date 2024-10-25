@@ -97,6 +97,8 @@
 	"component.title.tos": "Terms of Use",
 	"component.title.user_guides": "User Guides",
 	"component.title.we_hiring": "We're Hiring!",
+	"component.title.qacc": "Q/acc",
+	"component.title.qacc_news": "Q/acc News",
 	"component.title.what_is_giveth": "What is Giveth?",
 	"component.title.with_your_donation": "with your Donation",
 	"component.tooltip.donate_anonymously": "By checking this, we won't consider your profile information as a donor for this donation and won't show it on public pages.",
