@@ -8,27 +8,40 @@ import { EProjectsSortBy } from '@/apollo/types/gqlEnums';
 import { getMainCategorySlug } from '@/helpers/projects';
 import { transformGraphQLErrorsToStatusCode } from '@/helpers/requests';
 import { IProject } from '@/apollo/types/types';
+import { escapeXml } from '@/helpers/xml';
 
 const URL = config.FRONTEND_LINK;
 
 function generateSiteMap(projects: IProject[]) {
 	return `<?xml version="1.0" encoding="UTF-8"?>
-   <urlset xmlns="https://www.sitemaps.org/schemas/sitemap/0.9">
-     ${projects
-			.map(({ slug }: { slug: string }) => {
-				return `
-           <url>
-               <loc>${`${URL}/project/${slug}`}</loc>
-           </url>
-         `;
-			})
+	<urlset xmlns="https://www.sitemaps.org/schemas/sitemap/0.9">
+		${projects
+			.map(
+				({
+					slug,
+					title = '',
+					descriptionSummary = '',
+				}: {
+					slug: string;
+					title?: string;
+					descriptionSummary?: string;
+				}) => {
+					// Apply XML escaping to both title and description
+					return `
+						<url>
+							<loc>${`${URL}/project/${slug}`}</loc>
+							<title>${escapeXml(title)}</title>
+							<description>${escapeXml(descriptionSummary)}</description>
+						</url>
+					`;
+				},
+			)
 			.join('')}
-			<url>
-       <loc>${URL}/project/projects-sitemap.xml</loc>
-       <lastmod>${new Date().toISOString()}</lastmod>
-     </url>
-   </urlset>
- `;
+		<url>
+			<loc>${URL}/project/projects-sitemap.xml</loc>
+			<lastmod>${new Date().toISOString()}</lastmod>
+		</url>
+	</urlset>`;
 }
 
 export async function getServerSideProps({ res }: GetServerSidePropsContext) {
@@ -36,13 +49,14 @@ export async function getServerSideProps({ res }: GetServerSidePropsContext) {
 	let projects: IProject[] = [];
 	try {
 		const apolloClient = initializeApollo();
-		const sort = EProjectsSortBy.NEWEST;
+		const slug = 'all';
 		const { data } = await apolloClient.query({
 			query: FETCH_ALL_PROJECTS,
 			variables: {
 				...variables,
+				limit: 50,
 				sortingBy: EProjectsSortBy.INSTANT_BOOSTING,
-				mainCategory: getMainCategorySlug({ slug: sort }),
+				mainCategory: getMainCategorySlug({ slug }),
 				notifyOnNetworkStatusChange,
 			},
 			fetchPolicy: 'no-cache',
