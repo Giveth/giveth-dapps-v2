@@ -142,6 +142,22 @@ const Footer = () => {
 							</LinkItem>
 						</a>
 					</LinkColumn>
+					<LinkColumn>
+						<a href={links.QACC} target='_blank'>
+							<LinkItem color={textColor}>
+								{formatMessage({
+									id: 'component.title.qacc',
+								})}
+							</LinkItem>
+						</a>
+						<a href={links.QACC_NEWS} target='_blank'>
+							<LinkItem color={textColor}>
+								{formatMessage({
+									id: 'component.title.qacc_news',
+								})}
+							</LinkItem>
+						</a>
+					</LinkColumn>
 				</LeftContainer>
 				<RightContainer color={textColor}>
 					<SocialContainer>
@@ -225,7 +241,7 @@ const LeftContainer = styled(Flex)`
 	gap: 0;
 
 	${mediaQueries.laptopL} {
-		gap: 0 72px;
+		gap: 0 0px;
 	}
 `;
 
