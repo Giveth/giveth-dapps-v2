@@ -22,112 +22,112 @@ import {
 	donorOnboardingMetaTags,
 	giveconomyOnboardingMetaTags,
 } from '@/content/metatags';
+import { escapeXml } from '@/helpers/xml';
 
 const URL = config.FRONTEND_LINK;
 
 function generateSiteMap() {
 	return `<?xml version="1.0" encoding="UTF-8"?>
    <urlset xmlns="https://www.sitemaps.org/schemas/sitemap/0.9">
-     	<!-- Add the static URLs manually -->
      	<url>
       	<loc>${URL}</loc>
-			  <title>${homeMetatags.title}</title>
-      	<description>${homeMetatags.desc}</description>
+			  <title>${escapeXml(homeMetatags.title)}</title>
+      	<description>${escapeXml(homeMetatags.desc)}</description>
      	</url>
      	<url>
       	<loc>${URL}/projects/all</loc>
-			  <title>${projectsMetatags.title}</title>
-      	<description>${projectsMetatags.desc}</description>
+			  <title>${escapeXml(projectsMetatags.title)}</title>
+      	<description>${escapeXml(projectsMetatags.desc)}</description>
      	</url>
     	<url>
       	<loc>${URL}/giveconomy</loc>
-			  <title>${giveconomyMetatags.title}</title>
-      	<description>${giveconomyMetatags.desc}</description>
+			  <title>${escapeXml(giveconomyMetatags.title)}</title>
+      	<description>${escapeXml(giveconomyMetatags.desc)}</description>
      	</url>
     	<url>
       	<loc>${URL}/givpower</loc>
-			  <title>${givpowerMetatags.title}</title>
-      	<description>${givpowerMetatags.desc}</description>
+			  <title>${escapeXml(givpowerMetatags.title)}</title>
+      	<description>${escapeXml(givpowerMetatags.desc)}</description>
      	</url>
     	<url>
       	<loc>${URL}/givfarm</loc>
-			  <title>${givfarmMetatags.title}</title>
-      	<description>${givfarmMetatags.desc}</description>
+			  <title>${escapeXml(givfarmMetatags.title)}</title>
+      	<description>${escapeXml(givfarmMetatags.desc)}</description>
      	</url>
     	<url>
       	<loc>${URL}/about</loc>
-			  <title>${aboutMetatags.title}</title>
-      	<description>${aboutMetatags.desc}</description>
+			  <title>${escapeXml(aboutMetatags.title)}</title>
+      	<description>${escapeXml(aboutMetatags.desc)}</description>
      	</url>
     	<url>
       	<loc>${URL}/about</loc>
-			  <title>${aboutMetatags.title}</title>
-      	<description>${aboutMetatags.desc}</description>
+			  <title>${escapeXml(aboutMetatags.title)}</title>
+      	<description>${escapeXml(aboutMetatags.desc)}</description>
      	</url>
     	<url>
       	<loc>${URL}/givstream</loc>
-			  <title>${givstreamMetatags.title}</title>
-      	<description>${givstreamMetatags.desc}</description>
+			  <title>${escapeXml(givstreamMetatags.title)}</title>
+      	<description>${escapeXml(givstreamMetatags.desc)}</description>
      	</url>
     	<url>
       	<loc>${URL}/givbacks</loc>
-			  <title>${givbacksMetatags.title}</title>
-      	<description>${givbacksMetatags.desc}</description>
+			  <title>${escapeXml(givbacksMetatags.title)}</title>
+      	<description>${escapeXml(givbacksMetatags.desc)}</description>
      	</url>
     	<url>
       	<loc>${URL}/support</loc>
-			  <title>${supportMetatags.title}</title>
-      	<description>${supportMetatags.desc}</description>
+			  <title>${escapeXml(supportMetatags.title)}</title>
+      	<description>${escapeXml(supportMetatags.desc)}</description>
      	</url>
     	<url>
       	<loc>${URL}/partnerships</loc>
-			  <title>${partnershipMetatags.title}</title>
-      	<description>${partnershipMetatags.desc}</description>
+			  <title>${escapeXml(partnershipMetatags.title)}</title>
+      	<description>${escapeXml(partnershipMetatags.desc)}</description>
      	</url>
     	<url>
       	<loc>${URL}/join</loc>
-			  <title>${joinMetatags.title}</title>
-      	<description>${joinMetatags.desc}</description>
+			  <title>${escapeXml(joinMetatags.title)}</title>
+      	<description>${escapeXml(joinMetatags.desc)}</description>
      	</url>
     	<url>
       	<loc>${URL}/faq</loc>
-			  <title>${faqMetatags.title}</title>
-      	<description>${faqMetatags.desc}</description>
+			  <title>${escapeXml(faqMetatags.title)}</title>
+      	<description>${escapeXml(faqMetatags.desc)}</description>
      	</url>
     	<url>
       	<loc>${URL}/create</loc>
-			  <title>${createProjectMetatags.title}</title>
-      	<description>${createProjectMetatags.desc}</description>
+			  <title>${escapeXml(createProjectMetatags.title)}</title>
+      	<description>${escapeXml(createProjectMetatags.desc)}</description>
      	</url>
     	<url>
       	<loc>${URL}/claim</loc>
-			  <title>${claimMetatags.title}</title>
-      	<description>${claimMetatags.desc}</description>
+			  <title>${escapeXml(claimMetatags.title)}</title>
+      	<description>${escapeXml(claimMetatags.desc)}</description>
      	</url>
     	<url>
       	<loc>${URL}/nft</loc>
-			  <title>${nftMetatags.title}</title>
-      	<description>${nftMetatags.desc}</description>
+			  <title>${escapeXml(nftMetatags.title)}</title>
+      	<description>${escapeXml(nftMetatags.desc)}</description>
      	</url>
     	<url>
       	<loc>${URL}/onboarding</loc>
-			  <title>${generalOnboardingMetaTags.title}</title>
-      	<description>${generalOnboardingMetaTags.desc}</description>
+			  <title>${escapeXml(generalOnboardingMetaTags.title)}</title>
+      	<description>${escapeXml(generalOnboardingMetaTags.desc)}</description>
      	</url>
     	<url>
       	<loc>${URL}/onboarding/projects</loc>
-			  <title>${projectOnboardingMetaTags.title}</title>
-      	<description>${projectOnboardingMetaTags.desc}</description>
+			  <title>${escapeXml(projectOnboardingMetaTags.title)}</title>
+      	<description>${escapeXml(projectOnboardingMetaTags.desc)}</description>
      	</url>
     	<url>
       	<loc>${URL}/donors/projects</loc>
-			  <title>${donorOnboardingMetaTags.title}</title>
-      	<description>${donorOnboardingMetaTags.desc}</description>
+			  <title>${escapeXml(donorOnboardingMetaTags.title)}</title>
+      	<description>${escapeXml(donorOnboardingMetaTags.desc)}</description>
      	</url>
     	<url>
       	<loc>${URL}/donors/giveconomy</loc>
-			  <title>${giveconomyOnboardingMetaTags.title}</title>
-      	<description>${giveconomyOnboardingMetaTags.desc}</description>
+			  <title>${escapeXml(giveconomyOnboardingMetaTags.title)}</title>
+      	<description>${escapeXml(giveconomyOnboardingMetaTags.desc)}</description>
      	</url>
 			<url>
       	<loc>${URL}/sitemap/projects-sitemap.xml</loc>
