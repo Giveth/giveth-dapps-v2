@@ -130,7 +130,7 @@ function generateSiteMap() {
       	<description>${giveconomyOnboardingMetaTags.desc}</description>
      	</url>
 			<url>
-      	<loc>${URL}/projects/projects-sitemap.xml</loc>
+      	<loc>${URL}/sitemap/projects-sitemap.xml</loc>
       	<lastmod>${new Date().toISOString()}</lastmod>
      	</url>
 	 </urlset>
