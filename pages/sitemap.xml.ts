@@ -21,6 +21,7 @@ import {
 	projectOnboardingMetaTags,
 	donorOnboardingMetaTags,
 	giveconomyOnboardingMetaTags,
+	archivedQFRoundsMetaTags,
 } from '@/content/metatags';
 import { escapeXml } from '@/helpers/xml';
 
@@ -129,8 +130,17 @@ function generateSiteMap() {
 			  <title>${escapeXml(giveconomyOnboardingMetaTags.title)}</title>
       	<description>${escapeXml(giveconomyOnboardingMetaTags.desc)}</description>
      	</url>
+    	<url>
+      	<loc>${URL}/qf-archive</loc>
+			  <title>${escapeXml(archivedQFRoundsMetaTags.title)}</title>
+      	<description>${escapeXml(archivedQFRoundsMetaTags.desc)}</description>
+     	</url>
 			<url>
       	<loc>${URL}/sitemap/projects-sitemap.xml</loc>
+      	<lastmod>${new Date().toISOString()}</lastmod>
+     	</url>
+			<url>
+      	<loc>${URL}/sitemap/qf-sitemap.xml</loc>
       	<lastmod>${new Date().toISOString()}</lastmod>
      	</url>
 	 </urlset>

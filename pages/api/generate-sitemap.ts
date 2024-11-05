@@ -12,7 +12,7 @@ import { IProject } from '@/apollo/types/types';
 
 const URL = config.FRONTEND_LINK;
 
-function generateSiteMap(projects: IProject[]) {
+function generateProjectsSiteMap(projects: IProject[]) {
 	return `<?xml version="1.0" encoding="UTF-8"?>
     <urlset xmlns="https://www.sitemaps.org/schemas/sitemap/0.9">
       ${projects
@@ -36,10 +36,6 @@ function generateSiteMap(projects: IProject[]) {
 				},
 			)
 			.join('')}
-      <url>
-        <loc>${URL}/project/projects-sitemap.xml</loc>
-        <lastmod>${new Date().toISOString()}</lastmod>
-      </url>
     </urlset>`;
 }
 
@@ -48,8 +44,6 @@ export default async function handler(
 	res: NextApiResponse,
 ) {
 	const authHeader = req.headers['authorization'];
-
-	console.log('authHeader', authHeader);
 
 	// Only allow GET requests
 	if (req.method !== 'GET') {
@@ -61,20 +55,20 @@ export default async function handler(
 	}
 
 	try {
-		// Get first projecct data
-		const projectData = await getProjectFrom(0);
+		// Get first project data
+		const projectData = await getProjects(0);
 
 		const projects: IProject[] = projectData.allProjects?.projects || [];
 
 		if (projectData.allProjects.totalCount > 50) {
 			for (let i = 50; i < projectData.allProjects.totalCount; i += 50) {
-				const fetchNewProjectData = await getProjectFrom(i);
+				const fetchNewProjectData = await getProjects(i);
 				projects.push(...fetchNewProjectData.allProjects?.projects);
 			}
 		}
 
 		// Generate XML content
-		const sitemapContent = generateSiteMap(projects);
+		const sitemapContent = generateProjectsSiteMap(projects);
 
 		// Define the file path
 		const filePath = path.join(
@@ -97,8 +91,8 @@ export default async function handler(
 	}
 }
 
-async function getProjectFrom(skip: number) {
-	// Fetch project data from GraphQL
+// Fetch project data from GraphQL
+async function getProjects(skip: number) {
 	const apolloClient = initializeApollo();
 	const slug = 'all';
 	const { variables, notifyOnNetworkStatusChange } = OPTIONS_HOME_PROJECTS;
