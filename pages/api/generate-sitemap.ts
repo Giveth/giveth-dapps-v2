@@ -8,7 +8,8 @@ import { FETCH_ALL_PROJECTS } from '@/apollo/gql/gqlProjects';
 import { EProjectsSortBy } from '@/apollo/types/gqlEnums';
 import { getMainCategorySlug } from '@/helpers/projects';
 import { escapeXml } from '@/helpers/xml';
-import { IProject } from '@/apollo/types/types';
+import { IProject, IQFRound } from '@/apollo/types/types';
+import { FETCH_QF_ROUNDS_QUERY } from '@/apollo/gql/gqlQF';
 
 const URL = config.FRONTEND_LINK;
 
@@ -39,6 +40,38 @@ function generateProjectsSiteMap(projects: IProject[]) {
     </urlset>`;
 }
 
+function generateQFRoundsSiteMap(rounds: IQFRound[]) {
+	return `<?xml version="1.0" encoding="UTF-8"?>
+    <urlset xmlns="https://www.sitemaps.org/schemas/sitemap/0.9">
+      ${rounds
+			.map(
+				({
+					slug,
+					name = '',
+					description = '',
+				}: {
+					slug: string;
+					name?: string;
+					description?: string;
+				}) => {
+					// Default to empty strings if any field is null
+					const safeSlug = slug || '';
+					const safeName = name || '';
+					const safeDescription = description || '';
+
+					return `
+              <url>
+                <loc>${`${URL}/qf-archive/${safeSlug}`}</loc>
+                <title>${escapeXml(safeName)}</title>
+                <description>${escapeXml(safeDescription)}</description>
+              </url>
+            `;
+				},
+			)
+			.join('')}
+    </urlset>`;
+}
+
 export default async function handler(
 	req: NextApiRequest,
 	res: NextApiResponse,
@@ -55,6 +88,8 @@ export default async function handler(
 	}
 
 	try {
+		/* PROJECT SITEMAP */
+
 		// Get first project data
 		const projectData = await getProjects(0);
 
@@ -80,6 +115,29 @@ export default async function handler(
 
 		// Write the XML content to the file
 		await fs.promises.writeFile(filePath, sitemapContent, 'utf-8');
+
+		/* QF ARCHIVED ROUNDS SITEMAP */
+
+		// Get first project data
+		const roundsData = await getArchivedRounds();
+
+		// // Generate XML content
+		const sitemapRoundsContent = generateQFRoundsSiteMap(roundsData);
+
+		// Define the file path
+		const filePathQFRounds = path.join(
+			process.cwd(),
+			'public',
+			'sitemap',
+			'qf-sitemap.xml',
+		);
+
+		// // Write the XML content to the file
+		await fs.promises.writeFile(
+			filePathQFRounds,
+			sitemapRoundsContent,
+			'utf-8',
+		);
 
 		// Respond with success
 		res.status(200).json({
@@ -111,4 +169,15 @@ async function getProjects(skip: number) {
 	});
 
 	return data;
+}
+
+// Fetch qf archived rounds data from GraphQL
+async function getArchivedRounds() {
+	const apolloClient = initializeApollo();
+
+	const { data } = await apolloClient.query({
+		query: FETCH_QF_ROUNDS_QUERY,
+	});
+
+	return data.qfRounds || [];
 }
