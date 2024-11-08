@@ -31,6 +31,7 @@ import { EVerificationStatus } from '@/apollo/types/types';
 import ClaimRecurringDonationModal from '../../userProfile/projectsTab/ClaimRecurringDonationModal';
 import config from '@/configuration';
 import { findAnchorContractAddress } from '@/helpers/superfluid';
+import { ProjectCardNotification } from './ProjectCardNotification';
 
 interface IMobileActionsModalProps {
 	setShowModal: (value: boolean) => void;
@@ -163,55 +164,63 @@ export const AdminActions = () => {
 					project={project}
 				/>
 			)}
+			<ProjectCardNotification />
 		</Wrapper>
 	) : (
-		<MobileWrapper
-			gap='4px'
-			onClick={() => setShowMobileActionsModal(true)}
-		>
-			<div>Project Actions</div>
-			<IconChevronDown24 />
-			{showMobileActionsModal && (
-				<MobileActionsModal setShowModal={setShowMobileActionsModal}>
-					{options.map(option => (
-						<MobileActionModalItem
-							key={option.label}
-							onClick={option.cb}
-						>
-							<Flex gap='8px'>
-								<Flex $alignItems='center'>{option.icon}</Flex>
-								<div>{option.label}</div>
-							</Flex>
-						</MobileActionModalItem>
-					))}
-					{showVerificationModal && (
-						<VerificationModal
-							onClose={() => setShowVerificationModal(false)}
-						/>
-					)}
-					{deactivateModal && (
-						<DeactivateProjectModal
-							setShowModal={setDeactivateModal}
-							projectId={projectData?.id}
-							onSuccess={fetchProjectBySlug}
-						/>
-					)}
-					{showShareModal && (
-						<ShareModal
-							contentType={EContentType.thisProject}
-							setShowModal={setShowShareModal}
-							projectHref={slug}
-						/>
-					)}
-				</MobileActionsModal>
-			)}
-			{showClaimModal && (
-				<ClaimRecurringDonationModal
-					setShowModal={setShowClaimModal}
-					project={project}
-				/>
-			)}
-		</MobileWrapper>
+		<>
+			<MobileWrapper
+				gap='4px'
+				onClick={() => setShowMobileActionsModal(true)}
+			>
+				<div>Project Actions</div>
+				<IconChevronDown24 />
+				{showMobileActionsModal && (
+					<MobileActionsModal
+						setShowModal={setShowMobileActionsModal}
+					>
+						{options.map(option => (
+							<MobileActionModalItem
+								key={option.label}
+								onClick={option.cb}
+							>
+								<Flex gap='8px'>
+									<Flex $alignItems='center'>
+										{option.icon}
+									</Flex>
+									<div>{option.label}</div>
+								</Flex>
+							</MobileActionModalItem>
+						))}
+						{showVerificationModal && (
+							<VerificationModal
+								onClose={() => setShowVerificationModal(false)}
+							/>
+						)}
+						{deactivateModal && (
+							<DeactivateProjectModal
+								setShowModal={setDeactivateModal}
+								projectId={projectData?.id}
+								onSuccess={fetchProjectBySlug}
+							/>
+						)}
+						{showShareModal && (
+							<ShareModal
+								contentType={EContentType.thisProject}
+								setShowModal={setShowShareModal}
+								projectHref={slug}
+							/>
+						)}
+					</MobileActionsModal>
+				)}
+				{showClaimModal && (
+					<ClaimRecurringDonationModal
+						setShowModal={setShowClaimModal}
+						project={project}
+					/>
+				)}
+			</MobileWrapper>
+			<ProjectCardNotification />
+		</>
 	);
 };
 
