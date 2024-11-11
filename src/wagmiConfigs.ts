@@ -2,6 +2,7 @@ import { cookieStorage, createConfig, createStorage } from 'wagmi';
 import { walletConnect, coinbaseWallet, safe } from '@wagmi/connectors';
 
 import { createClient, http } from 'viem';
+import { getDrpcNetwork } from './lib/network';
 import configuration from './configuration';
 
 // Get projectId at https://cloud.walletconnect.com
@@ -18,6 +19,14 @@ const metadata = {
 };
 
 const chains = configuration.EVM_CHAINS;
+
+const createDrpcTransport = (chainId: number) => {
+	const network = getDrpcNetwork(chainId);
+	const drpcKey = process.env.NEXT_PUBLIC_DRPC_KEY;
+	return network && drpcKey
+		? http(`https://lb.drpc.org/ogrpc?network=${network}&dkey=${drpcKey}`)
+		: http();
+};
 
 // Create wagmiConfig
 export const wagmiConfig = createConfig({
@@ -37,6 +46,9 @@ export const wagmiConfig = createConfig({
 		storage: cookieStorage,
 	}),
 	client({ chain }) {
-		return createClient({ chain, transport: http() });
+		return createClient({
+			chain,
+			transport: createDrpcTransport(chain.id),
+		});
 	},
 });
