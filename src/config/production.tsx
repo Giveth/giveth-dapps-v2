@@ -522,21 +522,21 @@ const config: EnvConfig = {
 				isSuperToken: true,
 				coingeckoId: 'dai',
 			},
-			{
-				underlyingToken: {
-					decimals: 6,
-					id: '0x7f5c764cbc14f9669b88837ca1490cca17c31607',
-					name: 'USD Coin',
-					symbol: 'USDC',
-					coingeckoId: 'usd-coin',
-				},
-				decimals: 18,
-				id: '0x8430f084b939208e2eded1584889c9a66b90562f',
-				name: 'Super USD Coin',
-				symbol: 'USDCx',
-				isSuperToken: true,
-				coingeckoId: 'usd-coin',
-			},
+			// {
+			// 	underlyingToken: {
+			// 		decimals: 6,
+			// 		id: '0x7f5c764cbc14f9669b88837ca1490cca17c31607',
+			// 		name: 'USD Coin',
+			// 		symbol: 'USDC',
+			// 		coingeckoId: 'usd-coin',
+			// 	},
+			// 	decimals: 18,
+			// 	id: '0x8430f084b939208e2eded1584889c9a66b90562f',
+			// 	name: 'Super USD Coin',
+			// 	symbol: 'USDCx',
+			// 	isSuperToken: true,
+			// 	coingeckoId: 'usd-coin',
+			// },
 			{
 				underlyingToken: {
 					decimals: 18,
