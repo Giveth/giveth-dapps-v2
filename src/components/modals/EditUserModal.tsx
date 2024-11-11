@@ -8,7 +8,10 @@ import { captureException } from '@sentry/nextjs';
 import { useForm } from 'react-hook-form';
 import { Modal } from './Modal';
 import { client } from '@/apollo/apolloClient';
-import { UPDATE_USER } from '@/apollo/gql/gqlUser';
+import {
+	SEND_USER_EMAIL_CONFIRMATION_CODE_FLOW,
+	UPDATE_USER,
+} from '@/apollo/gql/gqlUser';
 import { IUser } from '@/apollo/types/types';
 import { gToast, ToastType } from '../toasts';
 import {
@@ -88,6 +91,20 @@ const EditUserModal = ({
 		}
 	};
 
+	const testMe = async () => {
+		try {
+			const { data } = await client.mutate({
+				mutation: SEND_USER_EMAIL_CONFIRMATION_CODE_FLOW,
+				variables: {
+					email: 'test£gmail.com',
+				},
+			});
+			console.log(data);
+		} catch (error) {
+			console.log(error);
+		}
+	};
+
 	const onSubmit = async (formData: Inputs) => {
 		setIsLoading(true);
 		try {
@@ -163,6 +180,11 @@ const EditUserModal = ({
 						</FlexCenter>
 					</FlexCenter>
 					<form onSubmit={handleSubmit(onSubmit)}>
+						<div>
+							<button type='button' onClick={testMe}>
+								TEST ME
+							</button>
+						</div>
 						<InputWrapper>
 							{inputFields.map(field => (
 								<Input
