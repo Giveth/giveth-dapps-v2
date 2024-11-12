@@ -243,6 +243,14 @@ export const RecurringDonationCard = () => {
 		? Number((perMonthAmount * 1000n) / amount) / 10
 		: 0;
 
+	// Reset the input value when the token is changed
+	useEffect(() => {
+		if (selectedRecurringToken || anchorContractAddress) {
+			setAmount(0n);
+			setPerMonthAmount(0n);
+		}
+	}, [anchorContractAddress, selectedRecurringToken]);
+
 	return (
 		<>
 			<Title weight={700} id='recurring-donation-page'>
