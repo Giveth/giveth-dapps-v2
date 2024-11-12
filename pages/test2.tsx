@@ -1,7 +1,14 @@
 import React from 'react';
 import { ethers } from 'ethers';
 import { Framework } from '@superfluid-finance/sdk-core';
-import config from '@/configuration';
+
+const USDCx_TOKEN_ADDRESS = '0x35adeb0638eb192755b6e52544650603fe65a006';
+const USDCex_TOKEN_ADDRESS = '0x8430f084b939208e2eded1584889c9a66b90562f'; // NOT WORKING
+const GIVETH_HOUSE_ADDRESS = '0x567c4B141ED61923967cA25Ef4906C8781069a10';
+
+const OPTIMISM_CHAIN_ID = 10;
+
+const STREAM_VALUE = '0.01';
 
 const YourApp = () => {
 	const handleApproveAndExecute = async () => {
@@ -16,21 +23,16 @@ const YourApp = () => {
 			await provider.send('eth_requestAccounts', []);
 			const signer = provider.getSigner();
 			const sf = await Framework.create({
-				chainId: config.OPTIMISM_CONFIG.id,
+				chainId: OPTIMISM_CHAIN_ID,
 				provider,
 			});
 
-			// WORK 0x35adeb0638eb192755b6e52544650603fe65a006 USDCx
-			// NOT WORK 0x8430f084b939208e2eded1584889c9a66b90562f USDC.ex
-
 			const address = await signer.getAddress();
-			const usdcx = await sf.loadWrapperSuperToken(
-				'0x8430f084b939208e2eded1584889c9a66b90562f',
-			);
-			const spenderAddress = '0x567c4B141ED61923967cA25Ef4906C8781069a10';
+			const usdcx = await sf.loadWrapperSuperToken(USDCex_TOKEN_ADDRESS);
+			const spenderAddress = GIVETH_HOUSE_ADDRESS;
 
-			// Define the amount to approve (0.1 USDCx)
-			const amountToApprove = ethers.utils.parseUnits('0.01', 18);
+			// Define the amount to approve (X.XX USDCx)
+			const amountToApprove = ethers.utils.parseUnits(STREAM_VALUE, 18);
 
 			// Check current allowance
 			const allowance = await usdcx.allowance({
@@ -56,9 +58,9 @@ const YourApp = () => {
 					gasLimit: ethers.utils.hexlify(200000),
 				});
 				await approveTxResponse.wait();
-				console.log('Approved 0.01 USDCx for spending.');
+				console.log(`Approved ${STREAM_VALUE} USDC for spending.`);
 			} else {
-				console.log('Already approved for 0.01 USDCx.');
+				console.log(`Already approved for ${STREAM_VALUE} USDC.`);
 			}
 
 			// Now execute the main transaction (transfer)
@@ -84,7 +86,7 @@ const YourApp = () => {
 
 	return (
 		<div style={{ textAlign: 'center', marginTop: '50px' }}>
-			<h1>Approve and Execute 0.1 USDC.ex</h1>
+			<h1>Approve and Execute {STREAM_VALUE} USDC</h1>
 			<button onClick={handleApproveAndExecute}>Approve & Execute</button>
 		</div>
 	);
