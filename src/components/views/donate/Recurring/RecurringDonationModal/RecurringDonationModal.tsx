@@ -217,6 +217,17 @@ const RecurringDonationInnerModal: FC<IRecurringDonationInnerModalProps> = ({
 			};
 			const sf = await Framework.create(_options);
 
+			const usdce = await sf.loadWrapperSuperToken(
+				'0x8430f084b939208e2eded1584889c9a66b90562f',
+			);
+			console.log('USDC.ex SuperToken loaded:', usdce.address);
+
+			const balance = await usdce.balanceOf({
+				account: address,
+				providerOrSigner: signer, // Use the signer to ensure correct network
+			});
+			console.log('USDC.ex SuperToken Balance:', balance.toString());
+
 			// EThx is not a Wrapper Super Token and should load separately
 			let superToken;
 			if (_superToken.symbol === 'ETHx') {

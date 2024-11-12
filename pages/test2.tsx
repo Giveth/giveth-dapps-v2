@@ -1,138 +1,91 @@
-import { useState } from 'react';
-import { useQueries } from '@tanstack/react-query';
-import { useAccount } from 'wagmi';
-import {
-	PublicKey,
-	LAMPORTS_PER_SOL,
-	Transaction,
-	SystemProgram,
-} from '@solana/web3.js';
-import BigNumber from 'bignumber.js';
-import { useConnection, useWallet } from '@solana/wallet-adapter-react';
-import FailedDonation, {
-	EDonationFailedType,
-} from '@/components/modals/FailedDonation';
-import { getTotalGIVpower } from '@/helpers/givpower';
-import { formatWeiHelper } from '@/helpers/number';
+import React from 'react';
+import { ethers } from 'ethers';
+import { Framework } from '@superfluid-finance/sdk-core';
 import config from '@/configuration';
-import { fetchSubgraphData } from '@/services/subgraph.service';
 
 const YourApp = () => {
-	const [failedModalType, setFailedModalType] =
-		useState<EDonationFailedType>();
-	const { address } = useAccount();
-	const subgraphValues = useQueries({
-		queries: config.CHAINS_WITH_SUBGRAPH.map(chain => ({
-			queryKey: ['subgraph', chain.id, address],
-			queryFn: async () => {
-				return await fetchSubgraphData(chain.id, address);
-			},
-			staleTime: config.SUBGRAPH_POLLING_INTERVAL,
-		})),
-	});
+	const handleApproveAndExecute = async () => {
+		try {
+			// Connect to MetaMask
+			if (!window.ethereum) {
+				alert('MetaMask not detected');
+				return;
+			}
 
-	// Solana wallet hooks
-	const {
-		publicKey,
-		disconnect: solanaWalletDisconnect,
-		signMessage: solanaSignMessage,
-		sendTransaction: solanaSendTransaction,
-		connecting: solanaIsConnecting,
-		connected: solanaIsConnected,
-	} = useWallet();
+			const provider = new ethers.providers.Web3Provider(window.ethereum);
+			await provider.send('eth_requestAccounts', []);
+			const signer = provider.getSigner();
+			const sf = await Framework.create({
+				chainId: config.OPTIMISM_CONFIG.id,
+				provider,
+			});
 
-	const { connection: solanaConnection } = useConnection();
+			// WORK 0x35adeb0638eb192755b6e52544650603fe65a006 USDCx
+			// NOT WORK 0x8430f084b939208e2eded1584889c9a66b90562f USDC.ex
 
-	const donateToSolana = async () => {
-		if (!publicKey) {
-			console.error('Wallet is not connected');
-			return;
-		}
-
-		console.log('Connection endpoint:', solanaConnection.rpcEndpoint);
-
-		const to = 'B6bfJUMPnpL2ddngPPe3M7QNpvrv7hiYYiGtg9iCJDMS';
-		const donationValue = 0.001;
-
-		console.log('publicKey', publicKey);
-		console.log('Public Key string:', publicKey.toString());
-
-		// Ensure the wallet has enough funds by requesting an airdrop if necessary
-		let balance = await solanaConnection.getBalance(publicKey);
-		console.log('Initial balance:', balance);
-		if (balance < LAMPORTS_PER_SOL) {
-			console.log('Airdropping 1 SOL for testing...');
-			const airdropSignature = await solanaConnection.requestAirdrop(
-				publicKey,
-				LAMPORTS_PER_SOL,
+			const address = await signer.getAddress();
+			const usdcx = await sf.loadWrapperSuperToken(
+				'0x8430f084b939208e2eded1584889c9a66b90562f',
 			);
-			await solanaConnection.confirmTransaction(airdropSignature);
-			balance = await solanaConnection.getBalance(publicKey);
-			console.log('New balance:', balance);
+			const spenderAddress = '0x567c4B141ED61923967cA25Ef4906C8781069a10';
+
+			// Define the amount to approve (0.1 USDCx)
+			const amountToApprove = ethers.utils.parseUnits('0.01', 18);
+
+			// Check current allowance
+			const allowance = await usdcx.allowance({
+				owner: address,
+				spender: spenderAddress,
+				providerOrSigner: signer,
+			});
+
+			// If allowance is insufficient, approve the required amount
+			if (ethers.BigNumber.from(allowance).lt(amountToApprove)) {
+				const approveOperation = usdcx.approve({
+					receiver: spenderAddress,
+					amount: amountToApprove.toString(),
+				});
+
+				// Get the populated transaction and send it with gasLimit
+				const populatedApproveTx =
+					await approveOperation.getPopulatedTransactionRequest(
+						signer,
+					);
+				const approveTxResponse = await signer.sendTransaction({
+					...populatedApproveTx,
+					gasLimit: ethers.utils.hexlify(200000),
+				});
+				await approveTxResponse.wait();
+				console.log('Approved 0.01 USDCx for spending.');
+			} else {
+				console.log('Already approved for 0.01 USDCx.');
+			}
+
+			// Now execute the main transaction (transfer)
+			const mainTransaction = await usdcx.transfer({
+				receiver: spenderAddress,
+				amount: amountToApprove.toString(),
+			});
+
+			// Get the populated transaction and send it with gasLimit
+			const populatedTransferTx =
+				await mainTransaction.getPopulatedTransactionRequest(signer);
+			const transferTxResponse = await signer.sendTransaction({
+				...populatedTransferTx,
+				gasLimit: ethers.utils.hexlify(200000),
+			});
+			await transferTxResponse.wait();
+			console.log('Transaction executed successfully.');
+		} catch (error) {
+			console.error('Error during approval or execution:', error);
+			alert('An error occurred. Check console for details.');
 		}
-
-		const lamports = new BigNumber(donationValue)
-			.times(LAMPORTS_PER_SOL)
-			.toFixed();
-
-		const transaction = new Transaction().add(
-			SystemProgram.transfer({
-				fromPubkey: publicKey!,
-				toPubkey: new PublicKey(to),
-				lamports: BigInt(lamports),
-			}),
-		);
-
-		console.log('Transaction', transaction);
-
-		console.log(
-			'Fee Payer:',
-			transaction.feePayer ? transaction.feePayer.toBase58() : 'None',
-		);
-
-		transaction.feePayer = publicKey;
-
-		const simulationResult =
-			await solanaConnection.simulateTransaction(transaction);
-		console.log('Simulation Result:', simulationResult);
-
-		if (simulationResult.value.err) {
-			console.error('Simulation error:', simulationResult.value.err);
-			return;
-		}
-
-		const hash = await solanaSendTransaction(transaction, solanaConnection);
-
-		console.log('hash', hash);
 	};
 
 	return (
-		<div>
-			<button onClick={donateToSolana}>DONATE ON SOLANA</button>
-			<w3m-button />
-			<div>
-				<button
-					onClick={() => {
-						const totalgivpower = getTotalGIVpower(
-							subgraphValues,
-							address,
-						);
-						console.log(
-							'totalgivpower',
-							formatWeiHelper(totalgivpower.total),
-						);
-					}}
-				>
-					Test Button
-				</button>
-			</div>
-			{failedModalType && (
-				<FailedDonation
-					txUrl={'0x01121212'}
-					setShowModal={() => setFailedModalType(undefined)}
-					type={failedModalType}
-				/>
-			)}
+		<div style={{ textAlign: 'center', marginTop: '50px' }}>
+			<h1>Approve and Execute 0.1 USDC.ex</h1>
+			<button onClick={handleApproveAndExecute}>Approve & Execute</button>
 		</div>
 	);
 };
