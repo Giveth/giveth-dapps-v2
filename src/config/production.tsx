@@ -533,7 +533,7 @@ const config: EnvConfig = {
 				decimals: 18,
 				id: '0x8430f084b939208e2eded1584889c9a66b90562f',
 				name: 'Super USD Coin',
-				symbol: 'USDCe',
+				symbol: 'USDC.ex',
 				isSuperToken: true,
 				coingeckoId: 'usd-coin',
 			},
