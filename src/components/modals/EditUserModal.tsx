@@ -96,7 +96,7 @@ const EditUserModal = ({
 			const { data } = await client.mutate({
 				mutation: SEND_USER_EMAIL_CONFIRMATION_CODE_FLOW,
 				variables: {
-					email: 'test£gmail.com',
+					email: 'kkatusic@gmail.com',
 				},
 			});
 			console.log(data);
