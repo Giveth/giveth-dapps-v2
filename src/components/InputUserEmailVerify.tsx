@@ -9,6 +9,7 @@ import {
 	Flex,
 	IconEmptyCircle,
 	IconCheckCircleFilled,
+	IconAlertCircle,
 } from '@giveth/ui-design-system';
 import React, {
 	forwardRef,
@@ -20,7 +21,7 @@ import React, {
 	useState,
 } from 'react';
 import styled, { css } from 'styled-components';
-import { useIntl } from 'react-intl';
+import { FormattedMessage, useIntl } from 'react-intl';
 import { EInputValidation, IInputValidation } from '@/types/inputValidation';
 import InputStyled from './styled-components/Input';
 import { getTextWidth } from '@/helpers/text';
@@ -31,7 +32,10 @@ import {
 } from '@/helpers/styledComponents';
 import { Spinner } from './Spinner';
 import { useProfileContext } from '@/context/profile.context';
-import { SEND_USER_EMAIL_CONFIRMATION_CODE_FLOW } from '@/apollo/gql/gqlUser';
+import {
+	SEND_USER_EMAIL_CONFIRMATION_CODE_FLOW,
+	SEND_USER_CONFIRMATION_CODE_FLOW,
+} from '@/apollo/gql/gqlUser';
 import { client } from '@/apollo/apolloClient';
 import type {
 	DeepRequired,
@@ -98,6 +102,10 @@ type InputType =
 			registerOptions?: never;
 	  } & IInput);
 
+interface IExtendedInputLabelProps extends IInputLabelProps {
+	$validation?: EInputValidation;
+}
+
 const InputUserEmailVerify = forwardRef<HTMLInputElement, InputType>(
 	(props, inputRef) => {
 		const { formatMessage } = useIntl();
@@ -110,10 +118,19 @@ const InputUserEmailVerify = forwardRef<HTMLInputElement, InputType>(
 		);
 		const [isVerificationProcess, setIsVerificationProcess] =
 			useState(false);
+		const [inputDescription, setInputDescription] = useState(
+			verified
+				? formatMessage({
+						id: 'label.email_already_verified',
+					})
+				: formatMessage({
+						id: 'label.email_used',
+					}),
+		);
+		const codeInputRef = useRef<HTMLInputElement>(null);
 
 		const {
 			label,
-			caption,
 			size = InputSize.MEDIUM,
 			disabled,
 			LeftIcon,
@@ -136,6 +153,12 @@ const InputUserEmailVerify = forwardRef<HTMLInputElement, InputType>(
 				? EInputValidation.NORMAL
 				: EInputValidation.ERROR,
 		);
+
+		const [validationCodeStatus, setValidationCodeStatus] = useState(
+			EInputValidation.SUCCESS,
+		);
+		const [disableCodeVerifyButton, setDisableCodeVerifyButton] =
+			useState(true);
 
 		// const inputRef = useRef<HTMLInputElement | null>(null);
 
@@ -183,18 +206,66 @@ const InputUserEmailVerify = forwardRef<HTMLInputElement, InputType>(
 			}
 		};
 
+		// Verification email handler, it will be called on button click
+		// It will send request to backend to check if email exists and if it's not verified yet
+		// or email is already exist on another user account
+		// If email isn't verified it will send email with verification code to user
 		const verificationEmailHandler = async () => {
-			console.log({ email });
 			try {
 				const { data } = await client.mutate({
 					mutation: SEND_USER_EMAIL_CONFIRMATION_CODE_FLOW,
 					variables: {
-						email: 'kkatusic@gmail.com',
+						email: email,
 					},
 				});
+
 				if (data.sendUserEmailConfirmationCodeFlow === 'EMAIL_EXIST') {
 					setValidationStatus(EInputValidation.WARNING);
 					setDisableVerifyButton(true);
+					setInputDescription(
+						formatMessage({
+							id: 'label.email_used_another',
+						}),
+					);
+				}
+
+				if (
+					data.sendUserEmailConfirmationCodeFlow ===
+					'VERIFICATION_SENT'
+				) {
+					setIsVerificationProcess(true);
+				}
+			} catch (error) {
+				console.log(error);
+			}
+		};
+
+		// Verification code handler, it will be called on button click
+		const handleInputCodeChange = (
+			e: React.ChangeEvent<HTMLInputElement>,
+		) => {
+			const value = e.target.value;
+			value.length >= 5
+				? setDisableCodeVerifyButton(false)
+				: setDisableCodeVerifyButton(true);
+		};
+
+		// Sent verification code to backend to check if it's correct
+		const handleButtonCodeChange = async () => {
+			try {
+				const { data } = await client.mutate({
+					mutation: SEND_USER_CONFIRMATION_CODE_FLOW,
+					variables: {
+						verifyCode: codeInputRef.current?.value,
+					},
+				});
+
+				if (
+					data.sendUserConfirmationCodeFlow === 'VERIFICATION_SUCCESS'
+				) {
+					setIsVerificationProcess(false);
+					setDisableCodeVerifyButton(true);
+					setVerified(true);
 				}
 			} catch (error) {
 				console.log(error);
@@ -209,6 +280,11 @@ const InputUserEmailVerify = forwardRef<HTMLInputElement, InputType>(
 							$disabled={disabled}
 							size={InputSizeToLinkSize(size)}
 							$required={Boolean(registerOptions.required)}
+							$validation={
+								isVerificationProcess
+									? EInputValidation.ERROR
+									: undefined
+							}
 						>
 							{label}
 						</InputLabel>
@@ -221,13 +297,16 @@ const InputUserEmailVerify = forwardRef<HTMLInputElement, InputType>(
 						</LeftIconWrapper>
 					)}
 					<InputStyled
-						$validation={validationStatus}
+						$validation={
+							isVerificationProcess
+								? EInputValidation.NORMAL
+								: undefined
+						}
 						$inputSize={size}
-						$hasLeftIcon={!!LeftIcon}
-						disabled={disabled}
 						maxLength={maxLength}
 						value={value}
 						id={id}
+						disabled={isVerificationProcess}
 						{...restRegProps}
 						{...rest}
 						ref={e => {
@@ -245,27 +324,22 @@ const InputUserEmailVerify = forwardRef<HTMLInputElement, InputType>(
 					>
 						{suffix}
 					</SuffixWrapper>
-					<Absolute>
-						<VerifyInputButtonWrapper
-							type='button'
-							$verified={verified}
-							disabled={disableVerifyButton}
-							onClick={verificationEmailHandler}
-						>
-							<Flex $alignItems='center' gap='8px'>
-								{!isVerificationProcess && !verified && (
-									<IconEmptyCircle />
-								)}
-								{!isVerificationProcess && verified && (
-									<IconCheckCircleFilled />
-								)}
-								{!!isVerificationProcess && (
-									<Spinner size={16} />
-								)}
-								<span>{labelButton}</span>
-							</Flex>
-						</VerifyInputButtonWrapper>
-					</Absolute>
+					{!isVerificationProcess && (
+						<Absolute>
+							<VerifyInputButtonWrapper
+								type='button'
+								$verified={verified}
+								disabled={disableVerifyButton}
+								onClick={verificationEmailHandler}
+							>
+								<Flex $alignItems='center' gap='8px'>
+									{!verified && <IconEmptyCircle />}
+									{verified && <IconCheckCircleFilled />}
+									<span>{labelButton}</span>
+								</Flex>
+							</VerifyInputButtonWrapper>
+						</Absolute>
+					)}
 					<Absolute>
 						{isValidating && <Spinner size={40} />}
 						{maxLength && (
@@ -283,12 +357,84 @@ const InputUserEmailVerify = forwardRef<HTMLInputElement, InputType>(
 						{error.message as string}
 					</InputValidation>
 				) : (
-					<InputDesc size={InputSizeToLinkSize(size)}>
-						{verified &&
-							formatMessage({
-								id: 'label.email_already_verified',
-							})}
-					</InputDesc> //hidden char
+					<InputDesc
+						size={InputSizeToLinkSize(size)}
+						validationStatus={validationStatus}
+					>
+						{inputDescription}
+					</InputDesc>
+				)}
+				{isVerificationProcess && (
+					<ValidationCode>
+						<EmailSentNotification
+							gap='8px'
+							$alignItems='center'
+							$justifyContent='center'
+						>
+							<IconAlertCircle />
+							{formatMessage(
+								{
+									id: 'label.email_sent_to',
+								},
+								{ email },
+							)}
+						</EmailSentNotification>
+						<label htmlFor='code'>
+							<InputLabel
+								$disabled={disabled}
+								size={InputSizeToLinkSize(size)}
+							>
+								{formatMessage({
+									id: 'label.email_please_verify',
+								})}
+							</InputLabel>
+						</label>
+						<InputWrapper>
+							<InputStyled
+								$validation={validationCodeStatus}
+								$inputSize={size}
+								$hasLeftIcon={!!LeftIcon}
+								maxLength={5}
+								id='code'
+								ref={codeInputRef}
+								data-testid='styled-input'
+								onChange={handleInputCodeChange}
+							/>
+							<Absolute>
+								<VerifyInputButtonWrapper
+									type='button'
+									$verified={verified}
+									disabled={disableCodeVerifyButton}
+									onClick={handleButtonCodeChange}
+								>
+									<Flex $alignItems='center' gap='8px'>
+										{!verified && <IconEmptyCircle />}
+										{verified && <IconCheckCircleFilled />}
+										<span>
+											{formatMessage({
+												id: 'label.email_confirm_code',
+											})}
+										</span>
+									</Flex>
+								</VerifyInputButtonWrapper>
+							</Absolute>
+						</InputWrapper>
+						<InputCodeDesc>
+							<FormattedMessage
+								id='label.email_get_resend'
+								values={{
+									button: chunks => (
+										<button
+											type='button'
+											onClick={verificationEmailHandler}
+										>
+											{chunks}
+										</button>
+									),
+								}}
+							/>
+						</InputCodeDesc>
+					</ValidationCode>
 				)}
 			</InputContainer>
 		);
@@ -322,10 +468,12 @@ const InputContainer = styled.div`
 	flex: 1;
 `;
 
-const InputLabel = styled(GLink)<IInputLabelProps>`
+const InputLabel = styled(GLink)<IExtendedInputLabelProps>`
 	padding-bottom: 4px;
 	color: ${props =>
-		props.$disabled ? neutralColors.gray[600] : neutralColors.gray[900]};
+		props.$validation === EInputValidation.ERROR
+			? semanticColors.punch[600]
+			: neutralColors.gray[900]};
 	&::after {
 		content: '*';
 		display: ${props => (props.$required ? 'inline-block' : 'none')};
@@ -334,9 +482,22 @@ const InputLabel = styled(GLink)<IInputLabelProps>`
 	}
 `;
 
-const InputDesc = styled(GLink)`
+const InputDesc = styled(GLink)<{ validationStatus: EInputValidation }>`
 	padding-top: 4px;
-	color: ${neutralColors.gray[900]};
+	color: ${props => {
+		switch (props.validationStatus) {
+			case EInputValidation.NORMAL:
+				return neutralColors.gray[900];
+			case EInputValidation.WARNING:
+				return semanticColors.golden[600];
+			case EInputValidation.ERROR:
+				return semanticColors.punch[500];
+			case EInputValidation.SUCCESS:
+				return semanticColors.jade[500];
+			default:
+				return neutralColors.gray[300];
+		}
+	}};
 	display: block;
 `;
 
@@ -437,6 +598,43 @@ const VerifyInputButtonWrapper = styled.button<VerifyInputButtonWrapperProps>`
 	}
 	&:disabled {
 		opacity: 0.5;
+	}
+`;
+
+const ValidationCode = styled(Flex)`
+	flex-direction: column;
+	margin-top: 30px;
+	margin-bottom: 25px;
+`;
+
+const EmailSentNotification = styled(Flex)`
+	width: 100%;
+	margin-bottom: 20px;
+	border: 1px solid ${brandColors.giv[200]};
+	padding: 16px;
+	border-radius: 8px;
+	font-size: 12px;
+	font-weight: 400;
+	line-height: 15.88px;
+	text-align: left;
+	color: ${brandColors.giv[500]};
+	svg {
+		color: ${brandColors.giv[500]};
+	}
+`;
+
+const InputCodeDesc = styled(GLink)`
+	padding-top: 4px;
+	font-size: 0.625rem;
+	line-height: 132%;
+	& button {
+		background: none;
+		border: none;
+		padding: 0;
+		color: ${brandColors.pinky[400]};
+		font-size: 0.625rem;
+		line-height: 132%;
+		cursor: pointer;
 	}
 `;
 

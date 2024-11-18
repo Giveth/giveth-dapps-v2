@@ -262,3 +262,9 @@ export const SEND_USER_EMAIL_CONFIRMATION_CODE_FLOW = gql`
 		sendUserEmailConfirmationCodeFlow(email: $email)
 	}
 `;
+
+export const SEND_USER_CONFIRMATION_CODE_FLOW = gql`
+	mutation SendUserConfirmationCodeFlow($verifyCode: String!) {
+		sendUserConfirmationCodeFlow(verifyCode: $verifyCode)
+	}
+`;
