@@ -37,6 +37,7 @@ import {
 	SEND_USER_CONFIRMATION_CODE_FLOW,
 } from '@/apollo/gql/gqlUser';
 import { client } from '@/apollo/apolloClient';
+import { showToastError } from '@/lib/helpers';
 import type {
 	DeepRequired,
 	FieldError,
@@ -109,7 +110,7 @@ interface IExtendedInputLabelProps extends IInputLabelProps {
 const InputUserEmailVerify = forwardRef<HTMLInputElement, InputType>(
 	(props, inputRef) => {
 		const { formatMessage } = useIntl();
-		const { user } = useProfileContext();
+		const { user, updateUser } = useProfileContext();
 
 		const [email, setEmail] = useState(user.email);
 		const [verified, setVerified] = useState(user.isEmailVerified);
@@ -204,6 +205,13 @@ const InputUserEmailVerify = forwardRef<HTMLInputElement, InputType>(
 			} else {
 				setDisableVerifyButton(true);
 			}
+
+			// Check if user is changing email address
+			if (e.target.value !== user.email) {
+				setVerified(false);
+			} else {
+				setVerified(true);
+			}
 		};
 
 		// Verification email handler, it will be called on button click
@@ -234,6 +242,12 @@ const InputUserEmailVerify = forwardRef<HTMLInputElement, InputType>(
 					'VERIFICATION_SENT'
 				) {
 					setIsVerificationProcess(true);
+					setValidationStatus(EInputValidation.NORMAL);
+					setInputDescription(
+						formatMessage({
+							id: 'label.email_used',
+						}),
+					);
 				}
 			} catch (error) {
 				console.log(error);
@@ -257,17 +271,29 @@ const InputUserEmailVerify = forwardRef<HTMLInputElement, InputType>(
 					mutation: SEND_USER_CONFIRMATION_CODE_FLOW,
 					variables: {
 						verifyCode: codeInputRef.current?.value,
+						email: email,
 					},
 				});
 
 				if (
 					data.sendUserConfirmationCodeFlow === 'VERIFICATION_SUCCESS'
 				) {
+					// Reset states
 					setIsVerificationProcess(false);
 					setDisableCodeVerifyButton(true);
 					setVerified(true);
+					setValidationCodeStatus(EInputValidation.SUCCESS);
+
+					// Update user data
+					updateUser({
+						email: email,
+						isEmailVerified: true,
+					});
 				}
 			} catch (error) {
+				if (error instanceof Error) {
+					showToastError(error.message);
+				}
 				console.log(error);
 			}
 		};
@@ -359,7 +385,7 @@ const InputUserEmailVerify = forwardRef<HTMLInputElement, InputType>(
 				) : (
 					<InputDesc
 						size={InputSizeToLinkSize(size)}
-						validationStatus={validationStatus}
+						$validationstatus={validationStatus}
 					>
 						{inputDescription}
 					</InputDesc>
@@ -482,10 +508,10 @@ const InputLabel = styled(GLink)<IExtendedInputLabelProps>`
 	}
 `;
 
-const InputDesc = styled(GLink)<{ validationStatus: EInputValidation }>`
+const InputDesc = styled(GLink)<{ $validationstatus: EInputValidation }>`
 	padding-top: 4px;
 	color: ${props => {
-		switch (props.validationStatus) {
+		switch (props.$validationstatus) {
 			case EInputValidation.NORMAL:
 				return neutralColors.gray[900];
 			case EInputValidation.WARNING:

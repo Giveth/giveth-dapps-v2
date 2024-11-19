@@ -9,6 +9,7 @@ import {
 	Flex,
 	FlexCenter,
 	IconArrowDownCircle16,
+	semanticColors,
 } from '@giveth/ui-design-system';
 import React, { FC, useState } from 'react';
 import { useIntl } from 'react-intl';
@@ -54,6 +55,8 @@ export const AdminActions = () => {
 	const { chain } = useAccount();
 	const { switchChain } = useSwitchChain();
 	const chainId = chain?.id;
+
+	const { isAdminEmailVerified } = useProjectContext();
 
 	const isVerificationDisabled =
 		isGivbackEligible ||
@@ -132,86 +135,109 @@ export const AdminActions = () => {
 	};
 
 	return !isMobile ? (
-		<Wrapper>
-			<Dropdown
-				style={dropdownStyle}
-				label='Project Actions'
-				options={options}
-			/>
-			{showVerificationModal && (
-				<VerificationModal
-					onClose={() => setShowVerificationModal(false)}
-				/>
+		<>
+			{!isAdminEmailVerified && (
+				<VerifyNotification>
+					{formatMessage({
+						id: 'label.email_actions_text',
+					})}
+				</VerifyNotification>
 			)}
-			{deactivateModal && (
-				<DeactivateProjectModal
-					setShowModal={setDeactivateModal}
-					projectId={projectData?.id}
-					onSuccess={fetchProjectBySlug}
+			<Wrapper $verified={isAdminEmailVerified}>
+				<Dropdown
+					style={dropdownStyle}
+					label='Project Actions'
+					options={options}
 				/>
-			)}
-			{showShareModal && (
-				<ShareModal
-					contentType={EContentType.thisProject}
-					setShowModal={setShowShareModal}
-					projectHref={slug}
-				/>
-			)}
-			{showClaimModal && (
-				<ClaimRecurringDonationModal
-					setShowModal={setShowClaimModal}
-					project={project}
-				/>
-			)}
-		</Wrapper>
+				{showVerificationModal && (
+					<VerificationModal
+						onClose={() => setShowVerificationModal(false)}
+					/>
+				)}
+				{deactivateModal && (
+					<DeactivateProjectModal
+						setShowModal={setDeactivateModal}
+						projectId={projectData?.id}
+						onSuccess={fetchProjectBySlug}
+					/>
+				)}
+				{showShareModal && (
+					<ShareModal
+						contentType={EContentType.thisProject}
+						setShowModal={setShowShareModal}
+						projectHref={slug}
+					/>
+				)}
+				{showClaimModal && (
+					<ClaimRecurringDonationModal
+						setShowModal={setShowClaimModal}
+						project={project}
+					/>
+				)}
+			</Wrapper>
+		</>
 	) : (
-		<MobileWrapper
-			gap='4px'
-			onClick={() => setShowMobileActionsModal(true)}
-		>
-			<div>Project Actions</div>
-			<IconChevronDown24 />
-			{showMobileActionsModal && (
-				<MobileActionsModal setShowModal={setShowMobileActionsModal}>
-					{options.map(option => (
-						<MobileActionModalItem
-							key={option.label}
-							onClick={option.cb}
-						>
-							<Flex gap='8px'>
-								<Flex $alignItems='center'>{option.icon}</Flex>
-								<div>{option.label}</div>
-							</Flex>
-						</MobileActionModalItem>
-					))}
-					{showVerificationModal && (
-						<VerificationModal
-							onClose={() => setShowVerificationModal(false)}
-						/>
-					)}
-					{deactivateModal && (
-						<DeactivateProjectModal
-							setShowModal={setDeactivateModal}
-							projectId={projectData?.id}
-							onSuccess={fetchProjectBySlug}
-						/>
-					)}
-					{showShareModal && (
-						<ShareModal
-							contentType={EContentType.thisProject}
-							setShowModal={setShowShareModal}
-							projectHref={slug}
-						/>
-					)}
-				</MobileActionsModal>
+		<>
+			{!isAdminEmailVerified && (
+				<VerifyNotification>
+					{formatMessage({
+						id: 'label.email_actions_text',
+					})}
+				</VerifyNotification>
 			)}
-			{showClaimModal && (
-				<ClaimRecurringDonationModal
-					setShowModal={setShowClaimModal}
-					project={project}
-				/>
-			)}
-		</MobileWrapper>
+			<MobileWrapper
+				gap='4px'
+				onClick={() => setShowMobileActionsModal(true)}
+				$verified={isAdminEmailVerified}
+			>
+				<div>Project Actions</div>
+				<IconChevronDown24 />
+				{showMobileActionsModal && (
+					<MobileActionsModal
+						setShowModal={setShowMobileActionsModal}
+					>
+						{options.map(option => (
+							<MobileActionModalItem
+								key={option.label}
+								onClick={option.cb}
+							>
+								<Flex gap='8px'>
+									<Flex $alignItems='center'>
+										{option.icon}
+									</Flex>
+									<div>{option.label}</div>
+								</Flex>
+							</MobileActionModalItem>
+						))}
+						{showVerificationModal && (
+							<VerificationModal
+								onClose={() => setShowVerificationModal(false)}
+							/>
+						)}
+						{deactivateModal && (
+							<DeactivateProjectModal
+								setShowModal={setDeactivateModal}
+								projectId={projectData?.id}
+								onSuccess={fetchProjectBySlug}
+							/>
+						)}
+						{showShareModal && (
+							<ShareModal
+								contentType={EContentType.thisProject}
+								setShowModal={setShowShareModal}
+								projectHref={slug}
+							/>
+						)}
+					</MobileActionsModal>
+				)}
+				{showClaimModal && (
+					<ClaimRecurringDonationModal
+						setShowModal={setShowClaimModal}
+						project={project}
+					/>
+				)}
+			</MobileWrapper>
+		</>
 	);
 };
 
@@ -232,22 +258,36 @@ const MobileActionsModal: FC<IMobileActionsModalProps> = ({
 	);
 };
 
-const Wrapper = styled.div`
+interface WrapperProps {
+	$verified: boolean;
+}
+
+const Wrapper = styled.div<WrapperProps>`
 	order: 1;
 	margin-bottom: 16px;
+	opacity: ${({ $verified }) => ($verified ? 1 : 0.5)};
+	pointer-events: ${({ $verified }) => ($verified ? 'auto' : 'none')};
 	${mediaQueries.tablet} {
 		margin-bottom: 5px;
 		order: unset;
 	}
 `;
 
-const MobileWrapper = styled(FlexCenter)`
+const MobileWrapper = styled(FlexCenter)<WrapperProps>`
 	padding: 10px 16px;
 	background-color: ${neutralColors.gray[300]};
+	opacity: ${({ $verified }) => ($verified ? 1 : 0.5)};
+	pointer-events: ${({ $verified }) => ($verified ? 'auto' : 'none')};
 	border-radius: 8px;
 `;
 
 const MobileActionModalItem = styled(Flex)`
 	padding: 16px 24px;
 	border-bottom: ${neutralColors.gray[400]} 1px solid;
+`;
+
+const VerifyNotification = styled.div`
+	font-size: 14px;
+	text-align: center;
+	color: ${semanticColors.golden[600]};
 `;
