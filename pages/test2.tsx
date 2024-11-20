@@ -7,9 +7,16 @@ const USDCex_TOKEN_ADDRESS = '0x8430f084b939208e2eded1584889c9a66b90562f'; // NO
 const GIVETH_HOUSE_ADDRESS = '0x567c4B141ED61923967cA25Ef4906C8781069a10';
 
 const TOKEN_ADDRESSES = [
-	{ name: 'USDCx', address: '0x35adeb0638eb192755b6e52544650603fe65a006' },
 	{ name: 'USDCex', address: '0x8430f084b939208e2eded1584889c9a66b90562f' },
-	{ name: 'USDC', address: '0x0b2C639c533813f4Aa9D7837CAf62653d097Ff85' },
+	{
+		name: 'USDC bridge',
+		address: '0x7f5c764cbc14f9669b88837ca1490cca17c31607',
+	},
+	{ name: 'USDCx', address: '0x35adeb0638eb192755b6e52544650603fe65a006' },
+	{
+		name: 'USDC native',
+		address: '0x0b2C639c533813f4Aa9D7837CAf62653d097Ff85',
+	},
 ];
 
 const OPTIMISM_CHAIN_ID = 10;
