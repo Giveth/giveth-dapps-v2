@@ -209,7 +209,7 @@ const InputUserEmailVerify = forwardRef<HTMLInputElement, InputType>(
 			// Check if user is changing email address
 			if (e.target.value !== user.email) {
 				setVerified(false);
-			} else {
+			} else if (e.target.value !== user.email && user.isEmailVerified) {
 				setVerified(true);
 			}
 		};
@@ -250,6 +250,9 @@ const InputUserEmailVerify = forwardRef<HTMLInputElement, InputType>(
 					);
 				}
 			} catch (error) {
+				if (error instanceof Error) {
+					showToastError(error.message);
+				}
 				console.log(error);
 			}
 		};

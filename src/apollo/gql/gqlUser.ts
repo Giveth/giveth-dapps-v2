@@ -179,6 +179,7 @@ export const UPDATE_USER = gql`
 		$firstName: String
 		$avatar: String
 		$newUser: Boolean
+		$isFirstUpdate: Boolean
 	) {
 		updateUser(
 			url: $url
@@ -188,6 +189,7 @@ export const UPDATE_USER = gql`
 			lastName: $lastName
 			avatar: $avatar
 			newUser: $newUser
+			isFirstUpdate: $isFirstUpdate
 		)
 	}
 `;

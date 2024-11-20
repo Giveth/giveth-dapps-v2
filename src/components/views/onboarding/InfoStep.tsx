@@ -80,6 +80,7 @@ const InfoStep: FC<IStep> = ({ setStep }) => {
 				variables: {
 					...formData,
 					newUser: true,
+					isFirstUpdate: true,
 				},
 			});
 			if (response.updateUser) {
