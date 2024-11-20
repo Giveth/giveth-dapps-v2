@@ -88,6 +88,8 @@ const YourApp = () => {
 				provider,
 			});
 
+			console.log({ sf });
+
 			const address = await signer.getAddress();
 
 			// Get token details (decimals, etc.)
@@ -106,12 +108,15 @@ const YourApp = () => {
 				tokenDecimals,
 			);
 
+			const flowRatePerSecond = amountToApprove.div(30 * 24 * 60 * 60); // Convert monthly to per-second rate
+
 			// Determine the token type
 			const { type, superToken } = await determineTokenType(
 				sf,
 				selectedToken,
 			);
 
+			console.log('Selected token:', selectedToken);
 			console.log('Super type:', type);
 			console.log('Super Token:', superToken);
 
@@ -151,51 +156,67 @@ const YourApp = () => {
 					console.log(`Approved ${amount} ${type} super tokens.`);
 				}
 
-				// Transfer or execute the operation
-				const transferOperation = superToken.transfer({
+				// Create the stream
+				const createFlowOperation = superToken.createFlow({
+					sender: address,
 					receiver: destinationAddress,
-					amount: amountToApprove.toString(),
+					flowRate: flowRatePerSecond.toString(),
 				});
 
-				const transferTxResponse = await signer.sendTransaction(
-					await transferOperation.getPopulatedTransactionRequest(
-						signer,
-					),
+				console.log({ createFlowOperation });
+
+				const flowTxResponse = await createFlowOperation.exec(
+					signer,
+					50,
 				);
-				await transferTxResponse.wait();
-				console.log('Super token transaction executed.');
-				setNotification(
-					'Super Token transaction executed successfully!',
-				);
+				await flowTxResponse.wait();
+				console.log('Stream created successfully.');
+				setNotification('Stream created successfully!');
 			} else if (type === 'erc20') {
-				console.log('Regular ERC-20 token detected');
+				console.log(
+					'Regular ERC-20 token detected. Upgrading to Super Token...',
+				);
+				const wrapperSuperToken =
+					await sf.loadSuperToken(selectedToken);
+
+				console.log({ wrapperSuperToken });
+
+				// Approve upgrade if needed
 				const erc20Contract = new ethers.Contract(
 					selectedToken,
 					[
 						'function approve(address spender, uint256 amount) public returns (bool)',
-						'function transfer(address recipient, uint256 amount) public returns (bool)',
 					],
 					signer,
 				);
-
-				// Approve the transfer
 				const approveTx = await erc20Contract.approve(
-					destinationAddress,
+					wrapperSuperToken.address,
 					amountToApprove,
 				);
 				await approveTx.wait();
-				console.log(`Approved ${amount} regular ERC-20 tokens.`);
+				console.log('ERC-20 token approved for upgrade.');
 
-				// Execute the transfer
-				const transferTx = await erc20Contract.transfer(
-					destinationAddress,
-					amountToApprove,
+				// Upgrade ERC20 to Super Token
+				// const upgradeOp = wrapperSuperToken.upgrade({
+				// 	amount: amountToApprove.toString(),
+				// });
+				// await upgradeOp.exec(signer);
+				// console.log('Upgrade complete.');
+
+				// Create the stream
+				const createFlowOperation = wrapperSuperToken.createFlow({
+					sender: address,
+					receiver: destinationAddress,
+					flowRate: flowRatePerSecond.toString(),
+				});
+
+				const flowTxResponse = await createFlowOperation.exec(
+					signer,
+					50,
 				);
-				await transferTx.wait();
-				console.log('Regular token transaction executed.');
-				setNotification(
-					'Regular ERC-20 transaction executed successfully!',
-				);
+				await flowTxResponse.wait();
+				console.log('Stream created successfully.');
+				setNotification('Stream created successfully!');
 			}
 		} catch (error) {
 			console.error('Error during approval or execution:', error);
