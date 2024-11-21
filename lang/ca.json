@@ -394,6 +394,7 @@
 	"label.email_confirm_code": "Confirma el codi",
 	"label.email_verify_banner": "Obté l'accés complet als teus comptes i projectes. Verifica la teva adreça de correu electrònic! <button>Verifica el correu</button>",
 	"label.email_actions_text": "Verifica el teu correu electrònic per gestionar els teus projectes!",
+	"label.email_error_verify": "Error de verificació del correu electrònic",
 	"label.enable_change": "Habilita el canvi",
 	"label.enable_recurring_donations": "Habilitar Donacions Recurrents",
 	"label.ends_on": "acaba el",

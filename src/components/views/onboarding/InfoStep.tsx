@@ -37,7 +37,6 @@ import { fetchUserByAddress } from '@/features/user/user.thunks';
 import { requiredOptions, validators } from '@/lib/constants/regex';
 import { useGeneralWallet } from '@/providers/generalWalletProvider';
 import { client } from '@/apollo/apolloClient';
-import { showToastError } from '@/lib/helpers';
 import InputStyled from '@/components/styled-components/Input';
 import { EInputValidation } from '@/types/inputValidation';
 
@@ -151,10 +150,16 @@ const InfoStep: FC<IStep> = ({ setStep }) => {
 			if (data.sendUserEmailConfirmationCodeFlow === 'EMAIL_EXIST') {
 				setValidationStatus(EInputValidation.WARNING);
 				setDisableVerifyButton(true);
-				showToastError(
+				gToast(
 					formatMessage({
 						id: 'label.email_used_another',
 					}),
+					{
+						type: ToastType.DANGER,
+						title: formatMessage({
+							id: 'label.email_error_verify',
+						}),
+					},
 				);
 			}
 
@@ -171,7 +176,12 @@ const InfoStep: FC<IStep> = ({ setStep }) => {
 			}
 		} catch (error) {
 			if (error instanceof Error) {
-				showToastError(error.message);
+				gToast(error.message, {
+					type: ToastType.DANGER,
+					title: formatMessage({
+						id: 'label.email_error_verify',
+					}),
+				});
 			}
 			console.log(error);
 		}
@@ -205,7 +215,12 @@ const InfoStep: FC<IStep> = ({ setStep }) => {
 			}
 		} catch (error) {
 			if (error instanceof Error) {
-				showToastError(error.message);
+				gToast(error.message, {
+					type: ToastType.DANGER,
+					title: formatMessage({
+						id: 'label.email_error_verify',
+					}),
+				});
 			}
 			console.log(error);
 		}
