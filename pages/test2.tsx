@@ -190,19 +190,6 @@ const YourApp = () => {
 					console.log(`Approved ${amount} ${type} super tokens.`);
 				}
 
-				// // Create the stream
-				// const createFlowOperation = superToken.createFlow({
-				// 	sender: address,
-				// 	receiver: destinationAddress,
-				// 	flowRate: flowRatePerSecond.toString(),
-				// });
-
-				// console.log({ createFlowOperation });
-
-				// const flowTxResponse = await createFlowOperation.exec(signer);
-				// await flowTxResponse.wait();
-				// console.log('Stream created successfully.');
-				// setNotification('Stream created successfully!');
 				// Check for existing flow
 				const flowStatus = await checkIfFlowExists(
 					sf,
@@ -251,45 +238,6 @@ const YourApp = () => {
 					setNotification('Flow created successfully!');
 				}
 			} else if (type === 'erc20') {
-				// console.log(
-				// 	'Regular ERC-20 token detected. Upgrading to Super Token...',
-				// );
-				// const wrapperSuperToken =
-				// 	await sf.loadSuperToken(selectedToken);
-				// console.log({ wrapperSuperToken });
-				// // Approve upgrade if needed
-				// const erc20Contract = new ethers.Contract(
-				// 	selectedToken,
-				// 	[
-				// 		'function approve(address spender, uint256 amount) public returns (bool)',
-				// 	],
-				// 	signer,
-				// );
-				// const approveTx = await erc20Contract.approve(
-				// 	wrapperSuperToken.address,
-				// 	amountToApprove,
-				// );
-				// await approveTx.wait();
-				// console.log('ERC-20 token approved for upgrade.');
-				// // Upgrade ERC20 to Super Token
-				// // const upgradeOp = wrapperSuperToken.upgrade({
-				// // 	amount: amountToApprove.toString(),
-				// // });
-				// // await upgradeOp.exec(signer);
-				// // console.log('Upgrade complete.');
-				// // Create the stream
-				// const createFlowOperation = wrapperSuperToken.createFlow({
-				// 	sender: address,
-				// 	receiver: destinationAddress,
-				// 	flowRate: flowRatePerSecond.toString(),
-				// });
-				// const flowTxResponse = await createFlowOperation.exec(
-				// 	signer,
-				// 	50,
-				// );
-				// await flowTxResponse.wait();
-				// console.log('Stream created successfully.');
-				// setNotification('Stream created successfully!');
 				console.log('Approving underlying ERC-20 token for upgrade...');
 
 				const operations: Operation[] = [];
@@ -314,9 +262,9 @@ const YourApp = () => {
 				console.log('Underlying ERC-20 token approved for upgrade.');
 
 				// Interact with the Super Token contract to perform the upgrade
-				const superTokenAbi = [
-					'function upgrade(uint256 amount) external',
-				];
+				// const superTokenAbi = [
+				// 	'function upgrade(uint256 amount) external',
+				// ];
 				// const superTokenContract = new ethers.Contract(
 				// 	wrapperSuperToken.address,
 				// 	superTokenAbi,
