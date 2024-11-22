@@ -23,6 +23,7 @@ import { requiredOptions, validators } from '@/lib/constants/regex';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
 import useUpload from '@/hooks/useUpload';
 import { useGeneralWallet } from '@/providers/generalWalletProvider';
+import InputUserEmailVerify from '../InputUserEmailVerify';
 
 interface IEditUserModal extends IModal {
 	user: IUser;
@@ -164,28 +165,36 @@ const EditUserModal = ({
 					</FlexCenter>
 					<form onSubmit={handleSubmit(onSubmit)}>
 						<InputWrapper>
-							{inputFields.map(field => (
-								<Input
-									defaultValue={(user as any)[field.name]}
-									key={field.name}
-									registerName={field.name}
-									label={formatMessage({
-										id: field.label,
-									})}
-									placeholder={field.placeholder}
-									caption={
-										field.caption &&
-										formatMessage({
-											id: field.caption,
-										})
-									}
-									size={InputSize.SMALL}
-									register={register}
-									error={(errors as any)[field.name]}
-									registerOptions={field.registerOptions}
-								/>
-							))}
-							<Button
+							{inputFields.map(field => {
+								// We load different input components for email becasue validation is different
+								const InputComponent =
+									field.type === 'email'
+										? InputUserEmailVerify
+										: Input;
+
+								return (
+									<InputComponent
+										defaultValue={(user as any)[field.name]}
+										key={field.name}
+										registerName={field.name}
+										label={formatMessage({
+											id: field.label,
+										})}
+										placeholder={field.placeholder}
+										caption={
+											field.caption &&
+											formatMessage({
+												id: field.caption,
+											})
+										}
+										size={InputSize.SMALL}
+										register={register}
+										error={(errors as any)[field.name]}
+										registerOptions={field.registerOptions}
+									/>
+								);
+							})}
+							<ButtonEditSave
 								buttonType='secondary'
 								label={formatMessage({
 									id: 'label.save',
@@ -222,7 +231,7 @@ const inputFields = [
 		registerOptions: requiredOptions.lastName,
 	},
 	{
-		label: 'label.email',
+		label: 'label.email_address',
 		placeholder: 'Example@Domain.com',
 		name: 'email',
 		type: 'email',
@@ -269,6 +278,10 @@ const InputWrapper = styled.div`
 	flex-direction: column;
 	gap: 8px;
 	text-align: left;
+`;
+
+const ButtonEditSave = styled(Button)`
+	margin-top: 24px;
 `;
 
 export default EditUserModal;

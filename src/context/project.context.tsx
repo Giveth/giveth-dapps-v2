@@ -56,6 +56,7 @@ interface IProjectContext {
 	isActive: boolean;
 	isDraft: boolean;
 	isAdmin: boolean;
+	isAdminEmailVerified: boolean;
 	hasActiveQFRound: boolean;
 	totalDonationsCount: number;
 	isCancelled: boolean;
@@ -73,6 +74,7 @@ const ProjectContext = createContext<IProjectContext>({
 	isActive: true,
 	isDraft: false,
 	isAdmin: false,
+	isAdminEmailVerified: false,
 	hasActiveQFRound: false,
 	totalDonationsCount: 0,
 	isCancelled: false,
@@ -109,6 +111,8 @@ export const ProjectProvider = ({
 		projectData?.adminUser?.walletAddress,
 		user?.walletAddress,
 	);
+
+	const isAdminEmailVerified = !!(isAdmin && user?.isEmailVerified);
 
 	const hasActiveQFRound = hasActiveRound(projectData?.qfRounds);
 
@@ -313,6 +317,7 @@ export const ProjectProvider = ({
 				isActive,
 				isDraft,
 				isAdmin,
+				isAdminEmailVerified,
 				hasActiveQFRound,
 				totalDonationsCount,
 				isCancelled,
