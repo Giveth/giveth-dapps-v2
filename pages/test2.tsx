@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { ethers } from 'ethers';
-import { Framework } from '@superfluid-finance/sdk-core';
+import { Framework, Operation } from '@superfluid-finance/sdk-core';
 
 const GIVETH_HOUSE_ADDRESS = '0x567c4B141ED61923967cA25Ef4906C8781069a10';
 
@@ -70,6 +70,40 @@ const YourApp = () => {
 		// If both checks fail, it's a regular ERC-20 token
 		console.log('Regular ERC-20 token detected.');
 		return { type: 'erc20', superToken: null };
+	};
+
+	// Function to check if a flow exists
+	const checkIfFlowExists = async (
+		sf: {
+			cfaV1: {
+				getFlow: (arg0: {
+					superToken: any;
+					sender: any;
+					receiver: any;
+					providerOrSigner: any;
+				}) => any;
+			};
+		},
+		superTokenAddress: any,
+		senderAddress: any,
+		receiverAddress: any,
+		signer: any,
+	) => {
+		try {
+			const flowInfo = await sf.cfaV1.getFlow({
+				superToken: superTokenAddress,
+				sender: senderAddress,
+				receiver: receiverAddress,
+				providerOrSigner: signer,
+			});
+			console.log(
+				`Existing flow found. Current flow rate: ${flowInfo.flowRate}`,
+			);
+			return { exists: true, flowRate: flowInfo.flowRate };
+		} catch (error) {
+			console.log('No existing flow found.');
+			return { exists: false, flowRate: '0' };
+		}
 	};
 
 	const handleApproveAndExecute = async () => {
@@ -156,67 +190,232 @@ const YourApp = () => {
 					console.log(`Approved ${amount} ${type} super tokens.`);
 				}
 
-				// Create the stream
-				const createFlowOperation = superToken.createFlow({
-					sender: address,
-					receiver: destinationAddress,
-					flowRate: flowRatePerSecond.toString(),
-				});
+				// // Create the stream
+				// const createFlowOperation = superToken.createFlow({
+				// 	sender: address,
+				// 	receiver: destinationAddress,
+				// 	flowRate: flowRatePerSecond.toString(),
+				// });
 
-				console.log({ createFlowOperation });
+				// console.log({ createFlowOperation });
 
-				const flowTxResponse = await createFlowOperation.exec(
+				// const flowTxResponse = await createFlowOperation.exec(signer);
+				// await flowTxResponse.wait();
+				// console.log('Stream created successfully.');
+				// setNotification('Stream created successfully!');
+				// Check for existing flow
+				const flowStatus = await checkIfFlowExists(
+					sf,
+					superToken.address,
+					address,
+					destinationAddress,
 					signer,
-					50,
 				);
-				await flowTxResponse.wait();
-				console.log('Stream created successfully.');
-				setNotification('Stream created successfully!');
+
+				if (flowStatus.exists && flowStatus.flowRate !== '0') {
+					// Add new flow rate to existing flow rate
+					const newFlowRate = ethers.BigNumber.from(
+						flowStatus.flowRate,
+					).add(flowRatePerSecond);
+
+					// Update the flow
+					const updateFlowOperation = superToken.updateFlow({
+						sender: address,
+						receiver: destinationAddress,
+						flowRate: newFlowRate.toString(), // New total flow rate
+					});
+
+					console.log('Updating existing flow...');
+					const updateFlowTxResponse = await updateFlowOperation.exec(
+						signer,
+						70,
+					);
+					await updateFlowTxResponse.wait();
+					console.log('Flow updated successfully.');
+					setNotification('Flow updated successfully!');
+				} else {
+					// Create a new flow if none exists
+					const createFlowOperation = superToken.createFlow({
+						sender: address,
+						receiver: destinationAddress,
+						flowRate: flowRatePerSecond.toString(), // New flow rate
+					});
+
+					console.log('Creating new flow...');
+					const createFlowTxResponse = await createFlowOperation.exec(
+						signer,
+						2,
+					);
+					await createFlowTxResponse.wait();
+					console.log('Flow created successfully.');
+					setNotification('Flow created successfully!');
+				}
 			} else if (type === 'erc20') {
-				console.log(
-					'Regular ERC-20 token detected. Upgrading to Super Token...',
-				);
+				// console.log(
+				// 	'Regular ERC-20 token detected. Upgrading to Super Token...',
+				// );
+				// const wrapperSuperToken =
+				// 	await sf.loadSuperToken(selectedToken);
+				// console.log({ wrapperSuperToken });
+				// // Approve upgrade if needed
+				// const erc20Contract = new ethers.Contract(
+				// 	selectedToken,
+				// 	[
+				// 		'function approve(address spender, uint256 amount) public returns (bool)',
+				// 	],
+				// 	signer,
+				// );
+				// const approveTx = await erc20Contract.approve(
+				// 	wrapperSuperToken.address,
+				// 	amountToApprove,
+				// );
+				// await approveTx.wait();
+				// console.log('ERC-20 token approved for upgrade.');
+				// // Upgrade ERC20 to Super Token
+				// // const upgradeOp = wrapperSuperToken.upgrade({
+				// // 	amount: amountToApprove.toString(),
+				// // });
+				// // await upgradeOp.exec(signer);
+				// // console.log('Upgrade complete.');
+				// // Create the stream
+				// const createFlowOperation = wrapperSuperToken.createFlow({
+				// 	sender: address,
+				// 	receiver: destinationAddress,
+				// 	flowRate: flowRatePerSecond.toString(),
+				// });
+				// const flowTxResponse = await createFlowOperation.exec(
+				// 	signer,
+				// 	50,
+				// );
+				// await flowTxResponse.wait();
+				// console.log('Stream created successfully.');
+				// setNotification('Stream created successfully!');
+				console.log('Approving underlying ERC-20 token for upgrade...');
+
+				const operations: Operation[] = [];
+
 				const wrapperSuperToken =
 					await sf.loadSuperToken(selectedToken);
 
-				console.log({ wrapperSuperToken });
-
-				// Approve upgrade if needed
 				const erc20Contract = new ethers.Contract(
-					selectedToken,
+					selectedToken, // Underlying ERC-20 token address
 					[
 						'function approve(address spender, uint256 amount) public returns (bool)',
 					],
 					signer,
 				);
+
+				// Approve the Super Token contract to spend the ERC-20 token
 				const approveTx = await erc20Contract.approve(
-					wrapperSuperToken.address,
-					amountToApprove,
+					wrapperSuperToken.address, // Address of the Super Token
+					amountToApprove.toString(),
 				);
 				await approveTx.wait();
-				console.log('ERC-20 token approved for upgrade.');
+				console.log('Underlying ERC-20 token approved for upgrade.');
 
-				// Upgrade ERC20 to Super Token
-				// const upgradeOp = wrapperSuperToken.upgrade({
-				// 	amount: amountToApprove.toString(),
-				// });
-				// await upgradeOp.exec(signer);
-				// console.log('Upgrade complete.');
+				// Interact with the Super Token contract to perform the upgrade
+				const superTokenAbi = [
+					'function upgrade(uint256 amount) external',
+				];
+				// const superTokenContract = new ethers.Contract(
+				// 	wrapperSuperToken.address,
+				// 	superTokenAbi,
+				// 	signer,
+				// );
 
-				// Create the stream
-				const createFlowOperation = wrapperSuperToken.createFlow({
-					sender: address,
-					receiver: destinationAddress,
-					flowRate: flowRatePerSecond.toString(),
-				});
-
-				const flowTxResponse = await createFlowOperation.exec(
-					signer,
-					50,
+				console.log('Upgrading ERC-20 token to Super Token...');
+				const newSuperToken = await sf.loadWrapperSuperToken(
+					'0x35adeb0638eb192755b6e52544650603fe65a006',
 				);
-				await flowTxResponse.wait();
-				console.log('Stream created successfully.');
-				setNotification('Stream created successfully!');
+
+				console.log({ newSuperToken });
+
+				const upgradeTx = await newSuperToken.upgrade({
+					amount: amountToApprove.toString(),
+				});
+				// await upgradeTx.wait();
+				// await upgradeTx.exec(signer);
+				operations.push(upgradeTx);
+				console.log('Upgrade to Super Token complete.', upgradeTx);
+
+				// Attempt to check allowance (skip if it fails)
+				let allowance;
+				try {
+					allowance = await newSuperToken.allowance({
+						owner: await signer.getAddress(),
+						spender: destinationAddress,
+						providerOrSigner: signer,
+					});
+					console.log(`Current allowance: ${allowance.toString()}`);
+				} catch (error) {
+					console.log(
+						'Allowance does not exist or cannot be fetched. Proceeding to approve...',
+					);
+				}
+
+				// Approve if needed
+				if (ethers.BigNumber.from(allowance).lt(amountToApprove)) {
+					const approveOperation = newSuperToken.approve({
+						receiver: destinationAddress,
+						amount: amountToApprove.toString(),
+					});
+
+					const approveTxResponse = await signer.sendTransaction(
+						await approveOperation.getPopulatedTransactionRequest(
+							signer,
+						),
+					);
+					await approveTxResponse.wait();
+					console.log(`Approved ${amount} ${type} super tokens.`);
+				}
+
+				// Create or update the stream
+				const flowStatus = await checkIfFlowExists(
+					sf,
+					newSuperToken.address,
+					address,
+					destinationAddress,
+					signer,
+				);
+
+				if (flowStatus.exists && flowStatus.flowRate !== '0') {
+					console.log('Updating existing flow...');
+					const updateFlowOperation = newSuperToken.updateFlow({
+						sender: address,
+						receiver: destinationAddress,
+						flowRate: flowRatePerSecond.toString(), // New flow rate
+					});
+					// const flowTxResponse =
+					// 	await updateFlowOperation.exec(signer);
+					// await flowTxResponse.wait();
+
+					operations.push(updateFlowOperation);
+
+					const batchOp = sf.batchCall(operations);
+					const txUpdate = await batchOp.exec(signer, 70);
+
+					console.log('Flow updated successfully.', txUpdate);
+					setNotification('Flow updated successfully!');
+				} else {
+					console.log('Creating new flow...');
+					const createFlowOperation = newSuperToken.createFlow({
+						sender: address,
+						receiver: destinationAddress,
+						flowRate: flowRatePerSecond.toString(), // New flow rate
+					});
+					// const flowTxResponse = await createFlowOperation.exec(
+					// 	signer,
+					// 	2,
+					// );
+					// await flowTxResponse.wait();
+					operations.push(createFlowOperation);
+
+					const batchOp = sf.batchCall(operations);
+					const txCreate = await batchOp.exec(signer, 70);
+
+					console.log('Flow created successfully.', txCreate);
+					setNotification('Flow created successfully!');
+				}
 			}
 		} catch (error) {
 			console.error('Error during approval or execution:', error);
