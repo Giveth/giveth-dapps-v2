@@ -58,6 +58,7 @@ const EditUserModal = ({
 	const { walletAddress: address } = useGeneralWallet();
 
 	const [updateUser] = useMutation(UPDATE_USER);
+	const [verified, setVerified] = useState(user.isEmailVerified);
 	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
 
 	const onSaveAvatar = async () => {
@@ -191,6 +192,9 @@ const EditUserModal = ({
 										register={register}
 										error={(errors as any)[field.name]}
 										registerOptions={field.registerOptions}
+										{...(field.type === 'email' && {
+											verifiedSaveButton: setVerified,
+										})}
 									/>
 								);
 							})}
@@ -199,7 +203,7 @@ const EditUserModal = ({
 								label={formatMessage({
 									id: 'label.save',
 								})}
-								disabled={isLoading}
+								disabled={isLoading || !verified}
 								type='submit'
 							/>
 							<TextButton

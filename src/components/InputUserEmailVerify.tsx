@@ -96,11 +96,14 @@ const InputSizeToLinkSize = (size: InputSize) => {
 };
 
 type InputType =
-	| IInputWithRegister
+	| (IInputWithRegister & {
+			verifiedSaveButton?: (verified: boolean) => void;
+	  })
 	| ({
 			registerName?: never;
 			register?: never;
 			registerOptions?: never;
+			verifiedSaveButton?: (verified: boolean) => void;
 	  } & IInput);
 
 interface IExtendedInputLabelProps extends IInputLabelProps {
@@ -209,8 +212,13 @@ const InputUserEmailVerify = forwardRef<HTMLInputElement, InputType>(
 			// Check if user is changing email address
 			if (e.target.value !== user.email) {
 				setVerified(false);
+				props.verifiedSaveButton && props.verifiedSaveButton(false);
 			} else if (e.target.value !== user.email && user.isEmailVerified) {
 				setVerified(true);
+				props.verifiedSaveButton && props.verifiedSaveButton(true);
+			} else if (e.target.value === user.email && user.isEmailVerified) {
+				setVerified(true);
+				props.verifiedSaveButton && props.verifiedSaveButton(true);
 			}
 		};
 
@@ -285,6 +293,7 @@ const InputUserEmailVerify = forwardRef<HTMLInputElement, InputType>(
 					setIsVerificationProcess(false);
 					setDisableCodeVerifyButton(true);
 					setVerified(true);
+					props.verifiedSaveButton && props.verifiedSaveButton(true);
 					setValidationCodeStatus(EInputValidation.SUCCESS);
 
 					// Update user data

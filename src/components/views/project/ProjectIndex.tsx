@@ -136,7 +136,7 @@ const ProjectIndex: FC<IProjectBySlug> = () => {
 
 	return (
 		<Wrapper>
-			{!isAdminEmailVerified && <VerifyEmailBanner />}
+			{!isAdminEmailVerified && isAdmin && <VerifyEmailBanner />}
 			{hasActiveQFRound && !isOnSolana && <PassportBanner />}
 			<Head>
 				<title>{title && `${title} |`} Giveth</title>

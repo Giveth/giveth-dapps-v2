@@ -390,7 +390,7 @@
 	"label.email_used_another": "Aquest correu electrònic ja ha estat verificat en un altre perfil!",
 	"label.email_sent_to": "Codi de verificació enviat a {email}",
 	"label.email_please_verify": "Si us plau, verifica el teu correu electrònic. Introdueix el codi de confirmació enviat al teu correu.",
-	"label.email_get_resend": "No has rebut el correu? Revisa la teva carpeta de correu brossa o <button>Reenvia l'enllaç de verificació!</button>",
+	"label.email_get_resend": "No has rebut el correu electrònic? Revisa la teva carpeta de correu brossa o <button>Torna a enviar el codi de verificació!</button>",
 	"label.email_confirm_code": "Confirma el codi",
 	"label.email_verify_banner": "Obté l'accés complet als teus comptes i projectes. Verifica la teva adreça de correu electrònic! <button>Verifica el correu</button>",
 	"label.email_actions_text": "Verifica el teu correu electrònic per gestionar els teus projectes!",
