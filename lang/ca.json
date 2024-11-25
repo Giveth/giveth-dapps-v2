@@ -1690,6 +1690,7 @@
 	"project.givback_toast.title.verified_public_2": " del valor de la teva donació!",
 	"project.givback_toast.title.verified_public_3": "Rep recompenses de fins a {percent}%",
 	"project.givback_toast.title.verified_public_not_eligible": "Impulsa aquest projecte amb GIVpower!",
+	"project.givback_toast.complete_eligibility": "Completa el teu formulari d’elegibilitat per als GIVbacks",
 	"projects_all": "Tots els Projectes",
 	"projects_all_desc": "SUPORT A PROJECTES GLOBALS DE BÉS PÚBLICS, SOSTENIBILITAT I REGENERACIÓ AMB CRYPTODONACIONS",
 	"projects_art-and-culture": "Art i Cultura",
