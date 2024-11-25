@@ -32,6 +32,7 @@ import { EVerificationStatus } from '@/apollo/types/types';
 import ClaimRecurringDonationModal from '../../userProfile/projectsTab/ClaimRecurringDonationModal';
 import config from '@/configuration';
 import { findAnchorContractAddress } from '@/helpers/superfluid';
+import { ProjectCardNotification } from './ProjectCardNotification';
 
 interface IMobileActionsModalProps {
 	setShowModal: (value: boolean) => void;
@@ -174,8 +175,8 @@ export const AdminActions = () => {
 						project={project}
 					/>
 				)}
-				<ProjectCardNotification />
-		</Wrapper>
+			</Wrapper>
+			<ProjectCardNotification />
 		</>
 	) : (
 		<>
@@ -238,6 +239,7 @@ export const AdminActions = () => {
 					/>
 				)}
 			</MobileWrapper>
+			<ProjectCardNotification />
 		</>
 	);
 };
