@@ -392,7 +392,7 @@
 	"label.email_please_verify": "Si us plau, verifica el teu correu electrònic. Introdueix el codi de confirmació enviat al teu correu.",
 	"label.email_get_resend": "No has rebut el correu electrònic? Revisa la teva carpeta de correu brossa o <button>Torna a enviar el codi de verificació!</button>",
 	"label.email_confirm_code": "Confirma el codi",
-	"label.email_verify_banner": "Obté l'accés complet als teus comptes i projectes. Verifica la teva adreça de correu electrònic! <button>Verifica el correu</button>",
+	"label.email_verify_banner": " <button>Actualitza el teu perfil</button> i verifica la propietat de la teva adreça de correu electrònic per recuperar l'accés als teus projectes.",
 	"label.email_actions_text": "Verifica el teu correu electrònic per gestionar els teus projectes!",
 	"label.email_error_verify": "Error de verificació del correu electrònic",
 	"label.enable_change": "Habilita el canvi",
