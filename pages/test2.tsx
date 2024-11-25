@@ -14,6 +14,9 @@ const TOKEN_ADDRESSES = [
 		name: 'USDC bridged',
 		address: '0x7f5c764cbc14f9669b88837ca1490cca17c31607',
 		decimals: 6,
+		superToken: {
+			address: '0x8430f084b939208e2eded1584889c9a66b90562f',
+		},
 	},
 	{
 		name: 'USDCx',
@@ -24,6 +27,9 @@ const TOKEN_ADDRESSES = [
 		name: 'USDC native',
 		address: '0x0b2C639c533813f4Aa9D7837CAf62653d097Ff85',
 		decimals: 6,
+		superToken: {
+			address: '0x35adeb0638eb192755b6e52544650603fe65a006',
+		},
 	},
 ];
 
@@ -99,6 +105,7 @@ const YourApp = () => {
 			console.log(
 				`Existing flow found. Current flow rate: ${flowInfo.flowRate}`,
 			);
+			console.log({ flowInfo });
 			return { exists: true, flowRate: flowInfo.flowRate };
 		} catch (error) {
 			console.log('No existing flow found.');
@@ -143,6 +150,7 @@ const YourApp = () => {
 			);
 
 			const flowRatePerSecond = amountToApprove.div(30 * 24 * 60 * 60); // Convert monthly to per-second rate
+			console.log({ flowRatePerSecond });
 
 			// Determine the token type
 			const { type, superToken } = await determineTokenType(
@@ -167,6 +175,7 @@ const YourApp = () => {
 						spender: destinationAddress,
 						providerOrSigner: signer,
 					});
+					await allowance.wait();
 					console.log(`Current allowance: ${allowance.toString()}`);
 				} catch (error) {
 					console.log(
@@ -215,7 +224,7 @@ const YourApp = () => {
 					console.log('Updating existing flow...');
 					const updateFlowTxResponse = await updateFlowOperation.exec(
 						signer,
-						70,
+						// 70,
 					);
 					await updateFlowTxResponse.wait();
 					console.log('Flow updated successfully.');
@@ -231,19 +240,31 @@ const YourApp = () => {
 					console.log('Creating new flow...');
 					const createFlowTxResponse = await createFlowOperation.exec(
 						signer,
-						2,
+						// 2,
 					);
 					await createFlowTxResponse.wait();
 					console.log('Flow created successfully.');
 					setNotification('Flow created successfully!');
 				}
 			} else if (type === 'erc20') {
+				/**
+				 *
+				 *
+				 * USDC native tokens
+				 *
+				 *
+				 *
+				 */
 				console.log('Approving underlying ERC-20 token for upgrade...');
 
 				const operations: Operation[] = [];
 
-				const wrapperSuperToken =
-					await sf.loadSuperToken(selectedToken);
+				const underlyingToken = await sf.loadSuperToken(selectedToken);
+				const newSuperToken = await sf.loadWrapperSuperToken(
+					token.superToken?.address || '',
+				);
+
+				console.log({ underlyingToken });
 
 				const erc20Contract = new ethers.Contract(
 					selectedToken, // Underlying ERC-20 token address
@@ -254,68 +275,35 @@ const YourApp = () => {
 				);
 
 				// Approve the Super Token contract to spend the ERC-20 token
-				const approveTx = await erc20Contract.approve(
-					wrapperSuperToken.address, // Address of the Super Token
-					amountToApprove.toString(),
-				);
-				await approveTx.wait();
-				console.log('Underlying ERC-20 token approved for upgrade.');
-
-				// Interact with the Super Token contract to perform the upgrade
-				// const superTokenAbi = [
-				// 	'function upgrade(uint256 amount) external',
-				// ];
-				// const superTokenContract = new ethers.Contract(
-				// 	wrapperSuperToken.address,
-				// 	superTokenAbi,
-				// 	signer,
-				// );
-
-				console.log('Upgrading ERC-20 token to Super Token...');
-				const newSuperToken = await sf.loadWrapperSuperToken(
-					'0x35adeb0638eb192755b6e52544650603fe65a006',
-				);
-
-				console.log({ newSuperToken });
-
-				const upgradeTx = await newSuperToken.upgrade({
+				const approveTx = await underlyingToken.approve({
+					receiver: newSuperToken.address, // Address of the Super Token
 					amount: amountToApprove.toString(),
 				});
-				// await upgradeTx.wait();
-				// await upgradeTx.exec(signer);
-				operations.push(upgradeTx);
+				const approveTRANS = await approveTx.exec(signer);
+				await approveTRANS.wait(); // Wait for the transaction to be mined
+				console.log(
+					'Underlying ERC-20 token approved for upgrade.',
+					approveTx,
+				);
+
+				console.log(
+					'Upgrading ERC-20 token to Super Token...',
+					approveTRANS,
+				);
+
+				const amountToApproveNew = ethers.utils.parseUnits(amount, 18);
+				const flowRatePerSecondNew = amountToApproveNew.div(
+					30 * 24 * 60 * 60,
+				); // Convert monthly to per-second rate
+
+				console.log('Upgrading......'); // THIS FAILING FIRST TIME
+				const upgradeTx = await newSuperToken.upgrade({
+					amount: amountToApproveNew.toString(),
+				});
+				const approveUPGRD = await upgradeTx.exec(signer);
+				await approveUPGRD.wait(); // Wait for the transaction to be mined
+				// operations.push(upgradeTx);
 				console.log('Upgrade to Super Token complete.', upgradeTx);
-
-				// Attempt to check allowance (skip if it fails)
-				let allowance;
-				try {
-					allowance = await newSuperToken.allowance({
-						owner: await signer.getAddress(),
-						spender: destinationAddress,
-						providerOrSigner: signer,
-					});
-					console.log(`Current allowance: ${allowance.toString()}`);
-				} catch (error) {
-					console.log(
-						'Allowance does not exist or cannot be fetched. Proceeding to approve...',
-					);
-				}
-
-				// Approve if needed
-				if (ethers.BigNumber.from(allowance).lt(amountToApprove)) {
-					const approveOperation = newSuperToken.approve({
-						receiver: destinationAddress,
-						amount: amountToApprove.toString(),
-					});
-
-					const approveTxResponse = await signer.sendTransaction(
-						await approveOperation.getPopulatedTransactionRequest(
-							signer,
-						),
-					);
-					await approveTxResponse.wait();
-					console.log(`Approved ${amount} ${type} super tokens.`);
-				}
 
 				// Create or update the stream
 				const flowStatus = await checkIfFlowExists(
@@ -331,7 +319,7 @@ const YourApp = () => {
 					const updateFlowOperation = newSuperToken.updateFlow({
 						sender: address,
 						receiver: destinationAddress,
-						flowRate: flowRatePerSecond.toString(), // New flow rate
+						flowRate: flowRatePerSecondNew.toString(), // New flow rate
 					});
 					// const flowTxResponse =
 					// 	await updateFlowOperation.exec(signer);
@@ -340,7 +328,7 @@ const YourApp = () => {
 					operations.push(updateFlowOperation);
 
 					const batchOp = sf.batchCall(operations);
-					const txUpdate = await batchOp.exec(signer, 70);
+					const txUpdate = await batchOp.exec(signer, 2);
 
 					console.log('Flow updated successfully.', txUpdate);
 					setNotification('Flow updated successfully!');
@@ -349,19 +337,19 @@ const YourApp = () => {
 					const createFlowOperation = newSuperToken.createFlow({
 						sender: address,
 						receiver: destinationAddress,
-						flowRate: flowRatePerSecond.toString(), // New flow rate
+						flowRate: flowRatePerSecondNew.toString(), // New flow rate
 					});
-					// const flowTxResponse = await createFlowOperation.exec(
-					// 	signer,
-					// 	2,
-					// );
-					// await flowTxResponse.wait();
-					operations.push(createFlowOperation);
+					const flowTxResponse = await createFlowOperation.exec(
+						signer,
+						2,
+					);
+					await flowTxResponse.wait();
+					// operations.push(createFlowOperation);
 
-					const batchOp = sf.batchCall(operations);
-					const txCreate = await batchOp.exec(signer, 70);
+					// const batchOp = sf.batchCall(operations);
+					// const txCreate = await batchOp.exec(signer, 700);
 
-					console.log('Flow created successfully.', txCreate);
+					console.log('Flow created successfully.', flowTxResponse);
 					setNotification('Flow created successfully!');
 				}
 			}
