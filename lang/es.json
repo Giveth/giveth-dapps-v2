@@ -390,7 +390,7 @@
 	"label.email_used_another": "¡Este correo electrónico ya ha sido verificado en otro perfil!",
 	"label.email_sent_to": "Código de verificación enviado a {email}",
 	"label.email_please_verify": "Por favor, verifica tu correo electrónico. Ingresa el código de confirmación enviado a tu correo.",
-	"label.email_get_resend": "¿No recibiste el correo? Revisa tu carpeta de spam o <button>¡Reenviar enlace de verificación!</button>",
+	"label.email_get_resend": "¿No recibiste el correo electrónico? Revisa tu carpeta de spam o <button>¡Reenviar código de verificación!</button>",
 	"label.email_confirm_code": "Confirmar código",
 	"label.email_verify_banner": "Obtén acceso completo a tus cuentas y proyectos. ¡Verifica tu dirección de correo electrónico! <button>Verificar correo</button>",
 	"label.email_actions_text": "¡Verifica tu correo electrónico para gestionar tus proyectos!",
