@@ -237,6 +237,7 @@ export interface IUser {
 	wasReferred?: boolean;
 	isReferrer?: boolean;
 	chainvineId?: string;
+	isEmailVerified?: boolean;
 }
 
 export interface IPassportInfo {
