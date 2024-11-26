@@ -31,7 +31,9 @@ export const Item: FC<IItemProps> = ({
 						{limitFraction(
 							formatUnits(
 								amount,
-								token.underlyingToken?.decimals || 18,
+								token.underlyingToken?.decimals ||
+									token.decimals ||
+									18,
 							),
 						)}
 						&nbsp;{token.symbol}
@@ -47,7 +49,9 @@ export const Item: FC<IItemProps> = ({
 											.multipliedBy(amount.toString())
 											.toFixed(0),
 									),
-									token.underlyingToken?.decimals || 18,
+									token.underlyingToken?.decimals ||
+										token.decimals ||
+										18,
 								),
 								2,
 							)}

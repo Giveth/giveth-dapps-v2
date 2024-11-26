@@ -142,12 +142,20 @@ export const RecurringDonationCard = () => {
 		if (selectedRecurringToken.token.isSuperToken) {
 			setAmount(balance.value || 0n);
 		}
+		if (selectedRecurringToken.token.decimals === 6) {
+			setAmount(0n);
+			setPerMonthAmount(0n);
+		}
 	}, [selectedRecurringToken, balance]);
 
 	const underlyingToken = selectedRecurringToken?.token.underlyingToken;
 
+	// Introduce a scaling factor to handle tokens with different decimals
+	const scaleFactor =
+		selectedRecurringToken?.token.decimals === 6 ? 10000n : 1n;
+
 	// total means project + giveth
-	const totalPerSec = perMonthAmount / ONE_MONTH_SECONDS;
+	const totalPerSec = perMonthAmount / (ONE_MONTH_SECONDS / scaleFactor);
 	const projectPerMonth =
 		(perMonthAmount * BigInt(100 - donationToGiveth)) / 100n;
 	const givethPerMonth = perMonthAmount - projectPerMonth;
@@ -168,7 +176,8 @@ export const RecurringDonationCard = () => {
 				0n,
 			) || 0n;
 	const totalStreamPerSec = totalPerSec + otherStreamsPerSec;
-	const totalStreamPerMonth = totalStreamPerSec * ONE_MONTH_SECONDS;
+	const totalStreamPerMonth =
+		totalStreamPerSec * (ONE_MONTH_SECONDS / scaleFactor);
 	const streamRunOutInMonth =
 		totalStreamPerSec > 0 ? amount / totalStreamPerMonth : 0n;
 	const isTotalStreamExceed =
