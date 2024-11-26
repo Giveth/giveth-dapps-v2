@@ -16,7 +16,14 @@ const VerifyEmailBanner = () => {
 							<button
 								type='button'
 								onClick={() => {
-									router.push({ pathname: Routes.MyAccount });
+									router.push(
+										{
+											pathname: Routes.MyAccount,
+											query: { opencheck: 'true' },
+										},
+										undefined,
+										{ shallow: true },
+									);
 								}}
 							>
 								{chunks}

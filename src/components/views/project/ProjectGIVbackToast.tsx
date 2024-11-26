@@ -39,7 +39,8 @@ import { GIVBACKS_DONATION_QUALIFICATION_VALUE_USD } from '@/lib/constants/const
 const ProjectGIVbackToast = () => {
 	const [showBoost, setShowBoost] = useState(false);
 	const [showVerification, setShowVerification] = useState(false);
-	const { projectData, isAdmin, activateProject } = useProjectContext();
+	const { projectData, isAdmin, activateProject, isAdminEmailVerified } =
+		useProjectContext();
 	const verStatus = projectData?.verificationFormStatus;
 	const projectStatus = projectData?.status.name;
 	const isGivbackEligible = projectData?.isGivbackEligible;
@@ -74,6 +75,7 @@ const ProjectGIVbackToast = () => {
 
 	const handleBoostClick = () => {
 		if (isSSRMode) return;
+		if (!isAdminEmailVerified) return;
 		if (!isEnabled) {
 			openConnectModal?.();
 		} else if (!isSignedIn) {
@@ -329,7 +331,7 @@ const ProjectGIVbackToast = () => {
 
 	return (
 		<>
-			<Wrapper>
+			<Wrapper $isverified={isAdminEmailVerified}>
 				<Content>
 					{icon}
 					<div>
@@ -405,7 +407,7 @@ const Content = styled(Flex)`
 	}
 `;
 
-const Wrapper = styled(Flex)`
+const Wrapper = styled(Flex)<{ $isverified: boolean }>`
 	justify-content: space-between;
 	align-items: center;
 	gap: 24px;
@@ -417,6 +419,7 @@ const Wrapper = styled(Flex)`
 	${mediaQueries.laptopL} {
 		flex-direction: row;
 	}
+	opacity: ${({ $isverified }) => ($isverified ? '1' : '0.75')};
 `;
 
 const InnerLink = styled.a`

@@ -221,7 +221,11 @@ const ProjectIndex: FC<IProjectBySlug> = () => {
 				</Row>
 			</HeadContainer>
 			{projectData && !isDraft && (
-				<ProjectTabs activeTab={activeTab} slug={slug} />
+				<ProjectTabs
+					activeTab={activeTab}
+					slug={slug}
+					verified={isAdminEmailVerified}
+				/>
 			)}
 			<BodyWrapper>
 				<ContainerStyled>
