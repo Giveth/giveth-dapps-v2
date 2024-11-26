@@ -17,6 +17,7 @@ import { Shadow } from '@/components/styled-components/Shadow';
 interface IProjectTabs {
 	activeTab: number;
 	slug: string;
+	verified?: boolean;
 }
 
 const badgeCount = (count?: number) => {
@@ -24,7 +25,7 @@ const badgeCount = (count?: number) => {
 };
 
 const ProjectTabs = (props: IProjectTabs) => {
-	const { activeTab, slug } = props;
+	const { activeTab, slug, verified } = props;
 	const { projectData, totalDonationsCount, boostersData } =
 		useProjectContext();
 	const { totalProjectUpdates } = projectData || {};
@@ -61,8 +62,22 @@ const ProjectTabs = (props: IProjectTabs) => {
 							i.query ? `?tab=${i.query}` : ''
 						}`}
 						scroll={false}
+						onClick={e => {
+							if (
+								!verified &&
+								i.query === EProjectPageTabs.UPDATES
+							) {
+								e.preventDefault(); // Prevent the link from navigating from unverified users
+							}
+						}}
 					>
-						<Tab className={activeTab === index ? 'active' : ''}>
+						<Tab
+							className={activeTab === index ? 'active' : ''}
+							$unverified={
+								!verified &&
+								i.query === EProjectPageTabs.UPDATES
+							}
+						>
 							{formatMessage({ id: i.title })}
 							{badgeCount(i.badge) && (
 								<Badge
@@ -107,7 +122,11 @@ const Badge = styled(Subline)`
 	}
 `;
 
-const Tab = styled(P)`
+interface TabProps {
+	$unverified?: boolean;
+}
+
+const Tab = styled(P)<TabProps>`
 	display: flex;
 	padding: 9px 24px;
 	border-radius: 48px;
@@ -117,6 +136,7 @@ const Tab = styled(P)`
 		color: ${brandColors.pinky[500]};
 		background: ${neutralColors.gray[200]};
 	}
+	opacity: ${({ $unverified }) => ($unverified ? '0.5' : '1')};
 `;
 
 const Wrapper = styled.div`

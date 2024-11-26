@@ -367,7 +367,7 @@ const InputUserEmailVerify = forwardRef<HTMLInputElement, InputType>(
 							<VerifyInputButtonWrapper
 								type='button'
 								$verified={verified}
-								disabled={disableVerifyButton}
+								disabled={disableVerifyButton || verified}
 								onClick={verificationEmailHandler}
 							>
 								<Flex $alignItems='center' gap='8px'>
@@ -635,7 +635,7 @@ const VerifyInputButtonWrapper = styled.button<VerifyInputButtonWrapperProps>`
 			$verified ? semanticColors.jade[500] : brandColors.giv[500]};
 	}
 	&:disabled {
-		opacity: 0.5;
+		opacity: ${({ $verified }) => ($verified ? '1' : '0.5')};
 	}
 `;
 

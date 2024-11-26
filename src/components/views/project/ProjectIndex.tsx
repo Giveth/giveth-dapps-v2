@@ -137,7 +137,9 @@ const ProjectIndex: FC<IProjectBySlug> = () => {
 	return (
 		<Wrapper>
 			{!isAdminEmailVerified && isAdmin && <VerifyEmailBanner />}
-			{hasActiveQFRound && !isOnSolana && <PassportBanner />}
+			{hasActiveQFRound && !isOnSolana && isAdminEmailVerified && (
+				<PassportBanner />
+			)}
 			<Head>
 				<title>{title && `${title} |`} Giveth</title>
 				<ProjectMeta project={projectData} />
@@ -221,7 +223,11 @@ const ProjectIndex: FC<IProjectBySlug> = () => {
 				</Row>
 			</HeadContainer>
 			{projectData && !isDraft && (
-				<ProjectTabs activeTab={activeTab} slug={slug} />
+				<ProjectTabs
+					activeTab={activeTab}
+					slug={slug}
+					verified={isAdminEmailVerified}
+				/>
 			)}
 			<BodyWrapper>
 				<ContainerStyled>

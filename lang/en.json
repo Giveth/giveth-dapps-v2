@@ -395,6 +395,14 @@
 	"label.email_verify_banner": " <button>Update your profile</button> & verify ownership of your email address to regain access to your projects.",
 	"label.email_actions_text": "Verify your email to manage your projects!",
 	"label.email_error_verify": "Error verification email",
+	"label.email_modal_verify_your": "Verify your email address",
+	"label.email_modal_need_verify": "You'll need to verify your email address before being able to create a new project.",
+	"label.email_modal_verifying": "Verifying your email address ensures we can communicate with you about any important changes on the platform. Your email address will not be shared publicly.",
+	"label.email_modal_to_verifying": "To verify your email address edit your profile and update your email.",
+	"label.email_modal_button": "Update profile",
+
+
+
 	"label.enable_change": "Enable Change",
 	"label.enable_recurring_donations": "Enable Recurring Donations",
 	"label.ends_on": "ends on",
