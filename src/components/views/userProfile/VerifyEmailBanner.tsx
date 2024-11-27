@@ -4,7 +4,11 @@ import { brandColors, FlexCenter } from '@giveth/ui-design-system';
 import { FormattedMessage } from 'react-intl';
 import Routes from '@/lib/constants/Routes';
 
-const VerifyEmailBanner = () => {
+const VerifyEmailBanner = ({
+	setShowModal,
+}: {
+	setShowModal?: (value: boolean) => void;
+}) => {
 	const router = useRouter();
 	return (
 		<Wrapper>
@@ -16,14 +20,21 @@ const VerifyEmailBanner = () => {
 							<button
 								type='button'
 								onClick={() => {
-									router.push(
-										{
-											pathname: Routes.MyAccount,
-											query: { opencheck: 'true' },
-										},
-										undefined,
-										{ shallow: true },
-									);
+									if (
+										router.pathname === Routes.MyAccount &&
+										router.query.opencheck === 'true'
+									) {
+										setShowModal?.(true);
+									} else {
+										router.push(
+											{
+												pathname: Routes.MyAccount,
+												query: { opencheck: 'true' },
+											},
+											undefined,
+											{ shallow: true },
+										);
+									}
 								}}
 							>
 								{chunks}

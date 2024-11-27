@@ -353,7 +353,7 @@ const ProjectGIVbackToast = () => {
 	}, [isUserLoading, router]);
 
 	return (
-		<>
+		<ContentWrapper>
 			<Wrapper $isverified={isAdminEmailVerified}>
 				<Content>
 					{icon}
@@ -384,7 +384,12 @@ const ProjectGIVbackToast = () => {
 			{showVerification && (
 				<VerificationModal onClose={() => setShowVerification(false)} />
 			)}
-		</>
+			{!isAdminEmailVerified && (
+				<TooltipWrapper>
+					{formatMessage({ id: 'label.email_tooltip' })}
+				</TooltipWrapper>
+			)}
+		</ContentWrapper>
 	);
 };
 
@@ -430,6 +435,32 @@ const Content = styled(Flex)`
 	}
 `;
 
+const TooltipWrapper = styled.div`
+	position: absolute;
+	bottom: 100%;
+	left: 50%;
+	transform: translateX(-50%);
+	background: #1a1a1a;
+	color: #fff;
+	padding: 8px 12px;
+	border-radius: 4px;
+	font-size: 12px;
+	white-space: nowrap;
+	opacity: 0;
+	visibility: hidden;
+	transition:
+		opacity 0.2s ease-in-out,
+		visibility 0.2s ease-in-out;
+`;
+
+const ContentWrapper = styled.div`
+	position: relative;
+	&:hover ${TooltipWrapper} {
+		visibility: visible;
+		opacity: 1;
+	}
+`;
+
 const Wrapper = styled(Flex)<{ $isverified: boolean }>`
 	justify-content: space-between;
 	align-items: center;
@@ -442,6 +473,7 @@ const Wrapper = styled(Flex)<{ $isverified: boolean }>`
 	${mediaQueries.laptopL} {
 		flex-direction: row;
 	}
+	pointer-events: ${({ $isverified }) => ($isverified ? 'auto' : 'none')};
 	opacity: ${({ $isverified }) => ($isverified ? '1' : '0.75')};
 `;
 

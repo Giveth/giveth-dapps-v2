@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import { useIntl } from 'react-intl';
 import Image from 'next/image';
+import { useRouter } from 'next/router';
 import { useMutation } from '@apollo/client';
 import { Button, brandColors, FlexCenter } from '@giveth/ui-design-system';
 import { captureException } from '@sentry/nextjs';
@@ -43,6 +44,7 @@ const EditUserModal = ({
 	user,
 	setShowProfilePicModal,
 }: IEditUserModal) => {
+	const router = useRouter();
 	const { formatMessage } = useIntl();
 	const [isLoading, setIsLoading] = useState(false);
 	const { onDelete } = useUpload();
@@ -106,6 +108,16 @@ const EditUserModal = ({
 					title: 'Success',
 				});
 				closeModal();
+
+				// Reset router query
+				router.push(
+					{
+						pathname: router.pathname,
+						query: {},
+					},
+					undefined,
+					{ shallow: true },
+				);
 			} else {
 				throw 'Update User Failed.';
 			}

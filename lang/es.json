@@ -400,6 +400,7 @@
 	"label.email_modal_verifying": "Verificar tu dirección de correo electrónico asegura que podamos comunicarnos contigo sobre cualquier cambio importante en la plataforma. Tu dirección de correo electrónico no se compartirá públicamente.",
 	"label.email_modal_to_verifying": "Para verificar tu dirección de correo electrónico, edita tu perfil y actualiza tu correo electrónico.",
 	"label.email_modal_button": "Actualizar perfil",
+	"label.email_tooltip": "Edita tu perfil desde \"Mi cuenta\" y verifica tu dirección de correo electrónico para continuar",
 	"label.enable_change": "Ayuda al Cambio",
 	"label.enable_recurring_donations": "Habilitar Donaciones Recurrentes",
 	"label.ends_on": "termina el",
