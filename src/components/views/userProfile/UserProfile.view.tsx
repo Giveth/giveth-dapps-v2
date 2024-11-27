@@ -43,6 +43,7 @@ import { buildUsersPfpInfoQuery } from '@/lib/subgraph/pfpQueryBuilder';
 import { IGiverPFPToken } from '@/apollo/types/types';
 import { useProfileContext } from '@/context/profile.context';
 import { useGeneralWallet } from '@/providers/generalWalletProvider';
+import VerifyEmailBanner from './VerifyEmailBanner';
 
 export interface IUserProfileView {}
 
@@ -123,6 +124,9 @@ const UserProfileView: FC<IUserProfileView> = () => {
 		);
 	return (
 		<>
+			{!user?.isEmailVerified && (
+				<VerifyEmailBanner setShowModal={setShowModal} />
+			)}
 			<ProfileHeader>
 				<Container>
 					{showCompleteProfile && (

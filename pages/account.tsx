@@ -6,7 +6,6 @@ import WalletNotConnected from '@/components/WalletNotConnected';
 import UserNotSignedIn from '@/components/UserNotSignedIn';
 import UserProfileView from '@/components/views/userProfile/UserProfile.view';
 import { ProfileProvider } from '@/context/profile.context';
-import VerifyEmailBanner from '@/components/views/userProfile/VerifyEmailBanner';
 
 const AccountRoute = () => {
 	const { isSignedIn, isEnabled, userData, isLoading } = useAppSelector(
@@ -28,7 +27,6 @@ const AccountRoute = () => {
 				<title>{userData?.name} | Giveth</title>
 			</Head>
 			<ProfileProvider user={userData!} myAccount>
-				{!userData?.isEmailVerified && <VerifyEmailBanner />}
 				<UserProfileView />
 			</ProfileProvider>
 		</>
