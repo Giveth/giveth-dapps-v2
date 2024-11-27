@@ -99,6 +99,8 @@ const ProjectIndex: FC<IProjectBySlug> = () => {
 		address => address.chainType === ChainType.STELLAR,
 	);
 
+	const isEmailVerifiedStatus = isAdmin ? isAdminEmailVerified : true;
+
 	useEffect(() => {
 		if (!isSSRMode) {
 			switch (router.query.tab) {
@@ -226,7 +228,7 @@ const ProjectIndex: FC<IProjectBySlug> = () => {
 				<ProjectTabs
 					activeTab={activeTab}
 					slug={slug}
-					verified={isAdminEmailVerified}
+					verified={isEmailVerifiedStatus}
 				/>
 			)}
 			<BodyWrapper>

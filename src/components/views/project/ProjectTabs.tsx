@@ -56,7 +56,7 @@ const ProjectTabs = (props: IProjectTabs) => {
 		<Wrapper>
 			<InnerWrapper>
 				{tabsArray.map((i, index) => (
-					<Link
+					<LinkWrapper
 						key={i.title}
 						href={`${Routes.Project}/${slug}${
 							i.query ? `?tab=${i.query}` : ''
@@ -90,7 +90,12 @@ const ProjectTabs = (props: IProjectTabs) => {
 								</Badge>
 							)}
 						</Tab>
-					</Link>
+						{!verified && i.query === EProjectPageTabs.UPDATES && (
+							<TooltipWrapper>
+								{formatMessage({ id: 'label.email_tooltip' })}
+							</TooltipWrapper>
+						)}
+					</LinkWrapper>
 				))}
 			</InnerWrapper>
 		</Wrapper>
@@ -125,6 +130,32 @@ const Badge = styled(Subline)`
 interface TabProps {
 	$unverified?: boolean;
 }
+
+const TooltipWrapper = styled.div`
+	position: absolute;
+	bottom: 18%;
+	left: 100%;
+	background: #1a1a1a;
+	color: #fff;
+	padding: 8px 12px;
+	border-radius: 4px;
+	font-size: 12px;
+	white-space: nowrap;
+	opacity: 0;
+	visibility: hidden;
+	transition:
+		opacity 0.2s ease-in-out,
+		visibility 0.2s ease-in-out;
+	z-index: 500;
+`;
+
+const LinkWrapper = styled(Link)`
+	position: relative;
+	&:hover ${TooltipWrapper} {
+		visibility: visible;
+		opacity: 1;
+	}
+`;
 
 const Tab = styled(P)<TabProps>`
 	display: flex;
