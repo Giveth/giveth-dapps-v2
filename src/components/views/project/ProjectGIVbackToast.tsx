@@ -51,8 +51,13 @@ const ProjectGIVbackToast = () => {
 	const isPublicGivbackEligible = isGivbackEligible && !isAdmin;
 	const isPublicVerifiedNotEligible =
 		isVerified && !isAdmin && !isGivbackEligible;
+
+	// When project is VOUCHED (verified=true), not givbacks eligible AND has incomplete givbacks form we should show this notification
 	const isOwnerVerifiedNotEligible =
-		isVerified && isAdmin && !isGivbackEligible;
+		isVerified &&
+		isAdmin &&
+		!isGivbackEligible &&
+		projectData.verificationFormStatus !== EVerificationStatus.VERIFIED;
 
 	const isEmailVerifiedStatus = isAdmin ? isAdminEmailVerified : true;
 
@@ -181,6 +186,29 @@ const ProjectGIVbackToast = () => {
 					/>
 				</ExternalLink>
 			);
+		} else if (isOwnerVerifiedNotEligible) {
+			title = formatMessage(
+				{
+					id: `${useIntlTitle}verified_owner`,
+				},
+				{
+					percent: givbackFactorPercent,
+					value: GIVBACKS_DONATION_QUALIFICATION_VALUE_USD,
+				},
+			);
+			description = formatMessage({
+				id: `${useIntlDescription}verified_owner_not_eligible`,
+			});
+			color = semanticColors.golden[600];
+			icon = <IconGIVBack24 color={semanticColors.golden[600]} />;
+			link = links.GIVPOWER_DOC;
+			Button = (
+				<OutlineButton
+					onClick={handleBoostClick}
+					label='Boost'
+					icon={<IconRocketInSpace16 />}
+				/>
+			);
 		} else if (verStatus === EVerificationStatus.DRAFT) {
 			title = formatMessage({
 				id: `${useIntlTitle}non_verified_owner_incomplete`,
@@ -231,29 +259,6 @@ const ProjectGIVbackToast = () => {
 			});
 			icon = <IconDeactivated24 />;
 			link = links.CANCELLED_PROJECTS_DOCS;
-		} else if (isOwnerVerifiedNotEligible) {
-			title = formatMessage(
-				{
-					id: `${useIntlTitle}verified_owner`,
-				},
-				{
-					percent: givbackFactorPercent,
-					value: GIVBACKS_DONATION_QUALIFICATION_VALUE_USD,
-				},
-			);
-			description = formatMessage({
-				id: `${useIntlDescription}verified_owner_not_eligible`,
-			});
-			color = semanticColors.golden[600];
-			icon = <IconGIVBack24 color={semanticColors.golden[600]} />;
-			link = links.GIVPOWER_DOC;
-			Button = (
-				<OutlineButton
-					onClick={handleBoostClick}
-					label='Boost'
-					icon={<IconRocketInSpace16 />}
-				/>
-			);
 		} else {
 			title = formatMessage({
 				id: `${useIntlTitle}non_verified_owner`,

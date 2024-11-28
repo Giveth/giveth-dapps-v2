@@ -1197,6 +1197,7 @@
 	"label.verified_status_for": "Elegibilidad para GIVbacks para",
 	"label.verify_email_address": "Verificar email",
 	"label.verify_your_project": "Formulario de Elegibilidad para GIVbacks",
+	"label.resume_your_project": "Reanudar el formulario de GIVbacks",
 	"label.verify_your_project.modal.four": "requiere un poco de información adicional sobre tu proyecto y el impacto previsto de tu organización.",
 	"label.verify_your_project.modal.one": "El programa GIVbacks es un concepto revolucionario que recompensa a los donantes de proyectos elegibles para GIVbacks con tokens GIV. Al aplicar para que tu proyecto obtenga el estado de 'Elegible para GIVbacks', podrás hacer que tu proyecto se destaque y fomentar más donaciones. Hacer que tu proyecto sea elegible para GIVbacks también construye una relación de confianza con tus donantes al demostrar la legitimidad de tu proyecto y mostrar que los fondos se están utilizando para crear un cambio positivo.",
 	"label.verify_your_project.modal.three": "proceso de verificación ",

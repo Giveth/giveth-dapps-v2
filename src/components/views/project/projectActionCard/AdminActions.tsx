@@ -80,7 +80,12 @@ export const AdminActions = () => {
 		},
 		{
 			label: formatMessage({
-				id: 'label.verify_your_project',
+				id: formatMessage({
+					id:
+						verificationFormStatus === EVerificationStatus.DRAFT
+							? 'label.resume_your_project'
+							: 'label.verify_your_project',
+				}),
 			}),
 
 			type: EOptionType.ITEM,
