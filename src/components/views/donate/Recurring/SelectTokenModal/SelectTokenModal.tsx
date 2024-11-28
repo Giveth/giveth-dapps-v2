@@ -136,7 +136,7 @@ const SelectTokenInnerModal: FC<ISelectTokenModalProps> = ({
 							return token ? (
 								<StreamInfo
 									key={tokenId}
-									stream={tokenStreams[tokenId]}
+									stream={tokenStreams[tokenId.toLowerCase()]}
 									balance={balances[token.symbol]}
 									disable={
 										!balances[token.symbol] ||

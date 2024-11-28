@@ -160,7 +160,8 @@ export const RecurringDonationCard = () => {
 		(perMonthAmount * BigInt(100 - donationToGiveth)) / 100n;
 	const givethPerMonth = perMonthAmount - projectPerMonth;
 	const tokenBalance = balance?.value;
-	const tokenStream = tokenStreams[selectedRecurringToken?.token.id || ''];
+	const tokenStream =
+		tokenStreams[selectedRecurringToken?.token.id.toLowerCase() || ''];
 
 	const anchorContractAddress = useMemo(
 		() => findAnchorContractAddress(project.anchorContracts),
@@ -776,7 +777,9 @@ export const RecurringDonationCard = () => {
 			{showTopUpModal && selectedRecurringToken && (
 				<ModifySuperTokenModal
 					tokenStreams={
-						tokenStreams[selectedRecurringToken?.token.id || '']
+						tokenStreams[
+							selectedRecurringToken?.token.id.toLowerCase() || ''
+						]
 					}
 					setShowModal={setShowTopUpModal}
 					selectedToken={selectedRecurringToken?.token!}
