@@ -1197,6 +1197,7 @@
 	"label.verified_status_for": "Elegibilitat per a GIVbacks per a",
 	"label.verify_email_address": "Verificar correu electrònic",
 	"label.verify_your_project": "Formulari d'Elegibilitat per a GIVbacks",
+	"label.resume_your_project": "Reprèn el formulari de GIVbacks",
 	"label.verify_your_project.modal.four": "requereix alguna informació addicional sobre el teu projecte i l'impacte previst de la teva organització.",
 	"label.verify_your_project.modal.one": "El programa GIVbacks és un concepte revolucionari que recompensa els donants de projectes elegibles per a GIVbacks amb tokens GIV. En sol·licitar que el teu projecte obtingui l'estat de 'Elegible per a GIVbacks', podràs fer que el teu projecte destaqui i fomentar més donacions. Fer que el teu projecte sigui elegible per a GIVbacks també construeix una relació de confiança amb els teus donants demostrant la legitimitat del teu projecte i mostrant que els fons s'estan utilitzant per crear un canvi positiu.",
 	"label.verify_your_project.modal.three": "procés de verificació ",

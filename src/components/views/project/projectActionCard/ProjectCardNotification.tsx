@@ -6,6 +6,7 @@ import {
 	IconAlertCircle16,
 	Flex,
 } from '@giveth/ui-design-system';
+import { EVerificationStatus } from '@/apollo/types/types';
 import { useProjectContext } from '@/context/project.context';
 
 export const ProjectCardNotification = () => {
@@ -15,10 +16,15 @@ export const ProjectCardNotification = () => {
 	const isVerified = projectData?.verified;
 	const isGivbackEligible = projectData?.isGivbackEligible;
 
-	const isOwnerVerifiedNotEligible =
-		isVerified && isAdmin && !isGivbackEligible;
+	// When project is VOUCHED (verified=true), not givbacks eligible AND has incomplete givbacks form we should show this notification
+	const isOwnerVerifiedNotEligibleIncompleteForm =
+		isVerified &&
+		isAdmin &&
+		!isGivbackEligible &&
+		projectData.verificationFormStatus !== EVerificationStatus.VERIFIED &&
+		projectData.verificationFormStatus !== EVerificationStatus.SUBMITTED;
 
-	if (!isOwnerVerifiedNotEligible) {
+	if (!isOwnerVerifiedNotEligibleIncompleteForm) {
 		return null;
 	}
 
