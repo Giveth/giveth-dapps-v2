@@ -162,8 +162,6 @@ export const RecurringDonationCard = () => {
 	const tokenBalance = balance?.value;
 	const tokenStream = tokenStreams[selectedRecurringToken?.token.id || ''];
 
-	console.log({ tokenStreams });
-
 	const anchorContractAddress = useMemo(
 		() => findAnchorContractAddress(project.anchorContracts),
 		[project.anchorContracts],
@@ -535,7 +533,6 @@ export const RecurringDonationCard = () => {
 								</Flex>
 							)}
 						</Flex>
-						AAAA
 						{tokenStream?.length > 0 && (
 							<>
 								<Flex $justifyContent='space-between'>

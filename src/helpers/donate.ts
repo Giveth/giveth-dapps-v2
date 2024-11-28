@@ -35,7 +35,6 @@ export const findUserActiveStreamOnSelectedToken = (
 };
 
 export const countActiveStreams = (tokenStreams: ISuperfluidStream[]) => {
-	console.log('tokenStreams', tokenStreams);
 	return (
 		tokenStreams.filter(stream => stream.currentFlowRate !== '0').length ||
 		0
