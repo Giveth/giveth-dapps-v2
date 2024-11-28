@@ -128,8 +128,6 @@ const SelectTokenInnerModal: FC<ISelectTokenModalProps> = ({
 							})}
 						</TitleSubheader>
 						{Object.keys(tokenStreams).map(tokenId => {
-							console.log(new Date());
-							console.log(tokenId);
 							const token = superTokens.find(
 								token =>
 									token.id.toLowerCase() ===
