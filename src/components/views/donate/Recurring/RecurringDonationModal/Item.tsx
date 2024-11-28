@@ -29,14 +29,9 @@ export const Item: FC<IItemProps> = ({
 				<Flex gap='4px'>
 					<B>
 						{limitFraction(
-							formatUnits(
-								amount,
-								token.underlyingToken?.decimals ||
-									token.decimals ||
-									18,
-							),
+							formatUnits(amount, token.decimals || 18),
 						)}
-						&nbsp;{token.symbol}
+						&nbsp;{token.underlyingToken?.symbol || token.symbol}
 					</B>
 					{subtext}
 					<UsdValue>
@@ -49,9 +44,7 @@ export const Item: FC<IItemProps> = ({
 											.multipliedBy(amount.toString())
 											.toFixed(0),
 									),
-									token.underlyingToken?.decimals ||
-										token.decimals ||
-										18,
+									token.decimals || 18,
 								),
 								2,
 							)}

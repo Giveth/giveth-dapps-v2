@@ -1,4 +1,4 @@
-import { useState, type FC } from 'react';
+import { useState, useMemo, type FC } from 'react';
 import styled from 'styled-components';
 import { P, brandColors, semanticColors } from '@giveth/ui-design-system';
 import { formatUnits } from 'viem';
@@ -8,7 +8,7 @@ import { TokenIcon } from '@/components/views/donate/TokenIcon/TokenIcon';
 import { TableCell } from './ActiveStreamsSection';
 import { ISuperfluidStream } from '@/types/superFluid';
 import { ONE_MONTH_SECONDS } from '@/lib/constants/constants';
-import { limitFraction } from '@/helpers/number';
+import { limitFraction, formatDonation } from '@/helpers/number';
 import config from '@/configuration';
 import { countActiveStreams } from '@/helpers/donate';
 import { findTokenByAddress } from '@/helpers/superfluid';
@@ -19,6 +19,16 @@ interface IStreamRowProps {
 }
 
 export const StreamRow: FC<IStreamRowProps> = ({ tokenStream }) => {
+	const superToken = useMemo(
+		() =>
+			config.OPTIMISM_CONFIG.SUPER_FLUID_TOKENS.find(
+				s => s.id === tokenStream[0].token.id,
+			),
+		[tokenStream],
+	);
+	console.log('tokenStream', tokenStream);
+	console.log('config', config.OPTIMISM_CONFIG.SUPER_FLUID_TOKENS);
+	// console.log('superToken', superToken);
 	const [showModifyModal, setShowModifyModal] = useState(false);
 	const { address, chain } = useAccount();
 	const { switchChain } = useSwitchChain();
@@ -39,7 +49,7 @@ export const StreamRow: FC<IStreamRowProps> = ({ tokenStream }) => {
 		0n,
 	);
 	const monthlyFlowRate = totalFlowRate * ONE_MONTH_SECONDS;
-	const { symbol, decimals } = tokenStream[0].token;
+	// const { symbol } = tokenStream[0].token;
 	const runOutMonth =
 		monthlyFlowRate > 0 && balance?.value
 			? balance?.value / monthlyFlowRate
@@ -57,12 +67,12 @@ export const StreamRow: FC<IStreamRowProps> = ({ tokenStream }) => {
 							)
 						: '0'}
 				</P>
-				<P>{symbol}</P>
+				<P>{superToken?.symbol}</P>
 			</TableCell>
 			<TableCell>
 				<P color={semanticColors.jade[500]}>
-					{limitFraction(
-						formatUnits(monthlyFlowRate || 0n, decimals),
+					{formatDonation(
+						limitFraction(formatUnits(BigInt(monthlyFlowRate), 18)),
 					)}
 					&nbsp;
 					{underlyingSymbol}
