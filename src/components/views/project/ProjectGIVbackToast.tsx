@@ -54,6 +54,8 @@ const ProjectGIVbackToast = () => {
 	const isOwnerVerifiedNotEligible =
 		isVerified && isAdmin && !isGivbackEligible;
 
+	const isEmailVerifiedStatus = isAdmin ? isAdminEmailVerified : true;
+
 	let color = isOwnerGivbackEligible
 		? semanticColors.golden[600]
 		: neutralColors.gray[900];
@@ -354,7 +356,7 @@ const ProjectGIVbackToast = () => {
 
 	return (
 		<ContentWrapper>
-			<Wrapper $isverified={isAdminEmailVerified}>
+			<Wrapper $isverified={isEmailVerifiedStatus}>
 				<Content>
 					{icon}
 					<div>
@@ -384,7 +386,7 @@ const ProjectGIVbackToast = () => {
 			{showVerification && (
 				<VerificationModal onClose={() => setShowVerification(false)} />
 			)}
-			{!isAdminEmailVerified && (
+			{!isEmailVerifiedStatus && (
 				<TooltipWrapper>
 					{formatMessage({ id: 'label.email_tooltip' })}
 				</TooltipWrapper>
