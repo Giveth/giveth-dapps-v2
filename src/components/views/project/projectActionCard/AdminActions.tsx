@@ -180,8 +180,8 @@ export const AdminActions = () => {
 						project={project}
 					/>
 				)}
+				<ProjectCardNotification />
 			</Wrapper>
-			<ProjectCardNotification />
 		</>
 	) : (
 		<>
