@@ -49,6 +49,7 @@ import Routes from '@/lib/constants/Routes';
 import { ChainType } from '@/types/config';
 import { useAppSelector } from '@/features/hooks';
 import { EndaomentProjectsInfo } from '@/components/views/project/EndaomentProjectsInfo';
+import VerifyEmailBanner from '../userProfile/VerifyEmailBanner';
 
 const ProjectDonations = dynamic(
 	() => import('./projectDonations/ProjectDonations.index'),
@@ -84,6 +85,7 @@ const ProjectIndex: FC<IProjectBySlug> = () => {
 		hasActiveQFRound,
 		isCancelled,
 		isAdmin,
+		isAdminEmailVerified,
 		isLoading,
 	} = useProjectContext();
 
@@ -96,6 +98,8 @@ const ProjectIndex: FC<IProjectBySlug> = () => {
 	const hasStellarAddress = recipientAddresses?.some(
 		address => address.chainType === ChainType.STELLAR,
 	);
+
+	const isEmailVerifiedStatus = isAdmin ? isAdminEmailVerified : true;
 
 	useEffect(() => {
 		if (!isSSRMode) {
@@ -134,7 +138,10 @@ const ProjectIndex: FC<IProjectBySlug> = () => {
 
 	return (
 		<Wrapper>
-			{hasActiveQFRound && !isOnSolana && <PassportBanner />}
+			{!isAdminEmailVerified && isAdmin && <VerifyEmailBanner />}
+			{hasActiveQFRound && !isOnSolana && isAdminEmailVerified && (
+				<PassportBanner />
+			)}
 			<Head>
 				<title>{title && `${title} |`} Giveth</title>
 				<ProjectMeta project={projectData} />
@@ -218,7 +225,11 @@ const ProjectIndex: FC<IProjectBySlug> = () => {
 				</Row>
 			</HeadContainer>
 			{projectData && !isDraft && (
-				<ProjectTabs activeTab={activeTab} slug={slug} />
+				<ProjectTabs
+					activeTab={activeTab}
+					slug={slug}
+					verified={isEmailVerifiedStatus}
+				/>
 			)}
 			<BodyWrapper>
 				<ContainerStyled>

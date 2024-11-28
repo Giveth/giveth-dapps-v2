@@ -43,10 +43,13 @@ import { buildUsersPfpInfoQuery } from '@/lib/subgraph/pfpQueryBuilder';
 import { IGiverPFPToken } from '@/apollo/types/types';
 import { useProfileContext } from '@/context/profile.context';
 import { useGeneralWallet } from '@/providers/generalWalletProvider';
+import VerifyEmailBanner from './VerifyEmailBanner';
 
 export interface IUserProfileView {}
 
 const UserProfileView: FC<IUserProfileView> = () => {
+	const router = useRouter();
+
 	const [showModal, setShowModal] = useState<boolean>(false); // follow this state to refresh user content on screen
 	const [showUploadProfileModal, setShowUploadProfileModal] = useState(false);
 	const [showIncompleteWarning, setShowIncompleteWarning] = useState(false);
@@ -57,11 +60,15 @@ const UserProfileView: FC<IUserProfileView> = () => {
 	const [pfpData, setPfpData] = useState<IGiverPFPToken[]>();
 	const { walletChainType, chain } = useGeneralWallet();
 	const { user, myAccount } = useProfileContext();
-	const router = useRouter();
 	const pfpToken = useGiverPFPToken(user?.walletAddress, user?.avatar);
 
 	const showCompleteProfile =
 		user && !isUserRegistered(user) && showIncompleteWarning && myAccount;
+
+	// Update the modal state if the query changes
+	useEffect(() => {
+		setShowModal(!!router.query.opencheck);
+	}, [router.query.opencheck]);
 
 	useEffect(() => {
 		if (user && !isUserRegistered(user) && myAccount) {
@@ -117,6 +124,9 @@ const UserProfileView: FC<IUserProfileView> = () => {
 		);
 	return (
 		<>
+			{!user?.isEmailVerified && (
+				<VerifyEmailBanner setShowModal={setShowModal} />
+			)}
 			<ProfileHeader>
 				<Container>
 					{showCompleteProfile && (
