@@ -162,6 +162,18 @@ const moduleExports = withBundleAnalyzer({
 						key: 'Content-Security-Policy',
 						value: "frame-ancestors 'self'",
 					},
+					{
+						key: 'X-Content-Type-Options',
+						value: 'nosniff', // Mitigates MIME type sniffing
+					},
+					{
+						key: 'Referrer-Policy',
+						value: 'strict-origin-when-cross-origin', // Protects user privacy
+					},
+					{
+						key: 'Permissions-Policy',
+						value: 'camera=(), microphone=(), geolocation=()', // Limits usage of browser features
+					},
 				],
 			},
 			{
