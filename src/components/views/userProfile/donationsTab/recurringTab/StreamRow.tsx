@@ -26,9 +26,6 @@ export const StreamRow: FC<IStreamRowProps> = ({ tokenStream }) => {
 			),
 		[tokenStream],
 	);
-	console.log('tokenStream', tokenStream);
-	console.log('config', config.OPTIMISM_CONFIG.SUPER_FLUID_TOKENS);
-	// console.log('superToken', superToken);
 	const [showModifyModal, setShowModifyModal] = useState(false);
 	const { address, chain } = useAccount();
 	const { switchChain } = useSwitchChain();
@@ -119,11 +116,11 @@ export const StreamRow: FC<IStreamRowProps> = ({ tokenStream }) => {
 					Deposit/Withdraw
 				</ModifyButton>
 			</TableCell>
-			{showModifyModal && (
+			{showModifyModal && superToken && (
 				<ModifySuperTokenModal
 					tokenStreams={tokenStream}
 					setShowModal={setShowModifyModal}
-					selectedToken={tokenStream[0].token}
+					selectedToken={superToken}
 					refreshBalance={refetch}
 				/>
 			)}
