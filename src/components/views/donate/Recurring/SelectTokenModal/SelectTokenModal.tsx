@@ -113,7 +113,6 @@ const SelectTokenInnerModal: FC<ISelectTokenModalProps> = ({
 			return balances[symbol] !== undefined && balances[symbol] > 0n;
 		},
 	);
-
 	return (
 		<>
 			<Wrapper>
@@ -137,6 +136,7 @@ const SelectTokenInnerModal: FC<ISelectTokenModalProps> = ({
 								<StreamInfo
 									key={tokenId}
 									stream={tokenStreams[tokenId.toLowerCase()]}
+									superToken={token}
 									balance={balances[token.symbol]}
 									disable={
 										!balances[token.symbol] ||
@@ -176,7 +176,6 @@ const SelectTokenInnerModal: FC<ISelectTokenModalProps> = ({
 						)}
 					</>
 				)}
-
 				{!isUserHasBalanceForAllSuperTokens && (
 					<>
 						<Title $medium>

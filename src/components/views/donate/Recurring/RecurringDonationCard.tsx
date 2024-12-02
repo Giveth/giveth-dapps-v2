@@ -44,7 +44,7 @@ import { showToastError, truncateToDecimalPlaces } from '@/lib/helpers';
 import config from '@/configuration';
 import { WrongNetworkLayer } from '../WrongNetworkLayer';
 import { ModifySuperTokenModal } from './ModifySuperToken/ModifySuperTokenModal';
-import { limitFraction } from '@/helpers/number';
+import { limitFraction, formatDonation } from '@/helpers/number';
 import AlloProtocolFirstDonationModal from './AlloProtocolFirstDonationModal';
 import links from '@/lib/constants/links';
 import Routes from '@/lib/constants/Routes';
@@ -570,12 +570,15 @@ export const RecurringDonationCard = () => {
 											id: 'label.you_will_donate_total',
 										})}{' '}
 										<TotalMonthlyStream>
-											{limitFraction(
-												formatUnits(
-													totalStreamPerSec *
-														ONE_MONTH_SECONDS,
-													selectedRecurringToken
-														?.token.decimals || 18,
+											{formatDonation(
+												limitFraction(
+													formatUnits(
+														totalStreamPerSec *
+															ONE_MONTH_SECONDS,
+														selectedRecurringToken
+															?.token.decimals ||
+															18,
+													),
 												),
 											)}{' '}
 											{
