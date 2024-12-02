@@ -82,7 +82,7 @@ const ProjectGIVbackToast = () => {
 
 	const handleBoostClick = () => {
 		if (isSSRMode) return;
-		if (!isAdminEmailVerified) return;
+		if (!isEmailVerifiedStatus) return;
 		if (!isEnabled) {
 			openConnectModal?.();
 		} else if (!isSignedIn) {
