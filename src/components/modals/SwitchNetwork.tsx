@@ -28,6 +28,7 @@ const defaultNetworks = Object.keys(networksConfig).map(key => ({
 	networkId: Number(key),
 	chainType: networksConfig[Number(key)].chainType,
 }));
+
 interface ISwitchNetworkModal extends IModal {
 	desc?: string;
 	customNetworks?: INetworkIdWithChain[];
@@ -39,12 +40,12 @@ const SwitchNetwork: FC<ISwitchNetworkModal> = ({
 	setShowModal,
 }) => {
 	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
-
 	const { switchChain } = useSwitchChain();
 	const { formatMessage } = useIntl();
 	const {
 		walletChainType,
 		handleSingOutAndSignInWithEVM,
+		setPendingNetworkId,
 		handleSignOutAndSignInWithSolana,
 		chain,
 	} = useGeneralWallet();
@@ -59,6 +60,17 @@ const SwitchNetwork: FC<ISwitchNetworkModal> = ({
 			};
 		}) || defaultNetworks;
 
+	const handleNetworkItemClick = (networkId: number) => {
+		if (walletChainType === ChainType.SOLANA) {
+			setPendingNetworkId(networkId);
+			handleSingOutAndSignInWithEVM();
+			closeModal(); // Close the modal since we cannot control the wallet modal
+		} else {
+			switchChain?.({ chainId: networkId });
+			closeModal();
+		}
+	};
+
 	return (
 		<Modal
 			headerTitle={formatMessage({ id: 'label.switch_network' })}
@@ -71,20 +83,7 @@ const SwitchNetwork: FC<ISwitchNetworkModal> = ({
 				{desc && <P>{desc}</P>}
 				{networks?.map(({ networkId, chainType }) => (
 					<NetworkItem
-						onClick={() => {
-							if (walletChainType === ChainType.SOLANA) {
-								handleSingOutAndSignInWithEVM();
-							}
-							if (
-								walletChainType === ChainType.EVM &&
-								chainType === ChainType.SOLANA
-							) {
-								handleSignOutAndSignInWithSolana();
-							} else {
-								switchChain?.({ chainId: networkId });
-							}
-							closeModal();
-						}}
+						onClick={() => handleNetworkItemClick(networkId)}
 						$isSelected={networkId === chainId}
 						key={networkId}
 						$baseTheme={theme}

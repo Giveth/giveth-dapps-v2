@@ -12,7 +12,6 @@ import BigNumber from 'bignumber.js';
 import { captureException } from '@sentry/nextjs';
 import { useAccount } from 'wagmi';
 import { WriteContractReturnType } from 'viem';
-import { useQuery } from '@tanstack/react-query';
 import { Modal } from './Modal';
 import {
 	ConfirmedInnerModal,
@@ -41,8 +40,8 @@ import { IModal } from '@/types/common';
 import { useIsSafeEnvironment } from '@/hooks/useSafeAutoConnect';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
 import { SubgraphDataHelper } from '@/lib/subgraph/subgraphDataHelper';
-import { fetchSubgraphData } from '@/services/subgraph.service';
 import { useFetchGIVPrice } from '@/hooks/useGivPrice';
+import { useSubgraphInfo } from '@/hooks/useSubgraphInfo';
 
 enum ClaimState {
 	UNKNOWN,
@@ -80,14 +79,9 @@ export const GIVdropHarvestModal: FC<IGIVdropHarvestModal> = ({
 
 	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
 	const { givTokenDistroHelper } = useGIVTokenDistroHelper();
-	const { address, chain } = useAccount();
-	const currentValues = useQuery({
-		queryKey: ['subgraph', chain?.id, address],
-		queryFn: async () => await fetchSubgraphData(chain?.id, address),
-		staleTime: config.SUBGRAPH_POLLING_INTERVAL,
-	});
+	const { address, chainId } = useAccount();
+	const currentValues = useSubgraphInfo();
 
-	const chainId = chain?.id;
 	const sdh = new SubgraphDataHelper(currentValues.data);
 	const givTokenDistroBalance = sdh.getGIVTokenDistroBalance();
 	const { data: givPrice } = useFetchGIVPrice();

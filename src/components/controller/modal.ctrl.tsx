@@ -4,6 +4,7 @@ import WelcomeModal from '@/components/modals/WelcomeModal';
 import { FirstWelcomeModal } from '@/components/modals/FirstWelcomeModal';
 import { SignWithWalletModal } from '@/components/modals/SignWithWalletModal';
 import { CompleteProfileModal } from '@/components/modals/CompleteProfileModal';
+import { VerifyEmailModal } from '@/components/modals/VerifyEmailModal';
 import { useIsSafeEnvironment } from '@/hooks/useSafeAutoConnect';
 import { useAppDispatch, useAppSelector } from '@/features/hooks';
 import {
@@ -13,6 +14,7 @@ import {
 	setShowSearchModal,
 	setShowSwitchNetworkModal,
 	setShowWelcomeModal,
+	setShowVerifyEmailModal,
 } from '@/features/modal/modal.slice';
 import { isUserRegistered } from '@/lib/helpers';
 import { SearchModal } from '../modals/SearchModal';
@@ -27,6 +29,7 @@ const ModalController = () => {
 		showWelcomeModal,
 		showSearchModal,
 		showSwitchNetwork,
+		showVerifyEmailModal,
 	} = useAppSelector(state => state.modal);
 
 	const { userData, isSignedIn } = useAppSelector(state => state.user);
@@ -100,6 +103,13 @@ const ModalController = () => {
 				<SwitchNetwork
 					setShowModal={state =>
 						dispatch(setShowSwitchNetworkModal(state))
+					}
+				/>
+			)}
+			{showVerifyEmailModal && (
+				<VerifyEmailModal
+					setShowModal={state =>
+						dispatch(setShowVerifyEmailModal(state))
 					}
 				/>
 			)}

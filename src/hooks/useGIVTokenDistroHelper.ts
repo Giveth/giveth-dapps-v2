@@ -1,11 +1,8 @@
 import { useState, useEffect } from 'react';
 import { AddressZero } from '@ethersproject/constants';
-import { useQuery } from '@tanstack/react-query';
-import { useAccount } from 'wagmi';
 import { TokenDistroHelper } from '@/lib/contractHelper/TokenDistroHelper';
 import { SubgraphDataHelper } from '@/lib/subgraph/subgraphDataHelper';
-import { fetchSubgraphData } from '@/services/subgraph.service';
-import config from '@/configuration';
+import { useSubgraphInfo } from './useSubgraphInfo';
 
 export const defaultTokenDistroHelper = new TokenDistroHelper({
 	contractAddress: AddressZero,
@@ -23,13 +20,7 @@ const useGIVTokenDistroHelper = (hold = false) => {
 	const [givTokenDistroHelper, setGIVTokenDistroHelper] =
 		useState<TokenDistroHelper>(defaultTokenDistroHelper);
 	const [isLoaded, setIsLoaded] = useState(false);
-	const { chain, address } = useAccount();
-	const currentValues = useQuery({
-		queryKey: ['subgraph', chain?.id, address],
-		queryFn: async () => await fetchSubgraphData(chain?.id, address),
-		enabled: !hold,
-		staleTime: config.SUBGRAPH_POLLING_INTERVAL,
-	});
+	const currentValues = useSubgraphInfo();
 
 	useEffect(() => {
 		const updateHelper = () => {

@@ -49,7 +49,7 @@ const ProfileProjectsTab: FC<IUserProfileView> = () => {
 					)}
 				</UserContributeTitle>
 			)}
-			<ProjectsContainer>
+			<ProjectsContainer $verified={!!user.isEmailVerified}>
 				{!isLoading && data?.totalCount === 0 ? (
 					<NothingWrapper>
 						<NothingToSee
@@ -95,8 +95,16 @@ const ProfileProjectsTab: FC<IUserProfileView> = () => {
 	);
 };
 
-export const ProjectsContainer = styled.div`
+interface ProjectsContainerProps {
+	$verified: boolean;
+}
+
+export const ProjectsContainer = styled.div<ProjectsContainerProps>`
 	margin-bottom: 40px;
+	background-color: ${({ $verified }) =>
+		$verified ? 'transparent' : '#f0f0f0'};
+	opacity: ${({ $verified }) => ($verified ? 1 : 0.5)};
+	pointer-events: ${({ $verified }) => ($verified ? 'auto' : 'none')};
 `;
 
 export const Loading = styled(Flex)`

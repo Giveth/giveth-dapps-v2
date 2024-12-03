@@ -256,3 +256,18 @@ export const FETCH_USERS_GIVPOWER_BY_ADDRESS = `
 		}
 	  }
 	}`;
+
+export const SEND_USER_EMAIL_CONFIRMATION_CODE_FLOW = gql`
+	mutation SendUserEmailConfirmationCodeFlow($email: String!) {
+		sendUserEmailConfirmationCodeFlow(email: $email)
+	}
+`;
+
+export const SEND_USER_CONFIRMATION_CODE_FLOW = gql`
+	mutation SendUserConfirmationCodeFlow(
+		$verifyCode: String!
+		$email: String!
+	) {
+		sendUserConfirmationCodeFlow(verifyCode: $verifyCode, email: $email)
+	}
+`;
