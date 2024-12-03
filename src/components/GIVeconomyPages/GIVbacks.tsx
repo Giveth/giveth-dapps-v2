@@ -12,7 +12,6 @@ import {
 import Link from 'next/link';
 import { useIntl } from 'react-intl';
 import { useAccount } from 'wagmi';
-import { useQuery } from '@tanstack/react-query';
 import {
 	GIVbacksTopContainer,
 	GIVbacksBottomContainer,
@@ -43,9 +42,9 @@ import { NoWrap, TopInnerContainer } from './commons';
 import links from '@/lib/constants/links';
 import Routes from '@/lib/constants/Routes';
 import { SubgraphDataHelper } from '@/lib/subgraph/subgraphDataHelper';
-import { fetchSubgraphData } from '@/services/subgraph.service';
 import { FETCH_ALLOCATED_GIVBACKS } from '@/apollo/gql/gqlGivbacks';
 import { client } from '@/apollo/apolloClient';
+import { useSubgraphInfo } from '@/hooks/useSubgraphInfo';
 
 export const TabGIVbacksTop = () => {
 	const { formatMessage } = useIntl();
@@ -53,17 +52,12 @@ export const TabGIVbacksTop = () => {
 	const [showGivBackExplain, setShowGivBackExplain] = useState(false);
 	const [givBackStream, setGivBackStream] = useState(0n);
 	const { givTokenDistroHelper } = useGIVTokenDistroHelper(showHarvestModal);
-	const { chain, address } = useAccount();
+	const { chainId } = useAccount();
 	const dataChainId =
-		chain?.id === config.OPTIMISM_NETWORK_NUMBER
+		chainId === config.OPTIMISM_NETWORK_NUMBER
 			? config.OPTIMISM_NETWORK_NUMBER
 			: config.GNOSIS_NETWORK_NUMBER;
-	const values = useQuery({
-		queryKey: ['subgraph', dataChainId, address],
-		queryFn: async () => await fetchSubgraphData(dataChainId, address),
-		enabled: !!chain,
-		staleTime: config.SUBGRAPH_POLLING_INTERVAL,
-	});
+	const values = useSubgraphInfo(dataChainId);
 	const givTokenDistroBalance = useMemo(() => {
 		const sdh = new SubgraphDataHelper(values.data);
 		return sdh.getGIVTokenDistroBalance();
@@ -107,7 +101,7 @@ export const TabGIVbacksTop = () => {
 								actionCb={() => {
 									setShowHarvestModal(true);
 								}}
-								network={chain?.id}
+								network={chainId}
 								targetNetworks={[
 									{
 										networkId: config.GNOSIS_NETWORK_NUMBER,

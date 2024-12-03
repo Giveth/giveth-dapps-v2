@@ -12,12 +12,14 @@ interface ProfileContext {
 	user: IUser;
 	myAccount: boolean;
 	givpowerBalance: string;
+	updateUser: (updatedUser: Partial<IUser>) => void;
 }
 
 const ProfileContext = createContext<ProfileContext>({
 	user: {} as IUser,
 	myAccount: false,
 	givpowerBalance: '0',
+	updateUser: () => {},
 });
 
 ProfileContext.displayName = 'ProfileContext';
@@ -27,8 +29,17 @@ export const ProfileProvider = (props: {
 	myAccount: boolean;
 	children: ReactNode;
 }) => {
-	const { user, myAccount, children } = props;
+	const { user: initialUser, myAccount, children } = props;
+	const [user, setUser] = useState<IUser>(initialUser);
 	const [balance, setBalance] = useState('0');
+
+	// Update user data
+	const updateUser = (updatedUser: Partial<IUser>) => {
+		setUser(prevUser => ({
+			...prevUser,
+			...updatedUser,
+		}));
+	};
 
 	useEffect(() => {
 		const fetchTotal = async () => {
@@ -52,6 +63,7 @@ export const ProfileProvider = (props: {
 				user,
 				myAccount,
 				givpowerBalance: balance,
+				updateUser,
 			}}
 		>
 			{children}

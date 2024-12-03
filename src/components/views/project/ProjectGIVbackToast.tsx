@@ -39,7 +39,8 @@ import { GIVBACKS_DONATION_QUALIFICATION_VALUE_USD } from '@/lib/constants/const
 const ProjectGIVbackToast = () => {
 	const [showBoost, setShowBoost] = useState(false);
 	const [showVerification, setShowVerification] = useState(false);
-	const { projectData, isAdmin, activateProject } = useProjectContext();
+	const { projectData, isAdmin, activateProject, isAdminEmailVerified } =
+		useProjectContext();
 	const verStatus = projectData?.verificationFormStatus;
 	const projectStatus = projectData?.status.name;
 	const isGivbackEligible = projectData?.isGivbackEligible;
@@ -50,10 +51,17 @@ const ProjectGIVbackToast = () => {
 	const isPublicGivbackEligible = isGivbackEligible && !isAdmin;
 	const isPublicVerifiedNotEligible =
 		isVerified && !isAdmin && !isGivbackEligible;
-	const isOwnerVerifiedNotEligible =
-		isVerified && isAdmin && !isGivbackEligible;
 
-	const color = isOwnerGivbackEligible
+	// When project is VOUCHED (verified=true), not givbacks eligible AND has incomplete givbacks form we should show this notification
+	const isOwnerVerifiedNotEligible =
+		isVerified &&
+		isAdmin &&
+		!isGivbackEligible &&
+		projectData.verificationFormStatus !== EVerificationStatus.VERIFIED;
+
+	const isEmailVerifiedStatus = isAdmin ? isAdminEmailVerified : true;
+
+	let color = isOwnerGivbackEligible
 		? semanticColors.golden[600]
 		: neutralColors.gray[900];
 	const { formatMessage } = useIntl();
@@ -74,6 +82,7 @@ const ProjectGIVbackToast = () => {
 
 	const handleBoostClick = () => {
 		if (isSSRMode) return;
+		if (!isEmailVerifiedStatus) return;
 		if (!isEnabled) {
 			openConnectModal?.();
 		} else if (!isSignedIn) {
@@ -176,6 +185,29 @@ const ProjectGIVbackToast = () => {
 						icon={<IconDiscord18 />}
 					/>
 				</ExternalLink>
+			);
+		} else if (isOwnerVerifiedNotEligible) {
+			title = formatMessage(
+				{
+					id: `${useIntlTitle}verified_owner`,
+				},
+				{
+					percent: givbackFactorPercent,
+					value: GIVBACKS_DONATION_QUALIFICATION_VALUE_USD,
+				},
+			);
+			description = formatMessage({
+				id: `${useIntlDescription}verified_owner_not_eligible_not_form`,
+			});
+			color = semanticColors.golden[600];
+			icon = <IconGIVBack24 color={semanticColors.golden[600]} />;
+			link = links.GIVPOWER_DOC;
+			Button = (
+				<OutlineButton
+					onClick={handleBoostClick}
+					label='Boost'
+					icon={<IconRocketInSpace16 />}
+				/>
 			);
 		} else if (verStatus === EVerificationStatus.DRAFT) {
 			title = formatMessage({
@@ -328,8 +360,8 @@ const ProjectGIVbackToast = () => {
 	}, [isUserLoading, router]);
 
 	return (
-		<>
-			<Wrapper>
+		<ContentWrapper>
+			<Wrapper $isverified={isEmailVerifiedStatus}>
 				<Content>
 					{icon}
 					<div>
@@ -359,7 +391,12 @@ const ProjectGIVbackToast = () => {
 			{showVerification && (
 				<VerificationModal onClose={() => setShowVerification(false)} />
 			)}
-		</>
+			{!isEmailVerifiedStatus && (
+				<TooltipWrapper>
+					{formatMessage({ id: 'label.email_tooltip' })}
+				</TooltipWrapper>
+			)}
+		</ContentWrapper>
 	);
 };
 
@@ -405,7 +442,33 @@ const Content = styled(Flex)`
 	}
 `;
 
-const Wrapper = styled(Flex)`
+const TooltipWrapper = styled.div`
+	position: absolute;
+	bottom: 100%;
+	left: 50%;
+	transform: translateX(-50%);
+	background: #1a1a1a;
+	color: #fff;
+	padding: 8px 12px;
+	border-radius: 4px;
+	font-size: 12px;
+	white-space: nowrap;
+	opacity: 0;
+	visibility: hidden;
+	transition:
+		opacity 0.2s ease-in-out,
+		visibility 0.2s ease-in-out;
+`;
+
+const ContentWrapper = styled.div`
+	position: relative;
+	&:hover ${TooltipWrapper} {
+		visibility: visible;
+		opacity: 1;
+	}
+`;
+
+const Wrapper = styled(Flex)<{ $isverified: boolean }>`
 	justify-content: space-between;
 	align-items: center;
 	gap: 24px;
@@ -417,6 +480,8 @@ const Wrapper = styled(Flex)`
 	${mediaQueries.laptopL} {
 		flex-direction: row;
 	}
+	pointer-events: ${({ $isverified }) => ($isverified ? 'auto' : 'none')};
+	opacity: ${({ $isverified }) => ($isverified ? '1' : '0.75')};
 `;
 
 const InnerLink = styled.a`

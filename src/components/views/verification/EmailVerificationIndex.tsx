@@ -83,14 +83,11 @@ function Verified() {
 	const { slug } = router.query;
 	const { formatMessage } = useIntl();
 
-	// we must wait for the router to be ready to get the slug from the query
 	useEffect(() => {
-		if (router.isReady) {
-			if (typeof slug === 'string') {
-				setQuerySlug(slug);
-			}
+		if (slug) {
+			setQuerySlug(slug as string);
 		}
-	}, [router.isReady, slug]);
+	}, [slug]);
 
 	return (
 		<>
