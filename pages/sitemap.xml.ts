@@ -143,6 +143,10 @@ function generateSiteMap() {
       	<loc>${URL}/sitemap/qf-sitemap.xml</loc>
       	<lastmod>${new Date().toISOString()}</lastmod>
      	</url>
+			<url>
+      	<loc>${URL}/sitemap/users-sitemap.xml</loc>
+      	<lastmod>${new Date().toISOString()}</lastmod>
+     	</url>
 	 </urlset>
  `;
 }

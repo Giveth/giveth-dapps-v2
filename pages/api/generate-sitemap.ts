@@ -1,6 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 import { NextApiRequest, NextApiResponse } from 'next';
+import { User } from '@sentry/types';
 import config from '@/configuration';
 import { initializeApollo } from '@/apollo/apolloClient';
 import { OPTIONS_HOME_PROJECTS } from '@/apollo/gql/gqlOptions';
@@ -10,6 +11,9 @@ import { getMainCategorySlug } from '@/helpers/projects';
 import { escapeXml } from '@/helpers/xml';
 import { IProject, IQFRound } from '@/apollo/types/types';
 import { FETCH_QF_ROUNDS_QUERY } from '@/apollo/gql/gqlQF';
+import { FETCH_ALL_USERS_BASIC_DATA } from '@/apollo/gql/gqlUser';
+import { addressToUserView } from '@/lib/routeCreators';
+import { shortenAddress } from '@/lib/helpers';
 
 const URL = config.FRONTEND_LINK;
 
@@ -68,6 +72,33 @@ function generateQFRoundsSiteMap(rounds: IQFRound[]) {
             `;
 				},
 			)
+			.join('')}
+    </urlset>`;
+}
+
+// Function to generate the XML sitemap for users
+function generateUsersSiteMap(users: User[]) {
+	return `<?xml version="1.0" encoding="UTF-8"?>
+    <urlset xmlns="https://www.sitemaps.org/schemas/sitemap/0.9">
+      ${users
+			.filter(({ walletAddress }) => walletAddress !== null)
+			.map(({ name = '', walletAddress = '' }) => {
+				const userUrl =
+					addressToUserView(walletAddress.toLowerCase()) || '';
+
+				const safeName = escapeXml(
+					name ||
+						shortenAddress(walletAddress.toLowerCase()) ||
+						'\u200C',
+				);
+
+				return `
+              <url>
+								<loc>${`${URL}${userUrl}`}</loc>
+                <title>${safeName}</title>
+              </url>
+            `;
+			})
 			.join('')}
     </urlset>`;
 }
@@ -139,6 +170,39 @@ export default async function handler(
 			'utf-8',
 		);
 
+		/* USER SITEMAP */
+
+		// Fetch user data
+		const users = await getUsers(0);
+		const userTotalCount = users.totalCount;
+		const userEntries = [...users.users];
+
+		// Fetch remaining users if necessary
+		if (userTotalCount > 50) {
+			for (let i = 50; i < userTotalCount; i += 50) {
+				const nextBatch = await getUsers(i);
+				userEntries.push(...nextBatch.users);
+			}
+		}
+
+		// Generate XML content for users
+		const sitemapUsersContent = generateUsersSiteMap(userEntries);
+
+		// Define the file path for users sitemap
+		const filePathUsers = path.join(
+			process.cwd(),
+			'public',
+			'sitemap',
+			'users-sitemap.xml',
+		);
+
+		// Write the XML content to the file
+		await fs.promises.writeFile(
+			filePathUsers,
+			sitemapUsersContent,
+			'utf-8',
+		);
+
 		// Respond with success
 		res.status(200).json({
 			message: 'Sitemap generated and saved successfully',
@@ -180,4 +244,25 @@ async function getArchivedRounds() {
 	});
 
 	return data.qfRounds || [];
+}
+
+// Fetch user data from GraphQL
+async function getUsers(skip: number) {
+	const apolloClient = initializeApollo();
+
+	console.log('GraphQL Query:', FETCH_ALL_USERS_BASIC_DATA);
+	console.log('Variables:', { limit: 50, skip: skip });
+
+	const { data } = await apolloClient.query({
+		query: FETCH_ALL_USERS_BASIC_DATA, // Query for user data
+		variables: {
+			limit: 50,
+			skip: skip,
+		},
+		fetchPolicy: 'no-cache',
+	});
+
+	console.log({ data });
+
+	return data.allUsersBasicData || { users: [], totalCount: 0 };
 }
