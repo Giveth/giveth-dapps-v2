@@ -1,4 +1,5 @@
 import React, { FC, useEffect, useState } from 'react';
+import styled from 'styled-components';
 import { useIntl } from 'react-intl';
 import { brandColors, H6, Lead, ButtonLink } from '@giveth/ui-design-system';
 import Link from 'next/link';
@@ -9,6 +10,7 @@ import check_stars from '/public/images/icons/check_stars.svg';
 import failed_stars from '/public/images/icons/failed_stars.svg';
 import { SEND_EMAIL_VERIFICATION_TOKEN } from '@/apollo/gql/gqlVerification';
 import { client } from '@/apollo/apolloClient';
+import { mediaQueries } from '@/lib/constants/constants';
 import { slugToVerification } from '@/lib/routeCreators';
 import {
 	VCImageContainer,
@@ -76,9 +78,16 @@ export default function EmailVerificationIndex() {
 }
 
 function Verified() {
+	const [querySlug, setQuerySlug] = useState<string | undefined>(undefined);
 	const router = useRouter();
 	const { slug } = router.query;
 	const { formatMessage } = useIntl();
+
+	useEffect(() => {
+		if (slug) {
+			setQuerySlug(slug as string);
+		}
+	}, [slug]);
 
 	return (
 		<>
@@ -96,16 +105,18 @@ function Verified() {
 					id: 'label.you_can_now_close_this_page_and_continue_verifying',
 				})}
 			</Lead>
-			<Link href={slugToVerification(slug as string)}>
-				<ButtonLink
-					size='small'
-					label={
-						formatMessage({
-							id: 'label.continue_verification',
-						})!
-					}
-				/>
-			</Link>
+			<LinkHolder>
+				<Link href={slugToVerification(querySlug as string)}>
+					<ButtonLink
+						size='small'
+						label={
+							formatMessage({
+								id: 'label.continue_verification',
+							})!
+						}
+					/>
+				</Link>
+			</LinkHolder>
 			<VCImageContainer>
 				<Link href='/'>
 					<Image
@@ -134,12 +145,12 @@ function Rejected() {
 				This link is expired or not exist anymore, you have to verify
 				your email again.
 			</Lead>
-			<VCLeadContainer>
+			<VCLeadContainerHolder>
 				<Lead>
 					please go to the verify status form under personal info and
 					request a new verification email!
 				</Lead>
-			</VCLeadContainer>
+			</VCLeadContainerHolder>
 
 			<VCImageContainer>
 				<Link href='/'>
@@ -154,3 +165,23 @@ function Rejected() {
 		</>
 	);
 }
+
+const LinkHolder = styled.div`
+	position: relative;
+	z-index: 1000;
+	${mediaQueries.mobileS} {
+		margin-bottom: 205px;
+	}
+	${mediaQueries.laptopS} {
+		margin-bottom: 0;
+	}
+`;
+
+const VCLeadContainerHolder = styled(VCLeadContainer)`
+	${mediaQueries.mobileS} {
+		margin-bottom: 205px;
+	}
+	${mediaQueries.laptopS} {
+		margin-bottom: 0;
+	}
+`;

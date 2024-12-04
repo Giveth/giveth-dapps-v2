@@ -39,11 +39,13 @@ export function checkVerificationStep(
 		case EVerificationSteps.BEFORE_START:
 			return true;
 		case EVerificationSteps.PERSONAL_INFO:
-			return (
-				verificationData !== undefined &&
-				verificationData.personalInfo !== null &&
-				verificationData.emailConfirmed !== false
-			);
+			// Removed because we are doing these confirmation on user profile
+			// return (
+			// 	verificationData !== undefined &&
+			// 	verificationData.personalInfo !== null &&
+			// 	verificationData.emailConfirmed !== false
+			// );
+			return true;
 		case EVerificationSteps.SOCIAL_PROFILES:
 			return (
 				verificationData !== undefined &&

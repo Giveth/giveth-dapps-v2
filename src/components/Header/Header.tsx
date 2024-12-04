@@ -35,6 +35,7 @@ import { ETheme } from '@/features/general/general.slice';
 import {
 	setShowCompleteProfile,
 	setShowSearchModal,
+	setShowVerifyEmailModal,
 } from '@/features/modal/modal.slice';
 import { slugToProjectView } from '@/lib/routeCreators';
 import { useModalCallback } from '@/hooks/useModalCallback';
@@ -138,6 +139,10 @@ const Header: FC<IHeader> = () => {
 			openWalletConnectModal();
 		} else if (!isSignedIn) {
 			signInThenCreate();
+		} else if (!isUserRegistered(userData)) {
+			dispatch(setShowCompleteProfile(true));
+		} else if (!userData?.isEmailVerified) {
+			dispatch(setShowVerifyEmailModal(true));
 		} else if (isUserRegistered(userData)) {
 			router.push(Routes.CreateProject);
 		} else {

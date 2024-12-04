@@ -157,10 +157,7 @@ const DonateIndex: FC = () => {
 
 				if (!transactionId) return;
 				const includeInQF =
-					activeStartedRound &&
-					!!getDonationById.valueUsd &&
-					getDonationById.valueUsd >=
-						(activeStartedRound?.minimumValidUsdValue || 0);
+					activeStartedRound && !!getDonationById.valueUsd;
 				setSuccessDonation({
 					txHash: [
 						{
