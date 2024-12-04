@@ -44,7 +44,7 @@ import { showToastError, truncateToDecimalPlaces } from '@/lib/helpers';
 import config from '@/configuration';
 import { WrongNetworkLayer } from '../WrongNetworkLayer';
 import { ModifySuperTokenModal } from './ModifySuperToken/ModifySuperTokenModal';
-import { limitFraction } from '@/helpers/number';
+import { limitFraction, formatDonation } from '@/helpers/number';
 import AlloProtocolFirstDonationModal from './AlloProtocolFirstDonationModal';
 import links from '@/lib/constants/links';
 import Routes from '@/lib/constants/Routes';
@@ -142,17 +142,26 @@ export const RecurringDonationCard = () => {
 		if (selectedRecurringToken.token.isSuperToken) {
 			setAmount(balance.value || 0n);
 		}
+		if (selectedRecurringToken.token.decimals === 6) {
+			setAmount(0n);
+			setPerMonthAmount(0n);
+		}
 	}, [selectedRecurringToken, balance]);
 
 	const underlyingToken = selectedRecurringToken?.token.underlyingToken;
 
+	// Introduce a scaling factor to handle tokens with different decimals
+	const scaleFactor =
+		selectedRecurringToken?.token.decimals === 6 ? 10000n : 1n;
+
 	// total means project + giveth
-	const totalPerSec = perMonthAmount / ONE_MONTH_SECONDS;
+	const totalPerSec = perMonthAmount / (ONE_MONTH_SECONDS / scaleFactor);
 	const projectPerMonth =
 		(perMonthAmount * BigInt(100 - donationToGiveth)) / 100n;
 	const givethPerMonth = perMonthAmount - projectPerMonth;
 	const tokenBalance = balance?.value;
-	const tokenStream = tokenStreams[selectedRecurringToken?.token.id || ''];
+	const tokenStream =
+		tokenStreams[selectedRecurringToken?.token.id.toLowerCase() || ''];
 
 	const anchorContractAddress = useMemo(
 		() => findAnchorContractAddress(project.anchorContracts),
@@ -168,7 +177,8 @@ export const RecurringDonationCard = () => {
 				0n,
 			) || 0n;
 	const totalStreamPerSec = totalPerSec + otherStreamsPerSec;
-	const totalStreamPerMonth = totalStreamPerSec * ONE_MONTH_SECONDS;
+	const totalStreamPerMonth =
+		totalStreamPerSec * (ONE_MONTH_SECONDS / scaleFactor);
 	const streamRunOutInMonth =
 		totalStreamPerSec > 0 ? amount / totalStreamPerMonth : 0n;
 	const isTotalStreamExceed =
@@ -560,12 +570,15 @@ export const RecurringDonationCard = () => {
 											id: 'label.you_will_donate_total',
 										})}{' '}
 										<TotalMonthlyStream>
-											{limitFraction(
-												formatUnits(
-													totalStreamPerSec *
-														ONE_MONTH_SECONDS,
-													selectedRecurringToken
-														?.token.decimals || 18,
+											{formatDonation(
+												limitFraction(
+													formatUnits(
+														totalStreamPerSec *
+															ONE_MONTH_SECONDS,
+														selectedRecurringToken
+															?.token.decimals ||
+															18,
+													),
 												),
 											)}{' '}
 											{
@@ -767,7 +780,9 @@ export const RecurringDonationCard = () => {
 			{showTopUpModal && selectedRecurringToken && (
 				<ModifySuperTokenModal
 					tokenStreams={
-						tokenStreams[selectedRecurringToken?.token.id || '']
+						tokenStreams[
+							selectedRecurringToken?.token.id.toLowerCase() || ''
+						]
 					}
 					setShowModal={setShowTopUpModal}
 					selectedToken={selectedRecurringToken?.token!}

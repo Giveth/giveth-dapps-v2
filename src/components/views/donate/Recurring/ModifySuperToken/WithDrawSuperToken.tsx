@@ -187,7 +187,7 @@ export const WithDrawSuperToken: FC<IWithDrawSuperTokenProps> = ({
 						title='Withdraw from this stream balance'
 						amount={amount}
 						price={tokenPrice}
-						token={token!}
+						token={superToken!}
 					/>
 					<RunOutInfo
 						superTokenBalance={

@@ -98,6 +98,8 @@
 	"component.title.user_guides": "Guies d'Usuari",
 	"component.title.we_hiring": "Estem contractant!",
 	"component.title.what_is_giveth": "Què és Giveth?",
+	"component.title.qacc": "Q/acc",
+	"component.title.qacc_news": "Q/acc News",
 	"component.title.with_your_donation": "amb la teva donació",
 	"component.tooltip.donate_anonymously": "En marcar això, no considerarem la informació del teu perfil com a donant per a aquesta donació i no la mostrarem a les pàgines públiques.",
 	"component.tooltip.donate_privately": "Si marques això, amagarem el teu nom i l'enllaç de la transacció de donació de la pàgina del projecte, i no mostrarem aquesta donació a la teva pàgina de perfil públic.",
