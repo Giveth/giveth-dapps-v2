@@ -1,5 +1,6 @@
 import { useFormContext } from 'react-hook-form';
 import { useIntl } from 'react-intl';
+import { useAccount, useSwitchChain } from 'wagmi';
 import styled, { css } from 'styled-components';
 import {
 	B,
@@ -23,13 +24,16 @@ import { getChainName } from '@/lib/network';
 import { IChainType } from '@/types/config';
 import { findAddressByChain } from '@/lib/helpers';
 import { useGeneralWallet } from '@/providers/generalWalletProvider';
-import { IAnchorContractData } from '@/apollo/types/types';
+import { IAnchorContractData, IProject } from '@/apollo/types/types';
 import { IconWithTooltip } from '@/components/IconWithToolTip';
 import { EInputs } from './types';
 import links from '@/lib/constants/links';
+import { STOP_RECURRING_SETUP_ON_CREATION } from './CreateProject';
+import { saveAnchorContract } from './AlloProtocol/AlloProtocolModal';
 
 interface IAddressInterfaceProps extends IChainType {
 	networkId: number;
+	project?: IProject;
 	onButtonClick?: () => void;
 	anchorContractData?: IAnchorContractData;
 	isEditMode?: boolean;
@@ -41,14 +45,22 @@ interface IconContainerProps {
 
 const AddressInterface = ({
 	networkId,
+	project,
 	onButtonClick,
 	chainType,
 	anchorContractData,
 	isEditMode,
 }: IAddressInterfaceProps) => {
+	const { chain } = useAccount();
+	const { switchChain } = useSwitchChain();
 	const { setValue, watch } = useFormContext();
 	const { formatMessage } = useIntl();
 	const { isOnEVM } = useGeneralWallet();
+
+	const isOnOptimism = chain
+		? chain.id === config.OPTIMISM_NETWORK_NUMBER
+		: false;
+	const isOnBase = chain ? chain.id === config.BASE_NETWORK_NUMBER : false;
 
 	const inputName = EInputs.addresses;
 	const alloProtocolRegistry = watch(EInputs.alloProtocolRegistry) as boolean;
@@ -56,6 +68,7 @@ const AddressInterface = ({
 	const value = watch(inputName);
 
 	const isOptimism = networkId === config.OPTIMISM_NETWORK_NUMBER;
+	const isBase = networkId === config.BASE_NETWORK_NUMBER;
 
 	const addressObj = findAddressByChain(value, networkId, chainType);
 	const walletAddress = addressObj?.address;
@@ -67,6 +80,15 @@ const AddressInterface = ({
 		config.OPTIMISM_NETWORK_NUMBER,
 		chainType,
 	);
+	const hasBaseAddress = !!findAddressByChain(
+		value,
+		config.BASE_NETWORK_NUMBER,
+		chainType,
+	);
+	const isRecurringOnOptimismReady = isOptimism && hasOptimismAddress;
+	const isRecurringOnBaseReady = isBase && hasBaseAddress;
+	const isRecurringDonationsReady =
+		isRecurringOnBaseReady || isRecurringOnOptimismReady;
 
 	return (
 		<Container>
@@ -117,7 +139,7 @@ const AddressInterface = ({
 						{hasAddress ? walletAddress : 'No address added yet!'}
 					</AddressContainer>
 					{hasAddress &&
-						(hasAnchorContract && isOptimism ? (
+						(hasAnchorContract && (isOptimism || isBase) ? (
 							<IconWithTooltip
 								direction='top'
 								icon={
@@ -153,10 +175,10 @@ const AddressInterface = ({
 							</IconContainer>
 						))}
 				</Flex>
-				{isOptimism && isOnEVM && (
-					// Render this section only on Optimism
+				{(isOptimism || isBase) && isOnEVM && (
+					// Render this section only on Optimism and Base
 					<AlloProtocolContainer>
-						<Flex>
+						<Flex $flexDirection='column' $alignItems='end'>
 							<div>
 								<B>
 									{hasAnchorContract && isEditMode
@@ -192,18 +214,55 @@ const AddressInterface = ({
 								<IconCheckContainer>
 									<IconCheck16 color={brandColors.giv[100]} />
 								</IconCheckContainer>
+							) : STOP_RECURRING_SETUP_ON_CREATION ? (
+								<EnableBtn>
+									<Button
+										buttonType={
+											isRecurringDonationsReady
+												? 'secondary'
+												: 'texty-secondary'
+										}
+										label={'Enable'}
+										disabled={!isRecurringDonationsReady}
+										onClick={() => {
+											if (!project) return;
+											if (
+												isRecurringOnOptimismReady &&
+												!isOnOptimism
+											) {
+												switchChain?.({
+													chainId:
+														config.OPTIMISM_NETWORK_NUMBER,
+												});
+											} else if (
+												isRecurringOnBaseReady &&
+												!isOnBase
+											) {
+												switchChain?.({
+													chainId:
+														config.BASE_NETWORK_NUMBER,
+												});
+											}
+
+											saveAnchorContract({
+												addedProjectState: project,
+												chainId: networkId,
+											});
+										}}
+									/>
+								</EnableBtn>
 							) : (
 								<ToggleSwitch
 									isOn={alloProtocolRegistry}
 									toggleOnOff={() => {
-										if (!hasOptimismAddress) return;
+										if (!isRecurringDonationsReady) return;
 										setValue(
 											EInputs.alloProtocolRegistry,
 											!alloProtocolRegistry,
 										);
 									}}
 									label=''
-									disabled={!hasOptimismAddress}
+									disabled={!isRecurringDonationsReady}
 								/>
 							)}
 						</Flex>
@@ -233,7 +292,7 @@ const TopContainer = styled.div`
 `;
 
 const MiddleContainer = styled.div`
-	padding: 24px 0;
+	padding: 24px 0 0 0;
 `;
 
 const AddressContainer = styled.div<{ $hasAddress: boolean }>`
@@ -284,6 +343,11 @@ const CustomLink = styled.a`
 	color: ${brandColors.giv[500]};
 	text-decoration: none;
 	cursor: pointer;
+`;
+
+const EnableBtn = styled.div`
+	width: 100px;
+	margin: 12px 0 0 0;
 `;
 
 export default AddressInterface;

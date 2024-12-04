@@ -423,6 +423,7 @@ const config: EnvConfig = {
 		gasPreference: {
 			// Keep it empty for automatic configuration
 		},
+		anchorRegistryAddress: '0x4AAcca72145e1dF2aeC137E1f3C5E3D75DB8b5f3',
 		chainLogo: (logoSize?: number) => <IconBase size={logoSize} />,
 	},
 
