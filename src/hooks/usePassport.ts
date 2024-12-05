@@ -235,7 +235,9 @@ export const usePassport = () => {
 		});
 
 		try {
-			const userAddressScore = await scoreUserAddress(address);
+			const userAddressScore = await scoreUserAddress(
+				address as `0x${string}`,
+			);
 			await updateState(userAddressScore);
 			dispatch(setUserMBDScore(userAddressScore?.activeQFMBDScore));
 		} catch (error) {

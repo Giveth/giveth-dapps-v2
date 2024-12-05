@@ -57,7 +57,7 @@ export const retryFetchEVMTransaction = async (
 ) => {
 	for (let i = 0; i < retries; i++) {
 		const transaction = await getTransaction(wagmiConfig, {
-			hash: txHash,
+			hash: txHash as `0x${string}`,
 		}).catch(error => {
 			console.error(
 				'Attempt',
