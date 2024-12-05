@@ -45,11 +45,16 @@ export interface IBalances {
 	[key: string]: bigint;
 }
 
-const superTokens = config.OPTIMISM_CONFIG.SUPER_FLUID_TOKENS;
-
 const SelectTokenInnerModal: FC<ISelectTokenModalProps> = ({
 	setShowModal,
 }) => {
+	const { chain } = useAccount();
+
+	const superTokens =
+		chain?.id === config.OPTIMISM_NETWORK_NUMBER
+			? config.OPTIMISM_CONFIG.SUPER_FLUID_TOKENS
+			: config.BASE_CONFIG.SUPER_FLUID_TOKENS;
+
 	const [tokens, setTokens] = useState<ISuperToken[]>([]);
 	const [underlyingTokens, setUnderlyingTokens] = useState<ISuperToken[]>([]);
 	const [balances, setBalances] = useState<IBalances>({});

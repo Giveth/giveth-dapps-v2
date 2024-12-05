@@ -36,7 +36,8 @@ export const WrongNetworkLayer = () => {
 							if (isOnEVM) {
 								switchChain &&
 									switchChain({
-										chainId: config.OPTIMISM_NETWORK_NUMBER,
+										// chainId: config.OPTIMISM_NETWORK_NUMBER,
+										chainId: config.BASE_NETWORK_NUMBER,
 									});
 							} else {
 								await handleSingOutAndSignInWithEVM();

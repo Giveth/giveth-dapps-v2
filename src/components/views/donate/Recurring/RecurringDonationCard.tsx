@@ -762,7 +762,9 @@ export const RecurringDonationCard = () => {
 			{showSelectTokenModal && (
 				<SelectTokenModal setShowModal={setShowSelectTokenModal} />
 			)}
-			{(!chain || chain.id !== config.OPTIMISM_NETWORK_NUMBER) && (
+			{(!chain ||
+				(chain.id !== config.OPTIMISM_NETWORK_NUMBER &&
+					chain.id !== config.BASE_NETWORK_NUMBER)) && (
 				<WrongNetworkLayer />
 			)}
 			{showRecurringDonationModal && (
