@@ -98,6 +98,11 @@ const moduleExports = withBundleAnalyzer({
 				permanent: false,
 			},
 			{
+				source: '/comarketing',
+				destination: '/assets/Giveth-Co-Marketing-Slides.pdf',
+				permanent: false,
+			},
+			{
 				source: '/qfguide',
 				destination:
 					'https://giveth.notion.site/Giveth-Quadratic-Funding-3478aa27eb094a699f9ddd6a8b611027',
