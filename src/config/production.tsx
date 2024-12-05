@@ -580,6 +580,7 @@ const config: EnvConfig = {
 		coingeckoChainName: 'celo',
 		chainLogo: (logoSize = 24) => <IconCelo size={logoSize} />,
 	},
+
 	ARBITRUM_CONFIG: {
 		...arbitrum,
 		chainType: ChainType.EVM,
@@ -590,6 +591,7 @@ const config: EnvConfig = {
 		coingeckoChainName: 'arbitrum',
 		chainLogo: (logoSize = 24) => <IconArbitrum size={logoSize} />,
 	},
+
 	BASE_CONFIG: {
 		...base,
 		chainType: ChainType.EVM,
@@ -599,6 +601,83 @@ const config: EnvConfig = {
 		subgraphAddress: '',
 		coingeckoChainName: 'base',
 		chainLogo: (logoSize = 24) => <IconBase size={logoSize} />,
+		SUPER_FLUID_TOKENS: [
+			{
+				underlyingToken: {
+					decimals: 6,
+					id: '0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913',
+					name: 'USD Coin',
+					symbol: 'USDC',
+					coingeckoId: 'usd-coin',
+				},
+				decimals: 18,
+				id: '0xD04383398dD2426297da660F9CCA3d439AF9ce1b',
+				name: 'Super USD Coin',
+				symbol: 'USDCx',
+				isSuperToken: true,
+				coingeckoId: 'usd-coin',
+			},
+			{
+				underlyingToken: {
+					decimals: 18,
+					id: '0x0000000000000000000000000000000000000000',
+					name: 'Ethereum',
+					symbol: 'ETH',
+					coingeckoId: 'ethereum',
+				},
+				decimals: 18,
+				id: '0x46fd5cfB4c12D87acD3a13e92BAa53240C661D93',
+				name: 'Super ETH',
+				symbol: 'ETHx',
+				isSuperToken: true,
+				coingeckoId: 'ethereum',
+			},
+			{
+				underlyingToken: {
+					decimals: 18,
+					id: '0xcbB7C0000aB88B473b1f5aFd9ef808440eed33Bf',
+					name: 'Coinbase Wrapped BTC',
+					symbol: 'cbBTC',
+					coingeckoId: 'bitcoin',
+				},
+				decimals: 18,
+				id: '0xDFd428908909CB5E24F5e79E6aD6BDE10bdf2327',
+				name: 'Coinbase wrapped BTC',
+				symbol: 'cbBTCx',
+				isSuperToken: true,
+				coingeckoId: 'bitcoin',
+			},
+			{
+				underlyingToken: {
+					decimals: 18,
+					id: '0x50c5725949A6F0c72E6C4a641F24049A917DB0Cb',
+					name: 'Dai Stablecoin',
+					symbol: 'DAI',
+					coingeckoId: 'dai',
+				},
+				decimals: 18,
+				id: '0x708169c8C87563Ce904E0a7F3BFC1F3b0b767f41',
+				name: 'Coinbase wrapped BTC',
+				symbol: 'DAIx',
+				isSuperToken: true,
+				coingeckoId: 'dai',
+			},
+			{
+				underlyingToken: {
+					decimals: 18,
+					id: '0x4ed4E862860beD51a9570b96d89aF5E1B0Efefed',
+					name: 'Degen',
+					symbol: 'DEGEN',
+					coingeckoId: 'degen-base',
+				},
+				decimals: 18,
+				id: '0x1efF3Dd78F4A14aBfa9Fa66579bD3Ce9E1B30529',
+				name: 'Super Degen',
+				symbol: 'DEGENx',
+				isSuperToken: true,
+				coingeckoId: 'degen-base',
+			},
+		],
 	},
 
 	ZKEVM_CONFIG: {
