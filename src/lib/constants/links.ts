@@ -56,6 +56,8 @@ const links = {
 	SWAG: 'https://swag.giveth.io/',
 	COMMONS_STACK: 'https://commonsstack.org/',
 	RECRUITEE: 'https://giveth.recruitee.com/',
+	QACC: 'https://qacc.giveth.io/',
+	QACC_NEWS: 'https://qacc.giveth.io/news',
 	JOINGIVFRENS: TYPEFORM + 'regenfarms',
 	DISCORD_SUPPORT: 'https://discord.gg/TeWHtAjNQT',
 	CALENDAR:
