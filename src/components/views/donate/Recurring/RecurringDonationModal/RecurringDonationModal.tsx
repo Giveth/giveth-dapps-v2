@@ -132,7 +132,8 @@ const RecurringDonationInnerModal: FC<IRecurringDonationInnerModalProps> = ({
 		tokenStreams,
 		setSuccessDonation,
 	} = useDonateData();
-	const { address } = useAccount();
+	const { address, chain } = useAccount();
+	const recurringNetworkID = chain?.id ?? 0;
 	const tokenPrice = useTokenPrice(selectedRecurringToken?.token);
 	const isSafeEnv = useIsSafeEnvironment();
 	const { formatMessage } = useIntl();
@@ -149,7 +150,7 @@ const RecurringDonationInnerModal: FC<IRecurringDonationInnerModalProps> = ({
 
 	const onApprove = async () => {
 		try {
-			await ensureCorrectNetwork(config.OPTIMISM_NETWORK_NUMBER);
+			await ensureCorrectNetwork(recurringNetworkID);
 			console.log(
 				'amount',
 				formatUnits(
@@ -161,6 +162,7 @@ const RecurringDonationInnerModal: FC<IRecurringDonationInnerModalProps> = ({
 			if (!address || !selectedRecurringToken) return;
 			const superToken = findSuperTokenByTokenAddress(
 				selectedRecurringToken.token.id,
+				recurringNetworkID,
 			);
 			if (!superToken) throw new Error('SuperToken not found');
 			const approve = await approveERC20tokenTransfer(
@@ -168,7 +170,7 @@ const RecurringDonationInnerModal: FC<IRecurringDonationInnerModalProps> = ({
 				address,
 				superToken.id, //superTokenAddress
 				selectedRecurringToken?.token.id, //tokenAddress
-				config.OPTIMISM_CONFIG.id,
+				recurringNetworkID,
 				isSafeEnv,
 			);
 			if (approve) {
@@ -183,7 +185,7 @@ const RecurringDonationInnerModal: FC<IRecurringDonationInnerModalProps> = ({
 
 	const onDonate = async () => {
 		try {
-			await ensureCorrectNetwork(config.OPTIMISM_NETWORK_NUMBER);
+			await ensureCorrectNetwork(recurringNetworkID);
 			setStep(EDonationSteps.DONATING);
 			const projectAnchorContract = findAnchorContractAddress(
 				project?.anchorContracts,
@@ -201,7 +203,10 @@ const RecurringDonationInnerModal: FC<IRecurringDonationInnerModalProps> = ({
 				throw new Error('Provider or signer not found');
 			let _superToken = selectedRecurringToken.token;
 			if (!_superToken.isSuperToken) {
-				const sp = findSuperTokenByTokenAddress(_superToken.id);
+				const sp = findSuperTokenByTokenAddress(
+					_superToken.id,
+					recurringNetworkID,
+				);
 				if (!sp) {
 					throw new Error('Super token not found');
 				} else {
@@ -210,7 +215,7 @@ const RecurringDonationInnerModal: FC<IRecurringDonationInnerModalProps> = ({
 			}
 
 			const _options = {
-				chainId: config.OPTIMISM_CONFIG.id,
+				chainId: recurringNetworkID,
 				provider: provider,
 				resolverAddress: isProduction
 					? undefined
@@ -256,7 +261,7 @@ const RecurringDonationInnerModal: FC<IRecurringDonationInnerModalProps> = ({
 					amount: newAmount.toString(),
 				});
 
-				//Upgrading ETHx is a special case and can't be batched
+				// Upgrading ETHx is a special case and can't be batched
 				if (_superToken.symbol === 'ETHx') {
 					await upgradeOperation.exec(signer);
 				} else {
@@ -340,7 +345,7 @@ const RecurringDonationInnerModal: FC<IRecurringDonationInnerModalProps> = ({
 			const projectDraftDonationInfo: ICreateDraftRecurringDonation = {
 				projectId: +project.id,
 				anonymous,
-				chainId: config.OPTIMISM_NETWORK_NUMBER,
+				chainId: recurringNetworkID,
 				flowRate: _flowRate,
 				superToken: _superToken,
 				isBatch,
@@ -355,7 +360,7 @@ const RecurringDonationInnerModal: FC<IRecurringDonationInnerModalProps> = ({
 			const givethDraftDonationInfo: ICreateDraftRecurringDonation = {
 				projectId: config.GIVETH_PROJECT_ID,
 				anonymous,
-				chainId: config.OPTIMISM_NETWORK_NUMBER,
+				chainId: recurringNetworkID,
 				flowRate: givethFlowRate,
 				superToken: _superToken,
 				isBatch,
@@ -368,7 +373,7 @@ const RecurringDonationInnerModal: FC<IRecurringDonationInnerModalProps> = ({
 				);
 			}
 
-			await ensureCorrectNetwork(config.OPTIMISM_NETWORK_NUMBER);
+			await ensureCorrectNetwork(recurringNetworkID);
 
 			if (isBatch) {
 				const batchOp = sf.batchCall(operations);
@@ -484,14 +489,14 @@ const RecurringDonationInnerModal: FC<IRecurringDonationInnerModalProps> = ({
 						],
 						isRecurring: true,
 						givBackEligible: true,
-						chainId: config.OPTIMISM_NETWORK_NUMBER,
+						chainId: recurringNetworkID,
 					});
 				} else {
 					setSuccessDonation({
 						txHash: [{ txHash: tx.hash, chainType: ChainType.EVM }],
 						isRecurring: true,
 						givBackEligible: true,
-						chainId: config.OPTIMISM_NETWORK_NUMBER,
+						chainId: recurringNetworkID,
 					});
 				}
 			}

@@ -13,11 +13,22 @@ import { useSwitchChain } from 'wagmi';
 import { useIntl } from 'react-intl';
 import config from '@/configuration';
 import { useGeneralWallet } from '@/providers/generalWalletProvider';
+import NetworkLogo from '@/components/NetworkLogo';
+import { ChainType } from '@/types/config';
 
 export const WrongNetworkLayer = () => {
 	const { switchChain } = useSwitchChain();
 	const { isOnEVM, handleSingOutAndSignInWithEVM } = useGeneralWallet();
 	const { formatMessage } = useIntl();
+
+	// List of recurring networks for user to select
+	const networks = [
+		{
+			name: config.OPTIMISM_CONFIG.name,
+			chainId: config.OPTIMISM_NETWORK_NUMBER,
+		},
+		{ name: config.BASE_CONFIG.name, chainId: config.BASE_NETWORK_NUMBER },
+	];
 
 	return (
 		<Overlay>
@@ -27,27 +38,39 @@ export const WrongNetworkLayer = () => {
 						<IconInfoFilled16 />
 						<Caption>
 							{formatMessage({
-								id: 'label.recurring_donations_currently_only_available_on_optimism',
+								id: 'label.recurring_donations_currently_only_available_on_optimism_base',
 							})}
 						</Caption>
 					</Title>
-					<SwitchButton
-						onClick={async () => {
-							if (isOnEVM) {
-								switchChain &&
-									switchChain({
-										// chainId: config.OPTIMISM_NETWORK_NUMBER,
-										chainId: config.BASE_NETWORK_NUMBER,
-									});
-							} else {
-								await handleSingOutAndSignInWithEVM();
-							}
-						}}
-					>
-						{formatMessage({
-							id: 'label.switch_network',
-						})}
-					</SwitchButton>
+					{networks.map(network => (
+						<NetworkWrapper key={network.chainId}>
+							<SwitchButtonHolder
+								key={network.chainId}
+								onClick={async () => {
+									if (isOnEVM) {
+										switchChain &&
+											switchChain({
+												chainId: network.chainId,
+											});
+									} else {
+										await handleSingOutAndSignInWithEVM();
+									}
+								}}
+							>
+								<NetworkLogo
+									chainId={network.chainId}
+									chainType={ChainType.EVM}
+									logoSize={30}
+								/>
+								<NetworkNameHolder>
+									{formatMessage({
+										id: 'label.switch_network',
+									})}{' '}
+									to {network.name}
+								</NetworkNameHolder>
+							</SwitchButtonHolder>
+						</NetworkWrapper>
+					))}
 				</Header>
 				<Desc>
 					{formatMessage(
@@ -55,7 +78,12 @@ export const WrongNetworkLayer = () => {
 							id: 'label.switch_to_network_to_continue_donating',
 						},
 						{
-							network: <b>{config.OPTIMISM_CONFIG.name}</b>,
+							network: (
+								<>
+									<b>{config.OPTIMISM_CONFIG.name}</b> or{' '}
+									<b>{config.BASE_CONFIG.name}</b>
+								</>
+							),
 						},
 					)}
 				</Desc>
@@ -107,4 +135,19 @@ const Desc = styled(Caption)`
 	color: ${neutralColors.gray[700]};
 	margin-top: 8px;
 	text-align: left;
+`;
+
+const NetworkWrapper = styled(Flex)`
+	width: 100%;
+`;
+
+const SwitchButtonHolder = styled(SwitchButton)`
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	margin-bottom: 8px;
+`;
+
+const NetworkNameHolder = styled.div`
+	padding-right: 10px;
 `;

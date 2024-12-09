@@ -113,8 +113,7 @@ export const RecurringDonationCard = () => {
 	const [showAlloProtocolModal, setShowAlloProtocolModal] = useState(false);
 
 	const { formatMessage } = useIntl();
-	const { address } = useAccount();
-	const { chain } = useAccount();
+	const { address, chain } = useAccount();
 	const isSignedIn = useAppSelector(state => state.user.isSignedIn);
 	const { modalCallback: signInThenDonate } = useModalCallback(() =>
 		setShowRecurringDonationModal(true),
