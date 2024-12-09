@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { useFormContext } from 'react-hook-form';
 import { useIntl } from 'react-intl';
 import { useAccount, useSwitchChain } from 'wagmi';
@@ -57,6 +58,10 @@ const AddressInterface = ({
 	const { formatMessage } = useIntl();
 	const { isOnEVM } = useGeneralWallet();
 
+	const [hasAnchorContract, setHasAnchorContract] = useState(
+		anchorContractData?.isActive || false,
+	);
+
 	const isOnOptimism = chain
 		? chain.id === config.OPTIMISM_NETWORK_NUMBER
 		: false;
@@ -74,7 +79,7 @@ const AddressInterface = ({
 	const walletAddress = addressObj?.address;
 
 	const hasAddress = !!walletAddress;
-	const hasAnchorContract = !!anchorContractData?.isActive;
+
 	const hasOptimismAddress = !!findAddressByChain(
 		value,
 		config.OPTIMISM_NETWORK_NUMBER,
@@ -250,7 +255,7 @@ const AddressInterface = ({
 												recipientAddress:
 													walletAddress || value,
 											});
-											// update here so it shows it already has a contract
+											setHasAnchorContract(true);
 										}}
 									/>
 								</EnableBtn>
