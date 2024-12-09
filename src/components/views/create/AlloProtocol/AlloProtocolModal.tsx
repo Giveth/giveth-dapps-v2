@@ -34,9 +34,11 @@ interface IAlloProtocolModal extends IModal {
 export const saveAnchorContract = async ({
 	addedProjectState,
 	chainId,
+	recipientAddress,
 }: {
 	addedProjectState: IProject;
 	chainId: number;
+	recipientAddress?: string;
 }) => {
 	try {
 		const isOptimism = chainId === config.OPTIMISM_NETWORK_NUMBER;
@@ -63,11 +65,10 @@ export const saveAnchorContract = async ({
 				hash: hash,
 				chainId,
 			});
-
 			const contractAddress = extractContractAddressFromString(
 				data.logs[0].data,
 			);
-			console.log({ data, contractAddress });
+
 			//Call backend to update project
 			await client.mutate({
 				mutation: CREATE_ANCHOR_CONTRACT_ADDRESS_QUERY,
@@ -75,6 +76,7 @@ export const saveAnchorContract = async ({
 					projectId: Number(addedProjectState.id),
 					networkId: chainId,
 					address: contractAddress,
+					recipientAddress,
 					txHash: hash,
 				},
 			});

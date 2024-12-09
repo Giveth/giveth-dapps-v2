@@ -224,7 +224,7 @@ const AddressInterface = ({
 										}
 										label={'Enable'}
 										disabled={!isRecurringDonationsReady}
-										onClick={() => {
+										onClick={async () => {
 											if (!project) return;
 											if (
 												isRecurringOnOptimismReady &&
@@ -244,10 +244,13 @@ const AddressInterface = ({
 												});
 											}
 
-											saveAnchorContract({
+											await saveAnchorContract({
 												addedProjectState: project,
 												chainId: networkId,
+												recipientAddress:
+													walletAddress || value,
 											});
+											// update here so it shows it already has a contract
 										}}
 									/>
 								</EnableBtn>

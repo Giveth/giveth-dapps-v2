@@ -55,6 +55,7 @@ export const PROJECT_CARD_FIELDS = gql`
 		anchorContracts {
 			address
 			isActive
+			networkId
 		}
 	}
 `;
@@ -196,6 +197,7 @@ export const FETCH_PROJECT_BY_SLUG_DONATION = gql`
 			anchorContracts {
 				address
 				isActive
+				networkId
 			}
 		}
 	}
@@ -294,6 +296,7 @@ export const FETCH_PROJECT_BY_SLUG_SINGLE_PROJECT = gql`
 			anchorContracts {
 				address
 				isActive
+				networkId
 			}
 		}
 	}
@@ -332,6 +335,7 @@ export const FETCH_PROJECT_BY_ID = gql`
 			anchorContracts {
 				address
 				isActive
+				networkId
 			}
 		}
 	}

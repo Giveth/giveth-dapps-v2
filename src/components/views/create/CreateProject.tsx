@@ -26,6 +26,7 @@ import {
 } from '@/apollo/gql/gqlProjects';
 import {
 	EProjectSocialMediaType,
+	IAnchorContractData,
 	IProject,
 	IProjectCreation,
 	IProjectEdition,
@@ -455,7 +456,6 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 			localStorage.removeItem(StorageLabel.CREATE_PROJECT_FORM);
 		}
 	};
-
 	return (
 		<>
 			<CreateHeader
@@ -552,10 +552,13 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 											}}
 											isEditMode={isEditMode}
 											anchorContractData={
-												(project?.anchorContracts &&
-													project
-														?.anchorContracts[0]) ??
-												undefined
+												project?.anchorContracts?.find(
+													(
+														contract: IAnchorContractData,
+													) =>
+														contract.networkId ===
+														chain.id,
+												) ?? undefined
 											}
 										/>
 									))}
