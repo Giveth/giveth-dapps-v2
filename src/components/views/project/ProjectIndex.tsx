@@ -98,6 +98,15 @@ const ProjectIndex: FC<IProjectBySlug> = () => {
 	const hasStellarAddress = recipientAddresses?.some(
 		address => address.chainType === ChainType.STELLAR,
 	);
+	const [isTooltipVisible, setTooltipVisible] = useState(false);
+
+	const handleMouseEnter = () => {
+		setTooltipVisible(true);
+	};
+
+	const handleMouseLeave = () => {
+		setTooltipVisible(false);
+	};
 
 	const isEmailVerifiedStatus = isAdmin ? isAdminEmailVerified : true;
 
@@ -258,19 +267,58 @@ const ProjectIndex: FC<IProjectBySlug> = () => {
 					{activeTab === 2 && <ProjectDonations />}
 					{activeTab === 3 && <ProjectGIVPowerIndex />}
 					{isDraft && (
-						<Flex $justifyContent='flex-end'>
-							<ContinueCreationButton
-								label={formatMessage({
-									id: 'label.continue_creation',
-								})}
-								buttonType='primary'
-								type='submit'
-								onClick={() =>
-									router.push(
-										idToProjectEdit(projectData?.id || ''),
-									)
-								}
-							/>
+						<Flex
+							$justifyContent='flex-end'
+							style={{ position: 'relative' }}
+						>
+							{/* Show tooltip only when the button is disabled (email not verified) */}
+							{!isEmailVerifiedStatus && (
+								<TooltipWrapper
+									style={{
+										visibility: isTooltipVisible
+											? 'visible'
+											: 'hidden',
+										position: 'absolute',
+										zIndex: 1000,
+										top: '50px', // Adjust as needed to position the tooltip near the button
+										left: '+10',
+										opacity: isTooltipVisible ? 1 : 0,
+										transition: 'opacity 0.2s ease',
+									}}
+								>
+									{formatMessage({
+										id: 'label.email_tooltip',
+									})}
+								</TooltipWrapper>
+							)}
+
+							{/* Wrapper for hover events */}
+							<div
+								onMouseEnter={handleMouseEnter}
+								onMouseLeave={handleMouseLeave}
+								style={{
+									display: 'inline-block', // Ensures it wraps the button
+									cursor: !isEmailVerifiedStatus
+										? 'not-allowed'
+										: 'pointer', // Pointer only when enabled
+								}}
+							>
+								<ContinueCreationButton
+									label={formatMessage({
+										id: 'label.continue_creation',
+									})}
+									disabled={!isEmailVerifiedStatus} // Button disabled when email is not verified
+									buttonType='primary'
+									type='submit'
+									onClick={() =>
+										router.push(
+											idToProjectEdit(
+												projectData?.id || '',
+											),
+										)
+									}
+								/>
+							</div>
 						</Flex>
 					)}
 					<ProjectDevouchBox />
@@ -316,10 +364,6 @@ const HeadContainer = styled(Container)`
 const Separator = styled.hr`
 	border: 1px solid ${neutralColors.gray[400]};
 	margin: 40px 0;
-`;
-
-const ContinueCreationButton = styled(Button)`
-	align-self: flex-end;
 `;
 
 const MobileContainer = styled.div<{ $hasActiveRound: boolean }>`
@@ -386,6 +430,36 @@ const LinkItem = styled(P)<{ color: string }>`
 	color: ${props => props.color};
 	font-weight: 500;
 	text-transform: capitalize;
+`;
+const ContinueCreationButton = styled(Button)`
+	align-self: flex-end;
+	position: relative;
+	cursor: pointer;
+`;
+
+const TooltipWrapper = styled.div`
+	position: absolute;
+	bottom: -35px;
+	left: buttonRect.left + window.scrollX + 10;
+	transform: translateX(-50%);
+	background: #1a1a1a;
+	color: #fff;
+	padding: 8px 12px;
+	border-radius: 4px;
+	font-size: 12px;
+	white-space: nowrap;
+	opacity: 0;
+	visibility: hidden;
+	transition:
+		opacity 0.2s ease-in-out,
+		visibility 0.2s ease-in-out;
+	z-index: 1000;
+
+	/* Tooltip on hover */
+	${ContinueCreationButton}:hover & {
+		opacity: 1;
+		visibility: visible;
+	}
 `;
 
 export default ProjectIndex;
