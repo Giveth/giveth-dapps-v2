@@ -274,17 +274,7 @@ const ProjectIndex: FC<IProjectBySlug> = () => {
 							{/* Show tooltip only when the button is disabled (email not verified) */}
 							{!isEmailVerifiedStatus && (
 								<TooltipWrapper
-									style={{
-										visibility: isTooltipVisible
-											? 'visible'
-											: 'hidden',
-										position: 'absolute',
-										zIndex: 1000,
-										top: '50px', // Adjust as needed to position the tooltip near the button
-										left: '+10',
-										opacity: isTooltipVisible ? 1 : 0,
-										transition: 'opacity 0.2s ease',
-									}}
+									isTooltipVisible={isTooltipVisible}
 								>
 									{formatMessage({
 										id: 'label.email_tooltip',
@@ -436,8 +426,15 @@ const ContinueCreationButton = styled(Button)`
 	position: relative;
 	cursor: pointer;
 `;
-
-const TooltipWrapper = styled.div`
+interface TooltipWrapperProps {
+	isTooltipVisible: boolean;
+	top?: string;
+	left?: string;
+}
+const TooltipWrapper = styled.div<TooltipWrapperProps>`
+	visibility: ${isTooltipVisible =>
+		isTooltipVisible ? 'visible' : 'hidden'};
+	opacity: ${({ isTooltipVisible }) => (isTooltipVisible ? 1 : 0)};
 	position: absolute;
 	bottom: -35px;
 	left: buttonRect.left + window.scrollX + 10;
@@ -448,13 +445,8 @@ const TooltipWrapper = styled.div`
 	border-radius: 4px;
 	font-size: 12px;
 	white-space: nowrap;
-	opacity: 0;
-	visibility: hidden;
-	transition:
-		opacity 0.2s ease-in-out,
-		visibility 0.2s ease-in-out;
+	transition: 'opacity 0.2s ease';
 	z-index: 1000;
-
 	/* Tooltip on hover */
 	${ContinueCreationButton}:hover & {
 		opacity: 1;
