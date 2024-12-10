@@ -10,6 +10,7 @@ import { Framework, type Operation } from '@superfluid-finance/sdk-core';
 import { useAccount } from 'wagmi';
 import { useIntl } from 'react-intl';
 import { formatUnits } from 'viem';
+import { ethers } from 'ethers';
 import { Modal } from '@/components/modals/Modal';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
 import { IModal } from '@/types/common';
@@ -227,10 +228,32 @@ const RecurringDonationInnerModal: FC<IRecurringDonationInnerModalProps> = ({
 
 			const operations: Operation[] = [];
 
+			let newAmount = amount;
+			let newPerMonthAmount = perMonthAmount;
+
+			// This is a special case with tokens that have 6 decimals
+			// We need to convert the amount to 18 decimals for the upgrade operation
+			// And also for the flow rate calculation
+			if (selectedRecurringToken.token.decimals === 6) {
+				const divisor = BigInt(
+					10 ** selectedRecurringToken.token.decimals,
+				);
+				const currentAmount = Number(amount) / Number(divisor);
+				newAmount = ethers.utils
+					.parseUnits(currentAmount.toString(), 18)
+					.toBigInt();
+
+				const currentPerMonth =
+					Number(perMonthAmount) / Number(divisor);
+				newPerMonthAmount = ethers.utils
+					.parseUnits(currentPerMonth.toString(), 18)
+					.toBigInt();
+			}
+
 			// Upgrade the token to super token
 			if (!isUpdating && !selectedRecurringToken.token.isSuperToken) {
 				const upgradeOperation = await superToken.upgrade({
-					amount: amount.toString(),
+					amount: newAmount.toString(),
 				});
 
 				//Upgrading ETHx is a special case and can't be batched
@@ -245,8 +268,8 @@ const RecurringDonationInnerModal: FC<IRecurringDonationInnerModalProps> = ({
 				throw new Error('Project wallet address not found');
 			}
 
-			const _flowRate =
-				(perMonthAmount * BigInt(100 - donationToGiveth)) /
+			let _flowRate =
+				(newPerMonthAmount * BigInt(100 - donationToGiveth)) /
 				100n /
 				ONE_MONTH_SECONDS;
 
@@ -279,7 +302,7 @@ const RecurringDonationInnerModal: FC<IRecurringDonationInnerModalProps> = ({
 				}
 
 				const _newFlowRate =
-					(perMonthAmount * BigInt(donationToGiveth)) /
+					(newPerMonthAmount * BigInt(donationToGiveth)) /
 					100n /
 					ONE_MONTH_SECONDS;
 

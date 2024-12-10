@@ -51,6 +51,7 @@ const SelectTokenInnerModal: FC<ISelectTokenModalProps> = ({
 	setShowModal,
 }) => {
 	const [tokens, setTokens] = useState<ISuperToken[]>([]);
+	const [underlyingTokens, setUnderlyingTokens] = useState<ISuperToken[]>([]);
 	const [balances, setBalances] = useState<IBalances>({});
 
 	const { formatMessage } = useIntl();
@@ -84,11 +85,12 @@ const SelectTokenInnerModal: FC<ISelectTokenModalProps> = ({
 				return acc;
 			}, {} as IBalances);
 
-			const filteredTokens = superTokens.filter(
-				token => !(newBalances[token.symbol] > 0n),
-			);
+			const filteredTokens = superTokens.filter(token => {
+				return !(newBalances[token.underlyingToken.symbol] > 0n);
+			});
 
 			setTokens(filteredTokens);
+			setUnderlyingTokens(superTokens);
 
 			// Update the state with the new balances
 			setBalances(newBalances);
@@ -111,7 +113,6 @@ const SelectTokenInnerModal: FC<ISelectTokenModalProps> = ({
 			return balances[symbol] !== undefined && balances[symbol] > 0n;
 		},
 	);
-
 	return (
 		<>
 			<Wrapper>
@@ -127,12 +128,15 @@ const SelectTokenInnerModal: FC<ISelectTokenModalProps> = ({
 						</TitleSubheader>
 						{Object.keys(tokenStreams).map(tokenId => {
 							const token = superTokens.find(
-								token => token.id === tokenId,
+								token =>
+									token.id.toLowerCase() ===
+									tokenId.toLowerCase(),
 							) as IToken;
 							return token ? (
 								<StreamInfo
 									key={tokenId}
-									stream={tokenStreams[tokenId]}
+									stream={tokenStreams[tokenId.toLowerCase()]}
+									superToken={token}
 									balance={balances[token.symbol]}
 									disable={
 										!balances[token.symbol] ||
@@ -150,7 +154,7 @@ const SelectTokenInnerModal: FC<ISelectTokenModalProps> = ({
 							) : null;
 						})}
 						{superTokens.map(token =>
-							tokenStreams[token.id] ||
+							tokenStreams[token.id.toLowerCase()] ||
 							balances[token.symbol] === 0n ? null : (
 								<TokenInfo
 									key={token.symbol}
@@ -172,7 +176,6 @@ const SelectTokenInnerModal: FC<ISelectTokenModalProps> = ({
 						)}
 					</>
 				)}
-
 				{!isUserHasBalanceForAllSuperTokens && (
 					<>
 						<Title $medium>
@@ -185,33 +188,38 @@ const SelectTokenInnerModal: FC<ISelectTokenModalProps> = ({
 								id: 'label.superfluid_eligible_tokens_description',
 							})}
 						</TitleSubheader>
-						{tokens.length > 0 ? (
-							tokens.map(token => (
-								<TokenInfo
-									key={token.underlyingToken.symbol}
-									token={token.underlyingToken}
-									balance={
-										balances[token.underlyingToken.symbol]
-									}
-									disable={
-										balances[
-											token.underlyingToken.symbol
-										] === undefined ||
-										balances[
-											token.underlyingToken.symbol
-										] === 0n
-									}
-									onClick={() => {
-										setSelectedRecurringToken({
-											token: token.underlyingToken,
-											balance:
-												balances[
-													token.underlyingToken.symbol
-												],
-										});
-										setShowModal(false);
-									}}
-								/>
+						{underlyingTokens.length > 0 ? (
+							underlyingTokens.map(token => (
+								<>
+									<TokenInfo
+										key={token.underlyingToken?.symbol}
+										token={token.underlyingToken}
+										balance={
+											balances[
+												token.underlyingToken.symbol
+											]
+										}
+										disable={
+											balances[
+												token.underlyingToken.symbol
+											] === undefined ||
+											balances[
+												token.underlyingToken.symbol
+											] === 0n
+										}
+										onClick={() => {
+											setSelectedRecurringToken({
+												token: token.underlyingToken,
+												balance:
+													balances[
+														token.underlyingToken
+															.symbol
+													],
+											});
+											setShowModal(false);
+										}}
+									/>
+								</>
 							))
 						) : (
 							<Caption>

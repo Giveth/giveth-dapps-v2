@@ -13,7 +13,7 @@ import { EModifySuperTokenSteps } from './common';
 import config from '@/configuration';
 
 interface IModifySuperTokenModalProps extends IModal {
-	selectedToken: IToken;
+	selectedToken: ISuperToken | IToken;
 	tokenStreams: ISuperfluidStream[];
 	refreshBalance: () => void;
 }

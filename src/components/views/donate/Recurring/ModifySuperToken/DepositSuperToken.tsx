@@ -2,6 +2,7 @@ import { useState, type FC, useEffect } from 'react';
 import { Button, Flex } from '@giveth/ui-design-system';
 import { useAccount, useBalance } from 'wagmi';
 import { useIntl } from 'react-intl';
+import { ethers } from 'ethers';
 import { Framework } from '@superfluid-finance/sdk-core';
 import { ISuperToken, IToken } from '@/types/superFluid';
 import { AddressZero } from '@/lib/constants/constants';
@@ -125,6 +126,7 @@ export const DepositSuperToken: FC<IDepositSuperTokenProps> = ({
 
 			// EThx is not a Wrapper Super Token and should load separately
 			let superTokenAsset;
+			let newAmount = amount;
 			if (superToken.symbol === 'ETHx') {
 				superTokenAsset = await sf.loadNativeAssetSuperToken(
 					superToken.id,
@@ -132,10 +134,18 @@ export const DepositSuperToken: FC<IDepositSuperTokenProps> = ({
 			} else {
 				superTokenAsset = await sf.loadWrapperSuperToken(superToken.id);
 			}
+			if (token && token.decimals === 6) {
+				const divisor = BigInt(10 ** token.decimals);
+				const currentAmount = Number(amount) / Number(divisor);
+				newAmount = ethers.utils
+					.parseUnits(currentAmount.toString(), 18)
+					.toBigInt();
+			}
+			console.log('token', token);
+			console.log('supertoken', superToken);
 			const upgradeOperation = await superTokenAsset.upgrade({
-				amount: amount.toString(),
+				amount: newAmount.toString(),
 			});
-
 			const tx = await upgradeOperation.exec(signer);
 			const res = await tx.wait();
 			if (!res.status) {
@@ -165,7 +175,6 @@ export const DepositSuperToken: FC<IDepositSuperTokenProps> = ({
 			closeModal();
 		}
 	};
-
 	return (
 		<Wrapper>
 			{step === EModifySuperTokenSteps.MODIFY ? (
