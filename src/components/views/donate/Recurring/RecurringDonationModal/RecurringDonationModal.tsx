@@ -24,6 +24,7 @@ import config, { isProduction } from '@/configuration';
 import {
 	findSuperTokenByTokenAddress,
 	findUserActiveStreamOnSelectedToken,
+	checkIfRecurringFlowExist,
 } from '@/helpers/donate';
 import { ONE_MONTH_SECONDS } from '@/lib/constants/constants';
 import { RunOutInfo } from '../RunOutInfo';
@@ -255,8 +256,25 @@ const RecurringDonationInnerModal: FC<IRecurringDonationInnerModalProps> = ({
 					.toBigInt();
 			}
 
+			// isUpdating is local variable to check if we are updating/modifying the flow
+			let willUpdateFlow = isUpdating;
+
+			// if isUpdating is false we need to check if there is an existing flow in the network
+			if (willUpdateFlow === false) {
+				const existingFlow = await checkIfRecurringFlowExist(
+					sf,
+					_superToken.id,
+					address,
+					projectAnchorContract,
+					signer,
+				);
+				if (existingFlow.exists && existingFlow.flowRate !== '0') {
+					willUpdateFlow = true;
+				}
+			}
+
 			// Upgrade the token to super token
-			if (!isUpdating && !selectedRecurringToken.token.isSuperToken) {
+			if (!willUpdateFlow && !selectedRecurringToken.token.isSuperToken) {
 				const upgradeOperation = await superToken.upgrade({
 					amount: newAmount.toString(),
 				});
@@ -284,19 +302,16 @@ const RecurringDonationInnerModal: FC<IRecurringDonationInnerModalProps> = ({
 				flowRate: _flowRate.toString(),
 			};
 
-			// isUpdating is local variable to check if we are updating/modifying the flow
-			let projectFlowOp = isUpdating
+			let projectFlowOp = willUpdateFlow
 				? superToken.updateFlow(options)
 				: superToken.createFlow(options);
 
-			// TODO if isUpdating is false we need to check if there is an existing flow in the network
-
 			operations.push(projectFlowOp);
-			const isDonatingToGiveth = !isUpdating && donationToGiveth > 0;
+			const isDonatingToGiveth = !willUpdateFlow && donationToGiveth > 0;
 			console.log(
 				'isDonatingToGiveth',
 				isDonatingToGiveth,
-				isUpdating,
+				willUpdateFlow,
 				donationToGiveth > 0,
 			);
 			let givethOldStream;
@@ -352,7 +367,7 @@ const RecurringDonationInnerModal: FC<IRecurringDonationInnerModalProps> = ({
 				flowRate: _flowRate,
 				superToken: _superToken,
 				isBatch,
-				isForUpdate: isUpdating,
+				isForUpdate: willUpdateFlow,
 			};
 
 			// Save Draft Donation
@@ -367,7 +382,7 @@ const RecurringDonationInnerModal: FC<IRecurringDonationInnerModalProps> = ({
 				flowRate: givethFlowRate,
 				superToken: _superToken,
 				isBatch,
-				isForUpdate: isUpdating,
+				isForUpdate: willUpdateFlow,
 			};
 			let givethDraftDonationId = 0;
 			if (isDonatingToGiveth) {
@@ -393,7 +408,7 @@ const RecurringDonationInnerModal: FC<IRecurringDonationInnerModalProps> = ({
 					txHash: tx.hash,
 					draftDonationId: projectDraftDonationId,
 				};
-				if (isUpdating) {
+				if (willUpdateFlow) {
 					console.log('Start Update Project Donation Info');
 					projectDonationId =
 						await updateRecurringDonation(projectDonationInfo);

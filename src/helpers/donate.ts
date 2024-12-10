@@ -62,3 +62,38 @@ export const countActiveStreams = (tokenStreams: ISuperfluidStream[]) => {
 		0
 	);
 };
+
+// Function to check if a flow exists
+export const checkIfRecurringFlowExist = async (
+	sf: {
+		cfaV1: {
+			getFlow: (arg0: {
+				superToken: any;
+				sender: any;
+				receiver: any;
+				providerOrSigner: any;
+			}) => any;
+		};
+	},
+	superTokenAddress: any,
+	senderAddress: any,
+	receiverAddress: any,
+	signer: any,
+) => {
+	try {
+		const flowInfo = await sf.cfaV1.getFlow({
+			superToken: superTokenAddress,
+			sender: senderAddress,
+			receiver: receiverAddress,
+			providerOrSigner: signer,
+		});
+		console.log(
+			`Existing flow found. Current flow rate: ${flowInfo.flowRate}`,
+		);
+		console.log({ flowInfo });
+		return { exists: true, flowRate: flowInfo.flowRate };
+	} catch (error) {
+		console.log('No existing flow found.');
+		return { exists: false, flowRate: '0' };
+	}
+};
