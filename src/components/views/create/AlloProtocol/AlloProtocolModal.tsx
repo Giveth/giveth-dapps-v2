@@ -65,6 +65,7 @@ export const saveAnchorContract = async ({
 				hash: hash,
 				chainId,
 			});
+
 			const contractAddress = extractContractAddressFromString(
 				data.logs[0].data,
 			);
