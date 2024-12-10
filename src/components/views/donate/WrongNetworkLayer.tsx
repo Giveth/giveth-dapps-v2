@@ -1,34 +1,23 @@
 import React from 'react';
 import styled from 'styled-components';
 import {
-	B,
 	Caption,
 	IconInfoFilled16,
 	brandColors,
 	neutralColors,
 	Flex,
 	FlexCenter,
+	Button,
 } from '@giveth/ui-design-system';
 import { useSwitchChain } from 'wagmi';
 import { useIntl } from 'react-intl';
 import config from '@/configuration';
 import { useGeneralWallet } from '@/providers/generalWalletProvider';
-import NetworkLogo from '@/components/NetworkLogo';
-import { ChainType } from '@/types/config';
 
 export const WrongNetworkLayer = () => {
 	const { switchChain } = useSwitchChain();
 	const { isOnEVM, handleSingOutAndSignInWithEVM } = useGeneralWallet();
 	const { formatMessage } = useIntl();
-
-	// List of recurring networks for user to select
-	const networks = [
-		{
-			name: config.OPTIMISM_CONFIG.name,
-			chainId: config.OPTIMISM_NETWORK_NUMBER,
-		},
-		{ name: config.BASE_CONFIG.name, chainId: config.BASE_NETWORK_NUMBER },
-	];
 
 	return (
 		<Overlay>
@@ -42,35 +31,6 @@ export const WrongNetworkLayer = () => {
 							})}
 						</Caption>
 					</Title>
-					{networks.map(network => (
-						<NetworkWrapper key={network.chainId}>
-							<SwitchButtonHolder
-								key={network.chainId}
-								onClick={async () => {
-									if (isOnEVM) {
-										switchChain &&
-											switchChain({
-												chainId: network.chainId,
-											});
-									} else {
-										await handleSingOutAndSignInWithEVM();
-									}
-								}}
-							>
-								<NetworkLogo
-									chainId={network.chainId}
-									chainType={ChainType.EVM}
-									logoSize={30}
-								/>
-								<NetworkNameHolder>
-									{formatMessage({
-										id: 'label.switch_network',
-									})}{' '}
-									to {network.name}
-								</NetworkNameHolder>
-							</SwitchButtonHolder>
-						</NetworkWrapper>
-					))}
 				</Header>
 				<Desc>
 					{formatMessage(
@@ -80,8 +40,40 @@ export const WrongNetworkLayer = () => {
 						{
 							network: (
 								<>
-									<b>{config.OPTIMISM_CONFIG.name}</b> or{' '}
-									<b>{config.BASE_CONFIG.name}</b>
+									<ButtonLinkHolder
+										buttonType='texty-primary'
+										label={config.OPTIMISM_CONFIG.name}
+										onClick={async () => {
+											if (isOnEVM) {
+												switchChain &&
+													switchChain({
+														chainId:
+															config
+																.OPTIMISM_CONFIG
+																.id,
+													});
+											} else {
+												await handleSingOutAndSignInWithEVM();
+											}
+										}}
+									/>{' '}
+									or{' '}
+									<ButtonLinkHolder
+										buttonType='texty-primary'
+										label={config.BASE_CONFIG.name}
+										onClick={async () => {
+											if (isOnEVM) {
+												switchChain &&
+													switchChain({
+														chainId:
+															config.BASE_CONFIG
+																.id,
+													});
+											} else {
+												await handleSingOutAndSignInWithEVM();
+											}
+										}}
+									/>
 								</>
 							),
 						},
@@ -123,11 +115,11 @@ const Title = styled(Flex)`
 	color: ${brandColors.giv[500]};
 `;
 
-const SwitchButton = styled(B)`
-	cursor: pointer;
-	color: ${brandColors.pinky[500]};
-	&:hover {
-		color: ${brandColors.pinky[600]};
+const ButtonLinkHolder = styled(Button)`
+	display: inline-block !important;
+	padding: 0;
+	& span:hover {
+		color: ${neutralColors.gray[400]};
 	}
 `;
 
@@ -135,19 +127,4 @@ const Desc = styled(Caption)`
 	color: ${neutralColors.gray[700]};
 	margin-top: 8px;
 	text-align: left;
-`;
-
-const NetworkWrapper = styled(Flex)`
-	width: 100%;
-`;
-
-const SwitchButtonHolder = styled(SwitchButton)`
-	display: flex;
-	align-items: center;
-	gap: 8px;
-	margin-bottom: 8px;
-`;
-
-const NetworkNameHolder = styled.div`
-	padding-right: 10px;
 `;
