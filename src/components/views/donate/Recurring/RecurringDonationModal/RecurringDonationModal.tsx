@@ -284,9 +284,12 @@ const RecurringDonationInnerModal: FC<IRecurringDonationInnerModalProps> = ({
 				flowRate: _flowRate.toString(),
 			};
 
+			// isUpdating is local variable to check if we are updating/modifying the flow
 			let projectFlowOp = isUpdating
 				? superToken.updateFlow(options)
 				: superToken.createFlow(options);
+
+			// TODO if isUpdating is false we need to check if there is an existing flow in the network
 
 			operations.push(projectFlowOp);
 			const isDonatingToGiveth = !isUpdating && donationToGiveth > 0;

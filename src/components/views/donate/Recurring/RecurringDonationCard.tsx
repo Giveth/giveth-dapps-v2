@@ -788,6 +788,7 @@ export const RecurringDonationCard = () => {
 					setShowModal={setShowTopUpModal}
 					selectedToken={selectedRecurringToken?.token!}
 					refreshBalance={refetch}
+					recurringNetworkID={chain?.id || 0}
 				/>
 			)}
 			{showAlloProtocolModal && (

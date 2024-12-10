@@ -424,6 +424,23 @@ const config: EnvConfig = {
 			// Keep it empty for automatic configuration
 		},
 		chainLogo: (logoSize?: number) => <IconBase size={logoSize} />,
+		SUPER_FLUID_TOKENS: [
+			{
+				underlyingToken: {
+					decimals: 18,
+					id: '0x6B0dacea6a72E759243c99Eaed840DEe9564C194',
+					name: 'fUSDC Fake Token',
+					symbol: 'USDC',
+					coingeckoId: 'usd-coin',
+				},
+				decimals: 18,
+				id: '0x1650581F573eAd727B92073B5Ef8B4f5B94D1648',
+				name: 'Super fUSDC Fake Token',
+				symbol: 'fUSDCx',
+				isSuperToken: true,
+				coingeckoId: 'usd-coin',
+			},
+		],
 	},
 
 	ZKEVM_CONFIG: {
