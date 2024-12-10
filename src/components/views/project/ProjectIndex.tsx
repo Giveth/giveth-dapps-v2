@@ -286,12 +286,6 @@ const ProjectIndex: FC<IProjectBySlug> = () => {
 							<div
 								onMouseEnter={handleMouseEnter}
 								onMouseLeave={handleMouseLeave}
-								style={{
-									display: 'inline-block', // Ensures it wraps the button
-									cursor: !isEmailVerifiedStatus
-										? 'not-allowed'
-										: 'pointer', // Pointer only when enabled
-								}}
 							>
 								<ContinueCreationButton
 									label={formatMessage({
@@ -432,8 +426,7 @@ interface TooltipWrapperProps {
 	left?: string;
 }
 const TooltipWrapper = styled.div<TooltipWrapperProps>`
-	visibility: ${isTooltipVisible =>
-		isTooltipVisible ? 'visible' : 'hidden'};
+	visibility: ${isTooltipVisible => (isTooltipVisible ? 'visible' : 'hidden')};
 	opacity: ${({ isTooltipVisible }) => (isTooltipVisible ? 1 : 0)};
 	position: absolute;
 	bottom: -35px;
@@ -451,6 +444,8 @@ const TooltipWrapper = styled.div<TooltipWrapperProps>`
 	${ContinueCreationButton}:hover & {
 		opacity: 1;
 		visibility: visible;
+	display: 'inline-block', // Ensures it wraps the button
+    cursor: !isEmailVerifiedStatus ? 'not-allowed' : 'pointer'
 	}
 `;
 
