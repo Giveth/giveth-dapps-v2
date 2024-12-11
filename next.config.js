@@ -161,11 +161,15 @@ const moduleExports = withBundleAnalyzer({
 				headers: [
 					{
 						key: 'X-Frame-Options',
-						value: 'SAMEORIGIN',
+						value: 'ALLOW-FROM https://app.safe.global',
 					},
 					{
 						key: 'Content-Security-Policy',
-						value: "frame-ancestors 'self'",
+						value: "frame-ancestors 'self' https://app.safe.global",
+					},
+					{
+						key: 'Access-Control-Allow-Origin',
+						value: 'https://app.safe.global',
 					},
 					{
 						key: 'X-Content-Type-Options',
