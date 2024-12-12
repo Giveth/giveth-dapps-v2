@@ -55,12 +55,14 @@ export const CREATE_ANCHOR_CONTRACT_ADDRESS_QUERY = gql`
 		$projectId: Int!
 		$networkId: Int!
 		$address: String!
+		$recipientAddress: String
 		$txHash: String!
 	) {
 		addAnchorContractAddress(
 			projectId: $projectId
 			networkId: $networkId
 			address: $address
+			recipientAddress: $recipientAddress
 			txHash: $txHash
 		) {
 			id

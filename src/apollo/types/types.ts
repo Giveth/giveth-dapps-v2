@@ -32,6 +32,7 @@ export interface IEstimatedMatching {
 export interface IAnchorContractData {
 	address: Address;
 	isActive: boolean;
+	networkId: number;
 }
 
 export interface IProject {

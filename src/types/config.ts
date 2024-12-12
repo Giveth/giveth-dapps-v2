@@ -172,6 +172,10 @@ export interface OptimismNetworkConfig extends NetworkConfig {
 	GIVETH_ANCHOR_CONTRACT_ADDRESS: Address;
 }
 
+export interface BaseNetworkConfig extends NetworkConfig {
+	anchorRegistryAddress: Address;
+}
+
 interface MicroservicesConfig {
 	authentication: string;
 	notification: string;
@@ -222,7 +226,7 @@ export interface EnvConfig {
 	OPTIMISM_CONFIG: OptimismNetworkConfig;
 	CELO_CONFIG: NetworkConfig;
 	ARBITRUM_CONFIG: NetworkConfig;
-	BASE_CONFIG: NetworkConfig;
+	BASE_CONFIG: BaseNetworkConfig;
 	ZKEVM_CONFIG: NetworkConfig;
 	CLASSIC_CONFIG: NetworkConfig;
 	BACKEND_LINK: string;
