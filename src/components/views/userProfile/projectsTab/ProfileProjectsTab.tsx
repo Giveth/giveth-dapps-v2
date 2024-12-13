@@ -1,79 +1,32 @@
 import { neutralColors, Col, Row, Flex } from '@giveth/ui-design-system';
-import { FC, useEffect, useState } from 'react';
+import { FC, useState } from 'react';
 import styled from 'styled-components';
 
 import { useIntl } from 'react-intl';
-import { IUserProfileView, EOrderBy, IOrder } from '../UserProfile.view';
-import { EDirection } from '@/apollo/types/gqlEnums';
+import { useQuery } from '@tanstack/react-query';
+import { IUserProfileView } from '../UserProfile.view';
 import NothingToSee from '@/components/views/userProfile/NothingToSee';
-import { client } from '@/apollo/apolloClient';
-import { FETCH_USER_PROJECTS } from '@/apollo/gql/gqlUser';
-import { IUserProjects } from '@/apollo/types/gqlTypes';
-import { IProject } from '@/apollo/types/types';
 import Pagination from '@/components/Pagination';
 import ProjectCard from '@/components/project-card/ProjectCard';
 import { UserContributeTitle, UserProfileTab } from '../common.sc';
 import { ProjectsContributeCard } from '@/components/ContributeCard';
 import { useProfileContext } from '@/context/profile.context';
 import ProjectItem from './ProjectItem';
-
-const itemPerPage = 10;
+import { getUserName } from '@/helpers/user';
+import { fetchUserProjects } from './services';
+import { projectsOrder, userProjectsPerPage } from './constants';
 
 const ProfileProjectsTab: FC<IUserProfileView> = () => {
-	const [loading, setLoading] = useState(false);
-	const [projects, setProjects] = useState<IProject[]>([]);
-	const [totalCount, setTotalCount] = useState<number>(0);
 	const [page, setPage] = useState(0);
-	const [order, setOrder] = useState<IOrder>({
-		by: EOrderBy.CreationDate,
-		direction: EDirection.DESC,
-	});
 	const { user, myAccount } = useProfileContext();
 	const { formatMessage } = useIntl();
-	const userName = user?.name || 'Unknown';
+	const userName = getUserName(user);
 
-	const changeOrder = (orderBy: EOrderBy) => {
-		if (orderBy === order.by) {
-			setOrder({
-				by: orderBy,
-				direction:
-					order.direction === EDirection.ASC
-						? EDirection.DESC
-						: EDirection.ASC,
-			});
-		} else {
-			setOrder({
-				by: orderBy,
-				direction: EDirection.DESC,
-			});
-		}
-	};
-
-	useEffect(() => {
-		if (!user) return;
-		const fetchUserProjects = async () => {
-			setLoading(true);
-			const { data: userProjects } = await client.query({
-				query: FETCH_USER_PROJECTS,
-				variables: {
-					userId: parseFloat(user.id || '') || -1,
-					take: itemPerPage,
-					skip: page * itemPerPage,
-					orderBy: order.by,
-					direction: order.direction,
-				},
-				fetchPolicy: 'no-cache',
-			});
-			setLoading(false);
-			if (userProjects?.projectsByUserId) {
-				const projectsByUserId: IUserProjects =
-					userProjects.projectsByUserId;
-				setProjects(projectsByUserId.projects);
-				setTotalCount(projectsByUserId.totalCount);
-			}
-		};
-		fetchUserProjects().then();
-	}, [user, page, order.by, order.direction]);
+	const { data, isLoading, refetch } = useQuery({
+		queryKey: ['dashboard-projects', user.id, page, projectsOrder],
+		queryFn: () => fetchUserProjects(user.id!, page, projectsOrder),
+		enabled: !!user.id,
+	});
 
 	return (
 		<UserProfileTab>
@@ -96,8 +49,8 @@ const ProfileProjectsTab: FC<IUserProfileView> = () => {
 					)}
 				</UserContributeTitle>
 			)}
-			<ProjectsContainer>
-				{!loading && totalCount === 0 ? (
+			<ProjectsContainer $verified={!!user.isEmailVerified}>
+				{!isLoading && data?.totalCount === 0 ? (
 					<NothingWrapper>
 						<NothingToSee
 							title={`${
@@ -113,41 +66,45 @@ const ProfileProjectsTab: FC<IUserProfileView> = () => {
 					</NothingWrapper>
 				) : myAccount ? (
 					<Flex $flexDirection='column' gap='18px'>
-						{projects.map(project => (
+						{data?.projects.map(project => (
 							<ProjectItem
-								key={project.id}
 								project={project}
-								setProjects={setProjects}
+								key={project.id}
+								refetchProjects={refetch}
 							/>
 						))}
 					</Flex>
 				) : (
 					<Row>
-						{projects.map(project => (
+						{data?.projects.map(project => (
 							<Col key={project.id} md={6} lg={4}>
 								<ProjectCard project={project} />
 							</Col>
 						))}
 					</Row>
 				)}
-				{loading && <Loading />}
+				{isLoading && <Loading />}
 			</ProjectsContainer>
 			<Pagination
 				currentPage={page}
-				totalCount={totalCount}
+				totalCount={data?.totalCount || 0}
 				setPage={setPage}
-				itemPerPage={itemPerPage}
+				itemPerPage={userProjectsPerPage}
 			/>
 		</UserProfileTab>
 	);
 };
 
-const ProjectsTableWrapper = styled.div`
-	overflow: auto;
-`;
+interface ProjectsContainerProps {
+	$verified: boolean;
+}
 
-export const ProjectsContainer = styled.div`
+export const ProjectsContainer = styled.div<ProjectsContainerProps>`
 	margin-bottom: 40px;
+	background-color: ${({ $verified }) =>
+		$verified ? 'transparent' : '#f0f0f0'};
+	opacity: ${({ $verified }) => ($verified ? 1 : 0.5)};
+	pointer-events: ${({ $verified }) => ($verified ? 'auto' : 'none')};
 `;
 
 export const Loading = styled(Flex)`

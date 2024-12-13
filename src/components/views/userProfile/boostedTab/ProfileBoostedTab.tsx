@@ -28,16 +28,17 @@ import { formatWeiHelper } from '@/helpers/number';
 import InlineToast, { EToastType } from '@/components/toasts/InlineToast';
 import { useFetchPowerBoostingInfo } from './useFetchPowerBoostingInfo';
 import { useProfileContext } from '@/context/profile.context';
+import { useFetchSubgraphDataForAllChains } from '@/hooks/useFetchSubgraphDataForAllChains';
 
 export const ProfileBoostedTab: FC<IUserProfileView> = () => {
 	const { user } = useProfileContext();
 	const { loading, boosts, order, setBoosts, setLoading, changeOrder } =
 		useFetchPowerBoostingInfo(user);
-	const { chain } = useAccount();
+	const { address, chain } = useAccount();
 	const { userData } = useAppSelector(state => state.user);
 	const boostedProjectsCount = userData?.boostedProjectsCount ?? 0;
-	const values = useAppSelector(state => state.subgraph);
-	const givPower = getTotalGIVpower(values);
+	const subgraphValues = useFetchSubgraphDataForAllChains();
+	const givPower = getTotalGIVpower(subgraphValues, address);
 	const isZeroGivPower = givPower.total.isZero();
 	const dispatch = useAppDispatch();
 
@@ -83,7 +84,7 @@ export const ProfileBoostedTab: FC<IUserProfileView> = () => {
 				setLoading(false);
 				return false;
 			} catch (error) {
-				console.log({ error });
+				console.error({ error });
 				captureException(error, {
 					tags: {
 						section: 'Save manage power boosting',
@@ -122,7 +123,7 @@ export const ProfileBoostedTab: FC<IUserProfileView> = () => {
 				setLoading(false);
 				return false;
 			} catch (error) {
-				console.log({ error });
+				console.error({ error });
 				captureException(error, {
 					tags: {
 						section: 'Save manage power boosting',

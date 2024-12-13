@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { FC, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import styled from 'styled-components';
 import {
@@ -13,10 +13,6 @@ import { smallFormatDate, formatTxLink } from '@/lib/helpers';
 import { slugToProjectView } from '@/lib/routeCreators';
 import ExternalLink from '@/components/ExternalLink';
 import { IWalletDonation } from '@/apollo/types/types';
-import {
-	EOrderBy,
-	IOrder,
-} from '@/components/views/userProfile/UserProfile.view';
 import SortIcon from '@/components/SortIcon';
 import DonationStatus from '@/components/badges/DonationStatusBadge';
 import {
@@ -27,6 +23,7 @@ import {
 import { Badge, EBadgeStatus } from '@/components/Badge';
 import { formatDonation } from '@/helpers/number';
 import NetworkLogo from '@/components/NetworkLogo';
+import { EOrderBy, IOrder } from '../../projectsTab/type';
 
 interface OneTimeDonationTable {
 	donations: IWalletDonation[];
@@ -42,8 +39,33 @@ const OneTimeDonationTable: FC<OneTimeDonationTable> = ({
 	myAccount,
 }) => {
 	const { formatMessage, locale } = useIntl();
+	const tableContainerRef = useRef<HTMLDivElement | null>(null);
+
+	// Check if last table cell has element width more than 120px
+	// increase table size and that will provde scoll on whole table instead of only last column
+	useEffect(() => {
+		const tableContainer = tableContainerRef.current;
+		if (tableContainer) {
+			const qfRoundCells = tableContainer.querySelectorAll('.lastCell');
+
+			let hasScroll = false;
+			qfRoundCells.forEach(cell => {
+				const firstSpan = cell.querySelector('span');
+				if (firstSpan && firstSpan.clientWidth > 120) {
+					hasScroll = true;
+				}
+			});
+
+			if (hasScroll) {
+				tableContainer.style.minWidth = '1335px';
+			} else {
+				tableContainer.style.minWidth = '900px';
+			}
+		}
+	}, [donations]);
+
 	return (
-		<DonationTableContainer $myAccount={myAccount}>
+		<DonationTableContainer $myAccount={myAccount} ref={tableContainerRef}>
 			<TableHeader onClick={() => changeOrder(EOrderBy.CreationDate)}>
 				{formatMessage({ id: 'label.donated_at' })}
 				<SortIcon order={order} title={EOrderBy.CreationDate} />
@@ -107,7 +129,7 @@ const OneTimeDonationTable: FC<OneTimeDonationTable> = ({
 						{donation.valueUsd &&
 							formatDonation(donation.valueUsd, '$', locale)}
 					</DonationTableCell>
-					<DonationTableCell>
+					<DonationTableCell className='lastCell'>
 						{donation.qfRound ? (
 							<Badge
 								status={EBadgeStatus.GIVETH}

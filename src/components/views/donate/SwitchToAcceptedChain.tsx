@@ -1,15 +1,19 @@
-import React, { FC } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
-import { Caption } from '@giveth/ui-design-system';
-import { Chain } from 'viem';
-import { getNetworkNames } from '@/components/views/donate/helpers';
 import {
-	NetworkToast,
-	SwitchCaption,
-} from '@/components/views/donate/common.styled';
-import { INetworkIdWithChain } from './common.types'; // Import the type
+	brandColors,
+	FlexCenter,
+	IconWrongNetwork24,
+	neutralColors,
+	semanticColors,
+	SublineBold,
+} from '@giveth/ui-design-system';
+import { Chain } from 'viem';
+import styled from 'styled-components';
+import { INetworkIdWithChain } from './common/common.types'; // Import the type
 import { useGeneralWallet } from '@/providers/generalWalletProvider';
 import { ChainType } from '@/types/config';
+import config from '@/configuration';
 
 interface ISwitchToAcceptedChain {
 	acceptedChains: INetworkIdWithChain[];
@@ -22,10 +26,18 @@ const SwitchToAcceptedChain: FC<ISwitchToAcceptedChain> = ({
 }) => {
 	const { formatMessage } = useIntl();
 	const { chain, walletChainType } = useGeneralWallet();
+	const [show, setShow] = useState(false);
 
-	const networkId = (chain as Chain)?.id;
+	const networkId = (chain as Chain)?.id || config.SOLANA_CONFIG.networkId;
+	const networkName = config.NETWORKS_CONFIG_WITH_ID[networkId]?.name;
+
+	useEffect(() => {
+		// To prevent SwitchToAcceptedChain flickering
+		setTimeout(() => setShow(true), 1000);
+	}, []);
 
 	if (
+		!show ||
 		!acceptedChains ||
 		acceptedChains.some(
 			chain =>
@@ -37,24 +49,43 @@ const SwitchToAcceptedChain: FC<ISwitchToAcceptedChain> = ({
 		return null;
 	}
 
-	// Assuming getNetworkNames is updated to handle INetworkIdWithChain array
 	return (
 		<NetworkToast>
-			<Caption $medium>
-				{formatMessage({
-					id: 'label.this_project_only_accept_on',
-				})}{' '}
-				{getNetworkNames(acceptedChains, 'and')}.
-			</Caption>
-			<SwitchCaption
+			<FlexCenter gap='4px'>
+				<IconWrongNetwork24 color={semanticColors.punch[500]} />
+				<SublineBold>
+					{formatMessage({
+						id: 'label.this_project_doesnt_accept_on',
+					})}
+					{' ' + networkName}
+				</SublineBold>
+			</FlexCenter>
+			<SublineBoldStyled
 				onClick={() => {
 					setShowChangeNetworkModal(true);
 				}}
 			>
-				{formatMessage({ id: 'label.switch_network' })}
-			</SwitchCaption>
+				{formatMessage({ id: 'label.switch_to_supported' })}
+			</SublineBoldStyled>
 		</NetworkToast>
 	);
 };
+
+const SublineBoldStyled = styled(SublineBold)`
+	cursor: pointer;
+	color: ${brandColors.giv[500]};
+`;
+
+const NetworkToast = styled.div`
+	display: flex;
+	margin: 12px 0 24px;
+	gap: 10px;
+	justify-content: space-between;
+	align-items: center;
+	padding: 4px 8px;
+	border-radius: 8px;
+	border: 1px solid ${semanticColors.punch[200]};
+	color: ${neutralColors.gray[800]};
+`;
 
 export default SwitchToAcceptedChain;

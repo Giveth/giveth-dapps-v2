@@ -23,9 +23,10 @@ import type { FC } from 'react';
 interface ILockInfo {
 	round: number;
 	amount: bigint;
+	farmIsNotStarted?: boolean;
 }
 
-const LockInfo: FC<ILockInfo> = ({ round, amount }) => {
+const LockInfo: FC<ILockInfo> = ({ round, amount, farmIsNotStarted }) => {
 	const { chain } = useAccount();
 	const chainId = chain?.id;
 	const { apr } =
@@ -71,11 +72,11 @@ const LockInfo: FC<ILockInfo> = ({ round, amount }) => {
 					</LockInfoRowHelp>
 				</LockInfoRowTitle>
 				<LockInfoRowValue>
-					{apr
-						? `${formatEthHelper(
-								apr.effectiveAPR.multipliedBy(multipler),
-							)}%`
-						: ' ? '}
+					{farmIsNotStarted
+						? 'Coming Soon'
+						: !apr
+							? ' ? '
+							: `${formatEthHelper(apr.effectiveAPR.multipliedBy(multipler))}%`}
 					<LockInfoRowSpark>
 						<IconSpark size={16} />
 					</LockInfoRowSpark>
@@ -90,7 +91,7 @@ const LockInfo: FC<ILockInfo> = ({ round, amount }) => {
 							direction={'right'}
 						>
 							<LockInfoTooltip>
-								GIVpower allows you to support verified projects
+								GIVpower allows you to support vouched projects
 								on Giveth while earning rewards.
 							</LockInfoTooltip>
 						</IconWithTooltip>
@@ -130,6 +131,7 @@ const MultiPlyHelp = styled.div`
 	top: -16px;
 	right: -20px;
 	cursor: pointer;
+
 	&:hover {
 		color: ${brandColors.giv[200]};
 	}
@@ -151,6 +153,7 @@ const LockInfoRowHelp = styled.div`
 	top: 1px;
 	right: -24px;
 	cursor: pointer;
+
 	&:hover {
 		color: ${brandColors.giv[200]};
 	}
@@ -162,6 +165,7 @@ const LockInfoRowSpark = styled.div`
 	left: -18px;
 	cursor: pointer;
 	color: ${brandColors.mustard[500]};
+
 	&:hover {
 		color: ${brandColors.mustard[400]};
 	}
@@ -169,6 +173,7 @@ const LockInfoRowSpark = styled.div`
 
 export const LockInfoTooltip = styled(Subline)`
 	color: ${neutralColors.gray[100]};
+
 	${mediaQueries.tablet} {
 		width: 160px;
 	}

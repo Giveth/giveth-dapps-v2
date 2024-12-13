@@ -22,7 +22,6 @@ import DoneContent from './DoneContent';
 import DeactivatingContent from './DeactivatingContent';
 import WhyContent from './WhyContent';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
-import { useProjectContext } from '@/context/project.context';
 
 export interface ISelectObj {
 	value: number;
@@ -36,12 +35,14 @@ const buttonLabels: { [key: string]: string }[] = [
 ];
 
 interface IDeactivateProjectModal extends IModal {
+	onSuccess: () => Promise<void>;
 	projectId?: string;
 }
 
 const DeactivateProjectModal: FC<IDeactivateProjectModal> = ({
 	projectId,
 	setShowModal,
+	onSuccess,
 }) => {
 	const [tab, setTab] = useState<number>(0);
 	const [motive, setMotive] = useState<string>('');
@@ -53,12 +54,10 @@ const DeactivateProjectModal: FC<IDeactivateProjectModal> = ({
 	const dispatch = useAppDispatch();
 	const isSignedIn = useAppSelector(state => state.user.isSignedIn);
 	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
-	const { fetchProjectBySlug } = useProjectContext();
 
 	const fetchReasons = async () => {
 		const { data } = await client.query({
 			query: GET_STATUS_REASONS,
-			fetchPolicy: 'no-cache',
 		});
 		const fetchedReasons = data.getStatusReasons.map((elem: any) => ({
 			label: elem.description,
@@ -88,13 +87,13 @@ const DeactivateProjectModal: FC<IDeactivateProjectModal> = ({
 						reasonId: Number(selectedReason.value),
 					},
 				});
-				await fetchProjectBySlug();
+				await onSuccess();
 			}
 			setTab(previousTab => previousTab + 1);
 			setIsLoading(false);
 		} catch (error) {
 			setIsLoading(false);
-			console.log('deactivation error', { error });
+			console.error('deactivation error', { error });
 		}
 	};
 

@@ -1,11 +1,13 @@
 import {
-	celo as celoDefault,
-	classic as classicDefault,
-	gnosis as gnosisDefault,
-	mainnet as mainnetDefault,
-	optimism as optimismDefault,
-	polygon as polygonDefault,
-	arbitrum as arbitrumDefault,
+	celo,
+	classic,
+	gnosis,
+	mainnet,
+	optimism,
+	polygon,
+	arbitrum,
+	base,
+	polygonZkEvm,
 } from '@wagmi/core/chains';
 import { WalletAdapterNetwork } from '@solana/wallet-adapter-base';
 import React from 'react';
@@ -24,13 +26,15 @@ import { IconPolygon } from '@/components/Icons/Polygon';
 import { IconOptimism } from '@/components/Icons/Optimism';
 import { IconCelo } from '@/components/Icons/Celo';
 import { IconClassic } from '@/components/Icons/Classic';
+import IconBase from '@/components/Icons/Base';
 import IconSolana from '@/components/Icons/Solana';
 import IconArbitrum from '@/components/Icons/Arbitrum';
-
-import { updateBlockExplorers } from './utils';
+import IconZKEVM from '@/components/Icons/ZKEVM';
+import IconStellar from '@/components/Icons/Stellar';
 
 const GNOSIS_GIV_TOKEN_ADDRESS = '0x4f4F9b8D5B4d0Dc10506e5551B0513B61fD59e75';
 const OPTIMISM_GIV_TOKEN_ADDRESS = '0x528CDc92eAB044E1E39FE43B9514bfdAB4412B98';
+const ZKEVM_GIV_TOKEN_ADDRESS = '0xddAFB91475bBf6210a151FA911AC8fdA7dE46Ec2';
 
 const SEPT_8TH_2022 = 1662595200000;
 const MAINNET_NETWORK_NUMBER = 1; // Mainnet
@@ -39,10 +43,15 @@ const POLYGON_NETWORK_NUMBER = 137;
 const OPTIMISM_NETWORK_NUMBER = 10;
 const CELO_NETWORK_NUMBER = 42220;
 const ARBITRUM_NETWORK_NUMBER = 42161;
+const BASE_NETWORK_NUMBER = 8453;
+const ZKEVM_NETWORK_NUMBER = 1101;
 const CLASSIC_NETWORK_NUMBER = 61;
+const STELLAR_NETWORK_NUMBER = 1500;
+const SOLANA_NETWORK_NUMBER = 101;
+
 const SOLANA_NETWORK: NonEVMChain = {
-	id: 0,
-	networkId: 101,
+	id: SOLANA_NETWORK_NUMBER,
+	networkId: SOLANA_NETWORK_NUMBER,
 	chainType: ChainType.SOLANA,
 	adapterNetwork: WalletAdapterNetwork.Mainnet,
 	name: 'Solana',
@@ -55,13 +64,23 @@ const SOLANA_NETWORK: NonEVMChain = {
 	},
 };
 
-const mainnet = updateBlockExplorers(mainnetDefault);
-const gnosis = updateBlockExplorers(gnosisDefault);
-const polygon = updateBlockExplorers(polygonDefault);
-const optimism = updateBlockExplorers(optimismDefault);
-const celo = updateBlockExplorers(celoDefault);
-const arbitrum = updateBlockExplorers(arbitrumDefault);
-const classic = updateBlockExplorers(classicDefault);
+const STELLAR_NETWORK: NonEVMChain = {
+	id: STELLAR_NETWORK_NUMBER,
+	networkId: STELLAR_NETWORK_NUMBER,
+	chainType: ChainType.STELLAR,
+	name: 'Stellar',
+	nativeCurrency: {
+		name: 'Stellar Lumens',
+		symbol: 'XLM',
+		decimals: 7,
+	},
+	blockExplorers: {
+		default: {
+			name: 'Stellar Explorer',
+			url: 'https://stellar.expert/explorer/public/',
+		},
+	},
+};
 
 const EVM_CHAINS = [
 	mainnet,
@@ -71,9 +90,11 @@ const EVM_CHAINS = [
 	celo,
 	arbitrum,
 	classic,
+	base,
+	polygonZkEvm,
 ] as readonly [Chain, ...Chain[]];
 
-const NON_EVM_CHAINS: NonEVMChain[] = [SOLANA_NETWORK];
+const NON_EVM_CHAINS: NonEVMChain[] = [STELLAR_NETWORK, SOLANA_NETWORK];
 
 const BASE_ROUTE =
 	process.env.NEXT_PUBLIC_BASE_ROUTE || 'https://mainnet.serve.giveth.io';
@@ -104,7 +125,10 @@ const config: EnvConfig = {
 	OPTIMISM_NETWORK_NUMBER: OPTIMISM_NETWORK_NUMBER,
 	CELO_NETWORK_NUMBER: CELO_NETWORK_NUMBER,
 	ARBITRUM_NETWORK_NUMBER: ARBITRUM_NETWORK_NUMBER,
+	BASE_NETWORK_NUMBER: BASE_NETWORK_NUMBER,
+	ZKEVM_NETWORK_NUMBER: ZKEVM_NETWORK_NUMBER,
 	CLASSIC_NETWORK_NUMBER: CLASSIC_NETWORK_NUMBER,
+	STELLAR_NETWORK_NUMBER: STELLAR_NETWORK_NUMBER,
 
 	RARIBLE_ADDRESS: 'https://rarible.com/',
 	MAINNET_CONFIG: {
@@ -118,12 +142,13 @@ const config: EnvConfig = {
 		},
 
 		subgraphAddress:
-			'https://api.thegraph.com/subgraphs/name/giveth/giveth-economy-second-mainnet?source=giveth',
+			process.env.NEXT_PUBLIC_SUBGRAPH_MAINNET ||
+			'https://gateway-arbitrum.network.thegraph.com/api/720ca27934ee17d259dc2975d9a6d714/subgraphs/id/9QK3vLoWF69TXSenUzQkkLhessaViu4naE58gRyKCxU7',
 		coingeckoChainName: 'ethereum',
 		chainLogo: (logoSize = 24) => <IconEthereum size={logoSize} />,
 
 		GIV_TOKEN_ADDRESS: '0x900db999074d9277c5da2a43f252d74366230da0',
-		GIV_BUY_LINK: 'https://swap.cow.fi/#/1/swap/ETH/GIV',
+		GIV_BUY_LINK: 'https://linktr.ee/GIVtoken',
 		tokenAddressOnUniswapV2: '0x4f4F9b8D5B4d0Dc10506e5551B0513B61fD59e75',
 		WETH_TOKEN_ADDRESS: '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2',
 		TOKEN_DISTRO_ADDRESS: '0x87dE995F6744B75bBe0255A973081142aDb61f4d',
@@ -236,7 +261,8 @@ const config: EnvConfig = {
 			},
 		],
 		uniswapV2Subgraph:
-			'https://api.thegraph.com/subgraphs/name/uniswap/uniswap-v2?source=giveth',
+			process.env.NEXT_PUBLIC_SUBGRAPH_UNISWAP_V2 ||
+			'https://gateway-arbitrum.network.thegraph.com/api/49102048d5822209c7cd189f8e4a51a9/subgraphs/id/EYCKATKGBKLWvSfwvBjzfCBmGwYNdVkduYXVivCsLRFu',
 		regenStreams: [
 			{
 				network: MAINNET_NETWORK_NUMBER,
@@ -262,12 +288,13 @@ const config: EnvConfig = {
 		},
 
 		subgraphAddress:
-			'https://api.thegraph.com/subgraphs/name/giveth/giveth-economy-second-xdai?source=giveth',
+			process.env.NEXT_PUBLIC_SUBGRAPH_GNOSIS ||
+			'https://gateway-arbitrum.network.thegraph.com/api/720ca27934ee17d259dc2975d9a6d714/subgraphs/id/Bbz1imi78Set7VYKxqwNGZ4dwqJpEUBNYqGsbPPZPh4q',
 		coingeckoChainName: 'xdai',
 		chainLogo: (logoSize = 24) => <IconGnosisChain size={logoSize} />,
 
 		GIV_TOKEN_ADDRESS: '0x4f4F9b8D5B4d0Dc10506e5551B0513B61fD59e75',
-		GIV_BUY_LINK: 'https://swap.cow.fi/#/100/swap/WXDAI/GIV',
+		GIV_BUY_LINK: 'https://linktr.ee/GIVtoken',
 		gGIV_TOKEN_ADDRESS: '0xfFBAbEb49be77E5254333d5fdfF72920B989425f',
 		tokenAddressOnUniswapV2: '0x4f4F9b8D5B4d0Dc10506e5551B0513B61fD59e75',
 		MERKLE_ADDRESS: '0xFad63adEFb8203F7605F25f6a921c8bf45604A5e',
@@ -372,7 +399,8 @@ const config: EnvConfig = {
 		],
 
 		uniswapV2Subgraph:
-			'https://api.thegraph.com/subgraphs/name/1hive/honeyswap-v2?source=giveth',
+			process.env.NEXT_PUBLIC_SUBGRAPH_HONEYSWAP_V2 ||
+			'https://api.studio.thegraph.com/proxy/40931/honeyswap-gnosis/version/latest',
 
 		regenStreams: [
 			{
@@ -409,10 +437,10 @@ const config: EnvConfig = {
 		},
 		anchorRegistryAddress: '0x4AAcca72145e1dF2aeC137E1f3C5E3D75DB8b5f3',
 		subgraphAddress:
-			'https://api.thegraph.com/subgraphs/name/giveth/giveconomy-optimism-mainnet?source=giveth',
+			process.env.NEXT_PUBLIC_SUBGRAPH_OPTIMISM ||
+			'https://gateway-arbitrum.network.thegraph.com/api/720ca27934ee17d259dc2975d9a6d714/subgraphs/id/zyoJAUh2eGLEbEkBqESDD497qHLGH1YcKH9PBEMnWjM',
 		GIV_TOKEN_ADDRESS: OPTIMISM_GIV_TOKEN_ADDRESS,
-		GIV_BUY_LINK:
-			'https://velodrome.finance/swap?from=eth&to=0x528cdc92eab044e1e39fe43b9514bfdab4412b98',
+		GIV_BUY_LINK: 'https://linktr.ee/GIVtoken',
 		tokenAddressOnUniswapV2: '0x4f4F9b8D5B4d0Dc10506e5551B0513B61fD59e75',
 		TOKEN_DISTRO_ADDRESS: '0xe3ac7b3e6b4065f4765d76fdc215606483bf3bd1',
 		uniswapV2Subgraph: '',
@@ -431,7 +459,8 @@ const config: EnvConfig = {
 		GIVETH_ANCHOR_CONTRACT_ADDRESS:
 			'0x5430757bc19c87ec562e4660e56af6cac324b50a',
 		superFluidSubgraph:
-			'https://api.thegraph.com/subgraphs/name/superfluid-finance/protocol-v1-optimism-mainnet?source=giveth',
+			process.env.NEXT_PUBLIC_SUBGRAPH_SUPER_FLUID ||
+			'https://subgraph-endpoints.superfluid.dev/optimism-mainnet/protocol-v1',
 		SUPER_FLUID_TOKENS: [
 			{
 				underlyingToken: {
@@ -497,16 +526,46 @@ const config: EnvConfig = {
 				underlyingToken: {
 					decimals: 6,
 					id: '0x7f5c764cbc14f9669b88837ca1490cca17c31607',
+					name: 'Bridged USD Coin',
+					symbol: 'USDC.e',
+					coingeckoId: 'usd-coin',
+				},
+				decimals: 18,
+				id: '0x8430f084b939208e2eded1584889c9a66b90562f',
+				name: 'Super Bridged USD Coin',
+				symbol: 'USDC.ex',
+				isSuperToken: true,
+				coingeckoId: 'usd-coin',
+			},
+			{
+				underlyingToken: {
+					decimals: 6,
+					id: '0x0b2c639c533813f4aa9d7837caf62653d097ff85',
 					name: 'USD Coin',
 					symbol: 'USDC',
 					coingeckoId: 'usd-coin',
 				},
 				decimals: 18,
-				id: '0x8430f084b939208e2eded1584889c9a66b90562f',
+				id: '0x35adeb0638eb192755b6e52544650603fe65a006',
 				name: 'Super USD Coin',
 				symbol: 'USDCx',
 				isSuperToken: true,
 				coingeckoId: 'usd-coin',
+			},
+			{
+				underlyingToken: {
+					decimals: 18,
+					id: '0x4f604735c1cf31399c6e711d5962b2b3e0225ad3',
+					name: 'Glo Dollar',
+					symbol: 'USDGLO',
+					coingeckoId: 'glo-dollar',
+				},
+				decimals: 18,
+				id: '0x9f41d0aa24e599fd8d0c180ee3c0f609dc41c622',
+				name: 'Super Glo Dollar',
+				symbol: 'USDGLOx',
+				isSuperToken: true,
+				coingeckoId: 'glo-dollar',
 			},
 		],
 	},
@@ -531,13 +590,53 @@ const config: EnvConfig = {
 		coingeckoChainName: 'arbitrum',
 		chainLogo: (logoSize = 24) => <IconArbitrum size={logoSize} />,
 	},
+	BASE_CONFIG: {
+		...base,
+		chainType: ChainType.EVM,
+		gasPreference: {
+			// Keep it empty for automatic configuration
+		},
+		anchorRegistryAddress: '0x4AAcca72145e1dF2aeC137E1f3C5E3D75DB8b5f3',
+		subgraphAddress: '',
+		coingeckoChainName: 'base',
+		chainLogo: (logoSize = 24) => <IconBase size={logoSize} />,
+	},
+
+	ZKEVM_CONFIG: {
+		...polygonZkEvm,
+		chainType: ChainType.EVM,
+		coingeckoChainName: 'polygon-zkevm',
+		gasPreference: {
+			// Keep it empty for automatic configuration
+		},
+		chainLogo: (logoSize?: number) => <IconZKEVM size={logoSize} />,
+		subgraphAddress: process.env.NEXT_PUBLIC_SUBGRAPH_ZKEVM,
+		GIV_TOKEN_ADDRESS: ZKEVM_GIV_TOKEN_ADDRESS,
+		GIV_BUY_LINK: 'https://linktr.ee/GIVtoken',
+		TOKEN_DISTRO_ADDRESS: '0x4fB9B10ECDe1b048DBC79aBEAB3793edc93a0d54',
+		uniswapV2Subgraph: '',
+		GIVPOWER: {
+			network: ZKEVM_NETWORK_NUMBER,
+			LM_ADDRESS: '0xc790f82bf6f8709aa4a56dc11afad7af7c2a9867',
+			POOL_ADDRESS: ZKEVM_GIV_TOKEN_ADDRESS,
+			type: StakingType.GIV_UNIPOOL_LM,
+			platform: StakingPlatform.GIVETH,
+			title: 'GIV',
+			description: '100% GIV',
+			unit: 'GIV',
+			//Tuesday, September 3, 2024 6:00:00 PM
+			farmStartTimeMS: 1725386400000,
+		},
+	},
 	CLASSIC_CONFIG: {
 		...classic,
 		chainType: ChainType.EVM,
 		gasPreference: {
 			// Keep it empty for automatic configuration
 		},
-		subgraphAddress: 'http://167.172.97.150:8000/subgraphs/name/giveth/etc',
+		subgraphAddress:
+			process.env.NEXT_PUBLIC_SUBGRAPH_CLASSIC ||
+			'http://167.172.97.150:8000/subgraphs/name/giveth/etc',
 		coingeckoChainName: 'ethereum-classic',
 		chainLogo: (logoSize = 24) => <IconClassic size={logoSize} />,
 	},
@@ -545,6 +644,11 @@ const config: EnvConfig = {
 		...SOLANA_NETWORK,
 		coingeckoChainName: 'solana',
 		chainLogo: (logoSize?: number) => <IconSolana size={logoSize} />,
+	},
+	STELLAR_CONFIG: {
+		...STELLAR_NETWORK,
+		coingeckoChainName: 'stellar',
+		chainLogo: (logoSize?: number) => <IconStellar size={logoSize} />,
 	},
 };
 

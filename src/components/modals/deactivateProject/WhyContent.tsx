@@ -1,10 +1,11 @@
 import { GLink, Lead, neutralColors } from '@giveth/ui-design-system';
-import Select, { type CSSObjectWithLabel, StylesConfig } from 'react-select';
+import Select from 'react-select';
 import { AnimatePresence, motion } from 'framer-motion';
 import React from 'react';
 import styled from 'styled-components';
 import { Shadow } from '@/components/styled-components/Shadow';
 import { ISelectObj } from './DeactivateProjectIndex';
+import type { CSSObjectWithLabel, StylesConfig } from 'react-select';
 
 interface IWhyContent {
 	handleChange: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
@@ -29,7 +30,6 @@ const WhyContent = ({
 			styles={selectCustomStyles}
 			value={selectedOption}
 			onChange={e => handleSelect(e)}
-			isMobile={false}
 		/>
 		<AnimatePresence>
 			{String(selectedOption?.value) === '5' && (

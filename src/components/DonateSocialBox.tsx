@@ -27,7 +27,7 @@ interface ISocialBox {
 const DonateSocialBox: FC<ISocialBox> = props => {
 	const [showModal, setShowModal] = useState<boolean>(false);
 	const { project, isDonateFooter } = props;
-	const { slug, verified } = project;
+	const { slug } = project;
 	const { isMobile } = useDetectDevice();
 	const { formatMessage } = useIntl();
 	const { isActive } = useProjectContext();
@@ -49,7 +49,6 @@ const DonateSocialBox: FC<ISocialBox> = props => {
 
 			<BadgeWrapper>
 				<ShareLikeBadge
-					type={verified ? 'reward' : 'share'}
 					onClick={() => isActive && setShowModal(true)}
 					isSimple={isMobile}
 					fromDonate={true}

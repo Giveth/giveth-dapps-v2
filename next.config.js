@@ -7,10 +7,8 @@ const { withSentryConfig } = require('@sentry/nextjs');
 const withBundleAnalyzer = require('@next/bundle-analyzer')({
 	enabled: process.env.ANALYZE === 'true',
 });
-var pjson = require('./package.json');
-const generateRobotsTxt = require('./scripts/generate-robots-txt');
 
-const isProduction = process.env.NEXT_PUBLIC_ENV === 'production';
+const generateRobotsTxt = require('./scripts/generate-robots-txt');
 
 const defaultLocale = 'en';
 const locales = ['ca', 'en', 'es'];
@@ -26,6 +24,7 @@ const moduleExports = withBundleAnalyzer({
 			{ protocol: 'https', port: '', hostname: 'images.unsplash.com' },
 			{ protocol: 'https', port: '', hostname: 'unicorn.mypinata.cloud' },
 			{ protocol: 'https', port: '', hostname: 'images.ctfassets.net' },
+			{ protocol: 'https', port: '', hostname: 'giveth.io' },
 			{
 				protocol: 'https',
 				port: '',
@@ -60,6 +59,7 @@ const moduleExports = withBundleAnalyzer({
 			},
 			{ protocol: 'https', port: '', hostname: 'ipfs.io' },
 			{ protocol: 'https', port: '', hostname: '*.amazonaws.com' },
+			{ protocol: 'https', port: '', hostname: 'giveth.io' },
 		],
 	},
 	compiler: {
@@ -103,28 +103,33 @@ const moduleExports = withBundleAnalyzer({
 					'https://giveth.notion.site/Giveth-Quadratic-Funding-3478aa27eb094a699f9ddd6a8b611027',
 				permanent: false,
 			},
-		];
-
-		if (isProduction) {
-			redirects.push(
-				{
-					source: '/qf',
-					destination: '/projects/all',
-					permanent: false,
-				},
-				{
-					source: '/qf/all',
-					destination: '/projects/all',
-					permanent: false,
-				},
-			);
-		} else {
-			redirects.push({
+			{
 				source: '/qf',
 				destination: '/qf/all',
 				permanent: false,
-			});
-		}
+			},
+		];
+
+		// if (isProduction) {
+		// 	redirects.push(
+		// 		{
+		// 			source: '/qf',
+		// 			destination: '/projects/all',
+		// 			permanent: false,
+		// 		},
+		// 		{
+		// 			source: '/qf/all',
+		// 			destination: '/projects/all',
+		// 			permanent: false,
+		// 		},
+		// 	);
+		// } else {
+		// 	redirects.push({
+		// 		source: '/qf',
+		// 		destination: '/qf/all',
+		// 		permanent: false,
+		// 	});
+		// }
 
 		return redirects;
 	},
@@ -143,11 +148,38 @@ const moduleExports = withBundleAnalyzer({
 		locales,
 		defaultLocale,
 	},
-	headers: () => {
+	headers: async () => {
 		return [
+			{
+				source: '/:path*',
+				locale: false,
+				headers: [
+					{
+						key: 'X-Frame-Options',
+						value: 'SAMEORIGIN',
+					},
+					{
+						key: 'Content-Security-Policy',
+						value: "frame-ancestors 'self'",
+					},
+					{
+						key: 'X-Content-Type-Options',
+						value: 'nosniff', // Mitigates MIME type sniffing
+					},
+					{
+						key: 'Referrer-Policy',
+						value: 'strict-origin-when-cross-origin', // Protects user privacy
+					},
+					{
+						key: 'Permissions-Policy',
+						value: 'camera=(), microphone=(), geolocation=()', // Limits usage of browser features
+					},
+				],
+			},
 			{
 				// Adding CORS headers for /manifest.json
 				source: '/manifest.json',
+				locale: false,
 				headers: [
 					{
 						key: 'Access-Control-Allow-Origin',

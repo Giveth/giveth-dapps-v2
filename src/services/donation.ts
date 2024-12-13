@@ -6,7 +6,7 @@ import {
 	UPDATE_DONATION_STATUS,
 } from '@/apollo/gql/gqlDonations';
 import { client } from '@/apollo/apolloClient';
-import { ICreateDonation } from '@/components/views/donate/helpers';
+import { ICreateDonation } from '@/components/views/donate/common/helpers';
 import { EDonationStatus } from '@/apollo/types/gqlEnums';
 import { FETCH_USER_STREAMS } from '@/apollo/gql/gqlUser';
 import { ITokenStreams } from '@/context/donate.context';
@@ -72,6 +72,8 @@ const createDonation = async (props: IOnTxHash) => {
 		chainvineReferred,
 		safeTransactionId,
 		draftDonationId,
+		useDonationBox,
+		relevantDonationTxHash,
 	} = props;
 	const { address, symbol } = token;
 	let donationId = 0;
@@ -91,6 +93,8 @@ const createDonation = async (props: IOnTxHash) => {
 				referrerId: chainvineReferred,
 				safeTransactionId,
 				draftDonationId,
+				useDonationBox,
+				relevantDonationTxHash,
 			},
 		});
 		donationId = data.createDonation;
@@ -100,7 +104,7 @@ const createDonation = async (props: IOnTxHash) => {
 				section: SENTRY_URGENT,
 			},
 		});
-		console.log('createDonation error: ', error);
+		console.error('createDonation error: ', error);
 		throw error;
 	}
 
@@ -174,7 +178,7 @@ export const createDraftRecurringDonation = async ({
 				section: SENTRY_URGENT,
 			},
 		});
-		console.log('createDraftRecurringDonation error: ', error);
+		console.error('createDraftRecurringDonation error: ', error);
 		throw error;
 	}
 };
@@ -216,7 +220,7 @@ export const createRecurringDonation = async ({
 				section: SENTRY_URGENT,
 			},
 		});
-		console.log('createRecurringDonation error: ', error);
+		console.error('createRecurringDonation error: ', error);
 		throw error;
 	}
 };
@@ -272,7 +276,7 @@ export const updateRecurringDonation = async (
 				section: SENTRY_URGENT,
 			},
 		});
-		console.log('updateRecurringDonation error: ', error);
+		console.error('updateRecurringDonation error: ', error);
 		throw error;
 	}
 };
@@ -313,7 +317,7 @@ export const endRecurringDonation = async ({
 				section: SENTRY_URGENT,
 			},
 		});
-		console.log('endRecurringDonation error: ', error);
+		console.error('endRecurringDonation error: ', error);
 		throw error;
 	}
 };
@@ -337,7 +341,54 @@ export const updateRecurringDonationStatus = async (
 				section: SENTRY_URGENT,
 			},
 		});
-		console.log('updateRecurringDonationStatus error: ', error);
+		console.error('updateRecurringDonationStatus error: ', error);
 		throw error;
 	}
 };
+
+// This is the function you will call to check if a wallet address is sanctioned.
+export async function isWalletSanctioned(
+	walletAddress: string,
+): Promise<boolean> {
+	try {
+		const baseURL = 'https://api.trmlabs.com/public/';
+		const url = `${baseURL}v1/sanctions/screening`;
+
+		// Define the address you want to screen
+		const request = [{ address: walletAddress }];
+
+		// Make the POST request using fetch
+		const response = await fetch(url, {
+			method: 'POST',
+			headers: {
+				Accept: 'application/json',
+				'Content-Type': 'application/json',
+			},
+			body: JSON.stringify(request),
+		});
+
+		// Parse the JSON response
+		const data = await response.json();
+
+		/** Sample response
+		 * [
+		 *   {
+		 *     address: '0xbF7BE1D1aa31E456f09FE9316e07Ac9F15B87De8',
+		 *     isSanctioned: false
+		 *   },
+		 *   {
+		 *     address: '0x2E100055A4F7100FF9898BAa3409085150355b4f',
+		 *     isSanctioned: false
+		 *   },
+		 *	 ...
+		 * ]
+		 */
+
+		// Check the response and determine if the address is sanctioned
+		const result = data && data[0];
+		return Boolean(result && result.isSanctioned);
+	} catch (error) {
+		console.error('Error checking wallet sanction status:', error);
+		return false;
+	}
+}

@@ -23,8 +23,8 @@ interface IFilterMenuProps {
 
 const projectsFeatures = [
 	{
-		label: { id: 'label.verified' },
-		value: EProjectsFilter.VERIFIED,
+		label: { id: 'label.isGivbackEligible' },
+		value: EProjectsFilter.IS_GIVBACK_ELIGIBLE,
 	},
 ];
 
@@ -56,6 +56,18 @@ const fundsFilter = [
 	{
 		label: 'Arbitrum',
 		value: EProjectsFilter.ACCEPT_FUND_ON_ARBITRUM,
+	},
+	{
+		label: 'Base',
+		value: EProjectsFilter.ACCEPT_FUND_ON_BASE,
+	},
+	{
+		label: 'Polygon ZKEVM',
+		value: EProjectsFilter.ACCEPT_FUND_ON_ZKEVM,
+	},
+	{
+		label: 'Stellar',
+		value: EProjectsFilter.ACCEPT_FUND_ON_STELLAR,
 	},
 ];
 

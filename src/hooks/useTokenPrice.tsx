@@ -3,10 +3,10 @@ import { useEffect, useState } from 'react';
 import { useAccount } from 'wagmi';
 import { Address } from 'viem';
 import { fetchPrice, fetchPriceWithCoingeckoId } from '@/services/token';
-import { useAppSelector } from '@/features/hooks';
 import config from '@/configuration';
 import { useGeneralWallet } from '@/providers/generalWalletProvider';
 import { ChainType } from '@/types/config';
+import { useFetchGIVPrice } from './useGivPrice';
 
 const ethereumChain = config.MAINNET_CONFIG;
 const gnosisChain = config.GNOSIS_CONFIG;
@@ -32,8 +32,8 @@ export const useTokenPrice = (token?: ITokenPrice) => {
 	const { walletChainType } = useGeneralWallet();
 	const { chain } = useAccount();
 	const chainId = chain?.id;
-	const givPrice = useAppSelector(state => state.price.givPrice);
-	const givTokenPrice = new BigNumber(givPrice).toNumber();
+	const { data: givPrice } = useFetchGIVPrice();
+	const givTokenPrice = givPrice ? new BigNumber(givPrice).toNumber() : 0;
 	const isMainnet = chainId === config.MAINNET_NETWORK_NUMBER;
 
 	useEffect(() => {
@@ -44,8 +44,8 @@ export const useTokenPrice = (token?: ITokenPrice) => {
 					stableCoins.includes(token.symbol.toUpperCase()))
 			) {
 				setTokenPrice(1);
-			} else if (token?.symbol === 'GIV') {
-				setTokenPrice(givTokenPrice || 0);
+			} else if (token?.symbol === 'GIV' && givTokenPrice) {
+				setTokenPrice(givTokenPrice);
 			} else if (token?.coingeckoId) {
 				setTokenPrice(
 					(await fetchPriceWithCoingeckoId(token.coingeckoId)) || 0,

@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { IUserWithPassport } from '@/apollo/types/types';
+import { IUserWithPassport, IPassportInfo } from '@/apollo/types/types';
 import {
 	fetchUserByAddress,
 	signToGetToken,
@@ -55,18 +55,6 @@ export const userSlice = createSlice({
 		setToken: (state, action: PayloadAction<string>) => {
 			state.token = action.payload;
 		},
-		incrementLikedProjectsCount: state => {
-			if (state.userData) {
-				state.userData.likedProjectsCount =
-					(state.userData.likedProjectsCount || 0) + 1;
-			}
-		},
-		decrementLikedProjectsCount: state => {
-			if (state.userData) {
-				state.userData.likedProjectsCount =
-					(state.userData.likedProjectsCount || 1) - 1;
-			}
-		},
 		setBoostedProjectsCount: (state, action: PayloadAction<number>) => {
 			if (state.userData) {
 				state.userData.boostedProjectsCount = action.payload;
@@ -74,6 +62,19 @@ export const userSlice = createSlice({
 		},
 		setIsLoading: (state, action: PayloadAction<boolean>) => {
 			state.isLoading = action.payload;
+		},
+		setUserMBDScore: (state, action: PayloadAction<number>) => {
+			if (state.userData) {
+				state.userData.activeQFMBDScore = action.payload;
+			}
+		},
+		setUserPassport: (state, action: PayloadAction<IPassportInfo>) => {
+			if (state.userData) {
+				state.userData.passportScore = action.payload.passportScore;
+				state.userData.passportStamps = action.payload.passportStamps;
+				state.userData.activeQFMBDScore =
+					action.payload.activeQFMBDScore;
+			}
 		},
 	},
 	extraReducers: builder => {
@@ -151,9 +152,9 @@ export const {
 	setIsEnabled,
 	setIsSignedIn,
 	setToken,
-	incrementLikedProjectsCount,
-	decrementLikedProjectsCount,
 	setBoostedProjectsCount,
 	setIsLoading,
+	setUserMBDScore,
+	setUserPassport,
 } = userSlice.actions;
 export default userSlice.reducer;

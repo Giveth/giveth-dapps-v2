@@ -36,7 +36,7 @@ const BoostedInnerModal: FC<IBoostedModalProps> = ({
 					animationData={CongratsAnimation}
 				/>
 			</ConfettiContainer>
-			<BoostedTitle>
+			<BoostedTitle id='project-boosted'>
 				{formatMessage({ id: 'label.project_boosted' })}
 			</BoostedTitle>
 			<Desc>
@@ -89,7 +89,7 @@ const Desc = styled(Lead)`
 
 const SeeGivPowerAllocationsButton = styled(CustomButtonLink)`
 	&:hover {
-		color: ${brandColors.pinky[600]};
+		color: ${brandColors.pinky[600]} !important;
 	}
 `;
 

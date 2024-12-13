@@ -1,6 +1,9 @@
 import { signMessage } from '@wagmi/core';
 import { client } from '@/apollo/apolloClient';
-import { REFRESH_USER_SCORES } from '@/apollo/gql/gqlPassport';
+import {
+	REFRESH_USER_SCORES,
+	SCORE_ACTIVE_QF_DONOR_ADDRESS,
+} from '@/apollo/gql/gqlPassport';
 import config from '@/configuration';
 import { getPassports } from '@/helpers/passport';
 import { getRequest, postRequest } from '@/helpers/requests';
@@ -15,11 +18,11 @@ export const fetchPassportScore = async (account: string) => {
 			variables: {
 				address: account?.toLowerCase(),
 			},
-			fetchPolicy: 'no-cache',
+			fetchPolicy: 'network-only',
 		});
 		return data;
 	} catch (error) {
-		console.log('error', error);
+		console.error('error', error);
 		//remove user's info from local storage
 		const passports = getPassports();
 		delete passports[account.toLowerCase()];
@@ -64,12 +67,66 @@ export const connectPassport = async (account: string, singin: boolean) => {
 		}
 		return true;
 	} catch (error: any) {
-		console.log('error', error);
-		if (error.code === 'ACTION_REJECTED') {
-			showToastError('Rejected By User');
+		console.error('error', error);
+		if (error.code === 4001) {
+			showToastError('User rejected the request.');
 		} else {
 			showToastError(error);
 		}
 		return false;
+	}
+};
+
+export const connectWallet = async (account: string, singin: boolean) => {
+	//Get Nonce and Message
+	try {
+		const { nonce, message } = await getRequest(
+			`${config.MICROSERVICES.authentication}/passportNonce`,
+			true,
+			{},
+		);
+
+		//sign message
+		const signature = await signMessage(wagmiConfig, { message });
+
+		//auth
+		const { jwt } = await postRequest(
+			`${config.MICROSERVICES.authentication}/passportAuthentication`,
+			true,
+			{ message, signature, nonce },
+		);
+
+		if (singin) {
+			//use passport jwt to sign in to the giveth and create user
+			localStorage.setItem(StorageLabel.USER, account.toLowerCase());
+			localStorage.setItem(StorageLabel.TOKEN, jwt);
+		}
+		return true;
+	} catch (error: any) {
+		console.error('error', error);
+		if (error.code === 4001) {
+			showToastError('User rejected the request.');
+		} else {
+			showToastError(error);
+		}
+		return false;
+	}
+};
+
+// get user's address score using the model-based detection endpoint
+export const scoreUserAddress = async (address: `0x${string}` | undefined) => {
+	try {
+		const { data } = await client.query({
+			query: SCORE_ACTIVE_QF_DONOR_ADDRESS,
+			variables: {
+				address: address?.toLowerCase(),
+			},
+			fetchPolicy: 'network-only',
+		});
+
+		return data.scoreUserAddress;
+	} catch (error) {
+		console.error('Failed to fetch user address score:', error);
+		return null;
 	}
 };

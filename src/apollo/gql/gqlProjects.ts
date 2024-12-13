@@ -8,6 +8,7 @@ export const PROJECT_CORE_FIELDS = gql`
 		image
 		slug
 		verified
+		isGivbackEligible
 		totalDonations
 		qfRounds {
 			id
@@ -28,17 +29,13 @@ export const PROJECT_CARD_FIELDS = gql`
 	fragment ProjectCardFields on Project {
 		...ProjectCoreFields
 		descriptionSummary
-		totalReactions
-		reaction {
-			id
-			userId
-		}
 		adminUser {
 			name
 			walletAddress
 			avatar
 		}
 		updatedAt
+		latestUpdateCreationDate
 		organization {
 			label
 		}
@@ -48,7 +45,6 @@ export const PROJECT_CARD_FIELDS = gql`
 			round
 		}
 		sumDonationValueUsdForActiveQfRound
-		sumDonationValueUsd
 		countUniqueDonorsForActiveQfRound
 		countUniqueDonors
 		estimatedMatching {
@@ -59,6 +55,7 @@ export const PROJECT_CARD_FIELDS = gql`
 		anchorContracts {
 			address
 			isActive
+			networkId
 		}
 	}
 `;
@@ -147,9 +144,17 @@ export const FETCH_PROJECT_BY_SLUG_DONATION = gql`
 			slug
 			descriptionSummary
 			verified
-			sumDonationValueUsd
+			isGivbackEligible
+			totalDonations
 			sumDonationValueUsdForActiveQfRound
 			countUniqueDonorsForActiveQfRound
+			categories {
+				name
+				value
+				mainCategory {
+					title
+				}
+			}
 			adminUser {
 				id
 				name
@@ -159,12 +164,14 @@ export const FETCH_PROJECT_BY_SLUG_DONATION = gql`
 			organization {
 				label
 				supportCustomTokens
+				disableRecurringDonations
 			}
 			addresses {
 				address
 				isRecipient
 				networkId
 				chainType
+				memo
 			}
 			status {
 				name
@@ -185,10 +192,12 @@ export const FETCH_PROJECT_BY_SLUG_DONATION = gql`
 				allocatedTokenSymbol
 				allocatedFundUSDPreferred
 				allocatedFundUSD
+				minimumValidUsdValue
 			}
 			anchorContracts {
 				address
 				isActive
+				networkId
 			}
 		}
 	}
@@ -206,6 +215,7 @@ export const FETCH_PROJECT_BY_SLUG_SINGLE_PROJECT = gql`
 			image
 			slug
 			verified
+			isGivbackEligible
 			totalDonations
 			description
 			addresses {
@@ -224,7 +234,6 @@ export const FETCH_PROJECT_BY_SLUG_SINGLE_PROJECT = gql`
 				id
 				userId
 			}
-			totalReactions
 			categories {
 				name
 				value
@@ -261,7 +270,6 @@ export const FETCH_PROJECT_BY_SLUG_SINGLE_PROJECT = gql`
 			}
 			givbackFactor
 			sumDonationValueUsdForActiveQfRound
-			sumDonationValueUsd
 			countUniqueDonorsForActiveQfRound
 			countUniqueDonors
 			estimatedMatching {
@@ -288,6 +296,7 @@ export const FETCH_PROJECT_BY_SLUG_SINGLE_PROJECT = gql`
 			anchorContracts {
 				address
 				isActive
+				networkId
 			}
 		}
 	}
@@ -302,6 +311,7 @@ export const FETCH_PROJECT_BY_ID = gql`
 			description
 			addresses {
 				address
+				memo
 				isRecipient
 				networkId
 				chainType
@@ -325,6 +335,7 @@ export const FETCH_PROJECT_BY_ID = gql`
 			anchorContracts {
 				address
 				isActive
+				networkId
 			}
 		}
 	}
@@ -334,6 +345,7 @@ export const FETCH_GIVETH_PROJECT_BY_ID = gql`
 	query ProjectById($id: Float!) {
 		projectById(id: $id) {
 			addresses {
+				memo
 				address
 				isRecipient
 				networkId
@@ -352,7 +364,6 @@ export const FETCH_PROJECT_REACTION_BY_ID = gql`
 				id
 				userId
 			}
-			totalReactions
 		}
 	}
 `;
@@ -379,7 +390,6 @@ export const FETCH_PROJECT_UPDATES = gql`
 			userId
 			content
 			isMain
-			totalReactions
 			reaction {
 				projectUpdateId
 				userId
@@ -417,7 +427,6 @@ export const FETCH_FEATURED_PROJECT_UPDATES = gql`
 			userId
 			content
 			isMain
-			totalReactions
 			createdAt
 		}
 	}
@@ -489,8 +498,16 @@ export const UPLOAD_IMAGE = gql`
 `;
 
 export const WALLET_ADDRESS_IS_VALID = gql`
-	query WalletAddressIsValid($address: String!) {
-		walletAddressIsValid(address: $address)
+	query WalletAddressIsValid(
+		$address: String!
+		$chainType: ChainType
+		$memo: String
+	) {
+		walletAddressIsValid(
+			address: $address
+			chainType: $chainType
+			memo: $memo
+		)
 	}
 `;
 
@@ -513,6 +530,7 @@ export const CREATE_PROJECT = gql`
 				address
 				networkId
 				chainType
+				memo
 			}
 			categories {
 				name
@@ -545,6 +563,7 @@ export const UPDATE_PROJECT = gql`
 				address
 				networkId
 				chainType
+				memo
 			}
 			impactLocation
 			categories {
@@ -565,12 +584,14 @@ export const ADD_RECIPIENT_ADDRESS_TO_PROJECT = gql`
 		$networkId: Float!
 		$address: String!
 		$chainType: ChainType
+		$memo: String
 	) {
 		addRecipientAddressToProject(
 			projectId: $projectId
 			networkId: $networkId
 			address: $address
 			chainType: $chainType
+			memo: $memo
 		) {
 			id
 			title
@@ -581,6 +602,7 @@ export const ADD_RECIPIENT_ADDRESS_TO_PROJECT = gql`
 			listed
 			reviewStatus
 			verified
+			isGivbackEligible
 			slugHistory
 			creationDate
 			adminUserId
@@ -594,6 +616,7 @@ export const ADD_RECIPIENT_ADDRESS_TO_PROJECT = gql`
 				isRecipient
 				networkId
 				chainType
+				memo
 			}
 			adminUser {
 				id
@@ -674,6 +697,7 @@ export const PROJECT_ACCEPTED_TOKENS = gql`
 			order
 			isStableCoin
 			coingeckoId
+			isQR
 		}
 	}
 `;
@@ -689,19 +713,24 @@ export const SIMILAR_PROJECTS = gql`
 	}
 `;
 
+export const MAIN_CATEGORIES_QUERY = `
+	mainCategories {
+		title
+		banner
+		slug
+		description
+		categories {
+			name
+			value
+			isActive
+			canUseOnFrontend
+		}
+	}
+`;
+
 export const FETCH_MAIN_CATEGORIES = gql`
 	query {
-		mainCategories {
-			title
-			banner
-			slug
-			description
-			categories {
-				name
-				value
-				isActive
-			}
-		}
+		${MAIN_CATEGORIES_QUERY}
 	}
 `;
 
@@ -748,5 +777,40 @@ export const FETCH_RECURRING_DONATIONS_BY_PROJECTID = gql`
 			}
 			totalCount
 		}
+	}
+`;
+export const FETCH_RECURRING_DONATIONS_BY_DATE = gql`
+	query ($projectId: Int!, $startDate: String, $endDate: String) {
+		recurringDonationsByDate(
+			projectId: $projectId
+			startDate: $startDate
+			endDate: $endDate
+		) {
+			recurringDonations {
+				id
+				txHash
+				networkId
+				flowRate
+				currency
+				anonymous
+				isArchived
+				status
+				totalUsdStreamed
+				donor {
+					id
+					walletAddress
+					firstName
+					email
+				}
+				createdAt
+			}
+			totalCount
+		}
+	}
+`;
+
+export const DELETE_DRAFT_PROJECT = gql`
+	mutation ($projectId: Float!) {
+		deleteDraftProject(projectId: $projectId)
 	}
 `;

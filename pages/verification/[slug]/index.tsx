@@ -50,15 +50,15 @@ const VerificationRoute = () => {
 					slug,
 					connectedWalletUserId: Number(userData?.id),
 				},
-				fetchPolicy: 'network-only',
+				fetchPolicy: 'no-cache',
 			})
 			.then((res: { data: { projectBySlug: IProject } }) => {
 				const _project = res.data.projectBySlug;
 				const isOwner = compareAddresses(
 					userData?.walletAddress,
-					_project.adminUser.walletAddress,
+					_project.adminUser?.walletAddress,
 				);
-				setOwnerAddress(_project.adminUser.walletAddress);
+				setOwnerAddress(_project.adminUser?.walletAddress);
 				setAllowVerification(
 					_project.status.name === EProjectStatus.ACTIVE && isOwner,
 				);
@@ -68,7 +68,7 @@ const VerificationRoute = () => {
 				setIsProjectLoading(false);
 			})
 			.catch((error: unknown) => {
-				console.log('fetchProjectBySlug error: ', error);
+				console.error('fetchProjectBySlug error: ', error);
 				captureException(error, {
 					tags: {
 						section: 'verificationFetchProjectBySlug',
@@ -98,7 +98,7 @@ const VerificationRoute = () => {
 	return (
 		<VerificationProvider>
 			<Head>
-				<title>Verify a Project | Giveth</title>
+				<title>GIVbacks Eligibility Application | Giveth</title>
 			</Head>
 			<VerificationIndex />
 		</VerificationProvider>

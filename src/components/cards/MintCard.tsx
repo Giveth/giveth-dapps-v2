@@ -18,13 +18,15 @@ import { readContracts, readContract } from '@wagmi/core';
 import { MintModal } from '../modals/Mint/MintModal';
 import { formatWeiHelper } from '@/helpers/number';
 import config from '@/configuration';
-import { abi as PFP_ABI } from '@/artifacts/pfpGiver.json';
+import PFP_ARTIFACTS from '@/artifacts/pfpGiver.json';
 import { InsufficientFundModal } from '../modals/InsufficientFund';
 import { usePFPMintData } from '@/context/pfpmint.context';
 import { useGeneralWallet } from '@/providers/generalWalletProvider';
 import { wagmiConfig } from '@/wagmiConfigs';
 import { getReadContractResult } from '@/lib/contracts';
+
 const MIN_NFT_QTY = 1;
+const PFP_ABI = PFP_ARTIFACTS.abi as Abi;
 
 interface IpfpContractData {
 	price: bigint;
@@ -66,11 +68,12 @@ export const MintCard = () => {
 
 	useEffect(() => {
 		async function fetchData() {
+			if (!config.MAINNET_CONFIG.PFP_CONTRACT_ADDRESS) return;
 			try {
 				const baseParams = {
 					address: config.MAINNET_CONFIG.PFP_CONTRACT_ADDRESS,
 					chainId: config.MAINNET_NETWORK_NUMBER,
-					abi: PFP_ABI as Abi,
+					abi: PFP_ABI,
 				} as const;
 				const result = await readContracts(wagmiConfig, {
 					contracts: [
@@ -106,7 +109,7 @@ export const MintCard = () => {
 					maxSupply: _maxSupply || 0,
 				});
 			} catch (error) {
-				console.log('failed to fetch GIversPFP data');
+				console.error('failed to fetch GIversPFP data');
 			}
 		}
 		fetchData();
@@ -114,18 +117,19 @@ export const MintCard = () => {
 
 	useEffect(() => {
 		async function fetchData() {
-			if (!walletAddress) return;
+			if (!walletAddress || !config.MAINNET_CONFIG.PFP_CONTRACT_ADDRESS)
+				return;
 			try {
 				const _balanceOf = await readContract(wagmiConfig, {
 					address: config.MAINNET_CONFIG.PFP_CONTRACT_ADDRESS,
 					chainId: config.MAINNET_NETWORK_NUMBER,
-					abi: PFP_ABI as Abi,
+					abi: PFP_ABI,
 					functionName: 'balanceOf',
 					args: [walletAddress],
 				});
 				setBalance(Number(_balanceOf || '0'));
 			} catch (error) {
-				console.log('failed to fetch user balance data');
+				console.error('failed to fetch user balance data');
 			}
 		}
 		fetchData();

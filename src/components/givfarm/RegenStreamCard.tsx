@@ -28,12 +28,15 @@ import { formatWeiHelper } from '@/helpers/number';
 import { IconFox } from '@/components/Icons/Fox';
 import { IconCult } from '@/components/Icons/Cult';
 import { HarvestAllModal } from '../modals/HarvestAll';
-import { useAppSelector } from '@/features/hooks';
 import config from '@/configuration';
 import { SubgraphDataHelper } from '@/lib/subgraph/subgraphDataHelper';
 import { TokenDistroHelper } from '@/lib/contractHelper/TokenDistroHelper';
 import { Relative } from '../styled-components/Position';
 import { ArchiveAndNetworkCover } from '../ArchiveAndNetworkCover/ArchiveAndNetworkCover';
+import { getSubgraphChainId } from '@/helpers/network';
+import { useFetchMainnetThirdPartyTokensPrice } from '@/hooks/useFetchMainnetThirdPartyTokensPrice';
+import { useFetchGnosisThirdPartyTokensPrice } from '@/hooks/useFetchGnosisThirdPartyTokensPrice';
+import { useSubgraphInfo } from '@/hooks/useSubgraphInfo';
 
 interface RegenStreamProps {
 	streamConfig: RegenStreamConfig;
@@ -58,7 +61,10 @@ export const RegenStreamCard: FC<RegenStreamProps> = ({ streamConfig }) => {
 	const [rewardStream, setRewardStream] = useState(0n);
 	const [lockedAmount, setLockedAmount] = useState(0n);
 	const [claimedAmount, setClaimedAmount] = useState(0n);
+
 	const { chain } = useAccount();
+	const subgraphChainId = getSubgraphChainId(streamConfig.network);
+	const currentValues = useSubgraphInfo(subgraphChainId);
 	const chainId = chain?.id;
 
 	const {
@@ -71,32 +77,27 @@ export const RegenStreamCard: FC<RegenStreamProps> = ({ streamConfig }) => {
 		archived,
 	} = streamConfig;
 
-	const currentValues = useAppSelector(
-		state =>
-			streamNetwork === config.GNOSIS_NETWORK_NUMBER
-				? state.subgraph.gnosisValues
-				: state.subgraph.mainnetValues,
-		() => (showModal ? true : false),
-	);
-
 	const { regenTokenDistroHelper, tokenDistroBalance } = useMemo(() => {
-		const sdh = new SubgraphDataHelper(currentValues);
+		const sdh = new SubgraphDataHelper(currentValues.data);
 		const tokenDistroBalance =
 			sdh.getTokenDistroBalance(tokenDistroAddress);
 		const regenTokenDistroHelper = new TokenDistroHelper(
 			sdh.getTokenDistro(tokenDistroAddress),
 		);
 		return { regenTokenDistroHelper, tokenDistroBalance };
-	}, [currentValues, tokenDistroAddress]);
+	}, [currentValues.data, tokenDistroAddress]);
 
-	const { mainnetThirdPartyTokensPrice, xDaiThirdPartyTokensPrice } =
-		useAppSelector(state => state.price);
+	const { data: mainnetThirdPartyTokensPrice } =
+		useFetchMainnetThirdPartyTokensPrice();
+	const { data: gnosisThirdPartyTokensPrice } =
+		useFetchGnosisThirdPartyTokensPrice();
 
 	useEffect(() => {
 		const currentPrice =
 			chainId === config.MAINNET_NETWORK_NUMBER
 				? mainnetThirdPartyTokensPrice
-				: xDaiThirdPartyTokensPrice;
+				: gnosisThirdPartyTokensPrice;
+		if (!currentPrice) return;
 		const price = new BigNumber(
 			currentPrice[tokenAddressOnUniswapV2.toLowerCase()],
 		);
@@ -112,7 +113,7 @@ export const RegenStreamCard: FC<RegenStreamProps> = ({ streamConfig }) => {
 		chainId,
 		tokenAddressOnUniswapV2,
 		mainnetThirdPartyTokensPrice,
-		xDaiThirdPartyTokensPrice,
+		gnosisThirdPartyTokensPrice,
 	]);
 	useEffect(() => {
 		setLockedAmount(BigInt(tokenDistroBalance.allocatedTokens));

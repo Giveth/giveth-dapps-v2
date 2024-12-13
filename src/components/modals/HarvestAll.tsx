@@ -9,13 +9,13 @@ import React, {
 import {
 	brandColors,
 	Caption,
-	IconGIVBack,
 	IconGIVFarm,
 	IconGIVStream,
 	IconHelpFilled16,
 	Lead,
 	P,
 	Flex,
+	IconGIVBack24,
 } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
 import BigNumber from 'bignumber.js';
@@ -59,13 +59,16 @@ import config from '@/configuration';
 import { IconWithTooltip } from '../IconWithToolTip';
 import { AmountBoxWithPrice } from '@/components/AmountBoxWithPrice';
 import { IModal } from '@/types/common';
-import { useAppSelector } from '@/features/hooks';
 import { useIsSafeEnvironment } from '@/hooks/useSafeAutoConnect';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
 import { getPoolIconWithName } from '@/helpers/platform';
 import { useTokenDistroHelper } from '@/hooks/useTokenDistroHelper';
 import { useStakingPool } from '@/hooks/useStakingPool';
 import { TokenDistroHelper } from '@/lib/contractHelper/TokenDistroHelper';
+import { showToastError } from '@/lib/helpers';
+import { useFetchMainnetThirdPartyTokensPrice } from '@/hooks/useFetchMainnetThirdPartyTokensPrice';
+import { useFetchGnosisThirdPartyTokensPrice } from '@/hooks/useFetchGnosisThirdPartyTokensPrice';
+import { useFetchGIVPrice } from '@/hooks/useGivPrice';
 
 interface IHarvestAllInnerModalProps {
 	title: string;
@@ -96,11 +99,11 @@ export const HarvestAllModal: FC<IHarvestAllModalProps> = ({
 	const [state, setState] = useState<HarvestStates>(HarvestStates.HARVEST);
 	const tokenSymbol = regenStreamConfig?.rewardTokenSymbol || 'GIV';
 	const { formatMessage } = useIntl();
-	const {
-		mainnetThirdPartyTokensPrice,
-		xDaiThirdPartyTokensPrice,
-		givPrice,
-	} = useAppSelector(state => state.price);
+	const { data: mainnetThirdPartyTokensPrice } =
+		useFetchMainnetThirdPartyTokensPrice();
+	const { data: gnosisThirdPartyTokensPrice } =
+		useFetchGnosisThirdPartyTokensPrice();
+	const { data: givPrice } = useFetchGIVPrice();
 	const isSafeEnv = useIsSafeEnvironment();
 	const [txHash, setTxHash] = useState('');
 	//GIVdrop TODO: Should we show Givdrop in new  design?
@@ -142,12 +145,21 @@ export const HarvestAllModal: FC<IHarvestAllModalProps> = ({
 		const currentPrice =
 			chainId === config.MAINNET_NETWORK_NUMBER
 				? mainnetThirdPartyTokensPrice
-				: xDaiThirdPartyTokensPrice;
+				: gnosisThirdPartyTokensPrice;
+		if (!currentPrice) return new BigNumber('0');
 		const price = regenStreamConfig
-			? currentPrice[regenStreamConfig.tokenAddressOnUniswapV2]
+			? currentPrice[
+					regenStreamConfig.tokenAddressOnUniswapV2.toLowerCase()
+				]
 			: givPrice;
-		return new BigNumber(price);
-	}, [givPrice, chainId, regenStreamConfig]);
+		return new BigNumber(price || '0');
+	}, [
+		chainId,
+		mainnetThirdPartyTokensPrice,
+		gnosisThirdPartyTokensPrice,
+		regenStreamConfig,
+		givPrice,
+	]);
 
 	useEffect(() => {
 		if (!tokenDistroHelper) return;
@@ -180,15 +192,24 @@ export const HarvestAllModal: FC<IHarvestAllModalProps> = ({
 			!tokenDistroBalance.givDropClaimed &&
 			address
 		) {
-			fetchAirDropClaimData(address).then(claimData => {
-				if (claimData) {
-					const givDrop = BigInt(claimData.amount);
-					setGIVdrop(givDrop / 10n);
+			fetchAirDropClaimData(address)
+				.then(claimData => {
+					if (claimData) {
+						const givDrop = BigInt(claimData.amount);
+						setGIVdrop(givDrop / 10n);
+						setGIVdropStream(
+							tokenDistroHelper.getStreamPartTokenPerWeek(
+								givDrop,
+							),
+						);
+					}
+				})
+				.catch(() => {
+					setGIVdrop(0n);
 					setGIVdropStream(
-						tokenDistroHelper.getStreamPartTokenPerWeek(givDrop),
+						tokenDistroHelper.getStreamPartTokenPerWeek(0n),
 					);
-				}
-			});
+				});
 		}
 	}, [
 		address,
@@ -231,11 +252,19 @@ export const HarvestAllModal: FC<IHarvestAllModalProps> = ({
 				if (txResponse) {
 					setState(HarvestStates.SUBMITTED);
 					setTxHash(txResponse);
-					const { status } = await waitForTransaction(
+					const { status, blockNumber } = await waitForTransaction(
 						txResponse,
 						isSafeEnv,
 					);
-
+					const event = new CustomEvent('chainEvent', {
+						detail: {
+							type: 'success',
+							chainId: chainId,
+							blockNumber: blockNumber,
+							address: address,
+						},
+					});
+					window.dispatchEvent(event);
 					setState(
 						status ? HarvestStates.CONFIRMED : HarvestStates.ERROR,
 					);
@@ -245,7 +274,7 @@ export const HarvestAllModal: FC<IHarvestAllModalProps> = ({
 			}
 		} catch (error: any) {
 			setState(
-				error?.cause.code === 4001
+				error?.cause?.code === 4001
 					? HarvestStates.HARVEST
 					: HarvestStates.ERROR,
 			);
@@ -254,13 +283,14 @@ export const HarvestAllModal: FC<IHarvestAllModalProps> = ({
 					section: 'onHarvest',
 				},
 			});
+			showToastError(error);
 		}
 	};
 
 	const modalTitle = regenStreamConfig ? 'RegenFarm Rewards' : title;
 
 	const calcUSD = (amount: string) => {
-		const price = tokenPrice || new BigNumber(givPrice);
+		const price = tokenPrice || new BigNumber(givPrice || '0');
 		return price.isNaN() ? '0' : price.times(amount).toFixed(2);
 	};
 
@@ -409,7 +439,7 @@ export const HarvestAllModal: FC<IHarvestAllModalProps> = ({
 								<BreakdownRow>
 									<BreakdownTitle>
 										<BreakdownIcon>
-											<IconGIVBack size={24} />
+											<IconGIVBack24 />
 										</BreakdownIcon>
 										<P>GIVbacks</P>
 									</BreakdownTitle>

@@ -126,6 +126,8 @@ export interface GIVpowerGgivStakingConfig extends SimplePoolStakingConfig {
 	GARDEN_ADDRESS: Address;
 }
 
+export interface SepoliaNetworkConfig extends NetworkConfig {}
+
 export interface MainnetNetworkConfig extends NetworkConfig {
 	subgraphAddress: string;
 	TOKEN_DISTRO_ADDRESS: Address;
@@ -144,6 +146,7 @@ export interface MainnetNetworkConfig extends NetworkConfig {
 	tokenAddressOnUniswapV2: Address;
 	uniswapV2Subgraph: string;
 }
+
 export interface GnosisNetworkConfig extends NetworkConfig {
 	subgraphAddress: string;
 	TOKEN_DISTRO_ADDRESS: Address;
@@ -169,6 +172,10 @@ export interface OptimismNetworkConfig extends NetworkConfig {
 	GIVETH_ANCHOR_CONTRACT_ADDRESS: Address;
 }
 
+export interface BaseNetworkConfig extends NetworkConfig {
+	anchorRegistryAddress: Address;
+}
+
 interface MicroservicesConfig {
 	authentication: string;
 	notification: string;
@@ -180,7 +187,7 @@ export interface NonEVMChain {
 	networkId: number;
 	name: string;
 	chainType: ChainType;
-	adapterNetwork: WalletAdapterNetwork;
+	adapterNetwork?: WalletAdapterNetwork;
 	nativeCurrency: {
 		name: string;
 		symbol: string;
@@ -209,25 +216,32 @@ export interface EnvConfig {
 	OPTIMISM_NETWORK_NUMBER: number;
 	CELO_NETWORK_NUMBER: number;
 	ARBITRUM_NETWORK_NUMBER: number;
+	BASE_NETWORK_NUMBER: number;
 	CLASSIC_NETWORK_NUMBER: number;
-	MAINNET_CONFIG: MainnetNetworkConfig;
+	ZKEVM_NETWORK_NUMBER: number;
+	STELLAR_NETWORK_NUMBER: number;
+	MAINNET_CONFIG: MainnetNetworkConfig | SepoliaNetworkConfig;
 	GNOSIS_CONFIG: GnosisNetworkConfig;
 	POLYGON_CONFIG: NetworkConfig;
 	OPTIMISM_CONFIG: OptimismNetworkConfig;
 	CELO_CONFIG: NetworkConfig;
 	ARBITRUM_CONFIG: NetworkConfig;
+	BASE_CONFIG: BaseNetworkConfig;
+	ZKEVM_CONFIG: NetworkConfig;
 	CLASSIC_CONFIG: NetworkConfig;
 	BACKEND_LINK: string;
 	FRONTEND_LINK: string;
 	MICROSERVICES: MicroservicesConfig;
 	RARIBLE_ADDRESS: string;
 	SOLANA_CONFIG: NonEVMNetworkConfig;
+	STELLAR_CONFIG: NonEVMNetworkConfig;
 }
 
 export interface GlobalConfig extends EnvConfig {
 	TOKEN_NAME: string;
 	WEB3_POLLING_INTERVAL: number;
 	SUBGRAPH_POLLING_INTERVAL: number;
+	SUBGRAPH_UPDATING_UI_INTERVAL: number;
 	NOTIFICATION_POLLING_INTERVAL: number;
 	PFP_POLLING_INTERVAL: number;
 	TOKEN_PRECISION: number;
@@ -241,6 +255,10 @@ export interface GlobalConfig extends EnvConfig {
 	NETWORKS_CONFIG: {
 		[key: number | string]: NetworkConfig | NonEVMNetworkConfig;
 	};
+	NETWORKS_CONFIG_WITH_ID: {
+		[key: number]: NetworkConfig | NonEVMNetworkConfig;
+	};
+	CHAINS_WITH_SUBGRAPH: NetworkConfig[];
 	INFURA_API_KEY: string | undefined;
 	BLOCKNATIVE_DAPP_ID: string | undefined;
 	GOOGLE_MAPS_API_KEY: string | undefined;
@@ -249,6 +267,7 @@ export interface GlobalConfig extends EnvConfig {
 export enum ChainType {
 	SOLANA = 'SOLANA',
 	EVM = 'EVM',
+	STELLAR = 'STELLAR',
 }
 
 export interface IChainType {

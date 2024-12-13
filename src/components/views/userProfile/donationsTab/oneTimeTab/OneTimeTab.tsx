@@ -10,7 +10,7 @@ import { IWalletDonation } from '@/apollo/types/types';
 import Pagination from '@/components/Pagination';
 import NothingToSee from '@/components/views/userProfile/NothingToSee';
 import DonationTable from '@/components/views/userProfile/donationsTab/oneTimeTab/OneTimeDonationsTable';
-import { IOrder, EOrderBy } from '../../UserProfile.view';
+import { EOrderBy, IOrder } from '../../projectsTab/type';
 import { useProfileContext } from '@/context/profile.context';
 import { WrappedSpinner } from '@/components/Spinner';
 

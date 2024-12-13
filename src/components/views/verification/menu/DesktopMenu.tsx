@@ -2,18 +2,25 @@ import { useIntl } from 'react-intl';
 import styled from 'styled-components';
 import { B, neutralColors, Col } from '@giveth/ui-design-system';
 import CheckCircle from '@/components/views/verification/CheckCircle';
+import WarningCircle from '@/components/views/verification/WarningCircle';
 import { Shadow } from '@/components/styled-components/Shadow';
 import menuList from '@/components/views/verification/menu/menuList';
 import { useVerificationData } from '@/context/verification.context';
 import { StepsProgressBar } from '@/components/views/verification/Common';
-import { findStepByName } from '@/lib/verification';
+import {
+	checkAllVerificationsSteps,
+	checkVerificationStep,
+} from '@/helpers/projects';
 
 const DesktopMenu = () => {
-	const { step, setStep, verificationData } = useVerificationData();
-	const { project, lastStep } = verificationData || {};
+	const { step, setStep, verificationData, isDraft } = useVerificationData();
+	const { project } = verificationData || {};
 	const { title } = project || {};
-	const lastStepIndex = findStepByName(lastStep);
 	const { formatMessage } = useIntl();
+	const allCheckedSteps = checkAllVerificationsSteps(
+		menuList,
+		verificationData,
+	);
 
 	return (
 		<MenuSection sm={3.75} md={2.75}>
@@ -23,19 +30,36 @@ const DesktopMenu = () => {
 			<MenuTitle $isActive>{title}</MenuTitle>
 			<StepsProgressBar />
 			{menuList.map((item, index) => {
-				const isClickable =
-					!!lastStepIndex && index <= lastStepIndex + 1;
+				let isClickable = index !== 8; // Do not enable click on last step "Done"
+				isClickable = !isDraft ? false : isClickable; // user first time came to verification steps
+
+				const isFieldDone = checkVerificationStep(
+					item.slug,
+					verificationData,
+				);
+				// show icon only if it is not optional or it is optional and user has filled it
+				const shouldShowIcon = !item.isOptional || isFieldDone;
+
+				// show check icon on last step if all steps are completed
+				const isUserOntheLastStep =
+					allCheckedSteps && index === 8 && step === 8;
+
+				const IconCheck =
+					isFieldDone || isUserOntheLastStep ? (
+						<CheckCircle />
+					) : (
+						<WarningCircle />
+					);
+
 				return (
 					<MenuTitle
 						$hover={isClickable}
-						$isActive={index <= step}
-						key={item}
+						$isActive={index === step}
+						key={item.slug}
 						onClick={() => isClickable && setStep(index)}
 					>
-						{formatMessage({ id: item })}
-						{(index <= lastStepIndex || step === 8) && (
-							<CheckCircle />
-						)}
+						{formatMessage({ id: item.label })}
+						{!!shouldShowIcon && IconCheck}
 					</MenuTitle>
 				);
 			})}

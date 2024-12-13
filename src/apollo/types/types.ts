@@ -32,6 +32,7 @@ export interface IEstimatedMatching {
 export interface IAnchorContractData {
 	address: Address;
 	isActive: boolean;
+	networkId: number;
 }
 
 export interface IProject {
@@ -48,11 +49,11 @@ export interface IProject {
 	impactLocation?: string;
 	qualityScore?: number;
 	verified?: boolean;
+	isGivbackEligible?: boolean;
 	verificationStatus?: EProjectVerificationStatus;
 	listed?: boolean | null;
 	categories: ICategory[];
 	reaction?: IReaction;
-	totalReactions: number;
 	adminUser: IAdminUser;
 	donations: {
 		id?: string;
@@ -64,10 +65,12 @@ export interface IProject {
 		name?: EProjectStatus;
 	};
 	updatedAt: string;
+	latestUpdateCreationDate?: string;
 	organization?: {
 		name: string;
 		label: string;
 		supportCustomTokens: boolean;
+		disableRecurringDonations?: boolean;
 	};
 	projectVerificationForm?: IProjectVerification;
 	projectPower: IProjectPower;
@@ -77,7 +80,6 @@ export interface IProject {
 	countUniqueDonors?: number;
 	countUniqueDonorsForActiveQfRound?: number;
 	estimatedMatching: IEstimatedMatching;
-	sumDonationValueUsd?: number;
 	sumDonationValueUsdForActiveQfRound?: number;
 	qfRounds?: IQFRound[];
 	campaigns?: ICampaign[];
@@ -85,23 +87,24 @@ export interface IProject {
 	socialMedia: IProjectSocialMedia[];
 }
 
-export interface IDonationProject extends IProject {
-	givethAddresses: IWalletAddress[];
-}
-
 export enum EProjectsFilter {
 	ACCEPT_GIV = 'AcceptGiv',
 	VERIFIED = 'Verified',
+	IS_GIVBACK_ELIGIBLE = 'IsGivbackEligible',
 	BOOSTED_WITH_GIVPOWER = 'BoostedWithGivPower',
 	GIVING_BLOCK = 'GivingBlock',
+	Endaoment = 'Endaoment',
 	ACCEPT_FUND_ON_MAINNET = 'AcceptFundOnMainnet',
 	ACCEPT_FUND_ON_GNOSIS = 'AcceptFundOnGnosis',
 	ACCEPT_FUND_ON_POLYGON = 'AcceptFundOnPolygon',
 	ACCEPT_FUND_ON_CELO = 'AcceptFundOnCelo',
 	ACCEPT_FUND_ON_ARBITRUM = 'AcceptFundOnArbitrum',
+	ACCEPT_FUND_ON_BASE = 'AcceptFundOnBase',
 	ACCEPT_FUND_ON_OPTIMISM = 'AcceptFundOnOptimism',
 	ACCEPT_FUND_ON_ETC = 'AcceptFundOnETC',
 	ACCEPT_FUND_ON_SOLANA = 'AcceptFundOnSolana',
+	ACCEPT_FUND_ON_ZKEVM = 'AcceptFundOnZKEVM',
+	ACCEPT_FUND_ON_STELLAR = 'AcceptFundOnStellar',
 	ACTIVE_QF_ROUND = 'ActiveQfRound',
 }
 
@@ -114,16 +117,21 @@ export enum ECampaignType {
 
 export enum ECampaignFilterField {
 	Verified = 'verified',
+	IsGivbackEligible = 'isGivbackEligible',
 	AcceptGiv = 'givingBlocksId',
 	GivingBlock = 'fromGivingBlock',
+	Endaoment = 'fromEndaoment',
 	BoostedWithGivPower = 'boostedWithGivPower',
 	AcceptFundOnMainnet = 'acceptFundOnMainnet',
 	AcceptFundOnGnosis = 'acceptFundOnGnosis',
 	AcceptFundOnPolygon = 'acceptFundOnPolygon',
 	AcceptFundOnCelo = 'acceptFundOnCelo',
 	AcceptFundOnArbitrum = 'acceptFundOnArbitrum',
+	AcceptFundOnBase = 'acceptFundOnBase',
 	AcceptFundOnOptimism = 'acceptFundOnOptimism',
 	AcceptFundOnSolana = 'acceptFundOnSolana',
+	AcceptFundOnZKEVM = 'acceptFundOnZKEVM',
+	AcceptFundOnStellar = 'acceptFundOnStellar',
 }
 
 export interface ICampaign {
@@ -151,6 +159,7 @@ export interface ICampaign {
 
 export interface IWalletAddress {
 	address?: string;
+	memo?: string;
 	isRecipient?: boolean;
 	networkId?: number;
 	chainType?: ChainType;
@@ -187,6 +196,7 @@ export enum EProjectSocialMediaType {
 	LENS = 'LENS',
 	WEBSITE = 'WEBSITE',
 	TELEGRAM = 'TELEGRAM',
+	GITHUB = 'GITHUB',
 }
 
 export interface IProjectSocialMedia {
@@ -228,11 +238,13 @@ export interface IUser {
 	wasReferred?: boolean;
 	isReferrer?: boolean;
 	chainvineId?: string;
+	isEmailVerified?: boolean;
 }
 
 export interface IPassportInfo {
 	passportScore: number;
 	passportStamps: any;
+	activeQFMBDScore?: number | null;
 }
 
 export interface IUserWithPassport extends IUser, IPassportInfo {}
@@ -263,6 +275,8 @@ export interface IDonation {
 	status: EDonationStatus;
 	onramperId?: string;
 	qfRound?: IQFRound;
+	isTokenEligibleForGivback?: boolean;
+	fromWalletAddress?: string;
 }
 
 export interface IWalletDonation extends IDonation {
@@ -282,6 +296,7 @@ export interface IWalletRecurringDonation {
 	flowRate: string;
 	currency: string;
 	amountStreamed: string;
+	totalUsdStreamed: string;
 	networkId: number;
 	finished: boolean;
 	anonymous: boolean;
@@ -302,6 +317,7 @@ export interface ICategory {
 	name: string;
 	value?: string;
 	isActive?: boolean;
+	canUseOnFrontend?: boolean;
 	mainCategory?: Pick<IMainCategory, 'title'>;
 }
 
@@ -380,6 +396,12 @@ export interface ISocialProfile {
 	name: string;
 }
 
+export interface IPersonalInfo {
+	email: string;
+	walletAddress: string;
+	fullName: string;
+}
+
 export interface IProjectVerification {
 	id: string;
 	isTermAndConditionsAccepted: boolean;
@@ -399,6 +421,7 @@ export interface IProjectVerification {
 	socialProfiles?: ISocialProfile[];
 	status: EVerificationStatus;
 	lastStep: EVerificationSteps;
+	personalInfo?: IPersonalInfo;
 }
 
 export enum EVerificationStatus {
@@ -419,7 +442,9 @@ export interface IProjectVerificationUpdateInput {
 }
 
 export enum EVerificationSteps {
+	BEFORE_START = 'beforeStart',
 	PERSONAL_INFO = 'personalInfo',
+	SOCIAL_PROFILES = 'socialProfiles',
 	PROJECT_REGISTRY = 'projectRegistry',
 	PROJECT_CONTACTS = 'projectContacts',
 	MANAGING_FUNDS = 'managingFunds',
@@ -475,11 +500,14 @@ export interface IQFRound {
 	allocatedFundUSDPreferred: boolean;
 	allocatedTokenSymbol: string;
 	allocatedTokenChainId: number;
+	minimumValidUsdValue?: number;
+	minMBDScore: number;
 }
 
 export interface IArchivedQFRound extends IQFRound {
 	totalDonations: number;
 	uniqueDonors: number;
+	isDataAnalysisDone: boolean;
 }
 
 export interface IGetQfRoundHistory {

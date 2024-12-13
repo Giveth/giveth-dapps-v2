@@ -46,7 +46,7 @@ const ProjectsCampaignBlock: FC<IProjectsCampaignBlockProps> = ({
 		<>
 			<TopContainer>
 				<BlockHeader>
-					<BlockTitle weight={700}>
+					<BlockTitle id='feature-projects-carousel' weight={700}>
 						{campaign.hashtags && campaign.hashtags.length > 0
 							? campaign.hashtags.map(hashtag => `#${hashtag} `)
 							: ''}
@@ -68,6 +68,7 @@ const ProjectsCampaignBlock: FC<IProjectsCampaignBlockProps> = ({
 						<H1 weight={700}>{campaign.title}</H1>
 						<Link href={campaignLinkGenerator(campaign) || ''}>
 							<Button
+								id='Explore_Row'
 								buttonType='texty-primary'
 								label={formatMessage({
 									id: 'page.projects.title.explore',

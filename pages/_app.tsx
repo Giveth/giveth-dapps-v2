@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { createWeb3Modal } from '@web3modal/wagmi/react';
 import Head from 'next/head';
 import { IntlProvider } from 'react-intl';
@@ -6,12 +6,13 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { Toaster } from 'react-hot-toast';
 import { ApolloProvider } from '@apollo/client';
 import NProgress from 'nprogress';
-import * as snippet from '@segment/snippet';
 import { useRouter } from 'next/router';
 import { Provider as ReduxProvider } from 'react-redux';
 import { SpeedInsights } from '@vercel/speed-insights/next';
-import Script from 'next/script';
+import { GoogleAnalytics } from '@next/third-parties/google';
 import { loadErrorMessages, loadDevMessages } from '@apollo/client/dev';
+import posthog from 'posthog-js';
+import { PostHogProvider } from 'posthog-js/react';
 import { WagmiProvider } from 'wagmi';
 import { projectId, wagmiConfig } from '@/wagmiConfigs';
 import { useApollo } from '@/apollo/apolloClient';
@@ -23,7 +24,6 @@ import { store } from '@/features/store';
 import SubgraphController from '@/components/controller/subgraph.ctrl';
 import UserController from '@/components/controller/user.ctrl';
 import ModalController from '@/components/controller/modal.ctrl';
-import PriceController from '@/components/controller/price.ctrl';
 import GeneralController from '@/components/controller/general.ctrl';
 import NotificationController from '@/components/controller/pfp.ctrl';
 import PfpController from '@/components/controller/notification.ctrl';
@@ -52,10 +52,10 @@ if (!isProduction) {
 declare global {
 	interface Window {
 		analytics: any;
+		gtag: any;
 	}
 }
 
-const DEFAULT_WRITE_KEY = 'MHK95b7o6FRNHt0ZZJU9bNGUT5MNCEyB';
 const queryClient = new QueryClient();
 
 export const IntlMessages = {
@@ -66,20 +66,17 @@ export const IntlMessages = {
 
 const defaultLocale = process.env.defaultLocale;
 
-function renderSnippet() {
-	const opts = {
-		apiKey:
-			process.env.NEXT_PUBLIC_ANALYTICS_WRITE_KEY || DEFAULT_WRITE_KEY,
-		// note: the page option only covers SSR tracking.
-		// Page.js is used to track other events using `window.analytics.page()`
-		page: true,
-	};
-
-	if (process.env.NEXT_PUBLIC_ENV === 'development') {
-		return snippet.max(opts);
-	}
-
-	return snippet.min(opts);
+// Check that PostHog is client-side (used to handle Next.js SSR)
+if (typeof window !== 'undefined' && isProduction) {
+	posthog.init(process.env.NEXT_PUBLIC_POSTHOG_KEY || '', {
+		api_host:
+			process.env.NEXT_PUBLIC_POSTHOG_HOST || 'https://us.i.posthog.com',
+		person_profiles: 'identified_only',
+		// Enable debug mode in development
+		loaded: posthog => {
+			if (process.env.NODE_ENV === 'development') posthog.debug();
+		},
+	});
 }
 
 const RenderComponent = ({ Component, pageProps }: any) => {
@@ -98,7 +95,11 @@ createWeb3Modal({
 	chainImages: {
 		[configuration.CLASSIC_NETWORK_NUMBER]:
 			'/images/currencies/classic/32.svg',
+		[configuration.ZKEVM_NETWORK_NUMBER]: '/images/currencies/zkevm/16.svg',
+		[configuration.POLYGON_NETWORK_NUMBER]:
+			'/images/currencies/polygon/16.svg',
 	},
+	allowUnsupportedChain: false,
 });
 
 function MyApp({ Component, pageProps }: AppProps) {
@@ -106,7 +107,22 @@ function MyApp({ Component, pageProps }: AppProps) {
 	const { pathname, asPath, query } = router;
 	const locale = router ? router.locale : defaultLocale;
 	const apolloClient = useApollo(pageProps);
-	const isMaintenanceMode = process.env.NEXT_PUBLIC_IS_MAINTENANCE === 'true';
+
+	// read bypass value from local storage for skipping maintenance mode only if maintenance mode is enabled inside ENV file4
+	const [isBypassingMaintenance, setIsBypassingMaintenance] =
+		useState<boolean>(false);
+
+	useEffect(() => {
+		if (typeof window !== 'undefined') {
+			const bypass = localStorage.getItem('bypassMaintenance') === 'true';
+			setIsBypassingMaintenance(bypass);
+		}
+	}, []);
+
+	// enable maintenance mode only if it is enabled inside ENV file and user has not bypassed it
+	const isMaintenanceMode =
+		process.env.NEXT_PUBLIC_IS_MAINTENANCE === 'true' &&
+		!isBypassingMaintenance;
 
 	useEffect(() => {
 		const handleStart = (url: string) => {
@@ -114,7 +130,18 @@ function MyApp({ Component, pageProps }: AppProps) {
 		};
 		const handleChangeComplete = (url: string) => {
 			NProgress.done();
-			isProduction && window.analytics.page(url);
+			if (isProduction && typeof window.gtag === 'function') {
+				window.gtag(
+					'config',
+					process.env.NEXT_PUBLIC_ANALYTICS_WRITE_KEY || '',
+					{
+						page_path: url,
+					},
+				);
+			}
+
+			// Track page views => Posthog
+			posthog?.capture('$pageview');
 		};
 		const handleChangeError = () => {
 			NProgress.done();
@@ -165,6 +192,9 @@ function MyApp({ Component, pageProps }: AppProps) {
 					content='width=device-width, initial-scale=1.0'
 				/>
 			</Head>
+			<GoogleAnalytics
+				gaId={process.env.NEXT_PUBLIC_ANALYTICS_WRITE_KEY || ''}
+			/>
 			<ReduxProvider store={store}>
 				<IntlProvider
 					locale={locale!}
@@ -176,44 +206,39 @@ function MyApp({ Component, pageProps }: AppProps) {
 							<WagmiProvider config={wagmiConfig}>
 								<QueryClientProvider client={queryClient}>
 									<GeneralWalletProvider>
-										{isMaintenanceMode ? (
-											<MaintenanceIndex />
-										) : (
-											<>
-												<NotificationController />
-												<GeneralController />
-												<PriceController />
-												<SubgraphController />
-												<UserController />
-												<HeaderWrapper />
-												{isGIVeconomyRoute(
-													router.route,
-												) && <GIVeconomyTab />}
-												{(pageProps as any)
-													.errorStatus ? (
-													<ErrorsIndex
-														statusCode={
-															(pageProps as any)
-																.errorStatus
-														}
-													/>
-												) : (
-													<RenderComponent
-														Component={Component}
-														pageProps={pageProps}
-													/>
-												)}
-												{process.env.NEXT_PUBLIC_ENV ===
-													'production' && (
-													<Script
-														id='segment-script'
-														strategy='afterInteractive'
-														dangerouslySetInnerHTML={{
-															__html: renderSnippet(),
-														}}
-													/>
-												)}
-												{/* {process.env.NEXT_PUBLIC_ENV !==
+										<PostHogProvider client={posthog}>
+											{isMaintenanceMode ? (
+												<MaintenanceIndex />
+											) : (
+												<>
+													<NotificationController />
+													<GeneralController />
+													<SubgraphController />
+													<UserController />
+													<HeaderWrapper />
+													{isGIVeconomyRoute(
+														router.route,
+													) && <GIVeconomyTab />}
+													{(pageProps as any)
+														.errorStatus ? (
+														<ErrorsIndex
+															statusCode={
+																(
+																	pageProps as any
+																).errorStatus
+															}
+														/>
+													) : (
+														<RenderComponent
+															Component={
+																Component
+															}
+															pageProps={
+																pageProps
+															}
+														/>
+													)}
+													{/* {process.env.NEXT_PUBLIC_ENV !==
 												'production' && (
 												<Script
 													id='console-script'
@@ -224,11 +249,12 @@ function MyApp({ Component, pageProps }: AppProps) {
 												/>
 											)} */}
 
-												<FooterWrapper />
-												<ModalController />
-												<PfpController />
-											</>
-										)}
+													<FooterWrapper />
+													<ModalController />
+													<PfpController />
+												</>
+											)}
+										</PostHogProvider>
 									</GeneralWalletProvider>
 								</QueryClientProvider>
 							</WagmiProvider>

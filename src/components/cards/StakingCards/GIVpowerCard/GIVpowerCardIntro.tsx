@@ -15,7 +15,6 @@ import { useIntl } from 'react-intl';
 import styled from 'styled-components';
 import Link from 'next/link';
 import links from '@/lib/constants/links';
-import { useAppSelector } from '@/features/hooks';
 import { SubgraphDataHelper } from '@/lib/subgraph/subgraphDataHelper';
 import Routes from '@/lib/constants/Routes';
 import { LockupDetailsModal } from '@/components/modals/LockupDetailsModal';
@@ -23,6 +22,7 @@ import TotalGIVpowerBox from '@/components/modals/StakeLock/TotalGIVpowerBox';
 import { StakeCardState } from '../BaseStakingCard/BaseStakingCard';
 import { useStakingPool } from '@/hooks/useStakingPool';
 import config from '@/configuration';
+import { useSubgraphInfo } from '@/hooks/useSubgraphInfo';
 import type { Dispatch, FC, SetStateAction } from 'react';
 
 interface IGIVpowerCardIntro {
@@ -40,9 +40,8 @@ const GIVpowerCardIntro: FC<IGIVpowerCardIntro> = ({
 		config.EVM_NETWORKS_CONFIG[poolNetwork].GIVPOWER ||
 			config.GNOSIS_CONFIG.GIVPOWER,
 	);
-	const currentValues = useAppSelector(state => state.subgraph.currentValues);
-
-	const sdh = new SubgraphDataHelper(currentValues);
+	const currentValues = useSubgraphInfo();
+	const sdh = new SubgraphDataHelper(currentValues.data);
 	const userGIVLocked = sdh.getUserGIVLockedBalance();
 
 	return (

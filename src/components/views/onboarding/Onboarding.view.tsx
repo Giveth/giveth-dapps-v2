@@ -33,7 +33,6 @@ export interface IOnboard {
 const OnboardView = () => {
 	const [step, setStep] = useState(OnboardSteps.INFO);
 	const [isFirstRegistration, setFirstRegistration] = useState(true);
-	const [firstLoading, setFirstLoading] = useState(true); // To prevent first flickering
 
 	const { isLoading, isEnabled, isSignedIn, userData } = useAppSelector(
 		state => state.user,
@@ -46,11 +45,10 @@ const OnboardView = () => {
 			// Do not show "Already completed profile" message when user completes first step
 			setFirstRegistration(!isRegistered);
 			setStep(OnboardSteps.INFO);
-			setFirstLoading(false);
 		}
 	}, [userData?.isSignedIn]);
 
-	if (isLoading || firstLoading) {
+	if (isLoading) {
 		return <WrappedSpinner />;
 	} else if (!isEnabled) {
 		return <WalletNotConnected />;

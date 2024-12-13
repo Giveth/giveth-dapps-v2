@@ -30,11 +30,11 @@ import { formatEthHelper, formatWeiHelper, Zero } from '@/helpers/number';
 import { getGivStakingAPR } from '@/lib/stakingPool';
 import { APR } from '@/types/poolInfo';
 import useClaim from '@/context/claim.context';
-import { useAppSelector } from '@/features/hooks';
 import useGIVTokenDistroHelper from '@/hooks/useGIVTokenDistroHelper';
 import { IClaimViewCardProps } from '../Claim.view';
 import { WeiPerEther } from '@/lib/constants/constants';
 import { InputWithUnit } from '@/components/input/InputWithUnit';
+import { useSubgraphInfo } from '@/hooks/useSubgraphInfo';
 
 const GovernCardContainer = styled(Card)`
 	padding-left: 254px;
@@ -108,10 +108,9 @@ const GovernCard: FC<IClaimViewCardProps> = ({ index }) => {
 	const [earnEstimate, setEarnEstimate] = useState(0n);
 	const [apr, setApr] = useState<APR>(null);
 
-	const { chain } = useAccount();
-	const chainId = chain?.id;
+	const { chainId } = useAccount();
 	const { givTokenDistroHelper } = useGIVTokenDistroHelper();
-	const gnosisValues = useAppSelector(state => state.subgraph.gnosisValues);
+	const gnosisValues = useSubgraphInfo(config.GNOSIS_NETWORK_NUMBER);
 
 	useEffect(() => {
 		let _stacked = 0;
@@ -153,9 +152,10 @@ const GovernCard: FC<IClaimViewCardProps> = ({ index }) => {
 	useEffect(() => {
 		if (!chainId) return;
 		const cb = () => {
+			if (!gnosisValues.data) return;
 			getGivStakingAPR(
 				config.GNOSIS_NETWORK_NUMBER,
-				gnosisValues,
+				gnosisValues.data,
 				chainId,
 			)
 				.then(_apr => {
@@ -175,7 +175,7 @@ const GovernCard: FC<IClaimViewCardProps> = ({ index }) => {
 		const interval = setInterval(cb, 120 * 1000);
 
 		return () => clearInterval(interval);
-	}, [stacked, gnosisValues]);
+	}, [stacked, gnosisValues.data, chainId]);
 
 	return (
 		<GovernCardContainer $activeIndex={step} $index={index}>

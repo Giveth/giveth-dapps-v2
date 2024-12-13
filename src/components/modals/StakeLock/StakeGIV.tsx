@@ -1,11 +1,13 @@
-import React, { FC, useState } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import { captureException } from '@sentry/nextjs';
 import { ButtonLink, H5, IconExternalLink } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
 import { useAccount } from 'wagmi';
+import { Address } from 'viem';
 import { Modal } from '../Modal';
 import {
 	approveERC20tokenTransfer,
+	permitTokens,
 	stakeGIV,
 	wrapToken,
 } from '@/lib/stakingPool';
@@ -20,6 +22,7 @@ import {
 	StyledOutlineButton,
 	SectionTitle,
 	StyledButton,
+	ToggleContainer,
 } from './StakeLock.sc';
 import { BriefContainer, H5White } from './LockingBrief';
 import { formatWeiHelper } from '@/helpers/number';
@@ -31,10 +34,14 @@ import { useStakingPool } from '@/hooks/useStakingPool';
 import { StakingAmountInput } from '@/components/AmountInput/StakingAmountInput';
 import { StakeSteps } from './StakeSteps';
 import { getGIVConfig } from '@/helpers/givpower';
-import type {
-	PoolStakingConfig,
-	SimplePoolStakingConfig,
+import {
+	RegenPoolStakingConfig,
+	StakingType,
+	type PoolStakingConfig,
+	type SimplePoolStakingConfig,
 } from '@/types/config';
+import ToggleSwitch from '@/components/ToggleSwitch';
+import { showToastError } from '@/lib/helpers';
 
 interface IStakeInnerModalProps {
 	poolStakingConfig: PoolStakingConfig;
@@ -72,39 +79,77 @@ const StakeGIVInnerModal: FC<IStakeModalProps> = ({
 	setShowModal,
 }) => {
 	const { formatMessage } = useIntl();
+	const [permit, setPermit] = useState<boolean>(false);
+	const [permitSignature, setPermitSignature] = useState<Address>();
 	const [amount, setAmount] = useState(0n);
 	const [txHash, setTxHash] = useState('');
 	const [stakeState, setStakeState] = useState<StakeState>(
 		StakeState.APPROVE,
 	);
-	const { address } = useAccount();
-	const { chain } = useAccount();
+	const { address, chain } = useAccount();
 	const chainId = chain?.id;
 	const { notStakedAmount: _maxAmount } = useStakingPool(poolStakingConfig);
 	const maxAmount = _maxAmount || 0n;
 	const isSafeEnv = useIsSafeEnvironment();
-
-	const { POOL_ADDRESS, LM_ADDRESS } =
+	const { POOL_ADDRESS, LM_ADDRESS, network, type } =
 		poolStakingConfig as SimplePoolStakingConfig;
+	const { regenStreamType } = poolStakingConfig as RegenPoolStakingConfig;
 
-	const onApprove = async () => {
-		if (amount === 0n) return;
+	const isGIVpower =
+		type === StakingType.GIV_GARDEN_LM ||
+		type === StakingType.GIV_UNIPOOL_LM;
+
+	// preffix property for heading elements used by analytics
+	const idPropertyPreffix = regenStreamType
+		? 'regenfarm'
+		: isGIVpower
+			? 'givpower'
+			: '';
+
+	const supportPermit =
+		network !== config.GNOSIS_NETWORK_NUMBER &&
+		network !== config.ZKEVM_NETWORK_NUMBER &&
+		network !== config.OPTIMISM_NETWORK_NUMBER;
+
+	useEffect(() => {
+		// If the user isn't on the Gnosis network or Optimism network, they can permit the staking contract to spend their GIV
+		if (supportPermit) {
+			setPermit(true);
+			setStakeState(StakeState.APPROVE);
+		}
+	}, [network]);
+
+	const onApprovePermit = async () => {
+		if (!chainId || !address || amount === 0n) return;
 		setStakeState(StakeState.APPROVING);
-
-		const isApproved = await approveERC20tokenTransfer(
-			amount,
-			address!,
-			poolStakingConfig.network === config.GNOSIS_NETWORK_NUMBER
-				? poolStakingConfig.GARDEN_ADDRESS!
-				: LM_ADDRESS!,
-			POOL_ADDRESS,
-			chainId!,
-			isSafeEnv,
-		);
-
-		if (isApproved) {
+		try {
+			if (permit) {
+				const _permitSignature = await permitTokens(
+					chainId,
+					address,
+					poolStakingConfig.POOL_ADDRESS,
+					poolStakingConfig.LM_ADDRESS,
+					amount,
+				);
+				if (!_permitSignature)
+					throw new Error('Permit signature failed');
+				setPermitSignature(_permitSignature);
+			} else {
+				const isApproved = await approveERC20tokenTransfer(
+					amount,
+					address!,
+					poolStakingConfig.network === config.GNOSIS_NETWORK_NUMBER
+						? poolStakingConfig.GARDEN_ADDRESS!
+						: LM_ADDRESS!,
+					POOL_ADDRESS,
+					chainId!,
+					isSafeEnv,
+				);
+				if (!isApproved) throw new Error('Approval failed');
+			}
 			setStakeState(StakeState.WRAP);
-		} else {
+		} catch (error) {
+			showToastError(error);
 			setStakeState(StakeState.APPROVE);
 		}
 	};
@@ -120,6 +165,15 @@ const StakeGIVInnerModal: FC<IStakeModalProps> = ({
 			if (txResponse) {
 				setTxHash(txResponse);
 				const data = await waitForTransaction(txResponse, isSafeEnv);
+				const event = new CustomEvent('chainEvent', {
+					detail: {
+						type: 'success',
+						chainId: chainId,
+						blockNumber: data.blockNumber,
+						address: address,
+					},
+				});
+				window.dispatchEvent(event);
 				setStakeState(
 					data.status === 'success'
 						? StakeState.CONFIRMED
@@ -141,17 +195,27 @@ const StakeGIVInnerModal: FC<IStakeModalProps> = ({
 	};
 
 	const onStake = async () => {
-		if (!chainId) return;
+		if (!chainId || !address) return;
 		setStakeState(StakeState.WRAPPING);
 		try {
 			const txResponse = await stakeGIV(
 				amount,
 				poolStakingConfig.LM_ADDRESS,
 				chainId,
+				permitSignature,
 			);
 			if (txResponse) {
 				setTxHash(txResponse);
 				const data = await waitForTransaction(txResponse, isSafeEnv);
+				const event = new CustomEvent('chainEvent', {
+					detail: {
+						type: 'success',
+						chainId: chainId,
+						blockNumber: data.blockNumber,
+						address: address,
+					},
+				});
+				window.dispatchEvent(event);
 				setStakeState(
 					data.status === 'success'
 						? StakeState.CONFIRMED
@@ -178,7 +242,10 @@ const StakeGIVInnerModal: FC<IStakeModalProps> = ({
 				stakeState !== StakeState.ERROR && (
 					<>
 						<StakeInnerModalContainer>
-							<StakeSteps stakeState={stakeState} />
+							<StakeSteps
+								stakeState={stakeState}
+								permit={permit}
+							/>
 							{(stakeState === StakeState.APPROVE ||
 								stakeState === StakeState.APPROVING) && (
 								<>
@@ -196,15 +263,38 @@ const StakeGIVInnerModal: FC<IStakeModalProps> = ({
 											stakeState === StakeState.APPROVING
 										}
 									/>
+									{supportPermit && (
+										<ToggleContainer>
+											<ToggleSwitch
+												isOn={permit}
+												toggleOnOff={() => {
+													if (permit)
+														setPermitSignature(
+															undefined,
+														);
+													setPermit(!permit);
+												}}
+												label={`${
+													permit
+														? 'Permit'
+														: 'Approve'
+												} mode`}
+											/>
+										</ToggleContainer>
+									)}
 									<StyledOutlineButton
 										label={formatMessage({
 											id:
 												stakeState ===
 												StakeState.APPROVE
-													? 'label.approve'
-													: 'label.approve_pending',
+													? permit
+														? 'label.permit'
+														: 'label.approve'
+													: permit
+														? 'label.permitting'
+														: 'label.approve_pending',
 										})}
-										onClick={onApprove}
+										onClick={onApprovePermit}
 										disabled={
 											amount === 0n ||
 											maxAmount < amount ||
@@ -236,7 +326,7 @@ const StakeGIVInnerModal: FC<IStakeModalProps> = ({
 								stakeState === StakeState.WRAPPING) && (
 								<>
 									<BriefContainer>
-										<H5>
+										<H5 id={`${idPropertyPreffix}-staking`}>
 											{formatMessage({
 												id: 'label.you_are_staking',
 											})}
@@ -287,7 +377,9 @@ const StakeGIVInnerModal: FC<IStakeModalProps> = ({
 				<StakeInnerModalContainer>
 					<BriefContainer>
 						<H5>Successful!</H5>
-						<H5White>You have staked</H5White>
+						<H5White id={`${idPropertyPreffix}-staked`}>
+							You have staked
+						</H5White>
 						<H5White weight={700}>
 							{formatWeiHelper(amount.toString())} GIV
 						</H5White>

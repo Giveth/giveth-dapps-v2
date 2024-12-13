@@ -6,10 +6,7 @@ import { useAccount, useSwitchChain } from 'wagmi';
 import { ETheme } from '@/features/general/general.slice';
 import { useAppDispatch, useAppSelector } from '@/features/hooks';
 import { setShowWalletModal } from '@/features/modal/modal.slice';
-import {
-	fetchMainCategories,
-	fetchQFRounds,
-} from '@/features/general/general.thunk';
+import { fetchMainCategoriesAndActiveQFRound } from '@/features/general/general.thunk';
 
 const GeneralController = () => {
 	const dispatch = useAppDispatch();
@@ -21,9 +18,8 @@ const GeneralController = () => {
 	const theme = useAppSelector(state => state.general.theme);
 
 	useEffect(() => {
-		dispatch(fetchMainCategories());
-		dispatch(fetchQFRounds());
-	}, [dispatch]);
+		dispatch(fetchMainCategoriesAndActiveQFRound());
+	}, []);
 
 	useEffect(() => {
 		if (!router) return;

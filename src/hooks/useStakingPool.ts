@@ -7,9 +7,8 @@ import {
 } from '@/lib/stakingPool';
 import { SimplePoolStakingConfig, StakingType } from '@/types/config';
 import { APR, UserStakeInfo } from '@/types/poolInfo';
-import { useAppSelector } from '@/features/hooks';
 import { Zero } from '@/helpers/number';
-import { chainInfoNames } from '@/features/subgraph/subgraph.helper';
+import { useSubgraphInfo } from './useSubgraphInfo';
 
 export interface IStakeInfo {
 	apr: APR;
@@ -28,27 +27,22 @@ export const useStakingPool = (
 		notStakedAmount: 0n,
 		stakedAmount: 0n,
 	});
-
-	const chainInfoName = chainInfoNames[poolStakingConfig.network];
-
-	const currentValues = useAppSelector(
-		state => state.subgraph[chainInfoName],
-		() => hold,
-	);
-
-	const { network, type } = poolStakingConfig;
-	const { isLoaded } = currentValues;
+	const currentValues = useSubgraphInfo(poolStakingConfig.network);
 
 	useEffect(() => {
+		const { network, type } = poolStakingConfig;
 		const cb = () => {
-			if (isLoaded) {
+			if (currentValues.data) {
 				const promise: Promise<APR> =
 					type === StakingType.GIV_GARDEN_LM ||
 					type === StakingType.GIV_UNIPOOL_LM
-						? getGivStakingAPR(network, currentValues, network)
-						: getLPStakingAPR(poolStakingConfig, currentValues);
+						? getGivStakingAPR(network, currentValues.data, network)
+						: getLPStakingAPR(
+								poolStakingConfig,
+								currentValues.data,
+							);
 				promise.then(setApr).catch(e => {
-					console.log('Error Calculating APR', e);
+					console.error('Error Calculating APR', e);
 					setApr({ effectiveAPR: Zero });
 				});
 			} else {
@@ -65,11 +59,14 @@ export const useStakingPool = (
 				clearInterval(interval);
 			}
 		};
-	}, [isLoaded]);
+	}, [currentValues.data, poolStakingConfig]);
 
 	useEffect(() => {
-		setUserStakeInfo(getUserStakeInfo(currentValues, poolStakingConfig));
-	}, [currentValues, poolStakingConfig]);
+		if (!currentValues.data) return;
+		setUserStakeInfo(
+			getUserStakeInfo(currentValues.data, poolStakingConfig),
+		);
+	}, [currentValues.data, poolStakingConfig]);
 
 	return {
 		apr,

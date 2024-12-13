@@ -21,7 +21,7 @@ import { slugToSuccessView, slugToProjectView } from '@/lib/routeCreators';
 import { EProjectStatus } from '@/apollo/types/gqlEnums';
 import { CREATE_ANCHOR_CONTRACT_ADDRESS_QUERY } from '@/apollo/gql/gqlSuperfluid';
 import { client } from '@/apollo/apolloClient';
-import { extractContractAddressFromString } from '../../donate/AlloProtocolFirstDonationModal';
+import { extractContractAddressFromString } from '../../donate/Recurring/AlloProtocolFirstDonationModal';
 import { wagmiConfig } from '@/wagmiConfigs';
 import createProfileABI from '@/artifacts/createProfile.json';
 import { generateRandomNonce } from '@/lib/helpers';
@@ -30,6 +30,62 @@ interface IAlloProtocolModal extends IModal {
 	project?: IProjectEdition; //If undefined, it means we are in create mode
 	addedProjectState: IProject;
 }
+
+export const saveAnchorContract = async ({
+	addedProjectState,
+	chainId,
+	recipientAddress,
+}: {
+	addedProjectState: IProject;
+	chainId: number;
+	recipientAddress?: string;
+}) => {
+	try {
+		const isOptimism = chainId === config.OPTIMISM_NETWORK_NUMBER;
+		const hash = await writeContract(wagmiConfig, {
+			address: isOptimism
+				? config.OPTIMISM_CONFIG.anchorRegistryAddress
+				: config.BASE_CONFIG.anchorRegistryAddress,
+			functionName: 'createProfile',
+			abi: createProfileABI.abi,
+			chainId,
+			args: [
+				generateRandomNonce(), //nonce
+				addedProjectState?.id!,
+				{
+					protocol: 1,
+					pointer: '',
+				},
+				addedProjectState?.adminUser?.walletAddress, //admin user wallet address
+				[],
+			],
+		});
+		if (hash) {
+			const data = await waitForTransactionReceipt(wagmiConfig, {
+				hash: hash,
+				chainId,
+			});
+
+			const contractAddress = extractContractAddressFromString(
+				data.logs[0].data,
+			);
+
+			//Call backend to update project
+			await client.mutate({
+				mutation: CREATE_ANCHOR_CONTRACT_ADDRESS_QUERY,
+				variables: {
+					projectId: Number(addedProjectState.id),
+					networkId: chainId,
+					address: contractAddress,
+					recipientAddress,
+					txHash: hash,
+				},
+			});
+		}
+	} catch (error) {
+		console.error('Error Contract', error);
+	}
+};
 
 const AlloProtocolModal: FC<IAlloProtocolModal> = ({
 	setShowModal,
@@ -84,7 +140,7 @@ const AlloProtocolModal: FC<IAlloProtocolModal> = ({
 							protocol: 1,
 							pointer: '',
 						},
-						addedProjectState?.adminUser.walletAddress, //admin user wallet address
+						addedProjectState?.adminUser?.walletAddress, //admin user wallet address
 						[],
 					],
 				});
@@ -120,7 +176,7 @@ const AlloProtocolModal: FC<IAlloProtocolModal> = ({
 				}
 				setShowModal(false); // Close the modal
 			} catch (error) {
-				console.log('Error Contract', error);
+				console.error('Error Contract', error);
 			} finally {
 				setIsLoading(false);
 			}

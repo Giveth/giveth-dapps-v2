@@ -1,9 +1,14 @@
 import React, { FC, useEffect, useMemo, useState } from 'react';
 import { captureException } from '@sentry/nextjs';
 import { useAccount } from 'wagmi';
+import { Address } from 'viem';
 import { Modal } from '../Modal';
 import { StakingPoolImages } from '../../StakingPoolImages';
-import { approveERC20tokenTransfer, stakeTokens } from '@/lib/stakingPool';
+import {
+	approveERC20tokenTransfer,
+	permitTokens,
+	stakeTokens,
+} from '@/lib/stakingPool';
 import {
 	ConfirmedInnerModal,
 	ErrorInnerModal,
@@ -68,6 +73,7 @@ const StakeInnerModal: FC<IStakeModalProps> = ({
 	const [amount, setAmount] = useState(0n);
 	const [txHash, setTxHash] = useState('');
 	const [permit, setPermit] = useState<boolean>(false);
+	const [permitSignature, setPermitSignature] = useState<Address>();
 	const [stakeState, setStakeState] = useState<StakeState>(
 		StakeState.APPROVE,
 	);
@@ -79,38 +85,6 @@ const StakeInnerModal: FC<IStakeModalProps> = ({
 
 	const { title, LM_ADDRESS, POOL_ADDRESS, platform } =
 		poolStakingConfig as SimplePoolStakingConfig;
-
-	// useEffect(() => {
-	// 	library?.on('block', async () => {
-	// 		const amountNumber = ethers.BigNumber.from(amount);
-	// 		if (
-	// 			amountNumber.gt(ethers.constants.Zero) &&
-	// 			stakeState === StakeState.APPROVING
-	// 		) {
-	// 			const signer = library.getSigner();
-	// 			const userAddress = await signer.getAddress();
-	// 			const tokenContract = new Contract(
-	// 				POOL_ADDRESS,
-	// 				ERC20_ABI,
-	// 				signer,
-	// 			) as ERC20;
-	// 			const allowance: BigNumber = await tokenContract.allowance(
-	// 				userAddress,
-	// 				LM_ADDRESS,
-	// 			);
-	// 			const amountNumber = ethers.BigNumber.from(amount);
-	// 			const allowanceNumber = ethers.BigNumber.from(
-	// 				allowance.toString(),
-	// 			);
-	// 			if (amountNumber.lte(allowanceNumber)) {
-	// 				setStakeState(StakeState.STAKE);
-	// 			}
-	// 		}
-	// 	});
-	// 	return () => {
-	// 		library.removeAllListeners('block');
-	// 	};
-	// }, [library, amount, stakeState]);
 
 	const onlyApproveMode = useMemo(
 		() => platform === StakingPlatform.ICHI,
@@ -149,21 +123,45 @@ const StakeInnerModal: FC<IStakeModalProps> = ({
 		if (!chainId || !address) return;
 		setStakeState(StakeState.STAKING);
 		try {
+			// Setup scope variable to handle signature
+			let _permitSignature = permitSignature;
+
+			if (permit) {
+				_permitSignature = await permitTokens(
+					chainId,
+					address,
+					poolStakingConfig.POOL_ADDRESS,
+					poolStakingConfig.LM_ADDRESS,
+					amount,
+				);
+				if (!_permitSignature)
+					throw new Error('Permit signature failed');
+				setPermitSignature(_permitSignature);
+			}
+
 			const txResponse = await stakeTokens(
-				address,
 				amount,
-				POOL_ADDRESS,
 				LM_ADDRESS,
 				chainId,
-				permit,
+				_permitSignature,
 			);
+
 			if (txResponse) {
 				setTxHash(txResponse);
 				setStakeState(StakeState.CONFIRMING);
-				const { status } = await waitForTransaction(
+				const { status, blockNumber } = await waitForTransaction(
 					txResponse,
 					isSafeEnv,
 				);
+				const event = new CustomEvent('chainEvent', {
+					detail: {
+						type: 'success',
+						chainId: chainId,
+						blockNumber: blockNumber,
+						address: address,
+					},
+				});
+				window.dispatchEvent(event);
 				setStakeState(status ? StakeState.CONFIRMED : StakeState.ERROR);
 			} else {
 				setStakeState(StakeState.STAKE);
@@ -183,6 +181,7 @@ const StakeInnerModal: FC<IStakeModalProps> = ({
 	const handlePermit = () => {
 		if (permit) {
 			setPermit(false);
+			setPermitSignature(undefined);
 			setStakeState(StakeState.APPROVE);
 		} else {
 			setPermit(true);

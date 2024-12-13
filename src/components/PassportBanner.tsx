@@ -1,25 +1,26 @@
 import {
 	GLink,
 	IconAlertTriangleFilled24,
-	IconExternalLink16,
 	IconInfoOutline24,
-	IconPassport24,
 	IconVerifiedBadge24,
 	IconWalletOutline16,
 	P,
 	brandColors,
 	mediaQueries,
 	semanticColors,
+	IconFingerprint32,
 	Flex,
 } from '@giveth/ui-design-system';
-import React, { ReactNode } from 'react';
+import { useAccount } from 'wagmi';
+import React, { ReactNode, useState } from 'react';
 import styled from 'styled-components';
 import { useIntl } from 'react-intl';
-import { useWeb3Modal } from '@web3modal/wagmi/react';
-import { EPassportState, usePassport } from '@/hooks/usePassport';
-import Routes from '@/lib/constants/Routes';
+import { EQFElegibilityState, usePassport } from '@/hooks/usePassport';
 import { useGeneralWallet } from '@/providers/generalWalletProvider';
 import { smallFormatDate } from '@/lib/helpers';
+import { Spinner } from '@/components/Spinner';
+import PassportModal from '@/components/modals/PassportModal';
+import { SignWithWalletModal } from '@/components/modals/SignWithWalletModal';
 
 enum EPBGState {
 	SUCCESS,
@@ -40,174 +41,217 @@ interface IData {
 		content: string;
 		bg: EPBGState;
 		icon: ReactNode;
-		link?: {
-			label: string;
-			url: string;
-		};
 	};
 }
 
 export const PassportBannerData: IData = {
-	[EPassportState.LOADING]: {
+	[EQFElegibilityState.LOADING]: {
 		content: 'label.passport.loading',
 		bg: EPBGState.WARNING,
-		icon: <IconPassport24 />,
+		icon: <IconFingerprint32 />,
 	},
-	[EPassportState.NOT_CONNECTED]: {
+	[EQFElegibilityState.PROCESSING]: {
+		content: 'label.qf_donor_eligibility.banner.check_eligibility',
+		bg: EPBGState.WARNING,
+		icon: <IconAlertTriangleFilled24 color={brandColors.giv[500]} />,
+	},
+	[EQFElegibilityState.NOT_CONNECTED]: {
 		content: 'label.passport.not_connected',
 		bg: EPBGState.INFO,
 		icon: <IconInfoOutline24 color={semanticColors.golden[700]} />,
 	},
-	[EPassportState.NOT_SIGNED]: {
-		content: 'label.passport.not_signed',
-		bg: EPBGState.INFO,
-		icon: <IconInfoOutline24 color={semanticColors.golden[700]} />,
-	},
-	[EPassportState.NOT_CREATED]: {
-		content: 'label.passport.not_created',
-		bg: EPBGState.INFO,
-		icon: <IconInfoOutline24 color={semanticColors.golden[700]} />,
-		link: {
-			label: 'label.passport.link.go_to_passport',
-			url: Routes.Passport,
-		},
-	},
-	[EPassportState.NOT_ELIGIBLE]: {
-		content: 'label.passport.not_eligible',
-		bg: EPBGState.WARNING,
-		icon: <IconAlertTriangleFilled24 color={brandColors.giv[500]} />,
-		link: {
-			label: 'label.passport.link.go_to_passport',
-			url: Routes.Passport,
-		},
-	},
-	[EPassportState.ELIGIBLE]: {
+	[EQFElegibilityState.ELIGIBLE]: {
 		content: 'label.passport.eligible',
 		bg: EPBGState.SUCCESS,
 		icon: <IconVerifiedBadge24 color={semanticColors.jade[600]} />,
-		link: {
-			label: 'label.passport.link.go_to_passport',
-			url: Routes.Passport,
-		},
 	},
-	[EPassportState.ENDED]: {
+	[EQFElegibilityState.ENDED]: {
 		content: 'label.passport.ended',
 		bg: EPBGState.ERROR,
 		icon: <IconAlertTriangleFilled24 color={semanticColors.punch[500]} />,
 	},
-	[EPassportState.NOT_STARTED]: {
+	[EQFElegibilityState.NOT_STARTED]: {
 		content: 'label.passport.round_starts_on',
 		bg: EPBGState.INFO,
 		icon: <IconAlertTriangleFilled24 color={semanticColors.golden[500]} />,
 	},
-	[EPassportState.NOT_ACTIVE_ROUND]: {
+	[EQFElegibilityState.NOT_ACTIVE_ROUND]: {
 		content: 'label.passport.no_active_round',
 		bg: EPBGState.INFO,
 		icon: <IconAlertTriangleFilled24 color={semanticColors.golden[500]} />,
 	},
-	[EPassportState.INVALID]: {
-		content: 'label.passport.invalid',
-		bg: EPBGState.ERROR,
-		icon: <IconInfoOutline24 color={semanticColors.punch[500]} />,
-		link: {
-			label: 'label.passport.link.go_to_passport',
-			url: Routes.Passport,
-		},
-	},
-	[EPassportState.ERROR]: {
+	[EQFElegibilityState.ERROR]: {
 		content: 'label.passport.error',
 		bg: EPBGState.ERROR,
 		icon: <IconInfoOutline24 color={semanticColors.punch[500]} />,
 	},
-	[EPassportState.NOT_AVAILABLE_FOR_GSAFE]: {
+	[EQFElegibilityState.NOT_AVAILABLE_FOR_GSAFE]: {
 		content: 'label.unfortunately_passport_is_incompatible',
 		bg: EPBGState.ERROR,
 		icon: <IconInfoOutline24 color={semanticColors.punch[500]} />,
 	},
+	[EQFElegibilityState.CHECK_ELIGIBILITY]: {
+		content: 'label.qf_donor_eligibility.banner.check_eligibility',
+		bg: EPBGState.WARNING,
+		icon: <IconAlertTriangleFilled24 color={brandColors.giv[500]} />,
+	},
+	[EQFElegibilityState.RECHECK_ELIGIBILITY]: {
+		content: 'label.qf_donor_eligibility.banner.recheck_eligibility',
+		bg: EPBGState.WARNING,
+		icon: <IconAlertTriangleFilled24 color={brandColors.giv[500]} />,
+	},
+	[EQFElegibilityState.MORE_INFO_NEEDED]: {
+		content: 'label.qf_donor_eligibility.banner.more_info_needed',
+		bg: EPBGState.INFO,
+		icon: <IconInfoOutline24 color={semanticColors.golden[700]} />,
+	},
+	[EQFElegibilityState.NOT_SIGNED]: {
+		content: 'label.passport.not_signed',
+		bg: EPBGState.INFO,
+		icon: <IconInfoOutline24 color={semanticColors.golden[700]} />,
+	},
 };
-
 export const PassportBanner = () => {
-	const { info, handleSign } = usePassport();
-	const { passportState, currentRound } = info;
-
+	const { info, updateState, fetchUserMBDScore, handleSign, refreshScore } =
+		usePassport();
+	const { currentRound, passportState, passportScore, qfEligibilityState } =
+		info;
 	const { formatMessage, locale } = useIntl();
-	const { open: openConnectModal } = useWeb3Modal();
+	const { connector } = useAccount();
 	const { isOnSolana, handleSingOutAndSignInWithEVM } = useGeneralWallet();
+	const [showModal, setShowModal] = useState<boolean>(false);
+	const [signWithWallet, setSignWithWallet] = useState<boolean>(false);
+
+	const isGSafeConnector = connector?.id === 'safe';
+
+	// Check if the eligibility state or current round is not loaded yet
+	const isLoading = !qfEligibilityState || !currentRound;
+
+	// Only render the banner when the data is available
+	if (isLoading) {
+		return null; // Or return a spinner or loading message if you'd like
+	}
 
 	return !isOnSolana ? (
-		<PassportBannerWrapper $bgColor={PassportBannerData[passportState].bg}>
-			<Flex gap='8px' $alignItems='center'>
-				<IconWrapper>
-					{PassportBannerData[passportState].icon}
-				</IconWrapper>
-				<P>
-					{formatMessage(
-						{
-							id: PassportBannerData[passportState].content,
-						},
-						{
-							data:
-								passportState === EPassportState.NOT_STARTED &&
-								currentRound
-									? smallFormatDate(
-											new Date(currentRound?.beginDate),
-										)
-									: undefined,
-						},
-					)}
-					{currentRound &&
-						(passportState === EPassportState.NOT_CREATED ||
-							passportState === EPassportState.NOT_ELIGIBLE) && (
-							<strong>
-								{new Date(currentRound.endDate)
-									.toLocaleString(locale || 'en-US', {
-										day: 'numeric',
-										month: 'short',
-									})
-									.replace(/,/g, '')}
-							</strong>
+		<>
+			<PassportBannerWrapper
+				$bgColor={PassportBannerData[qfEligibilityState].bg}
+			>
+				<Flex gap='8px' $alignItems='center'>
+					<IconWrapper>
+						{PassportBannerData[qfEligibilityState].icon}
+					</IconWrapper>
+					<P>
+						{formatMessage(
+							{
+								id: PassportBannerData[qfEligibilityState]
+									.content,
+							},
+							{
+								data:
+									qfEligibilityState ===
+										EQFElegibilityState.NOT_STARTED &&
+									currentRound
+										? smallFormatDate(
+												new Date(
+													currentRound?.beginDate,
+												),
+											)
+										: undefined,
+							},
 						)}
-				</P>
-			</Flex>
-			{PassportBannerData[passportState].link && (
-				<StyledLink
-					as='a'
-					href={PassportBannerData[passportState].link?.url}
-					target='_blank'
-					referrerPolicy='no-referrer'
-					rel='noreferrer'
-				>
-					<GLink>
+						{currentRound &&
+							qfEligibilityState ===
+								EQFElegibilityState.RECHECK_ELIGIBILITY && (
+								<>
+									{' '}
+									<strong>
+										{new Date(currentRound.endDate)
+											.toLocaleString(locale || 'en-US', {
+												day: 'numeric',
+												month: 'short',
+											})
+											.replace(/,/g, '')}
+									</strong>
+								</>
+							)}
+					</P>
+				</Flex>
+				{qfEligibilityState ===
+					EQFElegibilityState.CHECK_ELIGIBILITY && (
+					<StyledLink onClick={() => fetchUserMBDScore()}>
+						<GLink>
+							{formatMessage({
+								id: 'qf_donor_eligibility.banner.link.check_eligibility',
+							})}
+						</GLink>
+					</StyledLink>
+				)}
+				{qfEligibilityState ===
+					EQFElegibilityState.RECHECK_ELIGIBILITY && (
+					<StyledLink onClick={() => setShowModal(true)}>
+						<GLink>
+							{formatMessage({
+								id: 'qf_donor_eligibility.banner.link.recheck_eligibility',
+							})}
+						</GLink>
+					</StyledLink>
+				)}
+				{qfEligibilityState === EQFElegibilityState.PROCESSING && (
+					<StyledStatus>
 						{formatMessage({
-							id: PassportBannerData[passportState].link?.label,
+							id: 'label.processing',
 						})}
-					</GLink>
-					<IconExternalLink16 />
-				</StyledLink>
+						<Spinner color={brandColors.mustard[600]} size={25} />
+					</StyledStatus>
+				)}
+				{qfEligibilityState ===
+					EQFElegibilityState.MORE_INFO_NEEDED && (
+					<StyledLink onClick={() => setShowModal(true)}>
+						<GLink>
+							{formatMessage({
+								id: 'label.add_more_info',
+							})}
+						</GLink>
+					</StyledLink>
+				)}
+				{qfEligibilityState ===
+					(EQFElegibilityState as any).NOT_SIGNED && (
+					<StyledLink onClick={() => setSignWithWallet(true)}>
+						<GLink>
+							{formatMessage({
+								id: 'label.sign_message',
+							})}
+						</GLink>
+						<IconWalletOutline16 />
+					</StyledLink>
+				)}
+			</PassportBannerWrapper>
+			{showModal && (
+				<PassportModal
+					qfEligibilityState={qfEligibilityState}
+					passportState={passportState}
+					passportScore={passportScore}
+					currentRound={currentRound}
+					setShowModal={setShowModal}
+					updateState={updateState}
+					refreshScore={refreshScore}
+					handleSign={handleSign}
+				/>
 			)}
-			{passportState === EPassportState.NOT_CONNECTED && (
-				<StyledLink onClick={() => openConnectModal?.()}>
-					<GLink>
-						{formatMessage({
-							id: 'component.button.connect_wallet',
-						})}
-					</GLink>
-					<IconWalletOutline16 />
-				</StyledLink>
+			{signWithWallet && (
+				<SignWithWalletModal
+					isGSafeConnector={isGSafeConnector}
+					setShowModal={() => {
+						setSignWithWallet(false);
+					}}
+				/>
 			)}
-			{passportState === EPassportState.NOT_SIGNED && (
-				<StyledLink onClick={() => handleSign()}>
-					<GLink>
-						{formatMessage({
-							id: 'label.sign_message',
-						})}
-					</GLink>
-					<IconWalletOutline16 />
-				</StyledLink>
-			)}
-		</PassportBannerWrapper>
+		</>
 	) : (
-		<PassportBannerWrapper $bgColor={PassportBannerData[passportState].bg}>
+		<PassportBannerWrapper
+			$bgColor={PassportBannerData[qfEligibilityState].bg}
+		>
 			<P>
 				{formatMessage({
 					id: 'label.to_activate_your_gitcoin_passport',
@@ -233,14 +277,16 @@ export const PassportBannerWrapper = styled(Flex)<IPassportBannerWrapperProps>`
 	align-items: center;
 	justify-content: center;
 	gap: 8px;
-	position: relative;
+	position: sticky; /* Change this to sticky */
+	top: 0; /* This keeps it at the top as the user scrolls */
+	z-index: 5; /* Ensure it stays above other content */
 	${mediaQueries.tablet} {
 		flex-direction: row;
 	}
 `;
 
 const IconWrapper = styled.div`
-	width: 24px;
+	width: 30px;
 `;
 
 const StyledLink = styled(Flex)`
@@ -248,6 +294,12 @@ const StyledLink = styled(Flex)`
 	align-items: center;
 	gap: 4px;
 	cursor: pointer;
+`;
+
+const StyledStatus = styled(Flex)`
+	color: ${brandColors.giv[500]};
+	align-items: center;
+	gap: 4px;
 `;
 
 const StyledP = styled(P)`

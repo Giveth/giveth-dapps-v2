@@ -51,7 +51,7 @@ const Done = () => {
 	return (
 		<>
 			<Container>
-				<H4 weight={700}>
+				<H4 id='project-verification-submitted' weight={700}>
 					{titles[status ?? EVerificationStatus.SUBMITTED]}
 				</H4>
 				<P>{subtitles[status ?? EVerificationStatus.SUBMITTED]} </P>

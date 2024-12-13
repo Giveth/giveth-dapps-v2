@@ -46,7 +46,7 @@ const QFSection: FC<IQFSectionProps> = ({ projectData }) => {
 		qfRounds,
 		estimatedMatching,
 		sumDonationValueUsdForActiveQfRound,
-		sumDonationValueUsd,
+		totalDonations,
 		adminUser,
 		slug,
 		organization,
@@ -82,14 +82,15 @@ const QFSection: FC<IQFSectionProps> = ({ projectData }) => {
 		totalEstimatedMatching !== 0 ? (
 			<Flex $flexDirection='column' gap='4px'>
 				<EstimatedMatchingPrice>
-					{'+ ' +
-						formatDonation(
-							totalEstimatedMatching,
-							allocatedFundUSDPreferred ? '$' : '',
-							locale,
-							true,
-						)}{' '}
-					{allocatedFundUSDPreferred ? '' : allocatedTokenSymbol}
+					{formatDonation(
+						totalEstimatedMatching,
+						allocatedFundUSDPreferred ? '$' : '',
+						locale,
+						true,
+					)}
+					{allocatedFundUSDPreferred
+						? ''
+						: ` ${allocatedTokenSymbol}`}
 				</EstimatedMatchingPrice>
 				<Flex $alignItems='center' gap='4px'>
 					<LightCaption>
@@ -109,8 +110,35 @@ const QFSection: FC<IQFSectionProps> = ({ projectData }) => {
 			</Flex>
 		) : null;
 
+	const DonationMatch = ({ amount }: { amount: number }) => (
+		<FlexSameSize $justifyContent='space-between'>
+			<Subline>
+				{allocatedFundUSDPreferred && '$'}
+				{amount} {!allocatedFundUSDPreferred && allocatedTokenSymbol}
+			</Subline>
+			<IconArrowRight16 color={brandColors.cyan[500]} />
+			<EndAlignedSubline>
+				{formatDonation(
+					calculateEstimatedMatchingWithDonationAmount(
+						amount,
+						projectDonationsSqrtRootSum,
+						allProjectsSum,
+						allocatedFundUSDPreferred
+							? allocatedFundUSD
+							: matchingPool,
+						activeStartedRound?.maximumReward,
+					),
+					allocatedFundUSDPreferred ? '$' : '',
+					locale,
+					true,
+				)}
+				{allocatedFundUSDPreferred ? '' : ` ${allocatedTokenSymbol}`}
+			</EndAlignedSubline>
+		</FlexSameSize>
+	);
+
 	return (
-		<DonationSectionWrapper gap={isOnDonatePage ? '8px' : '24px'}>
+		<DonationSectionWrapper gap={'8px'}>
 			{isOnDonatePage && (
 				<>
 					<Link href={projectLink}>
@@ -136,7 +164,7 @@ const QFSection: FC<IQFSectionProps> = ({ projectData }) => {
 							})}
 							{' ' +
 								formatDonation(
-									sumDonationValueUsd || 0,
+									totalDonations || 0,
 									'$',
 									locale,
 								)}
@@ -188,7 +216,7 @@ const QFSection: FC<IQFSectionProps> = ({ projectData }) => {
 							})}
 							{' ' +
 								formatDonation(
-									sumDonationValueUsd || 0,
+									totalDonations || 0,
 									'$',
 									locale,
 								)}
@@ -225,93 +253,9 @@ const QFSection: FC<IQFSectionProps> = ({ projectData }) => {
 					</Flex>
 					<ContributionsContainer>
 						<Flex $flexDirection='column' gap='4px'>
-							<FlexSameSize $justifyContent='space-between'>
-								<Subline>
-									{allocatedFundUSDPreferred && '$'}1{' '}
-									{!allocatedFundUSDPreferred &&
-										allocatedTokenSymbol}
-								</Subline>
-								<IconArrowRight16
-									color={brandColors.cyan[500]}
-								/>
-								<EndAlignedSubline>
-									+{' '}
-									{formatDonation(
-										calculateEstimatedMatchingWithDonationAmount(
-											1,
-											projectDonationsSqrtRootSum,
-											allProjectsSum,
-											allocatedFundUSDPreferred
-												? allocatedFundUSD
-												: matchingPool,
-											activeStartedRound?.maximumReward,
-										),
-										allocatedFundUSDPreferred ? '$' : '',
-										locale,
-										true,
-									)}{' '}
-									{!allocatedFundUSDPreferred &&
-										allocatedTokenSymbol}
-								</EndAlignedSubline>
-							</FlexSameSize>
-							<FlexSameSize $justifyContent='space-between'>
-								<Subline>
-									{allocatedFundUSDPreferred && '$'}10{' '}
-									{!allocatedFundUSDPreferred &&
-										allocatedTokenSymbol}
-								</Subline>
-								<IconArrowRight16
-									color={brandColors.cyan[500]}
-								/>
-								<EndAlignedSubline>
-									+{' '}
-									{formatDonation(
-										calculateEstimatedMatchingWithDonationAmount(
-											10,
-											projectDonationsSqrtRootSum,
-											allProjectsSum,
-											allocatedFundUSDPreferred
-												? allocatedFundUSD
-												: matchingPool,
-											activeStartedRound?.maximumReward,
-										),
-										allocatedFundUSDPreferred ? '$' : '',
-										locale,
-										true,
-									)}{' '}
-									{!allocatedFundUSDPreferred &&
-										allocatedTokenSymbol}
-								</EndAlignedSubline>
-							</FlexSameSize>
-							<FlexSameSize $justifyContent='space-between'>
-								<Subline>
-									{allocatedFundUSDPreferred && '$'}100{' '}
-									{!allocatedFundUSDPreferred &&
-										allocatedTokenSymbol}
-								</Subline>
-								<IconArrowRight16
-									color={brandColors.cyan[500]}
-								/>
-								<EndAlignedSubline>
-									+{' '}
-									{formatDonation(
-										calculateEstimatedMatchingWithDonationAmount(
-											100,
-											projectDonationsSqrtRootSum,
-											allProjectsSum,
-											allocatedFundUSDPreferred
-												? allocatedFundUSD
-												: matchingPool,
-											activeStartedRound?.maximumReward,
-										),
-										allocatedFundUSDPreferred ? '$' : '',
-										locale,
-										true,
-									)}{' '}
-									{!allocatedFundUSDPreferred &&
-										allocatedTokenSymbol}
-								</EndAlignedSubline>
-							</FlexSameSize>
+							<DonationMatch amount={1} />
+							<DonationMatch amount={10} />
+							<DonationMatch amount={100} />
 							{/* <Flex $justifyContent='space-between'>
 							<LightSubline>Last updated: 3h ago</LightSubline>
 							<LightSubline>|</LightSubline>
@@ -358,7 +302,6 @@ const Amount = styled(H3)`
 
 const Description = styled(Caption)`
 	color: ${neutralColors.gray[700]};
-	margin-bottom: 24px;
 	white-space: nowrap;
 	& > div {
 		color: ${neutralColors.gray[900]};
@@ -381,9 +324,7 @@ const DonationSectionWrapper = styled(Flex)`
 	}
 `;
 
-const DonateInfo = styled.div`
-	height: 90px;
-`;
+const DonateInfo = styled.div``;
 
 const NoFund = styled(H4)`
 	color: ${neutralColors.gray[800]};

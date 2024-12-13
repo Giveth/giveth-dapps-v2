@@ -12,7 +12,6 @@ import {
 import React, { FC, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { useIntl } from 'react-intl';
-import { useAccount } from 'wagmi';
 import ExternalLink from '@/components/ExternalLink';
 import { client } from '@/apollo/apolloClient';
 import { FETCH_GIVETH_PROJECT_BY_ID } from '@/apollo/gql/gqlProjects';
@@ -21,7 +20,11 @@ import { slugToProjectView } from '@/lib/routeCreators';
 import { IFetchGivethProjectGQL } from '@/apollo/types/gqlTypes';
 import { useDonateData } from '@/context/donate.context';
 import { useIsSafeEnvironment } from '@/hooks/useSafeAutoConnect';
-import { EPassportState, usePassport } from '@/hooks/usePassport';
+import {
+	EPassportState,
+	usePassport,
+	EQFElegibilityState,
+} from '@/hooks/usePassport';
 import { getActiveRound } from '@/helpers/qf';
 import ProjectCardImage from '@/components/project-card/ProjectCardImage';
 import { DonatePageProjectDescription } from './DonatePageProjectDescription';
@@ -30,14 +33,19 @@ import links from '@/lib/constants/links';
 import { EContentType } from '@/lib/constants/shareContent';
 import QFToast from './QFToast';
 import { DonationInfo } from './DonationInfo';
-import { ManageRecurringDonation } from './ManageRecurringDonation';
+import { ManageRecurringDonation } from './Recurring/ManageRecurringDonation';
+import EndaomentProjectsInfo from '../project/EndaomentProjectsInfo';
 
-export const SuccessView: FC = () => {
+interface ISuccessView {
+	isStellar?: boolean;
+}
+export const SuccessView: FC<ISuccessView> = ({ isStellar }) => {
 	const { formatMessage } = useIntl();
 	const { successDonation, hasActiveQFRound, project } = useDonateData();
 	const {
 		givBackEligible,
 		txHash = [],
+		chainId,
 		excludeFromQF,
 		isRecurring,
 	} = successDonation || {};
@@ -46,11 +54,8 @@ export const SuccessView: FC = () => {
 	const [givethSlug, setGivethSlug] = useState<string>('');
 
 	const {
-		info: { passportState },
+		info: { passportState, qfEligibilityState },
 	} = usePassport();
-
-	const { chain } = useAccount();
-	const networkId = chain?.id;
 
 	const message = hasMultipleTxs ? (
 		<>
@@ -69,15 +74,16 @@ export const SuccessView: FC = () => {
 
 	const { activeStartedRound } = getActiveRound(project.qfRounds);
 
-	const isOnEligibleNetworks =
-		networkId && activeStartedRound?.eligibleNetworks?.includes(networkId);
+	const isOnEligibleNetworks = activeStartedRound?.eligibleNetworks?.includes(
+		(isStellar ? config.STELLAR_NETWORK_NUMBER : chainId) || 0,
+	);
 
 	useEffect(() => {
+		if (!hasMultipleTxs) return;
 		client
 			.query({
 				query: FETCH_GIVETH_PROJECT_BY_ID,
 				variables: { id: config.GIVETH_PROJECT_ID },
-				fetchPolicy: 'no-cache',
 			})
 			.then((res: IFetchGivethProjectGQL) =>
 				setGivethSlug(res.data.projectById.slug),
@@ -88,24 +94,39 @@ export const SuccessView: FC = () => {
 		? EContentType.justDonatedRecurring
 		: EContentType.justDonated;
 
+	const showQFToast =
+		!excludeFromQF &&
+		!isSafeEnv &&
+		hasActiveQFRound &&
+		isOnEligibleNetworks &&
+		passportState !== EPassportState.CONNECTING &&
+		passportState !== EPassportState.LOADING_SCORE &&
+		qfEligibilityState !== EQFElegibilityState.LOADING &&
+		qfEligibilityState !== EQFElegibilityState.PROCESSING &&
+		qfEligibilityState !== EQFElegibilityState.NOT_CONNECTED &&
+		qfEligibilityState !== EQFElegibilityState.ERROR;
+
 	return (
 		<Wrapper>
 			<Row>
 				<Col xs={12} lg={6}>
 					<InfoWrapper>
+						<EndaomentProjectsInfo
+							orgLabel={project?.organization?.label}
+						/>
 						<ImageWrapper>
 							<ProjectCardImage image={project.image} />
 						</ImageWrapper>
 						<DonatePageProjectDescription
 							projectData={project}
-							showRaised={false}
+							showRaised={true}
 						/>
 					</InfoWrapper>
 				</Col>
 				<Col xs={12} lg={6}>
 					<RightSectionWrapper>
 						<div>
-							<GiverH4 weight={700}>
+							<GiverH4 id='donation-success' weight={700}>
 								{formatMessage({ id: 'label.youre_giver_now' })}
 							</GiverH4>
 							<br />
@@ -135,11 +156,7 @@ export const SuccessView: FC = () => {
 								<br />
 							</>
 						)}
-						{!excludeFromQF &&
-							!isSafeEnv &&
-							hasActiveQFRound &&
-							passportState !== EPassportState.LOADING &&
-							isOnEligibleNetworks && <QFToast />}
+						{showQFToast && <QFToast />}
 						{isRecurring && <ManageRecurringDonation />}
 						<SocialBoxWrapper>
 							<SocialBox

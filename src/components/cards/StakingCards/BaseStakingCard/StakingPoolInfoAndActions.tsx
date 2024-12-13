@@ -54,6 +54,7 @@ import LockModal from '@/components/modals/StakeLock/Lock';
 import { WhatIsStreamModal } from '@/components/modals/WhatIsStream';
 import { LockupDetailsModal } from '@/components/modals/LockupDetailsModal';
 import ExternalLink from '@/components/ExternalLink';
+import { useSubgraphSyncInfo } from '@/hooks/useSubgraphSyncInfo';
 
 interface IStakingPoolInfoAndActionsProps {
 	poolStakingConfig: PoolStakingConfig | RegenPoolStakingConfig;
@@ -84,15 +85,16 @@ export const StakingPoolInfoAndActions: FC<IStakingPoolInfoAndActionsProps> = ({
 	const [showWhatIsGIVstreamModal, setShowWhatIsGIVstreamModal] =
 		useState(false);
 
+	const { formatMessage } = useIntl();
+	const { setChainInfo } = useFarms();
+	const router = useRouter();
+	const subgraphSyncedInfo = useSubgraphSyncInfo(poolStakingConfig.network);
 	const hold =
 		showAPRModal ||
 		showStakeModal ||
 		showUnStakeModal ||
 		showHarvestModal ||
 		showLockModal;
-	const { formatMessage } = useIntl();
-	const { setChainInfo } = useFarms();
-	const router = useRouter();
 	const {
 		apr,
 		notStakedAmount: userNotStakedAmount,
@@ -354,7 +356,12 @@ export const StakingPoolInfoAndActions: FC<IStakingPoolInfoAndActionsProps> = ({
 			)}
 			<HarvestButtonsWrapper>
 				<ClaimButton
-					disabled={exploited || earned === 0n}
+					disabled={
+						exploited ||
+						earned === 0n ||
+						!started ||
+						!subgraphSyncedInfo.isSynced
+					}
 					onClick={() => setShowHarvestModal(true)}
 					label={formatMessage({
 						id: 'label.harvest_rewards',
@@ -363,11 +370,18 @@ export const StakingPoolInfoAndActions: FC<IStakingPoolInfoAndActionsProps> = ({
 				/>
 				{isGIVpower && (
 					<ClaimButton
-						disabled={availableStakedToken <= 0n}
+						disabled={
+							availableStakedToken <= 0n ||
+							!subgraphSyncedInfo.isSynced
+						}
 						onClick={() => setShowLockModal(true)}
-						label={formatMessage({
-							id: 'label.increase_rewards',
-						})}
+						label={
+							started
+								? formatMessage({
+										id: 'label.increase_rewards',
+									})
+								: 'Lock your GIV'
+						}
 						buttonType='primary'
 					/>
 				)}
@@ -382,7 +396,8 @@ export const StakingPoolInfoAndActions: FC<IStakingPoolInfoAndActionsProps> = ({
 						disabled={
 							isDiscontinued ||
 							exploited ||
-							userNotStakedAmount === 0n
+							userNotStakedAmount === 0n ||
+							!subgraphSyncedInfo.isSynced
 						}
 						onClick={() => setShowStakeModal(true)}
 					/>
@@ -400,7 +415,10 @@ export const StakingPoolInfoAndActions: FC<IStakingPoolInfoAndActionsProps> = ({
 							id: 'label.unstake',
 						})}
 						size='small'
-						disabled={availableStakedToken === 0n}
+						disabled={
+							availableStakedToken === 0n ||
+							!subgraphSyncedInfo.isSynced
+						}
 						onClick={() => setShowUnStakeModal(true)}
 					/>
 					<FlexCenter gap='5px'>
@@ -505,6 +523,7 @@ export const StakingPoolInfoAndActions: FC<IStakingPoolInfoAndActionsProps> = ({
 					setShowModal={setShowLockModal}
 					poolStakingConfig={poolStakingConfig}
 					isGIVpower={isGIVpower}
+					started={started}
 				/>
 			)}
 			{showWhatIsGIVstreamModal && (

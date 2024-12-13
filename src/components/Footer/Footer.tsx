@@ -15,6 +15,7 @@ import {
 	IconRedit,
 	Container,
 	Flex,
+	IconFaracaster,
 } from '@giveth/ui-design-system';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -122,10 +123,37 @@ const Footer = () => {
 								})}
 							</LinkItem>
 						</Link>
+						<a
+							href={links.FEEDBACK}
+							target='_blank'
+							rel='noreferrer noopener'
+						>
+							<LinkItem color={textColor}>
+								{formatMessage({
+									id: 'label.leave_feedback',
+								})}
+							</LinkItem>
+						</a>
 						<a href={links.RECRUITEE}>
 							<LinkItem color={textColor}>
 								{formatMessage({
 									id: 'component.title.we_hiring',
+								})}
+							</LinkItem>
+						</a>
+					</LinkColumn>
+					<LinkColumn>
+						<a href={links.QACC} target='_blank'>
+							<LinkItem color={textColor}>
+								{formatMessage({
+									id: 'component.title.qacc',
+								})}
+							</LinkItem>
+						</a>
+						<a href={links.QACC_NEWS} target='_blank'>
+							<LinkItem color={textColor}>
+								{formatMessage({
+									id: 'component.title.qacc_news',
 								})}
 							</LinkItem>
 						</a>
@@ -147,6 +175,9 @@ const Footer = () => {
 						</ExternalLink>
 						<ExternalLink href={links.TWITTER}>
 							<IconXSocial size={24} color={textColor} />
+						</ExternalLink>
+						<ExternalLink href={links.FARCASTER}>
+							<IconFaracaster size={24} color={textColor} />
 						</ExternalLink>
 						<ExternalLink href={links.YOUTUBE}>
 							<IconYoutube size={24} color={textColor} />
@@ -210,7 +241,7 @@ const LeftContainer = styled(Flex)`
 	gap: 0;
 
 	${mediaQueries.laptopL} {
-		gap: 0 72px;
+		gap: 0 0px;
 	}
 `;
 
@@ -241,6 +272,10 @@ const SocialContainer = styled.div`
 
 	${mediaQueries.mobileL} {
 		gap: 40px;
+	}
+
+	${mediaQueries.laptopS} {
+		gap: 30px;
 	}
 `;
 

@@ -34,9 +34,6 @@ const TestRoute = () => {
 //This comment is for testing1
 
 const TestIndex = () => {
-	// const gnosisValues = useSelector(
-	// 	(state: RootState) => state.subgraph.gnosisValues,
-	// );
 	const [showModal, setShowModal] = useState(false);
 	const functionRef = useRef<Function>();
 	const [state, setState] = useState(0);
@@ -71,7 +68,7 @@ const TestIndex = () => {
 	const fetchProjects = async () => {
 		const res = await client.query({
 			query: FETCH_ALL_PROJECTS,
-			fetchPolicy: 'network-only',
+			fetchPolicy: 'no-cache',
 		});
 	};
 

@@ -13,7 +13,12 @@ import { IAddress } from '@/components/views/verification/manageFunds/ManageFund
 import SelectNetwork from '@/components/views/verification/manageFunds/SelectNetwork';
 import { ISelectedNetwork } from '@/components/views/verification/manageFunds/types';
 import config from '@/configuration';
-import { getAddressFromENS, isAddressENS, isSolanaAddress } from '@/lib/wallet';
+import {
+	getAddressFromENS,
+	isAddressENS,
+	isSolanaAddress,
+	isStellarAddress,
+} from '@/lib/wallet';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
 import { requiredOptions } from '@/lib/constants/regex';
 import { getChainName } from '@/lib/network';
@@ -98,6 +103,10 @@ const AddAddressModal: FC<IProps> = ({
 			if (!isSolanaAddress(address)) {
 				return 'Invalid Solana address';
 			}
+		} else if (watchChain?.chainType === ChainType.STELLAR) {
+			if (!isStellarAddress(address)) {
+				return 'Invalid Stellar address';
+			}
 		} else if (isAddressENS(address)) {
 			if (chainId !== 1) {
 				return 'Please switch to Mainnet to handle ENS addresses';
@@ -162,7 +171,7 @@ const AddAddressModal: FC<IProps> = ({
 						label='Wallet Address'
 						caption='Enter the related address.'
 						registerOptions={{
-							...requiredOptions.walletAddress,
+							...requiredOptions?.walletAddress,
 							validate: validateAddress,
 						}}
 						error={errors.address}

@@ -11,20 +11,20 @@ import {
 	Flex,
 } from '@giveth/ui-design-system';
 import { useAccount, useSwitchChain } from 'wagmi';
-import Select, {
-	type CSSObjectWithLabel,
-	ControlProps,
-	DropdownIndicatorProps,
-	OptionProps,
-	StylesConfig,
-	components,
-} from 'react-select';
+import Select, { components } from 'react-select';
 import { ChangeNetworkModal } from './modals/ChangeNetwork';
 import config from '../configuration';
 import { NetworkConfig } from '@/types/config';
 import NetworkLogo from './NetworkLogo';
 import { Shadow } from './styled-components/Shadow';
 import { useIsSafeEnvironment } from '@/hooks/useSafeAutoConnect';
+import type {
+	CSSObjectWithLabel,
+	ControlProps,
+	DropdownIndicatorProps,
+	OptionProps,
+	StylesConfig,
+} from 'react-select';
 
 export interface ISelected {
 	label: string;
@@ -34,12 +34,10 @@ export interface ISelected {
 }
 
 const _options = [
-	{ network: config.MAINNET_CONFIG, active: true },
 	{ network: config.GNOSIS_CONFIG, active: true },
 	{ network: config.OPTIMISM_CONFIG, active: true },
-	{ network: config.CLASSIC_CONFIG, active: true },
-	{ network: config.CELO_CONFIG, active: false },
-	{ network: config.ARBITRUM_CONFIG, active: false },
+	{ network: config.MAINNET_CONFIG, active: true },
+	{ network: config.ZKEVM_CONFIG, active: true },
 ];
 
 const options = _options.map(o => ({

@@ -1,9 +1,8 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { TokenDistroHelper } from '@/lib/contractHelper/TokenDistroHelper';
 import { SubgraphDataHelper } from '@/lib/subgraph/subgraphDataHelper';
 import { RegenStreamConfig } from '@/types/config';
-import { useAppSelector } from '@/features/hooks';
-import { chainInfoNames } from '@/features/subgraph/subgraph.helper';
+import { useSubgraphInfo } from './useSubgraphInfo';
 
 export const useTokenDistroHelper = (
 	poolNetwork: number,
@@ -12,29 +11,35 @@ export const useTokenDistroHelper = (
 ) => {
 	const [tokenDistroHelper, setTokenDistroHelper] =
 		useState<TokenDistroHelper>();
-
-	const currentValues = useAppSelector(
-		state =>
-			state.subgraph[chainInfoNames[poolNetwork]] ||
-			state.subgraph.currentValues,
-		() => (hold ? true : false),
+	const currentValues = useSubgraphInfo(poolNetwork);
+	const sdh = useMemo(
+		() => new SubgraphDataHelper(currentValues.data),
+		[currentValues.data],
 	);
-	const sdh = new SubgraphDataHelper(currentValues);
 
 	useEffect(() => {
-		if (regenStreamConfig) {
-			setTokenDistroHelper(
-				new TokenDistroHelper(
-					sdh.getTokenDistro(
-						regenStreamConfig?.tokenDistroAddress as string,
+		const updateHelper = () => {
+			if (regenStreamConfig) {
+				setTokenDistroHelper(
+					new TokenDistroHelper(
+						sdh.getTokenDistro(
+							regenStreamConfig?.tokenDistroAddress as string,
+						),
 					),
-				),
-			);
-		} else {
-			setTokenDistroHelper(
-				new TokenDistroHelper(sdh.getGIVTokenDistro()),
-			);
-		}
-	}, [currentValues, regenStreamConfig]);
+				);
+			} else {
+				setTokenDistroHelper(
+					new TokenDistroHelper(sdh.getGIVTokenDistro()),
+				);
+			}
+		};
+
+		updateHelper(); // Initial update
+
+		const interval = setInterval(updateHelper, 5000); // Periodic update every 5 seconds
+
+		return () => clearInterval(interval); // Cleanup interval on component unmount
+	}, [currentValues.data, regenStreamConfig, sdh]);
+
 	return { tokenDistroHelper, sdh };
 };

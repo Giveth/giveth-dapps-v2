@@ -5,35 +5,81 @@ import {
 	neutralColors,
 	semanticColors,
 	Flex,
+	IconGIVBack16,
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import { useIntl } from 'react-intl';
 import { useProjectContext } from '@/context/project.context';
 import ProjectBadge from './ProjectBadge';
 import { hasActiveRound } from '@/helpers/qf';
+import { IconWithTooltip } from '@/components/IconWithToolTip';
 
 const ProjectBadges = () => {
 	const { projectData } = useProjectContext();
 
-	const { verified, qfRounds, campaigns } = projectData || {};
+	const {
+		verified: projectVerified,
+		isGivbackEligible,
+		qfRounds,
+		campaigns,
+	} = projectData || {};
 	const { formatMessage } = useIntl();
 	const isQF = hasActiveRound(qfRounds);
+	const verified = projectVerified || isGivbackEligible;
 
-	if (!verified && !isQF && (!campaigns || campaigns.length === 0)) {
+	if (
+		!verified &&
+		!isGivbackEligible &&
+		!isQF &&
+		(!campaigns || campaigns.length === 0)
+	) {
 		return null;
 	}
 
 	return (
 		<CustomFlex gap='16px'>
 			{verified && (
-				<ProjectBadge
-					badgeText={formatMessage({
-						id: 'label.verified',
-					})}
-					wrapperColor={semanticColors.jade[700]}
-					BadgeIcon={<IconVerifiedBadge16 />}
-				/>
+				<IconWithTooltip
+					delay
+					icon={
+						<ProjectBadge
+							badgeText={formatMessage({
+								id: 'label.vouched',
+							})}
+							wrapperColor={semanticColors.jade[700]}
+							BadgeIcon={<IconVerifiedBadge16 />}
+						/>
+					}
+					direction='top'
+				>
+					<TooltipContent>
+						{formatMessage({ id: 'tooltip.vouched' })}
+					</TooltipContent>
+				</IconWithTooltip>
 			)}
+			{isGivbackEligible && (
+				<IconWithTooltip
+					delay
+					icon={
+						<ProjectBadge
+							badgeText={formatMessage({
+								id: 'label.isGivbackEligible',
+							})}
+							textColor={brandColors.giv[500]}
+							wrapperColor={'white'}
+							BadgeIcon={
+								<IconGIVBack16 color={brandColors.giv[500]} />
+							}
+						/>
+					}
+					direction='top'
+				>
+					<TooltipContent>
+						{formatMessage({ id: 'tooltip.givback_eligible' })}
+					</TooltipContent>
+				</IconWithTooltip>
+			)}
+
 			{isQF && (
 				<ProjectBadge
 					badgeText={formatMessage({
@@ -56,11 +102,17 @@ const ProjectBadges = () => {
 };
 
 const CustomFlex = styled(Flex)`
-	overflow-x: scroll;
 	overflow-y: hidden;
 	white-space: nowrap;
-	margin-bottom: -3px;
-	padding-top: 8px;
+	margin-bottom: 24px;
+`;
+
+export const TooltipContent = styled.div`
+	color: ${neutralColors.gray[100]};
+	cursor: default;
+	text-align: center;
+	width: 150px;
+	font-size: 0.8em;
 `;
 
 export default ProjectBadges;

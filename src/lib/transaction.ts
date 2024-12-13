@@ -57,9 +57,9 @@ export const retryFetchEVMTransaction = async (
 ) => {
 	for (let i = 0; i < retries; i++) {
 		const transaction = await getTransaction(wagmiConfig, {
-			hash: txHash,
+			hash: txHash as `0x${string}`,
 		}).catch(error => {
-			console.log(
+			console.error(
 				'Attempt',
 				i,
 				'Fetching Transaction Error:',
@@ -88,7 +88,7 @@ export const retryFetchSolanaTransaction = async (
 			solanaConnection,
 			txHash,
 		).catch(error => {
-			console.log(
+			console.error(
 				'Attempt',
 				i,
 				'Fetching Transaction Error:',

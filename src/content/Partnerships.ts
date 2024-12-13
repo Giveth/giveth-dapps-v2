@@ -20,6 +20,7 @@ import The_DAOist from '/public/images/partnerships/The_DAOist.svg';
 import Rainbow_Rolls from '/public/images/partnerships/Rainbow_Rolls.svg';
 import Panvala from '/public/images/partnerships/Panvala.svg';
 import The_Giving_Block from '/public/images/partnerships/The_Giving_Block.svg';
+import ENDAOMENT_LOGO from '/public/images/partnerships/Endaoment.svg';
 import Token_Engineering_Commons from '/public/images/partnerships/Token_Engineering_Commons.svg';
 import OneHive from '/public/images/partnerships/1Hive.svg';
 import SDG_Impact_Fund from '/public/images/partnerships/SDG_Impact_Fund.svg';
@@ -30,6 +31,7 @@ import Gnosis_Chain from '/public/images/partnerships/Gnosis_Chain.svg';
 import Crypto_Currency from '/public/images/partnerships/cryptocurrency-jobs.svg';
 import GatewayFM from '/public/images/partnerships/gatewayfm_logo.svg';
 import BlossomLabs from '/public/images/partnerships/BlossomLabsLogo.svg';
+import GloDollar from '/public/images/partnerships/GloDollarLogo.svg';
 
 export interface IPartner {
 	icon: any;
@@ -110,6 +112,12 @@ export const PartnershipArray: IPartner[] = [
 		title: 'gateway.fm',
 		description: 'page.partnerships.gatewayfm',
 		link: 'https://gateway.fm/',
+	},
+	{
+		icon: GloDollar,
+		title: 'Glo Dollar',
+		description: 'page.partnerships.glodollar',
+		link: 'https://www.glodollar.org/',
 	},
 	{
 		icon: Governauts,
@@ -207,6 +215,12 @@ export const PartnershipArray: IPartner[] = [
 		title: 'The Giving Block',
 		description: 'page.partnerships.thegivingblock',
 		link: 'https://thegivingblock.com/',
+	},
+	{
+		icon: ENDAOMENT_LOGO,
+		title: 'Endaoment',
+		description: 'page.partnerships.endaoment',
+		link: 'https://endaoment.org',
 	},
 	{
 		icon: Token_Engineering_Commons,

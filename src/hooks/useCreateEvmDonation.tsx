@@ -8,7 +8,7 @@ import { EDonationFailedType } from '@/components/modals/FailedDonation';
 import { EDonationStatus } from '@/apollo/types/gqlEnums';
 import { isAddressENS } from '@/lib/wallet';
 import { IOnTxHash, saveDonation, updateDonation } from '@/services/donation';
-import { ICreateDonation } from '@/components/views/donate/helpers';
+import { ICreateDonation } from '@/components/views/donate/common/helpers';
 import { getTxFromSafeTxId } from '@/lib/safe';
 import { retryFetchEVMTransaction } from '@/lib/transaction';
 import { useIsSafeEnvironment } from './useSafeAutoConnect';
@@ -18,7 +18,7 @@ import { client } from '@/apollo/apolloClient';
 import { CREATE_DRAFT_DONATION } from '@/apollo/gql/gqlDonations';
 
 export const useCreateEvmDonation = () => {
-	const [txHash, setTxHash] = useState<`0x${string}` | undefined>();
+	const [txHash, setTxHash] = useState<`0x${string}` | Address | undefined>();
 	const [donationSaved, setDonationSaved] = useState<boolean>(false);
 	const [donationMinted, setDonationMinted] = useState<boolean>(false);
 	const [donationId, setDonationId] = useState<number>(0);
@@ -30,7 +30,7 @@ export const useCreateEvmDonation = () => {
 	const isSafeEnv = useIsSafeEnvironment();
 
 	const { status } = useWaitForTransactionReceipt({
-		hash: txHash,
+		hash: txHash as `0x${string}`,
 		onReplaced(data) {
 			console.log('Transaction Updated', data);
 			setTxHash(data.transaction.hash);
@@ -77,6 +77,8 @@ export const useCreateEvmDonation = () => {
 				token,
 				draftDonationId,
 				setFailedModalType,
+				useDonationBox,
+				relevantDonationTxHash,
 			} = props;
 
 			if (isSafeEnv) {
@@ -94,6 +96,8 @@ export const useCreateEvmDonation = () => {
 						setFailedModalType,
 						safeTransactionId: txHash,
 						draftDonationId,
+						useDonationBox,
+						relevantDonationTxHash,
 					};
 				} else {
 					return null;
@@ -102,7 +106,7 @@ export const useCreateEvmDonation = () => {
 				transaction = await retryFetchEVMTransaction(txHash);
 				if (transaction) {
 					donationData = {
-						chainId: transaction.chainId!,
+						chainId: chainId || token.networkId,
 						txHash: transaction.hash,
 						amount: amount,
 						token,
@@ -115,6 +119,8 @@ export const useCreateEvmDonation = () => {
 						setFailedModalType,
 						safeTransactionId: null,
 						draftDonationId,
+						useDonationBox,
+						relevantDonationTxHash,
 					};
 				} else {
 					return null;
@@ -131,7 +137,7 @@ export const useCreateEvmDonation = () => {
 				return id;
 			} catch (e: any) {
 				await postRequest('/api/donation-backup', true, {
-					chainId: transaction?.chainId!,
+					chainId: chainId || token.networkId,
 					txHash: transaction?.hash,
 					amount: amount,
 					token,
@@ -142,11 +148,13 @@ export const useCreateEvmDonation = () => {
 					walletAddress: transaction?.from,
 					symbol: token.symbol,
 					error: e.message,
+					useDonationBox,
+					relevantDonationTxHash,
 				});
 				setFailedModalType(EDonationFailedType.NOT_SAVED);
 			}
 		} catch (error) {
-			console.log('Error sending transaction', { error });
+			console.error('Error sending transaction', { error });
 		}
 	};
 
@@ -155,14 +163,14 @@ export const useCreateEvmDonation = () => {
 		donationId: number,
 		setFailedModalType: (type: EDonationFailedType) => void,
 	) => {
-		console.log('name', error.name);
+		console.error('name', error.name);
 		const localTxHash = error.replacement?.hash || error.transactionHash;
 		setTxHash(localTxHash);
 
 		if (error.name === 'TransactionExecutionError') {
 			setFailedModalType(EDonationFailedType.FAILED);
 		} else {
-			console.log('Rejected1', error);
+			console.error('Rejected1', error);
 			setFailedModalType(EDonationFailedType.REJECTED);
 		}
 
@@ -199,6 +207,8 @@ export const useCreateEvmDonation = () => {
 					tokenAddress: token.address,
 					anonymous: props.anonymous,
 					referrerId: props.chainvineReferred,
+					usingDonationBox: props.useDonationBox,
+					relevantDonationTxHash: props.relevantDonationTxHash,
 					// safeTransactionId: safeTransactionId, // Not supported yet
 				},
 			});

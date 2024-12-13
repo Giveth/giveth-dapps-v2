@@ -1,7 +1,6 @@
 import Image from 'next/image';
 import {
 	brandColors,
-	H3,
 	H4,
 	IconRocketInSpace32,
 	QuoteText,
@@ -16,13 +15,11 @@ import {
 import Link from 'next/link';
 import { useIntl } from 'react-intl';
 import { useWeb3Modal } from '@web3modal/wagmi/react';
+import { useAccount } from 'wagmi';
 import {
 	GIVpowerTopContainer,
 	Title,
 	Subtitle,
-	LearnMoreButton,
-	HeadingSectionContainer,
-	HeadingTextContainer,
 	FeaturesCardContainer,
 	FeaturesCardHeading,
 	FeaturesCardSubheading,
@@ -58,19 +55,19 @@ import RocketImage from '../../../public/images/rocket.svg';
 import Growth from '../../../public/images/growth.svg';
 import GivStake from '../../../public/images/giv_stake.svg';
 import Routes from '@/lib/constants/Routes';
-import { useAppSelector } from '@/features/hooks';
 import config from '@/configuration';
 import { formatWeiHelper } from '@/helpers/number';
-import links from '@/lib/constants/links';
 import { getTotalGIVpower } from '@/helpers/givpower';
 import { useGeneralWallet } from '@/providers/generalWalletProvider';
 import { ChainType } from '@/types/config';
+import { useFetchSubgraphDataForAllChains } from '@/hooks/useFetchSubgraphDataForAllChains';
 
 export function TabPowerTop() {
 	const { formatMessage } = useIntl();
 	const { open: openConnectModal } = useWeb3Modal();
-	const values = useAppSelector(state => state.subgraph);
-	const givPower = getTotalGIVpower(values);
+	const { address } = useAccount();
+	const subgraphValues = useFetchSubgraphDataForAllChains();
+	const givPower = getTotalGIVpower(subgraphValues, address);
 	const givPowerFormatted = formatWeiHelper(givPower.total);
 	const hasZeroGivPower = givPowerFormatted === '0';
 
@@ -207,28 +204,6 @@ export function TabPowerBottom() {
 	return (
 		<>
 			<GIVpowerContainer>
-				<H3 weight={700}>
-					{formatMessage({
-						id: 'label.boost_projects_with_givpower',
-					})}
-				</H3>
-				<br />
-				<HeadingSectionContainer>
-					<HeadingTextContainer>
-						<QuoteText size='small'>
-							{formatMessage({
-								id: 'label.use_your_givpower_to_boost_verified_projects',
-							})}
-						</QuoteText>
-					</HeadingTextContainer>
-					<LearnMoreButton
-						isExternal
-						label={formatMessage({ id: 'label.learn_more' })}
-						target='_blank'
-						href={links.GIVPOWER_DOC}
-						size='large'
-					/>
-				</HeadingSectionContainer>
 				<FeaturesCardContainer>
 					<FeaturesCardHeading weight={700}>
 						{formatMessage({ id: 'label.how_does_givpower_work' })}
@@ -331,6 +306,7 @@ export function TabPowerBottom() {
 							<BenefitsCardHeading weight={700}>
 								{formatMessage({ id: 'label.for_givers' })}
 							</BenefitsCardHeading>
+							<br /> {/* Adding a line break here */}
 							<BenefitsCardContainer>
 								<BenefitsCardTextContainer>
 									<QuoteText size='small'>
@@ -363,6 +339,7 @@ export function TabPowerBottom() {
 							<BenefitsCardHeading weight={700}>
 								{formatMessage({ id: 'label.for_projects' })}
 							</BenefitsCardHeading>
+							<br /> {/* Adding a line break here */}
 							<BenefitsCardTextContainer>
 								<QuoteText size='small'>
 									{formatMessage({

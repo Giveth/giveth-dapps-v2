@@ -38,7 +38,11 @@ export const NoDonation: FC<INoDonation> = ({ selectedQF, recurring }) => {
 	return (
 		<Wrapper>
 			{selectedQF && !selectedQF.isActive ? (
-				<H2>There were no donations in this round.</H2>
+				<H2>
+					{formatMessage({
+						id: 'label.qf_no_donations',
+					})}
+				</H2>
 			) : (
 				<>
 					<H1>Be the</H1>

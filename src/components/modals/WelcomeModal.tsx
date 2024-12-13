@@ -45,7 +45,10 @@ const WelcomeModal: FC<IModal> = ({ setShowModal }) => {
 						<IconContentContainer>
 							<ChainIconContainer
 								onClick={() => {
-									openConnectModal && openConnectModal();
+									openConnectModal &&
+										openConnectModal(
+											{ view: 'Networks' }, // Always open Networks view on first time
+										);
 									dispatch(setShowWelcomeModal(false));
 								}}
 							>

@@ -1,4 +1,4 @@
-import React, { FC, useEffect } from 'react';
+import React, { FC, useCallback, useEffect } from 'react';
 import styled from 'styled-components';
 import {
 	B,
@@ -21,7 +21,7 @@ import { mediaQueries } from '@/lib/constants/constants';
 import { Modal } from './Modal';
 import { IModal } from '@/types/common';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
-import { INetworkIdWithChain } from '@/components/views/donate/common.types';
+import { INetworkIdWithChain } from '@/components/views/donate/common/common.types';
 import config from '@/configuration';
 import NetworkLogo from '../NetworkLogo';
 import { NetworkItem, SelectedNetwork } from './SwitchNetwork';
@@ -30,6 +30,10 @@ import Routes from '@/lib/constants/Routes';
 import { ChainType } from '@/types/config';
 import { useGeneralWallet } from '@/providers/generalWalletProvider';
 import { useIsSafeEnvironment } from '@/hooks/useSafeAutoConnect';
+import {
+	DonateModalPriorityValues,
+	useDonateData,
+} from '@/context/donate.context';
 
 interface IDonateWrongNetwork extends IModal {
 	acceptedChains?: INetworkIdWithChain[];
@@ -44,6 +48,9 @@ const networks = [
 	config.OPTIMISM_CONFIG,
 	config.CLASSIC_CONFIG,
 	config.SOLANA_CONFIG,
+	config.BASE_CONFIG,
+	config.ZKEVM_CONFIG,
+	config.STELLAR_CONFIG,
 ];
 
 export const DonateWrongNetwork: FC<IDonateWrongNetwork> = props => {
@@ -54,6 +61,11 @@ export const DonateWrongNetwork: FC<IDonateWrongNetwork> = props => {
 	const router = useRouter();
 	const { switchChain } = useSwitchChain();
 	const isSafeEnv = useIsSafeEnvironment();
+	const { setDonateModalByPriority } = useDonateData();
+	const closeNetworkModal = useCallback(() => {
+		setDonateModalByPriority(DonateModalPriorityValues.None);
+		closeModal();
+	}, []);
 
 	const {
 		walletChainType,
@@ -81,7 +93,7 @@ export const DonateWrongNetwork: FC<IDonateWrongNetwork> = props => {
 				acceptedChain => acceptedChain.networkId === networkId,
 			)
 		) {
-			closeModal();
+			closeNetworkModal();
 		}
 	}, [networkId, acceptedChains]);
 
@@ -160,7 +172,6 @@ export const DonateWrongNetwork: FC<IDonateWrongNetwork> = props => {
 												switchChain?.({
 													chainId: _chainId,
 												});
-												closeModal();
 											}
 										}}
 										$isSelected={_chainId === networkId}

@@ -1,8 +1,7 @@
-import { B, Lead, Container, Row, H2, Flex } from '@giveth/ui-design-system';
+import { B, Lead, Container } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
 import Image from 'next/image';
 import { useState, useEffect } from 'react';
-import { useProjectsContext } from '@/context/projects.context';
 import { getNowUnixMS } from '@/helpers/time';
 import { durationToString } from '@/lib/helpers';
 import {
@@ -10,9 +9,14 @@ import {
 	ActiveStyledCol,
 	Desc,
 	Title,
-	Sponsor,
-	SmallerSponsor,
+	CustomSponsors,
+	// Sponsor,
+	ActiveStyledRow,
+	// SmallerSponsor,
+	// BottomSponsors,
+	// MiddleSponsors,
 } from './common';
+import { useAppSelector } from '@/features/hooks';
 
 enum ERoundStatus {
 	LOADING,
@@ -26,13 +30,14 @@ export const ActiveQFProjectsBanner = () => {
 	const [state, setState] = useState(ERoundStatus.LOADING);
 	const [timer, setTimer] = useState<number | null>(null);
 	const { formatMessage } = useIntl();
-	const { qfRounds } = useProjectsContext();
-	const activeRound = qfRounds.find(round => round.isActive);
+	const { activeQFRound } = useAppSelector(state => state.general);
 
+	// Image format is being bad formatted so managing locally instead
+	const isGIVPalooza = activeQFRound?.name === 'GIV-a-Palooza';
 	useEffect(() => {
-		if (!activeRound) return setState(ERoundStatus.NO_ACTIVE);
-		const _startDate = new Date(activeRound?.beginDate).getTime();
-		const _endDate = new Date(activeRound?.endDate).getTime();
+		if (!activeQFRound) return setState(ERoundStatus.NO_ACTIVE);
+		const _startDate = new Date(activeQFRound?.beginDate).getTime();
+		const _endDate = new Date(activeQFRound?.endDate).getTime();
 		const now = getNowUnixMS();
 		const isRoundStarted = now > _startDate;
 		const isRoundEnded = now > _endDate;
@@ -43,15 +48,15 @@ export const ActiveQFProjectsBanner = () => {
 		} else {
 			setState(ERoundStatus.ENDED);
 		}
-	}, [activeRound]);
+	}, [activeQFRound]);
 
 	useEffect(() => {
 		let _date: number;
-		if (!activeRound) return;
+		if (!activeQFRound) return;
 		if (state === ERoundStatus.NOT_STARTED) {
-			_date = new Date(activeRound.beginDate).getTime();
+			_date = new Date(activeQFRound.beginDate).getTime();
 		} else if (state === ERoundStatus.RUNNING) {
-			_date = new Date(activeRound.endDate).getTime();
+			_date = new Date(activeQFRound.endDate).getTime();
 		} else {
 			return;
 		}
@@ -70,28 +75,30 @@ export const ActiveQFProjectsBanner = () => {
 		return () => {
 			clearInterval(interval);
 		};
-	}, [state, activeRound]);
+	}, [state, activeQFRound]);
 
 	return (
 		<BannerContainer>
 			<Image
 				src={
-					activeRound?.bannerBgImage ||
-					'/images/banners/qf-round/bg.svg'
+					isGIVPalooza
+						? '/images/banners/giv-palooza-bg1.svg'
+						: activeQFRound?.bannerBgImage ||
+							'/images/banners/qf-round/bg.svg'
 				}
 				style={{ objectFit: 'cover' }}
 				fill
 				alt='QF Banner'
 			/>
 			<Container>
-				<Row>
+				<ActiveStyledRow>
 					<ActiveStyledCol xs={12} md={6}>
 						<Title weight={700}>
-							{activeRound ? activeRound.name : null}
+							{activeQFRound ? activeQFRound.name : null}
 						</Title>
-						<H2>
-							{formatMessage({ id: 'label.quadratic_funding' })}
-						</H2>
+						{/*<H2>*/}
+						{/*	{formatMessage({ id: 'label.quadratic_funding' })}*/}
+						{/*</H2>*/}
 						{(state === ERoundStatus.NOT_STARTED ||
 							state === ERoundStatus.RUNNING) && (
 							<Desc>
@@ -104,7 +111,7 @@ export const ActiveQFProjectsBanner = () => {
 									})}
 								</Lead>
 								<B>
-									{activeRound && timer && timer > 0
+									{activeQFRound && timer && timer > 0
 										? durationToString(timer, 3)
 										: '--'}
 								</B>
@@ -116,7 +123,7 @@ export const ActiveQFProjectsBanner = () => {
 						md={6}
 						style={{ alignItems: 'center' }}
 					>
-						<Flex>
+						{/* <Flex>
 							{topSponsors.map(s => (
 								<SmallerSponsor
 									key={s.title}
@@ -126,8 +133,8 @@ export const ActiveQFProjectsBanner = () => {
 									height={120}
 								/>
 							))}
-						</Flex>
-						<Flex>
+						</Flex> */}
+						{/* <Flex>
 							{sponsors.map(s => (
 								<Sponsor
 									key={s.title}
@@ -137,8 +144,18 @@ export const ActiveQFProjectsBanner = () => {
 									height={188}
 								/>
 							))}
-						</Flex>
-						<Flex>
+						</Flex> */}
+						<CustomSponsors>
+							<Image
+								src={'/images/banners/qf-round/giv-palooza.svg'}
+								style={{
+									objectFit: 'contain',
+								}}
+								fill
+								alt='QF Sponsors'
+							/>
+						</CustomSponsors>
+						{/* <BottomSponsors>
 							{bottomSponsors.map(s => (
 								<SmallerSponsor
 									key={s.title}
@@ -148,71 +165,67 @@ export const ActiveQFProjectsBanner = () => {
 									height={120}
 								/>
 							))}
-						</Flex>
+						</BottomSponsors> */}
 					</ActiveStyledCol>
-				</Row>
+				</ActiveStyledRow>
 			</Container>
 		</BannerContainer>
 	);
 };
 
-const sponsors = [
-	{
-		title: '@PublicNouns',
-		image: '/images/banners/qf-round/sponsor1.svg',
-	},
-	{
-		title: '@OctantApp',
-		image: '/images/banners/qf-round/sponsor2.svg',
-	},
-	{
-		title: '@GMX_IO',
-		image: '/images/banners/qf-round/sponsor4.svg',
-	},
-	{
-		title: '@Gains_Network_io',
-		image: '/images/banners/qf-round/sponsor5.svg',
-	},
-];
+// const sponsors = [
+// 	{
+// 		title: '@Giveth',
+// 		image: '/images/banners/qf-round/Giveth.svg',
+// 	},
+// {
+// 	title: '@ThankArbitrum',
+// 	image: '/images/banners/qf-round/ThankArbitrum.svg',
+// },
+// {
+// 	title: '@celo',
+// 	image: '/images/banners/qf-round/celo.svg',
+// },
+// 	{
+// 		title: '@realMaskNetwork',
+// 		image: '/images/banners/qf-round/realMaskNetwork.svg',
+// 	},
+// ];
 
-const topSponsors = [
-	{
-		title: '@Arbitrum',
-		image: '/images/banners/qf-round/sponsor3.svg',
-	},
-	{
-		title: '@GloDollar',
-		image: '/images/banners/qf-round/sponsor6.svg',
-	},
-	{
-		title: '@LottoPGF',
-		image: '/images/banners/qf-round/sponsor7.svg',
-	},
-	{
-		title: '@Open_Dollar',
-		image: '/images/banners/qf-round/sponsor8.svg',
-	},
-];
+// const topSponsors = [
+// {
+// 	title: '@Arbitrum',
+// 	image: '/images/banners/qf-round/sponsor3.svg',
+// },
+// {
+// 	title: '@GloDollar',
+// 	image: '/images/banners/qf-round/sponsor6.svg',
+// },
+// {
+// 	title: '@LottoPGF',
+// 	image: '/images/banners/qf-round/sponsor7.svg',
+// },
+// 	{
+// 		title: '@Open_Dollar',
+// 		image: '/images/banners/qf-round/sponsor8.svg',
+// 	},
+// ];
 
-const bottomSponsors = [
-	{
-		title: '@PremiaFinance',
-		image: '/images/banners/qf-round/sponsor9.svg',
-	},
-	{
-		title: '@MuxProtocol',
-		image: '/images/banners/qf-round/sponsor10.svg',
-	},
-	{
-		title: '@_WOOFI',
-		image: '/images/banners/qf-round/sponsor11.svg',
-	},
-	{
-		title: '@Rage_Trade',
-		image: '/images/banners/qf-round/sponsor12.svg',
-	},
-	{
-		title: '@BreederDodo',
-		image: '/images/banners/qf-round/sponsor13.svg',
-	},
-];
+// const bottomSponsors = [
+// {
+// 	title: '@Glodollar',
+// 	image: '/images/banners/qf-round/Glodollar.svg',
+// },
+// {
+// 	title: '@OctantApp',
+// 	image: '/images/banners/qf-round/OctantApp.svg',
+// },
+// {
+// 	title: '@maearthmedia',
+// 	image: '/images/banners/qf-round/maearthmedia.svg',
+// },
+// {
+// 	title: '@RegenToken',
+// 	image: '/images/banners/qf-round/regenToken.svg',
+// },
+// ];

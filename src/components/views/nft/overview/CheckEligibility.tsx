@@ -11,13 +11,15 @@ import {
 import React, { ChangeEvent, useState } from 'react';
 import styled from 'styled-components';
 import { useAccount, useSwitchChain } from 'wagmi';
-import { Address } from 'viem';
+import { Abi, Address } from 'viem';
 import { readContract } from '@wagmi/core';
-import { abi as PFP_ABI } from '@/artifacts/pfpGiver.json';
+import PFP_ARTIFACTS from '@/artifacts/pfpGiver.json';
 import config from '@/configuration';
 import { getAddressFromENS, isAddressENS } from '@/lib/wallet';
 import EligibilityModal from './EligibilityModal';
 import { wagmiConfig } from '@/wagmiConfigs';
+
+const PFP_ABI = PFP_ARTIFACTS.abi as Abi;
 
 const CheckEligibility = () => {
 	const [walletAddress, setWalletAddress] = useState('');
@@ -35,6 +37,8 @@ const CheckEligibility = () => {
 
 	const checkAddress = async (address: Address) => {
 		try {
+			if (!config.MAINNET_CONFIG.PFP_CONTRACT_ADDRESS)
+				throw new Error('PFP contract address not found');
 			const isAllowed = await readContract(wagmiConfig, {
 				address: config.MAINNET_CONFIG.PFP_CONTRACT_ADDRESS,
 				abi: PFP_ABI,
@@ -45,7 +49,7 @@ const CheckEligibility = () => {
 			setShowModal(true);
 		} catch (error) {
 			setError('Cannot get data');
-			console.log('ErrorRRR', error);
+			console.error('ErrorRRR', error);
 		}
 	};
 
@@ -73,7 +77,7 @@ const CheckEligibility = () => {
 			}
 		} catch (error) {
 			setError('Please connect your wallet');
-			console.log('Error', error);
+			console.error('Error', error);
 		}
 	};
 

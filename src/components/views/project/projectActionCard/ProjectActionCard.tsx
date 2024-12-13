@@ -2,11 +2,8 @@ import {
 	mediaQueries,
 	neutralColors,
 	Flex,
-	Subline,
 	brandColors,
-	IconChevronRight16,
 } from '@giveth/ui-design-system';
-import Link from 'next/link';
 import styled from 'styled-components';
 import { useIntl } from 'react-intl';
 import { ProjectStats } from './ProjectStats';
@@ -18,7 +15,6 @@ import MobileDonateFooter from './MobileDonateFooter';
 import QFSection from './QFSection';
 import { DonateSection } from './DonationSection';
 import { ProjectPublicActions } from './ProjectPublicActions';
-import Routes from '@/lib/constants/Routes';
 
 export const ProjectActionCard = () => {
 	const isMobile = !useMediaQuery(device.tablet);
@@ -34,7 +30,7 @@ export const ProjectActionCard = () => {
 	return (
 		<ProjectActionCardWrapper
 			$flexDirection='column'
-			$justifyContent='space-between'
+			$justifyContent='space-evenly'
 		>
 			<ProjectActionInnerCard />
 		</ProjectActionCardWrapper>
@@ -57,20 +53,6 @@ const ProjectActionInnerCard = () => {
 			)}
 			{!isMobile && !isAdmin && <ProjectPublicActions />}
 			{isAdmin && <ProjectStats />}
-			<Link href={Routes.Onboarding + '/donors'}>
-				<LearnLink
-					$alignItems='center'
-					$justifyContent='center'
-					gap='2px'
-				>
-					<Subline>
-						{formatMessage({
-							id: 'label.learn_more_about_donating_on_giveth',
-						})}
-					</Subline>
-					<IconChevronRight16 />
-				</LearnLink>
-			</Link>
 		</>
 	);
 };

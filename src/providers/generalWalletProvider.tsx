@@ -14,7 +14,7 @@ import {
 	Transaction,
 	SystemProgram,
 } from '@solana/web3.js';
-import { useBalance, useDisconnect, useAccount } from 'wagmi';
+import { useBalance, useDisconnect, useAccount, useSwitchChain } from 'wagmi';
 import { getWalletClient } from '@wagmi/core';
 import { WalletAdapterNetwork } from '@solana/wallet-adapter-base';
 import { useWeb3Modal } from '@web3modal/wagmi/react';
@@ -58,6 +58,7 @@ interface IGeneralWalletContext {
 	handleSignOutAndShowWelcomeModal: () => Promise<void>;
 	isOnSolana: boolean;
 	isOnEVM: boolean;
+	setPendingNetworkId: (id: number | null) => void;
 }
 // Create the context
 export const GeneralWalletContext = createContext<IGeneralWalletContext>({
@@ -76,6 +77,7 @@ export const GeneralWalletContext = createContext<IGeneralWalletContext>({
 	handleSignOutAndShowWelcomeModal: async () => {},
 	isOnSolana: false,
 	isOnEVM: false,
+	setPendingNetworkId: () => {},
 });
 
 const getPhantomSolanaProvider = () => {
@@ -93,6 +95,9 @@ export const GeneralWalletProvider: React.FC<{
 	const [walletChainType, setWalletChainType] = useState<ChainType | null>(
 		null,
 	);
+	const [pendingNetworkId, setPendingNetworkId] = useState<number | null>(
+		null,
+	);
 	const [walletAddress, setWalletAddress] = useState<string | null>(null);
 	const [balance, setBalance] = useState<string>();
 	const [isConnected, setIsConnected] = useState<boolean>(false);
@@ -106,6 +111,7 @@ export const GeneralWalletProvider: React.FC<{
 	const router = useRouter();
 	const { token } = useAppSelector(state => state.user);
 	const { setVisible, visible } = useWalletModal();
+	const { switchChain } = useSwitchChain();
 
 	const isGIVeconomyRoute = useMemo(
 		() => checkIsGIVeconomyRoute(router.route),
@@ -266,6 +272,13 @@ export const GeneralWalletProvider: React.FC<{
 		}
 	}, [walletChainType, nonFormattedEvBalance, solanaBalance]);
 
+	useEffect(() => {
+		if (walletChainType === ChainType.EVM && pendingNetworkId !== null) {
+			switchChain?.({ chainId: pendingNetworkId });
+			setPendingNetworkId(null);
+		}
+	}, [walletChainType, pendingNetworkId]);
+
 	const signMessage = async (
 		message: string,
 	): Promise<string | undefined> => {
@@ -355,6 +368,7 @@ export const GeneralWalletProvider: React.FC<{
 		if (!isGIVeconomyRoute) {
 			dispatch(setShowWelcomeModal(true));
 		} else {
+			disconnect();
 			openConnectModal();
 		}
 	};
@@ -407,6 +421,7 @@ export const GeneralWalletProvider: React.FC<{
 		handleSignOutAndShowWelcomeModal,
 		isOnSolana,
 		isOnEVM,
+		setPendingNetworkId,
 	};
 
 	// Render the provider component with the provided context value

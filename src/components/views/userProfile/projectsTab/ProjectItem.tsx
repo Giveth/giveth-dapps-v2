@@ -1,14 +1,14 @@
 import {
 	H2,
 	IconFund24,
-	IconHeartOutline24,
 	IconPublish16,
 	P,
 	Subline,
 	neutralColors,
 	Flex,
+	mediaQueries,
 } from '@giveth/ui-design-system';
-import React, { Dispatch, SetStateAction, useState } from 'react';
+import { type FC, useState } from 'react';
 import styled from 'styled-components';
 import { useIntl } from 'react-intl';
 import Link from 'next/link';
@@ -22,22 +22,29 @@ import ProjectQFStatus from './ProjectQFStatus';
 import ProjectListedStatus from './ProjectListedStatus';
 import { formatDonation } from '@/helpers/number';
 import VerificationBadge from '@/components/VerificationBadge';
+import DeleteProjectModal from './DeleteProjectModal';
 
 interface IProjectItem {
 	project: IProject;
-	setProjects: Dispatch<SetStateAction<IProject[]>>;
+	refetchProjects: () => void;
 }
 
-const ProjectItem = ({ project, setProjects }: IProjectItem) => {
+const ProjectItem: FC<IProjectItem> = props => {
 	const { formatMessage, locale } = useIntl();
+	const [project, setProject] = useState(props.project);
 	const [showAddressModal, setShowAddressModal] = useState(false);
 	const [selectedProject, setSelectedProject] = useState<IProject>();
 	const [showClaimModal, setShowClaimModal] = useState(false);
+	const [showDeleteModal, setShowDeleteModal] = useState(false);
 
 	return (
 		<ProjectContainer>
-			<Flex $justifyContent='space-between' $alignItems='center'>
-				<div>
+			<ProjectInfoContainer
+				$justifyContent='space-between'
+				$alignItems='center'
+				gap='24px'
+			>
+				<Header>
 					<Subline>
 						<Flex $alignItems='center'>
 							<IconPublish16 />
@@ -50,18 +57,20 @@ const ProjectItem = ({ project, setProjects }: IProjectItem) => {
 						</Flex>
 					</Subline>
 					<Link href={`/project/${project.slug}`}>
-						<H2>{project.title}</H2>
+						<Title>{project.title}</Title>
 					</Link>
-				</div>
-				<ProjectActions
+				</Header>
+				<StyledProjectActions
 					setSelectedProject={setSelectedProject}
 					setShowAddressModal={setShowAddressModal}
 					project={project}
 					setShowClaimModal={setShowClaimModal}
+					setProject={setProject}
+					setShowDeleteModal={setShowDeleteModal}
 				/>
-			</Flex>
+			</ProjectInfoContainer>
 			<HorizontalDivider />
-			<Flex $justifyContent='space-between' gap='8px'>
+			<ProjectInfoContainer $justifyContent='space-between' gap='8px'>
 				<ProjectStatusesContainer $flexDirection='column' gap='16px'>
 					<Flex $justifyContent='space-between'>
 						<P>{formatMessage({ id: 'label.project_status' })}</P>
@@ -83,7 +92,7 @@ const ProjectItem = ({ project, setProjects }: IProjectItem) => {
 						</P>
 						<div>
 							<VerificationBadge
-								isVerified={project?.verified}
+								isGivbackEligible={project?.isGivbackEligible}
 								verificationStatus={
 									project.projectVerificationForm?.status
 								}
@@ -105,38 +114,36 @@ const ProjectItem = ({ project, setProjects }: IProjectItem) => {
 					<Flex $justifyContent='space-between'>
 						<P>
 							<Flex $alignItems='center' gap='6px'>
-								<IconHeartOutline24 />
-								{formatMessage({ id: 'label.likes' })}
-							</Flex>
-						</P>
-						<div>{project.totalReactions}</div>
-					</Flex>
-					<Flex $justifyContent='space-between'>
-						<P>
-							<Flex $alignItems='center' gap='6px'>
 								<IconFund24 />
 								{formatMessage({ id: 'label.total_raised' })}
 							</Flex>
 						</P>
 						{formatDonation(
-							project.sumDonationValueUsd || 0,
+							project.totalDonations || 0,
 							'$',
 							locale,
 						)}
 					</Flex>
 				</ProjectStatusesContainer>
-			</Flex>
+			</ProjectInfoContainer>
 			{showAddressModal && selectedProject && (
 				<ManageProjectAddressesModal
 					project={selectedProject}
 					setShowModal={setShowAddressModal}
-					setProjects={setProjects}
+					setProject={setProject}
 				/>
 			)}
 			{showClaimModal && selectedProject && (
 				<ClaimRecurringDonationModal
 					setShowModal={setShowClaimModal}
 					project={project}
+				/>
+			)}
+			{showDeleteModal && selectedProject && (
+				<DeleteProjectModal
+					setShowModal={setShowDeleteModal}
+					project={selectedProject}
+					refetchProjects={props.refetchProjects}
 				/>
 			)}
 		</ProjectContainer>
@@ -146,6 +153,24 @@ const ProjectItem = ({ project, setProjects }: IProjectItem) => {
 const ProjectContainer = styled.div`
 	padding: 24px;
 	background-color: ${neutralColors.gray[100]};
+	overflow: hidden;
+`;
+
+const Header = styled.div`
+	max-width: 100%;
+	overflow: hidden;
+`;
+
+const Title = styled(H2)`
+	text-overflow: ellipsis;
+	overflow: hidden;
+`;
+
+const StyledProjectActions = styled(ProjectActions)`
+	width: 100%;
+	${mediaQueries.tablet} {
+		width: unset;
+	}
 `;
 
 const HorizontalDivider = styled.hr`
@@ -153,8 +178,17 @@ const HorizontalDivider = styled.hr`
 	margin: 24px 0;
 `;
 
+const ProjectInfoContainer = styled(Flex)`
+	flex-direction: column;
+	${mediaQueries.tablet} {
+		flex-direction: row;
+	}
+`;
+
 const ProjectStatusesContainer = styled(Flex)`
-	width: 330px;
+	${mediaQueries.tablet} {
+		width: 330px;
+	}
 `;
 
 export default ProjectItem;

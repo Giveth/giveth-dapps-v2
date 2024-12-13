@@ -27,8 +27,14 @@ export function campaignLinkGenerator(campaign: ICampaign) {
 				case ECampaignFilterField.Verified:
 					params.append('filter', EProjectsFilter.VERIFIED);
 					break;
-				case ECampaignFilterField.GivingBlock:
-					params.append('filter', EProjectsFilter.GIVING_BLOCK);
+				case ECampaignFilterField.IsGivbackEligible:
+					params.append(
+						'filter',
+						EProjectsFilter.IS_GIVBACK_ELIGIBLE,
+					);
+					break;
+				case ECampaignFilterField.Endaoment:
+					params.append('filter', EProjectsFilter.Endaoment);
 					break;
 				case ECampaignFilterField.BoostedWithGivPower:
 					params.append(
@@ -66,6 +72,12 @@ export function campaignLinkGenerator(campaign: ICampaign) {
 						EProjectsFilter.ACCEPT_FUND_ON_ARBITRUM,
 					);
 					break;
+				case ECampaignFilterField.AcceptFundOnBase:
+					params.append(
+						'filter',
+						EProjectsFilter.ACCEPT_FUND_ON_BASE,
+					);
+					break;
 				case ECampaignFilterField.AcceptFundOnOptimism:
 					params.append(
 						'filter',
@@ -76,6 +88,18 @@ export function campaignLinkGenerator(campaign: ICampaign) {
 					params.append(
 						'filter',
 						EProjectsFilter.ACCEPT_FUND_ON_SOLANA,
+					);
+					break;
+				case ECampaignFilterField.AcceptFundOnZKEVM:
+					params.append(
+						'filter',
+						EProjectsFilter.ACCEPT_FUND_ON_ZKEVM,
+					);
+					break;
+				case ECampaignFilterField.AcceptFundOnStellar:
+					params.append(
+						'filter',
+						EProjectsFilter.ACCEPT_FUND_ON_STELLAR,
 					);
 					break;
 				default:
@@ -116,3 +140,111 @@ export function removeQueryParamAndRedirect(
 export const convertIPFSToHTTPS = (url: string) => {
 	return url.replace('ipfs://', 'https://ipfs.io/ipfs/');
 };
+
+export const getSocialMediaHandle = (
+	socialMediaUrl: string,
+	socialMediaType: string,
+) => {
+	let cleanedUrl = socialMediaUrl
+		.replace(/^https?:\/\//, '')
+		.replace('www.', '');
+
+	// Remove trailing slash if present
+	if (cleanedUrl.endsWith('/')) {
+		cleanedUrl = cleanedUrl.slice(0, -1);
+	}
+
+	// Match against different social media types using custom regex
+	const lowerCaseType = socialMediaType.toLowerCase();
+
+	switch (lowerCaseType) {
+		case 'github':
+			return extractUsernameFromPattern(
+				cleanedUrl,
+				/github\.com\/([^\/]+)/,
+			);
+		case 'x': // Former Twitter
+			return extractUsernameFromPattern(cleanedUrl, /x\.com\/([^\/]+)/);
+		case 'facebook':
+			return extractUsernameFromPattern(
+				cleanedUrl,
+				/facebook\.com\/([^\/]+)/,
+			);
+		case 'instagram':
+			return extractUsernameFromPattern(
+				cleanedUrl,
+				/instagram\.com\/([^\/]+)/,
+			);
+		case 'linkedin':
+			return extractUsernameFromPattern(
+				cleanedUrl,
+				/linkedin\.com\/(?:in|company)\/([^\/]+)/,
+			);
+		case 'youtube':
+			return extractUsernameFromPattern(
+				cleanedUrl,
+				/youtube\.com\/channel\/([^\/]+)/,
+			);
+		case 'reddit':
+			return extractUsernameFromPattern(
+				cleanedUrl,
+				/reddit\.com\/r\/([^\/]+)/,
+			);
+		case 'telegram':
+			return extractUsernameFromPattern(cleanedUrl, /t\.me\/([^\/]+)/);
+		case 'discord':
+			return extractUsernameFromPattern(
+				cleanedUrl,
+				/discord\.gg\/([^\/]+)/,
+			);
+		case 'farcaster':
+			// Assuming Farcaster uses a pattern like 'farcaster.xyz/username'
+			return extractUsernameFromPattern(
+				cleanedUrl,
+				/farcaster\.xyz\/([^\/]+)/,
+			);
+		case 'lens':
+			// Assuming Lens uses a pattern like 'lens.xyz/username'
+			return extractUsernameFromPattern(
+				cleanedUrl,
+				/lens\.xyz\/([^\/]+)/,
+			);
+		case 'website':
+		default:
+			return cleanedUrl; // Return cleaned URL for generic websites or unsupported social media
+	}
+};
+
+// Function to extract username from URL based on the regex pattern
+export const extractUsernameFromPattern = (
+	url: string,
+	regex: RegExp,
+): string => {
+	const match = url.match(regex);
+	if (match && match[1]) {
+		return `@${match[1]}`; // Return '@username'
+	}
+	return url; // Fallback to original URL if no match is found
+};
+
+/**
+ * Ensures that a given URL uses the https:// protocol.
+ * If the URL starts with http://, it will be replaced with https://.
+ * If the URL does not start with any protocol, https:// will be added.
+ * If the URL already starts with https://, it will remain unchanged.
+ *
+ * @param {string} url - The URL to be checked and possibly modified.
+ * @returns {string} - The modified URL with https://.
+ */
+export function ensureHttps(url: string): string {
+	if (!url.startsWith('https://')) {
+		if (url.startsWith('http://')) {
+			// Replace http:// with https://
+			url = url.replace('http://', 'https://');
+		} else {
+			// Add https:// if no protocol is present
+			url = 'https://' + url;
+		}
+	}
+	return url;
+}

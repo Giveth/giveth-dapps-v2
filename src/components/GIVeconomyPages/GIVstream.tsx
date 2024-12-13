@@ -6,17 +6,16 @@ import {
 	H1,
 	H3,
 	H6,
-	IconGIVBack,
 	IconGIVFarm,
 	IconGIVStream,
 	IconHelpFilled16,
 	IconPraise24,
-	IconSpark,
 	P,
 	Container,
 	Row,
 	Col,
 	Flex,
+	IconGIVBack24,
 } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
 import { useAccount } from 'wagmi';
@@ -44,8 +43,6 @@ import {
 	HistoryTitle,
 	HistoryTitleRow,
 	HistoryTooltip,
-	IncreaseSection,
-	IncreaseSectionTitle,
 	NoData,
 	PercentageRow,
 	TxHash,
@@ -65,9 +62,8 @@ import { ITokenAllocation } from '@/types/subgraph';
 import { IconGIV } from '../Icons/GIV';
 import { givEconomySupportedNetworks } from '@/lib/constants/constants';
 import Pagination from '../Pagination';
-import GivEconomyProjectCards from '../cards/GivEconomyProjectCards';
-import { useAppSelector } from '@/features/hooks';
 import { SubgraphDataHelper } from '@/lib/subgraph/subgraphDataHelper';
+import { useSubgraphInfo } from '@/hooks/useSubgraphInfo';
 
 export const TabGIVstreamTop = () => {
 	const { formatMessage } = useIntl();
@@ -75,15 +71,11 @@ export const TabGIVstreamTop = () => {
 	const [rewardLiquidPart, setRewardLiquidPart] = useState(0n);
 	const [rewardStream, setRewardStream] = useState(0n);
 	const { givTokenDistroHelper } = useGIVTokenDistroHelper(showModal);
-	const currentValues = useAppSelector(
-		state => state.subgraph.currentValues,
-		() => (showModal ? true : false),
-	);
-	const sdh = new SubgraphDataHelper(currentValues);
+	const { chainId } = useAccount();
+	const currentValues = useSubgraphInfo();
+	const sdh = new SubgraphDataHelper(currentValues.data);
 	const { allocatedTokens, claimed, givback } =
 		sdh.getGIVTokenDistroBalance();
-	const { chain } = useAccount();
-	const chainId = chain?.id;
 
 	useEffect(() => {
 		const _allocatedTokens = BigInt(allocatedTokens);
@@ -147,6 +139,11 @@ export const TabGIVstreamTop = () => {
 										chainType:
 											config.OPTIMISM_CONFIG.chainType,
 									},
+									{
+										networkId: config.ZKEVM_NETWORK_NUMBER,
+										chainType:
+											config.ZKEVM_CONFIG.chainType,
+									},
 								]}
 								title='Your GIVstream Rewards'
 							/>
@@ -165,8 +162,7 @@ export const TabGIVstreamTop = () => {
 };
 
 export const TabGIVstreamBottom = () => {
-	const { chain } = useAccount();
-	const chainId = chain?.id;
+	const { chainId } = useAccount();
 	const { givTokenDistroHelper } = useGIVTokenDistroHelper();
 	const { formatMessage } = useIntl();
 
@@ -174,9 +170,9 @@ export const TabGIVstreamBottom = () => {
 	const [remain, setRemain] = useState('');
 	useState(0n);
 	const [streamAmount, setStreamAmount] = useState(0n);
-	const sdh = new SubgraphDataHelper(
-		useAppSelector(state => state.subgraph.currentValues),
-	);
+	const currentValues = useSubgraphInfo();
+
+	const sdh = new SubgraphDataHelper(currentValues.data);
 	const givTokenDistroBalance = sdh.getGIVTokenDistroBalance();
 	const increaseSecRef = useRef<HTMLDivElement>(null);
 
@@ -278,15 +274,6 @@ export const TabGIVstreamBottom = () => {
 				</HistoryTitleRow>
 				<GIVstreamHistory />
 			</Container>
-			<IncreaseSection ref={increaseSecRef}>
-				<Container>
-					<IncreaseSectionTitle>
-						{formatMessage({ id: 'label.increase_your_givstream' })}
-						<IconSpark size={32} color={brandColors.mustard[500]} />
-					</IncreaseSectionTitle>
-					<GivEconomyProjectCards />
-				</Container>
-			</IncreaseSection>
 		</GIVstreamBottomContainer>
 	);
 };
@@ -338,7 +325,7 @@ const convertSourceTypeToIcon = (distributor: string) => {
 		case 'givback':
 			return (
 				<Flex gap='16px'>
-					<IconGIVBack size={24} color={brandColors.mustard[500]} />
+					<IconGIVBack24 color={brandColors.mustard[500]} />
 					<P>{` GIVbacks`}</P>
 				</Flex>
 			);
@@ -380,17 +367,18 @@ const convertSourceTypeToIcon = (distributor: string) => {
 const itemPerPage = 6;
 
 export const GIVstreamHistory: FC = () => {
-	const { chain } = useAccount();
-	const chainId = chain?.id;
-	const { address } = useAccount();
+	const { chain, address } = useAccount();
 	const [tokenAllocations, setTokenAllocations] = useState<
 		ITokenAllocation[]
 	>([]);
 	const { formatMessage, locale } = useIntl();
 	const [loading, setLoading] = useState(true);
 	const [page, setPage] = useState(0);
-	const currentValue = useAppSelector(state => state.subgraph.currentValues);
-	const sdh = new SubgraphDataHelper(currentValue);
+
+	const currentValue = useSubgraphInfo();
+
+	const chainId = chain?.id;
+	const sdh = new SubgraphDataHelper(currentValue.data);
 	const { allocationCount } = sdh.getGIVTokenDistroBalance();
 
 	const { givTokenDistroHelper } = useGIVTokenDistroHelper();

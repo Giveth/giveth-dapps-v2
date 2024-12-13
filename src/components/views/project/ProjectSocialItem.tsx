@@ -4,6 +4,7 @@ import { B, Flex, neutralColors } from '@giveth/ui-design-system';
 import { IProjectSocialMedia } from '@/apollo/types/types';
 import { Shadow } from '@/components/styled-components/Shadow';
 import { socialMediasArray } from '../create/SocialMediaBox/SocialMedias';
+import { ensureHttps, getSocialMediaHandle } from '@/helpers/url';
 
 interface IProjectSocialMediaItem {
 	socialMedia: IProjectSocialMedia;
@@ -19,11 +20,9 @@ const socialMediaColor: { [key: string]: string } = {
 	discord: '#7289DA',
 	website: '#2EA096',
 	telegram: '#229ED9',
+	github: '#1D1E1F',
 };
 
-const removeHttpsAndWwwFromUrl = (socialMediaUrl: string) => {
-	return socialMediaUrl.replace('https://', '').replace('www.', '');
-};
 const ProjectSocialItem = ({ socialMedia }: IProjectSocialMediaItem) => {
 	const item = socialMediasArray.find(item => {
 		return item.type.toLocaleLowerCase() === socialMedia.type.toLowerCase();
@@ -32,18 +31,18 @@ const ProjectSocialItem = ({ socialMedia }: IProjectSocialMediaItem) => {
 	const IconComponent = item?.icon;
 
 	return (
-		<a href={socialMedia.link} target='_blank'>
+		<a href={ensureHttps(socialMedia.link)} target='_blank'>
 			<SocialItemContainer>
 				<Flex gap='8px' $alignItems='center'>
-					{IconComponent ? (
+					{IconComponent && (
 						<IconComponent
 							color={
 								socialMediaColor[
-									item.name.toLocaleLowerCase() || 'website'
+									item?.name.toLocaleLowerCase() || 'website'
 								]
 							}
 						/>
-					) : null}
+					)}
 
 					<B
 						style={{
@@ -52,7 +51,11 @@ const ProjectSocialItem = ({ socialMedia }: IProjectSocialMediaItem) => {
 							],
 						}}
 					>
-						{removeHttpsAndWwwFromUrl(socialMedia.link)}
+						{/* Use the updated function to show a cleaner link or username */}
+						{getSocialMediaHandle(
+							socialMedia.link,
+							socialMedia.type,
+						)}
 					</B>
 				</Flex>
 			</SocialItemContainer>

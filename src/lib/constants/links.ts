@@ -29,6 +29,7 @@ const links = {
 	REDDIT: 'https://reddit.com/r/giveth',
 	INSTAGRAM: 'https://www.instagram.com/giveth.io/',
 	LINKEDIN: 'https://www.linkedin.com/company/givethio/',
+	FARCASTER: 'https://warpcast.com/~/channel/giveth',
 	DOCS,
 	GIVFARM_DOCS: DOCS + 'giveconomy/givfarm',
 	GIVSTREAM_DOCS: DOCS + 'giveconomy/givstream',
@@ -55,6 +56,8 @@ const links = {
 	SWAG: 'https://swag.giveth.io/',
 	COMMONS_STACK: 'https://commonsstack.org/',
 	RECRUITEE: 'https://giveth.recruitee.com/',
+	QACC: 'https://qacc.giveth.io/',
+	QACC_NEWS: 'https://qacc.giveth.io/news',
 	JOINGIVFRENS: TYPEFORM + 'regenfarms',
 	DISCORD_SUPPORT: 'https://discord.gg/TeWHtAjNQT',
 	CALENDAR:
@@ -74,6 +77,9 @@ const links = {
 		'https://app.staketogether.org/en/usd/ethereum/product/staking/eth-staking?projectAddress=0xf102fe6d6cf7f98c7c4ca45eb082caaaaa951d52',
 	STAKE_TOGETHER_OPTIMISM:
 		'https://app.staketogether.org/en/usd/optimism/product/staking/eth-restaking?projectAddress=0x93E79499b00a2fdAAC38e6005B0ad8E88b177346',
+	ENDAOMENT: 'https://endaoment.org',
+	DEVOUCH: 'https://devouch.xyz',
+	DEVOUCH_DOCS: 'https://docs.giveth.io/dapps/projectVerification',
 };
 
 if (!isProduction) {

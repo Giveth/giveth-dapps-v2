@@ -9,11 +9,11 @@ import {
 	IUniswapV3Pool,
 	IUniswapV3Position,
 	IGIVpower,
+	ISubgraphState,
 } from '@/types/subgraph';
 import config from '@/configuration';
 import { getGIVpowerRoundsInfo } from '@/helpers/givpower';
 import { AddressZero } from '../constants/constants';
-import type { ISubgraphState } from '@/features/subgraph/subgraph.types';
 
 export const transformTokenDistro = (info: any = {}): ITokenDistro => {
 	const _startTime = info?.startTime || '0';
@@ -198,6 +198,10 @@ export const transformUserGIVLocked = (info: any = {}): ITokenBalance => {
 	};
 };
 
+const transformIndexedBlockInfo = (info: any = {}): number => {
+	return info?.block?.number || 0;
+};
+
 export const transformSubgraphData = (data: any = {}): ISubgraphState => {
 	const result: ISubgraphState = {};
 	Object.entries(data).forEach(([key, value]) => {
@@ -228,6 +232,9 @@ export const transformSubgraphData = (data: any = {}): ISubgraphState => {
 
 			case key === 'userGIVLocked':
 				result[key] = transformUserGIVLocked(value);
+				break;
+			case key === '_meta':
+				result['indexedBlockNumber'] = transformIndexedBlockInfo(value);
 				break;
 
 			default:

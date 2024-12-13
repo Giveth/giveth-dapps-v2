@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import {
 	P,
@@ -14,15 +14,16 @@ import {
 	H5,
 	Flex,
 	IconHelpFilled16,
+	IconGIVBack16,
 } from '@giveth/ui-design-system';
 import Link from 'next/link';
 import { useIntl } from 'react-intl';
 import { useRouter } from 'next/router';
 import { Shadow } from '@/components/styled-components/Shadow';
-import ProjectCardBadges from './ProjectCardLikeAndShareButtons';
+import ProjectCardBadges from './ProjectCardBadgeButtons';
 import ProjectCardOrgBadge from './ProjectCardOrgBadge';
-import { IProject } from '@/apollo/types/types';
-import { thousandsSeparator, timeFromNow } from '@/lib/helpers';
+import { IAdminUser, IProject } from '@/apollo/types/types';
+import { timeFromNow } from '@/lib/helpers';
 import ProjectCardImage from './ProjectCardImage';
 import { slugToProjectDonate, slugToProjectView } from '@/lib/routeCreators';
 import { ORGANIZATION } from '@/lib/constants/organizations';
@@ -33,6 +34,8 @@ import { formatDonation } from '@/helpers/number';
 import { RoundNotStartedModal } from './RoundNotStartedModal';
 import { TooltipContent } from '@/components/modals/HarvestAll.sc';
 import { IconWithTooltip } from '@/components/IconWithToolTip';
+import { FETCH_RECURRING_DONATIONS_BY_DATE } from '@/apollo/gql/gqlProjects';
+import { client } from '@/apollo/apolloClient';
 
 const cardRadius = '12px';
 const imgHeight = '226px';
@@ -43,25 +46,41 @@ interface IProjectCard {
 	className?: string;
 	order?: number;
 }
-
+interface IRecurringDonation {
+	id: string;
+	txHash: string;
+	networkId: number;
+	currency: string;
+	anonymous: boolean;
+	status: string;
+	amountStreamed: number;
+	totalUsdStreamed: number;
+	flowRate: string;
+	donor: IAdminUser;
+	createdAt: string;
+	finished: boolean;
+}
 const ProjectCard = (props: IProjectCard) => {
 	const { project, className } = props;
+
 	const {
+		id,
 		title,
 		descriptionSummary,
 		image,
 		slug,
 		adminUser,
-		sumDonationValueUsd,
+		totalDonations,
 		sumDonationValueUsdForActiveQfRound,
-		updatedAt,
 		organization,
 		verified,
-		// projectPower,
+		isGivbackEligible,
+		latestUpdateCreationDate,
 		countUniqueDonors,
 		qfRounds,
 		estimatedMatching,
 	} = project;
+	const [recurringDonationSumInQF, setRecurringDonationSumInQF] = useState(0);
 	const [isHover, setIsHover] = useState(false);
 	const [showHintModal, setShowHintModal] = useState(false);
 	const [destination, setDestination] = useState('');
@@ -76,8 +95,8 @@ const ProjectCard = (props: IProjectCard) => {
 		estimatedMatching || {};
 
 	const { activeStartedRound, activeQFRound } = getActiveRound(qfRounds);
-	const hasFooter = activeStartedRound || verified;
-
+	const hasFooter = activeStartedRound || verified || isGivbackEligible;
+	const showVerifiedBadge = verified || isGivbackEligible;
 	const {
 		allocatedFundUSDPreferred,
 		allocatedFundUSD,
@@ -96,6 +115,43 @@ const ProjectCard = (props: IProjectCard) => {
 			setShowHintModal(true);
 		}
 	};
+
+	const fetchProjectRecurringDonationsByDate = async () => {
+		const startDate = activeStartedRound?.beginDate;
+		const endDate = activeStartedRound?.endDate;
+		if (startDate && endDate) {
+			const { data: projectRecurringDonations } = await client.query({
+				query: FETCH_RECURRING_DONATIONS_BY_DATE,
+				variables: {
+					projectId: parseInt(id),
+					startDate,
+					endDate,
+				},
+			});
+			const { recurringDonationsByDate } = projectRecurringDonations;
+			return recurringDonationsByDate;
+		}
+	};
+	useEffect(() => {
+		const calculateTotalAmountStreamed = async () => {
+			if (activeStartedRound?.isActive) {
+				const donations = await fetchProjectRecurringDonationsByDate();
+				let totalAmountStreamed;
+				if (donations.totalCount != 0) {
+					console.log(id, donations.recurringDonations);
+					totalAmountStreamed = donations.recurringDonations.reduce(
+						(sum: number, donation: IRecurringDonation) => {
+							return sum + donation.totalUsdStreamed;
+						},
+						0,
+					);
+					setRecurringDonationSumInQF(totalAmountStreamed);
+				}
+			}
+		};
+
+		calculateTotalAmountStreamed();
+	}, [props]);
 
 	return (
 		// </Link>
@@ -122,6 +178,7 @@ const ProjectCard = (props: IProjectCard) => {
 				</Link>
 			</ImagePlaceholder>
 			<CardBody
+				id={`project-card-body-${slug}`}
 				$isHover={
 					isHover
 						? hasFooter
@@ -137,7 +194,7 @@ const ProjectCard = (props: IProjectCard) => {
 					<LastUpdatedContainer $isHover={isHover}>
 						{formatMessage({ id: 'label.last_updated' })}:
 						{timeFromNow(
-							updatedAt,
+							latestUpdateCreationDate || '',
 							formatRelativeTime,
 							formatMessage({ id: 'label.just_now' }),
 						)}
@@ -171,8 +228,8 @@ const ProjectCard = (props: IProjectCard) => {
 							<PriceText>
 								{formatDonation(
 									(activeStartedRound
-										? sumDonationValueUsdForActiveQfRound
-										: sumDonationValueUsd) || 0,
+										? sumDonationValueUsdForActiveQfRound // TODO: add recurring donation amount
+										: totalDonations) || 0,
 									'$',
 									locale,
 								)}
@@ -190,7 +247,7 @@ const ProjectCard = (props: IProjectCard) => {
 										}) + ' '}
 										<span>
 											{formatDonation(
-												sumDonationValueUsd || 0,
+												totalDonations || 0,
 												'$',
 												locale,
 											)}
@@ -235,26 +292,22 @@ const ProjectCard = (props: IProjectCard) => {
 						{activeStartedRound && (
 							<Flex $flexDirection='column' gap='6px'>
 								<EstimatedMatchingPrice>
-									+
-									{thousandsSeparator(
-										formatDonation(
-											calculateTotalEstimatedMatching(
-												projectDonationsSqrtRootSum,
-												allProjectsSum,
-												allocatedFundUSDPreferred
-													? allocatedFundUSD
-													: matchingPool,
-												activeStartedRound?.maximumReward,
-											),
+									{formatDonation(
+										calculateTotalEstimatedMatching(
+											projectDonationsSqrtRootSum,
+											allProjectsSum,
 											allocatedFundUSDPreferred
-												? '$'
-												: '',
-											locale,
-											true,
+												? allocatedFundUSD
+												: matchingPool,
+											activeStartedRound?.maximumReward,
 										),
-									)}{' '}
-									{!allocatedFundUSDPreferred &&
-										allocatedTokenSymbol}
+										allocatedFundUSDPreferred ? '$' : '',
+										locale,
+										true,
+									)}
+									{allocatedFundUSDPreferred
+										? ''
+										: ` ${allocatedTokenSymbol}`}
 								</EstimatedMatchingPrice>
 								<EstimatedMatching>
 									<span>
@@ -288,16 +341,26 @@ const ProjectCard = (props: IProjectCard) => {
 						<Hr />
 						<PaddedRow $justifyContent='space-between'>
 							<Flex gap='16px'>
-								{verified && (
+								{showVerifiedBadge && (
 									<Flex $alignItems='center' gap='4px'>
 										<IconVerifiedBadge16
 											color={semanticColors.jade[500]}
 										/>
 										<VerifiedText>
 											{formatMessage({
-												id: 'label.verified',
+												id: 'label.vouched',
 											})}
 										</VerifiedText>
+									</Flex>
+								)}
+								{isGivbackEligible && (
+									<Flex $alignItems='center' gap='4px'>
+										<IconGIVBack16
+											color={brandColors.giv[500]}
+										/>
+										<GivbackEligibleText>
+											GIVbacks
+										</GivbackEligibleText>
 									</Flex>
 								)}
 								{activeStartedRound && (
@@ -311,6 +374,7 @@ const ProjectCard = (props: IProjectCard) => {
 				)}
 				<ActionButtons>
 					<Link
+						id='Donate_Card'
 						href={donateLink}
 						onClick={e => {
 							setDestination(donateLink);
@@ -371,6 +435,11 @@ const EstimatedMatching = styled(Subline)`
 const VerifiedText = styled(Subline)`
 	text-transform: uppercase;
 	color: ${semanticColors.jade[500]};
+`;
+
+const GivbackEligibleText = styled(Subline)`
+	text-transform: uppercase;
+	color: ${brandColors.giv[500]};
 `;
 
 const LastUpdatedContainer = styled(Subline)<{ $isHover?: boolean }>`

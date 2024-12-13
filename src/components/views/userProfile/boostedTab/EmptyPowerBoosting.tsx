@@ -8,16 +8,18 @@ import {
 import { useIntl } from 'react-intl';
 import Link from 'next/link';
 import { FC } from 'react';
+import { useAccount } from 'wagmi';
 import Routes from '@/lib/constants/Routes';
-import { useAppSelector } from '@/features/hooks';
 import { getTotalGIVpower } from '@/helpers/givpower';
+import { useFetchSubgraphDataForAllChains } from '@/hooks/useFetchSubgraphDataForAllChains';
 interface IEmptyPowerBoosting {
 	myAccount?: boolean;
 }
 
 export const EmptyPowerBoosting: FC<IEmptyPowerBoosting> = ({ myAccount }) => {
-	const values = useAppSelector(state => state.subgraph);
-	const givPower = getTotalGIVpower(values);
+	const { address } = useAccount();
+	const subgraphValues = useFetchSubgraphDataForAllChains();
+	const givPower = getTotalGIVpower(subgraphValues, address);
 	const { formatMessage } = useIntl();
 
 	return (

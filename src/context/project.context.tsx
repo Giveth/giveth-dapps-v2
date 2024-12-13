@@ -56,6 +56,7 @@ interface IProjectContext {
 	isActive: boolean;
 	isDraft: boolean;
 	isAdmin: boolean;
+	isAdminEmailVerified: boolean;
 	hasActiveQFRound: boolean;
 	totalDonationsCount: number;
 	isCancelled: boolean;
@@ -73,6 +74,7 @@ const ProjectContext = createContext<IProjectContext>({
 	isActive: true,
 	isDraft: false,
 	isAdmin: false,
+	isAdminEmailVerified: false,
 	hasActiveQFRound: false,
 	totalDonationsCount: 0,
 	isCancelled: false,
@@ -101,12 +103,16 @@ export const ProjectProvider = ({
 	const { isSignedIn, userData: user } = useAppSelector(state => state.user);
 	const dispatch = useAppDispatch();
 	const router = useRouter();
-	const slug = router.query.projectIdSlug as string;
+	const slug = (router.query.projectIdSlug as string)
+		? router.query.projectIdSlug
+		: project?.slug;
 
 	const isAdmin = compareAddresses(
 		projectData?.adminUser?.walletAddress,
 		user?.walletAddress,
 	);
+
+	const isAdminEmailVerified = !!(isAdmin && user?.isEmailVerified);
 
 	const hasActiveQFRound = hasActiveRound(projectData?.qfRounds);
 
@@ -116,7 +122,6 @@ export const ProjectProvider = ({
 			.query({
 				query: FETCH_PROJECT_BY_SLUG_SINGLE_PROJECT,
 				variables: { slug, connectedWalletUserId: Number(user?.id) },
-				fetchPolicy: 'network-only',
 			})
 			.then((res: { data: { projectBySlug: IProject } }) => {
 				const _project = res.data.projectBySlug;
@@ -129,7 +134,7 @@ export const ProjectProvider = ({
 				setIsLoading(false);
 			})
 			.catch((error: unknown) => {
-				console.log('fetchProjectBySlug error: ', error);
+				console.error('fetchProjectBySlug error: ', error);
 				captureException(error, {
 					tags: {
 						section: 'fetchProject',
@@ -215,7 +220,7 @@ export const ProjectProvider = ({
 					const _users =
 						boostingResp.data.getPowerBoosting.powerBoostings.map(
 							(boosting: IPowerBoosting) =>
-								boosting.user.walletAddress?.toLocaleLowerCase(),
+								boosting.user?.walletAddress?.toLocaleLowerCase(),
 						);
 
 					if (!_users || _users.length === 0) {
@@ -240,7 +245,7 @@ export const ProjectProvider = ({
 						const powerBoosting = _boostersData.powerBoostings[i];
 						powerBoosting.user.givpowerBalance =
 							unipoolBalancesObj[
-								powerBoosting.user.walletAddress.toLowerCase()
+								powerBoosting.user?.walletAddress.toLowerCase()
 							];
 						const _allocated = new BigNumber(
 							powerBoosting.user.givpowerBalance,
@@ -312,6 +317,7 @@ export const ProjectProvider = ({
 				isActive,
 				isDraft,
 				isAdmin,
+				isAdminEmailVerified,
 				hasActiveQFRound,
 				totalDonationsCount,
 				isCancelled,

@@ -26,6 +26,7 @@ import {
 } from '@/apollo/gql/gqlProjects';
 import {
 	EProjectSocialMediaType,
+	IAnchorContractData,
 	IProject,
 	IProjectCreation,
 	IProjectEdition,
@@ -59,6 +60,7 @@ import SocialMedias from './SocialMediaBox/SocialMedias';
 import { CreateHeader } from './CreateHeader';
 
 const ALL_CHAINS = config.CHAINS;
+export const STOP_RECURRING_SETUP_ON_CREATION = true;
 
 interface ICreateProjectProps {
 	project?: IProjectEdition;
@@ -67,6 +69,7 @@ interface ICreateProjectProps {
 const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 	const [quality, setQuality] = useState(EQualityState.LOW);
 	const [isLoading, setIsLoading] = useState(false);
+	const [isLoadingPreview, setIsLoadingPreview] = useState(false);
 	const [addedProjectState, setAddedProjectState] = useState<IProject>();
 	const [showAlloProtocolModal, setShowAlloProtocolModal] = useState(false);
 	const [addressModalChainId, setAddressModalChainId] = useState<number>();
@@ -132,6 +135,7 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 		lens: storageLens,
 		website: storageWebsite,
 		telegram: storageTelegram,
+		github: storageGithub,
 	} = storageProjectData || {};
 	const storageAddresses =
 		storageProjectData?.addresses instanceof Array
@@ -213,6 +217,10 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 				findSocialMedia(EProjectSocialMediaType.TELEGRAM)?.link ||
 				storageTelegram ||
 				'',
+			[EInputs.github]:
+				findSocialMedia(EProjectSocialMediaType.GITHUB)?.link ||
+				storageGithub ||
+				'',
 		},
 	});
 
@@ -239,6 +247,7 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 		website: watchWebsite,
 		draft: watchDraft,
 		telegram: watchTelegram,
+		github: watchGithub,
 	} = data;
 
 	useEffect(() => {
@@ -266,6 +275,7 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 		watchLens,
 		watchWebsite,
 		watchTelegram,
+		watchGithub,
 	]);
 	const hasOptimismAddress = watchAddresses.some(
 		address => config.OPTIMISM_NETWORK_NUMBER === address.networkId,
@@ -278,7 +288,6 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 	};
 
 	const onSubmit = async (formData: TInputs) => {
-		setIsLoading(true);
 		if (
 			!watchDraft &&
 			quality === EQualityState.MEDIUM &&
@@ -309,7 +318,11 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 				lens,
 				website,
 				telegram,
+				github,
 			} = formData;
+			//Only set loading to true if it is not a draft
+			setIsLoading(!draft);
+			setIsLoadingPreview(!!draft);
 
 			// Transforming the social media fields into the required structure
 			const socialMedia = [
@@ -324,6 +337,7 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 				{ type: EProjectSocialMediaType.LENS, link: lens },
 				{ type: EProjectSocialMediaType.WEBSITE, link: website },
 				{ type: EProjectSocialMediaType.TELEGRAM, link: telegram },
+				{ type: EProjectSocialMediaType.GITHUB, link: github },
 			].filter(
 				social => social.link && social.link !== '',
 			) as IProjectSocialMedia[]; // Filtering out empty links
@@ -333,8 +347,20 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 					formatMessage({ id: 'label.recipient_addresses_cant' }),
 				);
 				setIsLoading(false);
+				setIsLoadingPreview(false);
 				return;
 			}
+
+			// replace memo with undefined if it is not a stellar chain or if it is a stellar chain but memo is empty
+			addresses.forEach(address => {
+				if (
+					address.chainType !== ChainType.STELLAR ||
+					!address.memo ||
+					address.memo === ''
+				) {
+					address.memo = undefined;
+				}
+			});
 
 			const projectData: IProjectCreation = {
 				title: name,
@@ -366,6 +392,7 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 					? setAddedProjectState(addedProject.data?.createProject)
 					: setAddedProjectState(addedProject.data?.updateProject);
 				setIsLoading(false);
+				setIsLoadingPreview(false);
 			}
 
 			if (isDraft && !draft) {
@@ -380,7 +407,12 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 			if (addedProject) {
 				// Success
 
-				if (watchAlloProtocolRegistry && hasOptimismAddress && !draft) {
+				if (
+					!STOP_RECURRING_SETUP_ON_CREATION &&
+					watchAlloProtocolRegistry &&
+					hasOptimismAddress &&
+					!draft
+				) {
 					setShowAlloProtocolModal(true);
 					localStorage.removeItem(StorageLabel.CREATE_PROJECT_FORM);
 				} else {
@@ -424,7 +456,6 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 			localStorage.removeItem(StorageLabel.CREATE_PROJECT_FORM);
 		}
 	};
-
 	return (
 		<>
 			<CreateHeader
@@ -451,7 +482,6 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 						<FormProvider {...formMethods}>
 							<form
 								onSubmit={handleSubmit(onSubmit, onError)}
-								onSubmitCapture={() => setIsLoading(true)}
 								id='hook-form'
 							>
 								<NameInput
@@ -506,6 +536,7 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 									{ALL_CHAINS.map(chain => (
 										<AddressInterface
 											key={chain.id}
+											project={project as IProject}
 											networkId={chain.id}
 											chainType={
 												(chain as NonEVMChain).chainType
@@ -521,10 +552,13 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 											}}
 											isEditMode={isEditMode}
 											anchorContractData={
-												(project?.anchorContracts &&
-													project
-														?.anchorContracts[0]) ??
-												undefined
+												project?.anchorContracts?.find(
+													(
+														contract: IAnchorContractData,
+													) =>
+														contract.networkId ===
+														chain.id,
+												) ?? undefined
 											}
 										/>
 									))}
@@ -579,16 +613,16 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 											label={formatMessage({
 												id: 'label.preview',
 											})}
+											onClick={() =>
+												setValue(EInputs.draft, true)
+											}
 											buttonType='primary'
-											disabled={isLoading}
-											loading={isLoading}
+											disabled={isLoadingPreview}
+											loading={isLoadingPreview}
 											icon={
 												<IconExternalLink size={16} />
 											}
 											type='submit'
-											onClick={() =>
-												setValue(EInputs.draft, true)
-											}
 										/>
 									)}
 									{quality === EQualityState.LOW ? (

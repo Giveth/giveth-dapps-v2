@@ -42,36 +42,49 @@ export const SearchInput: FC<ISearchInputProps> = ({ setTerm, className }) => {
 		setValue(event.target.value);
 	}
 
+	function handleFormSubmit(inputValue: string) {
+		if (inputValue.length > 2) {
+			setTerm(inputValue);
+		}
+	}
+
 	const [inputRef] = useFocus();
 
 	return (
 		<SearchInputContainer className={className}>
-			<InputContainer onKeyDown={handleKeyDown}>
-				<StyledInput
-					onChange={handleOnChange}
-					as='input'
-					placeholder={formatMessage({
-						id: 'label.search_for_project',
-					})}
-					$baseTheme={theme}
-					value={value}
-					ref={inputRef}
-				/>
-				{value.length > 0 ? (
-					<IconRemoveWrapper
-						onClick={() => {
-							setValue('');
-							setTerm('');
-						}}
-					>
-						<IconX24 />
-					</IconRemoveWrapper>
-				) : (
-					<IconWrapper>
-						<IconSearch24 />
-					</IconWrapper>
-				)}
-			</InputContainer>
+			<form
+				onSubmit={e => {
+					e.preventDefault();
+					handleFormSubmit(value);
+				}}
+			>
+				<InputContainer onKeyDown={handleKeyDown}>
+					<StyledInput
+						onChange={handleOnChange}
+						as='input'
+						placeholder={formatMessage({
+							id: 'label.search_for_project',
+						})}
+						$baseTheme={theme}
+						value={value}
+						ref={inputRef}
+					/>
+					{value.length > 0 ? (
+						<IconRemoveWrapper
+							onClick={() => {
+								setValue('');
+								setTerm('');
+							}}
+						>
+							<IconX24 />
+						</IconRemoveWrapper>
+					) : (
+						<IconWrapper>
+							<IconSearch24 />
+						</IconWrapper>
+					)}
+				</InputContainer>
+			</form>
 			<HintRow $baseTheme={theme}>
 				{value.length > 0 ? (
 					value.length > 2 ? (

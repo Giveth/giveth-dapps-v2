@@ -19,6 +19,7 @@ import config, { isProduction } from '@/configuration';
 import { AddressZero } from './constants/constants';
 import { ChainType, NonEVMChain } from '@/types/config';
 import { wagmiConfig } from '@/wagmiConfigs';
+import usdtMainnetABI from '@/artifacts/usdtMainnetABI.json';
 
 declare let window: any;
 interface TransactionParams {
@@ -72,6 +73,9 @@ export const formatTxLink = (params: {
 	if (chainType === ChainType.SOLANA) {
 		return formatSolanaTxLink(txHash);
 	}
+	if (chainType === ChainType.STELLAR) {
+		return formatStellarTxLink(txHash);
+	}
 	return formatEvmTxLink(networkId, txHash);
 };
 
@@ -91,6 +95,11 @@ const formatSolanaTxLink = (txHash?: string) => {
 	}
 	// Test environment
 	return `${baseUrl}?cluster=devnet`;
+};
+
+const formatStellarTxLink = (txHash?: string) => {
+	if (!txHash) return '';
+	return `https://stellar.expert/explorer/public/tx/${txHash}`;
 };
 
 export function formatWalletLink(
@@ -209,6 +218,20 @@ export const smallFormatDate = (date: Date, locale?: string) => {
 		year: 'numeric',
 		month: 'short',
 	});
+};
+
+// format date to mm-dd-yyyy (ex: Jun-31-2021)
+export const smallDashedFormatDate = (date: Date, locale?: string) => {
+	return date
+		.toLocaleString(locale || 'en-US', {
+			day: 'numeric',
+			year: 'numeric',
+			month: 'short',
+		})
+		.split(' ')
+		.join('-')
+		.split(',')
+		.join('');
 };
 
 export const isSSRMode = typeof window === 'undefined';
@@ -353,15 +376,28 @@ async function handleErc20Transfer(
 	params: TransactionParams,
 	contractAddress: Address,
 ): Promise<Address> {
+	// 'viem' ABI contract for USDT donation fails on mainnet
+	// so we use the USDT mainnet ABI instead and put inside usdtMainnetABI.json file
+	// update for 'viem' package to fix this issue doesn't work
+	const ABItoUse =
+		contractAddress === '0xdac17f958d2ee523a2206206994597c13d831ec7'
+			? usdtMainnetABI
+			: erc20Abi;
+
 	const baseProps = {
 		address: contractAddress,
-		abi: erc20Abi,
+		abi: ABItoUse,
 	};
-	const decimals = await readContract(wagmiConfig, {
+	let decimals = await readContract(wagmiConfig, {
 		...baseProps,
 		functionName: 'decimals',
 	});
-	const value = parseUnits(params.value, decimals);
+
+	if (typeof decimals === 'bigint') {
+		decimals = Number(decimals.toString());
+	}
+
+	const value = parseUnits(params.value, decimals as number);
 	const hash = await writeContract(wagmiConfig, {
 		...baseProps,
 		functionName: 'transfer',
@@ -504,7 +540,7 @@ export const showToastError = (err: any) => {
 		type: ToastType.DANGER,
 		position: 'top-center',
 	});
-	console.log({ err });
+	console.error({ err });
 };
 
 export const calcBiggestUnitDifferenceTime = (_time: string) => {
@@ -607,7 +643,7 @@ export const getUserIPInfo = async () => {
 	return fetch('https://api.db-ip.com/v2/free/self')
 		.then(res => res.json())
 		.catch(err => {
-			console.log('getUserIp error: ', { err });
+			console.error('getUserIp error: ', { err });
 			throw err;
 		});
 };

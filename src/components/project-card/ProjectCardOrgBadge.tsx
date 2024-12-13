@@ -11,6 +11,9 @@ import {
 
 import { ORGANIZATION } from '@/lib/constants/organizations';
 import { mediaQueries } from '@/lib/constants/constants';
+import { IconWithTooltip } from '@/components/IconWithToolTip';
+import { TooltipContent } from '@/components/modals/HarvestAll.sc';
+import links from '@/lib/constants/links';
 
 interface IProjectCardOrgBadge {
 	isHover: boolean;
@@ -24,6 +27,9 @@ const setOrgImage = (org?: string) => {
 	switch (org) {
 		case ORGANIZATION.givingBlock:
 			img = '/images/thegivingblock.svg';
+			break;
+		case ORGANIZATION.endaoment:
+			img = '/images/endaoment.svg';
 			break;
 		case ORGANIZATION.change:
 			img = '/images/change.png';
@@ -47,21 +53,54 @@ const ProjectCardOrgBadge = ({
 
 	if (hideBadge) return null;
 
-	const content = (
-		<>
-			<OrganizationText>
-				{formatMessage({ id: 'label.project_by' })}:  
-			</OrganizationText>
-			<ImageContainer>
-				<Image
-					src={displayImg}
-					alt={organization as string}
-					fill={true}
-					objectFit='contain'
-				/>
-			</ImageContainer>
-		</>
-	);
+	const content =
+		organization === ORGANIZATION.endaoment ? (
+			<IconWithTooltip
+				icon={
+					<Flex gap='4px' $alignItems='center'>
+						<OrganizationText>
+							{formatMessage({ id: 'label.project_by' })}:
+						</OrganizationText>
+						<ImageContainer>
+							<Image
+								src={displayImg}
+								alt={organization as string}
+								width={100}
+								height={30}
+							/>
+						</ImageContainer>
+					</Flex>
+				}
+				direction={'bottom'}
+			>
+				<TooltipContent>
+					This project is delivered by{' '}
+					<a
+						href={links.ENDAOMENT}
+						target={'_blank'}
+						rel='noopener noreferrer'
+					>
+						Endaoment
+					</a>
+					, who handles the conversion and delivery of funds to this
+					project.
+				</TooltipContent>
+			</IconWithTooltip>
+		) : (
+			<>
+				<OrganizationText>
+					{formatMessage({ id: 'label.project_by' })}:  
+				</OrganizationText>
+				<ImageContainer>
+					<Image
+						src={displayImg}
+						alt={organization as string}
+						fill={true}
+						objectFit='contain'
+					/>
+				</ImageContainer>
+			</>
+		);
 	return (
 		<>
 			{isAbsolute ? (

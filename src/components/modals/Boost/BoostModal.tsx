@@ -1,17 +1,17 @@
 import { IconRocketInSpace32 } from '@giveth/ui-design-system';
 import { FC, useState } from 'react';
 import { useIntl } from 'react-intl';
+import { useAccount } from 'wagmi';
 import { IModal } from '@/types/common';
 import { Modal } from '../Modal';
-
 import { useModalAnimation } from '@/hooks/useModalAnimation';
 import 'rc-slider/assets/index.css';
 import { ZeroGivpowerModal } from './ZeroGivpowerModal';
 import { BoostModalContainer } from './BoostModal.sc';
 import BoostedInnerModal from './BoostedInnerModal';
 import BoostInnerModal from './BoostInnerModal';
-import { useAppSelector } from '@/features/hooks';
 import { getTotalGIVpower } from '@/helpers/givpower';
+import { useFetchSubgraphDataForAllChains } from '@/hooks/useFetchSubgraphDataForAllChains';
 
 interface IBoostModalProps extends IModal {
 	projectId: string;
@@ -28,8 +28,9 @@ const BoostModal: FC<IBoostModalProps> = ({ setShowModal, projectId }) => {
 	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
 	const [percentage, setPercentage] = useState(0);
 	const [state, setState] = useState(EBoostModalState.BOOSTING);
-	const values = useAppSelector(state => state.subgraph);
-	const givPower = getTotalGIVpower(values);
+	const { address } = useAccount();
+	const subgraphValues = useFetchSubgraphDataForAllChains();
+	const givPower = getTotalGIVpower(subgraphValues, address);
 
 	if (givPower.total.isZero()) {
 		return <ZeroGivpowerModal setShowModal={setShowModal} />;
