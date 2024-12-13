@@ -1,14 +1,4 @@
 import React from 'react';
-import {
-	celoAlfajores,
-	gnosis,
-	sepolia,
-	optimismSepolia,
-	polygon,
-	arbitrumSepolia,
-	baseSepolia,
-	polygonZkEvmCardona,
-} from 'wagmi/chains';
 import { WalletAdapterNetwork } from '@solana/wallet-adapter-base';
 import { type Chain } from 'viem';
 import {
@@ -31,6 +21,19 @@ import IconZKEVM from '@/components/Icons/ZKEVM';
 import IconArbitrum from '@/components/Icons/Arbitrum';
 import IconStellar from '@/components/Icons/Stellar';
 import { IconClassic } from '@/components/Icons/Classic';
+
+import chains from './chains';
+
+const {
+	celoAlfajores,
+	gnosis,
+	sepolia,
+	optimismSepolia,
+	polygon,
+	arbitrumSepolia,
+	baseSepolia,
+	polygonZkEvmCardona,
+} = chains;
 
 const BASE_ROUTE =
 	process.env.NEXT_PUBLIC_BASE_ROUTE ||

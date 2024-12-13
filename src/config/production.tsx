@@ -1,14 +1,3 @@
-import {
-	celo,
-	classic,
-	gnosis,
-	mainnet,
-	optimism,
-	polygon,
-	arbitrum,
-	base,
-	polygonZkEvm,
-} from '@wagmi/core/chains';
 import { WalletAdapterNetwork } from '@solana/wallet-adapter-base';
 import React from 'react';
 import { type Chain } from 'viem';
@@ -31,6 +20,20 @@ import IconSolana from '@/components/Icons/Solana';
 import IconArbitrum from '@/components/Icons/Arbitrum';
 import IconZKEVM from '@/components/Icons/ZKEVM';
 import IconStellar from '@/components/Icons/Stellar';
+
+import chains from './chains';
+
+const {
+	celo,
+	classic,
+	gnosis,
+	mainnet,
+	optimism,
+	polygon,
+	arbitrum,
+	base,
+	polygonZkEvm,
+} = chains;
 
 const GNOSIS_GIV_TOKEN_ADDRESS = '0x4f4F9b8D5B4d0Dc10506e5551B0513B61fD59e75';
 const OPTIMISM_GIV_TOKEN_ADDRESS = '0x528CDc92eAB044E1E39FE43B9514bfdAB4412B98';
