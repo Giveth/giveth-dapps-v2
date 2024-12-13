@@ -52,23 +52,25 @@ function updateBlockExplorers(chain: Chain): Chain {
 	};
 }
 
-const chains: Record<string, Chain> = {
-	celoAlfajores: updateBlockExplorers(celoAlfajores),
-	gnosis: updateBlockExplorers(gnosis),
-	goerli: updateBlockExplorers(goerli),
-	sepolia: updateBlockExplorers(sepolia),
-	optimismSepolia: updateBlockExplorers(optimismSepolia),
-	polygon: updateBlockExplorers(polygon),
-	arbitrumSepolia: updateBlockExplorers(arbitrumSepolia),
-	celo: updateBlockExplorers(celo),
-	classic: updateBlockExplorers(classic),
-	mainnet: updateBlockExplorers(mainnet),
-	optimism: updateBlockExplorers(optimism),
-	arbitrum: updateBlockExplorers(arbitrum),
-	base: updateBlockExplorers(base),
-	baseSepolia: updateBlockExplorers(baseSepolia),
-	polygonZkEvm: updateBlockExplorers(polygonZkEvm),
-	polygonZkEvmCardona: updateBlockExplorers(polygonZkEvmCardona),
-};
+const chains: Record<string, Chain> = Object.fromEntries(
+	Object.entries({
+		celoAlfajores,
+		gnosis,
+		goerli,
+		sepolia,
+		optimismSepolia,
+		polygon,
+		arbitrumSepolia,
+		celo,
+		classic,
+		mainnet,
+		optimism,
+		arbitrum,
+		base,
+		baseSepolia,
+		polygonZkEvm,
+		polygonZkEvmCardona,
+	}).map(([key, chain]) => [key, updateBlockExplorers(chain)]),
+);
 
 export default chains;
