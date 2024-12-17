@@ -163,8 +163,8 @@ export const RecurringDonationCard = () => {
 		tokenStreams[selectedRecurringToken?.token.id.toLowerCase() || ''];
 
 	const anchorContractAddress = useMemo(
-		() => findAnchorContractAddress(project.anchorContracts),
-		[project.anchorContracts],
+		() => findAnchorContractAddress(project.anchorContracts, chain?.id),
+		[project.anchorContracts, chain?.id],
 	);
 
 	// otherStreamsPerSec is the total flow rate of all streams except the one to the project

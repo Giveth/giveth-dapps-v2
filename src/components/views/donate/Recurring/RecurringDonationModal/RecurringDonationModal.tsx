@@ -190,6 +190,7 @@ const RecurringDonationInnerModal: FC<IRecurringDonationInnerModalProps> = ({
 			setStep(EDonationSteps.DONATING);
 			const projectAnchorContract = findAnchorContractAddress(
 				project?.anchorContracts,
+				recurringNetworkID,
 			);
 			if (!projectAnchorContract) {
 				throw new Error('Project anchor address not found');

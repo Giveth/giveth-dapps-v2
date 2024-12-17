@@ -51,7 +51,7 @@ export const UpdateStreamInnerModal: FC<IModifyStreamInnerModalProps> = ({
 	const [tx, setTx] = useState('');
 	const { formatMessage } = useIntl();
 	const tokenPrice = useTokenPrice(token);
-	const { address } = useAccount();
+	const { address, chain } = useAccount();
 	const { refetchTokenStream } = useProfileDonateTabData();
 
 	const onDonate = async () => {
@@ -60,6 +60,7 @@ export const UpdateStreamInnerModal: FC<IModifyStreamInnerModalProps> = ({
 			await ensureCorrectNetwork(config.OPTIMISM_NETWORK_NUMBER);
 			const projectAnchorContract = findAnchorContractAddress(
 				donation.project.anchorContracts,
+				chain?.id,
 			);
 			if (!projectAnchorContract) {
 				throw new Error('Project anchor address not found');

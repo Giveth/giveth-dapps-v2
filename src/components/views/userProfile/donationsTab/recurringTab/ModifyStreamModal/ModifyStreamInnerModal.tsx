@@ -62,7 +62,7 @@ export const ModifyStreamInnerModal: FC<IModifyStreamInnerModalProps> = ({
 		otherStreamsTotalFlowRate: 0n,
 	});
 	const { formatMessage } = useIntl();
-	const { address } = useAccount();
+	const { address, chain } = useAccount();
 
 	// Get the balance of the super token
 	const { data: balance } = useBalance({
@@ -117,6 +117,7 @@ export const ModifyStreamInnerModal: FC<IModifyStreamInnerModalProps> = ({
 		};
 		const anchorContractAddress = findAnchorContractAddress(
 			donation.project.anchorContracts,
+			chain?.id,
 		);
 		for (let i = 0; i < tokenStream.length; i++) {
 			const ts = tokenStream[i];

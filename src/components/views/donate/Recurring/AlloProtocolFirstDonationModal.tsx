@@ -64,62 +64,66 @@ const AlloProtocolFirstDonationModal: FC<IAlloProtocolModal> = ({
 		: false;
 
 	const handleButtonClick = async () => {
-		if (!isOnOptimism) {
-			switchChain?.({ chainId: config.OPTIMISM_NETWORK_NUMBER });
-		} else {
-			try {
-				setIsLoading(true);
-				if (
-					!project?.adminUser?.walletAddress ||
-					!isAddress(project?.adminUser?.walletAddress)
-				) {
-					throw new Error('Invalid Project Admin Address');
-				}
-				const hash = await writeContract(wagmiConfig, {
-					address: config.OPTIMISM_CONFIG.anchorRegistryAddress,
-					functionName: 'createProfile',
-					abi: createProfileABI.abi,
-					chainId: config.OPTIMISM_NETWORK_NUMBER,
-					args: [
-						generateRandomNonce(), //nonce
-						project?.id!,
-						{
-							protocol: 1,
-							pointer: '',
-						},
-						project?.adminUser?.walletAddress, //admin user wallet address
-						[],
-					],
-				});
-				setTxResult(hash);
-				if (hash) {
-					const data = await waitForTransactionReceipt(wagmiConfig, {
-						hash: hash,
-						chainId: config.OPTIMISM_NETWORK_NUMBER,
-					});
-
-					const contractAddress = extractContractAddressFromString(
-						data.logs[0].data,
-					);
-					//Call backend to update project
-					await client.mutate({
-						mutation: CREATE_ANCHOR_CONTRACT_ADDRESS_QUERY,
-						variables: {
-							projectId: Number(project.id),
-							networkId: config.OPTIMISM_NETWORK_NUMBER,
-							address: contractAddress,
-							txHash: hash,
-						},
-					});
-					await fetchProject();
-					onModalCompletion();
-				}
-				setShowModal(false); // Close the modal
-			} catch (error) {
-				showToastError(error);
-			} finally {
-				setIsLoading(false);
+		try {
+			setIsLoading(true);
+			if (
+				!project?.adminUser?.walletAddress ||
+				!isAddress(project?.adminUser?.walletAddress)
+			) {
+				throw new Error('Invalid Project Admin Address');
 			}
+			const hash = await writeContract(wagmiConfig, {
+				address: isOnOptimism
+					? config.OPTIMISM_CONFIG.anchorRegistryAddress
+					: config.BASE_CONFIG.anchorRegistryAddress,
+				functionName: 'createProfile',
+				abi: createProfileABI.abi,
+				chainId: isOnOptimism
+					? config.OPTIMISM_NETWORK_NUMBER
+					: config.BASE_NETWORK_NUMBER,
+				args: [
+					generateRandomNonce(), //nonce
+					project?.id!,
+					{
+						protocol: 1,
+						pointer: '',
+					},
+					project?.adminUser?.walletAddress, //admin user wallet address
+					[],
+				],
+			});
+			setTxResult(hash);
+			if (hash) {
+				const data = await waitForTransactionReceipt(wagmiConfig, {
+					hash: hash,
+					chainId: isOnOptimism
+						? config.OPTIMISM_NETWORK_NUMBER
+						: config.BASE_NETWORK_NUMBER,
+				});
+
+				const contractAddress = extractContractAddressFromString(
+					data.logs[0].data,
+				);
+				//Call backend to update project
+				await client.mutate({
+					mutation: CREATE_ANCHOR_CONTRACT_ADDRESS_QUERY,
+					variables: {
+						projectId: Number(project.id),
+						networkId: isOnOptimism
+							? config.OPTIMISM_NETWORK_NUMBER
+							: config.BASE_NETWORK_NUMBER,
+						address: contractAddress,
+						txHash: hash,
+					},
+				});
+				await fetchProject();
+				onModalCompletion();
+			}
+			setShowModal(false); // Close the modal
+		} catch (error) {
+			showToastError(error);
+		} finally {
+			setIsLoading(false);
 		}
 	};
 
