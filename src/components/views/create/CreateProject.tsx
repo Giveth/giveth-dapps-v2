@@ -26,6 +26,7 @@ import {
 } from '@/apollo/gql/gqlProjects';
 import {
 	EProjectSocialMediaType,
+	IAnchorContractData,
 	IProject,
 	IProjectCreation,
 	IProjectEdition,
@@ -59,6 +60,7 @@ import SocialMedias from './SocialMediaBox/SocialMedias';
 import { CreateHeader } from './CreateHeader';
 
 const ALL_CHAINS = config.CHAINS;
+export const STOP_RECURRING_SETUP_ON_CREATION = true;
 
 interface ICreateProjectProps {
 	project?: IProjectEdition;
@@ -405,7 +407,12 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 			if (addedProject) {
 				// Success
 
-				if (watchAlloProtocolRegistry && hasOptimismAddress && !draft) {
+				if (
+					!STOP_RECURRING_SETUP_ON_CREATION &&
+					watchAlloProtocolRegistry &&
+					hasOptimismAddress &&
+					!draft
+				) {
 					setShowAlloProtocolModal(true);
 					localStorage.removeItem(StorageLabel.CREATE_PROJECT_FORM);
 				} else {
@@ -449,7 +456,6 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 			localStorage.removeItem(StorageLabel.CREATE_PROJECT_FORM);
 		}
 	};
-
 	return (
 		<>
 			<CreateHeader
@@ -530,6 +536,7 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 									{ALL_CHAINS.map(chain => (
 										<AddressInterface
 											key={chain.id}
+											project={project as IProject}
 											networkId={chain.id}
 											chainType={
 												(chain as NonEVMChain).chainType
@@ -545,10 +552,13 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 											}}
 											isEditMode={isEditMode}
 											anchorContractData={
-												(project?.anchorContracts &&
-													project
-														?.anchorContracts[0]) ??
-												undefined
+												project?.anchorContracts?.find(
+													(
+														contract: IAnchorContractData,
+													) =>
+														contract.networkId ===
+														chain.id,
+												) ?? undefined
 											}
 										/>
 									))}

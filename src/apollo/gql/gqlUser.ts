@@ -154,6 +154,7 @@ export const FETCH_USER_RECURRING_DONATIONS = gql`
 					anchorContracts {
 						address
 						isActive
+						networkId
 					}
 				}
 				finished

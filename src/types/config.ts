@@ -174,6 +174,7 @@ export interface OptimismNetworkConfig extends NetworkConfig {
 
 export interface BaseNetworkConfig extends NetworkConfig {
 	SUPER_FLUID_TOKENS: Array<ISuperToken>;
+	anchorRegistryAddress: Address;
 }
 
 interface MicroservicesConfig {
