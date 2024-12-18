@@ -602,6 +602,11 @@ const config: EnvConfig = {
 		subgraphAddress: '',
 		coingeckoChainName: 'base',
 		chainLogo: (logoSize = 24) => <IconBase size={logoSize} />,
+		GIVETH_ANCHOR_CONTRACT_ADDRESS:
+			'0x5430757bc19c87ec562e4660e56af6cac324b50a',
+		superFluidSubgraph:
+			process.env.NEXT_PUBLIC_SUBGRAPH_SUPER_FLUID ||
+			'https://subgraph-endpoints.superfluid.dev/optimism-mainnet/protocol-v1',
 		SUPER_FLUID_TOKENS: [
 			{
 				underlyingToken: {
