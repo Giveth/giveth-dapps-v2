@@ -63,6 +63,8 @@ const AlloProtocolFirstDonationModal: FC<IAlloProtocolModal> = ({
 		? chain.id === config.OPTIMISM_NETWORK_NUMBER
 		: false;
 
+	const isOnBase = chain ? chain.id === config.BASE_NETWORK_NUMBER : false;
+
 	const handleButtonClick = async () => {
 		try {
 			setIsLoading(true);
@@ -127,6 +129,8 @@ const AlloProtocolFirstDonationModal: FC<IAlloProtocolModal> = ({
 		}
 	};
 
+	const thereTitle = isOnOptimism ? 'Optimism' : isOnBase ? 'Base' : '';
+
 	return (
 		<Modal
 			closeModal={updatedCloseModal}
@@ -148,20 +152,14 @@ const AlloProtocolFirstDonationModal: FC<IAlloProtocolModal> = ({
 						id: 'label.there_will_be_one_extra_transaction_you_need_to_sign_to',
 					})}{' '}
 					<span style={{ whiteSpace: 'nowrap', display: 'inline' }}>
-						Optimism
+						{thereTitle}
 					</span>
 					.
 				</P>
 				<Ellipse />
 				<br />
 				<CustomButton
-					label={
-						isOnOptimism
-							? formatMessage({ id: 'label.confirm' })
-							: `${formatMessage({
-									id: 'label.switch_to',
-								})} Optimism`
-					}
+					label={formatMessage({ id: 'label.confirm' })}
 					onClick={handleButtonClick}
 					loading={isLoading}
 					disabled={isLoading}

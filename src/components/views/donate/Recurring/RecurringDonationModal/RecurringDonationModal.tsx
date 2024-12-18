@@ -42,6 +42,7 @@ import { getEthersProvider, getEthersSigner } from '@/helpers/ethers';
 import { ERecurringDonationStatus } from '@/apollo/types/types';
 import { findAnchorContractAddress } from '@/helpers/superfluid';
 import { ensureCorrectNetwork } from '@/helpers/network';
+
 interface IRecurringDonationModalProps extends IModal {
 	donationToGiveth: number;
 	amount: bigint;
@@ -319,7 +320,9 @@ const RecurringDonationInnerModal: FC<IRecurringDonationInnerModalProps> = ({
 			let givethFlowRate = 0n;
 			if (isDonatingToGiveth) {
 				const givethAnchorContract =
-					config.OPTIMISM_CONFIG.GIVETH_ANCHOR_CONTRACT_ADDRESS;
+					recurringNetworkID === config.OPTIMISM_NETWORK_NUMBER
+						? config.OPTIMISM_CONFIG.GIVETH_ANCHOR_CONTRACT_ADDRESS
+						: config.BASE_CONFIG.GIVETH_ANCHOR_CONTRACT_ADDRESS;
 
 				if (!givethAnchorContract) {
 					throw new Error('Giveth wallet address not found');
@@ -337,6 +340,7 @@ const RecurringDonationInnerModal: FC<IRecurringDonationInnerModalProps> = ({
 					_superToken,
 				);
 
+				// Update Giveth stream if it exists
 				if (givethOldStream) {
 					givethFlowRate =
 						_newFlowRate + BigInt(givethOldStream.currentFlowRate);
@@ -348,6 +352,7 @@ const RecurringDonationInnerModal: FC<IRecurringDonationInnerModalProps> = ({
 					});
 					operations.push(givethFlowOp);
 				} else {
+					// Create Giveth stream if it doesn't exist
 					givethFlowRate = _newFlowRate;
 					const givethFlowOp = superToken.createFlow({
 						sender: address,
