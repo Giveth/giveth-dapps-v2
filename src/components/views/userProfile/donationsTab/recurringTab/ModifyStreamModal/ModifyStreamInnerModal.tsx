@@ -43,6 +43,7 @@ interface IModifyStreamInnerModalProps extends IModifyStreamModalProps {
 	superToken: IToken;
 	tokenStreams: ITokenStreams;
 	setModifyInfo: Dispatch<SetStateAction<IModifyDonationInfo | undefined>>;
+	recurringNetworkId: number;
 }
 
 interface IGeneralInfo {
@@ -56,13 +57,14 @@ export const ModifyStreamInnerModal: FC<IModifyStreamInnerModalProps> = ({
 	setStep,
 	tokenStreams,
 	setModifyInfo,
+	recurringNetworkId,
 }) => {
 	const [percentage, setPercentage] = useState(0);
 	const [info, setInfo] = useState<IGeneralInfo>({
 		otherStreamsTotalFlowRate: 0n,
 	});
 	const { formatMessage } = useIntl();
-	const { address, chain } = useAccount();
+	const { address } = useAccount();
 
 	// Get the balance of the super token
 	const { data: balance } = useBalance({
@@ -117,7 +119,7 @@ export const ModifyStreamInnerModal: FC<IModifyStreamInnerModalProps> = ({
 		};
 		const anchorContractAddress = findAnchorContractAddress(
 			donation.project.anchorContracts,
-			chain?.id,
+			recurringNetworkId,
 		);
 		for (let i = 0; i < tokenStream.length; i++) {
 			const ts = tokenStream[i];

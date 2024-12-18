@@ -10,7 +10,7 @@ import { Item } from '@/components/views/donate/Recurring/RecurringDonationModal
 import { IToken } from '@/types/superFluid';
 import { RunOutInfo } from '@/components/views/donate/Recurring/RunOutInfo';
 import { useTokenPrice } from '@/hooks/useTokenPrice';
-import config, { isProduction } from '@/configuration';
+import { isProduction } from '@/configuration';
 import { getEthersProvider, getEthersSigner } from '@/helpers/ethers';
 import { ONE_MONTH_SECONDS } from '@/lib/constants/constants';
 import { showToastError } from '@/lib/helpers';
@@ -36,6 +36,7 @@ interface IModifyStreamInnerModalProps extends IModifyStreamModalProps {
 	flowRatePerMonth: bigint;
 	streamFlowRatePerMonth: bigint;
 	closeModal: () => void;
+	recurringNetworkId: number;
 }
 
 export const UpdateStreamInnerModal: FC<IModifyStreamInnerModalProps> = ({
@@ -47,20 +48,21 @@ export const UpdateStreamInnerModal: FC<IModifyStreamInnerModalProps> = ({
 	flowRatePerMonth,
 	streamFlowRatePerMonth,
 	closeModal,
+	recurringNetworkId,
 }) => {
 	const [tx, setTx] = useState('');
 	const { formatMessage } = useIntl();
 	const tokenPrice = useTokenPrice(token);
-	const { address, chain } = useAccount();
+	const { address } = useAccount();
 	const { refetchTokenStream } = useProfileDonateTabData();
 
 	const onDonate = async () => {
 		setStep(EDonationSteps.DONATING);
 		try {
-			await ensureCorrectNetwork(config.OPTIMISM_NETWORK_NUMBER);
+			await ensureCorrectNetwork(recurringNetworkId);
 			const projectAnchorContract = findAnchorContractAddress(
 				donation.project.anchorContracts,
-				chain?.id,
+				recurringNetworkId,
 			);
 			if (!projectAnchorContract) {
 				throw new Error('Project anchor address not found');
@@ -75,7 +77,7 @@ export const UpdateStreamInnerModal: FC<IModifyStreamInnerModalProps> = ({
 				throw new Error('Provider or signer not found');
 
 			const _options = {
-				chainId: config.OPTIMISM_CONFIG.id,
+				chainId: recurringNetworkId,
 				provider: provider,
 				resolverAddress: isProduction
 					? undefined
@@ -105,7 +107,7 @@ export const UpdateStreamInnerModal: FC<IModifyStreamInnerModalProps> = ({
 				recurringDonationId: donation.id,
 				projectId: +donation.project.id,
 				anonymous: donation.anonymous,
-				chainId: config.OPTIMISM_NETWORK_NUMBER,
+				chainId: recurringNetworkId,
 				flowRate: _flowRatePerSec,
 				superToken: token,
 				isForUpdate: true,
@@ -119,7 +121,8 @@ export const UpdateStreamInnerModal: FC<IModifyStreamInnerModalProps> = ({
 			setTx(tx.hash);
 
 			let projectDonationId = 0;
-			// saving project donation to backend
+
+			// Saving project donation to backend
 			try {
 				const projectDonationInfo = {
 					...projectDraftDonationInfo,

@@ -219,7 +219,7 @@ const ClaimWithdrawalModal = ({
 						<CustomLink
 							href={formatTxLink({
 								txHash,
-								networkId: config.OPTIMISM_NETWORK_NUMBER,
+								networkId: recurringNetworkID,
 								chainType: ChainType.EVM,
 							})}
 							target='_blank'
