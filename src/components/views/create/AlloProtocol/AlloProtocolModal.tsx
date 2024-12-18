@@ -122,64 +122,70 @@ const AlloProtocolModal: FC<IAlloProtocolModal> = ({
 		? chain.id === config.OPTIMISM_NETWORK_NUMBER
 		: false;
 
-	const handleButtonClick = async () => {
-		if (!isOnOptimism) {
-			switchChain?.({ chainId: config.OPTIMISM_NETWORK_NUMBER });
-		} else {
-			try {
-				setIsLoading(true);
-				const hash = await writeContract(wagmiConfig, {
-					address: config.OPTIMISM_CONFIG.anchorRegistryAddress,
-					functionName: 'createProfile',
-					abi: createProfileABI.abi,
-					chainId: config.OPTIMISM_NETWORK_NUMBER,
-					args: [
-						generateRandomNonce(), //nonce
-						addedProjectState?.id!,
-						{
-							protocol: 1,
-							pointer: '',
-						},
-						addedProjectState?.adminUser?.walletAddress, //admin user wallet address
-						[],
-					],
-				});
-				setTxResult(hash);
-				if (hash) {
-					const data = await waitForTransactionReceipt(wagmiConfig, {
-						hash: hash,
-						chainId: config.OPTIMISM_NETWORK_NUMBER,
-					});
+	const isOnBase = chain ? chain.id === config.BASE_NETWORK_NUMBER : false;
 
-					const contractAddress = extractContractAddressFromString(
-						data.logs[0].data,
+	const handleButtonClick = async () => {
+		try {
+			setIsLoading(true);
+			const hash = await writeContract(wagmiConfig, {
+				address: isOnOptimism
+					? config.OPTIMISM_CONFIG.anchorRegistryAddress
+					: config.BASE_CONFIG.anchorRegistryAddress,
+				functionName: 'createProfile',
+				abi: createProfileABI.abi,
+				chainId: isOnOptimism
+					? config.OPTIMISM_NETWORK_NUMBER
+					: config.BASE_NETWORK_NUMBER,
+				args: [
+					generateRandomNonce(), //nonce
+					addedProjectState?.id!,
+					{
+						protocol: 1,
+						pointer: '',
+					},
+					addedProjectState?.adminUser?.walletAddress, //admin user wallet address
+					[],
+				],
+			});
+			setTxResult(hash);
+			if (hash) {
+				const data = await waitForTransactionReceipt(wagmiConfig, {
+					hash: hash,
+					chainId: isOnOptimism
+						? config.OPTIMISM_NETWORK_NUMBER
+						: config.BASE_NETWORK_NUMBER,
+				});
+
+				const contractAddress = extractContractAddressFromString(
+					data.logs[0].data,
+				);
+				//Call backend to update project
+				await client.mutate({
+					mutation: CREATE_ANCHOR_CONTRACT_ADDRESS_QUERY,
+					variables: {
+						projectId: Number(addedProjectState.id),
+						networkId: isOnOptimism
+							? config.OPTIMISM_NETWORK_NUMBER
+							: config.BASE_NETWORK_NUMBER,
+						address: contractAddress,
+						txHash: hash,
+					},
+				});
+				if (!isEditMode || (isEditMode && isDraft)) {
+					await router.push(
+						slugToSuccessView(addedProjectState.slug),
 					);
-					//Call backend to update project
-					await client.mutate({
-						mutation: CREATE_ANCHOR_CONTRACT_ADDRESS_QUERY,
-						variables: {
-							projectId: Number(addedProjectState.id),
-							networkId: config.OPTIMISM_NETWORK_NUMBER,
-							address: contractAddress,
-							txHash: hash,
-						},
-					});
-					if (!isEditMode || (isEditMode && isDraft)) {
-						await router.push(
-							slugToSuccessView(addedProjectState.slug),
-						);
-					} else {
-						await router.push(
-							slugToProjectView(addedProjectState.slug),
-						);
-					}
+				} else {
+					await router.push(
+						slugToProjectView(addedProjectState.slug),
+					);
 				}
-				setShowModal(false); // Close the modal
-			} catch (error) {
-				console.error('Error Contract', error);
-			} finally {
-				setIsLoading(false);
 			}
+			setShowModal(false); // Close the modal
+		} catch (error) {
+			console.error('Error Contract', error);
+		} finally {
+			setIsLoading(false);
 		}
 	};
 

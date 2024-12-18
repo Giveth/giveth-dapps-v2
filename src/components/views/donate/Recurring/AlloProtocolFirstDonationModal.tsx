@@ -63,65 +63,73 @@ const AlloProtocolFirstDonationModal: FC<IAlloProtocolModal> = ({
 		? chain.id === config.OPTIMISM_NETWORK_NUMBER
 		: false;
 
-	const handleButtonClick = async () => {
-		if (!isOnOptimism) {
-			switchChain?.({ chainId: config.OPTIMISM_NETWORK_NUMBER });
-		} else {
-			try {
-				setIsLoading(true);
-				if (
-					!project?.adminUser?.walletAddress ||
-					!isAddress(project?.adminUser?.walletAddress)
-				) {
-					throw new Error('Invalid Project Admin Address');
-				}
-				const hash = await writeContract(wagmiConfig, {
-					address: config.OPTIMISM_CONFIG.anchorRegistryAddress,
-					functionName: 'createProfile',
-					abi: createProfileABI.abi,
-					chainId: config.OPTIMISM_NETWORK_NUMBER,
-					args: [
-						generateRandomNonce(), //nonce
-						project?.id!,
-						{
-							protocol: 1,
-							pointer: '',
-						},
-						project?.adminUser?.walletAddress, //admin user wallet address
-						[],
-					],
-				});
-				setTxResult(hash);
-				if (hash) {
-					const data = await waitForTransactionReceipt(wagmiConfig, {
-						hash: hash,
-						chainId: config.OPTIMISM_NETWORK_NUMBER,
-					});
+	const isOnBase = chain ? chain.id === config.BASE_NETWORK_NUMBER : false;
 
-					const contractAddress = extractContractAddressFromString(
-						data.logs[0].data,
-					);
-					//Call backend to update project
-					await client.mutate({
-						mutation: CREATE_ANCHOR_CONTRACT_ADDRESS_QUERY,
-						variables: {
-							projectId: Number(project.id),
-							networkId: config.OPTIMISM_NETWORK_NUMBER,
-							address: contractAddress,
-							txHash: hash,
-						},
-					});
-					await fetchProject();
-					onModalCompletion();
-				}
-				setShowModal(false); // Close the modal
-			} catch (error) {
-				showToastError(error);
-			} finally {
-				setIsLoading(false);
+	const handleButtonClick = async () => {
+		try {
+			setIsLoading(true);
+			if (
+				!project?.adminUser?.walletAddress ||
+				!isAddress(project?.adminUser?.walletAddress)
+			) {
+				throw new Error('Invalid Project Admin Address');
 			}
+			const hash = await writeContract(wagmiConfig, {
+				address: isOnOptimism
+					? config.OPTIMISM_CONFIG.anchorRegistryAddress
+					: config.BASE_CONFIG.anchorRegistryAddress,
+				functionName: 'createProfile',
+				abi: createProfileABI.abi,
+				chainId: isOnOptimism
+					? config.OPTIMISM_NETWORK_NUMBER
+					: config.BASE_NETWORK_NUMBER,
+				args: [
+					generateRandomNonce(), //nonce
+					project?.id!,
+					{
+						protocol: 1,
+						pointer: '',
+					},
+					project?.adminUser?.walletAddress, //admin user wallet address
+					[],
+				],
+			});
+			setTxResult(hash);
+			if (hash) {
+				const data = await waitForTransactionReceipt(wagmiConfig, {
+					hash: hash,
+					chainId: isOnOptimism
+						? config.OPTIMISM_NETWORK_NUMBER
+						: config.BASE_NETWORK_NUMBER,
+				});
+
+				const contractAddress = extractContractAddressFromString(
+					data.logs[0].data,
+				);
+				//Call backend to update project
+				await client.mutate({
+					mutation: CREATE_ANCHOR_CONTRACT_ADDRESS_QUERY,
+					variables: {
+						projectId: Number(project.id),
+						networkId: isOnOptimism
+							? config.OPTIMISM_NETWORK_NUMBER
+							: config.BASE_NETWORK_NUMBER,
+						address: contractAddress,
+						txHash: hash,
+					},
+				});
+				await fetchProject();
+				onModalCompletion();
+			}
+			setShowModal(false); // Close the modal
+		} catch (error) {
+			showToastError(error);
+		} finally {
+			setIsLoading(false);
 		}
 	};
+
+	const thereTitle = isOnOptimism ? 'Optimism' : isOnBase ? 'Base' : '';
 
 	return (
 		<Modal
@@ -144,20 +152,14 @@ const AlloProtocolFirstDonationModal: FC<IAlloProtocolModal> = ({
 						id: 'label.there_will_be_one_extra_transaction_you_need_to_sign_to',
 					})}{' '}
 					<span style={{ whiteSpace: 'nowrap', display: 'inline' }}>
-						Optimism
+						{thereTitle}
 					</span>
 					.
 				</P>
 				<Ellipse />
 				<br />
 				<CustomButton
-					label={
-						isOnOptimism
-							? formatMessage({ id: 'label.confirm' })
-							: `${formatMessage({
-									id: 'label.switch_to',
-								})} Optimism`
-					}
+					label={formatMessage({ id: 'label.confirm' })}
 					onClick={handleButtonClick}
 					loading={isLoading}
 					disabled={isLoading}

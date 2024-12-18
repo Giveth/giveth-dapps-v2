@@ -24,6 +24,7 @@ import config, { isProduction } from '@/configuration';
 import {
 	findSuperTokenByTokenAddress,
 	findUserActiveStreamOnSelectedToken,
+	checkIfRecurringFlowExist,
 } from '@/helpers/donate';
 import { ONE_MONTH_SECONDS } from '@/lib/constants/constants';
 import { RunOutInfo } from '../RunOutInfo';
@@ -41,6 +42,7 @@ import { getEthersProvider, getEthersSigner } from '@/helpers/ethers';
 import { ERecurringDonationStatus } from '@/apollo/types/types';
 import { findAnchorContractAddress } from '@/helpers/superfluid';
 import { ensureCorrectNetwork } from '@/helpers/network';
+
 interface IRecurringDonationModalProps extends IModal {
 	donationToGiveth: number;
 	amount: bigint;
@@ -132,7 +134,8 @@ const RecurringDonationInnerModal: FC<IRecurringDonationInnerModalProps> = ({
 		tokenStreams,
 		setSuccessDonation,
 	} = useDonateData();
-	const { address } = useAccount();
+	const { address, chain } = useAccount();
+	const recurringNetworkID = chain?.id ?? 0;
 	const tokenPrice = useTokenPrice(selectedRecurringToken?.token);
 	const isSafeEnv = useIsSafeEnvironment();
 	const { formatMessage } = useIntl();
@@ -149,7 +152,7 @@ const RecurringDonationInnerModal: FC<IRecurringDonationInnerModalProps> = ({
 
 	const onApprove = async () => {
 		try {
-			await ensureCorrectNetwork(config.OPTIMISM_NETWORK_NUMBER);
+			await ensureCorrectNetwork(recurringNetworkID);
 			console.log(
 				'amount',
 				formatUnits(
@@ -161,6 +164,7 @@ const RecurringDonationInnerModal: FC<IRecurringDonationInnerModalProps> = ({
 			if (!address || !selectedRecurringToken) return;
 			const superToken = findSuperTokenByTokenAddress(
 				selectedRecurringToken.token.id,
+				recurringNetworkID,
 			);
 			if (!superToken) throw new Error('SuperToken not found');
 			const approve = await approveERC20tokenTransfer(
@@ -168,7 +172,7 @@ const RecurringDonationInnerModal: FC<IRecurringDonationInnerModalProps> = ({
 				address,
 				superToken.id, //superTokenAddress
 				selectedRecurringToken?.token.id, //tokenAddress
-				config.OPTIMISM_CONFIG.id,
+				recurringNetworkID,
 				isSafeEnv,
 			);
 			if (approve) {
@@ -183,10 +187,11 @@ const RecurringDonationInnerModal: FC<IRecurringDonationInnerModalProps> = ({
 
 	const onDonate = async () => {
 		try {
-			await ensureCorrectNetwork(config.OPTIMISM_NETWORK_NUMBER);
+			await ensureCorrectNetwork(recurringNetworkID);
 			setStep(EDonationSteps.DONATING);
 			const projectAnchorContract = findAnchorContractAddress(
 				project?.anchorContracts,
+				recurringNetworkID,
 			);
 			if (!projectAnchorContract) {
 				throw new Error('Project anchor address not found');
@@ -201,7 +206,10 @@ const RecurringDonationInnerModal: FC<IRecurringDonationInnerModalProps> = ({
 				throw new Error('Provider or signer not found');
 			let _superToken = selectedRecurringToken.token;
 			if (!_superToken.isSuperToken) {
-				const sp = findSuperTokenByTokenAddress(_superToken.id);
+				const sp = findSuperTokenByTokenAddress(
+					_superToken.id,
+					recurringNetworkID,
+				);
 				if (!sp) {
 					throw new Error('Super token not found');
 				} else {
@@ -210,7 +218,7 @@ const RecurringDonationInnerModal: FC<IRecurringDonationInnerModalProps> = ({
 			}
 
 			const _options = {
-				chainId: config.OPTIMISM_CONFIG.id,
+				chainId: recurringNetworkID,
 				provider: provider,
 				resolverAddress: isProduction
 					? undefined
@@ -250,13 +258,30 @@ const RecurringDonationInnerModal: FC<IRecurringDonationInnerModalProps> = ({
 					.toBigInt();
 			}
 
+			// isUpdating is local variable to check if we are updating/modifying the flow
+			let willUpdateFlow = isUpdating;
+
+			// if isUpdating is false we need to check if there is an existing flow in the network
+			if (willUpdateFlow === false) {
+				const existingFlow = await checkIfRecurringFlowExist(
+					sf,
+					_superToken.id,
+					address,
+					projectAnchorContract,
+					signer,
+				);
+				if (existingFlow.exists && existingFlow.flowRate !== '0') {
+					willUpdateFlow = true;
+				}
+			}
+
 			// Upgrade the token to super token
-			if (!isUpdating && !selectedRecurringToken.token.isSuperToken) {
+			if (!willUpdateFlow && !selectedRecurringToken.token.isSuperToken) {
 				const upgradeOperation = await superToken.upgrade({
 					amount: newAmount.toString(),
 				});
 
-				//Upgrading ETHx is a special case and can't be batched
+				// Upgrading ETHx is a special case and can't be batched
 				if (_superToken.symbol === 'ETHx') {
 					await upgradeOperation.exec(signer);
 				} else {
@@ -279,23 +304,25 @@ const RecurringDonationInnerModal: FC<IRecurringDonationInnerModalProps> = ({
 				flowRate: _flowRate.toString(),
 			};
 
-			let projectFlowOp = isUpdating
+			let projectFlowOp = willUpdateFlow
 				? superToken.updateFlow(options)
 				: superToken.createFlow(options);
 
 			operations.push(projectFlowOp);
-			const isDonatingToGiveth = !isUpdating && donationToGiveth > 0;
+			const isDonatingToGiveth = !willUpdateFlow && donationToGiveth > 0;
 			console.log(
 				'isDonatingToGiveth',
 				isDonatingToGiveth,
-				isUpdating,
+				willUpdateFlow,
 				donationToGiveth > 0,
 			);
 			let givethOldStream;
 			let givethFlowRate = 0n;
 			if (isDonatingToGiveth) {
 				const givethAnchorContract =
-					config.OPTIMISM_CONFIG.GIVETH_ANCHOR_CONTRACT_ADDRESS;
+					recurringNetworkID === config.OPTIMISM_NETWORK_NUMBER
+						? config.OPTIMISM_CONFIG.GIVETH_ANCHOR_CONTRACT_ADDRESS
+						: config.BASE_CONFIG.GIVETH_ANCHOR_CONTRACT_ADDRESS;
 
 				if (!givethAnchorContract) {
 					throw new Error('Giveth wallet address not found');
@@ -313,6 +340,7 @@ const RecurringDonationInnerModal: FC<IRecurringDonationInnerModalProps> = ({
 					_superToken,
 				);
 
+				// Update Giveth stream if it exists
 				if (givethOldStream) {
 					givethFlowRate =
 						_newFlowRate + BigInt(givethOldStream.currentFlowRate);
@@ -324,6 +352,7 @@ const RecurringDonationInnerModal: FC<IRecurringDonationInnerModalProps> = ({
 					});
 					operations.push(givethFlowOp);
 				} else {
+					// Create Giveth stream if it doesn't exist
 					givethFlowRate = _newFlowRate;
 					const givethFlowOp = superToken.createFlow({
 						sender: address,
@@ -340,11 +369,11 @@ const RecurringDonationInnerModal: FC<IRecurringDonationInnerModalProps> = ({
 			const projectDraftDonationInfo: ICreateDraftRecurringDonation = {
 				projectId: +project.id,
 				anonymous,
-				chainId: config.OPTIMISM_NETWORK_NUMBER,
+				chainId: recurringNetworkID,
 				flowRate: _flowRate,
 				superToken: _superToken,
 				isBatch,
-				isForUpdate: isUpdating,
+				isForUpdate: willUpdateFlow,
 			};
 
 			// Save Draft Donation
@@ -355,11 +384,11 @@ const RecurringDonationInnerModal: FC<IRecurringDonationInnerModalProps> = ({
 			const givethDraftDonationInfo: ICreateDraftRecurringDonation = {
 				projectId: config.GIVETH_PROJECT_ID,
 				anonymous,
-				chainId: config.OPTIMISM_NETWORK_NUMBER,
+				chainId: recurringNetworkID,
 				flowRate: givethFlowRate,
 				superToken: _superToken,
 				isBatch,
-				isForUpdate: isUpdating,
+				isForUpdate: willUpdateFlow,
 			};
 			let givethDraftDonationId = 0;
 			if (isDonatingToGiveth) {
@@ -368,7 +397,7 @@ const RecurringDonationInnerModal: FC<IRecurringDonationInnerModalProps> = ({
 				);
 			}
 
-			await ensureCorrectNetwork(config.OPTIMISM_NETWORK_NUMBER);
+			await ensureCorrectNetwork(recurringNetworkID);
 
 			if (isBatch) {
 				const batchOp = sf.batchCall(operations);
@@ -385,7 +414,7 @@ const RecurringDonationInnerModal: FC<IRecurringDonationInnerModalProps> = ({
 					txHash: tx.hash,
 					draftDonationId: projectDraftDonationId,
 				};
-				if (isUpdating) {
+				if (willUpdateFlow) {
 					console.log('Start Update Project Donation Info');
 					projectDonationId =
 						await updateRecurringDonation(projectDonationInfo);
@@ -484,14 +513,14 @@ const RecurringDonationInnerModal: FC<IRecurringDonationInnerModalProps> = ({
 						],
 						isRecurring: true,
 						givBackEligible: true,
-						chainId: config.OPTIMISM_NETWORK_NUMBER,
+						chainId: recurringNetworkID,
 					});
 				} else {
 					setSuccessDonation({
 						txHash: [{ txHash: tx.hash, chainType: ChainType.EVM }],
 						isRecurring: true,
 						givBackEligible: true,
-						chainId: config.OPTIMISM_NETWORK_NUMBER,
+						chainId: recurringNetworkID,
 					});
 				}
 			}

@@ -14,7 +14,10 @@ export const findTokenByAddress = (address?: Address) => {
 
 export const findAnchorContractAddress = (
 	anchorContracts?: IAnchorContractData[],
+	chainId?: number,
 ) => {
-	if (!anchorContracts) return undefined;
-	return anchorContracts.find(contract => contract.isActive)?.address;
+	if (!anchorContracts || !chainId) return undefined;
+	return anchorContracts.find(
+		contract => contract.isActive && contract.networkId == chainId,
+	)?.address;
 };

@@ -122,6 +122,7 @@ export const StreamRow: FC<IStreamRowProps> = ({ tokenStream }) => {
 					setShowModal={setShowModifyModal}
 					selectedToken={superToken}
 					refreshBalance={refetch}
+					recurringNetworkID={chainId || 0}
 				/>
 			)}
 		</RowWrapper>

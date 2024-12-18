@@ -11,7 +11,7 @@ import { IModifySuperTokenInnerModalProps } from './ModifySuperTokenModal';
 import { ISuperToken, IToken } from '@/types/superFluid';
 import { actionButtonLabel, EModifySuperTokenSteps } from './common';
 import { ModifyWrapper, Wrapper } from './common.sc';
-import config, { isProduction } from '@/configuration';
+import { isProduction } from '@/configuration';
 import { showToastError } from '@/lib/helpers';
 import { Item } from '../RecurringDonationModal/Item';
 import { RunOutInfo } from '../RunOutInfo';
@@ -36,7 +36,8 @@ export const WithDrawSuperToken: FC<IWithDrawSuperTokenProps> = ({
 	closeModal,
 }) => {
 	const [amount, setAmount] = useState(0n);
-	const { address } = useAccount();
+	const { address, chain } = useAccount();
+	const recurringNetworkID = chain?.id ?? 0;
 	const { formatMessage } = useIntl();
 	const tokenPrice = useTokenPrice(token);
 	const [isWarning, setIsWarning] = useState(false);
@@ -60,7 +61,7 @@ export const WithDrawSuperToken: FC<IWithDrawSuperTokenProps> = ({
 	const onWithdraw = async () => {
 		setStep(EModifySuperTokenSteps.WITHDRAWING);
 		try {
-			await ensureCorrectNetwork(config.OPTIMISM_NETWORK_NUMBER);
+			await ensureCorrectNetwork(recurringNetworkID);
 			if (!address) {
 				throw new Error('address not found1');
 			}
@@ -76,7 +77,7 @@ export const WithDrawSuperToken: FC<IWithDrawSuperTokenProps> = ({
 				throw new Error('Provider or signer not found');
 
 			const _options = {
-				chainId: config.OPTIMISM_CONFIG.id,
+				chainId: recurringNetworkID,
 				provider: provider,
 				resolverAddress: isProduction
 					? undefined

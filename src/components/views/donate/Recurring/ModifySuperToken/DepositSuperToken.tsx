@@ -11,7 +11,7 @@ import { IModifySuperTokenInnerModalProps } from './ModifySuperTokenModal';
 import { DepositSteps } from './DepositSuperTokenSteps';
 import { useTokenPrice } from '@/hooks/useTokenPrice';
 import { approveERC20tokenTransfer } from '@/lib/stakingPool';
-import config, { isProduction } from '@/configuration';
+import { isProduction } from '@/configuration';
 import { showToastError } from '@/lib/helpers';
 import { useIsSafeEnvironment } from '@/hooks/useSafeAutoConnect';
 import { StreamInfo } from './StreamInfo';
@@ -41,7 +41,8 @@ export const DepositSuperToken: FC<IDepositSuperTokenProps> = ({
 }) => {
 	const [amount, setAmount] = useState(0n);
 
-	const { address } = useAccount();
+	const { address, chain } = useAccount();
+	const recurringNetworkID = chain?.id ?? 0;
 	const { formatMessage } = useIntl();
 
 	const {
@@ -77,13 +78,13 @@ export const DepositSuperToken: FC<IDepositSuperTokenProps> = ({
 		if (!address || !superToken || !token) return;
 		try {
 			setStep(EModifySuperTokenSteps.APPROVING);
-			await ensureCorrectNetwork(config.OPTIMISM_NETWORK_NUMBER);
+			await ensureCorrectNetwork(recurringNetworkID);
 			const approve = await approveERC20tokenTransfer(
 				amount,
 				address,
 				superToken.id, //superTokenAddress
 				token.id, //tokenAddress
-				config.OPTIMISM_CONFIG.id,
+				recurringNetworkID,
 				isSafeEnv,
 			);
 			if (approve) {
@@ -100,7 +101,7 @@ export const DepositSuperToken: FC<IDepositSuperTokenProps> = ({
 	const onDeposit = async () => {
 		try {
 			setStep(EModifySuperTokenSteps.DEPOSITING);
-			await ensureCorrectNetwork(config.OPTIMISM_NETWORK_NUMBER);
+			await ensureCorrectNetwork(recurringNetworkID);
 			if (!address) {
 				throw new Error('address not found1');
 			}
@@ -116,7 +117,7 @@ export const DepositSuperToken: FC<IDepositSuperTokenProps> = ({
 				throw new Error('Provider or signer not found');
 
 			const _options = {
-				chainId: config.OPTIMISM_CONFIG.id,
+				chainId: recurringNetworkID,
 				provider: provider,
 				resolverAddress: isProduction
 					? undefined

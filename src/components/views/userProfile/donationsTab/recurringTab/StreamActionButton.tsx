@@ -18,17 +18,18 @@ import {
 } from '@/apollo/types/types';
 import { EndStreamModal } from './EndStreamModal';
 import { ArchiveStreamModal } from './ArchiveStreamModal';
-import config from '@/configuration';
 import { slugToProjectDonate } from '@/lib/routeCreators';
 
 interface IStreamActionButtonProps {
 	donation: IWalletRecurringDonation;
 	refetch: () => void;
+	recurringNetworkId: number;
 }
 
 export const StreamActionButton: FC<IStreamActionButtonProps> = ({
 	donation,
 	refetch,
+	recurringNetworkId,
 }) => {
 	const [showModify, setShowModify] = useState(false);
 	const [showEnd, setShowEnd] = useState(false);
@@ -101,9 +102,9 @@ export const StreamActionButton: FC<IStreamActionButtonProps> = ({
 	return options.length > 0 ? (
 		<Actions
 			onClick={() => {
-				if (chainId !== config.OPTIMISM_NETWORK_NUMBER) {
+				if (recurringNetworkId !== chainId) {
 					switchChain?.({
-						chainId: config.OPTIMISM_NETWORK_NUMBER,
+						chainId: recurringNetworkId,
 					});
 				}
 			}}
@@ -119,6 +120,7 @@ export const StreamActionButton: FC<IStreamActionButtonProps> = ({
 					setShowModal={setShowModify}
 					donation={donation}
 					refetch={refetch}
+					recurringNetworkId={recurringNetworkId}
 				/>
 			)}
 			{showEnd && (
@@ -126,6 +128,7 @@ export const StreamActionButton: FC<IStreamActionButtonProps> = ({
 					setShowModal={setShowEnd}
 					donation={donation}
 					refetch={refetch}
+					recurringNetworkId={recurringNetworkId}
 				/>
 			)}
 			{showArchive && (

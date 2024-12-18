@@ -425,6 +425,28 @@ const config: EnvConfig = {
 		},
 		anchorRegistryAddress: '0x4AAcca72145e1dF2aeC137E1f3C5E3D75DB8b5f3',
 		chainLogo: (logoSize?: number) => <IconBase size={logoSize} />,
+		GIVETH_ANCHOR_CONTRACT_ADDRESS:
+			'0x5430757bc19c87ec562e4660e56af6cac324b50a',
+		superFluidSubgraph:
+			process.env.NEXT_PUBLIC_SUBGRAPH_SUPER_FLUID ||
+			'https://subgraph-endpoints.superfluid.dev/base-mainnet/protocol-v1',
+		SUPER_FLUID_TOKENS: [
+			{
+				underlyingToken: {
+					decimals: 18,
+					id: '0x6B0dacea6a72E759243c99Eaed840DEe9564C194',
+					name: 'fUSDC Fake Token',
+					symbol: 'USDC',
+					coingeckoId: 'usd-coin',
+				},
+				decimals: 18,
+				id: '0x1650581F573eAd727B92073B5Ef8B4f5B94D1648',
+				name: 'Super fUSDC Fake Token',
+				symbol: 'fUSDCx',
+				isSuperToken: true,
+				coingeckoId: 'usd-coin',
+			},
+		],
 	},
 
 	ZKEVM_CONFIG: {

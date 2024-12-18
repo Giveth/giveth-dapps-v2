@@ -31,6 +31,7 @@ enum EEndStreamSteps {
 export interface IEndStreamModalProps extends IModal {
 	donation: IWalletRecurringDonation;
 	refetch: () => void;
+	recurringNetworkId: number;
 }
 
 export const EndStreamModal: FC<IEndStreamModalProps> = ({ ...props }) => {
@@ -60,11 +61,13 @@ export const EndStreamModal: FC<IEndStreamModalProps> = ({ ...props }) => {
 
 interface IEndStreamInnerModalProps extends IEndStreamModalProps {
 	closeModal: (refetch?: boolean) => void;
+	recurringNetworkId: number;
 }
 
 const EndStreamInnerModal: FC<IEndStreamInnerModalProps> = ({
 	closeModal,
 	donation,
+	recurringNetworkId,
 }) => {
 	const [step, setStep] = useState(EEndStreamSteps.CONFIRM);
 	const { formatMessage } = useIntl();
@@ -81,9 +84,15 @@ const EndStreamInnerModal: FC<IEndStreamInnerModalProps> = ({
 				throw new Error('Please connect your wallet first');
 			}
 
-			const _superToken = config.OPTIMISM_CONFIG.SUPER_FLUID_TOKENS.find(
-				s => s.underlyingToken.symbol === donation.currency,
-			);
+			const _superToken =
+				recurringNetworkId === config.OPTIMISM_NETWORK_NUMBER
+					? config.OPTIMISM_CONFIG.SUPER_FLUID_TOKENS.find(
+							s => s.underlyingToken.symbol === donation.currency,
+						)
+					: config.BASE_CONFIG.SUPER_FLUID_TOKENS.find(
+							s => s.underlyingToken.symbol === donation.currency,
+						);
+
 			if (!_superToken) {
 				throw new Error('SuperToken not found');
 			}
