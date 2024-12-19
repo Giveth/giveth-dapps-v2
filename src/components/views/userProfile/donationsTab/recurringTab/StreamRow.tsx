@@ -20,9 +20,7 @@ interface IStreamRowProps {
 
 export const StreamRow: FC<IStreamRowProps> = ({ tokenStream }) => {
 	const superToken = useMemo(() => {
-		// Check the networkId of the token
 		const networkId = tokenStream[0].networkId;
-
 		// Use the appropriate configuration based on the networkId
 		const tokenConfig =
 			networkId === config.BASE_NETWORK_NUMBER
@@ -32,13 +30,21 @@ export const StreamRow: FC<IStreamRowProps> = ({ tokenStream }) => {
 					: [];
 
 		// Find the super token in the selected configuration
-		return tokenConfig.find(s => s.id === tokenStream[0].token.id) || null;
+		return (
+			tokenConfig.find(
+				s =>
+					s.id.toLowerCase() ===
+					tokenStream[0].token.id.toLowerCase(),
+			) || null
+		);
 	}, [tokenStream]);
 
 	const [showModifyModal, setShowModifyModal] = useState(false);
 	const { address, chain } = useAccount();
 	const { switchChain } = useSwitchChain();
 	const { formatMessage } = useIntl();
+
+	const recurringNetworkId = tokenStream[0].networkId;
 
 	const chainId = chain?.id;
 
@@ -116,9 +122,9 @@ export const StreamRow: FC<IStreamRowProps> = ({ tokenStream }) => {
 			<TableCell>
 				<ModifyButton
 					onClick={() => {
-						if (chainId !== config.OPTIMISM_NETWORK_NUMBER) {
+						if (chainId !== recurringNetworkId) {
 							switchChain?.({
-								chainId: config.OPTIMISM_NETWORK_NUMBER,
+								chainId: recurringNetworkId,
 							});
 						} else {
 							setShowModifyModal(true);
@@ -129,13 +135,15 @@ export const StreamRow: FC<IStreamRowProps> = ({ tokenStream }) => {
 				</ModifyButton>
 			</TableCell>
 			{showModifyModal && superToken && (
-				<ModifySuperTokenModal
-					tokenStreams={tokenStream}
-					setShowModal={setShowModifyModal}
-					selectedToken={superToken}
-					refreshBalance={refetch}
-					recurringNetworkID={chainId || 0}
-				/>
+				<>
+					<ModifySuperTokenModal
+						tokenStreams={tokenStream}
+						setShowModal={setShowModifyModal}
+						selectedToken={superToken}
+						refreshBalance={refetch}
+						recurringNetworkID={recurringNetworkId}
+					/>
+				</>
 			)}
 		</RowWrapper>
 	);

@@ -142,8 +142,6 @@ export const DepositSuperToken: FC<IDepositSuperTokenProps> = ({
 					.parseUnits(currentAmount.toString(), 18)
 					.toBigInt();
 			}
-			console.log('token', token);
-			console.log('supertoken', superToken);
 			const upgradeOperation = await superTokenAsset.upgrade({
 				amount: newAmount.toString(),
 			});
