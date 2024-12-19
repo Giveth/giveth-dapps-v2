@@ -186,6 +186,7 @@ export const DepositSuperToken: FC<IDepositSuperTokenProps> = ({
 							amount={amount}
 							setAmount={setAmount}
 							token={token}
+							recurringNetworkID={recurringNetworkID}
 							balance={balance}
 							refetch={refetch}
 							isRefetching={isRefetching}

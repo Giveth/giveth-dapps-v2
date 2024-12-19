@@ -7,7 +7,6 @@ export interface ITokenIconProps {
 }
 
 export const TokenIcon: FC<ITokenIconProps> = ({ symbol, size = 24 }) => {
-	console.log({symbol});
 	const [src, setSrc] = useState(`/images/tokens/UNKOWN.svg`);
 	useEffect(() => {
 		setSrc(`/images/tokens/${symbol}.svg`);

@@ -48,7 +48,10 @@ export const StreamRow: FC<IStreamRowProps> = ({ tokenStream }) => {
 		chainId: tokenStream[0].networkId,
 	});
 
-	const token = findTokenByAddress(tokenStream[0].token.id);
+	const token = findTokenByAddress(
+		tokenStream[0].token.id,
+		tokenStream[0].networkId,
+	);
 	const underlyingSymbol = token?.underlyingToken?.symbol || '';
 	const totalFlowRate = tokenStream.reduce(
 		(acc, curr) => acc + BigInt(curr.currentFlowRate),

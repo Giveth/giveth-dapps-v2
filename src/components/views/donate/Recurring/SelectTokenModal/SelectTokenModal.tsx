@@ -141,6 +141,7 @@ const SelectTokenInnerModal: FC<ISelectTokenModalProps> = ({
 								<StreamInfo
 									key={tokenId}
 									stream={tokenStreams[tokenId.toLowerCase()]}
+									recurringNetworkId={chain?.id}
 									superToken={token}
 									balance={balances[token.symbol]}
 									disable={
