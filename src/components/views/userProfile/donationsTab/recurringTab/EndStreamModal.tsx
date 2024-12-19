@@ -102,7 +102,7 @@ const EndStreamInnerModal: FC<IEndStreamInnerModalProps> = ({
 				throw new Error('Provider or signer not found');
 
 			const _options = {
-				chainId: config.OPTIMISM_CONFIG.id,
+				chainId: recurringNetworkId,
 				provider: provider,
 				resolverAddress: isProduction
 					? undefined
@@ -128,7 +128,7 @@ const EndStreamInnerModal: FC<IEndStreamInnerModalProps> = ({
 				const info = {
 					recurringDonationId: parseInt(donation.id),
 					projectId: +donation.project.id,
-					chainId: config.OPTIMISM_NETWORK_NUMBER,
+					chainId: recurringNetworkId,
 					txHash: tx.hash,
 					superToken: _superToken,
 				};
