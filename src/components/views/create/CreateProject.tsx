@@ -60,7 +60,6 @@ import SocialMedias from './SocialMediaBox/SocialMedias';
 import { CreateHeader } from './CreateHeader';
 
 const ALL_CHAINS = config.CHAINS;
-export const STOP_RECURRING_SETUP_ON_CREATION = true;
 
 interface ICreateProjectProps {
 	project?: IProjectEdition;
@@ -78,7 +77,6 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 	const [activeProjectSection, setActiveProjectSection] =
 		useState<ECreateProjectSections>(ECreateProjectSections.default);
 	const [showLowScoreModal, setShowLowScoreModal] = useState(false);
-
 	const { formatMessage } = useIntl();
 	const [addProjectMutation] = useMutation(CREATE_PROJECT);
 	const [editProjectMutation] = useMutation(UPDATE_PROJECT);
@@ -96,6 +94,7 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 	}, [dispatch]);
 
 	const isEditMode = !!project;
+	const DO_RECURRING_SETUP_ON_CREATION = !isEditMode;
 
 	let storageProjectData: TInputs | undefined;
 
@@ -248,6 +247,8 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 		draft: watchDraft,
 		telegram: watchTelegram,
 		github: watchGithub,
+		baseAnchorContract,
+		opAnchorContract,
 	} = data;
 
 	useEffect(() => {
@@ -277,16 +278,13 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 		watchTelegram,
 		watchGithub,
 	]);
-	const hasOptimismAddress = watchAddresses.some(
-		address => config.OPTIMISM_NETWORK_NUMBER === address.networkId,
-	);
+
 	const onError = (errors: FieldErrors<TInputs>) => {
 		if (errors[EInputs.description]) {
 			document?.getElementById('project_description')?.scrollIntoView();
 		}
 		setIsLoading(false);
 	};
-
 	const onSubmit = async (formData: TInputs) => {
 		if (
 			!watchDraft &&
@@ -319,6 +317,8 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 				website,
 				telegram,
 				github,
+				baseAnchorContract,
+				opAnchorContract,
 			} = formData;
 			//Only set loading to true if it is not a draft
 			setIsLoading(!draft);
@@ -387,7 +387,9 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 						},
 					});
 
-			if (watchAlloProtocolRegistry && hasOptimismAddress) {
+			const doAlloProtocolRegistry =
+				baseAnchorContract || opAnchorContract;
+			if (doAlloProtocolRegistry) {
 				!isEditMode
 					? setAddedProjectState(addedProject.data?.createProject)
 					: setAddedProjectState(addedProject.data?.updateProject);
@@ -406,11 +408,9 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 
 			if (addedProject) {
 				// Success
-
 				if (
-					!STOP_RECURRING_SETUP_ON_CREATION &&
-					watchAlloProtocolRegistry &&
-					hasOptimismAddress &&
+					DO_RECURRING_SETUP_ON_CREATION &&
+					doAlloProtocolRegistry &&
 					!draft
 				) {
 					setShowAlloProtocolModal(true);
@@ -691,6 +691,8 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 						setShowModal={setShowAlloProtocolModal}
 						addedProjectState={addedProjectState}
 						project={project}
+						baseAnchorContract={baseAnchorContract}
+						opAnchorContract={opAnchorContract}
 					/>
 				)}
 				{showLowScoreModal && (

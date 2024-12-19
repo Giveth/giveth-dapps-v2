@@ -35,6 +35,13 @@ export interface IAnchorContractData {
 	networkId: number;
 }
 
+export interface IAnchorContractBasicData {
+	contractAddress?: Address;
+	recipientAddress: Address;
+	hash?: string;
+	enabled?: boolean;
+}
+
 export interface IProject {
 	id: string;
 	title?: string;
