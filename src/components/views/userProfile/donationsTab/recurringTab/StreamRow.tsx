@@ -19,13 +19,22 @@ interface IStreamRowProps {
 }
 
 export const StreamRow: FC<IStreamRowProps> = ({ tokenStream }) => {
-	const superToken = useMemo(
-		() =>
-			config.OPTIMISM_CONFIG.SUPER_FLUID_TOKENS.find(
-				s => s.id === tokenStream[0].token.id,
-			),
-		[tokenStream],
-	);
+	const superToken = useMemo(() => {
+		// Check the networkId of the token
+		const networkId = tokenStream[0].networkId;
+
+		// Use the appropriate configuration based on the networkId
+		const tokenConfig =
+			networkId === config.BASE_NETWORK_NUMBER
+				? config.BASE_CONFIG.SUPER_FLUID_TOKENS
+				: networkId === config.OPTIMISM_NETWORK_NUMBER
+					? config.OPTIMISM_CONFIG.SUPER_FLUID_TOKENS
+					: [];
+
+		// Find the super token in the selected configuration
+		return tokenConfig.find(s => s.id === tokenStream[0].token.id) || null;
+	}, [tokenStream]);
+
 	const [showModifyModal, setShowModifyModal] = useState(false);
 	const { address, chain } = useAccount();
 	const { switchChain } = useSwitchChain();
@@ -36,7 +45,7 @@ export const StreamRow: FC<IStreamRowProps> = ({ tokenStream }) => {
 	const { data: balance, refetch } = useBalance({
 		token: tokenStream[0].token.id,
 		address: address,
-		chainId: config.OPTIMISM_NETWORK_NUMBER,
+		chainId: tokenStream[0].networkId,
 	});
 
 	const token = findTokenByAddress(tokenStream[0].token.id);

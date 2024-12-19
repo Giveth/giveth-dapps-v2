@@ -112,23 +112,68 @@ const createDonation = async (props: IOnTxHash) => {
 };
 
 export const fetchUserStreams = async (address: Address) => {
-	const { data } = await gqlRequest(
+	const { data: baseData } = await gqlRequest(
+		config.BASE_CONFIG.superFluidSubgraph,
+		undefined,
+		FETCH_USER_STREAMS,
+		{ address: address.toLowerCase() },
+	);
+	const baseStreams: ISuperfluidStream[] = baseData?.streams;
+
+	// Categorize streams by token for Base config
+	const baseTokenStreams: ITokenStreams = {};
+	baseStreams.forEach(stream => {
+		if (!baseTokenStreams[stream.token.id]) {
+			baseTokenStreams[stream.token.id] = [];
+		}
+		stream.networkId = config.BASE_NETWORK_NUMBER;
+		baseTokenStreams[stream.token.id].push(stream);
+	});
+
+	const { data: optimismData } = await gqlRequest(
 		config.OPTIMISM_CONFIG.superFluidSubgraph,
 		undefined,
 		FETCH_USER_STREAMS,
 		{ address: address.toLowerCase() },
 	);
-	const streams: ISuperfluidStream[] = data?.streams;
+	const optimismStreams: ISuperfluidStream[] = optimismData?.streams;
 
-	//categorize streams by token
-	const _tokenStreams: ITokenStreams = {};
-	streams.forEach(stream => {
-		if (!_tokenStreams[stream.token.id]) {
-			_tokenStreams[stream.token.id] = [];
+	// Categorize streams by token for Optimism config
+	const optimismTokenStreams: ITokenStreams = {};
+	optimismStreams.forEach(stream => {
+		if (!optimismTokenStreams[stream.token.id]) {
+			optimismTokenStreams[stream.token.id] = [];
 		}
-		_tokenStreams[stream.token.id].push(stream);
+		stream.networkId = config.OPTIMISM_NETWORK_NUMBER;
+		optimismTokenStreams[stream.token.id].push(stream);
 	});
-	return _tokenStreams;
+
+	const combinedTokenStreams: ITokenStreams = { ...baseTokenStreams };
+
+	Object.keys(optimismTokenStreams).forEach(tokenId => {
+		if (!combinedTokenStreams[tokenId]) {
+			combinedTokenStreams[tokenId] = [];
+		}
+		combinedTokenStreams[tokenId].push(...optimismTokenStreams[tokenId]);
+	});
+
+	// Combina and sort by flow rate in descending order
+	const sortedTokenStreams = Object.entries(combinedTokenStreams)
+		.map(([tokenId, streams]) => {
+			const totalFlowRate = streams.reduce(
+				(sum, stream) =>
+					sum + parseFloat(stream.currentFlowRate || '0'),
+				0,
+			);
+			return { tokenId, streams, totalFlowRate };
+		})
+		.sort((a, b) => b.totalFlowRate - a.totalFlowRate)
+		.reduce((acc, { tokenId, streams }) => {
+			acc[tokenId] = streams;
+			return acc;
+		}, {} as ITokenStreams);
+
+	return sortedTokenStreams;
 };
 
 interface ICreateRecurringDonationBase {
