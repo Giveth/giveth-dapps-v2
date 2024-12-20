@@ -111,7 +111,7 @@ const TransactionView = () => {
 		if (!id) return;
 
 		const eventSource = new EventSource(
-			`${process.env.NEXT_PUBLIC_BASE_ROUTE}/events`,
+			`${process.env.NEXT_PUBLIC_BASE_ROUTE_test}/events`,
 		);
 
 		eventSource.onmessage = (event: MessageEvent) => {
