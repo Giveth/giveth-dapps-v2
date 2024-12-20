@@ -33,7 +33,7 @@ import IconStellar from '@/components/Icons/Stellar';
 import { IconClassic } from '@/components/Icons/Classic';
 
 const BASE_ROUTE =
-	process.env.NEXT_PUBLIC_BASE_ROUTE_test ||
+	process.env.NEXT_PUBLIC_BASE_ROUTE ||
 	'https://impact-graph.serve.giveth.io';
 const BACKEND_LINK =
 	process.env.NEXT_PUBLIC_BACKEND_LINK || `${BASE_ROUTE}/graphql`;

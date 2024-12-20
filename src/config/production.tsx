@@ -97,7 +97,7 @@ const EVM_CHAINS = [
 const NON_EVM_CHAINS: NonEVMChain[] = [STELLAR_NETWORK, SOLANA_NETWORK];
 
 const BASE_ROUTE =
-	process.env.NEXT_PUBLIC_BASE_ROUTE_test || 'https://mainnet.serve.giveth.io';
+	process.env.NEXT_PUBLIC_BASE_ROUTE || 'https://mainnet.serve.giveth.io';
 const BACKEND_LINK =
 	process.env.NEXT_PUBLIC_BACKEND_LINK || `${BASE_ROUTE}/graphql`;
 const FRONTEND_LINK =
