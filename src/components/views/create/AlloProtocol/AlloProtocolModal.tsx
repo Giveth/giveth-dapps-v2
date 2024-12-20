@@ -40,17 +40,22 @@ export const saveAnchorContract = async ({
 	addedProjectState,
 	chainId,
 	recipientAddress,
+	ownerAddres,
 	isDraft,
 	anchorContract,
+	userId,
 }: {
-	addedProjectState: IProject;
+	addedProjectState?: IProject;
 	chainId: number;
 	recipientAddress?: string;
+	ownerAddres?: string;
 	isDraft?: boolean;
 	anchorContract?: IAnchorContractBasicData;
+	userId?: string;
 }) => {
 	try {
-		if (anchorContract) {
+		if (anchorContract && addedProjectState) {
+			// Used on creation when there's already an anchor contract saved
 			return await client.mutate({
 				mutation: CREATE_ANCHOR_CONTRACT_ADDRESS_QUERY,
 				variables: {
@@ -72,12 +77,16 @@ export const saveAnchorContract = async ({
 			chainId,
 			args: [
 				generateRandomNonce(), //nonce
-				addedProjectState?.id!,
+				addedProjectState
+					? `giveth_project:${addedProjectState?.id!}`
+					: `giveth_user:${userId || 'unknown'}`,
 				{
 					protocol: 1,
 					pointer: '',
 				},
-				addedProjectState?.adminUser?.walletAddress, //admin user wallet address
+				addedProjectState
+					? addedProjectState?.adminUser?.walletAddress
+					: ownerAddres, //admin user wallet address
 				[],
 			],
 		});
@@ -91,9 +100,9 @@ export const saveAnchorContract = async ({
 				data.logs[0].data,
 			);
 
-			if (isDraft) {
+			if (isDraft || !addedProjectState) {
 				return { contractAddress, hash };
-			} else {
+			} else if (addedProjectState) {
 				//Call backend to update project
 				await client.mutate({
 					mutation: CREATE_ANCHOR_CONTRACT_ADDRESS_QUERY,
@@ -145,9 +154,7 @@ const AlloProtocolModal: FC<IAlloProtocolModal> = ({
 		try {
 			if (!addedProjectState) return;
 			setIsLoading(true);
-
 			// Handle Base anchor contract
-
 			if (baseAnchorContract?.recipientAddress) {
 				switchChain?.({
 					chainId: config.BASE_NETWORK_NUMBER,
@@ -156,6 +163,7 @@ const AlloProtocolModal: FC<IAlloProtocolModal> = ({
 					addedProjectState,
 					chainId: config.BASE_NETWORK_NUMBER,
 					recipientAddress: baseAnchorContract.recipientAddress,
+					anchorContract: baseAnchorContract,
 				});
 			}
 
@@ -168,6 +176,7 @@ const AlloProtocolModal: FC<IAlloProtocolModal> = ({
 					addedProjectState,
 					chainId: config.OPTIMISM_NETWORK_NUMBER,
 					recipientAddress: opAnchorContract.recipientAddress,
+					anchorContract: opAnchorContract,
 				});
 			}
 			setShowModal(false); // Close the modal

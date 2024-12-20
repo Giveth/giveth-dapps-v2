@@ -34,6 +34,7 @@ import { IconWithTooltip } from '@/components/IconWithToolTip';
 import { EInputs } from './types';
 import links from '@/lib/constants/links';
 import { saveAnchorContract } from './AlloProtocol/AlloProtocolModal';
+import { useAppSelector } from '@/features/hooks';
 
 interface IAddressInterfaceProps extends IChainType {
 	networkId: number;
@@ -56,12 +57,13 @@ const AddressInterface = ({
 	isEditMode,
 }: IAddressInterfaceProps) => {
 	const { chain } = useAccount();
+	const { userData } = useAppSelector(state => state.user);
 	const { switchChain } = useSwitchChain();
 	const { setValue, watch } = useFormContext();
 	const { formatMessage } = useIntl();
 	const { isOnEVM } = useGeneralWallet();
 
-	const DO_RECURRING_SETUP_ON_ENABLE = isEditMode;
+	const DO_RECURRING_SETUP_ON_ENABLE = true;
 
 	const [hasAnchorContract, setHasAnchorContract] = useState(
 		anchorContractData?.isActive || false,
@@ -238,25 +240,25 @@ const AddressInterface = ({
 											hasAnchorContract
 										}
 										onClick={async () => {
-											if (project) {
-												if (
-													isRecurringOnOptimismReady &&
-													!isOnOptimism
-												) {
-													switchChain?.({
-														chainId:
-															config.OPTIMISM_NETWORK_NUMBER,
-													});
-												} else if (
-													isRecurringOnBaseReady &&
-													!isOnBase
-												) {
-													switchChain?.({
-														chainId:
-															config.BASE_NETWORK_NUMBER,
-													});
-												}
+											if (
+												isRecurringOnOptimismReady &&
+												!isOnOptimism
+											) {
+												switchChain?.({
+													chainId:
+														config.OPTIMISM_NETWORK_NUMBER,
+												});
+											} else if (
+												isRecurringOnBaseReady &&
+												!isOnBase
+											) {
+												switchChain?.({
+													chainId:
+														config.BASE_NETWORK_NUMBER,
+												});
+											}
 
+											if (project) {
 												await saveAnchorContract({
 													addedProjectState: project,
 													chainId: networkId,
@@ -265,27 +267,33 @@ const AddressInterface = ({
 												});
 												setHasAnchorContract(true);
 											} else {
-												if (isOptimism) {
-													setValue(
-														EInputs.opAnchorContract,
-														{
-															recipientAddress:
-																walletAddress ||
-																value,
-														},
-													);
-													setHasAnchorContract(true);
-												} else if (isBase) {
-													setValue(
-														EInputs.baseAnchorContract,
-														{
-															recipientAddress:
-																walletAddress ||
-																value,
-														},
-													);
-													setHasAnchorContract(true);
-												}
+												const alloContract =
+													(await saveAnchorContract({
+														chainId: networkId,
+														recipientAddress:
+															walletAddress ||
+															value,
+														isDraft: true,
+														userId: userData?.id,
+														ownerAddres:
+															userData?.walletAddress,
+													})) as IAnchorContractBasicData;
+
+												setValue(
+													isOptimism
+														? EInputs.opAnchorContract
+														: EInputs.baseAnchorContract,
+													{
+														recipientAddress:
+															walletAddress ||
+															value,
+														enabled: true,
+														contractAddress:
+															alloContract.contractAddress,
+														hash: alloContract.hash,
+													},
+												);
+												setHasAnchorContract(true);
 											}
 										}}
 									/>

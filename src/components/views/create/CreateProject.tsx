@@ -1,5 +1,6 @@
 import React, { FC, useEffect, useRef, useState } from 'react';
 import { useIntl } from 'react-intl';
+import { useSwitchChain } from 'wagmi';
 import {
 	brandColors,
 	Button,
@@ -50,7 +51,9 @@ import CreateProjectAddAddressModal from './CreateProjectAddAddressModal';
 import AddressInterface from './AddressInterface';
 import { ChainType, NonEVMChain } from '@/types/config';
 import StorageLabel from '@/lib/localStorage';
-import AlloProtocolModal from './AlloProtocol/AlloProtocolModal';
+import AlloProtocolModal, {
+	saveAnchorContract,
+} from './AlloProtocol/AlloProtocolModal';
 import { ECreateProjectSections, TInputs, EInputs } from './types';
 import { ProGuide } from './proGuide/ProGuide';
 import { EQualityState } from './proGuide/score/scoreHelpers';
@@ -66,6 +69,7 @@ interface ICreateProjectProps {
 }
 
 const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
+	const { switchChain } = useSwitchChain();
 	const [quality, setQuality] = useState(EQualityState.LOW);
 	const [isLoading, setIsLoading] = useState(false);
 	const [isLoadingPreview, setIsLoadingPreview] = useState(false);
@@ -389,10 +393,12 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 
 			const doAlloProtocolRegistry =
 				baseAnchorContract || opAnchorContract;
+			let _addedProject;
 			if (doAlloProtocolRegistry) {
-				!isEditMode
-					? setAddedProjectState(addedProject.data?.createProject)
-					: setAddedProjectState(addedProject.data?.updateProject);
+				_addedProject = !isEditMode
+					? addedProject.data?.createProject
+					: addedProject.data?.updateProject;
+				setAddedProjectState(_addedProject);
 				setIsLoading(false);
 				setIsLoadingPreview(false);
 			}
@@ -405,7 +411,6 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 			}
 
 			//handle Anchor contract modal here.
-
 			if (addedProject) {
 				// Success
 				if (
@@ -413,8 +418,39 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 					doAlloProtocolRegistry &&
 					!draft
 				) {
-					setShowAlloProtocolModal(true);
+					if (!_addedProject) return;
+					console.log('processing anchor contracts', {
+						baseAnchorContract,
+						opAnchorContract,
+					});
+					setIsLoading(true);
+					// Handle Base anchor contract
+					if (baseAnchorContract?.recipientAddress) {
+						switchChain?.({
+							chainId: config.BASE_NETWORK_NUMBER,
+						});
+						await saveAnchorContract({
+							addedProjectState: _addedProject,
+							chainId: config.BASE_NETWORK_NUMBER,
+							recipientAddress:
+								baseAnchorContract.recipientAddress,
+							anchorContract: baseAnchorContract,
+						});
+					}
+					// Handle Optimism anchor contract
+					if (opAnchorContract?.recipientAddress) {
+						switchChain?.({
+							chainId: config.OPTIMISM_NETWORK_NUMBER,
+						});
+						await saveAnchorContract({
+							addedProjectState: _addedProject,
+							chainId: config.OPTIMISM_NETWORK_NUMBER,
+							recipientAddress: opAnchorContract.recipientAddress,
+							anchorContract: opAnchorContract,
+						});
+					}
 					localStorage.removeItem(StorageLabel.CREATE_PROJECT_FORM);
+					await router.push(slugToProjectView(_addedProject.slug));
 				} else {
 					setIsLoading(false);
 					if (!isEditMode) {
