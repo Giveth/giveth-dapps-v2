@@ -118,6 +118,7 @@ export const saveAnchorContract = async ({
 		}
 	} catch (error) {
 		console.error('Error Contract', error);
+		throw error;
 	}
 };
 
