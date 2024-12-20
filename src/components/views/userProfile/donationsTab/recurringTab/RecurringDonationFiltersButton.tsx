@@ -22,6 +22,8 @@ export interface IRecurringDonationFiltersButtonProps {
 	setTokenFilters: Dispatch<SetStateAction<string[]>>;
 	statusFilters: IFinishStatus;
 	setStatusFilters: Dispatch<SetStateAction<IFinishStatus>>;
+	networkIds: number[];
+	setNetworkIds: Dispatch<SetStateAction<number[]>>;
 }
 
 export const RecurringDonationFiltersButton: FC<
@@ -64,6 +66,8 @@ export const RecurringDonationFiltersButton: FC<
 					isOpen={isFilterOpen}
 					handleClose={handleFilterClose}
 					ref={filterMenuRef}
+					networkIds={props.networkIds}
+					setNetworkIds={props.setNetworkIds}
 				/>
 			)}
 		</Relative>

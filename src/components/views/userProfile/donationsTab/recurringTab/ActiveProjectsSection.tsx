@@ -38,6 +38,7 @@ export const ActiveProjectsSection = () => {
 	const [loading, setLoading] = useState(false);
 	const [donations, setDonations] = useState<IWalletRecurringDonation[]>([]);
 	const [totalDonations, setTotalDonations] = useState<number>(0);
+	const [networkIds, setNetworkIds] = useState<number[]>([]);
 	const [page, setPage] = useState(0);
 	const [order, setOrder] = useState<IOrder>({
 		by: ERecurringDonationSortField.createdAt,
@@ -82,6 +83,7 @@ export const ActiveProjectsSection = () => {
 					finishStatus: statusFilters,
 					filteredTokens: tokenFilters,
 					includeArchived: myAccount ? showArchive : true,
+					networkId: networkIds.length === 1 ? networkIds[0] : 0,
 				},
 			});
 			setLoading(false);
@@ -103,7 +105,9 @@ export const ActiveProjectsSection = () => {
 		statusFilters,
 		tokenFilters,
 		trigger,
+		networkIds,
 	]);
+
 	return (
 		<Wrapper>
 			<Flex $justifyContent='space-between'>
@@ -122,6 +126,8 @@ export const ActiveProjectsSection = () => {
 							setStatusFilters={setStatusFilters}
 							tokenFilters={tokenFilters}
 							setTokenFilters={setTokenFilters}
+							networkIds={networkIds}
+							setNetworkIds={setNetworkIds}
 						/>
 					</Flex>
 				)}

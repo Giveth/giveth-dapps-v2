@@ -13,6 +13,7 @@ import config from '@/configuration';
 import { countActiveStreams } from '@/helpers/donate';
 import { findTokenByAddress } from '@/helpers/superfluid';
 import { ModifySuperTokenModal } from '@/components/views/donate/Recurring/ModifySuperToken/ModifySuperTokenModal';
+import NetworkLogo from '@/components/NetworkLogo';
 
 interface IStreamRowProps {
 	tokenStream: ISuperfluidStream[];
@@ -21,6 +22,7 @@ interface IStreamRowProps {
 export const StreamRow: FC<IStreamRowProps> = ({ tokenStream }) => {
 	const superToken = useMemo(() => {
 		const networkId = tokenStream[0].networkId;
+
 		// Use the appropriate configuration based on the networkId
 		const tokenConfig =
 			networkId === config.BASE_NETWORK_NUMBER
@@ -95,6 +97,11 @@ export const StreamRow: FC<IStreamRowProps> = ({ tokenStream }) => {
 				</P>
 			</TableCell>
 			<TableCell>
+				<NetworkLogoWrapper>
+					<NetworkLogo chainId={recurringNetworkId} logoSize={32} />
+				</NetworkLogoWrapper>
+			</TableCell>
+			<TableCell>
 				{activeStreamCount}
 				&nbsp;
 				{formatMessage(
@@ -159,4 +166,8 @@ const ModifyButton = styled(P)`
 	&:hover {
 		color: ${brandColors.pinky[700]};
 	}
+`;
+
+const NetworkLogoWrapper = styled.div`
+	margin-left: 5px;
 `;
