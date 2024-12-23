@@ -252,7 +252,7 @@ const SelectTokenInnerModal: FC<ISelectTokenModalProps> = ({
 				) : sortedTokens.length > 0 && isConnected ? (
 					sortedTokens.map(({ token, balance }: ITokenBalance) => (
 						<TokenInfo
-							key={token.symbol}
+							key={token.address}
 							token={token}
 							hideZeroBalance={hideZeroBalance}
 							balance={balance}

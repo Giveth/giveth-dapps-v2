@@ -53,6 +53,9 @@ export const formatDonation = (
 	rounded: boolean = false,
 	maximumFractionDigits: number = 2,
 ): string => {
+	if (amount === '<0.000001') {
+		return '< 0.01';
+	}
 	const num = parseFloat(String(amount || 0));
 	if (rounded) maximumFractionDigits = 0;
 	const threshold = Math.pow(10, -maximumFractionDigits);
