@@ -102,7 +102,7 @@ const ModifySuperTokenInnerModal: FC<
 		let superTokens: any[] = [];
 		if (props.recurringNetworkID === config.OPTIMISM_NETWORK_NUMBER) {
 			superTokens = config.OPTIMISM_CONFIG.SUPER_FLUID_TOKENS;
-		} else if (props.recurringNetworkID === config.POLYGON_NETWORK_NUMBER) {
+		} else if (props.recurringNetworkID === config.BASE_NETWORK_NUMBER) {
 			superTokens = config.BASE_CONFIG.SUPER_FLUID_TOKENS;
 		}
 

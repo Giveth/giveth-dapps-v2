@@ -125,6 +125,7 @@ export const FETCH_USER_RECURRING_DONATIONS = gql`
 		$userId: Int!
 		$filteredTokens: [String!]
 		$includeArchived: Boolean
+		$networkId: Int
 	) {
 		recurringDonationsByUserId(
 			take: $take
@@ -135,6 +136,7 @@ export const FETCH_USER_RECURRING_DONATIONS = gql`
 			finishStatus: $finishStatus
 			filteredTokens: $filteredTokens
 			includeArchived: $includeArchived
+			networkId: $networkId
 		) {
 			recurringDonations {
 				id

@@ -154,6 +154,7 @@ export const WithDrawSuperToken: FC<IWithDrawSuperTokenProps> = ({
 							amount={amount}
 							setAmount={setAmount}
 							token={superToken}
+							recurringNetworkID={recurringNetworkID}
 							// try to put in modified value in place of SuperTokenBalance.value
 							refetch={refetch}
 							balance={modifiedValue}
