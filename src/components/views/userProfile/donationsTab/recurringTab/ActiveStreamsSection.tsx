@@ -55,6 +55,13 @@ export const ActiveStreamsSection: FC = () => {
 					<TableHeader>
 						<B>
 							{formatMessage({
+								id: 'label.network',
+							})}
+						</B>
+					</TableHeader>
+					<TableHeader>
+						<B>
+							{formatMessage({
 								id: 'label.supporting',
 							})}
 						</B>
@@ -95,7 +102,7 @@ const DonationTableContainer = styled.div<{ $myAccount?: boolean }>`
 	grid-template-columns: ${props =>
 		props.$myAccount
 			? '1fr 4fr 1fr 1.5fr 1fr 1fr'
-			: 'auto auto auto auto auto'};
+			: 'auto auto auto auto auto auto'};
 	overflow: auto;
 `;
 

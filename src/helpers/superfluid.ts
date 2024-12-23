@@ -2,13 +2,27 @@ import { Address } from 'viem';
 import config from '@/configuration';
 import { IAnchorContractData } from '@/apollo/types/types';
 
-export const findTokenByAddress = (address?: Address) => {
+export const findTokenByAddress = (
+	address?: Address,
+	networkId: number = config.BASE_NETWORK_NUMBER,
+) => {
 	if (!address) return undefined;
 	const _address = address.toLowerCase();
-	return config.OPTIMISM_CONFIG.SUPER_FLUID_TOKENS.find(
+
+	// Choose the token configuration based on networkId
+	const tokenConfig =
+		networkId === config.BASE_NETWORK_NUMBER
+			? config.BASE_CONFIG.SUPER_FLUID_TOKENS
+			: networkId === config.OPTIMISM_NETWORK_NUMBER
+				? config.OPTIMISM_CONFIG.SUPER_FLUID_TOKENS
+				: [];
+
+	// Find the token by address in the selected configuration
+	return tokenConfig.find(
 		superFluidToken =>
 			superFluidToken.id.toLowerCase() === _address ||
-			superFluidToken.underlyingToken.id.toLowerCase() === _address,
+			(superFluidToken.underlyingToken &&
+				superFluidToken.underlyingToken.id.toLowerCase() === _address),
 	);
 };
 
