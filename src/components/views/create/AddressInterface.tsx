@@ -25,12 +25,16 @@ import { getChainName } from '@/lib/network';
 import { IChainType } from '@/types/config';
 import { findAddressByChain } from '@/lib/helpers';
 import { useGeneralWallet } from '@/providers/generalWalletProvider';
-import { IAnchorContractData, IProject } from '@/apollo/types/types';
+import {
+	IAnchorContractBasicData,
+	IAnchorContractData,
+	IProject,
+} from '@/apollo/types/types';
 import { IconWithTooltip } from '@/components/IconWithToolTip';
 import { EInputs } from './types';
 import links from '@/lib/constants/links';
-import { STOP_RECURRING_SETUP_ON_CREATION } from './CreateProject';
 import { saveAnchorContract } from './AlloProtocol/AlloProtocolModal';
+import { useAppSelector } from '@/features/hooks';
 
 interface IAddressInterfaceProps extends IChainType {
 	networkId: number;
@@ -53,10 +57,13 @@ const AddressInterface = ({
 	isEditMode,
 }: IAddressInterfaceProps) => {
 	const { chain } = useAccount();
+	const { userData } = useAppSelector(state => state.user);
 	const { switchChain } = useSwitchChain();
 	const { setValue, watch } = useFormContext();
 	const { formatMessage } = useIntl();
 	const { isOnEVM } = useGeneralWallet();
+
+	const DO_RECURRING_SETUP_ON_ENABLE = true;
 
 	const [hasAnchorContract, setHasAnchorContract] = useState(
 		anchorContractData?.isActive || false,
@@ -68,12 +75,17 @@ const AddressInterface = ({
 	const isOnBase = chain ? chain.id === config.BASE_NETWORK_NUMBER : false;
 
 	const inputName = EInputs.addresses;
-	const alloProtocolRegistry = watch(EInputs.alloProtocolRegistry) as boolean;
-
 	const value = watch(inputName);
 
 	const isOptimism = networkId === config.OPTIMISM_NETWORK_NUMBER;
 	const isBase = networkId === config.BASE_NETWORK_NUMBER;
+
+	const alloContract = isBase
+		? EInputs.baseAnchorContract
+		: EInputs.opAnchorContract;
+	const alloProtocolRegistry = watch(
+		alloContract,
+	) as IAnchorContractBasicData;
 
 	const addressObj = findAddressByChain(value, networkId, chainType);
 	const walletAddress = addressObj?.address;
@@ -168,12 +180,7 @@ const AddressInterface = ({
 										1,
 									);
 									setValue(inputName, _addresses);
-									if (isOptimism) {
-										setValue(
-											EInputs.alloProtocolRegistry,
-											false,
-										);
-									}
+									setValue(alloContract, false);
 								}}
 							>
 								<IconTrash24 />
@@ -219,7 +226,7 @@ const AddressInterface = ({
 								<IconCheckContainer>
 									<IconCheck16 color={brandColors.giv[100]} />
 								</IconCheckContainer>
-							) : STOP_RECURRING_SETUP_ON_CREATION ? (
+							) : DO_RECURRING_SETUP_ON_ENABLE ? (
 								<EnableBtn>
 									<Button
 										buttonType={
@@ -228,9 +235,11 @@ const AddressInterface = ({
 												: 'texty-secondary'
 										}
 										label={'Enable'}
-										disabled={!isRecurringDonationsReady}
+										disabled={
+											!isRecurringDonationsReady ||
+											hasAnchorContract
+										}
 										onClick={async () => {
-											if (!project) return;
 											if (
 												isRecurringOnOptimismReady &&
 												!isOnOptimism
@@ -249,25 +258,57 @@ const AddressInterface = ({
 												});
 											}
 
-											await saveAnchorContract({
-												addedProjectState: project,
-												chainId: networkId,
-												recipientAddress:
-													walletAddress || value,
-											});
-											setHasAnchorContract(true);
+											if (project) {
+												await saveAnchorContract({
+													addedProjectState: project,
+													chainId: networkId,
+													recipientAddress:
+														walletAddress || value,
+												});
+												setHasAnchorContract(true);
+											} else {
+												const alloContract =
+													(await saveAnchorContract({
+														chainId: networkId,
+														recipientAddress:
+															walletAddress ||
+															value,
+														isDraft: true,
+														userId: userData?.id,
+														ownerAddres:
+															userData?.walletAddress,
+													})) as IAnchorContractBasicData;
+
+												setValue(
+													isOptimism
+														? EInputs.opAnchorContract
+														: EInputs.baseAnchorContract,
+													{
+														recipientAddress:
+															walletAddress ||
+															value,
+														enabled: true,
+														contractAddress:
+															alloContract.contractAddress,
+														hash: alloContract.hash,
+													},
+												);
+												setHasAnchorContract(true);
+											}
 										}}
 									/>
 								</EnableBtn>
 							) : (
 								<ToggleSwitch
-									isOn={alloProtocolRegistry}
+									isOn={!!alloProtocolRegistry?.enabled}
 									toggleOnOff={() => {
 										if (!isRecurringDonationsReady) return;
-										setValue(
-											EInputs.alloProtocolRegistry,
-											!alloProtocolRegistry,
-										);
+										setValue(alloContract, {
+											recipientAddress:
+												walletAddress || value,
+											enabled:
+												!alloProtocolRegistry?.enabled,
+										});
 									}}
 									label=''
 									disabled={!isRecurringDonationsReady}
