@@ -340,6 +340,22 @@ const RecurringDonationInnerModal: FC<IRecurringDonationInnerModalProps> = ({
 					_superToken,
 				);
 
+				// If givethOldStream don't exist check one more time on network
+				if (givethOldStream === undefined) {
+					const existingFlow = await checkIfRecurringFlowExist(
+						sf,
+						_superToken.id,
+						address,
+						givethAnchorContract,
+						signer,
+					);
+					if (existingFlow.exists && existingFlow.flowRate !== '0') {
+						givethOldStream = {
+							currentFlowRate: existingFlow.flowRate,
+						};
+					}
+				}
+
 				// Update Giveth stream if it exists
 				if (givethOldStream) {
 					givethFlowRate =
