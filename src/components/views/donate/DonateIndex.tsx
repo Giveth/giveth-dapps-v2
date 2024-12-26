@@ -16,7 +16,7 @@ import { useIntl } from 'react-intl';
 import { useRouter } from 'next/router';
 import { useAccount } from 'wagmi';
 import SocialBox from '../../DonateSocialBox';
-import NiceBanner from './NiceBanner';
+// import NiceBanner from './NiceBanner';
 import useDetectDevice from '@/hooks/useDetectDevice';
 import { useIsSafeEnvironment } from '@/hooks/useSafeAutoConnect';
 import {
@@ -313,7 +313,7 @@ const DonateIndex: FC = () => {
 							(isQRDonation && isStellarIncludedInQF)) && (
 							<PassportBanner />
 						)}
-					<NiceBanner />
+					{/* <NiceBanner /> */}
 					<Row>
 						<Col xs={12} lg={6}>
 							<DonationCard
