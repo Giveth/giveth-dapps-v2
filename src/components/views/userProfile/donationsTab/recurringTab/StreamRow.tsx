@@ -73,6 +73,10 @@ export const StreamRow: FC<IStreamRowProps> = ({ tokenStream }) => {
 			: 0n;
 	const activeStreamCount = countActiveStreams(tokenStream);
 
+	console.log('token', token);
+	console.log('token', token?.underlyingToken);
+	console.log('balance', balance?.value);
+
 	return (
 		<RowWrapper>
 			<TableCell>
