@@ -97,6 +97,7 @@ export const StreamRow: FC<IStreamRowProps> = ({ tokenStream }) => {
 					)}
 					&nbsp;
 					{underlyingSymbol}
+					{token?.symbol}
 					&nbsp;monthly
 				</P>
 			</TableCell>
