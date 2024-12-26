@@ -44,7 +44,7 @@ export const StreamRow: FC<IStreamRowProps> = ({ tokenStream }) => {
 	const [showModifyModal, setShowModifyModal] = useState(false);
 	const { address, chain } = useAccount();
 	const { switchChain } = useSwitchChain();
-	const { formatMessage } = useIntl(); 
+	const { formatMessage } = useIntl();
 
 	const recurringNetworkId = tokenStream[0].networkId;
 
