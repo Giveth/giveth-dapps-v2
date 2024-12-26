@@ -112,6 +112,7 @@ const createDonation = async (props: IOnTxHash) => {
 };
 
 export const fetchUserStreams = async (address: Address) => {
+	console.log(config.BASE_CONFIG.superFluidSubgraph);
 	const { data: baseData } = await gqlRequest(
 		config.BASE_CONFIG.superFluidSubgraph,
 		undefined,
@@ -130,6 +131,9 @@ export const fetchUserStreams = async (address: Address) => {
 		baseTokenStreams[stream.token.id].push(stream);
 	});
 
+	console.log('baseTokenStreams', baseTokenStreams);
+
+	console.log(config.OPTIMISM_CONFIG.superFluidSubgraph);
 	const { data: optimismData } = await gqlRequest(
 		config.OPTIMISM_CONFIG.superFluidSubgraph,
 		undefined,
@@ -137,6 +141,8 @@ export const fetchUserStreams = async (address: Address) => {
 		{ address: address.toLowerCase() },
 	);
 	const optimismStreams: ISuperfluidStream[] = optimismData?.streams;
+
+	console.log('optimismStreams', optimismStreams);
 
 	// Categorize streams by token for Optimism config
 	const optimismTokenStreams: ITokenStreams = {};
@@ -172,6 +178,8 @@ export const fetchUserStreams = async (address: Address) => {
 			acc[tokenId] = streams;
 			return acc;
 		}, {} as ITokenStreams);
+
+	console.log('sortedTokenStreams', sortedTokenStreams);
 
 	return sortedTokenStreams;
 };
