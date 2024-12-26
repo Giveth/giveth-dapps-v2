@@ -139,7 +139,7 @@ const SelectTokenInnerModal: FC<ISelectTokenModalProps> = ({
 							) as IToken;
 							return token ? (
 								<StreamInfo
-									key={tokenId}
+									key={`${tokenId}-${token.symbol || token.id}`}
 									stream={tokenStreams[tokenId.toLowerCase()]}
 									recurringNetworkId={chain?.id}
 									superToken={token}
@@ -163,7 +163,7 @@ const SelectTokenInnerModal: FC<ISelectTokenModalProps> = ({
 							tokenStreams[token.id.toLowerCase()] ||
 							balances[token.symbol] === 0n ? null : (
 								<TokenInfo
-									key={token.symbol}
+									key={`${token.id}-${token.symbol}-${chain?.id}`}
 									token={token}
 									balance={balances[token.symbol]}
 									disable={
@@ -196,36 +196,31 @@ const SelectTokenInnerModal: FC<ISelectTokenModalProps> = ({
 						</TitleSubheader>
 						{underlyingTokens.length > 0 ? (
 							underlyingTokens.map(token => (
-								<>
-									<TokenInfo
-										key={token.underlyingToken?.symbol}
-										token={token.underlyingToken}
-										balance={
-											balances[
-												token.underlyingToken.symbol
-											]
-										}
-										disable={
-											balances[
-												token.underlyingToken.symbol
-											] === undefined ||
-											balances[
-												token.underlyingToken.symbol
-											] === 0n
-										}
-										onClick={() => {
-											setSelectedRecurringToken({
-												token: token.underlyingToken,
-												balance:
-													balances[
-														token.underlyingToken
-															.symbol
-													],
-											});
-											setShowModal(false);
-										}}
-									/>
-								</>
+								<TokenInfo
+									key={`${token.underlyingToken?.id || token.symbol}-${chain?.id}`}
+									token={token.underlyingToken}
+									balance={
+										balances[token.underlyingToken.symbol]
+									}
+									disable={
+										balances[
+											token.underlyingToken.symbol
+										] === undefined ||
+										balances[
+											token.underlyingToken.symbol
+										] === 0n
+									}
+									onClick={() => {
+										setSelectedRecurringToken({
+											token: token.underlyingToken,
+											balance:
+												balances[
+													token.underlyingToken.symbol
+												],
+										});
+										setShowModal(false);
+									}}
+								/>
 							))
 						) : (
 							<Caption>
