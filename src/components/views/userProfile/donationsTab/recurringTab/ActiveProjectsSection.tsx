@@ -1,6 +1,6 @@
 import { H5, neutralColors, Flex } from '@giveth/ui-design-system';
 import styled from 'styled-components';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { useIntl } from 'react-intl';
 import ToggleSwitch from '@/components/ToggleSwitch';
 import { RecurringDonationFiltersButton } from './RecurringDonationFiltersButton';
@@ -34,6 +34,10 @@ export interface IFinishStatus {
 
 export const ActiveProjectsSection = () => {
 	const [trigger, setTrigger] = useState(false);
+	// this is used to trigger refetch data, but avoid loading from cache
+	const depsRef = useRef({
+		trigger: trigger,
+	});
 	const [showArchive, setShowArchive] = useState(false);
 	const [loading, setLoading] = useState(false);
 	const [donations, setDonations] = useState<IWalletRecurringDonation[]>([]);
@@ -70,6 +74,11 @@ export const ActiveProjectsSection = () => {
 	};
 
 	useEffect(() => {
+		// this is used to trigger refetch data, but avoid loading from cache
+		const prevDeps = depsRef.current;
+		const fetchPolicy =
+			prevDeps.trigger !== trigger ? 'network-only' : 'cache-first';
+
 		if (!user) return;
 		const fetchUserDonations = async () => {
 			setLoading(true);
@@ -85,6 +94,7 @@ export const ActiveProjectsSection = () => {
 					includeArchived: myAccount ? showArchive : true,
 					networkId: networkIds.length === 1 ? networkIds[0] : 0,
 				},
+				fetchPolicy: fetchPolicy,
 			});
 			setLoading(false);
 			if (userDonations?.recurringDonationsByUserId) {
@@ -93,6 +103,11 @@ export const ActiveProjectsSection = () => {
 				setDonations(recurringDonationsByUserId.recurringDonations);
 				setTotalDonations(recurringDonationsByUserId.totalCount);
 			}
+
+			// update deps object
+			depsRef.current = {
+				trigger,
+			};
 		};
 		fetchUserDonations().then();
 	}, [
@@ -116,7 +131,9 @@ export const ActiveProjectsSection = () => {
 					<Flex gap='24px'>
 						<StyledToggleSwitch
 							isOn={showArchive}
-							label='Switch to Archive Donations'
+							label={formatMessage({
+								id: 'label.archive_switch',
+							})}
 							toggleOnOff={() =>
 								setShowArchive(archive => !archive)
 							}
