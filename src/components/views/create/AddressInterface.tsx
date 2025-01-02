@@ -207,9 +207,20 @@ const AddressInterface = ({
 											? formatMessage({
 													id: 'label.your_project_is_set_up_to_receive_recurring_donations',
 												})
-											: formatMessage({
-													id: 'label.do_you_want_this_project_to_be_setup_to_receive_recurring_donations',
-												})}
+											: hasAnchorContract
+												? formatMessage(
+														{
+															id: 'label.this_project_is_now_set_up_publish_and_finalize_it',
+														},
+														{
+															network: isOptimism
+																? 'Optimism'
+																: 'Base',
+														},
+													)
+												: formatMessage({
+														id: 'label.do_you_want_this_project_to_be_setup_to_receive_recurring_donations',
+													})}
 									</CustomP>
 									<CustomLink
 										href={links.RECURRING_DONATION_DOCS}
@@ -222,7 +233,7 @@ const AddressInterface = ({
 									.
 								</div>
 							</div>
-							{hasAnchorContract && isEditMode ? (
+							{hasAnchorContract ? (
 								<IconCheckContainer>
 									<IconCheck16 color={brandColors.giv[100]} />
 								</IconCheckContainer>
