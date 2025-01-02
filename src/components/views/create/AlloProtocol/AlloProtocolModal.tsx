@@ -6,7 +6,7 @@ import {
 	P,
 	brandColors,
 } from '@giveth/ui-design-system';
-import { useAccount, useSwitchChain } from 'wagmi';
+import { useSwitchChain } from 'wagmi';
 import { useIntl } from 'react-intl';
 import { useRouter } from 'next/router';
 import { writeContract, waitForTransactionReceipt } from '@wagmi/core';
@@ -15,10 +15,13 @@ import { IModal } from '@/types/common';
 import { Modal } from '@/components/modals/Modal';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
 import config from '@/configuration';
-import { IProject, IProjectEdition } from '@/apollo/types/types';
+import {
+	IAnchorContractBasicData,
+	IProject,
+	IProjectEdition,
+} from '@/apollo/types/types';
 import StorageLabel from '@/lib/localStorage';
 import { slugToSuccessView, slugToProjectView } from '@/lib/routeCreators';
-import { EProjectStatus } from '@/apollo/types/gqlEnums';
 import { CREATE_ANCHOR_CONTRACT_ADDRESS_QUERY } from '@/apollo/gql/gqlSuperfluid';
 import { client } from '@/apollo/apolloClient';
 import { extractContractAddressFromString } from '../../donate/Recurring/AlloProtocolFirstDonationModal';
@@ -29,18 +32,41 @@ import { generateRandomNonce } from '@/lib/helpers';
 interface IAlloProtocolModal extends IModal {
 	project?: IProjectEdition; //If undefined, it means we are in create mode
 	addedProjectState: IProject;
+	baseAnchorContract?: IAnchorContractBasicData;
+	opAnchorContract?: IAnchorContractBasicData;
 }
 
 export const saveAnchorContract = async ({
 	addedProjectState,
 	chainId,
 	recipientAddress,
+	ownerAddres,
+	isDraft,
+	anchorContract,
+	userId,
 }: {
-	addedProjectState: IProject;
+	addedProjectState?: IProject;
 	chainId: number;
 	recipientAddress?: string;
+	ownerAddres?: string;
+	isDraft?: boolean;
+	anchorContract?: IAnchorContractBasicData;
+	userId?: string;
 }) => {
 	try {
+		if (anchorContract && addedProjectState) {
+			// Used on creation when there's already an anchor contract saved
+			return await client.mutate({
+				mutation: CREATE_ANCHOR_CONTRACT_ADDRESS_QUERY,
+				variables: {
+					projectId: Number(addedProjectState.id),
+					networkId: chainId,
+					address: anchorContract.contractAddress,
+					recipientAddress,
+					txHash: anchorContract.hash,
+				},
+			});
+		}
 		const isOptimism = chainId === config.OPTIMISM_NETWORK_NUMBER;
 		const hash = await writeContract(wagmiConfig, {
 			address: isOptimism
@@ -51,12 +77,16 @@ export const saveAnchorContract = async ({
 			chainId,
 			args: [
 				generateRandomNonce(), //nonce
-				addedProjectState?.id!,
+				addedProjectState
+					? `giveth_project:${addedProjectState?.id!}`
+					: `giveth_user:${userId || 'unknown'}`,
 				{
 					protocol: 1,
 					pointer: '',
 				},
-				addedProjectState?.adminUser?.walletAddress, //admin user wallet address
+				addedProjectState
+					? addedProjectState?.adminUser?.walletAddress
+					: ownerAddres, //admin user wallet address
 				[],
 			],
 		});
@@ -70,20 +100,25 @@ export const saveAnchorContract = async ({
 				data.logs[0].data,
 			);
 
-			//Call backend to update project
-			await client.mutate({
-				mutation: CREATE_ANCHOR_CONTRACT_ADDRESS_QUERY,
-				variables: {
-					projectId: Number(addedProjectState.id),
-					networkId: chainId,
-					address: contractAddress,
-					recipientAddress,
-					txHash: hash,
-				},
-			});
+			if (isDraft || !addedProjectState) {
+				return { contractAddress, hash };
+			} else if (addedProjectState) {
+				//Call backend to update project
+				await client.mutate({
+					mutation: CREATE_ANCHOR_CONTRACT_ADDRESS_QUERY,
+					variables: {
+						projectId: Number(addedProjectState.id),
+						networkId: chainId,
+						address: contractAddress,
+						recipientAddress,
+						txHash: hash,
+					},
+				});
+			}
 		}
 	} catch (error) {
 		console.error('Error Contract', error);
+		throw error;
 	}
 };
 
@@ -91,17 +126,15 @@ const AlloProtocolModal: FC<IAlloProtocolModal> = ({
 	setShowModal,
 	addedProjectState,
 	project,
+	baseAnchorContract,
+	opAnchorContract,
 }) => {
+	const { switchChain } = useSwitchChain();
 	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
-	const { chain } = useAccount();
 	const [isLoading, setIsLoading] = useState(false);
 	const [txResult, setTxResult] = useState<Address>();
 	const router = useRouter();
-	const { switchChain } = useSwitchChain();
 	const { formatMessage } = useIntl();
-	const isDraft =
-		project?.status.name === EProjectStatus.DRAFT ||
-		addedProjectState.status?.name === EProjectStatus.DRAFT;
 
 	const isEditMode = !!project;
 
@@ -118,70 +151,37 @@ const AlloProtocolModal: FC<IAlloProtocolModal> = ({
 		closeModal();
 	};
 
-	const isOnOptimism = chain
-		? chain.id === config.OPTIMISM_NETWORK_NUMBER
-		: false;
-
-	const isOnBase = chain ? chain.id === config.BASE_NETWORK_NUMBER : false;
-
 	const handleButtonClick = async () => {
 		try {
+			if (!addedProjectState) return;
 			setIsLoading(true);
-			const hash = await writeContract(wagmiConfig, {
-				address: isOnOptimism
-					? config.OPTIMISM_CONFIG.anchorRegistryAddress
-					: config.BASE_CONFIG.anchorRegistryAddress,
-				functionName: 'createProfile',
-				abi: createProfileABI.abi,
-				chainId: isOnOptimism
-					? config.OPTIMISM_NETWORK_NUMBER
-					: config.BASE_NETWORK_NUMBER,
-				args: [
-					generateRandomNonce(), //nonce
-					addedProjectState?.id!,
-					{
-						protocol: 1,
-						pointer: '',
-					},
-					addedProjectState?.adminUser?.walletAddress, //admin user wallet address
-					[],
-				],
-			});
-			setTxResult(hash);
-			if (hash) {
-				const data = await waitForTransactionReceipt(wagmiConfig, {
-					hash: hash,
-					chainId: isOnOptimism
-						? config.OPTIMISM_NETWORK_NUMBER
-						: config.BASE_NETWORK_NUMBER,
+			// Handle Base anchor contract
+			if (baseAnchorContract?.recipientAddress) {
+				switchChain?.({
+					chainId: config.BASE_NETWORK_NUMBER,
 				});
+				await saveAnchorContract({
+					addedProjectState,
+					chainId: config.BASE_NETWORK_NUMBER,
+					recipientAddress: baseAnchorContract.recipientAddress,
+					anchorContract: baseAnchorContract,
+				});
+			}
 
-				const contractAddress = extractContractAddressFromString(
-					data.logs[0].data,
-				);
-				//Call backend to update project
-				await client.mutate({
-					mutation: CREATE_ANCHOR_CONTRACT_ADDRESS_QUERY,
-					variables: {
-						projectId: Number(addedProjectState.id),
-						networkId: isOnOptimism
-							? config.OPTIMISM_NETWORK_NUMBER
-							: config.BASE_NETWORK_NUMBER,
-						address: contractAddress,
-						txHash: hash,
-					},
+			// Handle Optimism anchor contract
+			if (opAnchorContract?.recipientAddress) {
+				switchChain?.({
+					chainId: config.OPTIMISM_NETWORK_NUMBER,
 				});
-				if (!isEditMode || (isEditMode && isDraft)) {
-					await router.push(
-						slugToSuccessView(addedProjectState.slug),
-					);
-				} else {
-					await router.push(
-						slugToProjectView(addedProjectState.slug),
-					);
-				}
+				await saveAnchorContract({
+					addedProjectState,
+					chainId: config.OPTIMISM_NETWORK_NUMBER,
+					recipientAddress: opAnchorContract.recipientAddress,
+					anchorContract: opAnchorContract,
+				});
 			}
 			setShowModal(false); // Close the modal
+			await router.push(slugToProjectView(addedProjectState.slug));
 		} catch (error) {
 			console.error('Error Contract', error);
 		} finally {
@@ -192,6 +192,9 @@ const AlloProtocolModal: FC<IAlloProtocolModal> = ({
 	useEffect(() => {
 		localStorage.removeItem(StorageLabel.CREATE_PROJECT_FORM);
 	}, []);
+
+	const opAnchorReady = opAnchorContract?.recipientAddress;
+	const baseAnchorReady = baseAnchorContract?.recipientAddress;
 
 	return (
 		<Modal
@@ -215,14 +218,18 @@ const AlloProtocolModal: FC<IAlloProtocolModal> = ({
 						id: 'label.recurring_donation_setup_2',
 					})}
 					<span style={{ whiteSpace: 'nowrap', display: 'inline' }}>
-						Optimism
+						{opAnchorReady && baseAnchorReady
+							? 'Base & Optimsim'
+							: opAnchorReady
+								? 'Optimism'
+								: baseAnchorReady && 'Base'}
 					</span>
 					.
 				</P>
 				<Ellipse />
 				<br />
 				<CustomButton
-					label={isOnOptimism ? 'Confirm' : 'Switch To Optimism'}
+					label={'Confirm'}
 					onClick={handleButtonClick}
 					loading={isLoading}
 					disabled={isLoading}

@@ -42,7 +42,8 @@ export const FilterMenu = forwardRef<HTMLDivElement, IFilterMenuProps>(
 		const { formatMessage } = useIntl();
 		const count =
 			tokenFilters.length +
-			Object.values(statusFilters).filter(Boolean).length;
+			Object.values(statusFilters).filter(Boolean).length +
+			networkIds.length;
 
 		const handleSelectFilter = (e: boolean, filter: ISuperToken) => {
 			if (e) {
@@ -63,6 +64,7 @@ export const FilterMenu = forwardRef<HTMLDivElement, IFilterMenuProps>(
 		const clearFilters = () => {
 			setTokenFilters([]);
 			setStatusFilters({ active: false, ended: false });
+			setNetworkIds([]);
 			handleClose();
 		};
 
