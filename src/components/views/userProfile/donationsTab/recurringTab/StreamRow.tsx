@@ -13,33 +13,53 @@ import config from '@/configuration';
 import { countActiveStreams } from '@/helpers/donate';
 import { findTokenByAddress } from '@/helpers/superfluid';
 import { ModifySuperTokenModal } from '@/components/views/donate/Recurring/ModifySuperToken/ModifySuperTokenModal';
+import NetworkLogo from '@/components/NetworkLogo';
 
 interface IStreamRowProps {
 	tokenStream: ISuperfluidStream[];
 }
 
 export const StreamRow: FC<IStreamRowProps> = ({ tokenStream }) => {
-	const superToken = useMemo(
-		() =>
-			config.OPTIMISM_CONFIG.SUPER_FLUID_TOKENS.find(
-				s => s.id === tokenStream[0].token.id,
-			),
-		[tokenStream],
-	);
+	const superToken = useMemo(() => {
+		const networkId = tokenStream[0].networkId;
+
+		// Use the appropriate configuration based on the networkId
+		const tokenConfig =
+			networkId === config.BASE_NETWORK_NUMBER
+				? config.BASE_CONFIG.SUPER_FLUID_TOKENS
+				: networkId === config.OPTIMISM_NETWORK_NUMBER
+					? config.OPTIMISM_CONFIG.SUPER_FLUID_TOKENS
+					: [];
+
+		// Find the super token in the selected configuration
+		return (
+			tokenConfig.find(
+				s =>
+					s.id.toLowerCase() ===
+					tokenStream[0].token.id.toLowerCase(),
+			) || null
+		);
+	}, [tokenStream]);
+
 	const [showModifyModal, setShowModifyModal] = useState(false);
 	const { address, chain } = useAccount();
 	const { switchChain } = useSwitchChain();
 	const { formatMessage } = useIntl();
+
+	const recurringNetworkId = tokenStream[0].networkId;
 
 	const chainId = chain?.id;
 
 	const { data: balance, refetch } = useBalance({
 		token: tokenStream[0].token.id,
 		address: address,
-		chainId: config.OPTIMISM_NETWORK_NUMBER,
+		chainId: tokenStream[0].networkId,
 	});
 
-	const token = findTokenByAddress(tokenStream[0].token.id);
+	const token = findTokenByAddress(
+		tokenStream[0].token.id,
+		tokenStream[0].networkId,
+	);
 	const underlyingSymbol = token?.underlyingToken?.symbol || '';
 	const totalFlowRate = tokenStream.reduce(
 		(acc, curr) => acc + BigInt(curr.currentFlowRate),
@@ -77,6 +97,11 @@ export const StreamRow: FC<IStreamRowProps> = ({ tokenStream }) => {
 				</P>
 			</TableCell>
 			<TableCell>
+				<NetworkLogoWrapper>
+					<NetworkLogo chainId={recurringNetworkId} logoSize={32} />
+				</NetworkLogoWrapper>
+			</TableCell>
+			<TableCell>
 				{activeStreamCount}
 				&nbsp;
 				{formatMessage(
@@ -104,9 +129,9 @@ export const StreamRow: FC<IStreamRowProps> = ({ tokenStream }) => {
 			<TableCell>
 				<ModifyButton
 					onClick={() => {
-						if (chainId !== config.OPTIMISM_NETWORK_NUMBER) {
+						if (chainId !== recurringNetworkId) {
 							switchChain?.({
-								chainId: config.OPTIMISM_NETWORK_NUMBER,
+								chainId: recurringNetworkId,
 							});
 						} else {
 							setShowModifyModal(true);
@@ -117,12 +142,15 @@ export const StreamRow: FC<IStreamRowProps> = ({ tokenStream }) => {
 				</ModifyButton>
 			</TableCell>
 			{showModifyModal && superToken && (
-				<ModifySuperTokenModal
-					tokenStreams={tokenStream}
-					setShowModal={setShowModifyModal}
-					selectedToken={superToken}
-					refreshBalance={refetch}
-				/>
+				<>
+					<ModifySuperTokenModal
+						tokenStreams={tokenStream}
+						setShowModal={setShowModifyModal}
+						selectedToken={superToken}
+						refreshBalance={refetch}
+						recurringNetworkID={recurringNetworkId}
+					/>
+				</>
 			)}
 		</RowWrapper>
 	);
@@ -138,4 +166,8 @@ const ModifyButton = styled(P)`
 	&:hover {
 		color: ${brandColors.pinky[700]};
 	}
+`;
+
+const NetworkLogoWrapper = styled.div`
+	margin-left: 5px;
 `;

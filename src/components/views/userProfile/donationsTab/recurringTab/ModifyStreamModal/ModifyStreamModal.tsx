@@ -28,6 +28,7 @@ export interface IModifyDonationInfo {
 export interface IModifyStreamModalProps extends IModal {
 	donation: IWalletRecurringDonation;
 	refetch: () => void;
+	recurringNetworkId: number;
 }
 
 export const ModifyStreamModal: FC<IModifyStreamModalProps> = ({
@@ -39,13 +40,16 @@ export const ModifyStreamModal: FC<IModifyStreamModalProps> = ({
 	const { formatMessage } = useIntl();
 	const { tokenStreams } = useUserStreams();
 
-	const superToken = useMemo(
-		() =>
-			config.OPTIMISM_CONFIG.SUPER_FLUID_TOKENS.find(
+	const superToken = useMemo(() => {
+		if (props.recurringNetworkId === config.OPTIMISM_NETWORK_NUMBER) {
+			return config.OPTIMISM_CONFIG.SUPER_FLUID_TOKENS.find(
 				s => s.underlyingToken.symbol === props.donation.currency,
-			),
-		[props.donation.currency],
-	);
+			);
+		}
+		return config.BASE_CONFIG.SUPER_FLUID_TOKENS.find(
+			s => s.underlyingToken.symbol === props.donation.currency,
+		);
+	}, [props.recurringNetworkId, props.donation.currency]);
 
 	const handleCloseModal = () => {
 		if (step === EDonationSteps.SUCCESS) {
@@ -71,6 +75,7 @@ export const ModifyStreamModal: FC<IModifyStreamModalProps> = ({
 					tokenStreams={tokenStreams}
 					superToken={superToken!}
 					setModifyInfo={setModifyInfo}
+					recurringNetworkId={props.recurringNetworkId}
 				/>
 			) : (
 				<UpdateStreamInnerModal
@@ -82,6 +87,7 @@ export const ModifyStreamModal: FC<IModifyStreamModalProps> = ({
 					token={modifyInfo?.token!}
 					closeModal={handleCloseModal}
 					{...props}
+					recurringNetworkId={props.recurringNetworkId}
 				/>
 			)}
 		</Modal>

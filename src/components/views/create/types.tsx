@@ -1,4 +1,8 @@
-import { ICategory, IWalletAddress } from '@/apollo/types/types';
+import {
+	IAnchorContractBasicData,
+	ICategory,
+	IWalletAddress,
+} from '@/apollo/types/types';
 
 export enum EInputs {
 	name = 'name',
@@ -21,6 +25,8 @@ export enum EInputs {
 	website = 'website',
 	telegram = 'telegram',
 	github = 'github',
+	baseAnchorContract = 'baseAnchorContract',
+	opAnchorContract = 'opAnchorContract',
 }
 
 export enum ECreateProjectSections {
@@ -55,4 +61,6 @@ export type TInputs = {
 	[EInputs.website]?: string;
 	[EInputs.telegram]?: string;
 	[EInputs.github]?: string;
+	[EInputs.baseAnchorContract]?: IAnchorContractBasicData;
+	[EInputs.opAnchorContract]?: IAnchorContractBasicData;
 };

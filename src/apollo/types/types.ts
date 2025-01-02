@@ -32,6 +32,14 @@ export interface IEstimatedMatching {
 export interface IAnchorContractData {
 	address: Address;
 	isActive: boolean;
+	networkId: number;
+}
+
+export interface IAnchorContractBasicData {
+	contractAddress?: Address;
+	recipientAddress: Address;
+	hash?: string;
+	enabled?: boolean;
 }
 
 export interface IProject {

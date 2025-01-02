@@ -157,6 +157,7 @@ const RecurringDonationTable: FC<RecurringDonationTable> = ({
 								<StreamActionButton
 									donation={donation}
 									refetch={refetch}
+									recurringNetworkId={donation.networkId}
 								/>
 							</DonationTableCell>
 						</>

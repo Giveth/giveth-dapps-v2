@@ -31,6 +31,7 @@ export enum EModifySectionPlace {
 interface IModifySectionProps {
 	titleLabel: string;
 	token?: IToken;
+	recurringNetworkID: number;
 	amount: bigint;
 	setAmount: Dispatch<SetStateAction<bigint>>;
 	balance?: GetBalanceReturnType;
@@ -45,6 +46,7 @@ interface IModifySectionProps {
 export const ModifySection: FC<IModifySectionProps> = ({
 	titleLabel,
 	token,
+	recurringNetworkID,
 	amount,
 	setAmount,
 	balance,
@@ -62,7 +64,7 @@ export const ModifySection: FC<IModifySectionProps> = ({
 		setAmount(balance.value); // Set the amount to the balance value
 	};
 
-	const _token = findTokenByAddress(token?.id);
+	const _token = findTokenByAddress(token?.id, recurringNetworkID);
 	const ProperGlink =
 		modifySectionPlace === EModifySectionPlace.DEPOSIT
 			? CustomGLink

@@ -11,6 +11,7 @@ import { TokenIconWithGIVBack } from '../../TokenIcon/TokenIconWithGIVBack';
 
 interface IStreamInfoProps {
 	stream: ISuperfluidStream[];
+	recurringNetworkId?: number;
 	superToken: IToken;
 	balance: bigint;
 	disable: boolean;
@@ -20,6 +21,7 @@ interface IStreamInfoProps {
 
 export const StreamInfo: FC<IStreamInfoProps> = ({
 	stream,
+	recurringNetworkId,
 	balance,
 	superToken,
 	disable,
@@ -36,7 +38,7 @@ export const StreamInfo: FC<IStreamInfoProps> = ({
 			? balance / totalFlowRate / 2628000n
 			: 0n;
 
-	const token = findTokenByAddress(stream[0].token.id);
+	const token = findTokenByAddress(stream[0].token.id, recurringNetworkId);
 	const underlyingToken = token?.underlyingToken;
 	const activeStreamCount = countActiveStreams(stream);
 	return (

@@ -113,8 +113,7 @@ export const RecurringDonationCard = () => {
 	const [showAlloProtocolModal, setShowAlloProtocolModal] = useState(false);
 
 	const { formatMessage } = useIntl();
-	const { address } = useAccount();
-	const { chain } = useAccount();
+	const { address, chain } = useAccount();
 	const isSignedIn = useAppSelector(state => state.user.isSignedIn);
 	const { modalCallback: signInThenDonate } = useModalCallback(() =>
 		setShowRecurringDonationModal(true),
@@ -164,8 +163,8 @@ export const RecurringDonationCard = () => {
 		tokenStreams[selectedRecurringToken?.token.id.toLowerCase() || ''];
 
 	const anchorContractAddress = useMemo(
-		() => findAnchorContractAddress(project.anchorContracts),
-		[project.anchorContracts],
+		() => findAnchorContractAddress(project.anchorContracts, chain?.id),
+		[project.anchorContracts, chain?.id],
 	);
 
 	// otherStreamsPerSec is the total flow rate of all streams except the one to the project
@@ -762,7 +761,9 @@ export const RecurringDonationCard = () => {
 			{showSelectTokenModal && (
 				<SelectTokenModal setShowModal={setShowSelectTokenModal} />
 			)}
-			{(!chain || chain.id !== config.OPTIMISM_NETWORK_NUMBER) && (
+			{(!chain ||
+				(chain.id !== config.OPTIMISM_NETWORK_NUMBER &&
+					chain.id !== config.BASE_NETWORK_NUMBER)) && (
 				<WrongNetworkLayer />
 			)}
 			{showRecurringDonationModal && (
@@ -787,6 +788,7 @@ export const RecurringDonationCard = () => {
 					setShowModal={setShowTopUpModal}
 					selectedToken={selectedRecurringToken?.token!}
 					refreshBalance={refetch}
+					recurringNetworkID={chain?.id || 0}
 				/>
 			)}
 			{showAlloProtocolModal && (
