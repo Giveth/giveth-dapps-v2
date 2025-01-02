@@ -233,6 +233,10 @@ const ProjectRecurringDonationTable = () => {
 														) * ONE_MONTH_SECONDS,
 														18,
 													),
+													undefined,
+													undefined,
+													undefined,
+													3,
 												)}
 									</B>
 									{donation.status !== 'ended' && (
@@ -250,6 +254,8 @@ const ProjectRecurringDonationTable = () => {
 											donation.amountStreamed,
 											'',
 											locale,
+											undefined,
+											3,
 										)}
 									<Currency>{donation.currency}</Currency>
 									{!donation.anonymous && (
