@@ -13,7 +13,7 @@ import {
 import styled from 'styled-components';
 
 import { useRouter } from 'next/router';
-import { useCallback, useMemo } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import { Shadow } from '@/components/styled-components/Shadow';
 import DiscordIcon from '/public/images/icons/social/discord.svg';
 import LinkedinIcon from '/public/images/icons/social/linkedin.svg';
@@ -48,21 +48,16 @@ const SocialProfile = () => {
 		[verificationData],
 	);
 
-	const discordData = useMemo(
-		() => findSocialMedia('discord'),
-		[findSocialMedia],
+	const [twitterData, setTwitterData] = useState(
+		useMemo(() => findSocialMedia('twitter'), [findSocialMedia]),
 	);
 
-	const twitterData = useMemo(
-		() => findSocialMedia('twitter'),
-		[findSocialMedia],
+	const [linkedinData, setLinkedinData] = useState(
+		useMemo(() => findSocialMedia('linkedin'), [findSocialMedia]),
 	);
-
-	const linkedinData = useMemo(
-		() => findSocialMedia('linkedin'),
-		[findSocialMedia],
+	const [discordData, setDiscordData] = useState(
+		useMemo(() => findSocialMedia('discord'), [findSocialMedia]),
 	);
-
 	async function handleSocialSubmit(
 		socialNetwork: string,
 		notAuthorized: boolean,
@@ -108,6 +103,19 @@ const SocialProfile = () => {
 				variables: {
 					socialProfileId: id,
 				},
+			});
+
+			const stateHandlers: any = {
+				twitter: setTwitterData,
+				linkedin: setLinkedinData,
+				discord: setDiscordData,
+			};
+
+			// Loop through the states to find and update the matching one
+			Object.keys(stateHandlers).forEach(key => {
+				if (id === Number(findSocialMedia(key)?.id)) {
+					stateHandlers[key](null);
+				}
 			});
 
 			if (slug) {
