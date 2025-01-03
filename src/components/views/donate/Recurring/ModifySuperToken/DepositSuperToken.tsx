@@ -2,6 +2,7 @@ import { useState, type FC, useEffect } from 'react';
 import { Button, Flex } from '@giveth/ui-design-system';
 import { useAccount, useBalance } from 'wagmi';
 import { useIntl } from 'react-intl';
+import { ethers } from 'ethers';
 import { Framework } from '@superfluid-finance/sdk-core';
 import { ISuperToken, IToken } from '@/types/superFluid';
 import { AddressZero } from '@/lib/constants/constants';
@@ -10,7 +11,7 @@ import { IModifySuperTokenInnerModalProps } from './ModifySuperTokenModal';
 import { DepositSteps } from './DepositSuperTokenSteps';
 import { useTokenPrice } from '@/hooks/useTokenPrice';
 import { approveERC20tokenTransfer } from '@/lib/stakingPool';
-import config, { isProduction } from '@/configuration';
+import { isProduction } from '@/configuration';
 import { showToastError } from '@/lib/helpers';
 import { useIsSafeEnvironment } from '@/hooks/useSafeAutoConnect';
 import { StreamInfo } from './StreamInfo';
@@ -40,7 +41,8 @@ export const DepositSuperToken: FC<IDepositSuperTokenProps> = ({
 }) => {
 	const [amount, setAmount] = useState(0n);
 
-	const { address } = useAccount();
+	const { address, chain } = useAccount();
+	const recurringNetworkID = chain?.id ?? 0;
 	const { formatMessage } = useIntl();
 
 	const {
@@ -76,13 +78,13 @@ export const DepositSuperToken: FC<IDepositSuperTokenProps> = ({
 		if (!address || !superToken || !token) return;
 		try {
 			setStep(EModifySuperTokenSteps.APPROVING);
-			await ensureCorrectNetwork(config.OPTIMISM_NETWORK_NUMBER);
+			await ensureCorrectNetwork(recurringNetworkID);
 			const approve = await approveERC20tokenTransfer(
 				amount,
 				address,
 				superToken.id, //superTokenAddress
 				token.id, //tokenAddress
-				config.OPTIMISM_CONFIG.id,
+				recurringNetworkID,
 				isSafeEnv,
 			);
 			if (approve) {
@@ -99,7 +101,7 @@ export const DepositSuperToken: FC<IDepositSuperTokenProps> = ({
 	const onDeposit = async () => {
 		try {
 			setStep(EModifySuperTokenSteps.DEPOSITING);
-			await ensureCorrectNetwork(config.OPTIMISM_NETWORK_NUMBER);
+			await ensureCorrectNetwork(recurringNetworkID);
 			if (!address) {
 				throw new Error('address not found1');
 			}
@@ -115,7 +117,7 @@ export const DepositSuperToken: FC<IDepositSuperTokenProps> = ({
 				throw new Error('Provider or signer not found');
 
 			const _options = {
-				chainId: config.OPTIMISM_CONFIG.id,
+				chainId: recurringNetworkID,
 				provider: provider,
 				resolverAddress: isProduction
 					? undefined
@@ -125,6 +127,7 @@ export const DepositSuperToken: FC<IDepositSuperTokenProps> = ({
 
 			// EThx is not a Wrapper Super Token and should load separately
 			let superTokenAsset;
+			let newAmount = amount;
 			if (superToken.symbol === 'ETHx') {
 				superTokenAsset = await sf.loadNativeAssetSuperToken(
 					superToken.id,
@@ -132,10 +135,16 @@ export const DepositSuperToken: FC<IDepositSuperTokenProps> = ({
 			} else {
 				superTokenAsset = await sf.loadWrapperSuperToken(superToken.id);
 			}
+			if (token && token.decimals === 6) {
+				const divisor = BigInt(10 ** token.decimals);
+				const currentAmount = Number(amount) / Number(divisor);
+				newAmount = ethers.utils
+					.parseUnits(currentAmount.toString(), 18)
+					.toBigInt();
+			}
 			const upgradeOperation = await superTokenAsset.upgrade({
-				amount: amount.toString(),
+				amount: newAmount.toString(),
 			});
-
 			const tx = await upgradeOperation.exec(signer);
 			const res = await tx.wait();
 			if (!res.status) {
@@ -165,7 +174,6 @@ export const DepositSuperToken: FC<IDepositSuperTokenProps> = ({
 			closeModal();
 		}
 	};
-
 	return (
 		<Wrapper>
 			{step === EModifySuperTokenSteps.MODIFY ? (
@@ -176,6 +184,7 @@ export const DepositSuperToken: FC<IDepositSuperTokenProps> = ({
 							amount={amount}
 							setAmount={setAmount}
 							token={token}
+							recurringNetworkID={recurringNetworkID}
 							balance={balance}
 							refetch={refetch}
 							isRefetching={isRefetching}

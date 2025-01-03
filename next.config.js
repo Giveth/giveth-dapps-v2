@@ -98,6 +98,11 @@ const moduleExports = withBundleAnalyzer({
 				permanent: false,
 			},
 			{
+				source: '/comarketing',
+				destination: '/assets/Giveth-Co-Marketing-Slides.pdf',
+				permanent: false,
+			},
+			{
 				source: '/qfguide',
 				destination:
 					'https://giveth.notion.site/Giveth-Quadratic-Funding-3478aa27eb094a699f9ddd6a8b611027',
@@ -148,11 +153,42 @@ const moduleExports = withBundleAnalyzer({
 		locales,
 		defaultLocale,
 	},
-	headers: () => {
+	headers: async () => {
 		return [
+			{
+				source: '/:path*',
+				locale: false,
+				headers: [
+					{
+						key: 'X-Frame-Options',
+						value: 'ALLOW-FROM https://app.safe.global',
+					},
+					{
+						key: 'Content-Security-Policy',
+						value: "frame-ancestors 'self' https://app.safe.global",
+					},
+					{
+						key: 'Access-Control-Allow-Origin',
+						value: 'https://app.safe.global',
+					},
+					{
+						key: 'X-Content-Type-Options',
+						value: 'nosniff', // Mitigates MIME type sniffing
+					},
+					{
+						key: 'Referrer-Policy',
+						value: 'strict-origin-when-cross-origin', // Protects user privacy
+					},
+					{
+						key: 'Permissions-Policy',
+						value: 'camera=(), microphone=(), geolocation=()', // Limits usage of browser features
+					},
+				],
+			},
 			{
 				// Adding CORS headers for /manifest.json
 				source: '/manifest.json',
+				locale: false,
 				headers: [
 					{
 						key: 'Access-Control-Allow-Origin',

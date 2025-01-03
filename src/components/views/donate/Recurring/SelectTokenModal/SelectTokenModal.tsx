@@ -45,12 +45,18 @@ export interface IBalances {
 	[key: string]: bigint;
 }
 
-const superTokens = config.OPTIMISM_CONFIG.SUPER_FLUID_TOKENS;
-
 const SelectTokenInnerModal: FC<ISelectTokenModalProps> = ({
 	setShowModal,
 }) => {
+	const { chain } = useAccount();
+
+	const superTokens =
+		chain?.id === config.OPTIMISM_NETWORK_NUMBER
+			? config.OPTIMISM_CONFIG.SUPER_FLUID_TOKENS
+			: config.BASE_CONFIG.SUPER_FLUID_TOKENS;
+
 	const [tokens, setTokens] = useState<ISuperToken[]>([]);
+	const [underlyingTokens, setUnderlyingTokens] = useState<ISuperToken[]>([]);
 	const [balances, setBalances] = useState<IBalances>({});
 
 	const { formatMessage } = useIntl();
@@ -84,11 +90,12 @@ const SelectTokenInnerModal: FC<ISelectTokenModalProps> = ({
 				return acc;
 			}, {} as IBalances);
 
-			const filteredTokens = superTokens.filter(
-				token => !(newBalances[token.symbol] > 0n),
-			);
+			const filteredTokens = superTokens.filter(token => {
+				return !(newBalances[token.underlyingToken.symbol] > 0n);
+			});
 
 			setTokens(filteredTokens);
+			setUnderlyingTokens(superTokens);
 
 			// Update the state with the new balances
 			setBalances(newBalances);
@@ -111,7 +118,6 @@ const SelectTokenInnerModal: FC<ISelectTokenModalProps> = ({
 			return balances[symbol] !== undefined && balances[symbol] > 0n;
 		},
 	);
-
 	return (
 		<>
 			<Wrapper>
@@ -127,12 +133,16 @@ const SelectTokenInnerModal: FC<ISelectTokenModalProps> = ({
 						</TitleSubheader>
 						{Object.keys(tokenStreams).map(tokenId => {
 							const token = superTokens.find(
-								token => token.id === tokenId,
+								token =>
+									token.id.toLowerCase() ===
+									tokenId.toLowerCase(),
 							) as IToken;
 							return token ? (
 								<StreamInfo
-									key={tokenId}
-									stream={tokenStreams[tokenId]}
+									key={`${tokenId}-${token.symbol || token.id}`}
+									stream={tokenStreams[tokenId.toLowerCase()]}
+									recurringNetworkId={chain?.id}
+									superToken={token}
 									balance={balances[token.symbol]}
 									disable={
 										!balances[token.symbol] ||
@@ -150,10 +160,10 @@ const SelectTokenInnerModal: FC<ISelectTokenModalProps> = ({
 							) : null;
 						})}
 						{superTokens.map(token =>
-							tokenStreams[token.id] ||
+							tokenStreams[token.id.toLowerCase()] ||
 							balances[token.symbol] === 0n ? null : (
 								<TokenInfo
-									key={token.symbol}
+									key={`${token.id}-${token.symbol}-${chain?.id}`}
 									token={token}
 									balance={balances[token.symbol]}
 									disable={
@@ -172,7 +182,6 @@ const SelectTokenInnerModal: FC<ISelectTokenModalProps> = ({
 						)}
 					</>
 				)}
-
 				{!isUserHasBalanceForAllSuperTokens && (
 					<>
 						<Title $medium>
@@ -185,10 +194,10 @@ const SelectTokenInnerModal: FC<ISelectTokenModalProps> = ({
 								id: 'label.superfluid_eligible_tokens_description',
 							})}
 						</TitleSubheader>
-						{tokens.length > 0 ? (
-							tokens.map(token => (
+						{underlyingTokens.length > 0 ? (
+							underlyingTokens.map(token => (
 								<TokenInfo
-									key={token.underlyingToken.symbol}
+									key={`${token.underlyingToken?.id || token.symbol}-${chain?.id}`}
 									token={token.underlyingToken}
 									balance={
 										balances[token.underlyingToken.symbol]

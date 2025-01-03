@@ -1,13 +1,13 @@
 import React from 'react';
 import styled from 'styled-components';
 import {
-	B,
 	Caption,
 	IconInfoFilled16,
 	brandColors,
 	neutralColors,
 	Flex,
 	FlexCenter,
+	Button,
 } from '@giveth/ui-design-system';
 import { useSwitchChain } from 'wagmi';
 import { useIntl } from 'react-intl';
@@ -27,26 +27,10 @@ export const WrongNetworkLayer = () => {
 						<IconInfoFilled16 />
 						<Caption>
 							{formatMessage({
-								id: 'label.recurring_donations_currently_only_available_on_optimism',
+								id: 'label.recurring_donations_currently_only_available_on_optimism_base',
 							})}
 						</Caption>
 					</Title>
-					<SwitchButton
-						onClick={async () => {
-							if (isOnEVM) {
-								switchChain &&
-									switchChain({
-										chainId: config.OPTIMISM_NETWORK_NUMBER,
-									});
-							} else {
-								await handleSingOutAndSignInWithEVM();
-							}
-						}}
-					>
-						{formatMessage({
-							id: 'label.switch_network',
-						})}
-					</SwitchButton>
 				</Header>
 				<Desc>
 					{formatMessage(
@@ -54,7 +38,44 @@ export const WrongNetworkLayer = () => {
 							id: 'label.switch_to_network_to_continue_donating',
 						},
 						{
-							network: <b>{config.OPTIMISM_CONFIG.name}</b>,
+							network: (
+								<>
+									<ButtonLinkHolder
+										buttonType='texty-primary'
+										label={config.OPTIMISM_CONFIG.name}
+										onClick={async () => {
+											if (isOnEVM) {
+												switchChain &&
+													switchChain({
+														chainId:
+															config
+																.OPTIMISM_CONFIG
+																.id,
+													});
+											} else {
+												await handleSingOutAndSignInWithEVM();
+											}
+										}}
+									/>{' '}
+									or{' '}
+									<ButtonLinkHolder
+										buttonType='texty-primary'
+										label={config.BASE_CONFIG.name}
+										onClick={async () => {
+											if (isOnEVM) {
+												switchChain &&
+													switchChain({
+														chainId:
+															config.BASE_CONFIG
+																.id,
+													});
+											} else {
+												await handleSingOutAndSignInWithEVM();
+											}
+										}}
+									/>
+								</>
+							),
 						},
 					)}
 				</Desc>
@@ -94,11 +115,11 @@ const Title = styled(Flex)`
 	color: ${brandColors.giv[500]};
 `;
 
-const SwitchButton = styled(B)`
-	cursor: pointer;
-	color: ${brandColors.pinky[500]};
-	&:hover {
-		color: ${brandColors.pinky[600]};
+const ButtonLinkHolder = styled(Button)`
+	display: inline-block !important;
+	padding: 0;
+	& span:hover {
+		color: ${neutralColors.gray[400]};
 	}
 `;
 

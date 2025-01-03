@@ -18,6 +18,7 @@ import { ISuperToken } from '@/types/superFluid';
 import { PinkyColoredNumber } from '@/components/styled-components/PinkyColoredNumber';
 import { TokenIcon } from '@/components/views/donate/TokenIcon/TokenIcon';
 import { IRecurringDonationFiltersButtonProps } from './RecurringDonationFiltersButton';
+import NetworkLogo from '@/components/NetworkLogo';
 
 interface IFilterMenuProps extends IRecurringDonationFiltersButtonProps {
 	handleClose: (e?: any) => void;
@@ -33,13 +34,16 @@ export const FilterMenu = forwardRef<HTMLDivElement, IFilterMenuProps>(
 			setStatusFilters,
 			tokenFilters,
 			setTokenFilters,
+			networkIds,
+			setNetworkIds,
 		},
 		ref,
 	) => {
 		const { formatMessage } = useIntl();
 		const count =
 			tokenFilters.length +
-			Object.values(statusFilters).filter(Boolean).length;
+			Object.values(statusFilters).filter(Boolean).length +
+			networkIds.length;
 
 		const handleSelectFilter = (e: boolean, filter: ISuperToken) => {
 			if (e) {
@@ -60,6 +64,7 @@ export const FilterMenu = forwardRef<HTMLDivElement, IFilterMenuProps>(
 		const clearFilters = () => {
 			setTokenFilters([]);
 			setStatusFilters({ active: false, ended: false });
+			setNetworkIds([]);
 			handleClose();
 		};
 
@@ -81,8 +86,113 @@ export const FilterMenu = forwardRef<HTMLDivElement, IFilterMenuProps>(
 					</FlexCenter>
 				</Header>
 				<Section>
+					<B>{formatMessage({ id: 'label.network' })}</B>
+					<FeatureItem>
+						<CheckBox
+							onChange={() => {
+								if (
+									networkIds.includes(
+										config.OPTIMISM_NETWORK_NUMBER,
+									)
+								) {
+									setNetworkIds(prev =>
+										prev.filter(
+											id =>
+												id !==
+												config.OPTIMISM_NETWORK_NUMBER,
+										),
+									);
+								} else {
+									setNetworkIds(prev => [
+										...prev,
+										config.OPTIMISM_NETWORK_NUMBER,
+									]);
+								}
+
+								handleClose();
+							}}
+							checked={networkIds.includes(
+								config.OPTIMISM_NETWORK_NUMBER,
+							)}
+							size={14}
+						>
+							<Flex $alignItems='center' gap='4px'>
+								<NetworkLogo
+									chainId={config.OPTIMISM_NETWORK_NUMBER}
+									logoSize={16}
+								/>
+								<GLink size='Medium'>Optimism</GLink>
+							</Flex>
+						</CheckBox>
+					</FeatureItem>
+					<FeatureItem>
+						<CheckBox
+							onChange={() => {
+								if (
+									networkIds.includes(
+										config.BASE_NETWORK_NUMBER,
+									)
+								) {
+									setNetworkIds(prev =>
+										prev.filter(
+											id =>
+												id !==
+												config.BASE_NETWORK_NUMBER,
+										),
+									);
+								} else {
+									setNetworkIds(prev => [
+										...prev,
+										config.BASE_NETWORK_NUMBER,
+									]);
+								}
+
+								handleClose();
+							}}
+							checked={networkIds.includes(
+								config.BASE_NETWORK_NUMBER,
+							)}
+							size={14}
+						>
+							<Flex $alignItems='center' gap='4px'>
+								<NetworkLogo
+									chainId={config.BASE_NETWORK_NUMBER}
+									logoSize={16}
+								/>
+								<GLink size='Medium'>Base</GLink>
+							</Flex>
+						</CheckBox>
+					</FeatureItem>
 					<B>{formatMessage({ id: 'label.tokens' })}</B>
 					{config.OPTIMISM_CONFIG.SUPER_FLUID_TOKENS.map(token => (
+						<FeatureItem key={token.id}>
+							<CheckBox
+								onChange={e => {
+									handleSelectFilter(e, token);
+								}}
+								checked={tokenFilters.includes(
+									token.underlyingToken.symbol,
+								)}
+								size={14}
+							>
+								<Flex $alignItems='center' gap='4px'>
+									<TokenIcon
+										symbol={token.underlyingToken.symbol}
+										size={16}
+									/>
+									<GLink size='Medium'>
+										{token.underlyingToken.symbol}
+									</GLink>
+								</Flex>
+							</CheckBox>
+						</FeatureItem>
+					))}
+					{config.BASE_CONFIG.SUPER_FLUID_TOKENS.filter(
+						token =>
+							token.underlyingToken.symbol !== 'USDC' &&
+							token.underlyingToken.symbol !== 'DAI' &&
+							token.underlyingToken.symbol !== 'ETH',
+					).map(token => (
 						<FeatureItem key={token.id}>
 							<CheckBox
 								onChange={e => {

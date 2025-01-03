@@ -82,7 +82,7 @@ const ProjectGIVbackToast = () => {
 
 	const handleBoostClick = () => {
 		if (isSSRMode) return;
-		if (!isAdminEmailVerified) return;
+		if (!isEmailVerifiedStatus) return;
 		if (!isEnabled) {
 			openConnectModal?.();
 		} else if (!isSignedIn) {
@@ -197,7 +197,7 @@ const ProjectGIVbackToast = () => {
 				},
 			);
 			description = formatMessage({
-				id: `${useIntlDescription}verified_owner_not_eligible`,
+				id: `${useIntlDescription}verified_owner_not_eligible_not_form`,
 			});
 			color = semanticColors.golden[600];
 			icon = <IconGIVBack24 color={semanticColors.golden[600]} />;

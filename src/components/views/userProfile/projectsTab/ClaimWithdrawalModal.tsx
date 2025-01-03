@@ -10,6 +10,7 @@ import { Address, encodeFunctionData } from 'viem';
 import { useState } from 'react';
 import { useIntl } from 'react-intl';
 import { writeContract, waitForTransactionReceipt } from '@wagmi/core';
+import { useAccount } from 'wagmi';
 import { Modal } from '@/components/modals/Modal';
 import { IModal } from '@/types/common';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
@@ -75,18 +76,29 @@ const ClaimWithdrawalModal = ({
 		useState<ClaimTransactionState>(ClaimTransactionState.NOT_STARTED);
 	const [txHash, setTxHash] = useState<Address>();
 	const { formatMessage } = useIntl();
+	const { chain } = useAccount();
+	const recurringNetworkID = chain?.id ?? 0;
 
 	const projectName = project.title || '';
-	const optimismAddress = project.addresses?.find(
-		address => address.networkId === config.OPTIMISM_NETWORK_NUMBER,
-	)?.address;
+	let projectAddress = '';
+	if (recurringNetworkID === config.OPTIMISM_NETWORK_NUMBER) {
+		projectAddress =
+			project.addresses?.find(
+				address => address.networkId === config.OPTIMISM_NETWORK_NUMBER,
+			)?.address || '';
+	} else if (recurringNetworkID === config.BASE_NETWORK_NUMBER) {
+		projectAddress =
+			project.addresses?.find(
+				address => address.networkId === config.BASE_NETWORK_NUMBER,
+			)?.address || '';
+	}
 
 	const isETHx = selectedStream.token.symbol.toLowerCase() === 'ethx';
 	const handleConfirm = async () => {
 		console.log('anchorContractAddress', anchorContractAddress);
 		try {
 			console.log('isETHx', isETHx);
-			await ensureCorrectNetwork(config.OPTIMISM_NETWORK_NUMBER);
+			await ensureCorrectNetwork(recurringNetworkID);
 			const encodedDowngradeTo = isETHx
 				? encodeFunctionData({
 						abi: ISETH.abi,
@@ -97,7 +109,7 @@ const ClaimWithdrawalModal = ({
 						abi: superTokenABI.abi,
 						functionName: 'downgradeTo',
 						args: [
-							optimismAddress,
+							projectAddress,
 							+selectedStream.balance.toString(),
 						],
 					});
@@ -114,7 +126,7 @@ const ClaimWithdrawalModal = ({
 				abi: anchorContractABI.abi,
 				address: anchorContractAddress,
 				functionName: 'execute',
-				chainId: config.OPTIMISM_NETWORK_NUMBER,
+				chainId: recurringNetworkID,
 				args: [selectedStream.token.id, '', encodedDowngradeTo],
 			});
 
@@ -124,7 +136,7 @@ const ClaimWithdrawalModal = ({
 					wagmiConfig,
 					{
 						hash: tx,
-						chainId: config.OPTIMISM_NETWORK_NUMBER,
+						chainId: recurringNetworkID,
 					},
 				);
 
@@ -141,9 +153,9 @@ const ClaimWithdrawalModal = ({
 						abi: anchorContractABI.abi,
 						address: anchorContractAddress,
 						functionName: 'execute',
-						chainId: config.OPTIMISM_NETWORK_NUMBER,
+						chainId: recurringNetworkID,
 						args: [
-							optimismAddress,
+							projectAddress,
 							+selectedStream.balance.toString(),
 							'',
 						],
@@ -152,7 +164,7 @@ const ClaimWithdrawalModal = ({
 					if (transferEthTx) {
 						await waitForTransactionReceipt(wagmiConfig, {
 							hash: transferEthTx,
-							chainId: config.OPTIMISM_NETWORK_NUMBER,
+							chainId: recurringNetworkID,
 						});
 					}
 					setTransactionState(ClaimTransactionState.SUCCESS);
@@ -207,7 +219,7 @@ const ClaimWithdrawalModal = ({
 						<CustomLink
 							href={formatTxLink({
 								txHash,
-								networkId: config.OPTIMISM_NETWORK_NUMBER,
+								networkId: recurringNetworkID,
 								chainType: ChainType.EVM,
 							})}
 							target='_blank'

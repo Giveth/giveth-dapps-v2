@@ -125,6 +125,7 @@ export const FETCH_USER_RECURRING_DONATIONS = gql`
 		$userId: Int!
 		$filteredTokens: [String!]
 		$includeArchived: Boolean
+		$networkId: Int
 	) {
 		recurringDonationsByUserId(
 			take: $take
@@ -135,6 +136,7 @@ export const FETCH_USER_RECURRING_DONATIONS = gql`
 			finishStatus: $finishStatus
 			filteredTokens: $filteredTokens
 			includeArchived: $includeArchived
+			networkId: $networkId
 		) {
 			recurringDonations {
 				id
@@ -154,6 +156,7 @@ export const FETCH_USER_RECURRING_DONATIONS = gql`
 					anchorContracts {
 						address
 						isActive
+						networkId
 					}
 				}
 				finished
@@ -269,5 +272,19 @@ export const SEND_USER_CONFIRMATION_CODE_FLOW = gql`
 		$email: String!
 	) {
 		sendUserConfirmationCodeFlow(verifyCode: $verifyCode, email: $email)
+	}
+`;
+
+export const FETCH_ALL_USERS_BASIC_DATA = gql`
+	query FetchAllUsersBasicData($limit: Int, $skip: Int) {
+		allUsersBasicData(limit: $limit, skip: $skip) {
+			users {
+				firstName
+				lastName
+				name
+				walletAddress
+			}
+			totalCount
+		}
 	}
 `;

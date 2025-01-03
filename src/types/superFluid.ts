@@ -24,6 +24,7 @@ export interface ISuperfluidStream {
 	};
 	token: ISuperToken;
 	currentFlowRate: string;
+	networkId: number;
 }
 
 export interface IStream {

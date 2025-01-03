@@ -130,3 +130,10 @@ export const giveconomyOnboardingMetaTags = {
 	image: 'https://giveth.mypinata.cloud/ipfs/QmX2242gXzRp5tHWGkJu5L5VbgWD6Fu4NDbLunBhCKBEtY/GIVecon%20banner.svg',
 	url: 'https://giveth.io/onboarding/giveconomy',
 };
+
+export const archivedQFRoundsMetaTags = {
+	title: 'Giveth | Archived QF Rounds',
+	desc: 'Explore past quadratic funding rounds on Giveth! Check out the projects who participated, matching funds, donations and more info on this page.',
+	image: 'https://giveth.io/images/banners/qf-banner.svg',
+	url: `https://giveth.io/qf-archive`,
+};

@@ -62,6 +62,7 @@ const ProjectActions: FC<IProjectActions> = ({
 
 	const anchorContractAddress = findAnchorContractAddress(
 		project.anchorContracts,
+		chain?.id,
 	);
 
 	const chainId = chain?.id;

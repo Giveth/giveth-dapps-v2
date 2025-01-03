@@ -13,9 +13,10 @@ import { EModifySuperTokenSteps } from './common';
 import config from '@/configuration';
 
 interface IModifySuperTokenModalProps extends IModal {
-	selectedToken: IToken;
+	selectedToken: ISuperToken | IToken;
 	tokenStreams: ISuperfluidStream[];
 	refreshBalance: () => void;
+	recurringNetworkID: number;
 }
 
 const headerTitleGenerator = (step: EModifySuperTokenSteps) => {
@@ -97,22 +98,30 @@ const ModifySuperTokenInnerModal: FC<
 	IModifySuperTokenInnerModalProps
 > = props => {
 	const [tab, setTab] = useState(EModifyTabs.DEPOSIT);
-	const [token, superToken] = useMemo(
-		() =>
-			props.selectedToken.isSuperToken
-				? [
-						props.selectedToken.underlyingToken ||
-							config.OPTIMISM_CONFIG.SUPER_FLUID_TOKENS.find(
-								token => token.id === props.selectedToken.id,
-							)?.underlyingToken,
-						props.selectedToken as ISuperToken,
-					]
-				: [
-						props.selectedToken,
-						findSuperTokenByTokenAddress(props.selectedToken.id),
-					],
-		[props.selectedToken],
-	);
+	const [token, superToken] = useMemo(() => {
+		let superTokens: any[] = [];
+		if (props.recurringNetworkID === config.OPTIMISM_NETWORK_NUMBER) {
+			superTokens = config.OPTIMISM_CONFIG.SUPER_FLUID_TOKENS;
+		} else if (props.recurringNetworkID === config.BASE_NETWORK_NUMBER) {
+			superTokens = config.BASE_CONFIG.SUPER_FLUID_TOKENS;
+		}
+
+		return props.selectedToken.isSuperToken
+			? [
+					props.selectedToken.underlyingToken ||
+						superTokens.find(
+							token => token.id === props.selectedToken.id,
+						)?.underlyingToken,
+					props.selectedToken as ISuperToken,
+				]
+			: [
+					props.selectedToken,
+					findSuperTokenByTokenAddress(
+						props.selectedToken.id,
+						props.recurringNetworkID,
+					),
+				];
+	}, [props.selectedToken, props.recurringNetworkID]);
 
 	return (
 		<Wrapper>

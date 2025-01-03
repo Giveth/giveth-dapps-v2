@@ -67,6 +67,7 @@ export const AdminActions = () => {
 
 	const anchorContractAddress = findAnchorContractAddress(
 		project.anchorContracts,
+		chain?.id,
 	);
 
 	const options: IOption[] = [
@@ -180,8 +181,8 @@ export const AdminActions = () => {
 						project={project}
 					/>
 				)}
+				<ProjectCardNotification />
 			</Wrapper>
-			<ProjectCardNotification />
 		</>
 	) : (
 		<>

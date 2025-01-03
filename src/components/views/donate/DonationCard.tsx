@@ -63,6 +63,13 @@ export const DonationCard: FC<IDonationCardProps> = ({
 				address.chainType === ChainType.EVM &&
 				address.networkId === config.OPTIMISM_NETWORK_NUMBER,
 		);
+	const hasBaseAddress =
+		addresses &&
+		addresses.some(
+			address =>
+				address.chainType === ChainType.EVM &&
+				address.networkId === config.BASE_NETWORK_NUMBER,
+		);
 	const isEndaomentProject = project?.organization?.label === 'endaoment';
 	const isOwnerOnEVM =
 		project?.adminUser?.walletAddress &&
@@ -173,7 +180,7 @@ export const DonationCard: FC<IDonationCardProps> = ({
 							})}
 						</Tab>
 						{!disableRecurringDonations &&
-						hasOpAddress &&
+						(hasOpAddress || hasBaseAddress) &&
 						isOwnerOnEVM ? (
 							<Tab
 								$selected={tab === ETabs.RECURRING}

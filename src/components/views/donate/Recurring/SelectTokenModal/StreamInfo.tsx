@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { type FC } from 'react';
 import { formatUnits } from 'viem';
 import { useIntl } from 'react-intl';
-import { ISuperfluidStream } from '@/types/superFluid';
+import { ISuperfluidStream, IToken } from '@/types/superFluid';
 import { limitFraction } from '@/helpers/number';
 import { countActiveStreams } from '@/helpers/donate';
 import { findTokenByAddress } from '@/helpers/superfluid';
@@ -11,6 +11,8 @@ import { TokenIconWithGIVBack } from '../../TokenIcon/TokenIconWithGIVBack';
 
 interface IStreamInfoProps {
 	stream: ISuperfluidStream[];
+	recurringNetworkId?: number;
+	superToken: IToken;
 	balance: bigint;
 	disable: boolean;
 	onClick: () => void;
@@ -19,13 +21,14 @@ interface IStreamInfoProps {
 
 export const StreamInfo: FC<IStreamInfoProps> = ({
 	stream,
+	recurringNetworkId,
 	balance,
+	superToken,
 	disable,
 	onClick,
 	isSuperToken,
 }) => {
 	const { formatMessage } = useIntl();
-
 	const totalFlowRate = stream.reduce(
 		(acc, curr) => acc + BigInt(curr.currentFlowRate),
 		0n,
@@ -35,10 +38,9 @@ export const StreamInfo: FC<IStreamInfoProps> = ({
 			? balance / totalFlowRate / 2628000n
 			: 0n;
 
-	const token = findTokenByAddress(stream[0].token.id);
+	const token = findTokenByAddress(stream[0].token.id, recurringNetworkId);
 	const underlyingToken = token?.underlyingToken;
 	const activeStreamCount = countActiveStreams(stream);
-
 	return (
 		<Wrapper
 			gap='16px'
@@ -62,8 +64,8 @@ export const StreamInfo: FC<IStreamInfoProps> = ({
 			>
 				<Row $justifyContent='space-between'>
 					<Symbol>
-						<Caption $medium>{stream[0].token.symbol}</Caption>
-						<GrayCaption>{stream[0].token.name}</GrayCaption>
+						<Caption $medium>{superToken.symbol}</Caption>
+						<GrayCaption>{superToken.name}</GrayCaption>
 					</Symbol>
 					<Balance gap='4px'>
 						<GrayCaption>Stream Balance</GrayCaption>
@@ -78,7 +80,7 @@ export const StreamInfo: FC<IStreamInfoProps> = ({
 									)
 								: '--'}
 						</Caption>
-						<Caption $medium>{stream[0].token.symbol}</Caption>
+						<Caption $medium>{superToken.symbol}</Caption>
 					</Balance>
 				</Row>
 				{totalFlowRate !== undefined && (

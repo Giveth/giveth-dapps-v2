@@ -105,7 +105,7 @@ const ArchiveStreamInnerModal: FC<IArchiveStreamInnerModalProps> = ({
 			<Flex gap='16px'>
 				<ActionButton
 					label={formatMessage({ id: 'label.cancel' })}
-					onClick={() => closeModal}
+					onClick={() => closeModal()}
 					buttonType='texty-gray'
 					disabled={step === EArchiveStreamSteps.ARCHIVING}
 				/>

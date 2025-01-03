@@ -19,6 +19,7 @@ import config, { isProduction } from '@/configuration';
 import { AddressZero } from './constants/constants';
 import { ChainType, NonEVMChain } from '@/types/config';
 import { wagmiConfig } from '@/wagmiConfigs';
+import usdtMainnetABI from '@/artifacts/usdtMainnetABI.json';
 
 declare let window: any;
 interface TransactionParams {
@@ -375,15 +376,28 @@ async function handleErc20Transfer(
 	params: TransactionParams,
 	contractAddress: Address,
 ): Promise<Address> {
+	// 'viem' ABI contract for USDT donation fails on mainnet
+	// so we use the USDT mainnet ABI instead and put inside usdtMainnetABI.json file
+	// update for 'viem' package to fix this issue doesn't work
+	const ABItoUse =
+		contractAddress === '0xdac17f958d2ee523a2206206994597c13d831ec7'
+			? usdtMainnetABI
+			: erc20Abi;
+
 	const baseProps = {
 		address: contractAddress,
-		abi: erc20Abi,
+		abi: ABItoUse,
 	};
-	const decimals = await readContract(wagmiConfig, {
+	let decimals = await readContract(wagmiConfig, {
 		...baseProps,
 		functionName: 'decimals',
 	});
-	const value = parseUnits(params.value, decimals);
+
+	if (typeof decimals === 'bigint') {
+		decimals = Number(decimals.toString());
+	}
+
+	const value = parseUnits(params.value, decimals as number);
 	const hash = await writeContract(wagmiConfig, {
 		...baseProps,
 		functionName: 'transfer',

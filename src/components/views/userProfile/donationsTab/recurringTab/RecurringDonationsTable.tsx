@@ -130,6 +130,10 @@ const RecurringDonationTable: FC<RecurringDonationTable> = ({
 											18,
 										),
 									),
+									undefined,
+									undefined,
+									undefined,
+									3,
 								)}
 							</B>
 							<Currency>{donation.currency} /mo</Currency>
@@ -157,6 +161,7 @@ const RecurringDonationTable: FC<RecurringDonationTable> = ({
 								<StreamActionButton
 									donation={donation}
 									refetch={refetch}
+									recurringNetworkId={donation.networkId}
 								/>
 							</DonationTableCell>
 						</>

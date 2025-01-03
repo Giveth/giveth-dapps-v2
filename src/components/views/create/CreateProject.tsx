@@ -1,5 +1,6 @@
 import React, { FC, useEffect, useRef, useState } from 'react';
 import { useIntl } from 'react-intl';
+import { useSwitchChain } from 'wagmi';
 import {
 	brandColors,
 	Button,
@@ -26,6 +27,7 @@ import {
 } from '@/apollo/gql/gqlProjects';
 import {
 	EProjectSocialMediaType,
+	IAnchorContractData,
 	IProject,
 	IProjectCreation,
 	IProjectEdition,
@@ -49,7 +51,9 @@ import CreateProjectAddAddressModal from './CreateProjectAddAddressModal';
 import AddressInterface from './AddressInterface';
 import { ChainType, NonEVMChain } from '@/types/config';
 import StorageLabel from '@/lib/localStorage';
-import AlloProtocolModal from './AlloProtocol/AlloProtocolModal';
+import AlloProtocolModal, {
+	saveAnchorContract,
+} from './AlloProtocol/AlloProtocolModal';
 import { ECreateProjectSections, TInputs, EInputs } from './types';
 import { ProGuide } from './proGuide/ProGuide';
 import { EQualityState } from './proGuide/score/scoreHelpers';
@@ -65,6 +69,7 @@ interface ICreateProjectProps {
 }
 
 const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
+	const { switchChain } = useSwitchChain();
 	const [quality, setQuality] = useState(EQualityState.LOW);
 	const [isLoading, setIsLoading] = useState(false);
 	const [isLoadingPreview, setIsLoadingPreview] = useState(false);
@@ -76,7 +81,6 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 	const [activeProjectSection, setActiveProjectSection] =
 		useState<ECreateProjectSections>(ECreateProjectSections.default);
 	const [showLowScoreModal, setShowLowScoreModal] = useState(false);
-
 	const { formatMessage } = useIntl();
 	const [addProjectMutation] = useMutation(CREATE_PROJECT);
 	const [editProjectMutation] = useMutation(UPDATE_PROJECT);
@@ -94,6 +98,7 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 	}, [dispatch]);
 
 	const isEditMode = !!project;
+	const DO_RECURRING_SETUP_ON_CREATION = !isEditMode;
 
 	let storageProjectData: TInputs | undefined;
 
@@ -246,6 +251,8 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 		draft: watchDraft,
 		telegram: watchTelegram,
 		github: watchGithub,
+		baseAnchorContract,
+		opAnchorContract,
 	} = data;
 
 	useEffect(() => {
@@ -275,16 +282,13 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 		watchTelegram,
 		watchGithub,
 	]);
-	const hasOptimismAddress = watchAddresses.some(
-		address => config.OPTIMISM_NETWORK_NUMBER === address.networkId,
-	);
+
 	const onError = (errors: FieldErrors<TInputs>) => {
 		if (errors[EInputs.description]) {
 			document?.getElementById('project_description')?.scrollIntoView();
 		}
 		setIsLoading(false);
 	};
-
 	const onSubmit = async (formData: TInputs) => {
 		if (
 			!watchDraft &&
@@ -317,6 +321,8 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 				website,
 				telegram,
 				github,
+				baseAnchorContract,
+				opAnchorContract,
 			} = formData;
 			//Only set loading to true if it is not a draft
 			setIsLoading(!draft);
@@ -385,10 +391,14 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 						},
 					});
 
-			if (watchAlloProtocolRegistry && hasOptimismAddress) {
-				!isEditMode
-					? setAddedProjectState(addedProject.data?.createProject)
-					: setAddedProjectState(addedProject.data?.updateProject);
+			const doAlloProtocolRegistry =
+				baseAnchorContract || opAnchorContract;
+			let _addedProject;
+			if (doAlloProtocolRegistry) {
+				_addedProject = !isEditMode
+					? addedProject.data?.createProject
+					: addedProject.data?.updateProject;
+				setAddedProjectState(_addedProject);
 				setIsLoading(false);
 				setIsLoadingPreview(false);
 			}
@@ -401,13 +411,46 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 			}
 
 			//handle Anchor contract modal here.
-
 			if (addedProject) {
 				// Success
-
-				if (watchAlloProtocolRegistry && hasOptimismAddress && !draft) {
-					setShowAlloProtocolModal(true);
+				if (
+					DO_RECURRING_SETUP_ON_CREATION &&
+					doAlloProtocolRegistry &&
+					!draft
+				) {
+					if (!_addedProject) return;
+					console.log('processing anchor contracts', {
+						baseAnchorContract,
+						opAnchorContract,
+					});
+					setIsLoading(true);
+					// Handle Base anchor contract
+					if (baseAnchorContract?.recipientAddress) {
+						switchChain?.({
+							chainId: config.BASE_NETWORK_NUMBER,
+						});
+						await saveAnchorContract({
+							addedProjectState: _addedProject,
+							chainId: config.BASE_NETWORK_NUMBER,
+							recipientAddress:
+								baseAnchorContract.recipientAddress,
+							anchorContract: baseAnchorContract,
+						});
+					}
+					// Handle Optimism anchor contract
+					if (opAnchorContract?.recipientAddress) {
+						switchChain?.({
+							chainId: config.OPTIMISM_NETWORK_NUMBER,
+						});
+						await saveAnchorContract({
+							addedProjectState: _addedProject,
+							chainId: config.OPTIMISM_NETWORK_NUMBER,
+							recipientAddress: opAnchorContract.recipientAddress,
+							anchorContract: opAnchorContract,
+						});
+					}
 					localStorage.removeItem(StorageLabel.CREATE_PROJECT_FORM);
+					await router.push(slugToProjectView(_addedProject.slug));
 				} else {
 					setIsLoading(false);
 					if (!isEditMode) {
@@ -449,7 +492,6 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 			localStorage.removeItem(StorageLabel.CREATE_PROJECT_FORM);
 		}
 	};
-
 	return (
 		<>
 			<CreateHeader
@@ -530,6 +572,7 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 									{ALL_CHAINS.map(chain => (
 										<AddressInterface
 											key={chain.id}
+											project={project as IProject}
 											networkId={chain.id}
 											chainType={
 												(chain as NonEVMChain).chainType
@@ -545,10 +588,13 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 											}}
 											isEditMode={isEditMode}
 											anchorContractData={
-												(project?.anchorContracts &&
-													project
-														?.anchorContracts[0]) ??
-												undefined
+												project?.anchorContracts?.find(
+													(
+														contract: IAnchorContractData,
+													) =>
+														contract.networkId ===
+														chain.id,
+												) ?? undefined
 											}
 										/>
 									))}
@@ -681,6 +727,8 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 						setShowModal={setShowAlloProtocolModal}
 						addedProjectState={addedProjectState}
 						project={project}
+						baseAnchorContract={baseAnchorContract}
+						opAnchorContract={opAnchorContract}
 					/>
 				)}
 				{showLowScoreModal && (
