@@ -250,9 +250,6 @@ async function getArchivedRounds() {
 async function getUsers(skip: number) {
 	const apolloClient = initializeApollo();
 
-	console.log('GraphQL Query:', FETCH_ALL_USERS_BASIC_DATA);
-	console.log('Variables:', { limit: 50, skip: skip });
-
 	const { data } = await apolloClient.query({
 		query: FETCH_ALL_USERS_BASIC_DATA, // Query for user data
 		variables: {
@@ -261,8 +258,6 @@ async function getUsers(skip: number) {
 		},
 		fetchPolicy: 'no-cache',
 	});
-
-	console.log({ data });
 
 	return data.allUsersBasicData || { users: [], totalCount: 0 };
 }
