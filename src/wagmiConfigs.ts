@@ -2,7 +2,7 @@ import { cookieStorage, createConfig, createStorage } from 'wagmi';
 import { walletConnect, coinbaseWallet, safe } from '@wagmi/connectors';
 
 import { createClient, http } from 'viem';
-import { mainnet } from 'viem/chains';
+import { getDrpcNetwork } from './lib/network';
 import configuration from './configuration';
 
 // Get projectId at https://cloud.walletconnect.com
@@ -19,6 +19,14 @@ const metadata = {
 };
 
 const chains = configuration.EVM_CHAINS;
+
+const createDrpcTransport = (chainId: number) => {
+	const network = getDrpcNetwork(chainId);
+	const drpcKey = process.env.NEXT_PUBLIC_DRPC_KEY;
+	return network && drpcKey
+		? http(`https://lb.drpc.org/ogrpc?network=${network}&dkey=${drpcKey}`)
+		: http();
+};
 
 // Create wagmiConfig
 export const wagmiConfig = createConfig({
@@ -38,16 +46,9 @@ export const wagmiConfig = createConfig({
 		storage: cookieStorage,
 	}),
 	client({ chain }) {
-		// TODO: we must manage this for all chains in a better way
-		// basically to stop using viem's public transport
-		// leaving this as a hotfix to keep it quick
-		const infuraKey = process.env.NEXT_PUBLIC_INFURA_API_KEY;
-
-		const customHttp =
-			chain.id === mainnet.id && infuraKey
-				? http(`https://mainnet.infura.io/v3/${infuraKey}`)
-				: http();
-
-		return createClient({ chain, transport: customHttp });
+		return createClient({
+			chain,
+			transport: createDrpcTransport(chain.id),
+		});
 	},
 });
