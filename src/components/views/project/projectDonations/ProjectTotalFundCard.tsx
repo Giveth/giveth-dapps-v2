@@ -35,6 +35,7 @@ interface IProjectTotalFundCardProps {
 const ProjectTotalFundCard = ({ selectedQF }: IProjectTotalFundCardProps) => {
 	const [qfRoundHistory, setQfRoundHistory] = useState<IGetQfRoundHistory>();
 	const { projectData, isAdmin } = useProjectContext();
+	console.log('projectData', projectData);
 	const {
 		id,
 		totalDonations,
