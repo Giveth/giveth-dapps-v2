@@ -389,6 +389,7 @@
 	"label.email_verified": "Email Verified",
 	"label.email_verify": "Verify Email",
 	"label.email_already_verified": "Your email has been verified. You can now save your profile information.",
+	"label.email_cooldown": "Didn't get the email? Check your spam folder or <button>Resend Verification Code!</button> in <time>02:59</time>",
 	"label.email_used": "This email address will be used to send you important communications.",
 	"label.email_used_another": "This email that has already been verified on another profile!",
 	"label.email_sent_to": "Verification code sent to {email}",

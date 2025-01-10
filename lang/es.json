@@ -387,6 +387,7 @@
 	"label.email_verified": "Correo electrónico verificado",
 	"label.email_verify": "Verificar correo electrónico",
 	"label.email_already_verified": "Tu correo electrónico ha sido verificado. Ahora puedes guardar la información de tu perfil.",
+	"label.email_cooldown": "¿No recibiste el correo electrónico? Revisa tu carpeta de spam o <button>¡Reenviar código de verificación!</button> en <time>02:59</time>",
 	"label.email_used": "Esta dirección de correo electrónico se utilizará para enviarte comunicaciones importantes.",
 	"label.email_used_another": "¡Este correo electrónico ya ha sido verificado en otro perfil!",
 	"label.email_sent_to": "Código de verificación enviado a {email}",

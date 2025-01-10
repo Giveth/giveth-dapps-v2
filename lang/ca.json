@@ -389,6 +389,7 @@
 	"label.email_verified": "Correu electrònic verificat",
 	"label.email_verify": "Verifica el correu electrònic",
 	"label.email_already_verified": "El teu correu electrònic ha estat verificat. Ara pots desar la informació del teu perfil.",
+	"label.email_cooldown": "No has rebut el correu electrònic? Revisa la carpeta de correu brossa o <button>Torna a enviar el codi de verificació!</button> en <time>02:59</time>",
 	"label.email_used": "Aquesta adreça de correu electrònic s'utilitzarà per enviar-te comunicacions importants.",
 	"label.email_used_another": "Aquest correu electrònic ja ha estat verificat en un altre perfil!",
 	"label.email_sent_to": "Codi de verificació enviat a {email}",
