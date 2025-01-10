@@ -122,6 +122,9 @@ const InputUserEmailVerify = forwardRef<HTMLInputElement, InputType>(
 		);
 		const [isVerificationProcess, setIsVerificationProcess] =
 			useState(false);
+		const [isCooldown, setIsCooldown] = useState(false);
+		const [cooldownTime, setCooldownTime] = useState(0);
+
 		const [inputDescription, setInputDescription] = useState(
 			verified
 				? formatMessage({
@@ -227,7 +230,28 @@ const InputUserEmailVerify = forwardRef<HTMLInputElement, InputType>(
 		// or email is already exist on another user account
 		// If email isn't verified it will send email with verification code to user
 		const verificationEmailHandler = async () => {
+			// Prevent the button from being clicked during cooldown
+			if (isCooldown) {
+				return;
+			}
+
 			try {
+				// Start cooldown timer
+				setIsCooldown(true);
+				setCooldownTime(180); // Set cooldown time to 180 seconds (3 minutes)
+
+				const interval = setInterval(() => {
+					setCooldownTime(prev => {
+						if (prev <= 1) {
+							clearInterval(interval); // Stop the timer when cooldown ends
+							setIsCooldown(false); // Re-enable the button
+							setDisableVerifyButton(false);
+							return 0;
+						}
+						return prev - 1;
+					});
+				}, 1000); // Update every second
+
 				const { data } = await client.mutate({
 					mutation: SEND_USER_EMAIL_CONFIRMATION_CODE_FLOW,
 					variables: {
