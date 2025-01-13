@@ -235,6 +235,8 @@ const InputUserEmailVerify = forwardRef<HTMLInputElement, InputType>(
 		// It will send request to backend to check if email exists and if it's not verified yet
 		// or email is already exist on another user account
 		// If email isn't verified it will send email with verification code to user
+		let intervalId: NodeJS.Timeout;
+
 		const verificationEmailHandler = async () => {
 			// Prevent the button from being clicked during cooldown
 			if (isCooldown) {
@@ -245,7 +247,7 @@ const InputUserEmailVerify = forwardRef<HTMLInputElement, InputType>(
 			setIsCooldown(true);
 			setCooldownTime(180);
 
-			const intervalId = setInterval(() => {
+			intervalId = setInterval(() => {
 				setCooldownTime(prev => {
 					if (prev <= 1) {
 						resetCoolDown();
@@ -286,12 +288,6 @@ const InputUserEmailVerify = forwardRef<HTMLInputElement, InputType>(
 						}),
 					);
 				}
-
-				// Stop the timer when fetch ends
-				resetCoolDown();
-
-				// Clear interval when fetch is done
-				clearInterval(intervalId);
 			} catch (error) {
 				if (error instanceof Error) {
 					clearInterval(intervalId);
@@ -338,6 +334,12 @@ const InputUserEmailVerify = forwardRef<HTMLInputElement, InputType>(
 						email: email,
 						isEmailVerified: true,
 					});
+
+					// Stop the timer when fetch ends
+					resetCoolDown();
+
+					// Clear interval when fetch is done
+					clearInterval(intervalId);
 				}
 			} catch (error) {
 				if (error instanceof Error) {
@@ -436,36 +438,7 @@ const InputUserEmailVerify = forwardRef<HTMLInputElement, InputType>(
 						size={InputSizeToLinkSize(size)}
 						$validationstatus={validationStatus}
 					>
-						{isCooldown && (
-							<InputCodeDesc>
-								<FormattedMessage
-									id='label.email_cooldown'
-									values={{
-										button: chunks => (
-											<button
-												type='button'
-												onClick={
-													verificationEmailHandler
-												}
-												disabled={isCooldown}
-											>
-												{chunks}
-											</button>
-										),
-										time: () => (
-											<b>
-												{Math.floor(cooldownTime / 60)}:
-												{(
-													'0' +
-													(cooldownTime % 60)
-												).slice(-2)}
-											</b>
-										),
-									}}
-								/>
-							</InputCodeDesc>
-						)}
-						{!isCooldown && inputDescription}
+						{inputDescription}
 					</InputDesc>
 				)}
 				{isVerificationProcess && (
@@ -524,19 +497,55 @@ const InputUserEmailVerify = forwardRef<HTMLInputElement, InputType>(
 							</Absolute>
 						</InputWrapper>
 						<InputCodeDesc>
-							<FormattedMessage
-								id='label.email_get_resend'
-								values={{
-									button: chunks => (
-										<button
-											type='button'
-											onClick={verificationEmailHandler}
-										>
-											{chunks}
-										</button>
-									),
-								}}
-							/>
+							{isCooldown && (
+								<InputCodeDesc>
+									<FormattedMessage
+										id='label.email_cooldown'
+										values={{
+											button: chunks => (
+												<button
+													type='button'
+													onClick={
+														verificationEmailHandler
+													}
+													disabled={isCooldown}
+												>
+													{chunks}
+												</button>
+											),
+											time: () => (
+												<b>
+													{Math.floor(
+														cooldownTime / 60,
+													)}
+													:
+													{(
+														'0' +
+														(cooldownTime % 60)
+													).slice(-2)}
+												</b>
+											),
+										}}
+									/>
+								</InputCodeDesc>
+							)}
+							{!isCooldown && (
+								<FormattedMessage
+									id='label.email_get_resend'
+									values={{
+										button: chunks => (
+											<button
+												type='button'
+												onClick={
+													verificationEmailHandler
+												}
+											>
+												{chunks}
+											</button>
+										),
+									}}
+								/>
+							)}
 						</InputCodeDesc>
 					</ValidationCode>
 				)}
