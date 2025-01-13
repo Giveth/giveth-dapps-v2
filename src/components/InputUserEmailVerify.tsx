@@ -122,6 +122,9 @@ const InputUserEmailVerify = forwardRef<HTMLInputElement, InputType>(
 		);
 		const [isVerificationProcess, setIsVerificationProcess] =
 			useState(false);
+		const [isCooldown, setIsCooldown] = useState(false);
+		const [cooldownTime, setCooldownTime] = useState(0);
+
 		const [inputDescription, setInputDescription] = useState(
 			verified
 				? formatMessage({
@@ -199,6 +202,12 @@ const InputUserEmailVerify = forwardRef<HTMLInputElement, InputType>(
 					id: 'label.email_verify',
 				});
 
+		// Reset cooldown
+		const resetCoolDown = () => {
+			setIsCooldown(false);
+			setCooldownTime(0);
+		};
+
 		// Enable verification process "button" if email input value was empty and not verified yet
 		// and setup email if input value was changed and has more than 3 characters
 		const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -227,6 +236,26 @@ const InputUserEmailVerify = forwardRef<HTMLInputElement, InputType>(
 		// or email is already exist on another user account
 		// If email isn't verified it will send email with verification code to user
 		const verificationEmailHandler = async () => {
+			// Prevent the button from being clicked during cooldown
+			if (isCooldown) {
+				return;
+			}
+
+			// Start cooldown timer
+			setIsCooldown(true);
+			setCooldownTime(180);
+
+			const intervalId = setInterval(() => {
+				setCooldownTime(prev => {
+					if (prev <= 1) {
+						resetCoolDown();
+						setDisableVerifyButton(false);
+						return 0;
+					}
+					return prev - 1;
+				});
+			}, 1000);
+
 			try {
 				const { data } = await client.mutate({
 					mutation: SEND_USER_EMAIL_CONFIRMATION_CODE_FLOW,
@@ -257,8 +286,16 @@ const InputUserEmailVerify = forwardRef<HTMLInputElement, InputType>(
 						}),
 					);
 				}
+
+				// Stop the timer when fetch ends
+				resetCoolDown();
+
+				// Clear interval when fetch is done
+				clearInterval(intervalId);
 			} catch (error) {
 				if (error instanceof Error) {
+					clearInterval(intervalId);
+					resetCoolDown();
 					showToastError(error.message);
 				}
 				console.log(error);
@@ -399,7 +436,36 @@ const InputUserEmailVerify = forwardRef<HTMLInputElement, InputType>(
 						size={InputSizeToLinkSize(size)}
 						$validationstatus={validationStatus}
 					>
-						{inputDescription}
+						{isCooldown && (
+							<InputCodeDesc>
+								<FormattedMessage
+									id='label.email_cooldown'
+									values={{
+										button: chunks => (
+											<button
+												type='button'
+												onClick={
+													verificationEmailHandler
+												}
+												disabled={isCooldown}
+											>
+												{chunks}
+											</button>
+										),
+										time: () => (
+											<b>
+												{Math.floor(cooldownTime / 60)}:
+												{(
+													'0' +
+													(cooldownTime % 60)
+												).slice(-2)}
+											</b>
+										),
+									}}
+								/>
+							</InputCodeDesc>
+						)}
+						{!isCooldown && inputDescription}
 					</InputDesc>
 				)}
 				{isVerificationProcess && (
