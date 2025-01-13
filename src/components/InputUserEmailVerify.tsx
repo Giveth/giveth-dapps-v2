@@ -122,6 +122,9 @@ const InputUserEmailVerify = forwardRef<HTMLInputElement, InputType>(
 		);
 		const [isVerificationProcess, setIsVerificationProcess] =
 			useState(false);
+		const [isCooldown, setIsCooldown] = useState(false);
+		const [cooldownTime, setCooldownTime] = useState(0);
+
 		const [inputDescription, setInputDescription] = useState(
 			verified
 				? formatMessage({
@@ -199,6 +202,12 @@ const InputUserEmailVerify = forwardRef<HTMLInputElement, InputType>(
 					id: 'label.email_verify',
 				});
 
+		// Reset cooldown
+		const resetCoolDown = () => {
+			setIsCooldown(false);
+			setCooldownTime(0);
+		};
+
 		// Enable verification process "button" if email input value was empty and not verified yet
 		// and setup email if input value was changed and has more than 3 characters
 		const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -226,7 +235,29 @@ const InputUserEmailVerify = forwardRef<HTMLInputElement, InputType>(
 		// It will send request to backend to check if email exists and if it's not verified yet
 		// or email is already exist on another user account
 		// If email isn't verified it will send email with verification code to user
+		let intervalId: NodeJS.Timeout;
+
 		const verificationEmailHandler = async () => {
+			// Prevent the button from being clicked during cooldown
+			if (isCooldown) {
+				return;
+			}
+
+			// Start cooldown timer
+			setIsCooldown(true);
+			setCooldownTime(180);
+
+			intervalId = setInterval(() => {
+				setCooldownTime(prev => {
+					if (prev <= 1) {
+						resetCoolDown();
+						setDisableVerifyButton(false);
+						return 0;
+					}
+					return prev - 1;
+				});
+			}, 1000);
+
 			try {
 				const { data } = await client.mutate({
 					mutation: SEND_USER_EMAIL_CONFIRMATION_CODE_FLOW,
@@ -259,6 +290,8 @@ const InputUserEmailVerify = forwardRef<HTMLInputElement, InputType>(
 				}
 			} catch (error) {
 				if (error instanceof Error) {
+					clearInterval(intervalId);
+					resetCoolDown();
 					showToastError(error.message);
 				}
 				console.log(error);
@@ -301,6 +334,12 @@ const InputUserEmailVerify = forwardRef<HTMLInputElement, InputType>(
 						email: email,
 						isEmailVerified: true,
 					});
+
+					// Stop the timer when fetch ends
+					resetCoolDown();
+
+					// Clear interval when fetch is done
+					clearInterval(intervalId);
 				}
 			} catch (error) {
 				if (error instanceof Error) {
@@ -458,19 +497,55 @@ const InputUserEmailVerify = forwardRef<HTMLInputElement, InputType>(
 							</Absolute>
 						</InputWrapper>
 						<InputCodeDesc>
-							<FormattedMessage
-								id='label.email_get_resend'
-								values={{
-									button: chunks => (
-										<button
-											type='button'
-											onClick={verificationEmailHandler}
-										>
-											{chunks}
-										</button>
-									),
-								}}
-							/>
+							{isCooldown && (
+								<InputCodeDesc>
+									<FormattedMessage
+										id='label.email_cooldown'
+										values={{
+											button: chunks => (
+												<button
+													type='button'
+													onClick={
+														verificationEmailHandler
+													}
+													disabled={isCooldown}
+												>
+													{chunks}
+												</button>
+											),
+											time: () => (
+												<b>
+													{Math.floor(
+														cooldownTime / 60,
+													)}
+													:
+													{(
+														'0' +
+														(cooldownTime % 60)
+													).slice(-2)}
+												</b>
+											),
+										}}
+									/>
+								</InputCodeDesc>
+							)}
+							{!isCooldown && (
+								<FormattedMessage
+									id='label.email_get_resend'
+									values={{
+										button: chunks => (
+											<button
+												type='button'
+												onClick={
+													verificationEmailHandler
+												}
+											>
+												{chunks}
+											</button>
+										),
+									}}
+								/>
+							)}
 						</InputCodeDesc>
 					</ValidationCode>
 				)}
