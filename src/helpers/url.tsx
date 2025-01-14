@@ -198,11 +198,18 @@ export const getSocialMediaHandle = (
 				/discord\.gg\/([^\/]+)/,
 			);
 		case 'farcaster':
-			// Assuming Farcaster uses a pattern like 'farcaster.xyz/username'
-			return extractUsernameFromPattern(
-				cleanedUrl,
-				/farcaster\.xyz\/([^\/]+)/,
-			);
+			const isWrapCast = cleanedUrl.includes('warpcast');
+			if (isWrapCast) {
+				return extractUsernameFromPattern(
+					cleanedUrl,
+					/warpcast\.com\/([^\/]+)/,
+				);
+			} else {
+				return extractUsernameFromPattern(
+					cleanedUrl,
+					/farcaster\.xyz\/([^\/]+)/,
+				);
+			}
 		case 'lens':
 			// Assuming Lens uses a pattern like 'lens.xyz/username'
 			return extractUsernameFromPattern(
