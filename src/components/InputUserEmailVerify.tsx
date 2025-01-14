@@ -749,6 +749,10 @@ const InputCodeDesc = styled(GLink)`
 		line-height: 132%;
 		cursor: pointer;
 	}
+	& button: disabled {
+		opacity: 0.5;
+	}
+}
 `;
 
 export default InputUserEmailVerify;
