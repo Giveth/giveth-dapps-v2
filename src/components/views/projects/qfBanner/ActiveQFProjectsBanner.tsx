@@ -9,7 +9,7 @@ import {
 	ActiveStyledCol,
 	Desc,
 	Title,
-	CustomSponsors,
+	// CustomSponsors,
 	// Sponsor,
 	ActiveStyledRow,
 	// SmallerSponsor,
@@ -145,7 +145,7 @@ export const ActiveQFProjectsBanner = () => {
 								/>
 							))}
 						</Flex> */}
-						<CustomSponsors>
+						{/* <CustomSponsors>
 							<Image
 								src={'/images/banners/qf-round/giv-palooza.svg'}
 								style={{
@@ -154,7 +154,7 @@ export const ActiveQFProjectsBanner = () => {
 								fill
 								alt='QF Sponsors'
 							/>
-						</CustomSponsors>
+						</CustomSponsors> */}
 						{/* <BottomSponsors>
 							{bottomSponsors.map(s => (
 								<SmallerSponsor
