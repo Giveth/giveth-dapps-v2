@@ -235,7 +235,7 @@ const InputUserEmailVerify = forwardRef<HTMLInputElement, InputType>(
 		// It will send request to backend to check if email exists and if it's not verified yet
 		// or email is already exist on another user account
 		// If email isn't verified it will send email with verification code to user
-		let intervalId: NodeJS.Timeout;
+		const intervalIdRef = useRef<NodeJS.Timeout | null>(null);
 
 		const verificationEmailHandler = async () => {
 			// Prevent the button from being clicked during cooldown
@@ -243,15 +243,24 @@ const InputUserEmailVerify = forwardRef<HTMLInputElement, InputType>(
 				return;
 			}
 
+			// Clear any existing interval
+			if (intervalIdRef.current) {
+				clearInterval(intervalIdRef.current);
+			}
+
 			// Start cooldown timer
 			setIsCooldown(true);
 			setCooldownTime(180);
 
-			intervalId = setInterval(() => {
+			intervalIdRef.current = setInterval(() => {
 				setCooldownTime(prev => {
 					if (prev <= 1) {
 						resetCoolDown();
 						setDisableVerifyButton(false);
+						if (intervalIdRef.current) {
+							clearInterval(intervalIdRef.current);
+							intervalIdRef.current = null;
+						}
 						return 0;
 					}
 					return prev - 1;
@@ -290,7 +299,10 @@ const InputUserEmailVerify = forwardRef<HTMLInputElement, InputType>(
 				}
 			} catch (error) {
 				if (error instanceof Error) {
-					clearInterval(intervalId);
+					if (intervalIdRef.current) {
+						clearInterval(intervalIdRef.current);
+						intervalIdRef.current = null;
+					}
 					resetCoolDown();
 					showToastError(error.message);
 				}
@@ -339,7 +351,10 @@ const InputUserEmailVerify = forwardRef<HTMLInputElement, InputType>(
 					resetCoolDown();
 
 					// Clear interval when fetch is done
-					clearInterval(intervalId);
+					if (intervalIdRef.current) {
+						clearInterval(intervalIdRef.current);
+						intervalIdRef.current = null;
+					}
 				}
 			} catch (error) {
 				if (error instanceof Error) {
@@ -514,7 +529,7 @@ const InputUserEmailVerify = forwardRef<HTMLInputElement, InputType>(
 												</button>
 											),
 											time: () => (
-												<b>
+												<CoolDownTime>
 													{Math.floor(
 														cooldownTime / 60,
 													)}
@@ -523,7 +538,7 @@ const InputUserEmailVerify = forwardRef<HTMLInputElement, InputType>(
 														'0' +
 														(cooldownTime % 60)
 													).slice(-2)}
-												</b>
+												</CoolDownTime>
 											),
 										}}
 									/>
@@ -753,6 +768,12 @@ const InputCodeDesc = styled(GLink)`
 		opacity: 0.5;
 	}
 }
+`;
+
+const CoolDownTime = styled.strong`
+	color: ${brandColors.giv[500]};
+	font-size: 0.785rem;
+	line-height: 1.1;
 `;
 
 export default InputUserEmailVerify;
