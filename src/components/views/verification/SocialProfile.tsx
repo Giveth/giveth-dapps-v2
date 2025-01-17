@@ -13,7 +13,7 @@ import {
 import styled from 'styled-components';
 
 import { useRouter } from 'next/router';
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useState } from 'react';
 import { Shadow } from '@/components/styled-components/Shadow';
 import DiscordIcon from '/public/images/icons/social/discord.svg';
 import LinkedinIcon from '/public/images/icons/social/linkedin.svg';
@@ -48,16 +48,16 @@ const SocialProfile = () => {
 		[verificationData],
 	);
 
-	const [twitterData, setTwitterData] = useState(
-		useMemo(() => findSocialMedia('twitter'), [findSocialMedia]),
+	const [twitterData, setTwitterData] = useState(() =>
+		findSocialMedia('twitter'),
+	);
+	const [linkedinData, setLinkedinData] = useState(() =>
+		findSocialMedia('linkedin'),
+	);
+	const [discordData, setDiscordData] = useState(() =>
+		findSocialMedia('discord'),
 	);
 
-	const [linkedinData, setLinkedinData] = useState(
-		useMemo(() => findSocialMedia('linkedin'), [findSocialMedia]),
-	);
-	const [discordData, setDiscordData] = useState(
-		useMemo(() => findSocialMedia('discord'), [findSocialMedia]),
-	);
 	async function handleSocialSubmit(
 		socialNetwork: string,
 		notAuthorized: boolean,
@@ -114,7 +114,7 @@ const SocialProfile = () => {
 			// Loop through the states to find and update the matching one
 			Object.keys(stateHandlers).forEach(key => {
 				if (id === Number(findSocialMedia(key)?.id)) {
-					stateHandlers[key](null);
+					stateHandlers[key](undefined);
 				}
 			});
 
