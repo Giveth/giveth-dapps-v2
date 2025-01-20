@@ -141,7 +141,10 @@ export const RecurringDonationCard = () => {
 		if (selectedRecurringToken.token.isSuperToken) {
 			setAmount(balance.value || 0n);
 		}
-		if (selectedRecurringToken.token.decimals === 6) {
+		if (
+			selectedRecurringToken.token.decimals === 6 ||
+			selectedRecurringToken.token.decimals === 8
+		) {
 			setAmount(0n);
 			setPerMonthAmount(0n);
 		}
@@ -151,7 +154,11 @@ export const RecurringDonationCard = () => {
 
 	// Introduce a scaling factor to handle tokens with different decimals
 	const scaleFactor =
-		selectedRecurringToken?.token.decimals === 6 ? 10000n : 1n;
+		selectedRecurringToken?.token.decimals === 6
+			? 10000n
+			: selectedRecurringToken?.token.decimals === 8
+				? 100n
+				: 1n;
 
 	// total means project + giveth
 	const totalPerSec = perMonthAmount / (ONE_MONTH_SECONDS / scaleFactor);
