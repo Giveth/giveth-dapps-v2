@@ -91,8 +91,12 @@ const ProjectCard = (props: IProjectCard) => {
 	const { formatMessage, formatRelativeTime, locale } = useIntl();
 	const router = useRouter();
 
-	const { allProjectsSum, matchingPool, projectDonationsSqrtRootSum } =
-		estimatedMatching || {};
+	const {
+		allProjectsSum,
+		matchingPool,
+		projectDonationsSqrtRootSum,
+		matching,
+	} = estimatedMatching || {};
 
 	const { activeStartedRound, activeQFRound } = getActiveRound(qfRounds);
 	const hasFooter = activeStartedRound || verified || isGivbackEligible;
@@ -101,6 +105,7 @@ const ProjectCard = (props: IProjectCard) => {
 		allocatedFundUSDPreferred,
 		allocatedFundUSD,
 		allocatedTokenSymbol,
+		qfStrategy,
 	} = activeQFRound || {};
 
 	const projectLink = slugToProjectView(slug);
@@ -300,6 +305,8 @@ const ProjectCard = (props: IProjectCard) => {
 												? allocatedFundUSD
 												: matchingPool,
 											activeStartedRound?.maximumReward,
+											matching,
+											qfStrategy,
 										),
 										allocatedFundUSDPreferred ? '$' : '',
 										locale,

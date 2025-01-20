@@ -49,8 +49,12 @@ export const DonatePageProjectDescription: FC<
 		estimatedMatching,
 	} = projectData || {};
 
-	const { allProjectsSum, matchingPool, projectDonationsSqrtRootSum } =
-		estimatedMatching || {};
+	const {
+		allProjectsSum,
+		matchingPool,
+		projectDonationsSqrtRootSum,
+		matching,
+	} = estimatedMatching || {};
 	const isQRDonation = router.query.chain === ChainType.STELLAR.toLowerCase();
 	const orgLabel = organization?.label;
 	const isForeignOrg =
@@ -72,6 +76,7 @@ export const DonatePageProjectDescription: FC<
 		allocatedFundUSDPreferred,
 		allocatedFundUSD,
 		allocatedTokenSymbol,
+		qfStrategy,
 	} = activeQFRound || {};
 
 	return (
@@ -147,6 +152,8 @@ export const DonatePageProjectDescription: FC<
 											? allocatedFundUSD
 											: matchingPool,
 										activeStartedRound?.maximumReward,
+										matching,
+										qfStrategy,
 									),
 									allocatedFundUSDPreferred ? '$' : '',
 									locale,

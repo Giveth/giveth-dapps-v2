@@ -162,52 +162,77 @@ export const getSocialMediaHandle = (
 			return extractUsernameFromPattern(
 				cleanedUrl,
 				/github\.com\/([^\/]+)/,
+				false,
 			);
 		case 'x': // Former Twitter
-			return extractUsernameFromPattern(cleanedUrl, /x\.com\/([^\/]+)/);
+			return extractUsernameFromPattern(
+				cleanedUrl,
+				/x\.com\/([^\/]+)/,
+				false,
+			);
 		case 'facebook':
 			return extractUsernameFromPattern(
 				cleanedUrl,
 				/facebook\.com\/([^\/]+)/,
+				false,
 			);
 		case 'instagram':
 			return extractUsernameFromPattern(
 				cleanedUrl,
 				/instagram\.com\/([^\/]+)/,
+				false,
 			);
 		case 'linkedin':
 			return extractUsernameFromPattern(
 				cleanedUrl,
 				/linkedin\.com\/(?:in|company)\/([^\/]+)/,
+				false,
 			);
 		case 'youtube':
 			return extractUsernameFromPattern(
 				cleanedUrl,
 				/youtube\.com\/channel\/([^\/]+)/,
+				true,
 			);
 		case 'reddit':
 			return extractUsernameFromPattern(
 				cleanedUrl,
 				/reddit\.com\/r\/([^\/]+)/,
+				true,
 			);
 		case 'telegram':
-			return extractUsernameFromPattern(cleanedUrl, /t\.me\/([^\/]+)/);
+			return extractUsernameFromPattern(
+				cleanedUrl,
+				/t\.me\/([^\/]+)/,
+				false,
+			);
 		case 'discord':
 			return extractUsernameFromPattern(
 				cleanedUrl,
 				/discord\.gg\/([^\/]+)/,
+				true,
 			);
 		case 'farcaster':
-			const isWrapCast = cleanedUrl.includes('warpcast');
-			if (isWrapCast) {
+			const isWarpcastUser = cleanedUrl.includes('warpcast');
+			const isWarpcastChannel =
+				cleanedUrl.includes('channel') && isWarpcastUser;
+			if (isWarpcastChannel) {
+				return extractUsernameFromPattern(
+					cleanedUrl,
+					/warpcast\.com\/~\/channel\/([^\/]+)/,
+					true,
+				);
+			} else if (isWarpcastUser) {
 				return extractUsernameFromPattern(
 					cleanedUrl,
 					/warpcast\.com\/([^\/]+)/,
+					false,
 				);
 			} else {
 				return extractUsernameFromPattern(
 					cleanedUrl,
 					/farcaster\.xyz\/([^\/]+)/,
+					false,
 				);
 			}
 		case 'lens':
@@ -215,6 +240,7 @@ export const getSocialMediaHandle = (
 			return extractUsernameFromPattern(
 				cleanedUrl,
 				/lens\.xyz\/([^\/]+)/,
+				false,
 			);
 		case 'website':
 		default:
@@ -226,10 +252,11 @@ export const getSocialMediaHandle = (
 export const extractUsernameFromPattern = (
 	url: string,
 	regex: RegExp,
+	isChannel: boolean,
 ): string => {
 	const match = url.match(regex);
 	if (match && match[1]) {
-		return `@${match[1]}`; // Return '@username'
+		return isChannel ? `/${match[1]}` : `@${match[1]}`; // Return '@username' for users and '/channel' for channels
 	}
 	return url; // Fallback to original URL if no match is found
 };
