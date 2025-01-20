@@ -27,6 +27,7 @@ export interface IEstimatedMatching {
 	allProjectsSum: number;
 	matchingPool: number;
 	projectDonationsSqrtRootSum: number;
+	matching: number;
 }
 
 export interface IAnchorContractData {
@@ -488,6 +489,11 @@ export interface IUsersPFPTokens {
 	[key: string]: IGiverPFPToken[];
 }
 
+export enum QfStrategyEnum {
+	Cocm = 'Cocm',
+	Regular = 'Regular',
+}
+
 export interface IQFRound {
 	slug: string;
 	id: string;
@@ -509,6 +515,7 @@ export interface IQFRound {
 	allocatedTokenChainId: number;
 	minimumValidUsdValue?: number;
 	minMBDScore: number;
+	qfStrategy: QfStrategyEnum;
 }
 
 export interface IArchivedQFRound extends IQFRound {

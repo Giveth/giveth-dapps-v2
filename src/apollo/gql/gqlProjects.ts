@@ -20,6 +20,7 @@ export const PROJECT_CORE_FIELDS = gql`
 			allocatedTokenSymbol
 			allocatedFundUSDPreferred
 			allocatedFundUSD
+			qfStrategy
 		}
 	}
 `;
@@ -51,6 +52,7 @@ export const PROJECT_CARD_FIELDS = gql`
 			projectDonationsSqrtRootSum
 			allProjectsSum
 			matchingPool
+			matching
 		}
 		anchorContracts {
 			address
@@ -180,6 +182,7 @@ export const FETCH_PROJECT_BY_SLUG_DONATION = gql`
 				projectDonationsSqrtRootSum
 				allProjectsSum
 				matchingPool
+				matching
 			}
 			qfRounds {
 				id
@@ -193,6 +196,7 @@ export const FETCH_PROJECT_BY_SLUG_DONATION = gql`
 				allocatedFundUSDPreferred
 				allocatedFundUSD
 				minimumValidUsdValue
+				qfStrategy
 			}
 			anchorContracts {
 				address
@@ -276,6 +280,7 @@ export const FETCH_PROJECT_BY_SLUG_SINGLE_PROJECT = gql`
 				projectDonationsSqrtRootSum
 				allProjectsSum
 				matchingPool
+				matching
 			}
 			qfRounds {
 				id
@@ -288,6 +293,7 @@ export const FETCH_PROJECT_BY_SLUG_SINGLE_PROJECT = gql`
 				allocatedTokenSymbol
 				allocatedFundUSDPreferred
 				allocatedFundUSD
+				qfStrategy
 			}
 			campaigns {
 				id
