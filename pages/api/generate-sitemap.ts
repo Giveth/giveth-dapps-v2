@@ -1,11 +1,7 @@
-export const maxDuration = 300;
-export const dynamic = 'force-dynamic';
-
 import fs from 'fs';
 import path from 'path';
 import { NextApiRequest, NextApiResponse } from 'next';
 import { User } from '@sentry/types';
-import config from '@/configuration';
 import { initializeApollo } from '@/apollo/apolloClient';
 import { OPTIONS_HOME_PROJECTS } from '@/apollo/gql/gqlOptions';
 import { FETCH_ALL_PROJECTS } from '@/apollo/gql/gqlProjects';
@@ -18,7 +14,12 @@ import { FETCH_ALL_USERS_BASIC_DATA } from '@/apollo/gql/gqlUser';
 import { addressToUserView } from '@/lib/routeCreators';
 import { shortenAddress } from '@/lib/helpers';
 
-const URL = config.FRONTEND_LINK;
+export const config = {
+	maxDuration: 300,
+	dynamic: 'force-dynamic',
+};
+
+const URL = process.env.NEXT_PUBLIC_FRONTEND_LINK;
 
 function generateProjectsSiteMap(projects: IProject[]) {
 	return `<?xml version="1.0" encoding="UTF-8"?>
