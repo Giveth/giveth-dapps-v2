@@ -16,7 +16,6 @@ import { shortenAddress } from '@/lib/helpers';
 
 export const config = {
 	maxDuration: 300,
-	dynamic: 'force-dynamic',
 };
 
 const URL = process.env.NEXT_PUBLIC_FRONTEND_LINK;
