@@ -139,7 +139,7 @@ export const DepositSuperToken: FC<IDepositSuperTokenProps> = ({
 				const divisor = BigInt(10 ** token.decimals);
 				const currentAmount = Number(amount) / Number(divisor);
 				newAmount = ethers.utils
-					.parseUnits(currentAmount.toString(), 18)
+					.parseUnits(currentAmount.toFixed(8), 18)
 					.toBigInt();
 			}
 			const upgradeOperation = await superTokenAsset.upgrade({
