@@ -1,4 +1,5 @@
 # The Giveth DApp
+
 ### Build status:
 - Develop - [![build-develop](https://github.com/Giveth/giveth-dapps-v2/actions/workflows/Build.yml/badge.svg?branch=develop)](https://github.com/Giveth/giveth-dapps-v2/actions/workflows/Build.yml)
 - Main - [![build-main](https://github.com/Giveth/giveth-dapps-v2/actions/workflows/Build.yml/badge.svg?branch=main)](https://github.com/Giveth/giveth-dapps-v2/actions/workflows/Build.yml)
