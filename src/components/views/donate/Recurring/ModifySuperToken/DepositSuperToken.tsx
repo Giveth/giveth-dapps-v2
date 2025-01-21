@@ -135,7 +135,7 @@ export const DepositSuperToken: FC<IDepositSuperTokenProps> = ({
 			} else {
 				superTokenAsset = await sf.loadWrapperSuperToken(superToken.id);
 			}
-			if (token && token.decimals === 6) {
+			if (token && (token.decimals === 6 || token.decimals === 8)) {
 				const divisor = BigInt(10 ** token.decimals);
 				const currentAmount = Number(amount) / Number(divisor);
 				newAmount = ethers.utils
