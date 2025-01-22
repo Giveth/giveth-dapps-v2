@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import Image from 'next/image';
 import {
 	B,
 	Caption,
@@ -20,6 +21,7 @@ import {
 import { IProjectAcceptedToken } from '@/apollo/types/gqlTypes';
 import { formatDonation } from '@/helpers/number';
 import { truncateToDecimalPlaces } from '@/lib/helpers';
+import { calculateQFTimeDifferences } from '@/helpers/time';
 
 interface IEstimatedMatchingToast {
 	projectData: IProject;
@@ -49,7 +51,12 @@ const EstimatedMatchingToast: FC<IEstimatedMatchingToast> = ({
 		allocatedFundUSD,
 		allocatedTokenSymbol,
 		maximumReward,
+		clusterMatchingSyncAt,
 	} = activeStartedRound || {};
+
+	const clusterMatchingSyncAtDiff = calculateQFTimeDifferences(
+		clusterMatchingSyncAt || '',
+	);
 
 	const decimals = isStellar ? 18 : token?.decimals || 18;
 	const amountInUsd =
@@ -86,6 +93,22 @@ const EstimatedMatchingToast: FC<IEstimatedMatchingToast> = ({
 						{formatMessage({
 							id: 'component.qf-section.tooltip_polygon',
 						})}
+						<ToolTipBellow>
+							<Image
+								src={'/images/icons/clock.svg'}
+								alt='score'
+								width={16}
+								height={16}
+							/>
+							{formatMessage(
+								{
+									id: 'component.qf-section.estimated_time',
+								},
+								{
+									time: clusterMatchingSyncAtDiff,
+								},
+							)}
+						</ToolTipBellow>
 					</TooltipContent>
 				</IconWithTooltip>
 			</FlexCenter>
@@ -104,6 +127,19 @@ const Wrapper = styled.div<{ show?: boolean }>`
 	color: ${semanticColors.jade[700]};
 	margin-bottom: -5px;
 	opacity: ${({ show }) => (show ? 1 : 0)};
+`;
+
+const ToolTipBellow = styled.div`
+	display: flex;
+	align-items: center;
+	justify-content: flex-start;
+	border-top: 1px solid #121848;
+	margin: 7px 0;
+	padding: 7px 0 0 0;
+	line-height: 16px;
+	& img {
+		margin: 0 6px 0 0;
+	}
 `;
 
 export default EstimatedMatchingToast;
