@@ -261,7 +261,9 @@ const DonateIndex: FC = () => {
 
 	return successDonation ? (
 		<>
-			<DonateHeader />
+			<DonateHeader
+				isSuccessDonation={Object.keys(successDonation).length > 0}
+			/>
 			<DonateSuccessContainer>
 				<SuccessView isStellar={isQRDonation} />
 			</DonateSuccessContainer>
