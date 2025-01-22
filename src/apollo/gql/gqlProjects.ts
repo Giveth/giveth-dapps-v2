@@ -21,6 +21,7 @@ export const PROJECT_CORE_FIELDS = gql`
 			allocatedFundUSDPreferred
 			allocatedFundUSD
 			qfStrategy
+			clusterMatchingSyncAt
 		}
 	}
 `;
@@ -294,6 +295,7 @@ export const FETCH_PROJECT_BY_SLUG_SINGLE_PROJECT = gql`
 				allocatedFundUSDPreferred
 				allocatedFundUSD
 				qfStrategy
+				clusterMatchingSyncAt
 			}
 			campaigns {
 				id

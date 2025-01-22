@@ -27,6 +27,7 @@ import { client } from '@/apollo/apolloClient';
 import { FETCH_QF_ROUND_HISTORY } from '@/apollo/gql/gqlDonations';
 import { IGetQfRoundHistory, IQFRound } from '@/apollo/types/types';
 import { formatDonation } from '@/helpers/number';
+import { calculateQFTimeDifferences } from '@/helpers/time';
 
 interface IProjectTotalFundCardProps {
 	selectedQF: IQFRound | null;
@@ -53,7 +54,12 @@ const ProjectTotalFundCard = ({ selectedQF }: IProjectTotalFundCardProps) => {
 		allocatedFundUSDPreferred,
 		allocatedFundUSD,
 		allocatedTokenSymbol,
+		clusterMatchingSyncAt,
 	} = selectedQF || {};
+
+	const clusterMatchingSyncAtDiff = calculateQFTimeDifferences(
+		clusterMatchingSyncAt || '',
+	);
 
 	const selectedQFData = qfRounds?.find(round => round.id === selectedQF?.id);
 
@@ -218,7 +224,11 @@ const ProjectTotalFundCard = ({ selectedQF }: IProjectTotalFundCardProps) => {
 								</NotDistributedFundContainer>
 							) : (
 								<EstimatedMatchingSection $flexDirection='column'>
-									<Flex $justifyContent='space-between'>
+									<Flex
+										$justifyContent='space-between'
+										$alignItems='center'
+										$flexWrap={true}
+									>
 										<EstimatedMatchingPrice>
 											+{' '}
 											{formatDonation(
@@ -237,6 +247,16 @@ const ProjectTotalFundCard = ({ selectedQF }: IProjectTotalFundCardProps) => {
 												? 'Estimated Matching'
 												: 'Matching Funds'}
 										</EstimatedMatchingText>
+										<LastUpdate>
+											{formatMessage(
+												{
+													id: 'label.last_updated_ago',
+												},
+												{
+													time: clusterMatchingSyncAtDiff,
+												},
+											)}
+										</LastUpdate>
 									</Flex>
 
 									{qfRoundHistory?.distributedFundTxHash &&
@@ -351,8 +371,10 @@ const EstimatedMatchingTransaction = styled.div`
 `;
 
 const EstimatedMatchingPrice = styled(H5)`
+	align-self: center;
 	color: ${semanticColors.jade[600]};
 	font-weight: 700;
+	line-height: 1.1;
 `;
 
 const EstimatedMatchingText = styled(SublineBold)`
@@ -399,6 +421,17 @@ const BlockExplorerLink = styled(GLink)`
 	&:hover {
 		color: ${brandColors.pinky[500]};
 	}
+`;
+
+const LastUpdate = styled.div`
+	width: 100%;
+	margin-top: 8px;
+	font-size: 12px;
+	line-height: 18px;
+	color: ${neutralColors.gray[700]};
+	padding: 8px 0px 0px;
+	border-top: 1px solid rgba(0, 0, 0, 0.08);
+	align-self: stretch;
 `;
 
 export default ProjectTotalFundCard;
