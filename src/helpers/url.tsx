@@ -209,7 +209,7 @@ export const getSocialMediaHandle = (
 		case 'discord':
 			return extractUsernameFromPattern(
 				cleanedUrl,
-				/discord\.gg\/([^\/]+)/,
+				/discord\.(?:gg|com)\/([^\/]+)/,
 				true,
 			);
 		case 'farcaster':
