@@ -78,6 +78,8 @@ const QFSection: FC<IQFSectionProps> = ({ projectData }) => {
 		allProjectsSum,
 		allocatedFundUSDPreferred ? allocatedFundUSD : matchingPool,
 		activeStartedRound?.maximumReward,
+		matching,
+		qfStrategy,
 	);
 
 	const clusterMatchingSyncAtDiff = calculateQFTimeDifferences(
@@ -95,16 +97,7 @@ const QFSection: FC<IQFSectionProps> = ({ projectData }) => {
 			<Flex $flexDirection='column' gap='4px'>
 				<EstimatedMatchingPrice>
 					{formatDonation(
-						calculateTotalEstimatedMatching(
-							projectDonationsSqrtRootSum,
-							allProjectsSum,
-							allocatedFundUSDPreferred
-								? allocatedFundUSD
-								: matchingPool,
-							activeStartedRound?.maximumReward,
-							matching,
-							qfStrategy,
-						),
+						totalEstimatedMatching,
 						allocatedFundUSDPreferred ? '$' : '',
 						locale,
 						true,
