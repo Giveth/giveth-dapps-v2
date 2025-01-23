@@ -58,8 +58,12 @@ const QFSection: FC<IQFSectionProps> = ({ projectData }) => {
 	const router = useRouter();
 	const isOnDonatePage = router.pathname.includes('/donate');
 
-	const { projectDonationsSqrtRootSum, matchingPool, allProjectsSum } =
-		estimatedMatching ?? {};
+	const {
+		projectDonationsSqrtRootSum,
+		matchingPool,
+		allProjectsSum,
+		matching,
+	} = estimatedMatching ?? {};
 
 	const { activeStartedRound } = getActiveRound(qfRounds);
 	const {
@@ -67,6 +71,7 @@ const QFSection: FC<IQFSectionProps> = ({ projectData }) => {
 		allocatedTokenSymbol,
 		allocatedFundUSDPreferred,
 		clusterMatchingSyncAt,
+		qfStrategy,
 	} = activeStartedRound || {};
 	const totalEstimatedMatching = calculateTotalEstimatedMatching(
 		projectDonationsSqrtRootSum,
@@ -74,11 +79,6 @@ const QFSection: FC<IQFSectionProps> = ({ projectData }) => {
 		allocatedFundUSDPreferred ? allocatedFundUSD : matchingPool,
 		activeStartedRound?.maximumReward,
 	);
-
-	// const { clusterMatchingSyncAt } = activeQFRound || {};
-	console.log({ activeStartedRound });
-
-	console.log('activeQFRound', clusterMatchingSyncAt);
 
 	const clusterMatchingSyncAtDiff = calculateQFTimeDifferences(
 		clusterMatchingSyncAt || '',
@@ -95,7 +95,16 @@ const QFSection: FC<IQFSectionProps> = ({ projectData }) => {
 			<Flex $flexDirection='column' gap='4px'>
 				<EstimatedMatchingPrice>
 					{formatDonation(
-						totalEstimatedMatching,
+						calculateTotalEstimatedMatching(
+							projectDonationsSqrtRootSum,
+							allProjectsSum,
+							allocatedFundUSDPreferred
+								? allocatedFundUSD
+								: matchingPool,
+							activeStartedRound?.maximumReward,
+							matching,
+							qfStrategy,
+						),
 						allocatedFundUSDPreferred ? '$' : '',
 						locale,
 						true,
