@@ -92,7 +92,8 @@ export const validators = {
 	discord: {
 		pattern: {
 			value: regexList.discord,
-			message: 'Invalid Discord URL',
+			message:
+				'Invalid Discord URL, make sure this is a server invite link',
 		},
 	},
 	telegram: {

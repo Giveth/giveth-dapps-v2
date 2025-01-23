@@ -191,7 +191,7 @@ export const getSocialMediaHandle = (
 		case 'youtube':
 			return extractUsernameFromPattern(
 				cleanedUrl,
-				/youtube\.com\/channel\/([^\/]+)/,
+				/youtube\.com\/(?:c\/|@)([^\/]+)/,
 				true,
 			);
 		case 'reddit':
