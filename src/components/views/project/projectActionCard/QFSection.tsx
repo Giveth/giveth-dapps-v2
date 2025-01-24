@@ -58,8 +58,12 @@ const QFSection: FC<IQFSectionProps> = ({ projectData }) => {
 	const router = useRouter();
 	const isOnDonatePage = router.pathname.includes('/donate');
 
-	const { projectDonationsSqrtRootSum, matchingPool, allProjectsSum } =
-		estimatedMatching ?? {};
+	const {
+		projectDonationsSqrtRootSum,
+		matchingPool,
+		allProjectsSum,
+		matching,
+	} = estimatedMatching ?? {};
 
 	const { activeStartedRound } = getActiveRound(qfRounds);
 	const {
@@ -67,18 +71,16 @@ const QFSection: FC<IQFSectionProps> = ({ projectData }) => {
 		allocatedTokenSymbol,
 		allocatedFundUSDPreferred,
 		clusterMatchingSyncAt,
+		qfStrategy,
 	} = activeStartedRound || {};
 	const totalEstimatedMatching = calculateTotalEstimatedMatching(
 		projectDonationsSqrtRootSum,
 		allProjectsSum,
 		allocatedFundUSDPreferred ? allocatedFundUSD : matchingPool,
 		activeStartedRound?.maximumReward,
+		matching,
+		qfStrategy,
 	);
-
-	// const { clusterMatchingSyncAt } = activeQFRound || {};
-	console.log({ activeStartedRound });
-
-	console.log('activeQFRound', clusterMatchingSyncAt);
 
 	const clusterMatchingSyncAtDiff = calculateQFTimeDifferences(
 		clusterMatchingSyncAt || '',
