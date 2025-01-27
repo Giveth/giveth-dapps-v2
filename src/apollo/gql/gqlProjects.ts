@@ -20,7 +20,6 @@ export const PROJECT_CORE_FIELDS = gql`
 			allocatedTokenSymbol
 			allocatedFundUSDPreferred
 			allocatedFundUSD
-			qfStrategy
 		}
 	}
 `;
@@ -196,7 +195,6 @@ export const FETCH_PROJECT_BY_SLUG_DONATION = gql`
 				allocatedFundUSDPreferred
 				allocatedFundUSD
 				minimumValidUsdValue
-				qfStrategy
 			}
 			anchorContracts {
 				address
@@ -293,7 +291,6 @@ export const FETCH_PROJECT_BY_SLUG_SINGLE_PROJECT = gql`
 				allocatedTokenSymbol
 				allocatedFundUSDPreferred
 				allocatedFundUSD
-				qfStrategy
 			}
 			campaigns {
 				id

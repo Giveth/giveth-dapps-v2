@@ -35,7 +35,7 @@ interface IProjectTotalFundCardProps {
 const ProjectTotalFundCard = ({ selectedQF }: IProjectTotalFundCardProps) => {
 	const [qfRoundHistory, setQfRoundHistory] = useState<IGetQfRoundHistory>();
 	const { projectData, isAdmin } = useProjectContext();
-
+	console.log('projectData', projectData);
 	const {
 		id,
 		totalDonations,
@@ -120,8 +120,6 @@ const ProjectTotalFundCard = ({ selectedQF }: IProjectTotalFundCardProps) => {
 					allProjectsSum,
 					allocatedFundUSDPreferred ? allocatedFundUSD : matchingPool,
 					selectedQF.maximumReward,
-					projectData?.estimatedMatching.matching,
-					selectedQF.qfStrategy,
 				)
 			: qfRoundHistory
 				? qfRoundHistory.matchingFund !== null
@@ -132,8 +130,6 @@ const ProjectTotalFundCard = ({ selectedQF }: IProjectTotalFundCardProps) => {
 							qfRoundHistory.estimatedMatching.allProjectsSum,
 							qfRoundHistory.estimatedMatching.matchingPool,
 							selectedQF.maximumReward,
-							projectData?.estimatedMatching.matching,
-							selectedQF.qfStrategy,
 						)
 				: 0
 		: 0;
@@ -222,7 +218,7 @@ const ProjectTotalFundCard = ({ selectedQF }: IProjectTotalFundCardProps) => {
 										<EstimatedMatchingPrice>
 											+{' '}
 											{formatDonation(
-												matchFund || 0,
+												matchFund,
 												allocatedFundUSDPreferred
 													? '$'
 													: '',
