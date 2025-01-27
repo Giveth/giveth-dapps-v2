@@ -56,7 +56,7 @@ export const AmountInput: FC<IAmountInput> = ({
 
 		const _displayAmount = truncateToDecimalPlaces(
 			formatUnits(amount, decimals),
-			maxDecimals,
+			decimals / 3,
 		).toString();
 		setDisplayAmount(_displayAmount);
 	}, [amount, decimals]);
@@ -77,6 +77,7 @@ export const AmountInput: FC<IAmountInput> = ({
 	const onUserInput = useCallback(
 		(value: string) => {
 			const [, _decimals] = value.split('.');
+<<<<<<< HEAD
 
 			// Allow more decimals if token has 8 decimals
 			if (decimals === 8) {
@@ -84,6 +85,9 @@ export const AmountInput: FC<IAmountInput> = ({
 			} else {
 				if (_decimals?.length > decimals / 3) return; // Limit to 6 or 2 decimals for other tokens
 			}
+=======
+			if (_decimals?.length > decimals / 3) return;
+>>>>>>> parent of 5713da68d (Merge pull request #4950 from Giveth/add_estimated_timer)
 			setDisplayAmount(value);
 			setActiveStep(0);
 

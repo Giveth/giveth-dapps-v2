@@ -638,21 +638,21 @@ const config: EnvConfig = {
 				isSuperToken: true,
 				coingeckoId: 'ethereum',
 			},
-			{
-				underlyingToken: {
-					decimals: 8,
-					id: '0xcbB7C0000aB88B473b1f5aFd9ef808440eed33Bf',
-					name: 'Coinbase Wrapped BTC',
-					symbol: 'cbBTC',
-					coingeckoId: 'bitcoin',
-				},
-				decimals: 18,
-				id: '0xDFd428908909CB5E24F5e79E6aD6BDE10bdf2327',
-				name: 'Coinbase wrapped BTC',
-				symbol: 'cbBTCx',
-				isSuperToken: true,
-				coingeckoId: 'bitcoin',
-			},
+			// {
+			// 	underlyingToken: {
+			// 		decimals: 8,
+			// 		id: '0xcbB7C0000aB88B473b1f5aFd9ef808440eed33Bf',
+			// 		name: 'Coinbase Wrapped BTC',
+			// 		symbol: 'cbBTC',
+			// 		coingeckoId: 'bitcoin',
+			// 	},
+			// 	decimals: 18,
+			// 	id: '0xDFd428908909CB5E24F5e79E6aD6BDE10bdf2327',
+			// 	name: 'Coinbase wrapped BTC',
+			// 	symbol: 'cbBTCx',
+			// 	isSuperToken: true,
+			// 	coingeckoId: 'bitcoin',
+			// },
 			{
 				underlyingToken: {
 					decimals: 18,

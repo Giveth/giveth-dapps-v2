@@ -242,22 +242,19 @@ const RecurringDonationInnerModal: FC<IRecurringDonationInnerModalProps> = ({
 			// This is a special case with tokens that have 6 decimals
 			// We need to convert the amount to 18 decimals for the upgrade operation
 			// And also for the flow rate calculation
-			if (
-				selectedRecurringToken.token.decimals === 6 ||
-				selectedRecurringToken.token.decimals === 8
-			) {
+			if (selectedRecurringToken.token.decimals === 6) {
 				const divisor = BigInt(
 					10 ** selectedRecurringToken.token.decimals,
 				);
 				const currentAmount = Number(amount) / Number(divisor);
 				newAmount = ethers.utils
-					.parseUnits(currentAmount.toFixed(8), 18)
+					.parseUnits(currentAmount.toString(), 18)
 					.toBigInt();
 
 				const currentPerMonth =
 					Number(perMonthAmount) / Number(divisor);
 				newPerMonthAmount = ethers.utils
-					.parseUnits(currentPerMonth.toFixed(8), 18)
+					.parseUnits(currentPerMonth.toString(), 18)
 					.toBigInt();
 			}
 
