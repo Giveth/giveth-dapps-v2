@@ -27,6 +27,7 @@ export interface IEstimatedMatching {
 	allProjectsSum: number;
 	matchingPool: number;
 	projectDonationsSqrtRootSum: number;
+	matching: number;
 }
 
 export interface IAnchorContractData {

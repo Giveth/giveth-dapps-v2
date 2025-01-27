@@ -50,6 +50,22 @@ export const VerificationProvider = ({ children }: { children: ReactNode }) => {
 	const { slug } = router.query;
 	const isDraft = verificationData?.status === EVerificationStatus.DRAFT;
 
+	// Helper function to store the current step in localStorage
+	const storeStepInLocalStorage = (step: number) => {
+		if (typeof window !== 'undefined') {
+			localStorage.setItem('lastStep', step.toString());
+		}
+	};
+
+	// Helper function to get the last step from localStorage
+	const getStepFromLocalStorage = () => {
+		if (typeof window !== 'undefined') {
+			const lastStep = localStorage.getItem('lastStep');
+			return lastStep ? parseInt(lastStep, 10) : -1;
+		}
+		return -1;
+	};
+
 	useEffect(() => {
 		async function getVerificationData() {
 			try {
@@ -61,6 +77,13 @@ export const VerificationProvider = ({ children }: { children: ReactNode }) => {
 					verificationRes.data.getCurrentProjectVerificationForm;
 				setVerificationData(projectVerification);
 
+				// First, check for the step in localStorage
+				let lastStep = getStepFromLocalStorage();
+				if (lastStep !== -1) {
+					setStep(lastStep); // If there’s a stored step, use it
+					return;
+				}
+
 				const firstIncompleteStep = findFirstIncompleteStep(
 					menuList,
 					projectVerification,
@@ -68,13 +91,9 @@ export const VerificationProvider = ({ children }: { children: ReactNode }) => {
 
 				if (!projectVerification.emailConfirmed) {
 					setStep(1);
-				}
-				// return to first incomplete step
-				else if (firstIncompleteStep > 0) {
+				} else if (firstIncompleteStep > 0) {
 					setStep(firstIncompleteStep);
-				}
-				// all steps finished but user didn't submited project, return her to penultimate step
-				else if (
+				} else if (
 					firstIncompleteStep == -1 &&
 					projectVerification?.status == EVerificationStatus.DRAFT
 				) {
@@ -87,7 +106,6 @@ export const VerificationProvider = ({ children }: { children: ReactNode }) => {
 					case 'There is not any project verification form for this project':
 						setStep(0);
 						break;
-
 					default:
 						console.log('getVerificationData error: ', error);
 						captureException(error, {
@@ -99,10 +117,18 @@ export const VerificationProvider = ({ children }: { children: ReactNode }) => {
 				}
 			}
 		}
+
 		if (slug) {
 			getVerificationData().then();
 		}
 	}, [slug]);
+
+	// Whenever the step changes, store it in localStorage
+	useEffect(() => {
+		if (step >= 0) {
+			storeStepInLocalStorage(step);
+		}
+	}, [step]);
 
 	return (
 		<VerificationContext.Provider

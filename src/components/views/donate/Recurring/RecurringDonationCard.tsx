@@ -151,7 +151,11 @@ export const RecurringDonationCard = () => {
 
 	// Introduce a scaling factor to handle tokens with different decimals
 	const scaleFactor =
-		selectedRecurringToken?.token.decimals === 6 ? 10000n : 1n;
+		selectedRecurringToken?.token.decimals === 6
+			? 10000n
+			: selectedRecurringToken?.token.decimals === 8
+				? 1000000n
+				: 1n;
 
 	// total means project + giveth
 	const totalPerSec = perMonthAmount / (ONE_MONTH_SECONDS / scaleFactor);
@@ -353,13 +357,21 @@ export const RecurringDonationCard = () => {
 										id: 'label.available',
 									})}
 									:{' '}
-									{truncateToDecimalPlaces(
-										formatUnits(
-											balance.value,
-											balance.decimals,
-										),
-										balance.decimals / 3,
-									)}
+									{balance.decimals === 8
+										? truncateToDecimalPlaces(
+												formatUnits(
+													balance.value,
+													balance.decimals,
+												),
+												18 / 3,
+											)
+										: truncateToDecimalPlaces(
+												formatUnits(
+													balance.value,
+													balance.decimals,
+												),
+												balance.decimals / 3,
+											)}
 								</GLinkStyled>
 								<IconWrapper
 									onClick={() => !isRefetching && refetch()}

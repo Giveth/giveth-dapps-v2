@@ -130,6 +130,10 @@ const RecurringDonationTable: FC<RecurringDonationTable> = ({
 											18,
 										),
 									),
+									undefined,
+									undefined,
+									undefined,
+									3,
 								)}
 							</B>
 							<Currency>{donation.currency} /mo</Currency>

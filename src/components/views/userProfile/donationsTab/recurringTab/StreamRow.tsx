@@ -81,6 +81,7 @@ export const StreamRow: FC<IStreamRowProps> = ({ tokenStream }) => {
 					{balance && balance.value
 						? limitFraction(
 								formatUnits(balance.value, balance.decimals),
+								3,
 							)
 						: '0'}
 				</P>
@@ -90,6 +91,10 @@ export const StreamRow: FC<IStreamRowProps> = ({ tokenStream }) => {
 				<P color={semanticColors.jade[500]}>
 					{formatDonation(
 						limitFraction(formatUnits(BigInt(monthlyFlowRate), 18)),
+						undefined,
+						undefined,
+						undefined,
+						3,
 					)}
 					&nbsp;
 					{underlyingSymbol}
