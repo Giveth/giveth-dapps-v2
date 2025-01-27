@@ -56,7 +56,7 @@ export const AmountInput: FC<IAmountInput> = ({
 
 		const _displayAmount = truncateToDecimalPlaces(
 			formatUnits(amount, decimals),
-			decimals / 3,
+			maxDecimals,
 		).toString();
 		setDisplayAmount(_displayAmount);
 	}, [amount, decimals]);
