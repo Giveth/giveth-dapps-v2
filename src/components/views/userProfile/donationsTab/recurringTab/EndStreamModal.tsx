@@ -117,9 +117,13 @@ const EndStreamInnerModal: FC<IEndStreamInnerModalProps> = ({
 				superToken = await sf.loadWrapperSuperToken(_superToken.id);
 			}
 
+			const matchingContract = donation.project.anchorContracts.find(
+				contract => contract.networkId === recurringNetworkId,
+			);
+
 			const deleteOp = superToken.deleteFlow({
 				sender: address,
-				receiver: donation.project.anchorContracts[0].address,
+				receiver: matchingContract?.address || '',
 			});
 
 			const tx = await deleteOp.exec(signer);

@@ -52,7 +52,7 @@ export const AmountInput: FC<IAmountInput> = ({
 		const isZero = regex.test(displayAmount);
 		if (amount === 0n && isZero) return;
 
-		const maxDecimals = decimals === 8 ? 8 : decimals / 3;
+		const maxDecimals = decimals === 8 ? 6 : decimals / 3;
 
 		const _displayAmount = truncateToDecimalPlaces(
 			formatUnits(amount, decimals),
@@ -80,7 +80,7 @@ export const AmountInput: FC<IAmountInput> = ({
 
 			// Allow more decimals if token has 8 decimals
 			if (decimals === 8) {
-				if (_decimals?.length > 8) return; // Limit to 8 decimals
+				if (_decimals?.length > 6) return; // Limit to 8 decimals
 			} else {
 				if (_decimals?.length > decimals / 3) return; // Limit to 6 or 2 decimals for other tokens
 			}
