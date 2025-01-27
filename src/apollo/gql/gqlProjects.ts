@@ -198,7 +198,6 @@ export const FETCH_PROJECT_BY_SLUG_DONATION = gql`
 				allocatedFundUSD
 				minimumValidUsdValue
 				qfStrategy
-				clusterMatchingSyncAt
 			}
 			anchorContracts {
 				address

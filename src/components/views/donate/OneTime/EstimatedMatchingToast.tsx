@@ -46,7 +46,6 @@ const EstimatedMatchingToast: FC<IEstimatedMatchingToast> = ({
 		estimatedMatching || {};
 
 	const { activeStartedRound } = getActiveRound(qfRounds);
-
 	const {
 		allocatedFundUSDPreferred,
 		allocatedFundUSD,
