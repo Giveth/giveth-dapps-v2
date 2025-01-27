@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 import styled from 'styled-components';
-import Image from 'next/image';
 import {
 	P,
 	H6,
@@ -37,7 +36,6 @@ import { TooltipContent } from '@/components/modals/HarvestAll.sc';
 import { IconWithTooltip } from '@/components/IconWithToolTip';
 import { FETCH_RECURRING_DONATIONS_BY_DATE } from '@/apollo/gql/gqlProjects';
 import { client } from '@/apollo/apolloClient';
-import { calculateQFTimeDifferences } from '@/helpers/time';
 
 const cardRadius = '12px';
 const imgHeight = '226px';
@@ -108,12 +106,7 @@ const ProjectCard = (props: IProjectCard) => {
 		allocatedFundUSD,
 		allocatedTokenSymbol,
 		qfStrategy,
-		clusterMatchingSyncAt,
 	} = activeQFRound || {};
-
-	const clusterMatchingSyncAtDiff = calculateQFTimeDifferences(
-		clusterMatchingSyncAt || '',
-	);
 
 	const projectLink = slugToProjectView(slug);
 	const donateLink = slugToProjectDonate(slug);
@@ -337,24 +330,6 @@ const ProjectCard = (props: IProjectCard) => {
 											{formatMessage({
 												id: 'component.qf-section.tooltip_polygon',
 											})}
-											<ToolTipBellow>
-												<Image
-													src={
-														'/images/icons/clock.svg'
-													}
-													alt='score'
-													width={16}
-													height={16}
-												/>
-												{formatMessage(
-													{
-														id: 'component.qf-section.estimated_time',
-													},
-													{
-														time: clusterMatchingSyncAtDiff,
-													},
-												)}
-											</ToolTipBellow>
 										</TooltipContent>
 									</IconWithTooltip>
 								</EstimatedMatching>
@@ -616,19 +591,6 @@ const QFBadge = styled(Subline)`
 	border-radius: 16px;
 	display: flex;
 	align-items: center;
-`;
-
-const ToolTipBellow = styled.div`
-	display: flex;
-	align-items: center;
-	justify-content: flex-start;
-	border-top: 1px solid #121848;
-	margin: 7px 0;
-	padding: 7px 0 0 0;
-	line-height: 16px;
-	& img {
-		margin: 0 6px 0 0;
-	}
 `;
 
 export default ProjectCard;

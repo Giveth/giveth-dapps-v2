@@ -15,7 +15,6 @@ import {
 } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
 import styled from 'styled-components';
-import Image from 'next/image';
 import { type FC } from 'react';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
@@ -36,7 +35,6 @@ import { ProjectCardUserName } from '@/components/project-card/ProjectCardUserNa
 import { CustomH5 } from '@/components/setProfilePic/SetProfilePic';
 import { ORGANIZATION } from '@/lib/constants/organizations';
 import { slugToProjectView } from '@/lib/routeCreators';
-import { calculateQFTimeDifferences } from '@/helpers/time';
 
 interface IQFSectionProps {
 	projectData?: IProject;
@@ -66,22 +64,12 @@ const QFSection: FC<IQFSectionProps> = ({ projectData }) => {
 		allocatedFundUSD,
 		allocatedTokenSymbol,
 		allocatedFundUSDPreferred,
-		clusterMatchingSyncAt,
 	} = activeStartedRound || {};
 	const totalEstimatedMatching = calculateTotalEstimatedMatching(
 		projectDonationsSqrtRootSum,
 		allProjectsSum,
 		allocatedFundUSDPreferred ? allocatedFundUSD : matchingPool,
 		activeStartedRound?.maximumReward,
-	);
-
-	// const { clusterMatchingSyncAt } = activeQFRound || {};
-	console.log({ activeStartedRound });
-
-	console.log('activeQFRound', clusterMatchingSyncAt);
-
-	const clusterMatchingSyncAtDiff = calculateQFTimeDifferences(
-		clusterMatchingSyncAt || '',
 	);
 
 	const projectLink = slugToProjectView(slug!);
@@ -116,22 +104,6 @@ const QFSection: FC<IQFSectionProps> = ({ projectData }) => {
 							{formatMessage({
 								id: 'component.qf-section.tooltip_polygon',
 							})}
-							<ToolTipBellow>
-								<Image
-									src={'/images/icons/clock.svg'}
-									alt='score'
-									width={16}
-									height={16}
-								/>
-								{formatMessage(
-									{
-										id: 'component.qf-section.estimated_time',
-									},
-									{
-										time: clusterMatchingSyncAtDiff,
-									},
-								)}
-							</ToolTipBellow>
 						</TooltipContent>
 					</IconWithTooltip>
 				</Flex>
@@ -289,16 +261,6 @@ const QFSection: FC<IQFSectionProps> = ({ projectData }) => {
 							<LightSubline>|</LightSubline>
 							<LightSubline>Next update in: 3 min</LightSubline>
 						</Flex> */}
-							<LastUpdate>
-								{formatMessage(
-									{
-										id: 'label.last_updated_ago',
-									},
-									{
-										time: clusterMatchingSyncAtDiff,
-									},
-								)}
-							</LastUpdate>
 							<a
 								href={links.QF_DOC}
 								target='_blank'
@@ -428,24 +390,4 @@ const DefaultEstimatedMatchingContainer = styled.div`
 	@media (min-width: ${deviceSize.tablet}px) and (max-width: ${deviceSize.laptopS}px) {
 		display: none;
 	}
-`;
-
-const ToolTipBellow = styled.div`
-	display: flex;
-	align-items: center;
-	justify-content: flex-start;
-	border-top: 1px solid #121848;
-	margin: 7px 0;
-	padding: 7px 0 0 0;
-	line-height: 16px;
-	& img {
-		margin: 0 6px 0 0;
-	}
-`;
-
-const LastUpdate = styled.div`
-	font-weight: 400;
-	font-size: 12px;
-	line-height: 150%;
-	color: ${neutralColors.gray[700]};
 `;

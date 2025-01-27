@@ -57,25 +57,3 @@ const fetchServerTime = async () => {
 		fetching = false;
 	}
 };
-
-export function calculateQFTimeDifferences(
-	providedTime: string | undefined,
-): number {
-	if (!providedTime) {
-		return 0;
-	}
-
-	const providedDate = new Date(providedTime);
-	const currentDate = new Date();
-
-	if (isNaN(providedDate.getTime())) {
-		throw new Error('Invalid provided time');
-	}
-
-	// Calculate the difference in milliseconds and convert to whole minutes
-	const diffInMinutes = Math.floor(
-		(currentDate.getTime() - providedDate.getTime()) / (1000 * 60),
-	);
-
-	return diffInMinutes < 0 ? 0 : diffInMinutes;
-}
