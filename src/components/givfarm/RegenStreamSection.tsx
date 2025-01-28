@@ -5,6 +5,7 @@ import { useAccount } from 'wagmi';
 import { Subtitle, GIVfrensLink } from './RegenStreamSection.sc';
 import config from '@/configuration';
 import { RegenStreamCard } from './RegenStreamCard';
+import links from '@/lib/constants/links';
 
 interface IRegenStreamSectionProps {
 	showArchivedPools: boolean;
@@ -43,7 +44,7 @@ export const RegenStreamSection: FC<IRegenStreamSectionProps> = ({
 						<GIVfrensLink
 							as='a'
 							size='Big'
-							href='https://docs.giveth.io/regenFarms'
+							href={links.REGEN_FARM_DOCS}
 							target='_blank'
 							rel='noreferrer'
 						>

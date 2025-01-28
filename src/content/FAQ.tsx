@@ -328,28 +328,6 @@ const faqContent = (formatMessage: any) => {
 				),
 			},
 			{
-				question: 'page.faq.what_was_giveth_trace',
-				answer: (
-					<>
-						<FormattedMessage id='page.faq.what_is_a_traceable_project.content.one' />{' '}
-						<ExternalLink href={Routes.Home} title='Giveth.io' />{' '}
-						<FormattedMessage id='page.faq.what_is_a_traceable_project.content.two' />{' '}
-						<ExternalLink
-							href={links.CAMPAIGN_DOCS}
-							title={formatMessage({ id: 'label.campaign' })}
-						/>{' '}
-						<FormattedMessage id='label.on' />{' '}
-						<ExternalLink
-							href={links.TRACE}
-							title='Giveth TRACE '
-						/>
-						<FormattedMessage id='page.faq.what_is_a_traceable_project.content.three' />{' '}
-						<ExternalLink href={links.TRACES_DOCS} title='Traces' />
-						.
-					</>
-				),
-			},
-			{
 				question:
 					'page.faq.i_still_need_more_detail_on_how_giveth_works',
 				answer: (

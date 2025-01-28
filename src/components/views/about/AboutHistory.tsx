@@ -9,7 +9,6 @@ import {
 	H4,
 	Lead,
 } from '@giveth/ui-design-system';
-import links from '@/lib/constants/links';
 
 const AboutHistory = () => {
 	const [sliderSection, setSliderSection] = useState<number>(0);
@@ -29,17 +28,6 @@ const AboutHistory = () => {
 		{
 			title: 'label.and_now_the_giveconomy',
 			body: formatMessage({ id: 'label.and_now_the_giveconomy.desc' }),
-		},
-		{
-			title: 'label.take_a_dive_into_the_history',
-			body: (
-				<ReadMoreButton
-					isExternal
-					href={links.HISTORY}
-					target='_blank'
-					label={formatMessage({ id: 'label.read_more' })}
-				/>
-			),
 		},
 	];
 

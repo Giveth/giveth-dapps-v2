@@ -16,6 +16,7 @@ import { useAppSelector } from '@/features/hooks';
 import Routes from '@/lib/constants/Routes';
 import { ETheme } from '@/features/general/general.slice';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
+import links from '@/lib/constants/links';
 
 export const VerificationModal = (props: { onClose: () => void }) => {
 	const router = useRouter();
@@ -55,7 +56,7 @@ export const VerificationModal = (props: { onClose: () => void }) => {
 						id: 'label.verify_your_project.modal.two',
 					})}
 					<TextLink
-						href='https://docs.giveth.io/dapps/projectVerification/'
+						href={links.VERIFICATION_DOCS}
 						target='_blank'
 						rel='noreferrer'
 					>

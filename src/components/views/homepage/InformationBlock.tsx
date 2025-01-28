@@ -13,8 +13,8 @@ import Image from 'next/image';
 import TrazadoPinkIcon from 'public/images/particles/trazado-pink.svg';
 import TrazadoGivIcon from 'public/images/particles/trazado-giv.svg';
 import ExternalLink from '@/components/ExternalLink';
-import links from '@/lib/constants/links';
 import { Relative } from '@/components/styled-components/Position';
+import Routes from '@/lib/constants/Routes';
 
 const InformationBlock = () => {
 	const { formatMessage } = useIntl();
@@ -43,7 +43,7 @@ const InformationBlock = () => {
 						})}
 					</SpanStyled>
 				</Lead>
-				<ExternalLink href={links.OUR_MISSION}>
+				<ExternalLink href={Routes.AboutUs}>
 					<ButtonStyled
 						size='small'
 						label={formatMessage({ id: 'label.learn_more' })}

@@ -26,6 +26,7 @@ import { ChainType } from '@/types/config';
 import config from '@/configuration';
 import { calculateTotalEstimatedMatching, getActiveRound } from '@/helpers/qf';
 import { GivBackBadge } from '@/components/badges/GivBackBadge';
+import links from '@/lib/constants/links';
 
 interface IDonatePageProjectDescriptionProps {
 	projectData?: IProject;
@@ -193,7 +194,7 @@ export const DonatePageProjectDescription: FC<
 								})}
 							</P>
 							<a
-								href='https://docs.giveth.io/whatisgiveth/zero-fees'
+								href={links.ABOUT_GIVETH}
 								target='_blank'
 								referrerPolicy='no-referrer'
 								rel='noreferrer'

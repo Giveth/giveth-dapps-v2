@@ -13,6 +13,7 @@ import InternalLink from '@/components/InternalLink';
 import GivPic from 'public/images/onboard/two-giv.svg';
 import { Relative } from '@/components/styled-components/Position';
 import QuarterCircle from '@/components/particles/QuarterCircle';
+import links from '@/lib/constants/links';
 
 const WhatIsGIV = () => {
 	return (
@@ -40,7 +41,7 @@ const WhatIsGIV = () => {
 					</LeadStyled>
 					<InternalLink
 						color={brandColors.pinky[500]}
-						href='https://docs.giveth.io/blog/welcomeGIVeconomy/#the-giv-token'
+						href={links.GIVECONOMY_DOCS}
 					>
 						<ButtonText>Read MORE ABOUT GIV HERE</ButtonText>
 					</InternalLink>

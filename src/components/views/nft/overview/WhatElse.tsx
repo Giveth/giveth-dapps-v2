@@ -52,7 +52,7 @@ const WhatElse = () => {
 							{formatMessage({
 								id: 'label.if_you_hold_a_giver',
 							})}{' '}
-							<DocLink href='https://docs.giveth.io/dapps/giverspfp/#benefits'>
+							<DocLink href={links.NFT_DOCS}>
 								{formatMessage({
 									id: 'label.learn_more_about',
 								})}
