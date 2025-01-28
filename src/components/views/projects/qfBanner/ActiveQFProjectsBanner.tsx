@@ -183,6 +183,10 @@ const sponsors = [
 		image: '/images/banners/qf-round/loving-PG/PublicNouns.svg',
 	},
 	{
+		title: '@MUX',
+		image: '/images/banners/qf-round/loving-PG/MUX.svg',
+	},
+	{
 		title: '@Giveth',
 		image: '/images/banners/qf-round/loving-PG/GivethDonors.svg',
 	},
