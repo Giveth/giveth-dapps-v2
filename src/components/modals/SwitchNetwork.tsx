@@ -60,13 +60,17 @@ const SwitchNetwork: FC<ISwitchNetworkModal> = ({
 			};
 		}) || defaultNetworks;
 
-	const handleNetworkItemClick = (networkId: number) => {
+	const handleNetworkItemClick = (networkId: number, chainType: string) => {
 		if (walletChainType === ChainType.SOLANA) {
 			setPendingNetworkId(networkId);
 			handleSingOutAndSignInWithEVM();
 			closeModal(); // Close the modal since we cannot control the wallet modal
 		} else {
-			switchChain?.({ chainId: networkId });
+			if (chainType === ChainType.SOLANA) {
+				handleSignOutAndSignInWithSolana();
+			} else {
+				switchChain?.({ chainId: networkId });
+			}
 			closeModal();
 		}
 	};
@@ -83,7 +87,9 @@ const SwitchNetwork: FC<ISwitchNetworkModal> = ({
 				{desc && <P>{desc}</P>}
 				{networks?.map(({ networkId, chainType }) => (
 					<NetworkItem
-						onClick={() => handleNetworkItemClick(networkId)}
+						onClick={() =>
+							handleNetworkItemClick(networkId, chainType)
+						}
 						$isSelected={networkId === chainId}
 						key={networkId}
 						$baseTheme={theme}
