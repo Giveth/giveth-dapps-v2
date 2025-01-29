@@ -516,6 +516,7 @@ export interface IQFRound {
 	minimumValidUsdValue?: number;
 	minMBDScore: number;
 	qfStrategy: QfStrategyEnum;
+	clusterMatchingSyncAt: string;
 }
 
 export interface IArchivedQFRound extends IQFRound {

@@ -26,13 +26,16 @@ import { useDonateData } from '@/context/donate.context';
 import { EScrollDir, useScrollDetection } from '@/hooks/useScrollDetection';
 import { useGeneralWallet } from '@/providers/generalWalletProvider';
 import { setShowWelcomeModal } from '@/features/modal/modal.slice';
+import { getActiveRound } from '@/helpers/qf';
 
 export interface IHeader {
 	theme?: ETheme;
 	show?: boolean;
+	isSuccessDonation?: boolean;
 }
 
-export const DonateHeader: FC<IHeader> = () => {
+export const DonateHeader: FC<IHeader> = props => {
+	const { isSuccessDonation } = props;
 	const theme = useAppSelector(state => state.general.theme);
 	const { formatMessage } = useIntl();
 	const { walletAddress } = useGeneralWallet();
@@ -44,6 +47,18 @@ export const DonateHeader: FC<IHeader> = () => {
 
 	const isGIVeconomyRoute = checkIsGIVeconomyRoute(router.route);
 
+	let routePath = Routes.Project + '/' + project.slug;
+
+	// Change route if donation done successfully
+	if (isSuccessDonation) {
+		const { qfRounds } = project;
+		const { activeQFRound } = getActiveRound(qfRounds);
+
+		const isActiveQF = activeQFRound?.isActive;
+
+		routePath = isActiveQF ? Routes.AllQFProjects : Routes.AllProjects;
+	}
+
 	return (
 		<StyledHeader
 			$alignItems='center'
@@ -51,7 +66,7 @@ export const DonateHeader: FC<IHeader> = () => {
 			$show={scrollDir !== EScrollDir.Down}
 		>
 			<Flex $alignItems='center' gap='16px'>
-				<Link href={Routes.Project + '/' + project.slug}>
+				<Link href={routePath}>
 					<Logo>
 						<Image
 							width='26'

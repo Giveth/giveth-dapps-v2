@@ -191,7 +191,7 @@ export const getSocialMediaHandle = (
 		case 'youtube':
 			return extractUsernameFromPattern(
 				cleanedUrl,
-				/youtube\.com\/channel\/([^\/]+)/,
+				/youtube\.com\/(?:c\/|@)([^\/]+)/,
 				true,
 			);
 		case 'reddit':
@@ -209,7 +209,7 @@ export const getSocialMediaHandle = (
 		case 'discord':
 			return extractUsernameFromPattern(
 				cleanedUrl,
-				/discord\.gg\/([^\/]+)/,
+				/discord\.(?:gg|com\/channels|com)\/([^\/]+)/,
 				true,
 			);
 		case 'farcaster':
@@ -256,6 +256,7 @@ export const extractUsernameFromPattern = (
 ): string => {
 	const match = url.match(regex);
 	if (match && match[1]) {
+		console.log('match', match[1]);
 		return isChannel ? `/${match[1]}` : `@${match[1]}`; // Return '@username' for users and '/channel' for channels
 	}
 	return url; // Fallback to original URL if no match is found

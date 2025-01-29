@@ -16,8 +16,7 @@ export const regexList = {
 	mediumBlogBanner: /<img[^>]+src="(.*?)"/,
 	telegram:
 		/(?:https?:\/\/)?(?:www\.)?(?:t(?:elegram)?\.me|me|telegram\.org)\/(?:[a-zA-Z0-9_]{5,32}|joinchat\/[a-zA-Z0-9_]+)/,
-	discord:
-		/(?:https?:\/\/)?(?:www\.)?(?:discord\.gg|discord(?:app)?\.com\/invite)\/[\w-]+/,
+	discord: /(?:https?:\/\/)?(?:www\.)?discord\.[\w-]+/,
 	phone: /^(\+\d{1,2}\s?)?\(?\d{3}\)?[\s.-]?\d{3}[\s.-]?\d{4}$/,
 	github: /^(https:\/\/)?(www\.)?github\.com\/[A-Za-z0-9_-]+(\/[A-Za-z0-9_-]+)?\/?$/,
 };
@@ -50,55 +49,55 @@ export const validators = {
 	facebook: {
 		pattern: {
 			value: regexList.facebook,
-			message: 'Invalid facebook URL',
+			message: 'Invalid Facebook URL',
 		},
 	},
 	linkedin: {
 		pattern: {
 			value: regexList.linkedin,
-			message: 'Invalid linkedIn URL',
+			message: 'Invalid LinkedIn URL',
 		},
 	},
 	instagram: {
 		pattern: {
 			value: regexList.instagram,
-			message: 'Invalid instagram URL',
+			message: 'Invalid Instagram URL',
 		},
 	},
 	youtube: {
 		pattern: {
 			value: regexList.youtube,
-			message: 'Invalid youtube URL',
+			message: 'Invalid Youtube URL',
 		},
 	},
 	reddit: {
 		pattern: {
 			value: regexList.reddit,
-			message: 'Invalid reddit URL',
+			message: 'Invalid Reddit URL',
 		},
 	},
 	farcaster: {
 		pattern: {
 			value: regexList.website,
-			message: 'Invalid reddit URL',
+			message: 'Invalid Farcaster URL',
 		},
 	},
 	lens: {
 		pattern: {
 			value: regexList.website,
-			message: 'Invalid reddit URL',
+			message: 'Invalid Lens URL',
 		},
 	},
 	discord: {
 		pattern: {
 			value: regexList.discord,
-			message: 'Invalid discord URL',
+			message: 'Invalid Discord URL',
 		},
 	},
 	telegram: {
 		pattern: {
 			value: regexList.telegram,
-			message: 'Invalid telegram URL',
+			message: 'Invalid Telegram URL',
 		},
 	},
 	whatsapp: {
