@@ -12,6 +12,7 @@ import { Modal } from '@/components/modals/Modal';
 import { IModal } from '@/types/common';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
 import Routes from '@/lib/constants/Routes';
+import links from '@/lib/constants/links';
 
 interface IEligibilityModal extends IModal {
 	isSuccess: boolean;
@@ -55,11 +56,7 @@ const EligibilityModal = ({ isSuccess, setShowModal }: IEligibilityModal) => {
 				</CustomizedLink>
 			) : (
 				// if it is not successful we should link to the documentation article - mitch needs to publish this!!
-				<CustomizedLink
-					href='https://docs.giveth.io/dapps/giverspfp/'
-					passHref
-					target='_blank'
-				>
+				<CustomizedLink href={links.NFT_DOCS} passHref target='_blank'>
 					<CustomizedButtonLink
 						linkType='texty-secondary'
 						label='LEARN MORE'
