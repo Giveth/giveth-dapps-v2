@@ -126,7 +126,7 @@ const UserProfileView: FC<IUserProfileView> = () => {
 		<>
 			{user &&
 				myAccount &&
-				user.projectsCount > 0 &&
+				(user.projectsCount ?? 0) > 0 &&
 				!user?.isEmailVerified && (
 					<VerifyEmailBanner setShowModal={setShowModal} />
 				)}
