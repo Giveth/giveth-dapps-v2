@@ -7,8 +7,8 @@ const en = JSON.parse(enJsonData);
 const esJsonData = fs.readFileSync('es.json');
 const es = JSON.parse(esJsonData);
 
-const caJsonData = fs.readFileSync('ca.json');
-const ca = JSON.parse(caJsonData);
+const ctJsonData = fs.readFileSync('ct.json');
+const ct = JSON.parse(ctJsonData);
 
 function findSameKeyValue(obj) {
 	const sameKeyValue = {};
@@ -28,7 +28,7 @@ function save(obj, name) {
 }
 
 const ntEs = findSameKeyValue(es);
-const ntCa = findSameKeyValue(ca);
+const ntCt = findSameKeyValue(ct);
 
 save(ntEs, 'nt_es.json');
-save(ntCa, 'nt_ca.json');
+save(ntCt, 'nt_ca.json');

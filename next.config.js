@@ -11,7 +11,7 @@ const withBundleAnalyzer = require('@next/bundle-analyzer')({
 const generateRobotsTxt = require('./scripts/generate-robots-txt');
 
 const defaultLocale = 'en';
-const locales = ['en', 'ca', 'es'];
+const locales = ['en', 'ct', 'es'];
 
 const moduleExports = withBundleAnalyzer({
 	// Your existing module.exports

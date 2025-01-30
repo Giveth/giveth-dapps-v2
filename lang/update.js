@@ -7,8 +7,8 @@ const en = JSON.parse(enJsonData);
 const esJsonData = fs.readFileSync('es.json');
 const es = JSON.parse(esJsonData);
 
-const caJsonData = fs.readFileSync('ca.json');
-const ca = JSON.parse(caJsonData);
+const ctJsonData = fs.readFileSync('ct.json');
+const ct = JSON.parse(ctJsonData);
 
 function sort(data) {
 	// Convert object to array of key-value pairs
@@ -72,18 +72,18 @@ function removeExtraKeys(obj) {
 }
 
 const filteredEs = removeExtraKeys(es);
-const filteredCa = removeExtraKeys(ca);
+const filteredCt = removeExtraKeys(ct);
 
 const updatedEs = addMissingKeys(filteredEs);
-const updatedCa = addMissingKeys(filteredCa);
+const updatedCt = addMissingKeys(filteredCt);
 
 const sortedEn = sort(en);
 const sortedEs = sort(updatedEs);
-const sortedCa = sort(updatedCa);
+const sortedCt = sort(updatedCt);
 
 const filledEs = fillEmptyValues(sortedEs);
-const filledCa = fillEmptyValues(sortedCa);
+const filledCt = fillEmptyValues(sortedCt);
 
 save(sortedEn, 'en.json');
 save(filledEs, 'es.json');
-save(filledCa, 'ca.json');
+save(filledCt, 'ct.json');
