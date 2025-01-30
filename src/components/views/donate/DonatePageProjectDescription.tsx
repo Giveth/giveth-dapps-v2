@@ -76,7 +76,6 @@ export const DonatePageProjectDescription: FC<
 		allocatedFundUSDPreferred,
 		allocatedFundUSD,
 		allocatedTokenSymbol,
-		qfStrategy,
 	} = activeQFRound || {};
 
 	return (
@@ -152,8 +151,6 @@ export const DonatePageProjectDescription: FC<
 											? allocatedFundUSD
 											: matchingPool,
 										activeStartedRound?.maximumReward,
-										matching,
-										qfStrategy,
 									),
 									allocatedFundUSDPreferred ? '$' : '',
 									locale,
