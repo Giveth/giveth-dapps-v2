@@ -160,6 +160,7 @@ const ProjectCard = (props: IProjectCard) => {
 			onMouseLeave={() => setIsHover(false)}
 			className={className}
 			$order={props.order}
+			$activeStartedRound={!!activeStartedRound}
 		>
 			<ImagePlaceholder>
 				<ProjectCardBadges project={project} />
@@ -481,6 +482,11 @@ interface ICardBody {
 	$isHover: ECardBodyHover;
 }
 
+interface IWrapperProps {
+	$order?: number;
+	$activeStartedRound?: boolean;
+}
+
 const CardBody = styled.div<ICardBody>`
 	position: absolute;
 	left: 0;
@@ -522,7 +528,7 @@ const ImagePlaceholder = styled.div`
 	overflow: hidden;
 `;
 
-const Wrapper = styled.div<{ $order?: number }>`
+const Wrapper = styled.div<IWrapperProps>`
 	position: relative;
 	width: 100%;
 	border-radius: ${cardRadius};
@@ -530,7 +536,7 @@ const Wrapper = styled.div<{ $order?: number }>`
 	background: white;
 	overflow: hidden;
 	box-shadow: ${Shadow.Neutral[400]};
-	height: 536px;
+	height: ${props => (props.$activeStartedRound ? '560px' : '536px')};
 	order: ${props => props.$order};
 	${mediaQueries.laptopS} {
 		height: 472px;
