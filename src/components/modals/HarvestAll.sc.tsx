@@ -87,7 +87,7 @@ export const HarvestAllPending = styled(Pending)`
 
 export const TooltipContent = styled(Subline)`
 	${mediaQueries.tablet} {
-		width: 250px;
+		width: 200px;
 		text-align: left;
 	}
 `;

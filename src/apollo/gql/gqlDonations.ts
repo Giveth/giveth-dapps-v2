@@ -170,7 +170,6 @@ export const FETCH_QF_ROUND_HISTORY = gql`
 				projectDonationsSqrtRootSum
 				allProjectsSum
 				matchingPool
-				matching
 			}
 		}
 	}

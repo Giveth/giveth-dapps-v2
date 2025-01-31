@@ -1,4 +1,4 @@
-import { IQFRound, QfStrategyEnum } from '@/apollo/types/types';
+import { IQFRound } from '@/apollo/types/types';
 import { getNowUnixMS } from './time';
 // import { formatDonation } from '@/helpers/number';
 
@@ -32,8 +32,6 @@ export const calculateTotalEstimatedMatching = (
 	allProjectsSum?: number,
 	matchingPool?: number,
 	matchingCapPercentage?: number,
-	matching: number = 0,
-	qfStrategy?: string,
 ) => {
 	if (
 		!matchingCapPercentage ||
@@ -42,11 +40,6 @@ export const calculateTotalEstimatedMatching = (
 		!allProjectsSum
 	)
 		return 0;
-
-	// For al new round return "matching" value
-	if (qfStrategy && qfStrategy === QfStrategyEnum.Cocm) {
-		return matching;
-	}
 
 	const result = Math.min(
 		(Math.pow(projectDonationsSqrtRootSum, 2) / allProjectsSum) *
