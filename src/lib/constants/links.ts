@@ -3,7 +3,7 @@ import { isProduction } from '@/configuration';
 import Routes from '@/lib/constants/Routes';
 
 const DOCS = 'https://docs.giveth.io/';
-const GIVDROP_DOC = DOCS + 'giveconomy/givdrop/';
+const GIVDROP_DOC = DOCS + '/givdrop';
 const DISCOURSE = 'https://forum.giveth.io/';
 const TYPEFORM = 'https://giveth.typeform.com/';
 
@@ -31,27 +31,25 @@ const links = {
 	LINKEDIN: 'https://www.linkedin.com/company/givethio/',
 	FARCASTER: 'https://warpcast.com/~/channel/giveth',
 	DOCS,
-	GIVFARM_DOCS: DOCS + 'giveconomy/givfarm',
-	GIVSTREAM_DOCS: DOCS + 'giveconomy/givstream',
-	GIVBACK_DOC: DOCS + 'giveconomy/givbacks',
-	GIVPOWER_DOC: DOCS + 'giveconomy/givpower',
+	GIVFARM_DOCS: DOCS + '/givfarm',
+	GIVSTREAM_DOCS: DOCS + '/givstream',
+	GIVBACK_DOC: DOCS + '/givbacks',
+	GIVPOWER_DOC: DOCS + '/givpower',
 	GIVDROP_DOC,
-	CLAIM_GIVDROP_DOC: GIVDROP_DOC + '#claiming-your-givdrop',
+	CLAIM_GIVDROP_DOC: GIVDROP_DOC + '#block-1703ab28d48c81beb969c39045ef307e',
 	NICE_DOC: DOCS + 'giveconomy/niceToken',
-	COVENANT_DOC: DOCS + 'whatisgiveth/covenant/',
-	GIVETH_DOCS: DOCS + 'whatisgiveth/',
-	FUNDRAISING_DOCS: DOCS + 'whatisgiveth/fundraisingGuide',
-	HISTORY: DOCS + 'whatisgiveth/history',
-	OUR_MISSION: DOCS + 'whatisgiveth/#our-mission',
-	USER_DOCS: DOCS + 'dapps/',
-	DEVELOPER_DOCS: DOCS + 'dapps/givethioinstallation',
-	CAMPAIGN_DOCS: DOCS + 'dapps/entitiesAndRoles/#campaigns',
-	TRACES_DOCS: DOCS + 'dapps/entitiesAndRoles/#traces',
-	MAKE_TRACEABLE_DOCS: DOCS + 'dapps/makeTraceableProject',
-	VERIFICATION_DOCS: DOCS + 'dapps/projectVerification',
-	CANCELLED_PROJECTS_DOCS: DOCS + 'dapps/listedUnlisted/#cancelled-projects',
-	RECURRING_DONATION_DOCS: DOCS + 'dapps/recurringDonation',
-	Torus_MM_DOCS: DOCS + 'dapps/importTorusMM/',
+	COVENANT_DOC: DOCS + '/covenant',
+	ABOUT_GIVETH: DOCS + 'what-is-giveth/about-giveth',
+	FUNDRAISING_DOCS: DOCS + '/fundraisingguide',
+	USER_DOCS: DOCS + '/what-is-giveth/donors-project-guides',
+	VERIFICATION_DOCS: DOCS + '/projectverification',
+	CANCELLED_PROJECTS_DOCS:
+		DOCS + '/listedUnlisted#block-1703ab28d48c8166b7d5c7f8a70a9612',
+	RECURRING_DONATION_DOCS: DOCS + '/recurringDonation',
+	NFT_DOCS: DOCS + '/pfpcollection',
+	ZERO_FEES: DOCS + '/zero-fees',
+	REGEN_FARM_DOCS: DOCS + '/regenfarms',
+	GIVECONOMY_DOCS: DOCS + '/giveconomy',
 	TRACE: 'https://trace.giveth.io/',
 	SWAG: 'https://swag.giveth.io/',
 	COMMONS_STACK: 'https://commonsstack.org/',
@@ -64,10 +62,10 @@ const links = {
 		'https://calendar.google.com/calendar/u/1?cid=Z2l2ZXRoZG90aW9AZ21haWwuY29t',
 	ADD_TO_CALENDAR:
 		'https://calendar.google.com/event?action=TEMPLATE&tmeid=dWZydnNoNjVmb2NvNDNrZ2htMmtzaDNydGZfMjAyMjA2MDlUMTUwMDAwWiBnaXZldGhkb3Rpb0Bt&tmsrc=givethdotio%40gmail.com&scp=ALL',
-	GIV_BRIDGE: 'https://omni.gnosischain.com/bridge',
+	GIV_BRIDGE: 'https://bridge.gnosischain.com/',
 	PASSPORT: 'https://passport.gitcoin.co',
-	QF_DOC: DOCS + 'quadraticfunding',
-	MULTISIG_GUIDE: DOCS + 'dapps/multisigs',
+	QF_DOC: DOCS + '/quadraticfunding',
+	MULTISIG_GUIDE: DOCS + '/multisigs',
 	ACROSS_BRIDGE:
 		'https://across.to?ref=0x9cd1E4A6b3361abcCC90C7F8E788ac246d194303',
 	ALLO_PROTOCOL: 'https://docs.allo.gitcoin.co/',
@@ -79,7 +77,6 @@ const links = {
 		'https://app.staketogether.org/en/usd/optimism/product/staking/eth-restaking?projectAddress=0x93E79499b00a2fdAAC38e6005B0ad8E88b177346',
 	ENDAOMENT: 'https://endaoment.org',
 	DEVOUCH: 'https://devouch.xyz',
-	DEVOUCH_DOCS: 'https://docs.giveth.io/dapps/projectVerification',
 };
 
 if (!isProduction) {

@@ -8,8 +8,6 @@ import {
 } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
 import { useState } from 'react';
-import ExternalLink from '@/components/ExternalLink';
-import links from '@/lib/constants/links';
 import StorageLabel from '@/lib/localStorage';
 
 const TorusBanner = () => {
@@ -30,13 +28,6 @@ const TorusBanner = () => {
 					</Caption>
 					<Caption>
 						{formatMessage({ id: 'label.torus_banner_text_1' })}
-						<ExternalLink href={links.Torus_MM_DOCS}>
-							<Underline>
-								{formatMessage({
-									id: 'label.torus_banner_text_2',
-								})}
-							</Underline>
-						</ExternalLink>
 					</Caption>
 				</div>
 			</Left>

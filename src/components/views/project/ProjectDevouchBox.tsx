@@ -45,7 +45,7 @@ const ProjectDevouchBox = () => {
 						{formatMessage({
 							id: 'label.devouch.description.vouch_this_project',
 						})}{' '}
-						<ExternalLink href={links.DEVOUCH_DOCS}>
+						<ExternalLink href={links.PROJECT_VERIFICATION}>
 							<LearnMore>
 								{formatMessage({
 									id: 'label.devouch.learn_more_about_devouch',

@@ -64,6 +64,7 @@ import { givEconomySupportedNetworks } from '@/lib/constants/constants';
 import Pagination from '../Pagination';
 import { SubgraphDataHelper } from '@/lib/subgraph/subgraphDataHelper';
 import { useSubgraphInfo } from '@/hooks/useSubgraphInfo';
+import links from '@/lib/constants/links';
 
 export const TabGIVstreamTop = () => {
 	const { formatMessage } = useIntl();
@@ -240,7 +241,7 @@ export const TabGIVstreamBottom = () => {
 									linkType='secondary'
 									size='large'
 									target='_blank'
-									href='https://docs.giveth.io/giveconomy/givstream'
+									href={links.GIVSTREAM_DOCS}
 								/>
 							}
 						>

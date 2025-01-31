@@ -151,7 +151,7 @@ export const durationToYMDh = (
 	const shortRes = { y, m, d, h, min, sec };
 	if (full) {
 		let fullRes: any = {};
-		if (locale === 'ca') {
+		if (locale === 'ct') {
 			if (y) fullRes[`any${y > 1 ? 's' : ''}`] = y;
 			if (m) fullRes[`${m > 1 ? 'mesos' : 'mes'}`] = m;
 			if (d) fullRes[`${d > 1 ? 'dies' : 'dia'}`] = d;
