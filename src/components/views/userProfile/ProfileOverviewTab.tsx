@@ -37,6 +37,7 @@ import { useGeneralWallet } from '@/providers/generalWalletProvider';
 import { QFDonorEligibilityCard } from '@/components/views/userProfile/QFDonorEligibilityCard';
 import { getNowUnixMS } from '@/helpers/time';
 import { useFetchSubgraphDataForAllChains } from '@/hooks/useFetchSubgraphDataForAllChains';
+import ProjectsMiddleGivethVaultBanner from '../projects/MiddleBanners/ProjectsMiddleGivethVaultBanner';
 
 interface IBtnProps extends IButtonProps {
 	outline?: boolean;
@@ -214,6 +215,7 @@ const ProfileOverviewTab: FC<IUserProfileView> = () => {
 					</Row>
 				))
 			)}
+			<ProjectsMiddleGivethVaultBanner />
 			{myAccount && (
 				<AccountHero $leftAlign={title === _sections.donate.title}>
 					<H1>{title}</H1>
