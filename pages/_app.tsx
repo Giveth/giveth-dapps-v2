@@ -19,7 +19,7 @@ import { useApollo } from '@/apollo/apolloClient';
 import { HeaderWrapper } from '@/components/Header/HeaderWrapper';
 import { FooterWrapper } from '@/components/Footer/FooterWrapper';
 import '../styles/globals.css';
-import { ca, en, es } from '../lang';
+import { ct, en, es } from '../lang';
 import { store } from '@/features/store';
 import SubgraphController from '@/components/controller/subgraph.ctrl';
 import UserController from '@/components/controller/user.ctrl';
@@ -59,7 +59,7 @@ declare global {
 const queryClient = new QueryClient();
 
 export const IntlMessages = {
-	ca,
+	ct,
 	en,
 	es,
 };

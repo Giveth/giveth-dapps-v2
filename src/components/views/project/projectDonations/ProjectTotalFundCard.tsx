@@ -35,7 +35,6 @@ interface IProjectTotalFundCardProps {
 const ProjectTotalFundCard = ({ selectedQF }: IProjectTotalFundCardProps) => {
 	const [qfRoundHistory, setQfRoundHistory] = useState<IGetQfRoundHistory>();
 	const { projectData, isAdmin } = useProjectContext();
-
 	const {
 		id,
 		totalDonations,
@@ -214,15 +213,11 @@ const ProjectTotalFundCard = ({ selectedQF }: IProjectTotalFundCardProps) => {
 								</NotDistributedFundContainer>
 							) : (
 								<EstimatedMatchingSection $flexDirection='column'>
-									<Flex
-										$justifyContent='space-between'
-										$alignItems='center'
-										$flexWrap={true}
-									>
+									<Flex $justifyContent='space-between'>
 										<EstimatedMatchingPrice>
 											+{' '}
 											{formatDonation(
-												matchFund || 0,
+												matchFund,
 												allocatedFundUSDPreferred
 													? '$'
 													: '',

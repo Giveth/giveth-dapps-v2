@@ -17,6 +17,7 @@ import useClaim, { GiveDropStateType } from '@/context/claim.context';
 import { formatWeiHelper } from '@/helpers/number';
 import Routes from '@/lib/constants/Routes';
 import { IClaimViewCardProps } from '../Claim.view';
+import links from '@/lib/constants/links';
 
 export const ConnectCard: FC<IClaimViewCardProps> = ({ index }) => {
 	const [walletIsChanged, setWalletIsChanged] = useState(false);
@@ -171,7 +172,7 @@ export const ConnectCard: FC<IClaimViewCardProps> = ({ index }) => {
 									</WalletDisplayerInputContainer>
 									<WalletLink
 										as='a'
-										href='https://docs.giveth.io/giveconomy/givdrop/#if-you-get-stuck-in-the-givdrop-claim'
+										href={links.GIVDROP_DOC}
 										target='_blank'
 									>
 										What if this address doesn&apos;t match

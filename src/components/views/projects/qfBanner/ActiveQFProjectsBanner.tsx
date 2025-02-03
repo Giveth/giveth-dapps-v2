@@ -1,4 +1,4 @@
-import { B, Lead, Container } from '@giveth/ui-design-system';
+import { B, Lead, Container, Flex } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
 import Image from 'next/image';
 import { useState, useEffect } from 'react';
@@ -9,8 +9,8 @@ import {
 	ActiveStyledCol,
 	Desc,
 	Title,
-	CustomSponsors,
-	// Sponsor,
+	// CustomSponsors,
+	Sponsor,
 	ActiveStyledRow,
 	// SmallerSponsor,
 	// BottomSponsors,
@@ -134,7 +134,7 @@ export const ActiveQFProjectsBanner = () => {
 								/>
 							))}
 						</Flex> */}
-						{/* <Flex>
+						<Flex>
 							{sponsors.map(s => (
 								<Sponsor
 									key={s.title}
@@ -144,8 +144,8 @@ export const ActiveQFProjectsBanner = () => {
 									height={188}
 								/>
 							))}
-						</Flex> */}
-						<CustomSponsors>
+						</Flex>
+						{/* <CustomSponsors>
 							<Image
 								src={'/images/banners/qf-round/giv-palooza.svg'}
 								style={{
@@ -154,7 +154,7 @@ export const ActiveQFProjectsBanner = () => {
 								fill
 								alt='QF Sponsors'
 							/>
-						</CustomSponsors>
+						</CustomSponsors> */}
 						{/* <BottomSponsors>
 							{bottomSponsors.map(s => (
 								<SmallerSponsor
@@ -173,24 +173,24 @@ export const ActiveQFProjectsBanner = () => {
 	);
 };
 
-// const sponsors = [
-// 	{
-// 		title: '@Giveth',
-// 		image: '/images/banners/qf-round/Giveth.svg',
-// 	},
-// {
-// 	title: '@ThankArbitrum',
-// 	image: '/images/banners/qf-round/ThankArbitrum.svg',
-// },
-// {
-// 	title: '@celo',
-// 	image: '/images/banners/qf-round/celo.svg',
-// },
-// 	{
-// 		title: '@realMaskNetwork',
-// 		image: '/images/banners/qf-round/realMaskNetwork.svg',
-// 	},
-// ];
+const sponsors = [
+	{
+		title: '@GloDollar',
+		image: '/images/banners/qf-round/loving-PG/GloDollar.svg',
+	},
+	{
+		title: '@PublicNouns',
+		image: '/images/banners/qf-round/loving-PG/PublicNouns.svg',
+	},
+	{
+		title: '@MUX',
+		image: '/images/banners/qf-round/loving-PG/MUX.svg',
+	},
+	{
+		title: '@Giveth',
+		image: '/images/banners/qf-round/loving-PG/GivethDonors.svg',
+	},
+];
 
 // const topSponsors = [
 // {

@@ -1,5 +1,5 @@
-import ca from './ca.json';
+import ct from './ct.json';
 import en from './en.json';
 import es from './es.json';
 
-export { ca, en, es };
+export { ct, en, es };

@@ -26,6 +26,7 @@ import { ChainType } from '@/types/config';
 import config from '@/configuration';
 import { calculateTotalEstimatedMatching, getActiveRound } from '@/helpers/qf';
 import { GivBackBadge } from '@/components/badges/GivBackBadge';
+import links from '@/lib/constants/links';
 
 interface IDonatePageProjectDescriptionProps {
 	projectData?: IProject;
@@ -49,12 +50,8 @@ export const DonatePageProjectDescription: FC<
 		estimatedMatching,
 	} = projectData || {};
 
-	const {
-		allProjectsSum,
-		matchingPool,
-		projectDonationsSqrtRootSum,
-		matching,
-	} = estimatedMatching || {};
+	const { allProjectsSum, matchingPool, projectDonationsSqrtRootSum } =
+		estimatedMatching || {};
 	const isQRDonation = router.query.chain === ChainType.STELLAR.toLowerCase();
 	const orgLabel = organization?.label;
 	const isForeignOrg =
@@ -197,7 +194,7 @@ export const DonatePageProjectDescription: FC<
 								})}
 							</P>
 							<a
-								href='https://docs.giveth.io/whatisgiveth/zero-fees'
+								href={links.ABOUT_GIVETH}
 								target='_blank'
 								referrerPolicy='no-referrer'
 								rel='noreferrer'
