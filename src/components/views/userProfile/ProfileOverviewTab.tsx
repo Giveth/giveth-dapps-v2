@@ -215,7 +215,9 @@ const ProfileOverviewTab: FC<IUserProfileView> = () => {
 					</Row>
 				))
 			)}
-			<ProjectsMiddleGivethVaultBanner />
+			<BannerWrapper>
+				<ProjectsMiddleGivethVaultBanner />
+			</BannerWrapper>
 			{myAccount && (
 				<AccountHero $leftAlign={title === _sections.donate.title}>
 					<H1>{title}</H1>
@@ -282,6 +284,10 @@ const SectionTitle = styled(H5)`
 
 const SectionDesc = styled(P)`
 	margin-bottom: 24px;
+`;
+
+const BannerWrapper = styled.div`
+	margin-top: 30px;
 `;
 
 export default ProfileOverviewTab;
