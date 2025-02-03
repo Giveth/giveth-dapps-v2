@@ -2,7 +2,7 @@ import { parseUnits } from 'viem';
 import { IProjectAcceptedToken } from '@/apollo/types/gqlTypes';
 import { MAX_TOKEN_ORDER } from '@/lib/constants/tokens';
 import { EDonationFailedType } from '@/components/modals/FailedDonation';
-import { formatCrypto } from '@/helpers/number';
+import { formatCrypto, formatCryptoFor8Decimals } from '@/helpers/number';
 
 export const prepareTokenList = (tokens: IProjectAcceptedToken[]) => {
 	const _tokens = [...tokens];
@@ -64,5 +64,22 @@ export const calcDonationShare = (
 	return {
 		projectDonation: formatCrypto(projectDonation, decimals),
 		givethDonation: formatCrypto(givethDonation, decimals),
+	};
+};
+
+export const calcDonationShareFor8Decimals = (
+	totalDonation: bigint,
+	givethDonationPercent: number,
+): {
+	projectDonation: number;
+	givethDonation: number;
+} => {
+	let givethDonation = (totalDonation * BigInt(givethDonationPercent)) / 100n;
+
+	let projectDonation = totalDonation - givethDonation;
+
+	return {
+		projectDonation: formatCryptoFor8Decimals(projectDonation),
+		givethDonation: formatCryptoFor8Decimals(givethDonation),
 	};
 };

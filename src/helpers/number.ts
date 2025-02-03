@@ -9,6 +9,10 @@ export const formatCrypto = (amount: bigint, decimals: number) => {
 	return truncateToDecimalPlaces(formatUnits(amount, decimals), decimals / 3);
 };
 
+export const formatCryptoFor8Decimals = (amount: bigint) => {
+	return truncateToDecimalPlaces(formatUnits(amount, 8), 6);
+};
+
 export const formatEthHelper = (
 	amount: BigNumber.Value,
 	decimals: number = config.TOKEN_PRECISION,
