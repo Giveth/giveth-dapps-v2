@@ -73,16 +73,30 @@ export default ProjectsMiddleGivethVaultBanner;
 
 /* Styled Components */
 const BannerContainer = styled(Box)`
+	display: flex;
 	position: relative;
 	flex-direction: column;
 	gap: 15px;
 	padding: 70px 40px;
-	border-radius: 12px;
+	border-radius: 24px;
 	overflow: hidden;
-	background-image: url('/images/middle-banners/pool-together-bg.png');
+	background-image: url('/images/middle-banners/pool-together-mobile.svg');
 	background-size: cover;
 	background-position: top left;
 	background-repeat: no-repeat;
+
+	${mediaQueries.mobileL} {
+		background-image: url('/images/middle-banners/pool-together-pre-tablet.svg');
+	}
+
+	${mediaQueries.tablet} {
+		background-image: url('/images/middle-banners/pool-together-tablet.svg');
+	}
+
+	${mediaQueries.desktop} {
+		background-image: url('/images/middle-banners/pool-together-desktop.svg');
+		background-position: center;
+	}
 `;
 
 const BannerHeader = styled(Flex)`
