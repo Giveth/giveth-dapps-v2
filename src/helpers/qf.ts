@@ -40,7 +40,6 @@ export const calculateTotalEstimatedMatching = (
 		!allProjectsSum
 	)
 		return 0;
-
 	const result = Math.min(
 		(Math.pow(projectDonationsSqrtRootSum, 2) / allProjectsSum) *
 			matchingPool,

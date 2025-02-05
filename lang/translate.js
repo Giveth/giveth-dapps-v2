@@ -48,8 +48,8 @@ async function FillSpanishJsonFile() {
 	const esJsonData = fs.readFileSync('es.json');
 	const es = JSON.parse(esJsonData);
 
-	// const caJsonData = fs.readFileSync('ca.json');
-	// const ca = JSON.parse(caJsonData);
+	// const ctJsonData = fs.readFileSync('ca.json');
+	// const ca = JSON.parse(ctJsonData);
 
 	for (const key in es) {
 		if (Object.hasOwnProperty.call(es, key)) {
@@ -68,20 +68,20 @@ async function FillCatalanJsonFile() {
 	const enJsonData = fs.readFileSync('en.json');
 	const en = JSON.parse(enJsonData);
 
-	const caJsonData = fs.readFileSync('ca.json');
-	const ca = JSON.parse(caJsonData);
+	const ctJsonData = fs.readFileSync('ct.json');
+	const ct = JSON.parse(ctJsonData);
 
-	for (const key in ca) {
-		if (Object.hasOwnProperty.call(ca, key)) {
-			const value = ca[key];
+	for (const key in ct) {
+		if (Object.hasOwnProperty.call(ct, key)) {
+			const value = ct[key];
 			if (value === '') {
 				console.log(key, en[key]);
-				ca[key] = await translate(en[key], 'Catalan');
+				ct[key] = await translate(en[key], 'Catalan');
 			}
 		}
 	}
 
-	save(ca, 'ca.json');
+	save(ct, 'ct.json');
 }
 
 FillSpanishJsonFile();

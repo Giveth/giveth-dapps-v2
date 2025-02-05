@@ -11,7 +11,7 @@ import { IModal } from '@/types/common';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
 import StorageLabel from '@/lib/localStorage';
 
-const availableLanguages = ['ca', 'en', 'es'];
+const availableLanguages = ['ct', 'en', 'es'];
 
 export const LanguageModal: FC<IModal> = ({ setShowModal }) => {
 	const router = useRouter();

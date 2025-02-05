@@ -141,10 +141,7 @@ export const RecurringDonationCard = () => {
 		if (selectedRecurringToken.token.isSuperToken) {
 			setAmount(balance.value || 0n);
 		}
-		if (
-			selectedRecurringToken.token.decimals === 6 ||
-			selectedRecurringToken.token.decimals === 8
-		) {
+		if (selectedRecurringToken.token.decimals === 6) {
 			setAmount(0n);
 			setPerMonthAmount(0n);
 		}

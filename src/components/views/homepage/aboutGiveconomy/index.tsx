@@ -14,6 +14,7 @@ import {
 import styled from 'styled-components';
 import { useIntl } from 'react-intl';
 import { mediaQueries } from '@/lib/constants/constants';
+import links from '@/lib/constants/links';
 
 interface CustomBtn {
 	label: string;
@@ -145,7 +146,7 @@ const AboutGiveconomy = () => {
 							</Description>
 							<Btn
 								label='label.discover_our_roadmap'
-								route='https://docs.giveth.io/whatisgiveth/#our-roadmap'
+								route={links.ABOUT_GIVETH}
 							/>
 						</Content>
 						<ImageBox>

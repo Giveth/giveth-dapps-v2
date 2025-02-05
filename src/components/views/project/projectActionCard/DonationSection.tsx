@@ -20,6 +20,7 @@ import { formatDonation } from '@/helpers/number';
 import { IProject } from '@/apollo/types/types';
 import { useDonateData } from '@/context/donate.context';
 import { ORGANIZATION } from '@/lib/constants/organizations';
+import links from '@/lib/constants/links';
 
 interface IDonateSectionProps {
 	projectData?: IProject;
@@ -81,7 +82,7 @@ export const DonateSection: FC<IDonateSectionProps> = ({ projectData }) => {
 						})}
 					</P>
 					<a
-						href='https://docs.giveth.io/whatisgiveth/zero-fees'
+						href={links.ZERO_FEES}
 						target='_blank'
 						referrerPolicy='no-referrer'
 						rel='noreferrer'

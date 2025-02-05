@@ -57,6 +57,10 @@ const TooltipIconWrapper = styled.div`
 const IconsWrapper = styled.div`
 	margin-top: 14px;
 	display: flex;
+	flex-wrap: wrap; /* Allow content to wrap to the next line */
+	max-width: 100%; /* Ensure the content does not exceed the width of the parent */
+	max-height: 100%; /* Ensure the content does not exceed the height of the parent */
+
 	gap: 8px;
 	img {
 		filter: grayscale(100%);

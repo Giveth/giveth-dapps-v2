@@ -91,12 +91,8 @@ const ProjectCard = (props: IProjectCard) => {
 	const { formatMessage, formatRelativeTime, locale } = useIntl();
 	const router = useRouter();
 
-	const {
-		allProjectsSum,
-		matchingPool,
-		projectDonationsSqrtRootSum,
-		matching,
-	} = estimatedMatching || {};
+	const { allProjectsSum, matchingPool, projectDonationsSqrtRootSum } =
+		estimatedMatching || {};
 
 	const { activeStartedRound, activeQFRound } = getActiveRound(qfRounds);
 	const hasFooter = activeStartedRound || verified || isGivbackEligible;
@@ -164,6 +160,7 @@ const ProjectCard = (props: IProjectCard) => {
 			onMouseLeave={() => setIsHover(false)}
 			className={className}
 			$order={props.order}
+			$activeStartedRound={!!activeStartedRound}
 		>
 			<ImagePlaceholder>
 				<ProjectCardBadges project={project} />
@@ -485,6 +482,11 @@ interface ICardBody {
 	$isHover: ECardBodyHover;
 }
 
+interface IWrapperProps {
+	$order?: number;
+	$activeStartedRound?: boolean;
+}
+
 const CardBody = styled.div<ICardBody>`
 	position: absolute;
 	left: 0;
@@ -526,7 +528,7 @@ const ImagePlaceholder = styled.div`
 	overflow: hidden;
 `;
 
-const Wrapper = styled.div<{ $order?: number }>`
+const Wrapper = styled.div<IWrapperProps>`
 	position: relative;
 	width: 100%;
 	border-radius: ${cardRadius};
@@ -534,8 +536,13 @@ const Wrapper = styled.div<{ $order?: number }>`
 	background: white;
 	overflow: hidden;
 	box-shadow: ${Shadow.Neutral[400]};
-	height: 536px;
+	height: ${props => (props.$activeStartedRound ? '638px' : '536px')};
 	order: ${props => props.$order};
+	${mediaQueries.mobileM} {
+		height: ${props => (props.$activeStartedRound ? '603px' : '536px')};
+	${mediaQueries.mobileL} {
+		height: ${props => (props.$activeStartedRound ? '562px' : '536px')};
+	}
 	${mediaQueries.laptopS} {
 		height: 472px;
 	}

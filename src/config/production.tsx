@@ -663,7 +663,7 @@ const config: EnvConfig = {
 				},
 				decimals: 18,
 				id: '0x708169c8C87563Ce904E0a7F3BFC1F3b0b767f41',
-				name: 'Coinbase wrapped BTC',
+				name: 'Super Dai Stablecoin',
 				symbol: 'DAIx',
 				isSuperToken: true,
 				coingeckoId: 'dai',

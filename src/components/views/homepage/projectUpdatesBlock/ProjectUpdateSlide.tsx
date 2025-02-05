@@ -128,7 +128,7 @@ const ProjectUpdateSlideWrapper = styled(Flex)`
 
 const StyledProjectCard = styled(ProjectCard)`
 	${mediaQueries.laptopS} {
-		width: 384px !important;
+		width: 386px !important;
 	}
 `;
 
