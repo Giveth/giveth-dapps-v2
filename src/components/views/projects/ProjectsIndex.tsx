@@ -22,7 +22,7 @@ import { useAppDispatch, useAppSelector } from '@/features/hooks';
 import { setShowCompleteProfile } from '@/features/modal/modal.slice';
 import { ProjectsBanner } from './ProjectsBanner';
 import { useProjectsContext } from '@/context/projects.context';
-import { ProjectsMiddleBanner } from './MiddleBanners/ProjectsMiddleBanner';
+import { ProjectsMiddleGivethVaultBanner } from './MiddleBanners/ProjectsMiddleGivethVaultBanner';
 import { ActiveQFProjectsBanner } from './qfBanner/ActiveQFProjectsBanner';
 import { PassportBanner } from '@/components/PassportBanner';
 import { QFProjectsMiddleBanner } from './MiddleBanners/QFMiddleBanner';
@@ -256,7 +256,7 @@ const ProjectsIndex = (props: IProjectsView) => {
 							{isQF ? (
 								<QFProjectsMiddleBanner />
 							) : (
-								<ProjectsMiddleBanner />
+								<ProjectsMiddleGivethVaultBanner />
 							)}
 							{data.pages.map((page, pageIndex) => (
 								<Fragment key={pageIndex}>
