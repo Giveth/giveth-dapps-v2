@@ -28,6 +28,7 @@ import { truncateToDecimalPlaces } from '@/lib/helpers';
 import { IProjectAcceptedToken } from '@/apollo/types/gqlTypes';
 import {
 	calcDonationShare,
+	calcDonationShareFor8Decimals,
 	prepareTokenList,
 } from '@/components/views/donate/common/helpers';
 import { DonateWrongNetwork } from '@/components/modals/DonateWrongNetwork';
@@ -346,11 +347,14 @@ const CryptoDonation: FC<{
 	const {
 		givethDonation: givethDonationAmount,
 		projectDonation: projectDonationAmount,
-	} = calcDonationShare(
-		amount,
-		donationToGiveth,
-		selectedOneTimeToken?.decimals ?? 18,
-	);
+	} =
+		selectedOneTimeToken?.decimals === 8
+			? calcDonationShareFor8Decimals(amount, donationToGiveth)
+			: calcDonationShare(
+					amount,
+					donationToGiveth,
+					selectedOneTimeToken?.decimals ?? 18,
+				);
 
 	const decimals = selectedOneTimeToken?.decimals || 18;
 	const donationUsdValue =
@@ -507,13 +511,21 @@ const CryptoDonation: FC<{
 								})}
 								:{' '}
 								{selectedOneTimeToken
-									? truncateToDecimalPlaces(
-											formatUnits(
-												selectedTokenBalance,
-												tokenDecimals,
-											),
-											tokenDecimals / 3,
-										)
+									? tokenDecimals === 8
+										? truncateToDecimalPlaces(
+												formatUnits(
+													selectedTokenBalance,
+													tokenDecimals,
+												),
+												18 / 3,
+											)
+										: truncateToDecimalPlaces(
+												formatUnits(
+													selectedTokenBalance,
+													tokenDecimals,
+												),
+												tokenDecimals / 3,
+											)
 									: 0.0}
 							</GLinkStyled>
 							<IconWrapper
