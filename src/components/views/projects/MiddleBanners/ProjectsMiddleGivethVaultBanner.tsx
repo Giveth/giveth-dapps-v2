@@ -48,7 +48,7 @@ export const ProjectsMiddleGivethVaultBanner = () => {
 				<ButtonWrapper
 					target='_blank'
 					rel='noopener noreferrer'
-					href={`https://app.giveth.io/projects/giveth-vault`}
+					href={`https://app.cabana.fi/vault/8453/0x48c773aa0023980c3123acd4ae1d59753f812067`}
 				>
 					<OutlineButton
 						label={formatMessage({
