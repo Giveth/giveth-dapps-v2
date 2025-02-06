@@ -17,7 +17,7 @@ export const ProjectsBanner = () => {
 
 	const allCategory = {
 		title: formatMessage({ id: 'label.giveth_projects' }),
-		banner: '/images/banners/categories/all.png',
+		banner: '/images/banners/categories/all-new.png',
 		slug: 'all',
 		description: '',
 		categories: [],
@@ -30,9 +30,11 @@ export const ProjectsBanner = () => {
 			<Image
 				src={
 					selectedMainCategory?.banner ||
-					'/images/banners/categories/all.png'
+					'/images/banners/categories/all-new.png'
 				}
 				fill
+				objectFit='cover'
+				objectPosition='center'
 				alt={_mainCategory.title}
 			/>
 			<Title weight={700}>
@@ -49,23 +51,33 @@ export const BannerContainer = styled(FlexCenter)`
 	height: 0;
 	position: relative;
 	overflow: hidden;
+	margin-bottom: 0;
+	align-items: start !important;
+	padding: 0 4em;
+	border-top-left-radius: 16px;
+	border-top-right-radius: 16px;
 	${mediaQueries.tablet} {
-		height: 540px;
+		height: 260px;
+		margin-bottom: -50px;
 	}
 `;
 
 const Title = styled(H1)`
+	position: relative;
+	margin-top: -30px;
 	z-index: 1;
+	font-size: 52px;
+	line-height: 72px;
 	color: ${neutralColors.gray[100]} !important;
-	margin-bottom: 32px !important;
+	margin-bottom: 10px !important;
 `;
 
 const Desc = styled(SemiTitle)`
 	z-index: 1;
 	color: ${neutralColors.gray[100]} !important;
-	text-transform: uppercase;
 	max-width: 800px;
-	text-align: center;
-	line-height: 30px;
-	padding: 0 30px;
+	text-align: left;
+	text-transform: none !important;
+	font-size: 24px !important;
+	line-height: 30px !important;
 `;

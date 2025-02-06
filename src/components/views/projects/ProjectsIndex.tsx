@@ -220,7 +220,7 @@ const ProjectsIndex = (props: IProjectsView) => {
 				</Loading>
 			)}
 
-			{isQF ? (
+			{isQF && (
 				<>
 					<PassportBanner />
 					{isArchivedQF ? (
@@ -231,8 +231,6 @@ const ProjectsIndex = (props: IProjectsView) => {
 						<DefaultQFBanner />
 					)}
 				</>
-			) : (
-				<ProjectsBanner />
 			)}
 			<Wrapper>
 				{isQF && <QFHeader />}
@@ -241,6 +239,7 @@ const ProjectsIndex = (props: IProjectsView) => {
 				) : (
 					<>
 						{isQF && activeQFRound && <ActiveQFRoundStats />}
+						{!isQF && <ProjectsBanner />}
 						{onProjectsPageOrActiveQFPage && <FilterContainer />}
 					</>
 				)}
