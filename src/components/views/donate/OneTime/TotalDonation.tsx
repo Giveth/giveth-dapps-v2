@@ -3,7 +3,10 @@ import { Caption, neutralColors, Flex } from '@giveth/ui-design-system';
 import { FC } from 'react';
 import { useIntl } from 'react-intl';
 import { formatPrice } from '@/lib/helpers';
-import { calcDonationShare } from '@/components/views/donate/common/helpers';
+import {
+	calcDonationShare,
+	calcDonationShareFor8Decimals,
+} from '@/components/views/donate/common/helpers';
 import { IProjectAcceptedToken } from '@/apollo/types/gqlTypes';
 
 interface ITotalDonation {
@@ -31,11 +34,10 @@ const TotalDonation: FC<ITotalDonation> = props => {
 
 	const { formatMessage } = useIntl();
 
-	const { projectDonation, givethDonation } = calcDonationShare(
-		totalDonation,
-		donationToGiveth,
-		decimals,
-	);
+	const { givethDonation, projectDonation } =
+		token?.decimals === 8
+			? calcDonationShareFor8Decimals(totalDonation, donationToGiveth)
+			: calcDonationShare(totalDonation, donationToGiveth, decimals);
 
 	return (
 		<Container $isActive={isActive}>
