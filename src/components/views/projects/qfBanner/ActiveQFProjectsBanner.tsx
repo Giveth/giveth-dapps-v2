@@ -1,21 +1,12 @@
-import { B, Lead, Container, Flex } from '@giveth/ui-design-system';
+import { B, Lead, Container, Flex, Row, Col } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
 import Image from 'next/image';
 import { useState, useEffect } from 'react';
+import styled from 'styled-components';
+import { mediaQueries } from '@/lib/constants/constants';
 import { getNowUnixMS } from '@/helpers/time';
 import { durationToString } from '@/lib/helpers';
-import {
-	BannerContainer,
-	ActiveStyledCol,
-	Desc,
-	Title,
-	// CustomSponsors,
-	Sponsor,
-	ActiveStyledRow,
-	// SmallerSponsor,
-	// BottomSponsors,
-	// MiddleSponsors,
-} from './common';
+import { Desc, Title } from './common';
 import { useAppSelector } from '@/features/hooks';
 
 enum ERoundStatus {
@@ -93,9 +84,9 @@ export const ActiveQFProjectsBanner = () => {
 			<Container>
 				<ActiveStyledRow>
 					<ActiveStyledCol xs={12} md={6}>
-						<Title weight={700}>
+						<TitleWrapper weight={700}>
 							{activeQFRound ? activeQFRound.name : null}
-						</Title>
+						</TitleWrapper>
 						{/*<H2>*/}
 						{/*	{formatMessage({ id: 'label.quadratic_funding' })}*/}
 						{/*</H2>*/}
@@ -134,17 +125,17 @@ export const ActiveQFProjectsBanner = () => {
 								/>
 							))}
 						</Flex> */}
-						<Flex>
+						<ImagesWrapper>
 							{sponsors.map(s => (
 								<Sponsor
 									key={s.title}
 									src={s.image}
 									alt={s.title}
-									width={179}
-									height={188}
+									width={80}
+									height={80}
 								/>
 							))}
-						</Flex>
+						</ImagesWrapper>
 						{/* <CustomSponsors>
 							<Image
 								src={'/images/banners/qf-round/giv-palooza.svg'}
@@ -172,6 +163,55 @@ export const ActiveQFProjectsBanner = () => {
 		</BannerContainer>
 	);
 };
+
+export const BannerContainer = styled(Flex)`
+	height: 0;
+	position: relative;
+	overflow: hidden;
+	margin-bottom: 0;
+	align-items: start !important;
+	border-top-left-radius: 16px;
+	border-top-right-radius: 16px;
+	${mediaQueries.tablet} {
+		height: 210px;
+		margin-bottom: -50px;
+	}
+`;
+
+export const ActiveStyledRow = styled(Row)`
+	flex-direction: row;
+	@media (max-width: 1350px) {
+		flex-direction: column-reverse;
+	}
+`;
+
+export const ActiveStyledCol = styled(Col)`
+	position: relative;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	z-index: 1;
+	color: #ffffff;
+
+	@media (max-width: 1350px) {
+		width: 100% !important;
+	}
+`;
+
+const TitleWrapper = styled(Title)`
+	font-size: 36px;
+`;
+
+const ImagesWrapper = styled(Flex)`
+	width: 100%;
+	font-size: 36px;
+	justify-content: end;
+`;
+
+export const Sponsor = styled(Image)`
+	width: 85px;
+	height: 95px;
+`;
 
 const sponsors = [
 	{

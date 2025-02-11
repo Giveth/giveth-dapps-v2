@@ -34,7 +34,6 @@ import { ArchivedQFRoundStats } from './ArchivedQFRoundStats';
 import { ArchivedQFProjectsBanner } from './qfBanner/ArchivedQFProjectsBanner';
 import { ActiveQFRoundStats } from './ActiveQFRoundStats';
 import useMediaQuery from '@/hooks/useMediaQuery';
-import { QFHeader } from '@/components/views/archivedQFRounds/QFHeader';
 import { DefaultQFBanner } from '@/components/DefaultQFBanner';
 import NotAvailable from '@/components/NotAvailable';
 import { fetchProjects, IQueries } from './services';
@@ -223,24 +222,26 @@ const ProjectsIndex = (props: IProjectsView) => {
 			{isQF && (
 				<>
 					<PassportBanner />
-					{isArchivedQF ? (
-						!isMobile && <ArchivedQFProjectsBanner />
-					) : activeQFRound ? (
-						<ActiveQFProjectsBanner />
-					) : (
-						<DefaultQFBanner />
-					)}
 				</>
 			)}
 			<Wrapper>
-				{isQF && <QFHeader />}
+				{isQF && !isArchivedQF && (
+					<>
+						{activeQFRound ? (
+							<ActiveQFProjectsBanner />
+						) : (
+							<DefaultQFBanner />
+						)}
+					</>
+				)}
+				{isArchivedQF && !isMobile && <ArchivedQFProjectsBanner />}
 				{isArchivedQF ? (
 					<ArchivedQFRoundStats />
 				) : (
 					<>
-						{isQF && activeQFRound && <ActiveQFRoundStats />}
-						{!isQF && <ProjectsBanner />}
 						{onProjectsPageOrActiveQFPage && <FilterContainer />}
+						{!isQF && <ProjectsBanner />}
+						{isQF && activeQFRound && <ActiveQFRoundStats />}
 					</>
 				)}
 				{onProjectsPageOrActiveQFPage && (
