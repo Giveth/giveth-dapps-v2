@@ -218,7 +218,6 @@ const ProjectsIndex = (props: IProjectsView) => {
 					<Spinner />
 				</Loading>
 			)}
-
 			{isQF && (
 				<>
 					<PassportBanner />
@@ -239,8 +238,8 @@ const ProjectsIndex = (props: IProjectsView) => {
 					<ArchivedQFRoundStats />
 				) : (
 					<>
-						{onProjectsPageOrActiveQFPage && <FilterContainer />}
 						{!isQF && <ProjectsBanner />}
+						{onProjectsPageOrActiveQFPage && <FilterContainer />}
 						{isQF && activeQFRound && <ActiveQFRoundStats />}
 					</>
 				)}
