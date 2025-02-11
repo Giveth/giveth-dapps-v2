@@ -74,6 +74,7 @@ const Title = styled(H1)`
 
 const Desc = styled(SemiTitle)`
 	z-index: 1;
+	font-weight: 500;
 	color: ${neutralColors.gray[100]} !important;
 	max-width: 800px;
 	text-align: left;
