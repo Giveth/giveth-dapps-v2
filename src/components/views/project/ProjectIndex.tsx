@@ -145,6 +145,19 @@ const ProjectIndex: FC<IProjectBySlug> = () => {
 		);
 	}
 
+	console.log('Project data', projectData);
+	console.log('Project is cancelled', isCancelled);
+
+	if (!isAdmin && isCancelled) {
+		console.log('Project is cancelled');
+		return (
+			<NotAvailableHandler
+				isCancelled={isCancelled}
+				isProjectLoading={isLoading}
+			/>
+		);
+	}
+
 	return (
 		<Wrapper>
 			{!isAdminEmailVerified && isAdmin && <VerifyEmailBanner />}
