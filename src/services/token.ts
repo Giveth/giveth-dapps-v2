@@ -52,7 +52,39 @@ export const fetchBalance = async (
 			});
 		}
 	} catch (error) {
-		console.error('error on fetchBalance', { error });
+		console.error('error on fetchBalance', {
+			error,
+			tokenAddress,
+			userAddress,
+		});
+		return;
+	}
+};
+
+export const fetchRecurringBalance = async (
+	tokenAddress: Address,
+	userAddress: Address,
+	chainID: number,
+) => {
+	try {
+		if (tokenAddress === AddressZero) {
+			const client = getPublicClient(wagmiConfig);
+			return client?.getBalance({ address: userAddress });
+		} else {
+			return await readContract(wagmiConfig, {
+				address: tokenAddress,
+				abi: erc20Abi,
+				functionName: 'balanceOf',
+				args: [userAddress],
+				chainId: chainID,
+			});
+		}
+	} catch (error) {
+		console.error('error on fetchBalance', {
+			error,
+			tokenAddress,
+			userAddress,
+		});
 		return;
 	}
 };

@@ -2,28 +2,32 @@ import { useCallback, useEffect, useState } from 'react';
 import { Address } from 'viem';
 import { IToken } from '@/types/superFluid';
 import config from '@/configuration';
-import { fetchBalance } from '@/services/token';
+import { fetchRecurringBalance } from '@/services/token';
 
 export interface ITokenWithBalance {
 	token: IToken;
 	balance: bigint;
 }
 
-const allTokens = config.OPTIMISM_CONFIG.SUPER_FLUID_TOKENS;
-
 export const useProjectClaimableDonations = (
+	recurringNetworkID: number,
 	anchorContractAddress?: Address,
 ) => {
 	const [isLoading, setIsLoading] = useState(false);
 	const [balances, setBalances] = useState<ITokenWithBalance[]>([]);
+	const allTokens =
+		recurringNetworkID === config.OPTIMISM_NETWORK_NUMBER
+			? config.OPTIMISM_CONFIG.SUPER_FLUID_TOKENS
+			: config.BASE_CONFIG.SUPER_FLUID_TOKENS;
 
 	const fetchTokenBalance = useCallback(
 		async (token: IToken): Promise<ITokenWithBalance | null> => {
 			if (!anchorContractAddress) return null;
 			try {
-				const balance = await fetchBalance(
+				const balance = await fetchRecurringBalance(
 					token.id,
 					anchorContractAddress,
+					recurringNetworkID,
 				);
 				if (balance) {
 					return {
@@ -33,11 +37,16 @@ export const useProjectClaimableDonations = (
 				}
 				return null;
 			} catch (error) {
-				console.error('Error fetching token balance:', error);
+				console.error(
+					'Error fetching token balance:',
+					error,
+					anchorContractAddress,
+					recurringNetworkID,
+				);
 				return null;
 			}
 		},
-		[anchorContractAddress],
+		[anchorContractAddress, recurringNetworkID],
 	);
 
 	const fetchAllTokensBalances = useCallback(async () => {
@@ -53,11 +62,16 @@ export const useProjectClaimableDonations = (
 			) as ITokenWithBalance[];
 			setBalances(filteredResults);
 		} catch (error) {
-			console.error('Error fetching all tokens balances:', error);
+			console.error(
+				'Error fetching all tokens balances:',
+				error,
+				anchorContractAddress,
+				recurringNetworkID,
+			);
 		} finally {
 			setIsLoading(false);
 		}
-	}, [fetchTokenBalance, anchorContractAddress]);
+	}, [fetchTokenBalance, anchorContractAddress, recurringNetworkID]);
 
 	// Initial fetch
 	useEffect(() => {
