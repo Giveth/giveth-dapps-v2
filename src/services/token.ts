@@ -80,7 +80,7 @@ export const fetchRecurringBalance = async (
 			});
 		}
 	} catch (error) {
-		console.error('error on fetchBalance', {
+		console.error('error on fetchRecurringBalance', {
 			error,
 			tokenAddress,
 			userAddress,
