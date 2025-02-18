@@ -2,6 +2,7 @@ import { B, P, neutralColors, Flex } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import Image from 'next/image';
 import { useMemo, useState } from 'react';
+import { useSwitchChain } from 'wagmi';
 import { IProject } from '@/apollo/types/types';
 import { Modal } from '@/components/modals/Modal';
 import { IModal } from '@/types/common';
@@ -35,6 +36,7 @@ const ClaimRecurringDonationModal = ({
 	setShowModal,
 	project,
 }: IClaimRecurringDonationModal) => {
+	const { switchChain } = useSwitchChain();
 	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
 	const [showClaimWithdrawalModal, setShowClaimWithdrawalModal] =
 		useState(false);
@@ -42,8 +44,9 @@ const ClaimRecurringDonationModal = ({
 	const [activeTab, setActiveTab] = useState(0);
 	const [allTokensUsd, setAllTokensUsd] = useState<IAllTokensUsd>({});
 	const [fetchFunction, setFetchFunction] = useState<() => Promise<void>>(
-		() => Promise.resolve(),
+		() => async () => {},
 	);
+
 	const [selectedAnchorContractAddress, setSelectedAnchorContractAddress] =
 		useState('');
 
@@ -88,6 +91,17 @@ const ClaimRecurringDonationModal = ({
 		return sum;
 	}, [allTokensUsd]);
 
+	// Handle select stream and switch chain before opening the claim withdrawal modal
+	const handleSelectStream = async (selectedItem: ITokenWithBalance) => {
+		await switchChain({ chainId: recurringChains[activeTab].chainId });
+		setSelectedStream(selectedItem);
+		setShowClaimWithdrawalModal(true);
+		setFetchFunction(() => recurringChains[activeTab].data.refetch);
+		setSelectedAnchorContractAddress(
+			recurringChains[activeTab].anchorContractAddress || '',
+		);
+	};
+
 	return (
 		<Modal
 			closeModal={closeModal}
@@ -119,18 +133,9 @@ const ClaimRecurringDonationModal = ({
 								<ClaimRecurringItem
 									key={tokenWithBalance.token.symbol}
 									tokenWithBalance={tokenWithBalance}
-									onSelectStream={selectedItem => {
-										setSelectedStream(selectedItem);
-										setShowClaimWithdrawalModal(true);
-										setFetchFunction(
-											recurringChains[activeTab].data
-												.refetch,
-										);
-										setSelectedAnchorContractAddress(
-											recurringChains[activeTab]
-												.anchorContractAddress || '',
-										);
-									}}
+									onSelectStream={() =>
+										handleSelectStream(tokenWithBalance)
+									}
 									setAllTokensUsd={setAllTokensUsd}
 									allTokensUsd={allTokensUsd}
 								/>
