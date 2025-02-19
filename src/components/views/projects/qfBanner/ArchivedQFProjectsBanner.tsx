@@ -75,6 +75,7 @@ export const ArchivedQFProjectsBanner = () => {
 					style={{ objectFit: 'cover' }}
 					fill
 					alt='QF Banner'
+					unoptimized
 				/>
 			)}
 			<ContentContainer>
