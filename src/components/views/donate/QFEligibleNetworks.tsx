@@ -24,7 +24,8 @@ const QFEligibleNetworks = () => {
 	const [showModal, setShowModal] = useState(false);
 	const { isConnected } = useGeneralWallet();
 	const { formatMessage } = useIntl();
-	const { activeStartedRound } = useDonateData();
+	const { activeStartedRound, project } = useDonateData();
+	console.log('project', project);
 	const router = useRouter();
 	const isQRDonation = router.query.chain === ChainType.STELLAR.toLowerCase();
 	const eligibleNetworksWithoutStellar = activeStartedRound?.eligibleNetworks
@@ -42,24 +43,34 @@ const QFEligibleNetworks = () => {
 				{formatMessage({ id: 'label.eligible_networks_for_matching' })}
 			</Caption>
 			<IconsWrapper>
-				{activeStartedRound?.eligibleNetworks?.map(network => (
-					<IconWithTooltip
-						icon={
-							<TooltipIconWrapper>
-								{config.NETWORKS_CONFIG_WITH_ID[
-									network
-								]?.chainLogo(24)}
-							</TooltipIconWrapper>
-						}
-						direction='top'
-						align='top'
-						key={network}
-					>
-						<SublineBold>
-							{config.NETWORKS_CONFIG_WITH_ID[network]?.name}
-						</SublineBold>
-					</IconWithTooltip>
-				))}
+				{activeStartedRound?.eligibleNetworks?.map(network => {
+					// Check if project has an address for this network
+					const hasProjectAddress = project?.addresses?.some(
+						address =>
+							address.networkId === network &&
+							address.isRecipient,
+					);
+
+					// Only render if project has an address for this network
+					return hasProjectAddress ? (
+						<IconWithTooltip
+							icon={
+								<TooltipIconWrapper>
+									{config.NETWORKS_CONFIG_WITH_ID[
+										network
+									]?.chainLogo(24)}
+								</TooltipIconWrapper>
+							}
+							direction='top'
+							align='top'
+							key={network}
+						>
+							<SublineBold>
+								{config.NETWORKS_CONFIG_WITH_ID[network]?.name}
+							</SublineBold>
+						</IconWithTooltip>
+					) : null;
+				})}
 			</IconsWrapper>
 			{!isQRDonation && isConnected && (
 				<ButtonsWrapper>
@@ -99,15 +110,6 @@ const IconsWrapper = styled.div`
 	max-width: 100%; /* Ensure the content does not exceed the width of the parent */
 	max-height: 100%; /* Ensure the content does not exceed the height of the parent */
 	gap: 4px;
-	img {
-		filter: grayscale(100%);
-		opacity: 0.4;
-		transition: all 0.3s;
-		&:hover {
-			filter: grayscale(0);
-			opacity: 1;
-		}
-	}
 `;
 
 const ButtonsWrapper = styled.div`
