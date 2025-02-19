@@ -30,7 +30,6 @@ import { useModalAnimation } from '@/hooks/useModalAnimation';
 import { Modal } from '@/components/modals/Modal';
 import { EVerificationStatus } from '@/apollo/types/types';
 import ClaimRecurringDonationModal from '../../userProfile/projectsTab/ClaimRecurringDonationModal';
-import config from '@/configuration';
 import { findAnchorContractAddress } from '@/helpers/superfluid';
 import { ProjectCardNotification } from './ProjectCardNotification';
 
@@ -123,13 +122,7 @@ export const AdminActions = () => {
 		}),
 		icon: <IconArrowDownCircle16 />,
 		cb: () => {
-			if (chainId !== config.OPTIMISM_NETWORK_NUMBER) {
-				switchChain({
-					chainId: config.OPTIMISM_NETWORK_NUMBER,
-				});
-			} else {
-				setShowClaimModal && setShowClaimModal(true);
-			}
+			setShowClaimModal && setShowClaimModal(true);
 		},
 	};
 

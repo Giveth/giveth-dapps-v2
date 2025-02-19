@@ -95,9 +95,7 @@ const ClaimWithdrawalModal = ({
 
 	const isETHx = selectedStream.token.symbol.toLowerCase() === 'ethx';
 	const handleConfirm = async () => {
-		console.log('anchorContractAddress', anchorContractAddress);
 		try {
-			console.log('isETHx', isETHx);
 			await ensureCorrectNetwork(recurringNetworkID);
 			const encodedDowngradeTo = isETHx
 				? encodeFunctionData({

@@ -41,6 +41,7 @@ export const ClaimRecurringItem = ({
 							tokenWithBalance.token.decimals,
 						),
 					) || 0;
+
 			setAllTokensUsd({
 				...allTokensUsd,
 				[symbol]: tokenValueInUsd!,
