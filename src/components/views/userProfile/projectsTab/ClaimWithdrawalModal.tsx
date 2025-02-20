@@ -251,7 +251,7 @@ const FullWidthButton = styled(Button)`
 `;
 
 const ModalContainer = styled.div`
-	min-width: 500px;
+	max-width: 500px;
 	padding: 24px;
 `;
 
@@ -263,6 +263,7 @@ const CustomLink = styled.a`
 `;
 
 const TransactionWarning = styled(P)`
+	text-align: left;
 	padding-bottom: 16px;
 `;
 
