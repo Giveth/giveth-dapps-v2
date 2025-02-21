@@ -15,6 +15,26 @@ import { IProject } from '@/apollo/types/types';
 
 export type TQRStatus = 'waiting' | 'failed' | 'success' | 'expired';
 
+export const generateStellarPaymentQRCode = async (
+	toWalletAddress: string,
+	amount: number,
+	memo = '',
+	draftDonationId?: number,
+) => {
+	const formattedAddress = toWalletAddress.toUpperCase();
+
+	const paymentData = `stellar:${formattedAddress}?amount=${amount}&memo=${memo || draftDonationId}`;
+
+	try {
+		// Generate the QR code as a data URL
+		const qrCodeDataURL = await QRCode.toDataURL(paymentData);
+		return qrCodeDataURL;
+	} catch (error) {
+		console.error('Error generating QR code:', error);
+		throw error;
+	}
+};
+
 export const useQRCodeDonation = (project: IProject) => {
 	const [draftDonation, setDraftDonation] = useState<IDraftDonation | null>(
 		null,
@@ -22,25 +42,6 @@ export const useQRCodeDonation = (project: IProject) => {
 	const [status, setStatus] = useState<TQRStatus>('waiting');
 	const [loading, setLoading] = useState(false);
 	const [pendingDonationExists, setPendingDonationExists] = useState(false);
-
-	const generateStellarPaymentQRCode = async (
-		toWalletAddress: string,
-		amount: number,
-		memo = '',
-	) => {
-		const formattedAddress = toWalletAddress.toUpperCase();
-
-		const paymentData = `stellar:${formattedAddress}?amount=${amount}&memo=${memo}`;
-
-		try {
-			// Generate the QR code as a data URL
-			const qrCodeDataURL = await QRCode.toDataURL(paymentData);
-			return qrCodeDataURL;
-		} catch (error) {
-			console.error('Error generating QR code:', error);
-			throw error;
-		}
-	};
 
 	const createDraftDonation = async (
 		payload: ICreateDraftDonation,
