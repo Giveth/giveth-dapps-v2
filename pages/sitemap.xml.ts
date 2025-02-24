@@ -24,10 +24,32 @@ import {
 	archivedQFRoundsMetaTags,
 } from '@/content/metatags';
 import { escapeXml } from '@/helpers/xml';
+import { FETCH_LAST_SITEMAP_URL } from '@/apollo/gql/gqlSitemap';
+import { initializeApollo } from '@/apollo/apolloClient';
 
 const URL = config.FRONTEND_LINK;
 
-function generateSiteMap() {
+async function generateSiteMap() {
+	const latestSitemap = await fetchLatestSitemap();
+	let sitemapUrls = '';
+
+	if (latestSitemap) {
+		sitemapUrls = `
+			<url>
+				<loc>${latestSitemap.sitemapProjectsURL}</loc>
+				<lastmod>${new Date().toISOString()}</lastmod>
+			</url>
+			<url>
+				<loc>${latestSitemap.sitemapUsersURL}</loc>
+				<lastmod>${new Date().toISOString()}</lastmod>
+			</url>
+			<url>
+				<loc>${latestSitemap.sitemapQFRoundsURL}</loc>
+				<lastmod>${new Date().toISOString()}</lastmod>
+			</url>
+		`;
+	}
+
 	return `<?xml version="1.0" encoding="UTF-8"?>
    <urlset xmlns="https://www.sitemaps.org/schemas/sitemap/0.9">
      	<url>
@@ -135,18 +157,7 @@ function generateSiteMap() {
 			  <title>${escapeXml(archivedQFRoundsMetaTags.title)}</title>
       	<description>${escapeXml(archivedQFRoundsMetaTags.desc)}</description>
      	</url>
-			<url>
-      	<loc>${URL}/sitemap/projects-sitemap.xml</loc>
-      	<lastmod>${new Date().toISOString()}</lastmod>
-     	</url>
-			<url>
-      	<loc>${URL}/sitemap/qf-sitemap.xml</loc>
-      	<lastmod>${new Date().toISOString()}</lastmod>
-     	</url>
-			<url>
-      	<loc>${URL}/sitemap/users-sitemap.xml</loc>
-      	<lastmod>${new Date().toISOString()}</lastmod>
-     	</url>
+			${sitemapUrls}
 	 </urlset>
  `;
 }
@@ -163,6 +174,22 @@ export async function getServerSideProps({ res }: GetServerSidePropsContext) {
 	return {
 		props: {},
 	};
+}
+
+async function fetchLatestSitemap() {
+	const apolloClient = initializeApollo();
+
+	try {
+		const { data } = await apolloClient.query({
+			query: FETCH_LAST_SITEMAP_URL,
+			fetchPolicy: 'no-cache',
+		});
+
+		return data?.getLastSitemap?.sitemap_urls || null;
+	} catch (error) {
+		console.error('Error fetching sitemap:', error);
+		return null;
+	}
 }
 
 export default function SiteMap() {}
