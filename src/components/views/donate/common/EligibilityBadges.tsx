@@ -68,7 +68,7 @@ const EligibilityBadges: FC<IEligibilityBadges> = props => {
 
 	return isConnected ? (
 		<EligibilityBadgeWrapper style={style}>
-			{activeQFRound && (
+			{activeQFRound && !activeStartedRound ? null : (
 				<BadgesBase
 					warning={qfEligibleWarning}
 					active={isDonationMatched}
@@ -82,11 +82,9 @@ const EligibilityBadges: FC<IEligibilityBadges> = props => {
 						{
 							id: isDonationMatched
 								? 'page.donate.donations_will_be_matched'
-								: !activeStartedRound
-									? 'page.donate.project_not_eligible_for_qf'
-									: !isOnQFEligibleNetworks
-										? 'page.donate.network_not_eligible_for_qf'
-										: 'page.donate.unlocks_matching_funds',
+								: !isOnQFEligibleNetworks
+									? 'page.donate.network_not_eligible_for_qf'
+									: 'page.donate.unlocks_matching_funds',
 						},
 						{
 							value: activeStartedRound?.minimumValidUsdValue,
@@ -96,6 +94,7 @@ const EligibilityBadges: FC<IEligibilityBadges> = props => {
 					)}
 				</BadgesBase>
 			)}
+
 			<BadgesBase
 				warning={givbacksEligibleWarning}
 				active={isGivbacksEligible}

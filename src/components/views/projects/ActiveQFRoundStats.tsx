@@ -15,6 +15,7 @@ import { FETCH_QF_ROUND_STATS } from '@/apollo/gql/gqlQF';
 import { formatDate, formatUSD, thousandsSeparator } from '@/lib/helpers';
 import { useAppSelector } from '@/features/hooks';
 import { hasRoundStarted } from '@/helpers/qf';
+import { QFHeader } from '@/components/views/archivedQFRounds/QFHeader';
 
 export const ActiveQFRoundStats = () => {
 	const { formatMessage } = useIntl();
@@ -33,7 +34,12 @@ export const ActiveQFRoundStats = () => {
 
 	return (
 		<Wrapper>
-			<Title weight={700}>{activeQFRound?.name} Metrics</Title>
+			<TitleWrapper>
+				<Title weight={700}>
+					{activeQFRound?.name} <span>Metrics</span>
+				</Title>
+				<QFHeader />
+			</TitleWrapper>
 			<InfoSection $started={isRoundStarted}>
 				<ItemContainer>
 					<ItemTitle weight={700}>
@@ -104,13 +110,20 @@ const Wrapper = styled.div`
 	overflow: hidden;
 `;
 
+const TitleWrapper = styled(Flex)`
+	justify-content: space-between;
+
+	span {
+		color: ${neutralColors.gray[700]};
+	}
+`;
+
 const Title = styled(H5)`
 	margin-bottom: 40px;
 `;
 
 const InfoSection = styled(Flex)<{ $started: boolean }>`
 	flex-direction: column;
-	margin-top: 40px;
 	padding: 24px;
 	background-color: ${neutralColors.gray[100]};
 	border-radius: 16px;

@@ -536,8 +536,13 @@ const Wrapper = styled.div<IWrapperProps>`
 	background: white;
 	overflow: hidden;
 	box-shadow: ${Shadow.Neutral[400]};
-	height: ${props => (props.$activeStartedRound ? '560px' : '536px')};
+	height: ${props => (props.$activeStartedRound ? '638px' : '536px')};
 	order: ${props => props.$order};
+	${mediaQueries.mobileM} {
+		height: ${props => (props.$activeStartedRound ? '603px' : '536px')};
+	${mediaQueries.mobileL} {
+		height: ${props => (props.$activeStartedRound ? '562px' : '536px')};
+	}
 	${mediaQueries.laptopS} {
 		height: 472px;
 	}

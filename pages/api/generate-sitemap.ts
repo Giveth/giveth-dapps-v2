@@ -2,20 +2,20 @@ import fs from 'fs';
 import path from 'path';
 import { NextApiRequest, NextApiResponse } from 'next';
 import { User } from '@sentry/types';
-import config from '@/configuration';
-import { initializeApollo } from '@/apollo/apolloClient';
-import { OPTIONS_HOME_PROJECTS } from '@/apollo/gql/gqlOptions';
-import { FETCH_ALL_PROJECTS } from '@/apollo/gql/gqlProjects';
-import { EProjectsSortBy } from '@/apollo/types/gqlEnums';
-import { getMainCategorySlug } from '@/helpers/projects';
 import { escapeXml } from '@/helpers/xml';
 import { IProject, IQFRound } from '@/apollo/types/types';
-import { FETCH_QF_ROUNDS_QUERY } from '@/apollo/gql/gqlQF';
-import { FETCH_ALL_USERS_BASIC_DATA } from '@/apollo/gql/gqlUser';
 import { addressToUserView } from '@/lib/routeCreators';
 import { shortenAddress } from '@/lib/helpers';
 
-const URL = config.FRONTEND_LINK;
+export const config = {
+	api: {
+		bodyParser: {
+			sizeLimit: '10mb',
+		},
+	},
+};
+
+const URL = process.env.NEXT_PUBLIC_FRONTEND_LINK;
 
 function generateProjectsSiteMap(projects: IProject[]) {
 	return `<?xml version="1.0" encoding="UTF-8"?>
@@ -109,8 +109,10 @@ export default async function handler(
 ) {
 	const authHeader = req.headers['authorization'];
 
+	console.log('API route /api/generate-sitemap was called');
+
 	// Only allow GET requests
-	if (req.method !== 'GET') {
+	if (req.method !== 'POST') {
 		return res.status(405).end();
 	}
 
@@ -119,18 +121,15 @@ export default async function handler(
 	}
 
 	try {
+		// Parse the POST data from the request body
+		const { projects, users, qfRounds } = req.body;
+
 		/* PROJECT SITEMAP */
 
-		// Get first project data
-		const projectData = await getProjects(0);
-
-		const projects: IProject[] = projectData.allProjects?.projects || [];
-
-		if (projectData.allProjects.totalCount > 50) {
-			for (let i = 50; i < projectData.allProjects.totalCount; i += 50) {
-				const fetchNewProjectData = await getProjects(i);
-				projects.push(...fetchNewProjectData.allProjects?.projects);
-			}
+		if (!projects || !Array.isArray(projects)) {
+			return res
+				.status(400)
+				.json({ message: 'Invalid request payload projects' });
 		}
 
 		// Generate XML content
@@ -149,11 +148,14 @@ export default async function handler(
 
 		/* QF ARCHIVED ROUNDS SITEMAP */
 
-		// Get first project data
-		const roundsData = await getArchivedRounds();
+		if (!qfRounds || !Array.isArray(qfRounds)) {
+			return res
+				.status(400)
+				.json({ message: 'Invalid request payload qfRounds' });
+		}
 
 		// // Generate XML content
-		const sitemapRoundsContent = generateQFRoundsSiteMap(roundsData);
+		const sitemapRoundsContent = generateQFRoundsSiteMap(qfRounds);
 
 		// Define the file path
 		const filePathQFRounds = path.join(
@@ -172,21 +174,14 @@ export default async function handler(
 
 		/* USER SITEMAP */
 
-		// Fetch user data
-		const users = await getUsers(0);
-		const userTotalCount = users.totalCount;
-		const userEntries = [...users.users];
-
-		// Fetch remaining users if necessary
-		if (userTotalCount > 50) {
-			for (let i = 50; i < userTotalCount; i += 50) {
-				const nextBatch = await getUsers(i);
-				userEntries.push(...nextBatch.users);
-			}
+		if (!users || !Array.isArray(users)) {
+			return res
+				.status(400)
+				.json({ message: 'Invalid request payload users' });
 		}
 
 		// Generate XML content for users
-		const sitemapUsersContent = generateUsersSiteMap(userEntries);
+		const sitemapUsersContent = generateUsersSiteMap(users);
 
 		// Define the file path for users sitemap
 		const filePathUsers = path.join(
@@ -211,53 +206,4 @@ export default async function handler(
 		console.error('Error generating or saving sitemap:', error);
 		res.status(500).json({ error: 'Failed to generate sitemap' });
 	}
-}
-
-// Fetch project data from GraphQL
-async function getProjects(skip: number) {
-	const apolloClient = initializeApollo();
-	const slug = 'all';
-	const { variables, notifyOnNetworkStatusChange } = OPTIONS_HOME_PROJECTS;
-
-	const { data } = await apolloClient.query({
-		query: FETCH_ALL_PROJECTS,
-		variables: {
-			...variables,
-			limit: 50,
-			skip: skip,
-			sortingBy: EProjectsSortBy.INSTANT_BOOSTING,
-			mainCategory: getMainCategorySlug({ slug }),
-			notifyOnNetworkStatusChange,
-		},
-		fetchPolicy: 'no-cache',
-	});
-
-	return data;
-}
-
-// Fetch qf archived rounds data from GraphQL
-async function getArchivedRounds() {
-	const apolloClient = initializeApollo();
-
-	const { data } = await apolloClient.query({
-		query: FETCH_QF_ROUNDS_QUERY,
-	});
-
-	return data.qfRounds || [];
-}
-
-// Fetch user data from GraphQL
-async function getUsers(skip: number) {
-	const apolloClient = initializeApollo();
-
-	const { data } = await apolloClient.query({
-		query: FETCH_ALL_USERS_BASIC_DATA, // Query for user data
-		variables: {
-			limit: 50,
-			skip: skip,
-		},
-		fetchPolicy: 'no-cache',
-	});
-
-	return data.allUsersBasicData || { users: [], totalCount: 0 };
 }

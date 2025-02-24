@@ -41,7 +41,10 @@ import { ChainType } from '@/types/config';
 import { IProject, IWalletAddress } from '@/apollo/types/types';
 import { useCreateSolanaDonation } from '@/hooks/useCreateSolanaDonation';
 import { useTokenPrice } from '@/hooks/useTokenPrice';
-import { calcDonationShare } from '@/components/views/donate/common/helpers';
+import {
+	calcDonationShare,
+	calcDonationShareFor8Decimals,
+} from '@/components/views/donate/common/helpers';
 import { Spinner } from '@/components/Spinner';
 import { FETCH_GIVETH_PROJECT_BY_ID } from '@/apollo/gql/gqlProjects';
 import createGoogleTagEventPurchase from '@/helpers/googleAnalytics';
@@ -155,11 +158,11 @@ const DonateModal: FC<IDonateModalProps> = props => {
 		);
 	};
 
-	const { projectDonation, givethDonation } = calcDonationShare(
-		amount,
-		donationToGiveth,
-		token.decimals,
-	);
+	const { projectDonation, givethDonation } =
+		token.decimals === 8
+			? calcDonationShareFor8Decimals(amount, donationToGiveth)
+			: calcDonationShare(amount, donationToGiveth, token.decimals);
+
 	const projectDonationPrice = tokenPrice && tokenPrice * projectDonation;
 	const givethDonationPrice = tokenPrice && givethDonation * tokenPrice;
 

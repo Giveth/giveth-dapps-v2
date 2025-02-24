@@ -65,6 +65,7 @@ const QFSection: FC<IQFSectionProps> = ({ projectData }) => {
 		allocatedTokenSymbol,
 		allocatedFundUSDPreferred,
 	} = activeStartedRound || {};
+
 	const totalEstimatedMatching = calculateTotalEstimatedMatching(
 		projectDonationsSqrtRootSum,
 		allProjectsSum,

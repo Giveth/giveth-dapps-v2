@@ -13,9 +13,10 @@ import Image from 'next/image';
 
 export const BannerContainer = styled.div`
 	position: relative;
-	padding-top: 70px;
-	padding-bottom: 100px;
+	padding-top: 20px;
+	padding-bottom: 20px;
 	background: linear-gradient(98deg, #0f0116 24.06%, #380950 93.92%);
+	border-radius: 16px;
 	img {
 		-webkit-user-drag: none;
 		-khtml-user-drag: none;
@@ -30,7 +31,6 @@ export const StyledCol = styled(Col)`
 	display: flex;
 	flex-direction: column;
 	z-index: 1;
-	min-height: 300px;
 	text-align: center;
 	align-items: center;
 	padding-top: 40px;

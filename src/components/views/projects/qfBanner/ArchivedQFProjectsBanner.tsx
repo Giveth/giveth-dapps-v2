@@ -75,6 +75,7 @@ export const ArchivedQFProjectsBanner = () => {
 					style={{ objectFit: 'cover' }}
 					fill
 					alt='QF Banner'
+					unoptimized
 				/>
 			)}
 			<ContentContainer>
@@ -185,12 +186,12 @@ const BottomCenterCard = styled(Card)`
 
 const ContentContainer = styled(Container)`
 	display: flex;
-	justify-content: space-between;
+	width: 100%;
+	justify-content: center;
 	align-items: center;
 	position: relative;
 	z-index: 1;
 	padding: 0 20px;
-
 	@media (max-width: 1024px) {
 		width: 90% !important;
 	}

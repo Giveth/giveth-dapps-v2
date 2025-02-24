@@ -26,8 +26,7 @@ import {
 	slugToVerification,
 } from '@/lib/routeCreators';
 import { capitalizeAllWords, showToastError } from '@/lib/helpers';
-import config, { isDeleteProjectEnabled } from '@/configuration';
-import { findAnchorContractAddress } from '@/helpers/superfluid';
+import { isDeleteProjectEnabled } from '@/configuration';
 import DeactivateProjectModal from '@/components/modals/deactivateProject/DeactivateProjectIndex';
 import { client } from '@/apollo/apolloClient';
 import { ACTIVATE_PROJECT } from '@/apollo/gql/gqlProjects';
@@ -60,12 +59,9 @@ const ProjectActions: FC<IProjectActions> = ({
 	const status = project.status.name;
 	const isCancelled = status === EProjectStatus.CANCEL;
 
-	const anchorContractAddress = findAnchorContractAddress(
-		project.anchorContracts,
-		chain?.id,
-	);
+	// Simply check if there's at least one anchor contract
+	const hasAnchorContract = project.anchorContracts?.length > 0;
 
-	const chainId = chain?.id;
 	const projectId = project?.id;
 	const isActive = project?.status.name === EProjectStatus.ACTIVE;
 	const verificationStatus = project?.projectVerificationForm?.status;
@@ -144,21 +140,15 @@ const ProjectActions: FC<IProjectActions> = ({
 		},
 	];
 
-	if (anchorContractAddress) {
+	if (hasAnchorContract) {
 		const recurringDonationOption: IOption = {
 			label: formatMessage({
 				id: 'label.claim_recurring_donation',
 			}),
 			icon: <IconArrowDownCircle16 />,
 			cb: () => {
-				if (chainId !== config.OPTIMISM_NETWORK_NUMBER) {
-					switchChain({
-						chainId: config.OPTIMISM_NETWORK_NUMBER,
-					});
-				} else {
-					setSelectedProject(project);
-					setShowClaimModal && setShowClaimModal(true);
-				}
+				setSelectedProject(project);
+				setShowClaimModal && setShowClaimModal(true);
 			},
 		};
 		options.push(recurringDonationOption);
