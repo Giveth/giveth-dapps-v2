@@ -1,7 +1,6 @@
 import { neutralColors, Col, Row, Flex } from '@giveth/ui-design-system';
 import { FC, useState } from 'react';
 import styled from 'styled-components';
-
 import { useIntl } from 'react-intl';
 import { useQuery } from '@tanstack/react-query';
 import { IUserProfileView } from '../UserProfile.view';
@@ -21,6 +20,7 @@ const ProfileProjectsTab: FC<IUserProfileView> = () => {
 	const { user, myAccount } = useProfileContext();
 	const { formatMessage } = useIntl();
 	const userName = getUserName(user);
+	const isOwner = myAccount; // Determines if the logged-in user is the profile owner
 
 	const { data, isLoading, refetch } = useQuery({
 		queryKey: ['dashboard-projects', user.id, page, projectsOrder],
@@ -39,21 +39,17 @@ const ProfileProjectsTab: FC<IUserProfileView> = () => {
 			)}
 			{!myAccount && (
 				<UserContributeTitle weight={700}>
-					{formatMessage(
-						{
-							id: 'label.user_projects',
-						},
-						{
-							userName,
-						},
-					)}
+					{formatMessage({ id: 'label.user_projects' }, { userName })}
 				</UserContributeTitle>
 			)}
-			<ProjectsContainer $verified={!!user.isEmailVerified}>
+			<ProjectsContainer
+				$verified={!!user.isEmailVerified}
+				$isOwner={isOwner}
+			>
 				{!isLoading && data?.totalCount === 0 ? (
 					<NothingWrapper>
 						<NothingToSee
-							title={`${
+							title={
 								myAccount
 									? formatMessage({
 											id: 'label.you_havent_created_any_projects_yet',
@@ -61,19 +57,33 @@ const ProfileProjectsTab: FC<IUserProfileView> = () => {
 									: formatMessage({
 											id: 'label.this_user_hasnt_created_any_project_yet',
 										})
-							} `}
+							}
 						/>
 					</NothingWrapper>
 				) : myAccount ? (
-					<Flex $flexDirection='column' gap='18px'>
-						{data?.projects.map(project => (
-							<ProjectItem
-								project={project}
-								key={project.id}
-								refetchProjects={refetch}
-							/>
-						))}
-					</Flex>
+					!user.isEmailVerified ? (
+						<div style={{ opacity: 0.5, pointerEvents: 'none' }}>
+							<Flex $flexDirection='column' gap='18px'>
+								{data?.projects.map(project => (
+									<ProjectItem
+										project={project}
+										key={project.id}
+										refetchProjects={refetch}
+									/>
+								))}
+							</Flex>
+						</div>
+					) : (
+						<Flex $flexDirection='column' gap='18px'>
+							{data?.projects.map(project => (
+								<ProjectItem
+									project={project}
+									key={project.id}
+									refetchProjects={refetch}
+								/>
+							))}
+						</Flex>
+					)
 				) : (
 					<Row>
 						{data?.projects.map(project => (
@@ -97,14 +107,14 @@ const ProfileProjectsTab: FC<IUserProfileView> = () => {
 
 interface ProjectsContainerProps {
 	$verified: boolean;
+	$isOwner: boolean;
 }
 
 export const ProjectsContainer = styled.div<ProjectsContainerProps>`
 	margin-bottom: 40px;
-	background-color: ${({ $verified }) =>
-		$verified ? 'transparent' : '#f0f0f0'};
-	opacity: ${({ $verified }) => ($verified ? 1 : 0.5)};
-	pointer-events: ${({ $verified }) => ($verified ? 'auto' : 'none')};
+	background-color: ${({ $verified, $isOwner }) =>
+		$verified || !$isOwner ? 'transparent' : '#f0f0f0'};
+	opacity: ${({ $verified, $isOwner }) => ($verified || !$isOwner ? 1 : 0.5)};
 `;
 
 export const Loading = styled(Flex)`

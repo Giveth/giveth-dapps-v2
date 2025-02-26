@@ -269,12 +269,26 @@ export const QFDonorEligibilityCard = () => {
 					</EligibilityCardBottom>
 				)}
 			{passportState === EPassportState.ERROR && (
-				<InlineToast
-					type={EToastType.Error}
-					message={formatMessage({
-						id: 'label.passport.error',
-					})}
-				/>
+				<>
+					<ErrorInlineToast
+						type={EToastType.Error}
+						message={formatMessage({
+							id: 'label.passport.error',
+						})}
+					/>
+					<ReplyButton onClick={refreshScore}>
+						<FlexCenter gap='8px'>
+							<Button
+								label={formatMessage({
+									id: 'label.retry',
+								})}
+								size='medium'
+								buttonType='primary'
+								onClick={refreshScore}
+							/>
+						</FlexCenter>
+					</ReplyButton>
+				</>
 			)}
 			{passportState === EPassportState.INVALID && (
 				<>
@@ -357,4 +371,21 @@ const RightPositionedExternalLink = styled(ExternalLink)`
 const BoldText = styled.strong`
 	font-weight: 600;
 	text-transform: capitalize;
+`;
+
+const ErrorInlineToast = styled(InlineToast)`
+	margin-bottom: 0.5em;
+`;
+
+const ReplyButton = styled.div`
+	& button {
+		color: ${brandColors.pinky[500]};
+		background-color: white;
+		font-size: 14px !important;
+		filter: drop-shadow(0px 3px 20px rgba(83, 38, 236, 0.13));
+	}
+
+	& button:hover {
+		color: white;
+	}
 `;

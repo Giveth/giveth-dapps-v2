@@ -22,7 +22,7 @@ import { useAppDispatch, useAppSelector } from '@/features/hooks';
 import { setShowCompleteProfile } from '@/features/modal/modal.slice';
 import { ProjectsBanner } from './ProjectsBanner';
 import { useProjectsContext } from '@/context/projects.context';
-import { ProjectsMiddleBanner } from './MiddleBanners/ProjectsMiddleBanner';
+import { ProjectsMiddleGivethVaultBanner } from './MiddleBanners/ProjectsMiddleGivethVaultBanner';
 import { ActiveQFProjectsBanner } from './qfBanner/ActiveQFProjectsBanner';
 import { PassportBanner } from '@/components/PassportBanner';
 import { QFProjectsMiddleBanner } from './MiddleBanners/QFMiddleBanner';
@@ -34,7 +34,6 @@ import { ArchivedQFRoundStats } from './ArchivedQFRoundStats';
 import { ArchivedQFProjectsBanner } from './qfBanner/ArchivedQFProjectsBanner';
 import { ActiveQFRoundStats } from './ActiveQFRoundStats';
 import useMediaQuery from '@/hooks/useMediaQuery';
-import { QFHeader } from '@/components/views/archivedQFRounds/QFHeader';
 import { DefaultQFBanner } from '@/components/DefaultQFBanner';
 import NotAvailable from '@/components/NotAvailable';
 import { fetchProjects, IQueries } from './services';
@@ -219,29 +218,29 @@ const ProjectsIndex = (props: IProjectsView) => {
 					<Spinner />
 				</Loading>
 			)}
-
-			{isQF ? (
+			{isQF && (
 				<>
 					<PassportBanner />
-					{isArchivedQF ? (
-						!isMobile && <ArchivedQFProjectsBanner />
-					) : activeQFRound ? (
-						<ActiveQFProjectsBanner />
-					) : (
-						<DefaultQFBanner />
-					)}
 				</>
-			) : (
-				<ProjectsBanner />
 			)}
 			<Wrapper>
-				{isQF && <QFHeader />}
+				{isQF && !isArchivedQF && (
+					<>
+						{activeQFRound ? (
+							<ActiveQFProjectsBanner />
+						) : (
+							<DefaultQFBanner />
+						)}
+					</>
+				)}
+				{isArchivedQF && !isMobile && <ArchivedQFProjectsBanner />}
 				{isArchivedQF ? (
 					<ArchivedQFRoundStats />
 				) : (
 					<>
-						{isQF && activeQFRound && <ActiveQFRoundStats />}
+						{!isQF && <ProjectsBanner />}
 						{onProjectsPageOrActiveQFPage && <FilterContainer />}
+						{isQF && activeQFRound && <ActiveQFRoundStats />}
 					</>
 				)}
 				{onProjectsPageOrActiveQFPage && (
@@ -256,7 +255,7 @@ const ProjectsIndex = (props: IProjectsView) => {
 							{isQF ? (
 								<QFProjectsMiddleBanner />
 							) : (
-								<ProjectsMiddleBanner />
+								<ProjectsMiddleGivethVaultBanner />
 							)}
 							{data.pages.map((page, pageIndex) => (
 								<Fragment key={pageIndex}>

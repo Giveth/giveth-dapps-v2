@@ -12,6 +12,7 @@ const ProjectEligibleQFChains = () => {
 	const { formatMessage } = useIntl();
 
 	const { activeStartedRound } = getActiveRound(projectData?.qfRounds);
+
 	return (
 		<Container>
 			<Wrapper>
@@ -21,24 +22,37 @@ const ProjectEligibleQFChains = () => {
 					})}
 				</Caption>
 				<IconsWrapper>
-					{activeStartedRound?.eligibleNetworks?.map(network => (
-						<IconWithTooltip
-							icon={
-								<TooltipIconWrapper>
-									{config.NETWORKS_CONFIG_WITH_ID[
-										network
-									]?.chainLogo(24)}
-								</TooltipIconWrapper>
-							}
-							direction='top'
-							align='top'
-							key={network}
-						>
-							<SublineBold>
-								{config.NETWORKS_CONFIG_WITH_ID[network]?.name}
-							</SublineBold>
-						</IconWithTooltip>
-					))}
+					{activeStartedRound?.eligibleNetworks?.map(network => {
+						// Check if project has an address for this network
+						const hasProjectAddress = projectData?.addresses?.some(
+							address =>
+								address.networkId === network &&
+								address.isRecipient,
+						);
+
+						// Only render if project has an address for this network
+						return hasProjectAddress ? (
+							<IconWithTooltip
+								icon={
+									<TooltipIconWrapper>
+										{config.NETWORKS_CONFIG_WITH_ID[
+											network
+										]?.chainLogo(24)}
+									</TooltipIconWrapper>
+								}
+								direction='top'
+								align='top'
+								key={network}
+							>
+								<SublineBold>
+									{
+										config.NETWORKS_CONFIG_WITH_ID[network]
+											?.name
+									}
+								</SublineBold>
+							</IconWithTooltip>
+						) : null;
+					})}
 				</IconsWrapper>
 			</Wrapper>
 		</Container>
@@ -60,17 +74,7 @@ const IconsWrapper = styled.div`
 	flex-wrap: wrap; /* Allow content to wrap to the next line */
 	max-width: 100%; /* Ensure the content does not exceed the width of the parent */
 	max-height: 100%; /* Ensure the content does not exceed the height of the parent */
-
 	gap: 8px;
-	img {
-		filter: grayscale(100%);
-		opacity: 0.4;
-		transition: all 0.3s;
-		&:hover {
-			filter: grayscale(0);
-			opacity: 1;
-		}
-	}
 `;
 
 const Wrapper = styled.div`

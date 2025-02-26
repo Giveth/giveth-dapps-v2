@@ -20,8 +20,10 @@ interface IProviderProps {
 }
 const { SOLANA_CONFIG } = config;
 const solanaAdapter = SOLANA_CONFIG?.adapterNetwork;
-const solanaNode =
-	process.env.NEXT_PUBLIC_SOLANA_NODE_URL || clusterApiUrl(solanaAdapter);
+const solanaNode = process.env.NEXT_PUBLIC_DRPC_KEY
+	? `https://lb.drpc.org/ogrpc?network=solana&dkey=${process.env.NEXT_PUBLIC_DRPC_KEY}`
+	: clusterApiUrl(solanaAdapter);
+
 // Create a context for the provider
 export const SolanaCtx = createContext<any>(null);
 

@@ -296,7 +296,12 @@ export const ProjectProvider = ({
 	const isDraft = projectData?.status.name === EProjectStatus.DRAFT;
 
 	useEffect(() => {
-		setIsCancelled(false);
+		if (project && project.status.name === EProjectStatus.CANCEL) {
+			setIsCancelled(true);
+		} else {
+			setIsCancelled(false);
+		}
+
 		if (user?.isSignedIn && !project) {
 			fetchProjectBySlug();
 		} else {

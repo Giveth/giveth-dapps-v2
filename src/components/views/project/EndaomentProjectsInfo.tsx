@@ -46,10 +46,11 @@ export const EndaomentProjectsInfo: FC<EndaomentProjectsInfo> = ({
 
 // New styles for Endaoment Info
 const EndaomentInfo = styled.div`
-	padding: 16px;
+	padding: 18px;
 	background-color: ${neutralColors.gray[100]};
 	border-radius: 8px;
 	margin-top: 16px;
+	margin-bottom: 16px;
 `;
 
 const TitleWithLogo = styled.div`
