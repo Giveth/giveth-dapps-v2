@@ -14,6 +14,7 @@ import { loadErrorMessages, loadDevMessages } from '@apollo/client/dev';
 import posthog from 'posthog-js';
 import { PostHogProvider } from 'posthog-js/react';
 import { WagmiProvider } from 'wagmi';
+import { ThirdwebProvider } from 'thirdweb/react';
 import { projectId, wagmiConfig } from '@/wagmiConfigs';
 import { useApollo } from '@/apollo/apolloClient';
 import { HeaderWrapper } from '@/components/Header/HeaderWrapper';
@@ -204,41 +205,43 @@ function MyApp({ Component, pageProps }: AppProps) {
 					<ApolloProvider client={apolloClient}>
 						<SolanaProvider>
 							<WagmiProvider config={wagmiConfig}>
-								<QueryClientProvider client={queryClient}>
-									<GeneralWalletProvider>
-										<PostHogProvider client={posthog}>
-											{isMaintenanceMode ? (
-												<MaintenanceIndex />
-											) : (
-												<>
-													<NotificationController />
-													<GeneralController />
-													<SubgraphController />
-													<UserController />
-													<HeaderWrapper />
-													{isGIVeconomyRoute(
-														router.route,
-													) && <GIVeconomyTab />}
-													{(pageProps as any)
-														.errorStatus ? (
-														<ErrorsIndex
-															statusCode={
-																(
-																	pageProps as any
-																).errorStatus
-															}
-														/>
-													) : (
-														<RenderComponent
-															Component={
-																Component
-															}
-															pageProps={
-																pageProps
-															}
-														/>
-													)}
-													{/* {process.env.NEXT_PUBLIC_ENV !==
+								<ThirdwebProvider>
+									<QueryClientProvider client={queryClient}>
+										<GeneralWalletProvider>
+											<PostHogProvider client={posthog}>
+												{isMaintenanceMode ? (
+													<MaintenanceIndex />
+												) : (
+													<>
+														<NotificationController />
+														<GeneralController />
+														<SubgraphController />
+														<UserController />
+														<HeaderWrapper />
+														{isGIVeconomyRoute(
+															router.route,
+														) && <GIVeconomyTab />}
+														{(pageProps as any)
+															.errorStatus ? (
+															<ErrorsIndex
+																statusCode={
+																	(
+																		pageProps as any
+																	)
+																		.errorStatus
+																}
+															/>
+														) : (
+															<RenderComponent
+																Component={
+																	Component
+																}
+																pageProps={
+																	pageProps
+																}
+															/>
+														)}
+														{/* {process.env.NEXT_PUBLIC_ENV !==
 												'production' && (
 												<Script
 													id='console-script'
@@ -249,14 +252,15 @@ function MyApp({ Component, pageProps }: AppProps) {
 												/>
 											)} */}
 
-													<FooterWrapper />
-													<ModalController />
-													<PfpController />
-												</>
-											)}
-										</PostHogProvider>
-									</GeneralWalletProvider>
-								</QueryClientProvider>
+														<FooterWrapper />
+														<ModalController />
+														<PfpController />
+													</>
+												)}
+											</PostHogProvider>
+										</GeneralWalletProvider>
+									</QueryClientProvider>
+								</ThirdwebProvider>
 							</WagmiProvider>
 						</SolanaProvider>
 					</ApolloProvider>
