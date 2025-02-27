@@ -1,17 +1,23 @@
 import styled from 'styled-components';
 import {
 	B,
+	brandColors,
+	GLink,
 	H2,
 	H4,
+	H5,
 	H6,
+	IconExternalLink,
 	neutralColors,
 	P,
-	Subline,
+	semanticColors,
+	SublineBold,
 	Flex,
 	mediaQueries,
 } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
 import { useEffect, useState } from 'react';
+import config from '@/configuration';
 import { Shadow } from '@/components/styled-components/Shadow';
 import ProjectWalletAddress from '@/components/views/project/projectDonations/ProjectWalletAddress';
 import { useProjectContext } from '@/context/project.context';
@@ -20,6 +26,7 @@ import { client } from '@/apollo/apolloClient';
 import { FETCH_QF_ROUND_HISTORY } from '@/apollo/gql/gqlDonations';
 import { IGetQfRoundHistory, IQFRound } from '@/apollo/types/types';
 import { formatDonation } from '@/helpers/number';
+import { ProjectRaised } from './ProjectRaised';
 
 interface IProjectTotalFundCardProps {
 	selectedQF: IQFRound | null;
@@ -41,7 +48,13 @@ const ProjectTotalFundCard = ({ selectedQF }: IProjectTotalFundCardProps) => {
 	const { allProjectsSum, matchingPool, projectDonationsSqrtRootSum } =
 		estimatedMatching || {};
 
-	const { allocatedFundUSDPreferred, allocatedFundUSD } = selectedQF || {};
+	const {
+		allocatedFundUSDPreferred,
+		allocatedFundUSD,
+		allocatedTokenSymbol,
+	} = selectedQF || {};
+
+	const selectedQFData = qfRounds?.find(round => round.id === selectedQF?.id);
 
 	const notDistributedFund =
 		!qfRoundHistory?.matchingFund &&
@@ -143,27 +156,9 @@ const ProjectTotalFundCard = ({ selectedQF }: IProjectTotalFundCardProps) => {
 					</UpperSection>
 					{countUniqueDonors !== undefined &&
 						countUniqueDonors > 0 && (
-							<div>
-								<LightSubline>
-									{formatMessage({
-										id: 'label.raised_from',
-									})}
-								</LightSubline>
-								<Subline style={{ display: 'inline-block' }}>
-									&nbsp;{countUniqueDonors}
-									&nbsp;
-								</Subline>
-								<LightSubline>
-									{formatMessage(
-										{
-											id: 'label.contributors',
-										},
-										{
-											count: countUniqueDonors,
-										},
-									)}
-								</LightSubline>
-							</div>
+							<ProjectRaised
+								roundDonorsCount={countUniqueDonors}
+							/>
 						)}
 				</>
 			) : (
@@ -176,7 +171,12 @@ const ProjectTotalFundCard = ({ selectedQF }: IProjectTotalFundCardProps) => {
 							<TotalFund>
 								{formatDonation(roundTotalDonation || 0, '$')}
 							</TotalFund>
-							{notDistributedFund && (
+							{!qfRoundHistory?.distributedFundTxHash && (
+								<ProjectRaised
+									roundDonorsCount={roundDonorsCount}
+								/>
+							)}
+							{notDistributedFund ? (
 								<NotDistributedFundContainer>
 									<EstimatedMatchingSection>
 										<Flex $flexDirection='column' gap='8px'>
@@ -198,15 +198,62 @@ const ProjectTotalFundCard = ({ selectedQF }: IProjectTotalFundCardProps) => {
 										</Flex>
 									</EstimatedMatchingSection>
 								</NotDistributedFundContainer>
+							) : (
+								qfRoundHistory?.distributedFundTxHash &&
+								!selectedQF.isActive && (
+									<EstimatedMatchingSection $flexDirection='column'>
+										<Flex $justifyContent='space-between'>
+											<EstimatedMatchingPrice>
+												+{' '}
+												{formatDonation(
+													matchFund,
+													allocatedFundUSDPreferred
+														? '$'
+														: '',
+													locale,
+													!!selectedQFData?.isActive,
+												)}{' '}
+												{!allocatedFundUSDPreferred &&
+													allocatedTokenSymbol}
+											</EstimatedMatchingPrice>
+											<EstimatedMatchingText>
+												{selectedQFData?.isActive
+													? 'Estimated Matching'
+													: 'Matching Funds'}
+											</EstimatedMatchingText>
+										</Flex>
+
+										{qfRoundHistory?.distributedFundTxHash &&
+											!selectedQF.isActive && (
+												<EstimatedMatchingTransaction>
+													<BlockExplorerLink
+														as='a'
+														href={`${
+															config
+																.EVM_NETWORKS_CONFIG[
+																+qfRoundHistory.distributedFundNetwork!
+															]?.blockExplorers
+																?.default.url
+														}
+			/tx/${qfRoundHistory?.distributedFundTxHash}`}
+														target='_blank'
+														size='Big'
+													>
+														View transaction &nbsp;
+														<IconExternalLink
+															size={16}
+														/>
+													</BlockExplorerLink>
+												</EstimatedMatchingTransaction>
+											)}
+									</EstimatedMatchingSection>
+								)
 							)}
-							<div>
-								<LightSubline> Raised from </LightSubline>
-								<Subline style={{ display: 'inline-block' }}>
-									&nbsp;{roundDonorsCount}
-									&nbsp;
-								</Subline>
-								<LightSubline>contributors</LightSubline>
-							</div>
+							{qfRoundHistory?.distributedFundTxHash && (
+								<ProjectRaised
+									roundDonorsCount={roundDonorsCount}
+								/>
+							)}
 						</div>
 					) : (
 						<NoDonation>
@@ -237,7 +284,7 @@ const ProjectTotalFundCard = ({ selectedQF }: IProjectTotalFundCardProps) => {
 
 const BottomSection = styled.div`
 	color: ${neutralColors.gray[700]};
-	margin-top: 40px;
+	margin-top: 30px;
 	width: max-content;
 `;
 
@@ -279,9 +326,21 @@ const EstimatedMatchingSection = styled(Flex)`
 	margin-top: 8px;
 `;
 
-const LightSubline = styled(Subline)`
-	display: inline-block;
-	color: ${neutralColors.gray[700]};
+const EstimatedMatchingTransaction = styled.div`
+	margin-top: 8px;
+	padding-top: 8px;
+	border-top: 1px solid ${neutralColors.gray[300]};
+`;
+
+const EstimatedMatchingPrice = styled(H5)`
+	color: ${semanticColors.jade[600]};
+	font-weight: 700;
+`;
+
+const EstimatedMatchingText = styled(SublineBold)`
+	color: ${semanticColors.jade[600]};
+	font-weight: 600;
+	max-width: 60px;
 `;
 
 const CustomP = styled(P)`
@@ -307,6 +366,16 @@ const NotDistributedDescription = styled(P)`
 
 const NotDistributedFundContainer = styled.div`
 	margin-bottom: 8px;
+`;
+
+const BlockExplorerLink = styled(GLink)`
+	display: flex;
+	align-items: center;
+	width: 100%;
+	color: ${brandColors.pinky[400]};
+	&:hover {
+		color: ${brandColors.pinky[500]};
+	}
 `;
 
 export default ProjectTotalFundCard;
