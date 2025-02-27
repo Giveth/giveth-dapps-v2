@@ -8,12 +8,9 @@ import {
 	ButtonLink,
 	Subline,
 	semanticColors,
-	// B,
-	// IconRocketInSpace16,
 	IconVerifiedBadge16,
 	H5,
 	Flex,
-	IconHelpFilled16,
 	IconGIVBack16,
 } from '@giveth/ui-design-system';
 import Link from 'next/link';
@@ -29,13 +26,12 @@ import { slugToProjectDonate, slugToProjectView } from '@/lib/routeCreators';
 import { ORGANIZATION } from '@/lib/constants/organizations';
 import { mediaQueries } from '@/lib/constants/constants';
 import { ProjectCardUserName } from './ProjectCardUserName';
-import { calculateTotalEstimatedMatching, getActiveRound } from '@/helpers/qf';
-import { formatDonation } from '@/helpers/number';
+import { getActiveRound } from '@/helpers/qf';
 import { RoundNotStartedModal } from './RoundNotStartedModal';
-import { TooltipContent } from '@/components/modals/HarvestAll.sc';
-import { IconWithTooltip } from '@/components/IconWithToolTip';
 import { FETCH_RECURRING_DONATIONS_BY_DATE } from '@/apollo/gql/gqlProjects';
 import { client } from '@/apollo/apolloClient';
+import { ProjectCardTotalRaised } from './ProjectCardTotalRaised';
+import { ProjectCardTotalRaisedQF } from './ProjectCardTotalRaisedQF';
 
 const cardRadius = '12px';
 const imgHeight = '226px';
@@ -78,7 +74,7 @@ const ProjectCard = (props: IProjectCard) => {
 		latestUpdateCreationDate,
 		countUniqueDonors,
 		qfRounds,
-		estimatedMatching,
+		countUniqueDonorsForActiveQfRound,
 	} = project;
 	const [recurringDonationSumInQF, setRecurringDonationSumInQF] = useState(0);
 	const [isHover, setIsHover] = useState(false);
@@ -91,17 +87,9 @@ const ProjectCard = (props: IProjectCard) => {
 	const { formatMessage, formatRelativeTime, locale } = useIntl();
 	const router = useRouter();
 
-	const { allProjectsSum, matchingPool, projectDonationsSqrtRootSum } =
-		estimatedMatching || {};
-
 	const { activeStartedRound, activeQFRound } = getActiveRound(qfRounds);
 	const hasFooter = activeStartedRound || verified || isGivbackEligible;
 	const showVerifiedBadge = verified || isGivbackEligible;
-	const {
-		allocatedFundUSDPreferred,
-		allocatedFundUSD,
-		allocatedTokenSymbol,
-	} = activeQFRound || {};
 
 	const projectLink = slugToProjectView(slug);
 	const donateLink = slugToProjectDonate(slug);
@@ -152,6 +140,13 @@ const ProjectCard = (props: IProjectCard) => {
 
 		calculateTotalAmountStreamed();
 	}, [props]);
+
+	console.log(
+		'countUniqueDonorsForActiveQfRound',
+		countUniqueDonorsForActiveQfRound,
+	);
+
+	console.log('countUniqueDonors', countUniqueDonors);
 
 	return (
 		// </Link>
@@ -225,109 +220,27 @@ const ProjectCard = (props: IProjectCard) => {
 				>
 					<Description>{descriptionSummary}</Description>
 					<PaddedRow $justifyContent='space-between'>
-						<Flex $flexDirection='column' gap='4px'>
-							<PriceText>
-								{formatDonation(
-									(activeStartedRound
-										? sumDonationValueUsdForActiveQfRound // TODO: add recurring donation amount
-										: totalDonations) || 0,
-									'$',
-									locale,
-								)}
-							</PriceText>
-							{activeStartedRound ? (
-								<>
-									<Subline color={neutralColors.gray[700]}>
-										{formatMessage({
-											id: 'label.amount_raised_in_this_round',
-										})}
-									</Subline>
-									<AmountRaisedText>
-										{formatMessage({
-											id: 'label.total_raised',
-										}) + ' '}
-										<span>
-											{formatDonation(
-												totalDonations || 0,
-												'$',
-												locale,
-											)}
-										</span>
-									</AmountRaisedText>
-								</>
-							) : (
-								<AmountRaisedText>
-									{formatMessage({
-										id: 'label.total_amount_raised',
-									})}
-								</AmountRaisedText>
-							)}
-
-							{!activeStartedRound && (
-								<div>
-									<LightSubline>
-										{formatMessage({
-											id: 'label.raised_from',
-										})}{' '}
-									</LightSubline>
-									<Subline
-										style={{ display: 'inline-block' }}
-									>
-										&nbsp;
-										{countUniqueDonors}
-										&nbsp;
-									</Subline>
-									<LightSubline>
-										{formatMessage(
-											{
-												id: 'label.contributors',
-											},
-											{
-												count: countUniqueDonors,
-											},
-										)}
-									</LightSubline>
-								</div>
-							)}
-						</Flex>
+						{!activeStartedRound && (
+							<ProjectCardTotalRaised
+								activeStartedRound={!!activeStartedRound}
+								totalDonations={totalDonations || 0}
+								sumDonationValueUsdForActiveQfRound={
+									sumDonationValueUsdForActiveQfRound || 0
+								}
+								countUniqueDonors={countUniqueDonors || 0}
+							/>
+						)}
 						{activeStartedRound && (
-							<Flex $flexDirection='column' gap='6px'>
-								<EstimatedMatchingPrice>
-									{formatDonation(
-										calculateTotalEstimatedMatching(
-											projectDonationsSqrtRootSum,
-											allProjectsSum,
-											allocatedFundUSDPreferred
-												? allocatedFundUSD
-												: matchingPool,
-											activeStartedRound?.maximumReward,
-										),
-										allocatedFundUSDPreferred ? '$' : '',
-										locale,
-										true,
-									)}
-									{allocatedFundUSDPreferred
-										? ''
-										: ` ${allocatedTokenSymbol}`}
-								</EstimatedMatchingPrice>
-								<EstimatedMatching>
-									<span>
-										{formatMessage({
-											id: 'label.estimated_matching',
-										})}
-									</span>
-									<IconWithTooltip
-										icon={<IconHelpFilled16 />}
-										direction='top'
-									>
-										<TooltipContent>
-											{formatMessage({
-												id: 'component.qf-section.tooltip_polygon',
-											})}
-										</TooltipContent>
-									</IconWithTooltip>
-								</EstimatedMatching>
-							</Flex>
+							<ProjectCardTotalRaisedQF
+								activeStartedRound={!!activeStartedRound}
+								totalDonations={totalDonations || 0}
+								sumDonationValueUsdForActiveQfRound={
+									sumDonationValueUsdForActiveQfRound || 0
+								}
+								countUniqueDonors={
+									countUniqueDonorsForActiveQfRound || 0
+								}
+							/>
 						)}
 					</PaddedRow>
 				</Link>
@@ -422,15 +335,6 @@ const PriceText = styled(H5)`
 const LightSubline = styled(Subline)`
 	display: inline-block;
 	color: ${neutralColors.gray[700]};
-`;
-
-const EstimatedMatching = styled(Subline)`
-	display: flex;
-	gap: 5px;
-	color: ${neutralColors.gray[700]};
-	> *:last-child {
-		margin-top: 2px;
-	}
 `;
 
 const VerifiedText = styled(Subline)`
@@ -571,21 +475,6 @@ const ActionButtons = styled(PaddedRow)`
 	margin: 25px 0;
 	gap: 16px;
 	flex-direction: column;
-`;
-
-const EstimatedMatchingPrice = styled(H5)`
-	color: ${semanticColors.jade[500]};
-`;
-
-const AmountRaisedText = styled(Subline)`
-	color: ${neutralColors.gray[700]};
-	background-color: ${neutralColors.gray[300]};
-	padding: 2px 8px;
-	border-radius: 4px;
-	width: fit-content;
-	> span {
-		font-weight: 500;
-	}
 `;
 
 const QFBadge = styled(Subline)`

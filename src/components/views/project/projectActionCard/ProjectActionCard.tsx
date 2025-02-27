@@ -30,7 +30,7 @@ export const ProjectActionCard = () => {
 	return (
 		<ProjectActionCardWrapper
 			$flexDirection='column'
-			$justifyContent='space-evenly'
+			$justifyContent='space-between'
 		>
 			<ProjectActionInnerCard />
 		</ProjectActionCardWrapper>
@@ -63,7 +63,7 @@ const ProjectActionCardWrapper = styled(Flex)`
 	height: 100%;
 	padding-top: 12px;
 	${mediaQueries.tablet} {
-		padding: 16px 24px;
+		padding: 24px 24px;
 	}
 `;
 
