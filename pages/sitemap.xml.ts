@@ -62,6 +62,61 @@ async function generateSiteMap() {
 			  <title>${escapeXml(projectsMetatags.title)}</title>
       	<description>${escapeXml(projectsMetatags.desc)}</description>
      	</url>
+     	<url>
+      	<loc>${URL}/projects/art-and-culture</loc>
+			  <title>${escapeXml(projectsMetatags.title)} - Art & Culture</title>
+      	<description>${escapeXml(projectsMetatags.desc)}</description>
+     	</url>
+			<url>
+      	<loc>${URL}/projects/community</loc>
+			  <title>${escapeXml(projectsMetatags.title)} - Community</title>
+      	<description>${escapeXml(projectsMetatags.desc)}</description>
+     	</url>
+			<url>
+      	<loc>${URL}/projects/economic-and-infrastructure</loc>
+			  <title>${escapeXml(projectsMetatags.title)} - Economic & Infrastructure</title>
+      	<description>${escapeXml(projectsMetatags.desc)}</description>
+     	</url>
+			<url>
+      	<loc>${URL}/projects/education</loc>
+			  <title>${escapeXml(projectsMetatags.title)} - Education</title>
+      	<description>${escapeXml(projectsMetatags.desc)}</description>
+     	</url>
+			<url>
+      	<loc>${URL}/projects/environment-and-energy</loc>
+			  <title>${escapeXml(projectsMetatags.title)} - Environment & Energy</title>
+      	<description>${escapeXml(projectsMetatags.desc)}</description>
+     	</url>
+			<url>
+      	<loc>${URL}/projects/equality</loc>
+			  <title>${escapeXml(projectsMetatags.title)} - Equality</title>
+      	<description>${escapeXml(projectsMetatags.desc)}</description>
+     	</url>
+			<url>
+      	<loc>${URL}/projects/finance</loc>
+			  <title>${escapeXml(projectsMetatags.title)} - Finance</title>
+      	<description>${escapeXml(projectsMetatags.desc)}</description>
+     	</url>
+			<url>
+      	<loc>${URL}/projects/health-and-wellness</loc>
+			  <title>${escapeXml(projectsMetatags.title)} - Health & Wellness</title>
+      	<description>${escapeXml(projectsMetatags.desc)}</description>
+     	</url>
+			<url>
+      	<loc>${URL}/projects/nature</loc>
+			  <title>${escapeXml(projectsMetatags.title)} - Nature</title>
+      	<description>${escapeXml(projectsMetatags.desc)}</description>
+     	</url>
+			<url>
+      	<loc>${URL}/projects/ngo</loc>
+			  <title>${escapeXml(projectsMetatags.title)} - NGO</title>
+      	<description>${escapeXml(projectsMetatags.desc)}</description>
+     	</url>
+			<url>
+      	<loc>${URL}/projects/other</loc>
+			  <title>${escapeXml(projectsMetatags.title)} - Other</title>
+      	<description>${escapeXml(projectsMetatags.desc)}</description>
+     	</url>
     	<url>
       	<loc>${URL}/giveconomy</loc>
 			  <title>${escapeXml(giveconomyMetatags.title)}</title>
@@ -76,11 +131,6 @@ async function generateSiteMap() {
       	<loc>${URL}/givfarm</loc>
 			  <title>${escapeXml(givfarmMetatags.title)}</title>
       	<description>${escapeXml(givfarmMetatags.desc)}</description>
-     	</url>
-    	<url>
-      	<loc>${URL}/about</loc>
-			  <title>${escapeXml(aboutMetatags.title)}</title>
-      	<description>${escapeXml(aboutMetatags.desc)}</description>
      	</url>
     	<url>
       	<loc>${URL}/about</loc>
@@ -116,16 +166,6 @@ async function generateSiteMap() {
       	<loc>${URL}/faq</loc>
 			  <title>${escapeXml(faqMetatags.title)}</title>
       	<description>${escapeXml(faqMetatags.desc)}</description>
-     	</url>
-    	<url>
-      	<loc>${URL}/create</loc>
-			  <title>${escapeXml(createProjectMetatags.title)}</title>
-      	<description>${escapeXml(createProjectMetatags.desc)}</description>
-     	</url>
-    	<url>
-      	<loc>${URL}/claim</loc>
-			  <title>${escapeXml(claimMetatags.title)}</title>
-      	<description>${escapeXml(claimMetatags.desc)}</description>
      	</url>
     	<url>
       	<loc>${URL}/nft</loc>
