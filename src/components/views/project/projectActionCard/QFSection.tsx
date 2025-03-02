@@ -204,9 +204,6 @@ const QFSection: FC<IQFSectionProps> = ({ projectData }) => {
 							})}
 						</b>
 					</Description>
-					<TabletEstimatedMatchingContainer>
-						<EstimatedMatchingSection />
-					</TabletEstimatedMatchingContainer>
 				</DonateInfo>
 			) : (
 				<div>
@@ -234,10 +231,6 @@ const QFSection: FC<IQFSectionProps> = ({ projectData }) => {
 					</TabletEstimatedMatchingContainer>
 				</div>
 			)}
-			<DefaultEstimatedMatchingContainer>
-				<EstimatedMatchingSection />
-			</DefaultEstimatedMatchingContainer>
-
 			{!isOnDonatePage && (
 				<ChartContainer>
 					<Flex $justifyContent='space-between'>
@@ -360,6 +353,7 @@ const ContributionsContainer = styled.div`
 `;
 
 const ChartContainer = styled.div`
+	margin-top: 3.5em;
 	@media (min-width: ${deviceSize.tablet}px) and (max-width: ${deviceSize.laptopS}px) {
 		flex-grow: 0.5;
 		min-height: 240px;
