@@ -130,7 +130,12 @@ export const ProjectPublicActions = () => {
 					</SublineBold>
 				</AlreadyDonatedWrapper>
 			)}
-			<Link id='Donate_Project' href={slugToProjectDonate(slug || '')}>
+			<Link
+				id='Donate_Project'
+				href={isActive ? slugToProjectDonate(slug || '') : '#'}
+				onClick={e => !isActive && e.preventDefault()}
+				style={{ pointerEvents: !isActive ? 'none' : 'auto' }}
+			>
 				<DonateButton
 					label={formatMessage({ id: 'label.donate' })}
 					disabled={!isActive}
