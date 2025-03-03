@@ -12,7 +12,6 @@ import {
 	OutlineButton,
 	B,
 } from '@giveth/ui-design-system';
-import ExternalLink from '@/components/ExternalLink';
 import links from '@/lib/constants/links';
 import { useProjectContext } from '@/context/project.context';
 import { Shadow } from '@/components/styled-components/Shadow';
@@ -45,13 +44,6 @@ const ProjectDevouchBox = () => {
 						{formatMessage({
 							id: 'label.devouch.description.vouch_this_project',
 						})}{' '}
-						<ExternalLink href={links.PROJECT_VERIFICATION}>
-							<LearnMore>
-								{formatMessage({
-									id: 'label.devouch.learn_more_about_devouch',
-								})}
-							</LearnMore>
-						</ExternalLink>
 					</Description>
 				</TextContent>
 			</Content>
@@ -118,15 +110,6 @@ const Title = styled(B)`
 const Description = styled(P)`
 	max-width: 859px;
 	color: ${neutralColors.gray[700]};
-`;
-
-const LearnMore = styled.span`
-	color: ${brandColors.pinky[500]};
-	text-decoration: none;
-	font-size: 14px;
-	&:hover {
-		text-decoration: underline;
-	}
 `;
 
 const ButtonWrapper = styled.a`

@@ -262,7 +262,7 @@ const ProjectCard = (props: IProjectCard) => {
 										/>
 										<VerifiedText>
 											{formatMessage({
-												id: 'label.vouched',
+												id: 'label.verified',
 											})}
 										</VerifiedText>
 									</Flex>
