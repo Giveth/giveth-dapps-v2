@@ -28,7 +28,7 @@ export const givstreamMetatags = {
 
 export const givpowerMetatags = {
 	title: 'GIVpower: Boost Projects with GIVpower',
-	desc: 'With GIVpower, you can support vouched projects, while earning rewards on your GIV.',
+	desc: 'With GIVpower, you can support verified projects, while earning rewards on your GIV.',
 	image: 'https://i.ibb.co/HTbdCdd/Thumbnail.png',
 	url: 'https://giveth.io/givpower',
 };

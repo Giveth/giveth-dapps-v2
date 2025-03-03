@@ -16,7 +16,7 @@ export const ProjectCardNotification = () => {
 	const isVerified = projectData?.verified;
 	const isGivbackEligible = projectData?.isGivbackEligible;
 
-	// When project is VOUCHED (verified=true), not givbacks eligible AND has incomplete givbacks form we should show this notification
+	// When project is VERIFIED (verified=true), not givbacks eligible AND has incomplete givbacks form we should show this notification
 	const isOwnerVerifiedNotEligibleIncompleteForm =
 		isVerified &&
 		isAdmin &&
