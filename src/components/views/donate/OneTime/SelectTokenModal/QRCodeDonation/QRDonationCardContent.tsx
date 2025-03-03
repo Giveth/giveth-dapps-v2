@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React, { FC, useEffect } from 'react';
 import { useIntl } from 'react-intl';
 import {
 	neutralColors,
@@ -18,6 +18,7 @@ import CopyConatainer from './CopyConatainer';
 import InlineToast, { EToastType } from '@/components/toasts/InlineToast';
 import { IWalletAddress } from '@/apollo/types/types';
 import { Spinner } from '@/components/Spinner';
+import { generateStellarPaymentQRCode } from '@/hooks/useQRCodeDonation';
 
 interface IQRDonationCardContentProps {
 	tokenData?: IProjectAcceptedToken;
@@ -87,6 +88,23 @@ const QRDonationCardContent: FC<IQRDonationCardContentProps> = ({
 }) => {
 	const { formatMessage } = useIntl();
 
+	const [qrData, setQRData] = React.useState<string | null>(null);
+
+	useEffect(() => {
+		const generateQRImage = async () => {
+			const qrImg = await generateStellarPaymentQRCode(
+				projectAddress?.address ?? '',
+				draftDonationData?.amount ?? 0,
+				projectAddress?.memo ?? '',
+				draftDonationData?.id,
+			);
+
+			setQRData(qrImg);
+		};
+
+		generateQRImage();
+	}, [projectAddress, draftDonationData]);
+
 	if (draftDonationLoading) {
 		return (
 			<Flex
@@ -132,7 +150,7 @@ const QRDonationCardContent: FC<IQRDonationCardContentProps> = ({
 					})}
 				</B>
 				<ImageComponent
-					dataUrl={draftDonationData?.qrCodeDataUrl ?? ''}
+					dataUrl={qrData ?? ''}
 					isExpired={
 						!!qrDonationStatus &&
 						['expired', 'failed'].includes(qrDonationStatus)
