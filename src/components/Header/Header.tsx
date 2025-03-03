@@ -60,9 +60,10 @@ import { EScrollDir, useScrollDetection } from '@/hooks/useScrollDetection';
 export interface IHeader {
 	theme?: ETheme;
 	show?: boolean;
+	showQFBanner?: boolean;
 }
 
-const Header: FC<IHeader> = () => {
+const Header: FC<IHeader> = ({ showQFBanner }) => {
 	const [showBackBtn, setShowBackBtn] = useState(false);
 
 	const [showSidebar, sidebarCondition, openSidebar, closeSidebar] =
@@ -155,6 +156,7 @@ const Header: FC<IHeader> = () => {
 			$alignItems='center'
 			$baseTheme={theme}
 			$show={scrollDir !== EScrollDir.Down}
+			$showQFBanner={showQFBanner}
 		>
 			<Flex>
 				{showBackBtn ? (

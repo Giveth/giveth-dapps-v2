@@ -16,13 +16,17 @@ import { ETheme } from '@/features/general/general.slice';
 interface IStyledHeader extends IHeader {
 	$baseTheme?: ETheme;
 	$show?: boolean;
+	$showQFBanner?: boolean;
 }
 
 export const StyledHeader = styled(Flex)<IStyledHeader>`
 	position: fixed;
 	left: 0;
 	right: 0;
-	top: ${props => (props.$show ? 0 : '-100px')};
+	top: ${props => {
+		if (!props.$show) return '-100px';
+		return props.$showQFBanner ? '53px' : '0';
+	}};
 	z-index: ${zIndex.HEADER};
 	transition: top 0.3s ease;
 	padding: 16px 24px;
