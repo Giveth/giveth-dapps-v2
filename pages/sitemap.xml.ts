@@ -14,8 +14,6 @@ import {
 	partnershipMetatags,
 	joinMetatags,
 	faqMetatags,
-	createProjectMetatags,
-	claimMetatags,
 	nftMetatags,
 	generalOnboardingMetaTags,
 	projectOnboardingMetaTags,
