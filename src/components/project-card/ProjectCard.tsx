@@ -338,12 +338,10 @@ const LightSubline = styled(Subline)`
 `;
 
 const VerifiedText = styled(Subline)`
-	text-transform: uppercase;
 	color: ${semanticColors.jade[500]};
 `;
 
 const GivbackEligibleText = styled(Subline)`
-	text-transform: uppercase;
 	color: ${brandColors.giv[500]};
 `;
 
