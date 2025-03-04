@@ -273,8 +273,8 @@ const faqContent = (formatMessage: any) => {
 						<FormattedMessage id='page.faq.how_do_i_knnow_projects_get_my_money.content.one' />{' '}
 						(e.g.,{' '}
 						<ExternalLink
-							href='https://etherscan.io'
-							title='etherscan.io'
+							href='https://eth.blockscout.com'
+							title='eth.blockscout.com'
 						/>
 						){' '}
 						<FormattedMessage id='page.faq.how_do_i_knnow_projects_get_my_money.content.two' />
