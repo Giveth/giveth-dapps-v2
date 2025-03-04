@@ -34,6 +34,7 @@ import {
 import { ChainType } from '@/types/config';
 import { signOut } from '@/features/user/user.thunks';
 import { wagmiConfig } from '@/wagmiConfigs';
+import { getEthersProvider } from '@/helpers/ethers';
 
 const { SOLANA_CONFIG } = config;
 const solanaAdapter = SOLANA_CONFIG?.adapterNetwork;
@@ -59,6 +60,7 @@ interface IGeneralWalletContext {
 	isOnSolana: boolean;
 	isOnEVM: boolean;
 	setPendingNetworkId: (id: number | null) => void;
+	isContractWallet: boolean;
 }
 // Create the context
 export const GeneralWalletContext = createContext<IGeneralWalletContext>({
@@ -78,6 +80,7 @@ export const GeneralWalletContext = createContext<IGeneralWalletContext>({
 	isOnSolana: false,
 	isOnEVM: false,
 	setPendingNetworkId: () => {},
+	isContractWallet: false,
 });
 
 const getPhantomSolanaProvider = () => {
@@ -106,6 +109,7 @@ export const GeneralWalletProvider: React.FC<{
 		Chain | WalletAdapterNetwork | undefined
 	>(undefined);
 	const [chainName, setChainName] = useState<string | undefined>(undefined);
+	const [isContractWallet, setIsContractWallet] = useState<boolean>(false);
 	const dispatch = useAppDispatch();
 	const { open: openConnectModal } = useWeb3Modal();
 	const router = useRouter();
@@ -124,6 +128,7 @@ export const GeneralWalletProvider: React.FC<{
 		isConnecting: evmIsConnecting,
 	} = useAccount();
 	const { chain: evmChain } = useAccount();
+
 	const { disconnect: ethereumWalletDisconnect } = useDisconnect();
 	const nonFormattedEvBalance = useBalance({ address: evmAddress });
 	const [solanaBalance, setSolanaBalance] = useState<number>();
@@ -214,13 +219,22 @@ export const GeneralWalletProvider: React.FC<{
 		if (evmAddress && evmChain) {
 			setWalletChainType(ChainType.EVM);
 			setWalletAddress(evmAddress);
+
+			// Check if the connected wallet is a smart contract wallet
+			checkIsContractWallet(evmAddress).then(isContractWallet => {
+				setIsContractWallet(isContractWallet);
+				console.log('Is contract wallet:', isContractWallet);
+			});
 		} else if (publicKey) {
 			setWalletChainType(ChainType.SOLANA);
 			setWalletAddress(publicKey?.toString());
+			// Solana doesn't use ERC-1271, so we set it to false
+			setIsContractWallet(false);
 		} else {
 			setWalletChainType(null);
 			setWalletAddress(null);
 			setBalance(undefined);
+			setIsContractWallet(false); // Reset the state when disconnecting
 		}
 	}, [evmAddress, evmChain, publicKey]);
 
@@ -404,6 +418,34 @@ export const GeneralWalletProvider: React.FC<{
 		}, 100); // wait 100 milliseconds (0.1 seconds) before dispatching, because otherwise the modal will not show
 	};
 
+	// Function to check if a wallet is a smart contract wallet
+	const checkIsContractWallet = async (address: string): Promise<boolean> => {
+		try {
+			if (!address || !evmChain) return false;
+
+			// First check if the address has code (is a contract)
+			const connector = wagmiConfig.connectors[0];
+			if (!connector) return false;
+
+			const provider = await getEthersProvider(wagmiConfig);
+			if (!provider) return false;
+
+			const code = await provider.getCode(address);
+
+			// If no code, it's an EOA (not a contract wallet)
+			if (!code || code === '0x') return false;
+
+			// If it has code, it's a contract wallet
+			return true;
+		} catch (error) {
+			console.error(
+				'Error checking if wallet is a contract wallet:',
+				error,
+			);
+			return false;
+		}
+	};
+
 	const contextValue: IGeneralWalletContext = {
 		walletChainType,
 		signMessage,
@@ -422,6 +464,7 @@ export const GeneralWalletProvider: React.FC<{
 		isOnSolana,
 		isOnEVM,
 		setPendingNetworkId,
+		isContractWallet,
 	};
 
 	// Render the provider component with the provided context value

@@ -2,7 +2,7 @@ import { FC, useEffect, useState, useCallback } from 'react';
 import styled from 'styled-components';
 import { useIntl } from 'react-intl';
 import { useWeb3Modal } from '@web3modal/wagmi/react';
-import { connect } from '@wagmi/core';
+import { connect, switchChain } from '@wagmi/core';
 
 import {
 	brandColors,
@@ -73,7 +73,8 @@ export const SignWithWalletModal: FC<IProps> = ({
 	const isSafeEnv = useIsSafeEnvironment();
 
 	const chainId = chain?.id;
-	const { walletAddress, signMessage, walletChainType } = useGeneralWallet();
+	const { walletAddress, signMessage, walletChainType, isContractWallet } =
+		useGeneralWallet();
 	const router = useRouter();
 	const { isAnimating, closeModal: _closeModal } =
 		useModalAnimation(setShowModal);
@@ -185,6 +186,12 @@ export const SignWithWalletModal: FC<IProps> = ({
 		}
 		setLoading(true);
 		try {
+			if (walletChainType === ChainType.EVM && isContractWallet) {
+				console.log('Switching chain to Polygon');
+				await switchChain(wagmiConfig, {
+					chainId: 137,
+				});
+			}
 			const signature = await dispatch(
 				signToGetToken({
 					address,
