@@ -52,7 +52,7 @@ const ProjectGIVbackToast = () => {
 	const isPublicVerifiedNotEligible =
 		isVerified && !isAdmin && !isGivbackEligible;
 
-	// When project is VOUCHED (verified=true), not givbacks eligible AND has incomplete givbacks form we should show this notification
+	// When project is VERIFIED (verified=true), not givbacks eligible AND has incomplete givbacks form we should show this notification
 	const isOwnerVerifiedNotEligible =
 		isVerified &&
 		isAdmin &&

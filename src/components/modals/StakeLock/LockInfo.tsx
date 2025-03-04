@@ -91,7 +91,7 @@ const LockInfo: FC<ILockInfo> = ({ round, amount, farmIsNotStarted }) => {
 							direction={'right'}
 						>
 							<LockInfoTooltip>
-								GIVpower allows you to support vouched projects
+								GIVpower allows you to support verified projects
 								on Giveth while earning rewards.
 							</LockInfoTooltip>
 						</IconWithTooltip>
