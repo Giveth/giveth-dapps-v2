@@ -141,13 +141,6 @@ const ProjectCard = (props: IProjectCard) => {
 		calculateTotalAmountStreamed();
 	}, [props]);
 
-	console.log(
-		'countUniqueDonorsForActiveQfRound',
-		countUniqueDonorsForActiveQfRound,
-	);
-
-	console.log('countUniqueDonors', countUniqueDonors);
-
 	return (
 		// </Link>
 		<Wrapper
