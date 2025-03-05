@@ -44,7 +44,7 @@ const ProjectBadges = () => {
 					icon={
 						<ProjectBadge
 							badgeText={formatMessage({
-								id: 'label.vouched',
+								id: 'label.verified',
 							})}
 							wrapperColor={semanticColors.jade[700]}
 							BadgeIcon={<IconVerifiedBadge16 />}

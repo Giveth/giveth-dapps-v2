@@ -141,13 +141,6 @@ const ProjectCard = (props: IProjectCard) => {
 		calculateTotalAmountStreamed();
 	}, [props]);
 
-	console.log(
-		'countUniqueDonorsForActiveQfRound',
-		countUniqueDonorsForActiveQfRound,
-	);
-
-	console.log('countUniqueDonors', countUniqueDonors);
-
 	return (
 		// </Link>
 		<Wrapper
@@ -262,7 +255,7 @@ const ProjectCard = (props: IProjectCard) => {
 										/>
 										<VerifiedText>
 											{formatMessage({
-												id: 'label.vouched',
+												id: 'label.verified',
 											})}
 										</VerifiedText>
 									</Flex>
