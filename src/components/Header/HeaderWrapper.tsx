@@ -1,6 +1,7 @@
 import dynamic from 'next/dynamic';
 import Image from 'next/image';
 import Link from 'next/link';
+import { useState } from 'react';
 import { Flex } from '@giveth/ui-design-system';
 import { useAppSelector } from '@/features/hooks';
 import {
@@ -11,6 +12,7 @@ import {
 	StyledHeader,
 } from './Header.sc';
 import Routes from '@/lib/constants/Routes';
+import QFAnnouncementBanner from '@/components/views/homepage/QFAnnouncementBanner';
 
 const Header = dynamic(() => import('./Header'), {
 	loading: () => <HeaderLoading />,
@@ -47,10 +49,13 @@ const HeaderLoading = () => {
 
 export const HeaderWrapper = () => {
 	const showHeader = useAppSelector(state => state.general.showHeader);
+	const [showQFBanner, setShowQFBanner] = useState(false);
+
 	return showHeader ? (
 		<>
+			<QFAnnouncementBanner onShow={setShowQFBanner} />
 			<HeaderPlaceHolder />
-			<Header />
+			<Header showQFBanner={showQFBanner} />
 		</>
 	) : null;
 };
