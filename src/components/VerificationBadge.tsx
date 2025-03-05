@@ -1,7 +1,7 @@
 import { FC } from 'react';
+import { useIntl } from 'react-intl';
 import { EVerificationStatus } from '@/apollo/types/types';
 import { Badge, EBadgeStatus } from './Badge';
-
 interface IProps {
 	isGivbackEligible?: boolean;
 	verificationStatus?: EVerificationStatus;
@@ -11,6 +11,7 @@ const VerificationBadge: FC<IProps> = ({
 	isGivbackEligible,
 	verificationStatus,
 }) => {
+	const { formatMessage } = useIntl();
 	const verStatus = isGivbackEligible
 		? EVerificationStatus.VERIFIED
 		: verificationStatus;
@@ -18,23 +19,33 @@ const VerificationBadge: FC<IProps> = ({
 	let label, badgeStatus;
 	switch (verStatus) {
 		case EVerificationStatus.REJECTED:
-			label = 'Declined';
+			label = formatMessage({
+				id: 'label.verification_status_backs.declined',
+			});
 			badgeStatus = EBadgeStatus.ERROR;
 			break;
 		case EVerificationStatus.SUBMITTED:
-			label = 'Submitted';
+			label = formatMessage({
+				id: 'label.verification_status_backs.submitted',
+			});
 			badgeStatus = EBadgeStatus.GIVETH;
 			break;
 		case EVerificationStatus.VERIFIED:
-			label = 'Eligible';
+			label = formatMessage({
+				id: 'label.verification_status_backs.eligible',
+			});
 			badgeStatus = EBadgeStatus.SUCCESS;
 			break;
 		case EVerificationStatus.DRAFT:
-			label = 'Incomplete';
+			label = formatMessage({
+				id: 'label.verification_status_backs.incomplete',
+			});
 			badgeStatus = EBadgeStatus.WARNING;
 			break;
 		default:
-			label = 'Ineligible';
+			label = formatMessage({
+				id: 'label.verification_status_backs.ineligible',
+			});
 			badgeStatus = EBadgeStatus.ERROR;
 	}
 	return <Badge status={badgeStatus} label={label} />;
