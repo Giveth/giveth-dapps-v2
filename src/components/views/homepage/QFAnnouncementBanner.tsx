@@ -3,15 +3,18 @@ import styled from 'styled-components';
 import { FlexCenter, IconArrowRight16 } from '@giveth/ui-design-system';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
+import { useIntl } from 'react-intl';
 import Routes from '@/lib/constants/Routes';
 import { useAppSelector } from '@/features/hooks';
 import { getNowUnixMS } from '@/helpers/time';
+import { thousandsSeparator } from '@/lib/helpers';
 
 interface IQFAnnouncementBannerProps {
 	onShow?: (isShowing: boolean) => void;
 }
 
 const QFAnnouncementBanner = ({ onShow }: IQFAnnouncementBannerProps) => {
+	const { formatMessage } = useIntl();
 	const router = useRouter();
 	const shouldShowBanner =
 		router.pathname === Routes.Home ||
@@ -40,13 +43,26 @@ const QFAnnouncementBanner = ({ onShow }: IQFAnnouncementBannerProps) => {
 
 	if (!shouldShowBanner || !isRoundActive) return null;
 
+	const {
+		allocatedFundUSD,
+		allocatedFundUSDPreferred,
+		allocatedTokenSymbol,
+		allocatedFund,
+	} = activeQFRound || {};
+
 	return (
 		<Wrapper>
 			<LinkWrapper href={Routes.AllQFProjects}>
 				<PStyled>
-					💜 <span>{activeQFRound.name}</span> Get your donations
-					amplified by a matching pool of $
-					{activeQFRound.allocatedFundUSD}
+					💜 <span>{activeQFRound.name}</span>{' '}
+					{formatMessage({ id: 'label.donations_amplified' })}
+					{allocatedFundUSDPreferred && '$'}
+					{thousandsSeparator(
+						allocatedFundUSDPreferred
+							? allocatedFundUSD
+							: allocatedFund,
+					) || ' --'}{' '}
+					{!allocatedFundUSDPreferred && allocatedTokenSymbol}
 					<IconArrowRight16 size={20} color='#FF96C6' />
 				</PStyled>
 			</LinkWrapper>
