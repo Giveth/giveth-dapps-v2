@@ -1,10 +1,5 @@
 import styled from 'styled-components';
-import {
-	SublineBold,
-	brandColors,
-	neutralColors,
-  semanticColors,
-} from '@giveth/ui-design-system';
+import { SublineBold, semanticColors } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
 
 interface IProjectVerificationStatus {
