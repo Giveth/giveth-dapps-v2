@@ -25,6 +25,16 @@ export const ProjectsBanner = () => {
 
 	const _mainCategory = selectedMainCategory ?? allCategory;
 
+	console.log('selectedMainCategory', selectedMainCategory);
+
+	const bannerTitle = selectedMainCategory?.title
+		? selectedMainCategory.title
+		: formatMessage({ id: `projects_${_mainCategory.slug}` });
+
+	const bannerDescription = selectedMainCategory?.description
+		? selectedMainCategory.description
+		: formatMessage({ id: `projects_${_mainCategory.slug}_desc` });
+
 	return (
 		<BannerContainer direction='column'>
 			<Image
@@ -37,12 +47,8 @@ export const ProjectsBanner = () => {
 				objectPosition='center'
 				alt={_mainCategory.title}
 			/>
-			<Title weight={700}>
-				{formatMessage({ id: `projects_${_mainCategory.slug}` })}
-			</Title>
-			<Desc>
-				{formatMessage({ id: `projects_${_mainCategory.slug}_desc` })}
-			</Desc>
+			<Title weight={700}>{bannerTitle}</Title>
+			<Desc>{bannerDescription}</Desc>
 		</BannerContainer>
 	);
 };
