@@ -25,8 +25,6 @@ export const ProjectsBanner = () => {
 
 	const _mainCategory = selectedMainCategory ?? allCategory;
 
-	console.log('selectedMainCategory', selectedMainCategory);
-
 	const bannerTitle = selectedMainCategory?.title
 		? selectedMainCategory.title
 		: formatMessage({ id: `projects_${_mainCategory.slug}` });
