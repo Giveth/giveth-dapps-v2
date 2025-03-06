@@ -55,14 +55,16 @@ const QFAnnouncementBanner = ({ onShow }: IQFAnnouncementBannerProps) => {
 			<LinkWrapper href={Routes.AllQFProjects}>
 				<PStyled>
 					💜 <span>{activeQFRound.name}</span>{' '}
-					{formatMessage({ id: 'label.donations_amplified' })}
-					{allocatedFundUSDPreferred && '$'}
-					{thousandsSeparator(
-						allocatedFundUSDPreferred
-							? allocatedFundUSD
-							: allocatedFund,
-					) || ' --'}{' '}
-					{!allocatedFundUSDPreferred && allocatedTokenSymbol}
+					{formatMessage(
+						{ id: 'label.donations_amplified' },
+						{
+							amount: allocatedFundUSDPreferred
+								? '$' + thousandsSeparator(allocatedFundUSD)
+								: thousandsSeparator(allocatedFund) +
+										' ' +
+										allocatedTokenSymbol || ' --',
+						},
+					)}{' '}
 					<IconArrowRight16 size={20} color='#FF96C6' />
 				</PStyled>
 			</LinkWrapper>

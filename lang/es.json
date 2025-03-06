@@ -1772,5 +1772,5 @@
 	"tooltip.withdraw_stream_balance": "Si tiene donaciones recurrentes activas, su saldo disponible para retirar será ligeramente menor que su saldo actual.",
 	"ubi": "RBI",
 	"water-and-sanitation": "Agua & Saneamiento",
-	"label.donations_amplified": "Haz que tus donaciones se amplifiquen con un fondo de igualación de "
+	"label.donations_amplified": "Haz que tus donaciones se amplifiquen con un fondo de igualación de {amount}"
 }
