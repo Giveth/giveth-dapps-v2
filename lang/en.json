@@ -1772,5 +1772,5 @@
 	"tooltip.withdraw_stream_balance": "If you have active recurring donations your available stream balance to withdraw will be slightly less than your actual balance.",
 	"ubi": "UBI",
 	"water-and-sanitation": "Water & Sanitation",
-	"label.donations_amplified": "Get your donations amplified by a matching pool of "
+	"label.donations_amplified": "Get your donations amplified by a {amount} matching pool"
 }
