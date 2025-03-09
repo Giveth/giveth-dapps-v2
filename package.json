@@ -33,6 +33,7 @@
 		"@stellar/stellar-sdk": "^12.2.0",
 		"@superfluid-finance/sdk-core": "^0.7.0",
 		"@tanstack/react-query": "^5.45.1",
+		"@thirdweb-dev/react": "^4.9.4",
 		"@thirdweb-dev/wagmi-adapter": "^0.2.21",
 		"@vercel/speed-insights": "^1.0.9",
 		"@web3auth/sign-in-with-solana": "^3.0.0",
