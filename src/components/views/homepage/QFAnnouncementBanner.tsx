@@ -78,6 +78,7 @@ const PStyled = styled.div`
 	gap: 4px;
 	font-weight: 600;
 	font-size: 14px;
+	text-align: center;
 	color: #ff96c6;
 	& span {
 		display: inline-block;
@@ -105,7 +106,11 @@ const LinkWrapper = styled(Link)`
 `;
 
 const Wrapper = styled(FlexCenter)`
+	position: fixed;
+	top: 0;
+	left: 0;
 	width: 100%;
+	display: none;
 	flex-wrap: wrap;
 	padding: 16px;
 	text-align: center;
@@ -115,6 +120,9 @@ const Wrapper = styled(FlexCenter)`
 	z-index: 99;
 	position: sticky;
 	cursor: pointer;
+	@media (min-width: 768px) {
+		display: flex;
+	}
 `;
 
 export default QFAnnouncementBanner;
