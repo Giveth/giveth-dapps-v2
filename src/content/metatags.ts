@@ -28,7 +28,7 @@ export const givstreamMetatags = {
 
 export const givpowerMetatags = {
 	title: 'GIVpower: Boost Projects with GIVpower',
-	desc: 'With GIVpower, you can support vouched projects, while earning rewards on your GIV.',
+	desc: 'With GIVpower, you can support verified projects, while earning rewards on your GIV.',
 	image: 'https://i.ibb.co/HTbdCdd/Thumbnail.png',
 	url: 'https://giveth.io/givpower',
 };
@@ -38,6 +38,13 @@ export const projectsMetatags = {
 	desc: 'Support for-good projects, nonprofits & charities with crypto donations. Give directly with zero added fees. Get rewarded when you donate to GIVbacks eligible projects!',
 	image: 'https://giveth.mypinata.cloud/ipfs/QmQ9sfdevs9vS7czBXBfDaRRPhU8a6T5gXxF3NDGSnQe1c',
 	url: 'https://giveth.io/projects',
+};
+
+export const projectsQFRoundMetatags = {
+	title: 'Empower Change: Support Impactful Projects with Crypto',
+	desc: 'Make a difference by donating crypto to meaningful projects, nonprofits, and charities. Enjoy zero added fees and earn rewards when you support GIVbacks-eligible initiatives!',
+	image: 'https://giveth.mypinata.cloud/ipfs/QmQ9sfdevs9vS7czBXBfDaRRPhU8a6T5gXxF3NDGSnQe1c',
+	url: 'https://giveth.io/qf/all',
 };
 
 export const givbacksMetatags = {

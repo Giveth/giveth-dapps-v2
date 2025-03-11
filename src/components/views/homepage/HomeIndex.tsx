@@ -1,25 +1,24 @@
 import { FC, Fragment, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { neutralColors } from '@giveth/ui-design-system';
-import HomeFromBlog from './HomeFromBlog';
+import HomeFromBlog from '@/components/views/homepage/HomeFromBlog';
 import WhyGiveth from '@/components/views/homepage/whyGiveth';
 import ProjectsCampaignBlock from '@/components/views/homepage/ProjectsCampaignBlock';
-import IntroBlock from './introBlock';
-import VideoBlock from './videoBlock';
-import AboutGiveconomy from './aboutGiveconomy';
-import { IHomeRoute } from '../../../../pages';
+import IntroBlock from '@/components/views/homepage/introBlock';
+import VideoBlock from '@/components/views/homepage/videoBlock';
+import AboutGiveconomy from '@/components/views/homepage/aboutGiveconomy';
 import InformationBlock from '@/components/views/homepage/InformationBlock';
-import { CampaignsBlock } from './campaignsBlock/CampaignsBlock';
-import HomePartners from './partners';
+import { CampaignsBlock } from '@/components/views/homepage/campaignsBlock/CampaignsBlock';
+import HomePartners from '@/components/views/homepage/partners';
 import GetUpdates from '@/components/GetUpdates';
-import { ProjectUpdatesBlock } from './projectUpdatesBlock/ProjectUpdatesBlock';
+import { ProjectUpdatesBlock } from '@/components/views/homepage/projectUpdatesBlock/ProjectUpdatesBlock';
 import { useAppSelector } from '@/features/hooks';
 import { client } from '@/apollo/apolloClient';
 import { FETCH_CAMPAIGNS_AND_FEATURED_PROJECTS } from '@/apollo/gql/gqlHomePage';
-import { LatestUpdatesBlock } from './latestUpdates/LatestUpdatesBlock';
+import { LatestUpdatesBlock } from '@/components/views/homepage/latestUpdates/LatestUpdatesBlock';
 import StorageLabel from '@/lib/localStorage';
-import TorusBanner from './TorusBanner';
-// import AnnouncementBanner from './AnnouncementBanner';
+import TorusBanner from '@/components/views/homepage/TorusBanner';
+import { IHomeRoute } from '../../../../pages';
 
 const HomeIndex: FC<IHomeRoute> = props => {
 	const {
@@ -66,7 +65,6 @@ const HomeIndex: FC<IHomeRoute> = props => {
 
 	return (
 		<Wrapper>
-			{/*	<AnnouncementBanner /> */}
 			{showTorusBanner && <TorusBanner />}
 			<IntroBlock />
 			<Separator />
