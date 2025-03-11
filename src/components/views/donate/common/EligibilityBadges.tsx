@@ -66,7 +66,7 @@ const EligibilityBadges: FC<IEligibilityBadges> = props => {
 		isProjectGivbacksEligible &&
 		donationUsdValue >= GIVBACKS_DONATION_QUALIFICATION_VALUE_USD;
 
-	// ✅ Define messageId BEFORE rendering to avoid issues
+	//  Define messageId BEFORE rendering to avoid issues
 	const messageId = isDonationMatched
 		? 'page.donate.donations_will_be_matched'
 		: !isOnQFEligibleNetworks && activeStartedRound
@@ -77,7 +77,7 @@ const EligibilityBadges: FC<IEligibilityBadges> = props => {
 
 	return isConnected ? (
 		<EligibilityBadgeWrapper style={style}>
-			{/* ✅ Prevents QF Badge from rendering when !isOnQFEligibleNetworks && !activeStartedRound */}
+			{/* Prevents QF Badge from rendering when !isOnQFEligibleNetworks && !activeStartedRound */}
 			{!(isOnQFEligibleNetworks || activeStartedRound) ? null : (
 				<BadgesBase
 					warning={qfEligibleWarning}
