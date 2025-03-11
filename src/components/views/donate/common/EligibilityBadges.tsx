@@ -41,11 +41,11 @@ const EligibilityBadges: FC<IEligibilityBadges> = props => {
 	const isStellar = router.query.chain === ChainType.STELLAR.toLowerCase();
 	const isTokenGivbacksEligible = token?.isGivbackEligible;
 	const isProjectGivbacksEligible = !!isGivbackEligible;
+
 	const networkId = isStellar
 		? config.STELLAR_NETWORK_NUMBER
-		: (chain as Chain)?.id
-			? (chain as Chain)?.id
-			: config.SOLANA_CONFIG.networkId;
+		: (chain as Chain)?.id || config.SOLANA_CONFIG.networkId;
+
 	const isOnQFEligibleNetworks =
 		activeStartedRound?.eligibleNetworks?.includes(networkId || 0);
 	const decimals = isStellar ? 18 : token?.decimals || 18;
@@ -66,9 +66,19 @@ const EligibilityBadges: FC<IEligibilityBadges> = props => {
 		isProjectGivbacksEligible &&
 		donationUsdValue >= GIVBACKS_DONATION_QUALIFICATION_VALUE_USD;
 
+	//  Define messageId BEFORE rendering to avoid issues
+	const messageId = isDonationMatched
+		? 'page.donate.donations_will_be_matched'
+		: !isOnQFEligibleNetworks && activeStartedRound
+			? 'page.donate.network_not_eligible_for_qf'
+			: isOnQFEligibleNetworks && activeStartedRound
+				? 'page.donate.unlocks_matching_funds'
+				: null; // Prevents invalid id values
+
 	return isConnected ? (
 		<EligibilityBadgeWrapper style={style}>
-			{activeQFRound && !activeStartedRound ? null : (
+			{/* Prevents QF Badge from rendering when !isOnQFEligibleNetworks && !activeStartedRound */}
+			{!(isOnQFEligibleNetworks || activeStartedRound) ? null : (
 				<BadgesBase
 					warning={qfEligibleWarning}
 					active={isDonationMatched}
@@ -78,20 +88,16 @@ const EligibilityBadges: FC<IEligibilityBadges> = props => {
 					) : (
 						<IconQFNotEligible24 />
 					)}
-					{formatMessage(
-						{
-							id: isDonationMatched
-								? 'page.donate.donations_will_be_matched'
-								: !isOnQFEligibleNetworks
-									? 'page.donate.network_not_eligible_for_qf'
-									: 'page.donate.unlocks_matching_funds',
-						},
-						{
-							value: activeStartedRound?.minimumValidUsdValue,
-							network:
-								config.NETWORKS_CONFIG_WITH_ID[networkId]?.name,
-						},
-					)}
+					{messageId &&
+						formatMessage(
+							{ id: messageId },
+							{
+								value: activeStartedRound?.minimumValidUsdValue,
+								network:
+									config.NETWORKS_CONFIG_WITH_ID[networkId]
+										?.name,
+							},
+						)}
 				</BadgesBase>
 			)}
 
