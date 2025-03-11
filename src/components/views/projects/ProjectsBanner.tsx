@@ -25,6 +25,9 @@ export const ProjectsBanner = () => {
 
 	const _mainCategory = selectedMainCategory ?? allCategory;
 
+	// It wont show title and description from the database because
+	// we are using here on the FE translations
+
 	return (
 		<BannerContainer direction='column'>
 			<Image
