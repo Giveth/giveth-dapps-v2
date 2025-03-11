@@ -20,6 +20,7 @@ import {
 	donorOnboardingMetaTags,
 	giveconomyOnboardingMetaTags,
 	archivedQFRoundsMetaTags,
+	projectsQFRoundMetatags,
 } from '@/content/metatags';
 import { escapeXml } from '@/helpers/xml';
 import { FETCH_LAST_SITEMAP_URL } from '@/apollo/gql/gqlSitemap';
@@ -62,7 +63,7 @@ async function generateSiteMap() {
      	</url>
      	<url>
       	<loc>${URL}/projects/art-and-culture</loc>
-			  <title>${escapeXml(projectsMetatags.title)} - Art & Culture</title>
+			  <title>${escapeXml(projectsMetatags.title)} - Art &amp; Culture</title>
       	<description>${escapeXml(projectsMetatags.desc)}</description>
      	</url>
 			<url>
@@ -72,7 +73,7 @@ async function generateSiteMap() {
      	</url>
 			<url>
       	<loc>${URL}/projects/economic-and-infrastructure</loc>
-			  <title>${escapeXml(projectsMetatags.title)} - Economic & Infrastructure</title>
+			  <title>${escapeXml(projectsMetatags.title)} - Economic &amp; Infrastructure</title>
       	<description>${escapeXml(projectsMetatags.desc)}</description>
      	</url>
 			<url>
@@ -82,7 +83,7 @@ async function generateSiteMap() {
      	</url>
 			<url>
       	<loc>${URL}/projects/environment-and-energy</loc>
-			  <title>${escapeXml(projectsMetatags.title)} - Environment & Energy</title>
+			  <title>${escapeXml(projectsMetatags.title)} - Environment &amp; Energy</title>
       	<description>${escapeXml(projectsMetatags.desc)}</description>
      	</url>
 			<url>
@@ -97,7 +98,7 @@ async function generateSiteMap() {
      	</url>
 			<url>
       	<loc>${URL}/projects/health-and-wellness</loc>
-			  <title>${escapeXml(projectsMetatags.title)} - Health & Wellness</title>
+			  <title>${escapeXml(projectsMetatags.title)} - Health &amp; Wellness</title>
       	<description>${escapeXml(projectsMetatags.desc)}</description>
      	</url>
 			<url>
@@ -186,9 +187,24 @@ async function generateSiteMap() {
       	<description>${escapeXml(donorOnboardingMetaTags.desc)}</description>
      	</url>
     	<url>
+      	<loc>${URL}/onboarding/donors</loc>
+			  <title>${escapeXml(donorOnboardingMetaTags.title)}</title>
+      	<description>${escapeXml(donorOnboardingMetaTags.desc)}</description>
+     	</url>
+    	<url>
       	<loc>${URL}/donors/giveconomy</loc>
 			  <title>${escapeXml(giveconomyOnboardingMetaTags.title)}</title>
       	<description>${escapeXml(giveconomyOnboardingMetaTags.desc)}</description>
+     	</url>
+    	<url>
+      	<loc>${URL}/onboarding/giveconomy</loc>
+			  <title>${escapeXml(giveconomyOnboardingMetaTags.title)}</title>
+      	<description>${escapeXml(giveconomyOnboardingMetaTags.desc)}</description>
+     	</url>
+    	<url>
+      	<loc>${URL}/qf/all</loc>
+			  <title>${escapeXml(projectsQFRoundMetatags.title)}</title>
+      	<description>${escapeXml(projectsQFRoundMetatags.desc)}</description>
      	</url>
     	<url>
       	<loc>${URL}/qf-archive</loc>

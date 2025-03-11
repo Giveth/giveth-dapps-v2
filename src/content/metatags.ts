@@ -40,6 +40,13 @@ export const projectsMetatags = {
 	url: 'https://giveth.io/projects',
 };
 
+export const projectsQFRoundMetatags = {
+	title: 'Empower Change: Support Impactful Projects with Crypto',
+	desc: 'Make a difference by donating crypto to meaningful projects, nonprofits, and charities. Enjoy zero added fees and earn rewards when you support GIVbacks-eligible initiatives!',
+	image: 'https://giveth.mypinata.cloud/ipfs/QmQ9sfdevs9vS7czBXBfDaRRPhU8a6T5gXxF3NDGSnQe1c',
+	url: 'https://giveth.io/qf/all',
+};
+
 export const givbacksMetatags = {
 	title: 'GIVbacks: Get rewarded for donating to public goods',
 	desc: 'When you make a donation of $5 or more to a GIVbacks eligible project you qualify to get GIV!',
