@@ -34,7 +34,6 @@ const GetStarted = () => {
 				query: SUBSCRIBE_ONBOARDING,
 				variables: { email },
 			});
-			console.log('data.subscribeOnboarding', data?.subscribeOnboarding);
 			if (data?.subscribeOnboarding) {
 				gToast('You have successfully subscribed.', {
 					type: ToastType.SUCCESS,
