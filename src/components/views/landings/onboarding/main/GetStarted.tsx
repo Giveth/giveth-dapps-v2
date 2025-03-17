@@ -34,6 +34,7 @@ const GetStarted = () => {
 				query: SUBSCRIBE_ONBOARDING,
 				variables: { email },
 			});
+			console.log('data.subscribeOnboarding', data?.subscribeOnboarding);
 			if (data?.subscribeOnboarding) {
 				gToast('You have successfully subscribed.', {
 					type: ToastType.SUCCESS,
@@ -45,7 +46,9 @@ const GetStarted = () => {
 				await Promise.reject();
 			}
 		} catch (e) {
-			showToastError('Something went wrong, please try again later');
+			showToastError(
+				'Something went wrong, please check your email and try again',
+			);
 			reset();
 		}
 	};
