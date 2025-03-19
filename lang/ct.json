@@ -1771,5 +1771,7 @@
 	"tooltip.withdraw_stream_balance": "Si teniu donacions recurrents actives, el vostre saldo disponible per retirar serà lleugerament inferior al vostre saldo actual.",
 	"ubi": "Renta bàsica",
 	"water-and-sanitation": "Aigua i Sanejament",
-	"label.donations_amplified": "Fes que les teves donacions s’amplifiquin amb un fons de compensació de {amount}"
+	"label.donations_amplified": "Fes que les teves donacions s’amplifiquin amb un fons de compensació de {amount}",
+	"help_improve": "Ajuda'ns a millorar Giveth!",
+	"help_improve_description": "Comparteix la teva opinió en una enquesta ràpida i ajuda'ns a millorar l'experiència dels donants."
 }
