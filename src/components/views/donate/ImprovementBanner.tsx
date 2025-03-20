@@ -23,8 +23,6 @@ const ImprovementBanner: FC<IImprovementBanner> = () => {
 		setIsExpanded(prev => !prev);
 	};
 
-	console.log('isExpanded', isExpanded);
-
 	return (
 		<>
 			<BannerWrapper isExpanded={isExpanded}>
