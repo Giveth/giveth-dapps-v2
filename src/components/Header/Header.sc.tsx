@@ -16,6 +16,7 @@ import { ETheme } from '@/features/general/general.slice';
 interface IStyledHeader extends IHeader {
 	$baseTheme?: ETheme;
 	$show?: boolean;
+	$showQFBanner?: boolean;
 }
 
 export const StyledHeader = styled(Flex)<IStyledHeader>`
@@ -23,6 +24,7 @@ export const StyledHeader = styled(Flex)<IStyledHeader>`
 	left: 0;
 	right: 0;
 	top: ${props => (props.$show ? 0 : '-100px')};
+
 	z-index: ${zIndex.HEADER};
 	transition: top 0.3s ease;
 	padding: 16px 24px;
@@ -36,6 +38,10 @@ export const StyledHeader = styled(Flex)<IStyledHeader>`
 			: '0px 3px 20px rgba(212, 218, 238, 0.4)'};
 	${mediaQueries.tablet} {
 		padding: 16px 32px;
+		top: ${props => {
+			if (!props.$show) return '-100px';
+			return props.$showQFBanner ? '53px' : '0';
+		}};
 	}
 `;
 

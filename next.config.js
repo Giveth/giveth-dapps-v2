@@ -58,7 +58,6 @@ const moduleExports = withBundleAnalyzer({
 				hostname: 'cdn-images-1.medium.com',
 			},
 			{ protocol: 'https', port: '', hostname: 'ipfs.io' },
-			{ protocol: 'https', port: '', hostname: '*.amazonaws.com' },
 			{ protocol: 'https', port: '', hostname: 'giveth.io' },
 		],
 	},

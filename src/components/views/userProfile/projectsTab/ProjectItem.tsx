@@ -12,7 +12,7 @@ import { type FC, useState } from 'react';
 import styled from 'styled-components';
 import { useIntl } from 'react-intl';
 import Link from 'next/link';
-import { IProject } from '@/apollo/types/types';
+import { EVerificationStatus, IProject } from '@/apollo/types/types';
 import { smallFormatDate } from '@/lib/helpers';
 import { ManageProjectAddressesModal } from '@/components/modals/ManageProjectAddresses/ManageProjectAddressesModal';
 import ProjectActions from './ProjectActions';
@@ -23,6 +23,7 @@ import ProjectListedStatus from './ProjectListedStatus';
 import { formatDonation } from '@/helpers/number';
 import VerificationBadge from '@/components/VerificationBadge';
 import DeleteProjectModal from './DeleteProjectModal';
+import ProjectVerificationStatus from './ProjectVerificationStatus';
 
 interface IProjectItem {
 	project: IProject;
@@ -87,7 +88,7 @@ const ProjectItem: FC<IProjectItem> = props => {
 					<Flex $justifyContent='space-between'>
 						<P>
 							{formatMessage({
-								id: 'label.verification_status',
+								id: 'label.verification_status_backs',
 							})}
 						</P>
 						<div>
@@ -95,6 +96,21 @@ const ProjectItem: FC<IProjectItem> = props => {
 								isGivbackEligible={project?.isGivbackEligible}
 								verificationStatus={
 									project.projectVerificationForm?.status
+								}
+							/>
+						</div>
+					</Flex>
+					<Flex $justifyContent='space-between'>
+						<P>
+							{formatMessage({
+								id: 'label.verification_status',
+							})}
+						</P>
+						<div>
+							<ProjectVerificationStatus
+								verified={
+									project.projectVerificationForm?.status ===
+									EVerificationStatus.VERIFIED
 								}
 							/>
 						</div>

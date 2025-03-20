@@ -23,6 +23,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useIntl } from 'react-intl';
 import BigNumber from 'bignumber.js';
+import { EProjectStatus } from '@/apollo/types/gqlEnums';
 import { AddressZero, ONE_MONTH_SECONDS } from '@/lib/constants/constants';
 import { FlowRateTooltip } from '@/components/GIVeconomyPages/GIVstream.sc';
 import { IconWithTooltip } from '@/components/IconWithToolTip';
@@ -97,6 +98,7 @@ export function mapValueInverse(value: number) {
 export const RecurringDonationCard = () => {
 	const { project, selectedRecurringToken, tokenStreams } = useDonateData();
 	const isGivethProject = Number(project.id!) === config.GIVETH_PROJECT_ID;
+	const isActive = project.status?.name === EProjectStatus.ACTIVE;
 	const [amount, setAmount] = useState(0n);
 	const [perMonthAmount, setPerMonthAmount] = useState(0n);
 	const [isUpdating, setIsUpdating] = useState(false);
@@ -135,7 +137,6 @@ export const RecurringDonationCard = () => {
 				: selectedRecurringToken?.token.id,
 		address: address,
 	});
-
 	useEffect(() => {
 		if (!selectedRecurringToken || !balance) return;
 		if (selectedRecurringToken.token.isSuperToken) {
@@ -749,10 +750,26 @@ export const RecurringDonationCard = () => {
 							</Flex>
 						</Flex>
 					</DonatesInfoSection>
+					{!isActive && (
+						<div
+							style={{
+								marginTop: '10px',
+								padding: '8px',
+								width: '100%',
+							}}
+						>
+							<InlineToast
+								type={EToastType.Warning}
+								message={formatMessage({
+									id: 'label.this_project_is_not_active',
+								})}
+							/>
+						</div>
+					)}
 					<ActionButton
 						label={formatMessage({ id: 'label.donate' })}
 						onClick={handleDonate}
-						disabled={isFormInvalid}
+						disabled={!isActive || isFormInvalid}
 					/>
 				</>
 			)}

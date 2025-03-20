@@ -11,7 +11,6 @@ import {
 	neutralColors,
 	P,
 	semanticColors,
-	Subline,
 	SublineBold,
 	Flex,
 	mediaQueries,
@@ -27,6 +26,7 @@ import { client } from '@/apollo/apolloClient';
 import { FETCH_QF_ROUND_HISTORY } from '@/apollo/gql/gqlDonations';
 import { IGetQfRoundHistory, IQFRound } from '@/apollo/types/types';
 import { formatDonation } from '@/helpers/number';
+import { ProjectRaised } from './ProjectRaised';
 
 interface IProjectTotalFundCardProps {
 	selectedQF: IQFRound | null;
@@ -156,27 +156,9 @@ const ProjectTotalFundCard = ({ selectedQF }: IProjectTotalFundCardProps) => {
 					</UpperSection>
 					{countUniqueDonors !== undefined &&
 						countUniqueDonors > 0 && (
-							<div>
-								<LightSubline>
-									{formatMessage({
-										id: 'label.raised_from',
-									})}
-								</LightSubline>
-								<Subline style={{ display: 'inline-block' }}>
-									&nbsp;{countUniqueDonors}
-									&nbsp;
-								</Subline>
-								<LightSubline>
-									{formatMessage(
-										{
-											id: 'label.contributors',
-										},
-										{
-											count: countUniqueDonors,
-										},
-									)}
-								</LightSubline>
-							</div>
+							<ProjectRaised
+								roundDonorsCount={countUniqueDonors}
+							/>
 						)}
 				</>
 			) : (
@@ -189,6 +171,11 @@ const ProjectTotalFundCard = ({ selectedQF }: IProjectTotalFundCardProps) => {
 							<TotalFund>
 								{formatDonation(roundTotalDonation || 0, '$')}
 							</TotalFund>
+							{!qfRoundHistory?.distributedFundTxHash && (
+								<ProjectRaised
+									roundDonorsCount={roundDonorsCount}
+								/>
+							)}
 							{notDistributedFund ? (
 								<NotDistributedFundContainer>
 									<EstimatedMatchingSection>
@@ -212,61 +199,61 @@ const ProjectTotalFundCard = ({ selectedQF }: IProjectTotalFundCardProps) => {
 									</EstimatedMatchingSection>
 								</NotDistributedFundContainer>
 							) : (
-								<EstimatedMatchingSection $flexDirection='column'>
-									<Flex $justifyContent='space-between'>
-										<EstimatedMatchingPrice>
-											+{' '}
-											{formatDonation(
-												matchFund,
-												allocatedFundUSDPreferred
-													? '$'
-													: '',
-												locale,
-												!!selectedQFData?.isActive,
-											)}{' '}
-											{!allocatedFundUSDPreferred &&
-												allocatedTokenSymbol}
-										</EstimatedMatchingPrice>
-										<EstimatedMatchingText>
-											{selectedQFData?.isActive
-												? 'Estimated Matching'
-												: 'Matching Funds'}
-										</EstimatedMatchingText>
-									</Flex>
+								qfRoundHistory?.distributedFundTxHash &&
+								!selectedQF.isActive && (
+									<EstimatedMatchingSection $flexDirection='column'>
+										<Flex $justifyContent='space-between'>
+											<EstimatedMatchingPrice>
+												+{' '}
+												{formatDonation(
+													matchFund,
+													allocatedFundUSDPreferred
+														? '$'
+														: '',
+													locale,
+													!!selectedQFData?.isActive,
+												)}{' '}
+												{!allocatedFundUSDPreferred &&
+													allocatedTokenSymbol}
+											</EstimatedMatchingPrice>
+											<EstimatedMatchingText>
+												{selectedQFData?.isActive
+													? 'Estimated Matching'
+													: 'Matching Funds'}
+											</EstimatedMatchingText>
+										</Flex>
 
-									{qfRoundHistory?.distributedFundTxHash &&
-										!selectedQF.isActive && (
-											<EstimatedMatchingTransaction>
-												<BlockExplorerLink
-													as='a'
-													href={`${
-														config
-															.EVM_NETWORKS_CONFIG[
-															+qfRoundHistory.distributedFundNetwork!
-														]?.blockExplorers
-															?.default.url
-													}
+										{qfRoundHistory?.distributedFundTxHash &&
+											!selectedQF.isActive && (
+												<EstimatedMatchingTransaction>
+													<BlockExplorerLink
+														as='a'
+														href={`${
+															config
+																.EVM_NETWORKS_CONFIG[
+																+qfRoundHistory.distributedFundNetwork!
+															]?.blockExplorers
+																?.default.url
+														}
 			/tx/${qfRoundHistory?.distributedFundTxHash}`}
-													target='_blank'
-													size='Big'
-												>
-													View transaction &nbsp;
-													<IconExternalLink
-														size={16}
-													/>
-												</BlockExplorerLink>
-											</EstimatedMatchingTransaction>
-										)}
-								</EstimatedMatchingSection>
+														target='_blank'
+														size='Big'
+													>
+														View transaction &nbsp;
+														<IconExternalLink
+															size={16}
+														/>
+													</BlockExplorerLink>
+												</EstimatedMatchingTransaction>
+											)}
+									</EstimatedMatchingSection>
+								)
 							)}
-							<div>
-								<LightSubline> Raised from </LightSubline>
-								<Subline style={{ display: 'inline-block' }}>
-									&nbsp;{roundDonorsCount}
-									&nbsp;
-								</Subline>
-								<LightSubline>contributors</LightSubline>
-							</div>
+							{qfRoundHistory?.distributedFundTxHash && (
+								<ProjectRaised
+									roundDonorsCount={roundDonorsCount}
+								/>
+							)}
 						</div>
 					) : (
 						<NoDonation>
@@ -297,7 +284,7 @@ const ProjectTotalFundCard = ({ selectedQF }: IProjectTotalFundCardProps) => {
 
 const BottomSection = styled.div`
 	color: ${neutralColors.gray[700]};
-	margin-top: 40px;
+	margin-top: 30px;
 	width: max-content;
 `;
 
@@ -354,11 +341,6 @@ const EstimatedMatchingText = styled(SublineBold)`
 	color: ${semanticColors.jade[600]};
 	font-weight: 600;
 	max-width: 60px;
-`;
-
-const LightSubline = styled(Subline)`
-	display: inline-block;
-	color: ${neutralColors.gray[700]};
 `;
 
 const CustomP = styled(P)`

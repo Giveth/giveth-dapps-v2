@@ -45,7 +45,9 @@ const GetStarted = () => {
 				await Promise.reject();
 			}
 		} catch (e) {
-			showToastError('Something went wrong, please try again later');
+			showToastError(
+				'Something went wrong, please check your email and try again',
+			);
 			reset();
 		}
 	};
