@@ -1,4 +1,5 @@
 import { FC, useState } from 'react';
+import { Widget } from '@typeform/embed-react';
 import styled from 'styled-components';
 import { useIntl } from 'react-intl';
 import Image from 'next/image';
@@ -70,11 +71,10 @@ const ImprovementBanner: FC<IImprovementBanner> = () => {
 				</BannerHeader>
 
 				<ExpandableContent isExpanded={isExpanded}>
-					<iframe
-						src='https://giveth.typeform.com/donorsurvey2025'
-						width='100%'
-						height='795px'
-						frameBorder='0'
+					<Widget
+						id='pujGt0tC'
+						style={{ width: '100%', height: '780px' }}
+						className='my-form'
 					/>
 				</ExpandableContent>
 			</BannerWrapper>
