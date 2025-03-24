@@ -1,4 +1,4 @@
-import { FC, useState } from 'react';
+import { FC, useState, useEffect } from 'react';
 import { Widget } from '@typeform/embed-react';
 import styled from 'styled-components';
 import { useIntl } from 'react-intl';
@@ -18,10 +18,44 @@ interface IImprovementBanner {
 const ImprovementBanner: FC<IImprovementBanner> = () => {
 	const { formatMessage } = useIntl();
 	const [isExpanded, setIsExpanded] = useState(false);
+	const [shouldShow, setShouldShow] = useState(false);
+
+	// Check if user has already completed the form
+	// If yes, show the form after 60 days
+	useEffect(() => {
+		const savedDate = localStorage.getItem('improvement_survey_date');
+		if (!savedDate) {
+			setShouldShow(true);
+			return;
+		}
+
+		const savedTime = new Date(savedDate).getTime();
+		const now = new Date().getTime();
+		const diffInDays = (now - savedTime) / (1000 * 60 * 60 * 24);
+
+		if (diffInDays > 60) {
+			setShouldShow(true);
+		} else {
+			setShouldShow(false);
+		}
+	}, []);
 
 	const toggleExpand = () => {
 		setIsExpanded(prev => !prev);
 	};
+
+	const handleFormSubmit = () => {
+		const today = new Date().toISOString();
+		localStorage.setItem('improvement_survey_date', today);
+		setShouldShow(false);
+		setIsExpanded(false);
+	};
+
+	const handleFormClose = () => {
+		setIsExpanded(false);
+	};
+
+	if (!shouldShow) return null;
 
 	return (
 		<>
@@ -71,8 +105,10 @@ const ImprovementBanner: FC<IImprovementBanner> = () => {
 				<ExpandableContent isExpanded={isExpanded}>
 					<Widget
 						id='pujGt0tC'
-						style={{ width: '100%', height: '780px' }}
+						style={{ width: '100%', height: '750px' }}
 						className='my-form'
+						onSubmit={handleFormSubmit}
+						onClose={handleFormClose}
 					/>
 				</ExpandableContent>
 			</BannerWrapper>
@@ -157,6 +193,16 @@ const ExpandableContent = styled.div<{ isExpanded: boolean }>`
 	z-index: 10020;
 	border-bottom-left-radius: 16px;
 	border-bottom-right-radius: 16px;
+
+	@media (max-width: 768px) {
+		max-height: ${props => (props.isExpanded ? '100vh' : '0')};
+		position: fixed;
+		top: 0;
+		left: 0;
+		right: 0;
+		bottom: 0;
+		z-index: 10030;
+	}
 `;
 
 const Overlay = styled.div<{ isExpanded: boolean }>`
