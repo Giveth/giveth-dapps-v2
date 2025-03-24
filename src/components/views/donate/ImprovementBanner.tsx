@@ -105,7 +105,7 @@ const ImprovementBanner: FC<IImprovementBanner> = () => {
 				<ExpandableContent isExpanded={isExpanded}>
 					<Widget
 						id='pujGt0tC'
-						style={{ width: '100%', height: '780px' }}
+						style={{ width: '100%', height: '750px' }}
 						className='my-form'
 						onSubmit={handleFormSubmit}
 						onClose={handleFormClose}
