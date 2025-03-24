@@ -51,6 +51,10 @@ const ImprovementBanner: FC<IImprovementBanner> = () => {
 		setIsExpanded(false);
 	};
 
+	const handleFormClose = () => {
+		setIsExpanded(false);
+	};
+
 	if (!shouldShow) return null;
 
 	return (
@@ -104,6 +108,7 @@ const ImprovementBanner: FC<IImprovementBanner> = () => {
 						style={{ width: '100%', height: '780px' }}
 						className='my-form'
 						onSubmit={handleFormSubmit}
+						onClose={handleFormClose}
 					/>
 				</ExpandableContent>
 			</BannerWrapper>
