@@ -23,6 +23,11 @@ const ImprovementBanner: FC<IImprovementBanner> = () => {
 		setIsExpanded(prev => !prev);
 	};
 
+	const handleFormSubmit = (data: any) => {
+		console.log('form submitted');
+		console.log(data);
+	};
+
 	return (
 		<>
 			<BannerWrapper isExpanded={isExpanded}>
@@ -73,6 +78,7 @@ const ImprovementBanner: FC<IImprovementBanner> = () => {
 						id='pujGt0tC'
 						style={{ width: '100%', height: '780px' }}
 						className='my-form'
+						onSubmit={handleFormSubmit}
 					/>
 				</ExpandableContent>
 			</BannerWrapper>
