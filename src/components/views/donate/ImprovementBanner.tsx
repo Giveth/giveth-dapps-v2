@@ -188,6 +188,16 @@ const ExpandableContent = styled.div<{ isExpanded: boolean }>`
 	z-index: 10020;
 	border-bottom-left-radius: 16px;
 	border-bottom-right-radius: 16px;
+
+	@media (max-width: 768px) {
+		max-height: ${props => (props.isExpanded ? '100vh' : '0')};
+		position: fixed;
+		top: 0;
+		left: 0;
+		right: 0;
+		bottom: 0;
+		z-index: 10030;
+	}
 `;
 
 const Overlay = styled.div<{ isExpanded: boolean }>`
