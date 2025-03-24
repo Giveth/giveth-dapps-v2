@@ -1,4 +1,4 @@
-import { FC, useState } from 'react';
+import { FC, useState, useEffect } from 'react';
 import { Widget } from '@typeform/embed-react';
 import styled from 'styled-components';
 import { useIntl } from 'react-intl';
@@ -18,15 +18,40 @@ interface IImprovementBanner {
 const ImprovementBanner: FC<IImprovementBanner> = () => {
 	const { formatMessage } = useIntl();
 	const [isExpanded, setIsExpanded] = useState(false);
+	const [shouldShow, setShouldShow] = useState(false);
+
+	// Check if user has already completed the form
+	// If yes, show the form after 60 days
+	useEffect(() => {
+		const savedDate = localStorage.getItem('improvement_survey_date');
+		if (!savedDate) {
+			setShouldShow(true);
+			return;
+		}
+
+		const savedTime = new Date(savedDate).getTime();
+		const now = new Date().getTime();
+		const diffInDays = (now - savedTime) / (1000 * 60 * 60 * 24);
+
+		if (diffInDays > 60) {
+			setShouldShow(true);
+		} else {
+			setShouldShow(false);
+		}
+	}, []);
 
 	const toggleExpand = () => {
 		setIsExpanded(prev => !prev);
 	};
 
-	const handleFormSubmit = (data: any) => {
-		console.log('form submitted');
-		console.log(data);
+	const handleFormSubmit = () => {
+		const today = new Date().toISOString();
+		localStorage.setItem('improvement_survey_date', today);
+		setShouldShow(false);
+		setIsExpanded(false);
 	};
+
+	if (!shouldShow) return null;
 
 	return (
 		<>

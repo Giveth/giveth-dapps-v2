@@ -220,7 +220,6 @@ export const useCreateEvmDonation = () => {
 			).catch(error => {
 				handleError(error, 0, setFailedModalType);
 			});
-			console.log('HERE IS THE hash', hash);
 			if (!hash) return { isSaved: false, txHash: '', isMinted: false };
 			setTxHash(hash);
 			const id = await handleSaveDonation(hash!, props);
