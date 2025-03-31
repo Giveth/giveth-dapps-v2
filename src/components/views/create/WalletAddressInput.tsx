@@ -73,6 +73,8 @@ const WalletAddressInput: FC<IProps> = ({
 	const errorMessage = error.message;
 
 	const isStellarChain = chainType === ChainType.STELLAR;
+	const isSolanaChain = chainType === ChainType.SOLANA;
+
 	const isAddressUsed =
 		errorMessage.indexOf(
 			formatMessage({ id: 'label.is_already_being_used_for_a_project' }),
@@ -294,9 +296,13 @@ const WalletAddressInput: FC<IProps> = ({
 				<ExchangeNotify>
 					<Warning>!</Warning>
 					<Caption>
-						{formatMessage({
-							id: 'label.please_do_not_enter_exchange_deposit',
-						})}
+						{isSolanaChain
+							? formatMessage({
+									id: 'label.please_do_not_enter_exchange_deposit_solana',
+								})
+							: formatMessage({
+									id: 'label.please_do_not_enter_exchange_deposit',
+								})}
 					</Caption>
 				</ExchangeNotify>
 			)}
