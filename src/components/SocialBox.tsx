@@ -32,25 +32,10 @@ const SocialBox: FC<ISocialBox> = props => {
 
 	const projectUrl = fullPath(slugToProjectView(slug));
 
-	// Remove after round ends
-	const activeQFRound = project.qfRounds?.find(round => round.isActive);
-	const now = new Date();
-
-	// Remove after round ends
-	const isRoundActive =
-		activeQFRound &&
-		new Date(activeQFRound.beginDate) <= now &&
-		new Date(activeQFRound.endDate) >= now;
-
-	// Remove after round ends
-	const shareTitleTwitter = isRoundActive
-		? `I just donated in the @OctantApp @ENS_DAO QF round on @Giveth! 💜 Check out the project I supported: `
-		: shareContentCreator(contentType, ESocialType.twitter);
-
-	// Remove after round ends
-	const shareTitleFarcaster = isRoundActive
-		? `I just donated in the @octant @ensdao QF round on @Giveth! 💜 Check out the project I supported: ${projectUrl}`
-		: shareContentCreator(contentType, ESocialType.twitter);
+	const shareTitleTwitter = shareContentCreator(
+		contentType,
+		ESocialType.twitter,
+	);
 
 	const shareTitleFacebookAndLinkedin = shareContentCreator(
 		contentType,
@@ -103,7 +88,7 @@ const SocialBox: FC<ISocialBox> = props => {
 				</SocialItem>
 				<SocialItem $isDonateFooter={isDonateFooter}>
 					<Link
-						href={`https://warpcast.com/~/compose?embeds[]=${projectUrl}&text=${shareTitleFarcaster}`}
+						href={`https://warpcast.com/~/compose?embeds[]=${projectUrl}&text=${shareTitleTwitter} ${projectUrl}`}
 						target='_blank'
 					>
 						<Image
