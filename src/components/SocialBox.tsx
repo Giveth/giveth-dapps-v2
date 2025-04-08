@@ -30,16 +30,17 @@ const SocialBox: FC<ISocialBox> = props => {
 	const { descriptionSummary, slug } = project;
 	const { formatMessage } = useIntl();
 
+	const projectUrl = fullPath(slugToProjectView(slug));
+
 	const shareTitleTwitter = shareContentCreator(
 		contentType,
 		ESocialType.twitter,
 	);
+
 	const shareTitleFacebookAndLinkedin = shareContentCreator(
 		contentType,
 		ESocialType.facebook,
 	);
-
-	const projectUrl = fullPath(slugToProjectView(slug));
 
 	return (
 		<Social $isDonateFooter={isDonateFooter}>
@@ -87,7 +88,7 @@ const SocialBox: FC<ISocialBox> = props => {
 				</SocialItem>
 				<SocialItem $isDonateFooter={isDonateFooter}>
 					<Link
-						href={`https://warpcast.com/~/compose?embeds[]=${projectUrl}&text=${shareTitleTwitter}`}
+						href={`https://warpcast.com/~/compose?embeds[]=${projectUrl}&text=${shareTitleTwitter} ${projectUrl}`}
 						target='_blank'
 					>
 						<Image
