@@ -34,6 +34,7 @@
 		"@superfluid-finance/sdk-core": "^0.7.0",
 		"@tanstack/react-query": "^5.45.1",
 		"@thirdweb-dev/wagmi-adapter": "^0.2.21",
+		"@typeform/embed-react": "^4.3.0",
 		"@vercel/speed-insights": "^1.0.9",
 		"@web3auth/sign-in-with-solana": "^3.0.0",
 		"@web3modal/wagmi": "^5.1.7",

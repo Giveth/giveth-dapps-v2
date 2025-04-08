@@ -35,6 +35,7 @@ import QFToast from './QFToast';
 import { DonationInfo } from './DonationInfo';
 import { ManageRecurringDonation } from './Recurring/ManageRecurringDonation';
 import EndaomentProjectsInfo from '../project/EndaomentProjectsInfo';
+import ImprovementBanner from './ImprovementBanner';
 
 interface ISuccessView {
 	isStellar?: boolean;
@@ -108,6 +109,7 @@ export const SuccessView: FC<ISuccessView> = ({ isStellar }) => {
 
 	return (
 		<Wrapper>
+			<ImprovementBanner />
 			<Row>
 				<Col xs={12} lg={6}>
 					<InfoWrapper>

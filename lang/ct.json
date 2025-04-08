@@ -778,6 +778,7 @@
 	"label.please_connect_your_wallet_to_win_givbacks_and_match": "Connecta la teva cartera per guanyar GIVbacks i igualar la teva donació en QF.",
 	"label.please_contact_support_team": "Si us plau, contacteu l'equip de suport.",
 	"label.please_do_not_enter_exchange_deposit": "Si us plau, NO introduïu una adreça de dipòsit d'intercanvi, o els vostres fons podrien perdre's! Utilitzeu un compte que controleu en aquesta xarxa. Recomanem utilitzar Metamask.",
+	"label.please_do_not_enter_exchange_deposit_solana": "Si us plau, NO introdueixis una adreça de dipòsit d'un exchange, o podries perdre els teus fons! Utilitza un compte que controlis en aquesta xarxa. Et recomanem utilitzar Metamask. A més, Giveth NO dona suport a l'enviament de donacions a MULTISIGS a la xarxa Solana.",
 	"label.please_enter_full_link": "Introdueix el vincle complet",
 	"label.please_note_it_will_take_few_minutes_for_your_giv_to_bridge": "Si us plau, tingueu en compte que trigarà uns minuts perquè el vostre GIV es transfereixi.",
 	"label.please_select_a_category": "Selecciona una categoria, si us plau.",
@@ -1771,5 +1772,7 @@
 	"tooltip.withdraw_stream_balance": "Si teniu donacions recurrents actives, el vostre saldo disponible per retirar serà lleugerament inferior al vostre saldo actual.",
 	"ubi": "Renta bàsica",
 	"water-and-sanitation": "Aigua i Sanejament",
-	"label.donations_amplified": "Fes que les teves donacions s’amplifiquin amb un fons de compensació de {amount}"
+	"label.donations_amplified": "Fes que les teves donacions s’amplifiquin amb un fons de compensació de {amount}",
+	"help_improve": "Ajuda'ns a millorar Giveth!",
+	"help_improve_description": "Comparteix la teva opinió en una enquesta ràpida i ajuda'ns a millorar l'experiència dels donants."
 }

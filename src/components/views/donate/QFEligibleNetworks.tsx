@@ -25,7 +25,6 @@ const QFEligibleNetworks = () => {
 	const { isConnected } = useGeneralWallet();
 	const { formatMessage } = useIntl();
 	const { activeStartedRound, project } = useDonateData();
-	console.log('project', project);
 	const router = useRouter();
 	const isQRDonation = router.query.chain === ChainType.STELLAR.toLowerCase();
 	const eligibleNetworksWithoutStellar = activeStartedRound?.eligibleNetworks

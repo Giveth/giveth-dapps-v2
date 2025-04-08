@@ -778,6 +778,7 @@
 	"label.please_connect_your_wallet_to_win_givbacks_and_match": "Conecta tu billetera para ganar GIVbacks e igualar tu donación en QF.",
 	"label.please_contact_support_team": "Por favor contacta al equipo de soporte.",
 	"label.please_do_not_enter_exchange_deposit": "¡Por favor, NO introduzcas una dirección de depósito de intercambio, o podrías perder tus fondos! Usa una cuenta que controles en esta red. Recomendamos usar Metamask.",
+	"label.please_do_not_enter_exchange_deposit_solana": "¡Por favor, NO ingreses una dirección de depósito de un exchange, ¡o podrías perder tus fondos! Usa una cuenta que controles en esta red. Recomendamos usar Metamask. Además, Giveth NO admite el envío de donaciones a MULTISIGS en la red de Solana.",
 	"label.please_enter_full_link": "Por favor, introduzca el enlace completo",
 	"label.please_note_it_will_take_few_minutes_for_your_giv_to_bridge": "Por favor ten en cuenta que tomará unos minutos para que tu GIV se transfiera.",
 	"label.please_select_a_category": "Por favor selecciona una categoria.",
@@ -1772,5 +1773,7 @@
 	"tooltip.withdraw_stream_balance": "Si tiene donaciones recurrentes activas, su saldo disponible para retirar será ligeramente menor que su saldo actual.",
 	"ubi": "RBI",
 	"water-and-sanitation": "Agua & Saneamiento",
-	"label.donations_amplified": "Haz que tus donaciones se amplifiquen con un fondo de igualación de {amount}"
+	"label.donations_amplified": "Haz que tus donaciones se amplifiquen con un fondo de igualación de {amount}",
+	"help_improve": "¡Ayúdanos a mejorar Giveth!",
+	"help_improve_description": "Comparte tu opinión en una encuesta rápida y ayúdanos a mejorar la experiencia de los donantes."
 }
