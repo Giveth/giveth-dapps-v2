@@ -160,6 +160,12 @@ const config: EnvConfig = {
 		gasPreference: {
 			// Keep it empty for automatic configuration
 		},
+		blockExplorers: {
+			default: {
+				name: 'Blockscout',
+				url: 'https://eth-sepolia.blockscout.com',
+			},
+		},
 		coingeckoChainName: 'ethereum',
 		chainLogo: (logoSize?: number) => <IconEthereum size={logoSize} />,
 	},
@@ -171,7 +177,12 @@ const config: EnvConfig = {
 			maxFeePerGas: (2e9).toString(),
 			maxPriorityFeePerGas: (1e9).toString(),
 		},
-
+		blockExplorers: {
+			default: {
+				name: 'Blockscout',
+				url: 'https://gnosis.blockscout.com',
+			},
+		},
 		subgraphAddress:
 			process.env.NEXT_PUBLIC_SUBGRAPH_GNOSIS ||
 			'https://api.studio.thegraph.com/query/76292/giveconomy-staging-gnosischain/version/latest',
@@ -325,6 +336,12 @@ const config: EnvConfig = {
 		gasPreference: {
 			// Keep it empty for automatic configuration
 		},
+		blockExplorers: {
+			default: {
+				name: 'Blockscout',
+				url: 'https://polygon.blockscout.com',
+			},
+		},
 		coingeckoChainName: 'polygon-pos',
 		chainLogo: (logoSize?: number) => <IconPolygon size={logoSize} />,
 	},
@@ -334,6 +351,12 @@ const config: EnvConfig = {
 		chainType: ChainType.EVM,
 		gasPreference: {
 			// Keep it empty for automatic configuration
+		},
+		blockExplorers: {
+			default: {
+				name: 'Blockscout',
+				url: 'https://optimism-sepolia.blockscout.com',
+			},
 		},
 		anchorRegistryAddress: '0x4AAcca72145e1dF2aeC137E1f3C5E3D75DB8b5f3',
 		subgraphAddress:
@@ -402,6 +425,12 @@ const config: EnvConfig = {
 		gasPreference: {
 			// Keep it empty for automatic configuration
 		},
+		blockExplorers: {
+			default: {
+				name: 'Blockscout',
+				url: 'https://celo-alfajores.blockscout.com',
+			},
+		},
 		coingeckoChainName: 'celo',
 		chainLogo: (logoSize?: number) => <IconCelo size={logoSize} />,
 	},
@@ -412,6 +441,12 @@ const config: EnvConfig = {
 		gasPreference: {
 			// Keep it empty for automatic configuration
 		},
+		blockExplorers: {
+			default: {
+				name: 'Blockscout',
+				url: 'https://arbitrum-sepolia.blockscout.com',
+			},
+		},
 		coingeckoChainName: 'arbitrum',
 		chainLogo: (logoSize?: number) => <IconArbitrum size={logoSize} />,
 	},
@@ -419,10 +454,16 @@ const config: EnvConfig = {
 	BASE_CONFIG: {
 		...baseSepolia,
 		chainType: ChainType.EVM,
-		coingeckoChainName: 'base',
 		gasPreference: {
 			// Keep it empty for automatic configuration
 		},
+		blockExplorers: {
+			default: {
+				name: 'Blockscout',
+				url: 'https://base-sepolia.blockscout.com',
+			},
+		},
+		coingeckoChainName: 'base',
 		anchorRegistryAddress: '0x4AAcca72145e1dF2aeC137E1f3C5E3D75DB8b5f3',
 		chainLogo: (logoSize?: number) => <IconBase size={logoSize} />,
 		GIVETH_ANCHOR_CONTRACT_ADDRESS:
@@ -452,10 +493,16 @@ const config: EnvConfig = {
 	ZKEVM_CONFIG: {
 		...polygonZkEvmCardona,
 		chainType: ChainType.EVM,
-		coingeckoChainName: 'polygon-zkevm',
 		gasPreference: {
 			// Keep it empty for automatic configuration
 		},
+		blockExplorers: {
+			default: {
+				name: 'Blockscout',
+				url: 'https://explorer-ui.cardona.zkevm-rpc.com',
+			},
+		},
+		coingeckoChainName: 'polygon-zkevm',
 		chainLogo: (logoSize?: number) => <IconZKEVM size={logoSize} />,
 
 		subgraphAddress: process.env.NEXT_PUBLIC_SUBGRAPH_ZKEVM,
@@ -479,11 +526,17 @@ const config: EnvConfig = {
 	CLASSIC_CONFIG: {
 		...classic,
 		chainType: ChainType.EVM,
-		chainLogo: (logoSize?: number) => <IconClassic size={logoSize} />,
-		coingeckoChainName: 'ethereum-classic',
 		gasPreference: {
 			// Keep it empty for automatic configuration
 		},
+		blockExplorers: {
+			default: {
+				name: 'Blockscout',
+				url: 'https://etc-mordor.blockscout.com',
+			},
+		},
+		chainLogo: (logoSize?: number) => <IconClassic size={logoSize} />,
+		coingeckoChainName: 'ethereum-classic',
 	},
 	STELLAR_CONFIG: {
 		...STELLAR_NETWORK,
