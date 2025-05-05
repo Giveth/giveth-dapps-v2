@@ -25,7 +25,7 @@ interface IDonateToGiveth {
 	disabled?: boolean;
 }
 
-const givethDonationOptions = [5, 10, 15, 20];
+const givethDonationOptions = [10, 15, 20, 25];
 
 const DonateToGiveth: FC<IDonateToGiveth> = ({
 	donationToGiveth,
