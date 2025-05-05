@@ -44,7 +44,7 @@ const DonateToGiveth: FC<IDonateToGiveth> = ({
 	};
 
 	const handleCheckbox = (e: boolean) => {
-		setDonationToGiveth(e ? 5 : 0);
+		setDonationToGiveth(e ? 10 : 0);
 	};
 
 	return (
