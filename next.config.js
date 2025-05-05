@@ -153,22 +153,30 @@ const moduleExports = withBundleAnalyzer({
 		defaultLocale,
 	},
 	headers: async () => {
+		const safe      = 'https://app.safe.global';
+		const nounspace = ['https://nounspace.com', 'https://www.nounspace.com'];
+		const frameAncestors = ["'self'", safe, ...nounspace].join(' ');
+		// Declare additional consts and include them in frameAncestors to enable additional domains to embed Giveth pages in iframes.
 		return [
 			{
 				source: '/:path*',
 				locale: false,
 				headers: [
 					{
-						key: 'X-Frame-Options',
-						value: 'ALLOW-FROM https://app.safe.global',
-					},
-					{
 						key: 'Content-Security-Policy',
-						value: "frame-ancestors 'self' https://app.safe.global",
+						value: `frame-ancestors ${frameAncestors};`,
 					},
 					{
 						key: 'Access-Control-Allow-Origin',
-						value: 'https://app.safe.global',
+						value: '*',
+					},
+					{
+						key: 'Access-Control-Allow-Methods',
+					  	value: 'GET,HEAD,POST,OPTIONS',
+					},
+					{
+						key: 'Access-Control-Allow-Headers',
+						value: 'Origin,Accept,Content-Type,Authorization',
 					},
 					{
 						key: 'X-Content-Type-Options',
@@ -191,7 +199,7 @@ const moduleExports = withBundleAnalyzer({
 				headers: [
 					{
 						key: 'Access-Control-Allow-Origin',
-						value: 'https://app.safe.global',
+						value: '*',
 					},
 					{ key: 'Access-Control-Allow-Methods', value: 'GET' },
 					{
