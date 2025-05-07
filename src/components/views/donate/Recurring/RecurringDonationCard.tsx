@@ -103,7 +103,7 @@ export const RecurringDonationCard = () => {
 	const [perMonthAmount, setPerMonthAmount] = useState(0n);
 	const [isUpdating, setIsUpdating] = useState(false);
 	const [donationToGiveth, setDonationToGiveth] = useState(
-		isGivethProject ? 0 : 5,
+		isGivethProject ? 0 : 10,
 	);
 	const [anonymous, setAnonymous] = useState<boolean>(false);
 	const [showSelectTokenModal, setShowSelectTokenModal] = useState(false);
