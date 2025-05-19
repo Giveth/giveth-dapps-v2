@@ -109,7 +109,7 @@ const Input = forwardRef<HTMLInputElement, InputType>((props, inputRef) => {
 	} = props;
 	const id = useId();
 	const canvasRef = useRef<HTMLCanvasElement>();
-	// const inputRef = useRef<HTMLInputElement | null>(null);
+	// const inputRef = useRef<HTMLInputElement | null>(null) ;
 	const validationStatus =
 		!error || isValidating
 			? EInputValidation.NORMAL
