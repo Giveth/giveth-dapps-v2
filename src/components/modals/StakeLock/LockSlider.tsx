@@ -22,13 +22,14 @@ const maxRound = 26;
 interface ILockSlider {
 	round: number;
 	setRound: Dispatch<SetStateAction<number>>;
+	chainNumber: number
 }
 
-const LockSlider: FC<ILockSlider> = ({ round, setRound }) => {
+const LockSlider: FC<ILockSlider> = ({ round, setRound, chainNumber }) => {
 	const { formatMessage, locale } = useIntl();
 	const [isChanged, setIsChanged] = useState(false);
-	const gnosisValues = useSubgraphInfo(config.GNOSIS_NETWORK_NUMBER);
-	const givpowerInfo = gnosisValues.data?.givpowerInfo as IGIVpower;
+	const subgraphInfo = useSubgraphInfo(chainNumber);
+	const givpowerInfo = subgraphInfo.data?.givpowerInfo as IGIVpower;
 	const unlockDate = new Date(getUnlockDate(givpowerInfo, round));
 	return (
 		<>
