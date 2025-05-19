@@ -520,6 +520,7 @@ const config: EnvConfig = {
 			title: 'GIV',
 			description: '100% GIV',
 			unit: 'GIV',
+			farmStartTimeMS: 1654012800000,
 		},
 	},
 
