@@ -167,7 +167,11 @@ const LockModal: FC<ILockModalProps> = ({
 									</LockInfoTooltip>
 								</IconWithTooltip>
 							</Flex>
-							<LockSlider setRound={setRound} round={round} chainNumber={poolNetwork}/>
+							<LockSlider
+								setRound={setRound}
+								round={round}
+								chainNumber={poolNetwork}
+							/>
 							<LockInfo
 								round={round}
 								amount={amount}
