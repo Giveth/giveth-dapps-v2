@@ -146,6 +146,12 @@ const config: EnvConfig = {
 			'https://gateway-arbitrum.network.thegraph.com/api/720ca27934ee17d259dc2975d9a6d714/subgraphs/id/9QK3vLoWF69TXSenUzQkkLhessaViu4naE58gRyKCxU7',
 		coingeckoChainName: 'ethereum',
 		chainLogo: (logoSize = 24) => <IconEthereum size={logoSize} />,
+		blockExplorers: {
+			default: {
+				name: 'Blockscout',
+				url: 'https://eth.blockscout.com',
+			},
+		},
 
 		GIV_TOKEN_ADDRESS: '0x900db999074d9277c5da2a43f252d74366230da0',
 		GIV_BUY_LINK: 'https://linktr.ee/GIVtoken',
@@ -286,6 +292,12 @@ const config: EnvConfig = {
 			maxFeePerGas: (2e9).toString(),
 			maxPriorityFeePerGas: (1e9).toString(),
 		},
+		blockExplorers: {
+			default: {
+				name: 'Blockscout',
+				url: 'https://gnosis.blockscout.com',
+			},
+		},
 
 		subgraphAddress:
 			process.env.NEXT_PUBLIC_SUBGRAPH_GNOSIS ||
@@ -424,6 +436,12 @@ const config: EnvConfig = {
 		gasPreference: {
 			// Keep it empty for automatic configuration
 		},
+		blockExplorers: {
+			default: {
+				name: 'Blockscout',
+				url: 'https://polygon.blockscout.com',
+			},
+		},
 		subgraphAddress: '',
 		coingeckoChainName: 'polygon-pos',
 		chainLogo: (logoSize = 24) => <IconPolygon size={logoSize} />,
@@ -434,6 +452,12 @@ const config: EnvConfig = {
 		chainType: ChainType.EVM,
 		gasPreference: {
 			// Keep it empty for automatic configuration
+		},
+		blockExplorers: {
+			default: {
+				name: 'Blockscout',
+				url: 'https://optimism.blockscout.com',
+			},
 		},
 		anchorRegistryAddress: '0x4AAcca72145e1dF2aeC137E1f3C5E3D75DB8b5f3',
 		subgraphAddress:
@@ -576,6 +600,12 @@ const config: EnvConfig = {
 		gasPreference: {
 			// Keep it empty for automatic configuration
 		},
+		blockExplorers: {
+			default: {
+				name: 'Blockscout',
+				url: 'https://celo.blockscout.com',
+			},
+		},
 		subgraphAddress: '',
 		coingeckoChainName: 'celo',
 		chainLogo: (logoSize = 24) => <IconCelo size={logoSize} />,
@@ -587,6 +617,12 @@ const config: EnvConfig = {
 		gasPreference: {
 			// Keep it empty for automatic configuration
 		},
+		blockExplorers: {
+			default: {
+				name: 'Blockscout',
+				url: 'https://arbitrum.blockscout.com',
+			},
+		},
 		subgraphAddress: '',
 		coingeckoChainName: 'arbitrum',
 		chainLogo: (logoSize = 24) => <IconArbitrum size={logoSize} />,
@@ -597,6 +633,12 @@ const config: EnvConfig = {
 		chainType: ChainType.EVM,
 		gasPreference: {
 			// Keep it empty for automatic configuration
+		},
+		blockExplorers: {
+			default: {
+				name: 'Blockscout',
+				url: 'https://base.blockscout.com',
+			},
 		},
 		anchorRegistryAddress: '0x4AAcca72145e1dF2aeC137E1f3C5E3D75DB8b5f3',
 		subgraphAddress: '',
@@ -693,6 +735,12 @@ const config: EnvConfig = {
 		gasPreference: {
 			// Keep it empty for automatic configuration
 		},
+		blockExplorers: {
+			default: {
+				name: 'Blockscout',
+				url: 'https://zkevm.blockscout.com',
+			},
+		},
 		chainLogo: (logoSize?: number) => <IconZKEVM size={logoSize} />,
 		subgraphAddress: process.env.NEXT_PUBLIC_SUBGRAPH_ZKEVM,
 		GIV_TOKEN_ADDRESS: ZKEVM_GIV_TOKEN_ADDRESS,
@@ -717,6 +765,12 @@ const config: EnvConfig = {
 		chainType: ChainType.EVM,
 		gasPreference: {
 			// Keep it empty for automatic configuration
+		},
+		blockExplorers: {
+			default: {
+				name: 'Blockscout',
+				url: 'https://etc.blockscout.com',
+			},
 		},
 		subgraphAddress:
 			process.env.NEXT_PUBLIC_SUBGRAPH_CLASSIC ||

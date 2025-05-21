@@ -113,7 +113,7 @@ const CryptoDonation: FC<{
 		[],
 	);
 	const [donationToGiveth, setDonationToGiveth] = useState(
-		noDonationSplit ? 0 : 5,
+		noDonationSplit ? 0 : 10,
 	);
 	const [showQFModal, setShowQFModal] = useState(false);
 	const [showSelectTokenModal, setShowSelectTokenModal] = useState(false);
