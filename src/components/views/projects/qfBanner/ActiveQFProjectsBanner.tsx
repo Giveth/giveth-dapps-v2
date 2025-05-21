@@ -125,7 +125,7 @@ export const ActiveQFProjectsBanner = () => {
 								/>
 							))}
 						</Flex> */}
-						<ImagesWrapper>
+						{/* <ImagesWrapper>
 							{sponsors.map(s => (
 								<Sponsor
 									key={s.title}
@@ -135,7 +135,7 @@ export const ActiveQFProjectsBanner = () => {
 									height={80}
 								/>
 							))}
-						</ImagesWrapper>
+						</ImagesWrapper> */}
 						{/* <CustomSponsors>
 							<Image
 								src={'/images/banners/qf-round/giv-palooza.svg'}
