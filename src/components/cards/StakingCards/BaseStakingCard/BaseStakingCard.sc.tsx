@@ -43,7 +43,12 @@ export const StakingPoolLabel = styled(H4)``;
 export const StakingPoolSubtitle = styled(Caption)``;
 
 export const StakePoolInfoContainer = styled.div`
-	padding: 0 24px;
+	background-color: #3a26b9;
+	border-radius: 16px;
+	padding: 24px;
+	box-sizing: border-box;
+	position: relative;
+	min-height: 350px; /* Set a fixed min-height equal or greater than the card with modal open */
 `;
 
 export const Details = styled(Flex)`

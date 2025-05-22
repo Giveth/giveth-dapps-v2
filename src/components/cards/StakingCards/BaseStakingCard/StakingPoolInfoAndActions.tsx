@@ -11,6 +11,7 @@ import { FC, useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
 import { useRouter } from 'next/router';
 import { useAccount } from 'wagmi';
+import CalloutBox from '@/components/CalloutBox';
 import FarmCountDown from '@/components/FarmCountDown';
 import { IconWithTooltip } from '@/components/IconWithToolTip';
 import { avgAPR } from '@/helpers/givpower';
@@ -63,6 +64,7 @@ interface IStakingPoolInfoAndActionsProps {
 	currentIncentive?: {
 		key?: (string | number)[] | null | undefined;
 	};
+	isArchived?: boolean; // <-- Add here, as a top-level prop!
 }
 
 export const StakingPoolInfoAndActions: FC<IStakingPoolInfoAndActionsProps> = ({
@@ -70,6 +72,7 @@ export const StakingPoolInfoAndActions: FC<IStakingPoolInfoAndActionsProps> = ({
 	isDiscontinued,
 	isGIVpower,
 	currentIncentive,
+	isArchived = false, // default to false if not passed
 }) => {
 	const [started, setStarted] = useState(true);
 	const [rewardLiquidPart, setRewardLiquidPart] = useState(0n);
@@ -127,6 +130,9 @@ export const StakingPoolInfoAndActions: FC<IStakingPoolInfoAndActionsProps> = ({
 	);
 
 	const userGIVLocked = sdh.getUserGIVLockedBalance();
+	const POLYGON_ZKEVM_DEPRECATION_MS = Date.UTC(2025, 3, 10, 16, 0, 0); // June 10, 2025 11am Panama
+	const POLYGON_ZKEVM_HIDE_DATE_MS = Date.UTC(2025, 4, 10, 0, 0, 0); // July 10, 2025
+	const ARCHIVE_NOTICE_KEY = 'givfarm_zkevm_archive_notice_dismissed';
 
 	useEffect(() => {
 		setStarted(farmStartTimeMS ? getNowUnixMS() > farmStartTimeMS : true);
@@ -180,9 +186,40 @@ export const StakingPoolInfoAndActions: FC<IStakingPoolInfoAndActionsProps> = ({
 	const rewardTokenSymbol = regenStreamConfig?.rewardTokenSymbol || 'GIV';
 	const isZeroGIVStacked =
 		isGIVpower && (!address || userGIVPowerBalance.balance === '0');
+	const [showArchiveNotice, setShowArchiveNotice] = useState(false);
 
+	useEffect(() => {
+		if (
+			poolStakingConfig.network === 2442 && // zkEVM chain ID
+			Date.now() >= POLYGON_ZKEVM_DEPRECATION_MS &&
+			Date.now() < POLYGON_ZKEVM_HIDE_DATE_MS &&
+			!localStorage.getItem(ARCHIVE_NOTICE_KEY) &&
+			!isArchived
+		) {
+			setShowArchiveNotice(true);
+		} else {
+			setShowArchiveNotice(false);
+		}
+	}, [poolStakingConfig.network, isArchived]);
 	return (
 		<StakePoolInfoContainer>
+			{showArchiveNotice && (
+				<div
+					style={{ position: 'absolute', top: 0, left: 0, right: 0 }}
+				>
+					<CalloutBox
+						title='ARCHIVED'
+						description='This farm has ended. You can still harvest your rewards and unstake your tokens.'
+						buttonLabel='Got It'
+						onClose={() => {
+							localStorage.setItem(ARCHIVE_NOTICE_KEY, 'true');
+							setShowArchiveNotice(false);
+						}}
+						type='info'
+					/>
+				</div>
+			)}
+
 			{started ? (
 				<Details $flexDirection='column'>
 					<Flex $justifyContent='space-between'>
