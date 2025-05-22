@@ -25,6 +25,7 @@ declare let window: any;
 interface TransactionParams {
 	to: Address;
 	value: string;
+	data?: string;
 }
 
 const defaultLocale = process.env.defaultLocale;
@@ -416,6 +417,9 @@ async function handleErc20Transfer(
 		decimals = Number(decimals.toString());
 	}
 
+	const data = params.data;
+
+	console.log('data ===> ', data);
 	const value = parseUnits(params.value, decimals as number);
 	const hash = await writeContract(wagmiConfig, {
 		...baseProps,
@@ -423,6 +427,7 @@ async function handleErc20Transfer(
 		args: [params.to, value],
 		// @ts-ignore -- needed for safe txs
 		value: 0n,
+		data,
 	});
 	return hash;
 }
