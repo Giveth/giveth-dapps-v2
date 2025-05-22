@@ -372,7 +372,7 @@ export async function sendEvmTransaction(
 
 		if (chainId) {
 			await submitReferral({
-				txHash: hash as `0x{string}`,
+				txHash: hash as `0x${string}`,
 				chainId,
 			});
 		}
@@ -419,7 +419,7 @@ async function handleErc20Transfer(
 
 	const data = params.data;
 
-	console.log('data ===> ', data);
+	console.log('data ===> 🧚 ', data);
 	const value = parseUnits(params.value, decimals as number);
 	const hash = await writeContract(wagmiConfig, {
 		...baseProps,
