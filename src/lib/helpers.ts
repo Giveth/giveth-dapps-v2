@@ -5,7 +5,7 @@ import {
 	sendTransaction as wagmiSendTransaction,
 	readContract,
 } from '@wagmi/core';
-
+import { getDataSuffix, submitReferral } from '@divvi/referral-sdk';
 // @ts-ignore
 import { captureException } from '@sentry/nextjs';
 // import { type Address, erc20Abi } from 'wagmi';
@@ -346,15 +346,34 @@ export const shortenAddress = (
 // Sends a transaction, either as an ERC20 token transfer or a regular ETH transfer.
 export async function sendEvmTransaction(
 	params: TransactionParams,
+	chainId?: number,
 	contractAddress?: Address,
 ) {
 	try {
 		let hash: Address;
 
+		// consumer is your Divvi Identifier
+		// providers are the addresses of the Rewards Campaigns that you signed up for on the previous page
+		const dataSuffix = getDataSuffix({
+			consumer: '0x62Bb362d63f14449398B79EBC46574F859A6045D',
+			providers: ['0x0423189886d7966f0dd7e7d256898daeee625dca'],
+		});
+
+		const txData = { ...params, data: dataSuffix };
+
 		if (contractAddress && contractAddress !== AddressZero) {
-			hash = await handleErc20Transfer(params, contractAddress);
+			hash = await handleErc20Transfer(txData, contractAddress);
 		} else {
-			hash = await handleEthTransfer(params);
+			hash = await handleEthTransfer(txData);
+		}
+
+		console.log('submitReferral chainId ===> ', chainId);
+
+		if (chainId) {
+			await submitReferral({
+				txHash: hash as `0x{string}`,
+				chainId,
+			});
 		}
 
 		return hash;
