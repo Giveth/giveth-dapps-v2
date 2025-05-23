@@ -310,10 +310,13 @@ export const GeneralWalletProvider: React.FC<{
 		if (!isConnected) throw Error('Wallet is not connected');
 		switch (walletChainType) {
 			case ChainType.EVM:
-				return sendEvmTransaction({
-					to: to as `0x${string}`,
-					value,
-				});
+				return sendEvmTransaction(
+					{
+						to: to as `0x${string}`,
+						value,
+					},
+					pendingNetworkId || undefined,
+				);
 			case ChainType.SOLANA: {
 				const lamports = new BigNumber(value)
 					.times(LAMPORTS_PER_SOL)

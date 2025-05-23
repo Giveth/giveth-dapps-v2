@@ -216,6 +216,7 @@ export const useCreateEvmDonation = () => {
 			props.draftDonationId = draftDonationData.createDraftDonation;
 			const hash = await sendEvmTransaction(
 				transactionObj,
+				chainId,
 				address,
 			).catch(error => {
 				handleError(error, 0, setFailedModalType);
