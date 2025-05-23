@@ -441,12 +441,14 @@ export async function handleErc20Transfer(
 
 	// Step 5: Report to Divvi
 	if (chainId) {
-		const res = await submitReferral({
-			txHash,
-			chainId,
-		});
-
-		console.log('submitReferral response ===> ', res);
+		try {
+			await submitReferral({
+				txHash,
+				chainId,
+			});
+		} catch {
+			return txHash;
+		}
 	}
 
 	return txHash;
@@ -470,12 +472,14 @@ async function handleEthTransfer(params: TransactionParams): Promise<Address> {
 
 	// Step 5: Report to Divvi
 	if (params.chainId) {
-		const res = await submitReferral({
-			txHash: hash,
-			chainId: params.chainId,
-		});
-
-		console.log('submitReferral response ===> ', res);
+		try {
+			await submitReferral({
+				txHash: hash,
+				chainId: params.chainId,
+			});
+		} catch {
+			return hash;
+		}
 	}
 
 	console.log('ETH transfer result', { hash });
