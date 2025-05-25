@@ -201,6 +201,11 @@ export const StakingPoolInfoAndActions: FC<IStakingPoolInfoAndActionsProps> = ({
 			setShowArchiveNotice(false);
 		}
 	}, [poolStakingConfig.network, isArchived]);
+	const isArchivingPeriod =
+		!isArchived &&
+		Date.now() >= POLYGON_ZKEVM_DEPRECATION_MS &&
+		Date.now() < POLYGON_ZKEVM_HIDE_DATE_MS;
+
 	return (
 		<StakePoolInfoContainer>
 			{showArchiveNotice && (
@@ -409,7 +414,8 @@ export const StakingPoolInfoAndActions: FC<IStakingPoolInfoAndActionsProps> = ({
 					<ClaimButton
 						disabled={
 							availableStakedToken <= 0n ||
-							!subgraphSyncedInfo.isSynced
+							!subgraphSyncedInfo.isSynced ||
+							isArchivingPeriod // <-- NEW condition added
 						}
 						onClick={() => setShowLockModal(true)}
 						label={
@@ -434,7 +440,8 @@ export const StakingPoolInfoAndActions: FC<IStakingPoolInfoAndActionsProps> = ({
 							isDiscontinued ||
 							exploited ||
 							userNotStakedAmount === 0n ||
-							!subgraphSyncedInfo.isSynced
+							!subgraphSyncedInfo.isSynced ||
+							isArchivingPeriod // <-- NEW condition added
 						}
 						onClick={() => setShowStakeModal(true)}
 					/>
