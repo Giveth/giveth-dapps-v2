@@ -134,22 +134,19 @@ const renderPools = (chainId?: number, showArchivedPools?: boolean) => {
 		const pool = pools[i];
 		const { farmEndTimeMS, network } = pool;
 
-		// Check if pool is Polygon zkEVM
 		const isZkEvmPool = network === ZKEVM_CHAIN_ID;
 
-		// Check if pool should be archived (farm ended + 2 weeks or after July 10 for zkEVM)
 		const archivedByFarmEnd =
 			farmEndTimeMS && now > farmEndTimeMS + TWO_WEEK;
 
-		// Additional archived logic for zkEVM farm: hide it from active list only after July 10
 		const zkEvmArchived = isZkEvmPool && now >= POLYGON_ZKEVM_HIDE_DATE_MS;
 
 		const archived = archivedByFarmEnd || zkEvmArchived;
 
 		if (archived) {
-			archivedPools.push(renderPool(pool, i, true)); // pass isArchived = true
+			archivedPools.push(renderPool(pool, i, true));
 		} else {
-			filteredPools.push(renderPool(pool, i, false)); // pass isArchived = false
+			filteredPools.push(renderPool(pool, i, false));
 		}
 	}
 

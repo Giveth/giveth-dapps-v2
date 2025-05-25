@@ -32,7 +32,7 @@ interface IBaseStakingCardProps {
 	currentIncentive?: {
 		key?: (string | number)[] | null | undefined;
 	};
-	isArchived?: boolean; // <-- Add here, as a top-level prop!
+	isArchived?: boolean;
 }
 
 const BaseStakingCard: FC<IBaseStakingCardProps> = ({

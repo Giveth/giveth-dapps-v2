@@ -399,6 +399,7 @@ export const StakingPoolInfoAndActions: FC<IStakingPoolInfoAndActionsProps> = ({
 			<HarvestButtonsWrapper>
 				<ClaimButton
 					disabled={
+						isArchived ||
 						exploited ||
 						earned === 0n ||
 						!started ||
@@ -413,6 +414,7 @@ export const StakingPoolInfoAndActions: FC<IStakingPoolInfoAndActionsProps> = ({
 				{isGIVpower && (
 					<ClaimButton
 						disabled={
+							isArchived ||
 							availableStakedToken <= 0n ||
 							!subgraphSyncedInfo.isSynced ||
 							isArchivingPeriod
@@ -437,6 +439,7 @@ export const StakingPoolInfoAndActions: FC<IStakingPoolInfoAndActionsProps> = ({
 						})}
 						size='small'
 						disabled={
+							isArchived ||
 							isDiscontinued ||
 							exploited ||
 							userNotStakedAmount === 0n ||
