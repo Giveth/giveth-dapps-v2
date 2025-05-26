@@ -14,9 +14,7 @@ import {
 	parseEther,
 	parseUnits,
 	erc20Abi,
-	createWalletClient,
 	encodeFunctionData,
-	custom,
 } from 'viem';
 import { WalletAdapterNetwork } from '@solana/wallet-adapter-base';
 import { giveconomyTabs } from '@/lib/constants/Tabs';
