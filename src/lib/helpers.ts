@@ -425,15 +425,9 @@ export async function handleErc20Transfer(
 	const chainId = params.chainId;
 
 	// Step 3: Create a wallet client
-	const walletClient = createWalletClient({
-		chain: chainId as unknown as Chain,
-		transport: custom(window.ethereum),
-	});
-	const [account] = await walletClient.getAddresses();
 
 	// Step 4: Send transaction with referral data
-	const txHash = await walletClient.sendTransaction({
-		account,
+	const txHash = await wagmiSendTransaction(wagmiConfig, {
 		to: contractAddress,
 		data: `${baseData}${dataSuffix}` as `0x${string}`,
 		value: 0n,
