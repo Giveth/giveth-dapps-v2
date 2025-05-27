@@ -399,7 +399,6 @@ export const StakingPoolInfoAndActions: FC<IStakingPoolInfoAndActionsProps> = ({
 			<HarvestButtonsWrapper>
 				<ClaimButton
 					disabled={
-						isArchived ||
 						exploited ||
 						earned === 0n ||
 						!started ||
