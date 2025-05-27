@@ -11,7 +11,7 @@ import { FC, useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
 import { useRouter } from 'next/router';
 import { useAccount } from 'wagmi';
-import CalloutBox from '@/components/CalloutBox';
+import { ArchiveCover } from '@/components/ArchiveAndNetworkCover/ArchiveCover';
 import FarmCountDown from '@/components/FarmCountDown';
 import { IconWithTooltip } from '@/components/IconWithToolTip';
 import { avgAPR } from '@/helpers/givpower';
@@ -209,20 +209,10 @@ export const StakingPoolInfoAndActions: FC<IStakingPoolInfoAndActionsProps> = ({
 	return (
 		<StakePoolInfoContainer>
 			{showArchiveNotice && (
-				<div
-					style={{ position: 'absolute', top: 0, left: 0, right: 0 }}
-				>
-					<CalloutBox
-						title='ARCHIVED'
-						description='This farm has ended. You can still harvest your rewards and unstake your tokens.'
-						buttonLabel='Got It'
-						onClose={() => {
-							localStorage.setItem(ARCHIVE_NOTICE_KEY, 'true');
-							setShowArchiveNotice(false);
-						}}
-						type='info'
-					/>
-				</div>
+				<ArchiveCover
+					isExploited={exploited}
+					isStream={!!regenStreamConfig}
+				/>
 			)}
 
 			{started ? (
