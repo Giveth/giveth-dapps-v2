@@ -130,8 +130,8 @@ export const StakingPoolInfoAndActions: FC<IStakingPoolInfoAndActionsProps> = ({
 	);
 
 	const userGIVLocked = sdh.getUserGIVLockedBalance();
-	const POLYGON_ZKEVM_DEPRECATION_MS = Date.UTC(2025, 4, 10, 16, 0, 0); // June 10, 2025 11am Panama
-	const POLYGON_ZKEVM_HIDE_DATE_MS = Date.UTC(2025, 5, 10, 0, 0, 0); // July 10, 2025
+	const POLYGON_ZKEVM_DEPRECATION_MS = Date.UTC(2025, 3, 10, 16, 0, 0); // June 10, 2025 11am Panama
+	const POLYGON_ZKEVM_HIDE_DATE_MS = Date.UTC(2025, 4, 10, 0, 0, 0); // July 10, 2025
 	const ARCHIVE_NOTICE_KEY = 'givfarm_zkevm_archive_notice_dismissed';
 
 	useEffect(() => {
