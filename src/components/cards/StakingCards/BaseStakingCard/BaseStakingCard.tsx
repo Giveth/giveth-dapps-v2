@@ -32,12 +32,14 @@ interface IBaseStakingCardProps {
 	currentIncentive?: {
 		key?: (string | number)[] | null | undefined;
 	};
+	isArchived?: boolean;
 }
 
 const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 	poolStakingConfig,
 	notif,
 	currentIncentive,
+	isArchived,
 }) => {
 	const [state, setState] = useState(StakeCardState.NORMAL);
 	const [showGIVPowerExplain, setShowGIVPowerExplain] = useState(false);
@@ -87,6 +89,7 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 							isDiscontinued={isDiscontinued}
 							isGIVpower={isGIVpower}
 							currentIncentive={currentIncentive}
+							isArchived={isArchived}
 						/>
 					</>
 				) : state === StakeCardState.GIVPOWER_INTRO ? (
