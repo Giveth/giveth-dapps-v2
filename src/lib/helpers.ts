@@ -1,15 +1,21 @@
 // eslint-disable-next-line import/named
 import unescape from 'lodash/unescape';
 import {
-	writeContract,
 	sendTransaction as wagmiSendTransaction,
 	readContract,
 } from '@wagmi/core';
-
+import { getDataSuffix, submitReferral } from '@divvi/referral-sdk';
 // @ts-ignore
 import { captureException } from '@sentry/nextjs';
 // import { type Address, erc20Abi } from 'wagmi';
-import { Address, Chain, parseEther, parseUnits, erc20Abi } from 'viem';
+import {
+	Address,
+	Chain,
+	parseEther,
+	parseUnits,
+	erc20Abi,
+	encodeFunctionData,
+} from 'viem';
 import { WalletAdapterNetwork } from '@solana/wallet-adapter-base';
 import { giveconomyTabs } from '@/lib/constants/Tabs';
 import { getRequest } from '@/helpers/requests';
@@ -25,6 +31,7 @@ declare let window: any;
 interface TransactionParams {
 	to: Address;
 	value: string;
+	chainId?: number;
 }
 
 const defaultLocale = process.env.defaultLocale;
@@ -346,15 +353,19 @@ export const shortenAddress = (
 // Sends a transaction, either as an ERC20 token transfer or a regular ETH transfer.
 export async function sendEvmTransaction(
 	params: TransactionParams,
+	chainId?: number,
 	contractAddress?: Address,
 ) {
 	try {
 		let hash: Address;
 
 		if (contractAddress && contractAddress !== AddressZero) {
-			hash = await handleErc20Transfer(params, contractAddress);
+			hash = await handleErc20Transfer(
+				{ ...params, chainId },
+				contractAddress,
+			);
 		} else {
-			hash = await handleEthTransfer(params);
+			hash = await handleEthTransfer({ ...params, chainId });
 		}
 
 		return hash;
@@ -371,14 +382,11 @@ export async function sendEvmTransaction(
 	}
 }
 
-// Handles the transfer for ERC20 tokens, returning the transaction hash.
-async function handleErc20Transfer(
+export async function handleErc20Transfer(
+	// Handles the transfer for ERC20 tokens, returning the transaction hash.
 	params: TransactionParams,
 	contractAddress: Address,
 ): Promise<Address> {
-	// 'viem' ABI contract for USDT donation fails on mainnet
-	// so we use the USDT mainnet ABI instead and put inside usdtMainnetABI.json file
-	// update for 'viem' package to fix this issue doesn't work
 	const ABItoUse =
 		contractAddress === '0xdac17f958d2ee523a2206206994597c13d831ec7'
 			? usdtMainnetABI
@@ -388,35 +396,83 @@ async function handleErc20Transfer(
 		address: contractAddress,
 		abi: ABItoUse,
 	};
+
 	let decimals = await readContract(wagmiConfig, {
 		...baseProps,
 		functionName: 'decimals',
 	});
-
 	if (typeof decimals === 'bigint') {
 		decimals = Number(decimals.toString());
 	}
 
 	const value = parseUnits(params.value, decimals as number);
-	const hash = await writeContract(wagmiConfig, {
-		...baseProps,
+
+	// Step 1: Encode function data manually
+	const baseData = encodeFunctionData({
+		abi: ABItoUse,
 		functionName: 'transfer',
 		args: [params.to, value],
-		// @ts-ignore -- needed for safe txs
+	});
+
+	// Step 2: Get referral data suffix
+	const dataSuffix = getDataSuffix({
+		consumer: '0x62Bb362d63f14449398B79EBC46574F859A6045D',
+		providers: ['0x0423189886d7966f0dd7e7d256898daeee625dca'],
+	});
+
+	const chainId = params.chainId;
+
+	// Step 3: Create a wallet client
+
+	// Step 4: Send transaction with referral data
+	const txHash = await wagmiSendTransaction(wagmiConfig, {
+		to: contractAddress,
+		data: `${baseData}${dataSuffix}` as `0x${string}`,
 		value: 0n,
 	});
-	return hash;
+
+	// Step 5: Report to Divvi
+	if (chainId) {
+		try {
+			await submitReferral({
+				txHash,
+				chainId,
+			});
+		} catch {
+			return txHash;
+		}
+	}
+
+	return txHash;
 }
 
 // Handles the transfer for ETH, returning the transaction hash.
 async function handleEthTransfer(params: TransactionParams): Promise<Address> {
 	const value = parseEther(params.value);
 
+	// Step 2: Get referral data suffix
+	const dataSuffix = getDataSuffix({
+		consumer: '0x62Bb362d63f14449398B79EBC46574F859A6045D',
+		providers: ['0x0423189886d7966f0dd7e7d256898daeee625dca'],
+	});
+
 	const hash = await wagmiSendTransaction(wagmiConfig, {
 		to: params.to,
 		value: value,
-		data: '0x',
+		data: ('0x' + dataSuffix) as `0x${string}`,
 	});
+
+	// Step 5: Report to Divvi
+	if (params.chainId) {
+		try {
+			await submitReferral({
+				txHash: hash,
+				chainId: params.chainId,
+			});
+		} catch {
+			return hash;
+		}
+	}
 
 	console.log('ETH transfer result', { hash });
 	return hash;
