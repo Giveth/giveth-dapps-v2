@@ -1,476 +1,618 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useAccount, useBalance, useReadContract } from 'wagmi';
+import { getConnectorClient } from '@wagmi/core';
+import { formatUnits } from 'viem';
 import { ethers } from 'ethers';
-import { Framework, Operation } from '@superfluid-finance/sdk-core';
+import { wagmiConfig } from '@/wagmiConfigs';
 
-const GIVETH_HOUSE_ADDRESS = '0x567c4B141ED61923967cA25Ef4906C8781069a10';
+// Squid Router configuration
+// const SQUID_API_BASE_URL = 'https://v2.api.squidrouter.com';
+const SQUID_API_BASE_URL = 'https://apiplus.squidrouter.com';
 
-const TOKEN_ADDRESSES = [
-	{
-		name: 'USDCx',
-		address: '0xD04383398dD2426297da660F9CCA3d439AF9ce1b',
-		decimals: 18,
-	},
-	{
-		name: 'USDC Coin',
-		address: '0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913',
-		decimals: 6,
-		superToken: {
-			address: '0xD04383398dD2426297da660F9CCA3d439AF9ce1b',
-		},
-	},
-];
+interface Network {
+	id: string;
+	name: string;
+	chainId: number;
+}
 
-const BASE_CHAIN_ID = 8453;
+interface Token {
+	address: string;
+	symbol: string;
+	name: string;
+	decimals: number;
+	balance?: string;
+}
 
 const YourApp = () => {
-	const [tokens, setTokens] = useState<
-		{ name: string; address: string; balance: string }[]
-	>([]);
-	const [selectedToken, setSelectedToken] = useState('');
-	const [destinationAddress, setDestinationAddress] =
-		useState(GIVETH_HOUSE_ADDRESS);
-	const [loading, setLoading] = useState(true);
-	const [amount, setAmount] = useState('0.001'); // Initial amount
-	const [notification, setNotification] = useState('');
+	const { address: currentUserAddress } = useAccount();
+	const [fromAddress, setFromAddress] = useState(currentUserAddress || '');
+	const [toAddress, setToAddress] = useState(
+		'0x495A28448A06B0DF634750EB062311dDC40B3ae5',
+	);
+	const [amount, setAmount] = useState('');
+	const [sourceNetwork, setSourceNetwork] = useState('137'); // Default Polygon
+	const [selectedSourceToken, setSelectedSourceToken] = useState('');
+	const [availableTokens, setAvailableTokens] = useState<Token[]>([]);
+	const [isLoading, setIsLoading] = useState(false);
+	const [isLoadingTokens, setIsLoadingTokens] = useState(false);
 
-	const determineTokenType = async (
-		sf: {
-			loadNativeAssetSuperToken: (arg0: any) => any;
-			loadWrapperSuperToken: (arg0: any) => any;
-		},
-		tokenAddress: any,
-	) => {
-		let superToken;
+	// Available test networks
+	const networks: Network[] = [{ id: '137', name: 'Polygon', chainId: 137 }];
 
-		// Check if it's a native super token
-		try {
-			superToken = await sf.loadNativeAssetSuperToken(tokenAddress);
-			console.log('Native Super Token detected.');
-			return { type: 'native', superToken };
-		} catch (error) {
-			console.log('Not a Native Super Token.');
-		}
-
-		// Check if it's a wrapper super token
-		try {
-			superToken = await sf.loadWrapperSuperToken(tokenAddress);
-			console.log('Wrapper Super Token detected.');
-			return { type: 'wrapper', superToken };
-		} catch (error) {
-			console.log('Not a Wrapper Super Token.');
-		}
-
-		// If both checks fail, it's a regular ERC-20 token
-		console.log('Regular ERC-20 token detected.');
-		return { type: 'erc20', superToken: null };
+	// Test Giveth token on Polygon (destination)
+	// const destinationGivethToken: Token = {
+	// 	address: '0xc4df120d75604307dcB604fde2AD3b8a8B7c6FAA',
+	// 	symbol: 'GIV',
+	// 	name: 'Test Giveth Token',
+	// 	decimals: 18,
+	// };
+	const destinationGivethToken: Token = {
+		// address: '0x2791Bca1f2de4661ED88A30C99A7a9449Aa84174',
+		address: '0x3c499c542cEF5E3811e1192ce70d8cC03d5c3359',
+		symbol: 'USDC',
+		name: 'USDC Token',
+		decimals: 6,
 	};
 
-	// Function to check if a flow exists
-	const checkIfFlowExists = async (
-		sf: {
-			cfaV1: {
-				getFlow: (arg0: {
-					superToken: any;
-					sender: any;
-					receiver: any;
-					providerOrSigner: any;
-				}) => any;
-			};
+	// Get native token balance (POL)
+	const { data: nativeBalance } = useBalance({
+		address: currentUserAddress,
+		chainId: parseInt(sourceNetwork),
+	});
+
+	// ERC20 ABI for balanceOf function
+	const erc20Abi = [
+		{
+			name: 'balanceOf',
+			type: 'function',
+			stateMutability: 'view',
+			inputs: [{ name: 'account', type: 'address' }],
+			outputs: [{ name: '', type: 'uint256' }],
 		},
-		superTokenAddress: any,
-		senderAddress: any,
-		receiverAddress: any,
-		signer: any,
-	) => {
+	] as const;
+
+	// USDT balance on Polygon
+	const { data: usdtBalance } = useReadContract({
+		address: '0xc2132D05D31c914a87C6611C10748AEb04B58e8F',
+		abi: erc20Abi,
+		functionName: 'balanceOf',
+		args: currentUserAddress ? [currentUserAddress] : undefined,
+		chainId: 137,
+	});
+
+	// USDC balance on Polygon
+	const { data: usdcBalance } = useReadContract({
+		address: '0x3c499c542cEF5E3811e1192ce70d8cC03d5c3359',
+		abi: erc20Abi,
+		functionName: 'balanceOf',
+		args: currentUserAddress ? [currentUserAddress] : undefined,
+		chainId: 137,
+	});
+
+	// Function to get token balance
+	const getTokenBalance = (
+		tokenAddress: string,
+		decimals: number,
+	): string => {
+		if (!currentUserAddress) return '0.0000';
+
 		try {
-			const flowInfo = await sf.cfaV1.getFlow({
-				superToken: superTokenAddress,
-				sender: senderAddress,
-				receiver: receiverAddress,
-				providerOrSigner: signer,
-			});
-			console.log(
-				`Existing flow found. Current flow rate: ${flowInfo.flowRate}`,
-			);
-			console.log({ flowInfo });
-			return { exists: true, flowRate: flowInfo.flowRate };
-		} catch (error) {
-			console.log('No existing flow found.');
-			return { exists: false, flowRate: '0' };
-		}
-	};
-
-	const handleApproveAndExecute = async () => {
-		try {
-			// Connect to MetaMask
-			if (!window.ethereum) {
-				alert('MetaMask not detected');
-				return;
-			}
-
-			const provider = new ethers.providers.Web3Provider(window.ethereum);
-			await provider.send('eth_requestAccounts', []);
-			const signer = provider.getSigner();
-			const sf = await Framework.create({
-				chainId: BASE_CHAIN_ID,
-				provider,
-			});
-
-			console.log({ sf });
-
-			const address = await signer.getAddress();
-
-			// Get token details (decimals, etc.)
-			const token = TOKEN_ADDRESSES.find(
-				t => t.address === selectedToken,
-			);
-			if (!token) {
-				alert('Invalid token selected.');
-				return;
-			}
-			const tokenDecimals = token.decimals;
-
-			// Define the amount to approve (X.XX USDCx)
-			const amountToApprove = ethers.utils.parseUnits(
-				amount,
-				tokenDecimals,
-			);
-
-			const flowRatePerSecond = amountToApprove.div(30 * 24 * 60 * 60); // Convert monthly to per-second rate
-			console.log({ flowRatePerSecond });
-
-			// Determine the token type
-			const { type, superToken } = await determineTokenType(
-				sf,
-				selectedToken,
-			);
-
-			console.log('Selected token:', selectedToken);
-			console.log('Super type:', type);
-			console.log('Super Token:', superToken);
-
-			if (type === 'native' || type === 'wrapper') {
-				console.log(
-					`${type.charAt(0).toUpperCase() + type.slice(1)} Super Token detected`,
-				);
-
-				// Attempt to check allowance (skip if it fails)
-				let allowance;
-				try {
-					allowance = await superToken.allowance({
-						owner: await signer.getAddress(),
-						spender: destinationAddress,
-						providerOrSigner: signer,
-					});
-					await allowance.wait();
-					console.log(`Current allowance: ${allowance.toString()}`);
-				} catch (error) {
-					console.log(
-						'Allowance does not exist or cannot be fetched. Proceeding to approve...',
-					);
-				}
-
-				// Approve if needed
-				if (ethers.BigNumber.from(allowance).lt(amountToApprove)) {
-					const approveOperation = superToken.approve({
-						receiver: destinationAddress,
-						amount: amountToApprove.toString(),
-					});
-
-					const approveTxResponse = await signer.sendTransaction(
-						await approveOperation.getPopulatedTransactionRequest(
-							signer,
+			// For native token (POL), use the native balance
+			if (tokenAddress === '0x0000000000000000000000000000000000000000') {
+				if (nativeBalance) {
+					return parseFloat(
+						formatUnits(
+							nativeBalance.value,
+							nativeBalance.decimals,
 						),
-					);
-					await approveTxResponse.wait();
-					console.log(`Approved ${amount} ${type} super tokens.`);
+					).toFixed(4);
 				}
-
-				// Check for existing flow
-				const flowStatus = await checkIfFlowExists(
-					sf,
-					superToken.address,
-					address,
-					destinationAddress,
-					signer,
-				);
-
-				if (flowStatus.exists && flowStatus.flowRate !== '0') {
-					// Add new flow rate to existing flow rate
-					const newFlowRate = ethers.BigNumber.from(
-						flowStatus.flowRate,
-					).add(flowRatePerSecond);
-
-					// Update the flow
-					const updateFlowOperation = superToken.updateFlow({
-						sender: address,
-						receiver: destinationAddress,
-						flowRate: newFlowRate.toString(), // New total flow rate
-					});
-
-					console.log('Updating existing flow...');
-					const updateFlowTxResponse = await updateFlowOperation.exec(
-						signer,
-						// 70,
-					);
-					await updateFlowTxResponse.wait();
-					console.log('Flow updated successfully.');
-					setNotification('Flow updated successfully!');
-				} else {
-					// Create a new flow if none exists
-					const createFlowOperation = superToken.createFlow({
-						sender: address,
-						receiver: destinationAddress,
-						flowRate: flowRatePerSecond.toString(), // New flow rate
-					});
-
-					console.log('Creating new flow...');
-					const createFlowTxResponse = await createFlowOperation.exec(
-						signer,
-						// 2,
-					);
-					await createFlowTxResponse.wait();
-					console.log('Flow created successfully.');
-					setNotification('Flow created successfully!');
-				}
-			} else if (type === 'erc20') {
-				/**
-				 *
-				 *
-				 * USDC native tokens
-				 *
-				 *
-				 *
-				 */
-				console.log('Approving underlying ERC-20 token for upgrade...');
-
-				const operations: Operation[] = [];
-
-				const underlyingToken = await sf.loadSuperToken(selectedToken);
-				const newSuperToken = await sf.loadWrapperSuperToken(
-					token.superToken?.address || '',
-				);
-
-				console.log({ underlyingToken });
-
-				const erc20Contract = new ethers.Contract(
-					selectedToken, // Underlying ERC-20 token address
-					[
-						'function approve(address spender, uint256 amount) public returns (bool)',
-					],
-					signer,
-				);
-
-				// Approve the Super Token contract to spend the ERC-20 token
-				const approveTx = await underlyingToken.approve({
-					receiver: newSuperToken.address, // Address of the Super Token
-					amount: amountToApprove.toString(),
-				});
-				const approveTRANS = await approveTx.exec(signer);
-				await approveTRANS.wait(); // Wait for the transaction to be mined
-				console.log(
-					'Underlying ERC-20 token approved for upgrade.',
-					approveTx,
-				);
-
-				console.log(
-					'Upgrading ERC-20 token to Super Token...',
-					approveTRANS,
-				);
-
-				const amountToApproveNew = ethers.utils.parseUnits(amount, 18);
-				const flowRatePerSecondNew = amountToApproveNew.div(
-					30 * 24 * 60 * 60,
-				); // Convert monthly to per-second rate
-
-				console.log('Upgrading......'); // THIS FAILING FIRST TIME
-				const upgradeTx = await newSuperToken.upgrade({
-					amount: amountToApproveNew.toString(),
-				});
-				const approveUPGRD = await upgradeTx.exec(signer);
-				await approveUPGRD.wait(); // Wait for the transaction to be mined
-				// operations.push(upgradeTx);
-				console.log('Upgrade to Super Token complete.', upgradeTx);
-
-				// Create or update the stream
-				const flowStatus = await checkIfFlowExists(
-					sf,
-					newSuperToken.address,
-					address,
-					destinationAddress,
-					signer,
-				);
-
-				if (flowStatus.exists && flowStatus.flowRate !== '0') {
-					console.log('Updating existing flow...');
-					const updateFlowOperation = newSuperToken.updateFlow({
-						sender: address,
-						receiver: destinationAddress,
-						flowRate: flowRatePerSecondNew.toString(), // New flow rate
-					});
-					// const flowTxResponse =
-					// 	await updateFlowOperation.exec(signer);
-					// await flowTxResponse.wait();
-
-					operations.push(updateFlowOperation);
-
-					const batchOp = sf.batchCall(operations);
-					const txUpdate = await batchOp.exec(signer, 2);
-
-					console.log('Flow updated successfully.', txUpdate);
-					setNotification('Flow updated successfully!');
-				} else {
-					console.log('Creating new flow...');
-					const createFlowOperation = newSuperToken.createFlow({
-						sender: address,
-						receiver: destinationAddress,
-						flowRate: flowRatePerSecondNew.toString(), // New flow rate
-					});
-					const flowTxResponse = await createFlowOperation.exec(
-						signer,
-						2,
-					);
-					await flowTxResponse.wait();
-					// operations.push(createFlowOperation);
-
-					// const batchOp = sf.batchCall(operations);
-					// const txCreate = await batchOp.exec(signer, 700);
-
-					console.log('Flow created successfully.', flowTxResponse);
-					setNotification('Flow created successfully!');
-				}
+				return '0.0000';
 			}
+
+			// For USDT
+			if (tokenAddress === '0xc2132D05D31c914a87C6611C10748AEb04B58e8F') {
+				if (usdtBalance) {
+					return parseFloat(
+						formatUnits(usdtBalance as bigint, decimals),
+					).toFixed(4);
+				}
+				return '0.0000';
+			}
+
+			// For USDC
+			if (tokenAddress === '0x3c499c542cEF5E3811e1192ce70d8cC03d5c3359') {
+				if (usdcBalance) {
+					return parseFloat(
+						formatUnits(usdcBalance as bigint, decimals),
+					).toFixed(4);
+				}
+				return '0.0000';
+			}
+
+			return '0.0000';
 		} catch (error) {
-			console.error('Error during approval or execution:', error);
-			setNotification(
-				'Transaction failed! Please check the console for details.',
-			);
+			console.error('Error formatting token balance:', error);
+			return '0.0000';
 		}
 	};
 
+	// Update fromAddress when wallet connects
 	useEffect(() => {
-		const fetchTokens = async () => {
+		if (currentUserAddress) {
+			setFromAddress(currentUserAddress);
+		}
+	}, [currentUserAddress]);
+
+	// Load available tokens when source network changes
+	useEffect(() => {
+		const loadTokensForNetwork = () => {
+			setIsLoadingTokens(true);
 			try {
-				if (!window.ethereum) {
-					alert('MetaMask not detected');
-					return;
+				// Test tokens on different networks
+				const networkTokens: { [key: string]: Token[] } = {
+					'137': [
+						{
+							address:
+								'0x0000000000000000000000000000000000000000',
+							symbol: 'POL',
+							name: 'Polygon',
+							decimals: 18,
+						},
+						{
+							address:
+								'0xc2132D05D31c914a87C6611C10748AEb04B58e8F',
+							symbol: 'USDT',
+							name: 'Tether USD',
+							decimals: 6,
+						},
+						{
+							address:
+								'0x3c499c542cEF5E3811e1192ce70d8cC03d5c3359',
+							symbol: 'USDC',
+							name: 'USD Coin',
+							decimals: 6,
+						},
+					],
+				};
+
+				const tokens = networkTokens[sourceNetwork] || [];
+
+				// Add real balances to tokens
+				const tokensWithBalances = tokens.map(token => ({
+					...token,
+					balance: getTokenBalance(token.address, token.decimals),
+				}));
+
+				setAvailableTokens(tokensWithBalances);
+				if (tokensWithBalances.length > 0) {
+					setSelectedSourceToken(tokensWithBalances[0].address);
 				}
-
-				const provider = new ethers.providers.Web3Provider(
-					window.ethereum,
-				);
-				await provider.send('eth_requestAccounts', []);
-				const signer = provider.getSigner();
-				const address = await signer.getAddress();
-
-				const balances = await Promise.all(
-					TOKEN_ADDRESSES.map(async token => {
-						const contract = new ethers.Contract(
-							token.address,
-							[
-								// ERC20 ABI for balanceOf and decimals
-								'function balanceOf(address owner) view returns (uint256)',
-								'function decimals() view returns (uint8)',
-							],
-							provider,
-						);
-
-						const balance = await contract.balanceOf(address);
-						const decimals = await contract.decimals();
-
-						return {
-							name: token.name,
-							address: token.address,
-							balance: ethers.utils.formatUnits(
-								balance,
-								decimals,
-							),
-						};
-					}),
-				);
-
-				setTokens(balances);
-				setSelectedToken(balances[0]?.address || '');
-				setLoading(false);
 			} catch (error) {
-				console.error('Error fetching tokens:', error);
-				alert('An error occurred while fetching tokens.');
+				console.error('Error loading tokens:', error);
+			} finally {
+				setIsLoadingTokens(false);
 			}
 		};
 
-		fetchTokens();
-	}, []);
+		if (sourceNetwork && currentUserAddress) {
+			loadTokensForNetwork();
+		}
+	}, [
+		sourceNetwork,
+		currentUserAddress,
+		nativeBalance,
+		usdtBalance,
+		usdcBalance,
+	]);
+
+	const getSquidRoute = async () => {
+		try {
+			setIsLoading(true);
+
+			const sourceToken = availableTokens.find(
+				t => t.address === selectedSourceToken,
+			);
+
+			if (!sourceToken) {
+				throw new Error('Source token not found');
+			}
+
+			const params = {
+				fromAddress: fromAddress,
+				fromChain: '137',
+				fromToken: sourceToken.address,
+				fromAmount: (
+					parseFloat(amount) * Math.pow(10, sourceToken.decimals)
+				).toString(),
+				toChain: '137', // Always Polygon for destination
+				toToken: destinationGivethToken.address,
+				toAddress: toAddress,
+				// slippage: '1.0',
+				quoteOnly: false,
+			};
+
+			const response = await fetch(`${SQUID_API_BASE_URL}/v2/route`, {
+				method: 'POST',
+				headers: {
+					'x-integrator-id':
+						'giveth-test-45254b91-2ae7-4007-95db-80d465492e2c',
+					'Content-Type': 'application/json',
+				},
+				body: JSON.stringify(params),
+			});
+
+			if (!response.ok) {
+				throw new Error(`HTTP error! status: ${response.status}`);
+			}
+
+			const route = await response.json();
+			console.log('Squid Route:', route);
+
+			return route;
+		} catch (error) {
+			console.error('Error getting Squid route:', error);
+			throw error;
+		} finally {
+			setIsLoading(false);
+		}
+	};
+
+	const executeTransaction = async (route: any) => {
+		try {
+			console.log('Executing transaction with route:', route);
+			const squidTransactionRequest = route.transactionRequest;
+
+			const sourceToken = route.estimate.fromToken;
+			const fromAmount = route.estimate.fromAmount;
+
+			await approveSpending(
+				squidTransactionRequest?.target,
+				sourceToken.address,
+				fromAmount,
+			);
+
+			const signer = await getEthersSigner();
+
+			const tx = await signer.sendTransaction({
+				to: squidTransactionRequest.target,
+				data: squidTransactionRequest.data,
+				value: squidTransactionRequest.value,
+				// gasPrice: (await provider.getFeeData()).gasPrice,
+				gasLimit: squidTransactionRequest.gasLimit,
+			});
+			console.log(tx.hash);
+
+			// if (
+			// 	squidTransactionRequest &&
+			// 	squidTransactionRequest.data &&
+			// 	squidTransactionRequest.to
+			// ) {
+			// 	const signer = await getEthersSigner();
+			// 	const tx = await signer.sendTransaction({
+			// 		to: squidTransactionRequest.to,
+			// 		data: squidTransactionRequest.data,
+			// 		value: squidTransactionRequest.value
+			// 			? ethers.BigNumber.from(squidTransactionRequest.value)
+			// 			: undefined,
+			// 		gasLimit: squidTransactionRequest.gasLimit
+			// 			? ethers.BigNumber.from(
+			// 					squidTransactionRequest.gasLimit,
+			// 				)
+			// 			: undefined,
+			// 	});
+			// console.log('Submitted transaction:', tx.hash);
+			// await tx.wait();
+			// 	console.log('Transaction confirmed');
+			// } else {
+			// 	console.warn('Skipping execution: No transactionRequest found');
+			// }
+
+			console.log('Transaction:', squidTransactionRequest);
+		} catch (error) {
+			console.error('Error executing transaction:', error);
+		}
+	};
+
+	const handleSubmit = async (e: React.FormEvent) => {
+		e.preventDefault();
+
+		if (!amount || parseFloat(amount) <= 0) {
+			alert('Please enter a valid amount');
+			return;
+		}
+
+		if (!fromAddress || !toAddress) {
+			alert('Please ensure both addresses are filled');
+			return;
+		}
+
+		if (!selectedSourceToken) {
+			alert('Please select a source token');
+			return;
+		}
+
+		try {
+			const sourceToken = availableTokens.find(
+				t => t.address === selectedSourceToken,
+			);
+			console.log('Form submitted with data:', {
+				fromAddress,
+				toAddress,
+				amount,
+				sourceNetwork: networks.find(n => n.id === sourceNetwork)?.name,
+				sourceToken: sourceToken?.symbol,
+				destinationNetwork: 'Polygon',
+				destinationToken: 'USDC',
+			});
+
+			const routeData = await getSquidRoute();
+			if (routeData?.route) {
+				await executeTransaction(routeData.route); // pass the inner `route`
+			}
+		} catch (error) {
+			console.error('Transaction failed:', error);
+			alert('Transaction failed. Check console for details.');
+		}
+	};
+
+	const selectedToken = availableTokens.find(
+		t => t.address === selectedSourceToken,
+	);
 
 	return (
-		<div style={{ textAlign: 'center', marginTop: '50px' }}>
-			<h1>Approve and Execute {amount} USDC</h1>
-			<h3>
-				Network ID: {BASE_CHAIN_ID} <em>Optimism Network</em>
-			</h3>
-			<h3>
-				Transaction to wallet: {destinationAddress}
-				<em>Giveth House</em>
-			</h3>
-			<div>
-				<h3>Select a Token</h3>
-				{loading ? (
-					<p>Loading tokens...</p>
-				) : (
-					<select
-						value={selectedToken}
-						onChange={e => setSelectedToken(e.target.value)}
-						style={{ padding: '10px 20px' }}
+		<div style={{ padding: '20px', maxWidth: '600px', margin: '0 auto' }}>
+			<h1>Cross-Chain Token Transfer</h1>
+			<p style={{ color: '#666', marginBottom: '20px' }}>
+				Transfer tokens from Polygon & Gnosis networks to Giveth Token
+				(GIV) on Polygon using Squid Router
+			</p>
+
+			<form
+				onSubmit={handleSubmit}
+				style={{
+					display: 'flex',
+					flexDirection: 'column',
+					gap: '15px',
+				}}
+			>
+				<div>
+					<label
+						htmlFor='fromAddress'
+						style={{ display: 'block', marginBottom: '5px' }}
 					>
-						{tokens.map(token => (
-							<option key={token.address} value={token.address}>
-								{token.name} - ${token.balance} -{' '}
-								{token.address}
+						From Address (Current User):
+					</label>
+					<input
+						type='text'
+						id='fromAddress'
+						value={fromAddress}
+						onChange={e => setFromAddress(e.target.value)}
+						placeholder='Current user wallet address'
+						style={{
+							width: '100%',
+							padding: '10px',
+							border: '1px solid #ccc',
+							borderRadius: '4px',
+							fontSize: '14px',
+						}}
+					/>
+				</div>
+
+				<div>
+					<label
+						htmlFor='toAddress'
+						style={{ display: 'block', marginBottom: '5px' }}
+					>
+						To Address (Polygon Recipient):
+					</label>
+					<input
+						type='text'
+						id='toAddress'
+						value={toAddress}
+						onChange={e => setToAddress(e.target.value)}
+						placeholder='Polygon recipient address'
+						style={{
+							width: '100%',
+							padding: '10px',
+							border: '1px solid #ccc',
+							borderRadius: '4px',
+							fontSize: '14px',
+						}}
+					/>
+				</div>
+
+				<div>
+					<label
+						htmlFor='sourceNetwork'
+						style={{ display: 'block', marginBottom: '5px' }}
+					>
+						Source Network:
+					</label>
+					<select
+						id='sourceNetwork'
+						value={sourceNetwork}
+						onChange={e => setSourceNetwork(e.target.value)}
+						style={{
+							width: '100%',
+							padding: '10px',
+							border: '1px solid #ccc',
+							borderRadius: '4px',
+							fontSize: '14px',
+						}}
+					>
+						{networks.map(network => (
+							<option key={network.id} value={network.id}>
+								{network.name}
 							</option>
 						))}
 					</select>
-				)}
-			</div>
-			<br />
-			<div>
-				<h3>Enter Amount</h3>
-				<input
-					type='text'
-					value={amount}
-					onChange={e => setAmount(e.target.value)}
-					style={{ padding: '10px', width: '200px' }}
-				/>
-			</div>
-			<br />
-			<div>
-				<h3>Destination Address</h3>
-				<input
-					type='text'
-					value={destinationAddress}
-					onChange={e => setDestinationAddress(e.target.value)}
-					style={{ padding: '10px', width: '500px' }}
-				/>
-			</div>
-			<br />
-			<button
-				onClick={handleApproveAndExecute}
-				style={{ padding: '10px 20px' }}
-			>
-				Approve & Execute
-			</button>
-			{notification && (
+				</div>
+
+				<div>
+					<label
+						htmlFor='sourceToken'
+						style={{ display: 'block', marginBottom: '5px' }}
+					>
+						Source Token {isLoadingTokens && '(Loading...)'}:
+					</label>
+					<select
+						id='sourceToken'
+						value={selectedSourceToken}
+						onChange={e => setSelectedSourceToken(e.target.value)}
+						disabled={
+							isLoadingTokens || availableTokens.length === 0
+						}
+						style={{
+							width: '100%',
+							padding: '10px',
+							border: '1px solid #ccc',
+							borderRadius: '4px',
+							fontSize: '14px',
+							backgroundColor: isLoadingTokens
+								? '#f5f5f5'
+								: 'white',
+						}}
+					>
+						{availableTokens.map(token => (
+							<option key={token.address} value={token.address}>
+								{token.symbol} - Balance: {token.balance}
+							</option>
+						))}
+					</select>
+				</div>
+
+				<div>
+					<label
+						htmlFor='amount'
+						style={{ display: 'block', marginBottom: '5px' }}
+					>
+						Amount ({selectedToken?.symbol || 'Token'}):
+					</label>
+					<input
+						type='number'
+						id='amount'
+						value={amount}
+						onChange={e => setAmount(e.target.value)}
+						placeholder={`Enter amount in ${selectedToken?.symbol || 'tokens'}`}
+						step='0.000001'
+						min='0'
+						max={selectedToken?.balance || undefined}
+						style={{
+							width: '100%',
+							padding: '10px',
+							border: '1px solid #ccc',
+							borderRadius: '4px',
+							fontSize: '14px',
+						}}
+					/>
+					{selectedToken?.balance && (
+						<small style={{ color: '#666' }}>
+							Available: {selectedToken.balance}{' '}
+							{selectedToken.symbol}
+						</small>
+					)}
+				</div>
+
+				<div>
+					<label style={{ display: 'block', marginBottom: '5px' }}>
+						Destination Network: Polygon (Fixed)
+					</label>
+					<input
+						type='text'
+						value='Polygon'
+						disabled
+						style={{
+							width: '100%',
+							padding: '10px',
+							border: '1px solid #ccc',
+							borderRadius: '4px',
+							fontSize: '14px',
+							backgroundColor: '#f5f5f5',
+							color: '#666',
+						}}
+					/>
+				</div>
+
+				<div>
+					<label style={{ display: 'block', marginBottom: '5px' }}>
+						Destination Token: USDC (USDC Token)
+					</label>
+					<input
+						type='text'
+						value='USDC - USDC Token'
+						disabled
+						style={{
+							width: '100%',
+							padding: '10px',
+							border: '1px solid #ccc',
+							borderRadius: '4px',
+							fontSize: '14px',
+							backgroundColor: '#f5f5f5',
+							color: '#666',
+						}}
+					/>
+					<small style={{ color: '#666' }}>
+						Token Address: {destinationGivethToken.address}
+					</small>
+				</div>
+
 				<div
 					style={{
-						position: 'fixed',
-						bottom: '10px',
-						right: '10px',
-						backgroundColor: '#4caf50',
-						color: 'white',
-						padding: '15px',
-						borderRadius: '5px',
-						boxShadow: '0 0 10px rgba(0,0,0,0.2)',
+						padding: '10px',
+						backgroundColor: '#e8f5e8',
+						borderRadius: '4px',
+						fontSize: '14px',
+						border: '1px solid #4caf50',
 					}}
 				>
-					{notification}
+					<strong>🔄 Cross-Chain Transaction Details:</strong>
+					<br />
+					From: {networks.find(n => n.id === sourceNetwork)?.name} (
+					{selectedToken?.symbol || 'Token'}) → To: Polygon (USDC)
+					<br />
+					Amount: {amount || '0'} {selectedToken?.symbol || 'Token'}
+					<br />
+					<small>Recipient: {toAddress}</small>
+				</div>
+
+				<button
+					type='submit'
+					disabled={
+						isLoading || isLoadingTokens || !selectedSourceToken
+					}
+					style={{
+						padding: '12px 24px',
+						backgroundColor:
+							isLoading || isLoadingTokens || !selectedSourceToken
+								? '#ccc'
+								: '#4caf50',
+						color: 'white',
+						border: 'none',
+						borderRadius: '4px',
+						fontSize: '16px',
+						cursor:
+							isLoading || isLoadingTokens || !selectedSourceToken
+								? 'not-allowed'
+								: 'pointer',
+					}}
+				>
+					{isLoading
+						? 'Getting Route...'
+						: '🔄 Get Cross-Chain Route & Execute'}
+				</button>
+			</form>
+
+			{currentUserAddress && (
+				<div
+					style={{
+						marginTop: '20px',
+						padding: '10px',
+						backgroundColor: '#f8f9fa',
+						borderRadius: '4px',
+					}}
+				>
+					<strong>Connected Wallet:</strong> {currentUserAddress}
 				</div>
 			)}
 		</div>
@@ -478,3 +620,41 @@ const YourApp = () => {
 };
 
 export default YourApp;
+
+export const approveSpending = async (
+	transactionRequestTarget: string,
+	fromToken: string,
+	fromAmount: string,
+) => {
+	const erc20Abi = [
+		'function approve(address spender, uint256 amount) public returns (bool)',
+	];
+
+	const signer = await getEthersSigner();
+	const tokenContract = new ethers.Contract(fromToken, erc20Abi, signer);
+
+	try {
+		const tx = await tokenContract.approve(
+			transactionRequestTarget,
+			fromAmount,
+		);
+		await tx.wait();
+		console.log(`
+      Approved ${fromAmount} tokens for ${transactionRequestTarget}`);
+	} catch (error) {
+		console.error('Approval failed:', error);
+		throw error;
+	}
+};
+
+export const getEthersSigner = async (): Promise<ethers.Signer> => {
+	const client = await getConnectorClient(wagmiConfig);
+
+	if (!client) {
+		throw new Error('No connector client found');
+	}
+
+	// ethers v5 compatible
+	const provider = new ethers.providers.Web3Provider(client as any); // cast needed if type mismatch
+	return provider.getSigner();
+};
