@@ -189,17 +189,19 @@ export const StakingPoolInfoAndActions: FC<IStakingPoolInfoAndActionsProps> = ({
 	const [showArchiveNotice, setShowArchiveNotice] = useState(false);
 
 	useEffect(() => {
-		if (
-			poolStakingConfig.network === 2442 && // zkEVM chain ID
-			Date.now() >= POLYGON_ZKEVM_DEPRECATION_MS &&
-			Date.now() < POLYGON_ZKEVM_HIDE_DATE_MS &&
-			!localStorage.getItem(ARCHIVE_NOTICE_KEY) &&
-			!isArchived
-		) {
-			setShowArchiveNotice(true);
-		} else {
-			setShowArchiveNotice(false);
-		}
+		const now = Date.now();
+		const isZkEvmPool = poolStakingConfig.network === 2442;
+
+		const inArchivingWindow =
+			now >= POLYGON_ZKEVM_DEPRECATION_MS &&
+			now < POLYGON_ZKEVM_HIDE_DATE_MS;
+
+		const shouldShowArchive =
+			isZkEvmPool &&
+			(inArchivingWindow || isArchived) &&
+			!localStorage.getItem(ARCHIVE_NOTICE_KEY);
+
+		setShowArchiveNotice(shouldShowArchive);
 	}, [poolStakingConfig.network, isArchived]);
 	const isArchivingPeriod =
 		!isArchived &&
