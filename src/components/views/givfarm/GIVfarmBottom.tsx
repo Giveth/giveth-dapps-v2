@@ -122,7 +122,7 @@ const getPoolsInfoByChainID = (
 };
 
 const POLYGON_ZKEVM_HIDE_DATE_MS = Date.UTC(2025, 5, 10, 0, 0, 0); // July 10, 2025
-const ZKEVM_CHAIN_ID = 2442; // Polygon zkEVM chain ID
+const ZKEVM_CHAIN_ID = config.ZKEVM_NETWORK_NUMBER; // Polygon zkEVM chain ID
 
 const renderPools = (chainId?: number, showArchivedPools?: boolean) => {
 	const pools = getPoolsInfoByChainID(chainId);
