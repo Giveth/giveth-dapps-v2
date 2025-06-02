@@ -1780,5 +1780,6 @@
 	"label.project.description": "A project lets you share your mission and collect crypto donations transparently.",
 	"label.cause.description": "A collection of projects that share a common goal, vision or theme",
 	"label.causes": "Causes",
-	"label.cause": "Cause"
+	"label.cause": "Cause",
+	"label.causes_all": "All Causes"
 }
