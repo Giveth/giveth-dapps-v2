@@ -3,7 +3,6 @@ import { FC, useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
 import {
-	Button,
 	GLink,
 	IconMenu24,
 	IconSearch24,
@@ -19,11 +18,11 @@ import {
 	SmallCreateProject,
 	Logo,
 	SmallCreateProjectParent,
-	LargeCreateProject,
 	HomeButton,
 	GLinkNoWrap,
 	SearchButton,
 } from './Header.sc';
+import { CreateButtonWithMenu } from '../menu/CreateButtonWithMenu';
 import {
 	isSSRMode,
 	isUserRegistered,
@@ -201,6 +200,13 @@ const Header: FC<IHeader> = ({ showQFBanner }) => {
 						<ProjectsMenu />
 					</LinkWithMenu>
 					<LinkWithMenu
+						title={formatMessage({ id: 'label.causes' })}
+						isHeaderShowing={scrollDir !== EScrollDir.Down}
+						href={Routes.AllCauses}
+					>
+						<ProjectsMenu />
+					</LinkWithMenu>
+					<LinkWithMenu
 						title='GIVeconomy'
 						isHeaderShowing={scrollDir !== EScrollDir.Down}
 						href={Routes.GIVeconomy}
@@ -229,16 +235,12 @@ const Header: FC<IHeader> = ({ showQFBanner }) => {
 			)}
 			<FlexSpacer />
 			<Flex gap='8px'>
-				<LargeCreateProject $isTexty={isProjectPage}>
-					<Button
-						label={formatMessage({
-							id: 'component.button.create_project',
-						})}
-						size='small'
-						buttonType={isProjectPage ? 'texty-primary' : 'primary'}
-						onClick={handleCreateButton}
-					/>
-				</LargeCreateProject>
+				<CreateButtonWithMenu
+					isHeaderShowing={scrollDir !== EScrollDir.Down}
+					onClick={handleCreateButton}
+					size='small'
+					isProjectPage={isProjectPage}
+				/>
 				<SmallCreateProjectParent>
 					<SmallCreateProject
 						onClick={handleCreateButton}
