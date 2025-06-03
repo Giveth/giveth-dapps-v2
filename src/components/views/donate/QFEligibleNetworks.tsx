@@ -35,6 +35,11 @@ const QFEligibleNetworks = () => {
 				? ChainType.EVM
 				: ChainType.SOLANA,
 		}));
+	const isStellarOnlyRound =
+		activeStartedRound?.eligibleNetworks?.length === 1 &&
+		activeStartedRound?.eligibleNetworks[0] ===
+			config.STELLAR_NETWORK_NUMBER;
+
 	if (!activeStartedRound) return null;
 	return (
 		<Wrapper>
@@ -71,19 +76,23 @@ const QFEligibleNetworks = () => {
 					) : null;
 				})}
 			</IconsWrapper>
-			{!isQRDonation && isConnected && (
+			{!isQRDonation && isConnected && !isStellarOnlyRound && (
 				<ButtonsWrapper>
 					<OutlineButton
 						onClick={() => setShowModal(true)}
 						size='medium'
 						icon={<IconNetwork24 />}
-						label={formatMessage({ id: 'label.switch_network' })}
+						label={formatMessage({
+							id: 'label.switch_network',
+						})}
 					/>
 					<ExternalLink href={links.ACROSS_BRIDGE}>
 						<OutlineButton
 							size='medium'
 							icon={<IconExternalLink24 />}
-							label={formatMessage({ id: 'label.bridge_tokens' })}
+							label={formatMessage({
+								id: 'label.bridge_tokens',
+							})}
 						/>
 					</ExternalLink>
 				</ButtonsWrapper>
