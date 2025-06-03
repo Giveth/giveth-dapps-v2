@@ -108,15 +108,20 @@ export const QRDonationCard: FC<QRDonationCardProps> = ({
 		address => address.chainType === ChainType.STELLAR,
 	);
 
+	const isStellar = router.query.chain === ChainType.STELLAR.toLowerCase();
+
 	const isOnEligibleNetworks = activeStartedRound?.eligibleNetworks?.includes(
 		config.STELLAR_NETWORK_NUMBER,
 	);
 	const isProjectGivbacksEligible = !!verified;
 	const isInQF = !!isOnEligibleNetworks;
 	const showConnectWallet = isProjectGivbacksEligible || isInQF;
+
 	const textToDisplayOnConnect =
 		isProjectGivbacksEligible && isInQF
-			? 'label.please_connect_your_wallet_to_win_givbacks_and_match'
+			? isStellar
+				? 'label.sign_into_giveth_for_a_chance_to_win_givbacks'
+				: 'label.please_connect_your_wallet_to_win_givbacks_and_match'
 			: isProjectGivbacksEligible
 				? 'label.please_connect_your_wallet_to_win_givbacks'
 				: 'label.please_connect_your_wallet_to_match';
@@ -323,14 +328,17 @@ export const QRDonationCard: FC<QRDonationCardProps> = ({
 					})}
 				/>
 			)}
-			{!showQRCode && !isConnected && showConnectWallet && (
-				<ConnectWallet>
-					<IconWalletOutline24 color={neutralColors.gray[700]} />
-					{formatMessage({
-						id: textToDisplayOnConnect,
-					})}
-				</ConnectWallet>
-			)}
+			{!showQRCode &&
+				!isConnected &&
+				showConnectWallet &&
+				(isStellar || !isOnEligibleNetworks) && (
+					<ConnectWallet>
+						<IconWalletOutline24 color={neutralColors.gray[700]} />
+						{formatMessage({
+							id: textToDisplayOnConnect,
+						})}
+					</ConnectWallet>
+				)}
 			{!showQRCode && (
 				<EligibilityBadges
 					amount={amount}

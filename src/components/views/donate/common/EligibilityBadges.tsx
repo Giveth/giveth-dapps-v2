@@ -48,6 +48,7 @@ const EligibilityBadges: FC<IEligibilityBadges> = props => {
 
 	const isOnQFEligibleNetworks =
 		activeStartedRound?.eligibleNetworks?.includes(networkId || 0);
+
 	const decimals = isStellar ? 18 : token?.decimals || 18;
 
 	const donationUsdValue =
@@ -75,7 +76,7 @@ const EligibilityBadges: FC<IEligibilityBadges> = props => {
 				? 'page.donate.unlocks_matching_funds'
 				: null; // Prevents invalid id values
 
-	return isConnected ? (
+	return isConnected || (isStellar && !isOnQFEligibleNetworks) ? (
 		<EligibilityBadgeWrapper style={style}>
 			{/* Prevents QF Badge from rendering when !isOnQFEligibleNetworks && !activeStartedRound */}
 			{!(isOnQFEligibleNetworks || activeStartedRound) ? null : (
