@@ -37,15 +37,11 @@ export const CreateButtonWithMenu: FC<ICreateButtonWithMenu> = ({
 	}, [closeMenu, isHeaderShowing]);
 
 	const handleButtonClick = () => {
-		if (isMobile) {
-			setClickOpen(!clickOpen);
-			if (!clickOpen) {
-				openMenu();
-			} else {
-				closeMenu();
-			}
+		setClickOpen(!clickOpen);
+		if (!clickOpen) {
+			openMenu();
 		} else {
-			onClick();
+			closeMenu();
 		}
 	};
 
@@ -56,8 +52,7 @@ export const CreateButtonWithMenu: FC<ICreateButtonWithMenu> = ({
 	};
 
 	const handleCauseClick = () => {
-		// Add your cause creation route here
-		router.push('/create-cause'); // Replace with actual route
+		router.push(Routes.CreateCause);
 		closeMenu();
 		setClickOpen(false);
 	};
@@ -224,9 +219,12 @@ const MenuContainer = styled.div<{ $isAnimating: boolean }>`
 		props.$isAnimating ? 'translateY(0)' : 'translateY(-10px)'};
 	transition: all 0.3s ease;
 	width: 234px;
+	top: 0;
+	right: 0;
 
 	${mediaQueries.mobileL} {
 		min-width: 280px;
+		width: 280px;
 		right: 12% !important;
 		transform: ${props =>
 			props.$isAnimating

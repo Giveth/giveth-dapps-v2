@@ -1774,5 +1774,11 @@
 	"water-and-sanitation": "Aigua i Sanejament",
 	"label.donations_amplified": "Fes que les teves donacions s’amplifiquin amb un fons de compensació de {amount}",
 	"help_improve": "Ajuda'ns a millorar Giveth!",
-	"help_improve_description": "Comparteix la teva opinió en una enquesta ràpida i ajuda'ns a millorar l'experiència dels donants."
+	"help_improve_description": "Comparteix la teva opinió en una enquesta ràpida i ajuda'ns a millorar l'experiència dels donants.",
+	"label.button.create": "crear",
+	"label.project.description": "Un projecte et permet compartir la teva missió i rebre donacions en cripto de manera transparent.",
+	"label.cause.description": "Una col·lecció de projectes que comparteixen un objectiu, visió o tema comú",
+	"label.causes": "Causes",
+	"label.cause": "Causa",
+	"label.causes_all": "Totes les causes"
 }

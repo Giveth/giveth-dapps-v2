@@ -67,6 +67,7 @@ const Routes = {
 	Invoice: '/transaction',
 	AllCauses: '/causes/all',
 	Causes: '/causes',
+	CreateCause: '/causes/create',
 };
 
 export default Routes;
