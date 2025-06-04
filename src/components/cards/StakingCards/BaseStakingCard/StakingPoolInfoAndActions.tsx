@@ -11,6 +11,7 @@ import { FC, useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
 import { useRouter } from 'next/router';
 import { useAccount } from 'wagmi';
+import styled from 'styled-components';
 import { ArchiveCover } from '@/components/ArchiveAndNetworkCover/ArchiveCover';
 import FarmCountDown from '@/components/FarmCountDown';
 import { IconWithTooltip } from '@/components/IconWithToolTip';
@@ -187,6 +188,9 @@ export const StakingPoolInfoAndActions: FC<IStakingPoolInfoAndActionsProps> = ({
 	const isZeroGIVStacked =
 		isGIVpower && (!address || userGIVPowerBalance.balance === '0');
 	const [showArchiveNotice, setShowArchiveNotice] = useState(false);
+	const ArchiveCoverWrapper = styled(ArchiveCover)`
+		top: 24px; // Or tweak to your desired vertical alignment
+	`;
 
 	useEffect(() => {
 		const now = Date.now();
@@ -211,7 +215,7 @@ export const StakingPoolInfoAndActions: FC<IStakingPoolInfoAndActionsProps> = ({
 	return (
 		<StakePoolInfoContainer>
 			{showArchiveNotice && (
-				<ArchiveCover
+				<ArchiveCoverWrapper
 					isExploited={exploited}
 					isStream={!!regenStreamConfig}
 				/>
