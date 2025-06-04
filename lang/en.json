@@ -1781,5 +1781,15 @@
 	"label.cause.description": "A collection of projects that share a common goal, vision or theme",
 	"label.causes": "Causes",
 	"label.cause": "Cause",
-	"label.causes_all": "All Causes"
+	"label.cause.causes_all": "All Causes",
+	"label.cause.cause_information": "Cause Information",
+	"label.cause.select_projects": "Select Projects",
+	"label.cause.review": "Review",
+	"label.cause.info_desc": "Provide basic information about your cause to help others understand its purpose.",
+	"label.cause.title": "Title",
+	"label.cause.title_placeholder": "Enter the title of your Cause...",
+	"label.cause.whats_a_cause": "What's a Cause?",
+	"label.cause.whats_a_cause_desc": "A Cause is a curated collection of public goods projects united by a shared theme or mission. When you create a Cause, you’re launching a dedicated donation pool that supports those projects. An AI-powered agent manages the funds, automatically redistributing donations to the most impactful projects over time.",
+	"label.cause.create_description": "Description",
+	"label.cause.create_description_desc": "Describe your cause with at least {min} characters, tell us more!"
 }
