@@ -95,6 +95,11 @@ const DonateIndex: FC = () => {
 			config.STELLAR_NETWORK_NUMBER,
 		);
 
+	const isStellarOnlyQF =
+		isQRDonation &&
+		activeStartedRound?.eligibleNetworks?.length === 1 &&
+		isStellarIncludedInQF;
+
 	useEffect(() => {
 		dispatch(setShowHeader(false));
 		return () => {
@@ -313,10 +318,7 @@ const DonateIndex: FC = () => {
 					{!isSafeEnv &&
 						hasActiveQFRound &&
 						!isOnSolana &&
-						(!isQRDonation ||
-							(isQRDonation && isStellarIncludedInQF)) && (
-							<PassportBanner />
-						)}
+						!isStellarOnlyQF && <PassportBanner />}
 					<Row>
 						<Col xs={12} lg={6}>
 							<DonationCard

@@ -50,6 +50,8 @@ import { ChainType } from '@/types/config';
 import { useAppSelector } from '@/features/hooks';
 import { EndaomentProjectsInfo } from '@/components/views/project/EndaomentProjectsInfo';
 import VerifyEmailBanner from '../userProfile/VerifyEmailBanner';
+import config from '@/configuration';
+import { getActiveRound } from '@/helpers/qf';
 
 const ProjectDonations = dynamic(
 	() => import('./projectDonations/ProjectDonations.index'),
@@ -90,6 +92,7 @@ const ProjectIndex: FC<IProjectBySlug> = () => {
 	} = useProjectContext();
 
 	const { isOnSolana } = useGeneralWallet();
+	const { activeStartedRound } = getActiveRound(projectData?.qfRounds);
 
 	const router = useRouter();
 	const slug = router.query.projectIdSlug as string;
@@ -109,6 +112,12 @@ const ProjectIndex: FC<IProjectBySlug> = () => {
 	};
 
 	const isEmailVerifiedStatus = isAdmin ? isAdminEmailVerified : true;
+	const isStellarOnlyQF =
+		hasActiveQFRound &&
+		activeStartedRound?.eligibleNetworks?.length === 1 &&
+		activeStartedRound?.eligibleNetworks?.includes(
+			config.STELLAR_NETWORK_NUMBER,
+		);
 
 	useEffect(() => {
 		if (!isSSRMode) {
@@ -158,9 +167,10 @@ const ProjectIndex: FC<IProjectBySlug> = () => {
 	return (
 		<Wrapper>
 			{!isAdminEmailVerified && isAdmin && <VerifyEmailBanner />}
-			{hasActiveQFRound && !isOnSolana && isAdminEmailVerified && (
-				<PassportBanner />
-			)}
+			{hasActiveQFRound &&
+				!isOnSolana &&
+				!isStellarOnlyQF &&
+				isAdminEmailVerified && <PassportBanner />}
 			<Head>
 				<title>{title && `${title} |`} Giveth</title>
 				<ProjectMeta project={projectData} />
