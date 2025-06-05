@@ -192,6 +192,15 @@ export interface IProjectEdition {
 	socialMedia: IProjectSocialMedia[];
 }
 
+export interface ICauseEdition {
+	id?: string;
+	title?: string;
+	image?: string;
+	description?: string;
+	categories: ICategory[];
+	selectedProjects: IProject[];
+}
+
 export enum EProjectSocialMediaType {
 	FACEBOOK = 'FACEBOOK',
 	X = 'X',
