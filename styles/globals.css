@@ -294,3 +294,7 @@ a {
   wcm-modal{
 	display: none;
   }
+
+	.archive-cover-wrapper {
+		padding-bottom: 10em !important;
+	}

@@ -24,7 +24,7 @@ export const ArchiveCover: FC<IArchiveCoverProps> = ({
 	const { formatMessage } = useIntl();
 
 	return showModal ? (
-		<Cover>
+		<Cover className='archive-cover-wrapper'>
 			<ArchiveModal>
 				<ArchiveModalIcon>
 					<IconInfoFilled16 color={brandColors.giv['000']} />
