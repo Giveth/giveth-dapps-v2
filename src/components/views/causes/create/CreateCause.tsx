@@ -2,17 +2,18 @@ import { useState, FC, useEffect } from 'react';
 import { useIntl } from 'react-intl';
 import { useRouter } from 'next/router';
 import { useForm, FormProvider } from 'react-hook-form';
-import { IProjectEdition } from '@/apollo/types/types';
+import { ICauseEdition } from '@/apollo/types/types';
 import { CreateCauseHeader } from '@/components/views/causes/create/CreateCauseHeader';
 import { CauseInformationStep } from '@/components/views/causes/create/CauseInformationStep';
-import { SelectProjectsStep } from '@/components/views/causes/create/SeelctProjectsStep';
-import { ReviewStep } from '@/components/views/causes/create/ReviewStep';
+import { CauseSelectProjectsStep } from '@/components/views/causes/create/CauseSelectProjectsStep';
+import { CauseReviewStep } from '@/components/views/causes/create/CauseReviewStep';
 import StorageLabel from '@/lib/localStorage';
 import { showToastError } from '@/lib/helpers';
 import { gToast, ToastType } from '@/components/toasts';
+import { EInputs, TCauseInputs } from '@/components/views/causes/create/types';
 
-interface ICreateProjectProps {
-	project?: IProjectEdition;
+interface ICreateCauseProps {
+	project?: ICauseEdition;
 }
 
 // Custom success toast function
@@ -23,60 +24,61 @@ const showToastSuccess = (message: string) => {
 	});
 };
 
-const CreateCause: FC<ICreateProjectProps> = () => {
+const CreateCause: FC<ICreateCauseProps> = () => {
 	const { formatMessage } = useIntl();
 	const router = useRouter();
 	const [currentStep, setCurrentStep] = useState(1);
 	const [isSubmitting, setIsSubmitting] = useState(false);
 
 	// Initialize react-hook-form
-	const methods = useForm({
+	let storageCauseData: TCauseInputs | undefined;
+
+	const storedCause = localStorage.getItem(StorageLabel.CREATE_CAUSE_FORM);
+	if (storedCause) {
+		storageCauseData = JSON.parse(storedCause);
+	}
+
+	const {
+		title: storageTitle,
+		description: storageDescription,
+		categories: storageCategories,
+		image: storageImage,
+		selectedProjects: storageSelectedProjects,
+	} = storageCauseData || {};
+
+	const formMethods = useForm({
 		mode: 'onChange',
 		defaultValues: {
-			name: '',
-			description: '',
-			selectedProjects: '',
+			[EInputs.title]: storageTitle || '',
+			[EInputs.description]: storageDescription || '',
+			[EInputs.selectedProjects]: storageSelectedProjects || '',
+			[EInputs.categories]: storageCategories || [],
+			[EInputs.image]: storageImage || '',
 		},
 	});
 
-	const { watch, reset } = methods;
-	const formData = watch();
+	const { watch } = formMethods;
+	const formDataWatch = watch();
 
-	// Load data from localStorage on component mount
-	useEffect(() => {
-		const storedData = localStorage.getItem(StorageLabel.CREATE_CAUSE_FORM);
-		if (storedData) {
-			try {
-				const parsedData = JSON.parse(storedData);
-				if (
-					parsedData.formData &&
-					Object.values(parsedData.formData).some(value => value)
-				) {
-					reset(parsedData.formData);
-					setCurrentStep(parsedData.currentStep || 1);
-				}
-			} catch (error) {
-				console.error('Error parsing stored cause form data:', error);
-				// Clear corrupted data
-				localStorage.removeItem(StorageLabel.CREATE_CAUSE_FORM);
-			}
-		}
-	}, [reset]);
+	const {
+		title: watchTitle,
+		description: watchDescription,
+		categories: watchCategories,
+		image: watchImage,
+	} = formDataWatch;
 
-	// Save data to localStorage whenever formData or currentStep changes
 	useEffect(() => {
-		if (Object.values(formData).some(value => value)) {
-			const dataToStore = {
-				formData,
-				currentStep,
-				timestamp: new Date().getTime(),
-			};
-			localStorage.setItem(
-				StorageLabel.CREATE_CAUSE_FORM,
-				JSON.stringify(dataToStore),
-			);
-		}
-	}, [formData, currentStep]);
+		localStorage.setItem(
+			StorageLabel.CREATE_CAUSE_FORM,
+			JSON.stringify(formDataWatch),
+		);
+	}, [
+		watchTitle,
+		watchDescription,
+		watchCategories,
+		watchImage,
+		formDataWatch,
+	]);
 
 	// Function to clear storage (call this when form is submitted or cancelled)
 	const clearStorage = () => {
@@ -86,14 +88,13 @@ const CreateCause: FC<ICreateProjectProps> = () => {
 	// Validate form data
 	const validateForm = (): boolean => {
 		const formErrors: { [key: string]: string } = {};
-
 		// Step 1 validation (Cause Information)
-		if (!formData.name?.trim()) {
-			formErrors.name = formatMessage({
-				id: 'error.cause_name_required',
+		if (!formDataWatch.title?.trim()) {
+			formErrors.title = formatMessage({
+				id: 'label.cause.title_required',
 			});
 		}
-		if (!formData.description?.trim()) {
+		if (!formDataWatch.description?.trim()) {
 			formErrors.description = formatMessage({
 				id: 'error.cause_description_required',
 			});
@@ -101,8 +102,9 @@ const CreateCause: FC<ICreateProjectProps> = () => {
 
 		// Step 2 validation (Select Projects)
 		if (
-			!formData.selectedProjects ||
-			formData.selectedProjects.split(',').length === 0
+			!formDataWatch.selectedProjects ||
+			(Array.isArray(formDataWatch.selectedProjects) &&
+				formDataWatch.selectedProjects.length === 0)
 		) {
 			formErrors.selectedProjects = formatMessage({
 				id: 'error.projects_required',
@@ -163,18 +165,6 @@ const CreateCause: FC<ICreateProjectProps> = () => {
 		}
 	};
 
-	// Handle form cancellation
-	const handleCancel = () => {
-		if (
-			confirm(
-				'Are you sure you want to cancel? All progress will be lost.',
-			)
-		) {
-			clearStorage();
-			router.push('/causes');
-		}
-	};
-
 	const steps = [
 		{
 			label: formatMessage({ id: 'label.cause.cause_information' }),
@@ -197,15 +187,20 @@ const CreateCause: FC<ICreateProjectProps> = () => {
 				currentStep={currentStep}
 				setCurrentStep={setCurrentStep}
 			/>
-			<FormProvider {...methods}>
+			<FormProvider {...formMethods}>
 				<form onSubmit={handleSubmit} noValidate>
 					{currentStep === 1 && (
 						<CauseInformationStep
 							onNext={() => setCurrentStep(2)}
 						/>
 					)}
-					{currentStep === 2 && <SelectProjectsStep />}
-					{currentStep === 3 && <ReviewStep />}
+					{currentStep === 2 && (
+						<CauseSelectProjectsStep
+							onPrevious={handlePreviousStep}
+							onNext={() => setCurrentStep(3)}
+						/>
+					)}
+					{currentStep === 3 && <CauseReviewStep />}
 				</form>
 			</FormProvider>
 		</>

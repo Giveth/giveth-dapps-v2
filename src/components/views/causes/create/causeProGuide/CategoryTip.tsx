@@ -10,14 +10,14 @@ const CategoryTip = () => {
 			<TipListItem>
 				<P>
 					{formatMessage({
-						id: 'label.select_the_categories_that_best_represents_the_main',
+						id: 'label.cause.select_categories_desc',
 					})}
 				</P>
 			</TipListItem>
 			<TipListItem>
 				<P>
 					{formatMessage({
-						id: 'label.think_about_where_your_potential_donors_might_look_for_a_project_like_yours',
+						id: 'label.cause.select_categories_desc_2',
 					})}
 				</P>
 			</TipListItem>

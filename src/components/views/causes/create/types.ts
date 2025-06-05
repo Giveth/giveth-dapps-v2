@@ -1,17 +1,25 @@
+import { ICategory } from '@/apollo/types/types';
+
 export enum ECreateCauseSections {
 	default = 'default',
 	name = 'name',
 	description = 'description',
 	categories = 'categories',
-	location = 'location',
 	image = 'image',
-	addresses = 'addresses',
 }
 
 export enum EInputs {
-	name = 'name',
+	title = 'title',
 	description = 'description',
 	categories = 'categories',
-	impactLocation = 'impactLocation',
+	selectedProjects = 'selectedProjects',
 	image = 'image',
 }
+
+export type TCauseInputs = {
+	[EInputs.title]: string;
+	[EInputs.description]?: string;
+	[EInputs.categories]?: ICategory[];
+	[EInputs.image]?: string;
+	[EInputs.selectedProjects]?: string[];
+};

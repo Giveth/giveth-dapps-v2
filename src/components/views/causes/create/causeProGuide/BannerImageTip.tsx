@@ -10,7 +10,7 @@ const BannerImageTip = () => {
 			<TipListItem>
 				<P>
 					{formatMessage({
-						id: 'label.choose_a_unique_image_that_represents_what_your_project_is_about',
+						id: 'label.cause.choose_an_image',
 					})}
 				</P>
 			</TipListItem>
@@ -24,7 +24,7 @@ const BannerImageTip = () => {
 			<TipListItem>
 				<P>
 					{formatMessage({
-						id: 'label.if_your_project_has_a_custom_logo_or_graphic_inlcude_it',
+						id: 'label.cause.include_custom_logo_or_graphic',
 					})}
 				</P>
 			</TipListItem>

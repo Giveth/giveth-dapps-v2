@@ -5,8 +5,6 @@ import TitleTip from '@/components/views/causes/create/causeProGuide/TitleTip';
 import DescriptionTip from '@/components/views/causes/create/causeProGuide/DescriptionTip';
 import BannerImageTip from '@/components/views/causes/create/causeProGuide/BannerImageTip';
 import CategoryTip from '@/components/views/causes/create/causeProGuide/CategoryTip';
-import MapTip from '@/components/views/causes/create/causeProGuide/MapTip';
-import AddressesTip from '@/components/views/causes/create/causeProGuide/AddressesTip';
 import { Card } from '@/components/views/create/proGuide/common.sc';
 import { ECreateCauseSections } from '@/components/views/causes/create/types';
 
@@ -25,33 +23,31 @@ const CauseTip = ({ activeSection }: ICauseTipProps) => {
 		},
 
 		[ECreateCauseSections.name]: {
-			title: 'A Captivating Title',
+			title: formatMessage({
+				id: 'label.cause.create_title',
+			}),
 			component: <TitleTip />,
 		},
 
 		[ECreateCauseSections.description]: {
-			title: 'Describing your Cause',
+			title: formatMessage({
+				id: 'label.cause.create_description_examples',
+			}),
 			component: <DescriptionTip />,
 		},
 
 		[ECreateCauseSections.categories]: {
-			title: 'Choose the Right Category',
+			title: formatMessage({
+				id: 'label.cause.categories_right_category',
+			}),
 			component: <CategoryTip />,
 		},
 
-		[ECreateCauseSections.location]: {
-			title: 'Put your Cause on the Map',
-			component: <MapTip />,
-		},
-
 		[ECreateCauseSections.image]: {
-			title: 'Adding a Banner Image',
+			title: formatMessage({
+				id: 'label.cause.add_an_image_to_your_cause',
+			}),
 			component: <BannerImageTip />,
-		},
-
-		[ECreateCauseSections.addresses]: {
-			title: 'Receiving Funding',
-			component: <AddressesTip />,
 		},
 	};
 

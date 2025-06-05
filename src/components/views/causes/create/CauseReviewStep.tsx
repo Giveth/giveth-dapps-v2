@@ -1,10 +1,10 @@
 import styled from 'styled-components';
 import { Container, H3 } from '@giveth/ui-design-system';
 
-export const SelectProjectsStep = () => {
+export const CauseReviewStep = () => {
 	return (
 		<StyledContainer>
-			<H3>Select Projects</H3>
+			<H3>Review</H3>
 		</StyledContainer>
 	);
 };
