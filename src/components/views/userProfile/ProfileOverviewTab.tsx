@@ -35,9 +35,10 @@ import { useProfileContext } from '@/context/profile.context';
 import { useIsSafeEnvironment } from '@/hooks/useSafeAutoConnect';
 import { useGeneralWallet } from '@/providers/generalWalletProvider';
 import { QFDonorEligibilityCard } from '@/components/views/userProfile/QFDonorEligibilityCard';
-import { getNowUnixMS } from '@/helpers/time';
 import { useFetchSubgraphDataForAllChains } from '@/hooks/useFetchSubgraphDataForAllChains';
 import ProjectsMiddleGivethVaultBanner from '../projects/MiddleBanners/ProjectsMiddleGivethVaultBanner';
+import config from '@/configuration';
+import { hasRoundStarted } from '@/helpers/qf';
 
 interface IBtnProps extends IButtonProps {
 	outline?: boolean;
@@ -118,10 +119,12 @@ const ProfileOverviewTab: FC<IUserProfileView> = () => {
 	const givPower = getTotalGIVpower(subgraphValues, address);
 	const { title, subtitle, buttons } = section;
 
-	const activeStartedRoundNotEnded =
-		activeQFRound &&
-		new Date(activeQFRound.beginDate).getTime() < getNowUnixMS() &&
-		new Date(activeQFRound.endDate).getTime() > getNowUnixMS();
+	const startedActiveRound = activeQFRound && hasRoundStarted(activeQFRound);
+
+	const isStellarOnlyQF =
+		startedActiveRound &&
+		activeQFRound.eligibleNetworks?.length === 1 &&
+		activeQFRound.eligibleNetworks?.includes(config.STELLAR_NETWORK_NUMBER);
 
 	useEffect(() => {
 		const setupSections = async () => {
@@ -208,7 +211,7 @@ const ProfileOverviewTab: FC<IUserProfileView> = () => {
 				) : (
 					<Row>
 						<Col lg={6}>
-							{activeStartedRoundNotEnded && (
+							{startedActiveRound && !isStellarOnlyQF && (
 								<QFDonorEligibilityCard />
 							)}
 						</Col>

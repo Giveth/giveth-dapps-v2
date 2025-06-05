@@ -354,7 +354,7 @@ export const usePassport = () => {
 					passportState: EPassportState.NOT_CONNECTED,
 					passportScore: null,
 					activeQFMBDScore: null,
-					currentRound: null,
+					currentRound: activeQFRound,
 				});
 			}
 			console.log('******2', address, isUserFullFilled, user);

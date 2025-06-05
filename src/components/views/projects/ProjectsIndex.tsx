@@ -39,6 +39,8 @@ import NotAvailable from '@/components/NotAvailable';
 import { fetchProjects, IQueries } from './services';
 import { IProject } from '@/apollo/types/types';
 import { LAST_PROJECT_CLICKED } from './constants';
+import { hasRoundStarted } from '@/helpers/qf';
+import config from '@/configuration';
 
 export interface IProjectsView {
 	projects: IProject[];
@@ -60,6 +62,9 @@ const ProjectsIndex = (props: IProjectsView) => {
 		isQF,
 		isArchivedQF,
 	} = useProjectsContext();
+
+	const activeRoundStarted = hasRoundStarted(activeQFRound);
+
 	const router = useRouter();
 	const lastElementRef = useRef<HTMLDivElement>(null);
 	const isInfiniteScrolling = useRef(true);
@@ -170,6 +175,13 @@ const ProjectsIndex = (props: IProjectsView) => {
 		sessionStorage.setItem(LAST_PROJECT_CLICKED, slug);
 	};
 
+	const isStellarOnlyQF =
+		activeRoundStarted &&
+		activeQFRound?.eligibleNetworks?.length === 1 &&
+		activeQFRound?.eligibleNetworks?.includes(
+			config.STELLAR_NETWORK_NUMBER,
+		);
+
 	// Scroll to last clicked project
 	useEffect(() => {
 		if (!isFetching && !isFetchingNextPage) {
@@ -218,11 +230,7 @@ const ProjectsIndex = (props: IProjectsView) => {
 					<Spinner />
 				</Loading>
 			)}
-			{isQF && (
-				<>
-					<PassportBanner />
-				</>
-			)}
+			{isQF && !isStellarOnlyQF && <PassportBanner />}
 			<Wrapper>
 				{isQF && !isArchivedQF && (
 					<>

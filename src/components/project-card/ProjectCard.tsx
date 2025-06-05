@@ -22,7 +22,11 @@ import ProjectCardOrgBadge from './ProjectCardOrgBadge';
 import { IAdminUser, IProject } from '@/apollo/types/types';
 import { timeFromNow } from '@/lib/helpers';
 import ProjectCardImage from './ProjectCardImage';
-import { slugToProjectDonate, slugToProjectView } from '@/lib/routeCreators';
+import {
+	slugToProjectDonate,
+	slugToProjectDonateStellar,
+	slugToProjectView,
+} from '@/lib/routeCreators';
 import { ORGANIZATION } from '@/lib/constants/organizations';
 import { mediaQueries } from '@/lib/constants/constants';
 import { ProjectCardUserName } from './ProjectCardUserName';
@@ -32,7 +36,7 @@ import { FETCH_RECURRING_DONATIONS_BY_DATE } from '@/apollo/gql/gqlProjects';
 import { client } from '@/apollo/apolloClient';
 import { ProjectCardTotalRaised } from './ProjectCardTotalRaised';
 import { ProjectCardTotalRaisedQF } from './ProjectCardTotalRaisedQF';
-
+import config from '@/configuration';
 const cardRadius = '12px';
 const imgHeight = '226px';
 const SIDE_PADDING = '26px';
@@ -84,15 +88,22 @@ const ProjectCard = (props: IProjectCard) => {
 	const isForeignOrg =
 		orgLabel !== ORGANIZATION.trace && orgLabel !== ORGANIZATION.giveth;
 	const name = adminUser?.name;
-	const { formatMessage, formatRelativeTime, locale } = useIntl();
+	const { formatMessage, formatRelativeTime } = useIntl();
 	const router = useRouter();
 
 	const { activeStartedRound, activeQFRound } = getActiveRound(qfRounds);
 	const hasFooter = activeStartedRound || verified || isGivbackEligible;
 	const showVerifiedBadge = verified || isGivbackEligible;
 
+	const isStellarOnlyRound =
+		activeStartedRound?.eligibleNetworks?.length === 1 &&
+		activeStartedRound?.eligibleNetworks[0] ===
+			config.STELLAR_NETWORK_NUMBER;
+
 	const projectLink = slugToProjectView(slug);
-	const donateLink = slugToProjectDonate(slug);
+	const donateLink = isStellarOnlyRound
+		? slugToProjectDonateStellar(slug)
+		: slugToProjectDonate(slug);
 
 	// Show hint modal if the user clicks on the card and the round is not started
 	const handleClick = (e: any) => {

@@ -27,9 +27,14 @@ import { useModalCallback } from '@/hooks/useModalCallback';
 import { bookmarkProject, unBookmarkProject } from '@/lib/reaction';
 import { FETCH_PROJECT_REACTION_BY_ID } from '@/apollo/gql/gqlProjects';
 import { client } from '@/apollo/apolloClient';
-import { slugToProjectDonate } from '@/lib/routeCreators';
+import {
+	slugToProjectDonate,
+	slugToProjectDonateStellar,
+} from '@/lib/routeCreators';
 import { useAlreadyDonatedToProject } from '@/hooks/useAlreadyDonatedToProject';
 import { BadgeButton } from '@/components/project-card/ProjectCardBadgeButtons';
+import config from '@/configuration';
+import { getActiveRound } from '@/helpers/qf';
 
 export const ProjectPublicActions = () => {
 	const [showModal, setShowShareModal] = useState<boolean>(false);
@@ -46,7 +51,13 @@ export const ProjectPublicActions = () => {
 	} = useAppSelector(state => state.user);
 	const { formatMessage } = useIntl();
 	const { open: openConnectModal } = useWeb3Modal();
+	const { activeStartedRound } = getActiveRound(projectData?.qfRounds);
 	const alreadyDonated = useAlreadyDonatedToProject(projectData);
+
+	const isStellarOnlyRound =
+		activeStartedRound?.eligibleNetworks?.length === 1 &&
+		activeStartedRound?.eligibleNetworks[0] ===
+			config.STELLAR_NETWORK_NUMBER;
 
 	useEffect(() => {
 		const fetchProjectReaction = async () => {
@@ -132,7 +143,13 @@ export const ProjectPublicActions = () => {
 			)}
 			<Link
 				id='Donate_Project'
-				href={isActive ? slugToProjectDonate(slug || '') : '#'}
+				href={
+					isActive
+						? isStellarOnlyRound
+							? slugToProjectDonateStellar(slug || '')
+							: slugToProjectDonate(slug || '')
+						: '#'
+				}
 				onClick={e => !isActive && e.preventDefault()}
 				style={{ pointerEvents: !isActive ? 'none' : 'auto' }}
 			>
