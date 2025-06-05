@@ -76,7 +76,7 @@ const EligibilityBadges: FC<IEligibilityBadges> = props => {
 				? 'page.donate.unlocks_matching_funds'
 				: null; // Prevents invalid id values
 
-	return isConnected || (isStellar && !isOnQFEligibleNetworks) ? (
+	return isConnected || (isStellar && !isProjectGivbacksEligible) ? (
 		<EligibilityBadgeWrapper style={style}>
 			{/* Prevents QF Badge from rendering when !isOnQFEligibleNetworks && !activeStartedRound */}
 			{!(isOnQFEligibleNetworks || activeStartedRound) ? null : (
