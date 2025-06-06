@@ -7,11 +7,12 @@ import {
 	P,
 	Row,
 } from '@giveth/ui-design-system';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useFormContext } from 'react-hook-form';
 import { useIntl } from 'react-intl';
 import { CauseProjectsSearch } from '@/components/views/causes/create/formElements/CauseProjectsSearch';
 import { CauseProjectsSearchList } from '@/components/views/causes/create/formElements/CauseProjectsSearchList';
+import { EProjectsFilter } from '@/apollo/types/types';
 
 interface ICauseSelectProjectsStepProps {
 	onNext: () => void;
@@ -24,6 +25,12 @@ export const CauseSelectProjectsStep = ({
 }: ICauseSelectProjectsStepProps) => {
 	const { formatMessage } = useIntl();
 	const { getValues } = useFormContext();
+
+	const [searchFilters, setSearchFilters] = useState({
+		searchTerm: '',
+		selectedMainCategory: '',
+		filters: [],
+	});
 
 	// Get value from previous step
 	const title = getValues('title');
@@ -44,20 +51,34 @@ export const CauseSelectProjectsStep = ({
 		}
 	}, [title, description, categories, image, onPrevious]);
 
+	const handleFiltersChange = (filters: {
+		searchTerm: string;
+		selectedMainCategory: string | null;
+		filters: EProjectsFilter[] | never[];
+	}) => {
+		setSearchFilters({
+			searchTerm: filters.searchTerm,
+			selectedMainCategory: filters.selectedMainCategory || '',
+			filters: filters.filters as never[],
+		});
+	};
+
 	return (
 		<StyledContainer>
 			<Row>
-				<Col lg={8} md={12}>
+				<Col lg={7} md={12}>
 					<Title>
 						{formatMessage({ id: 'label.cause.select_projects' })}
 					</Title>
 					<Desc>
 						{formatMessage({
-							id: 'label.cause.select_projects_desc',
+							id: 'label.cause.select_projects_dec_intro',
 						})}
 					</Desc>
-					<CauseProjectsSearch />
-					<CauseProjectsSearchList />
+					<CauseProjectsSearch
+						onFiltersChange={handleFiltersChange}
+					/>
+					<CauseProjectsSearchList searchFilters={searchFilters} />
 				</Col>
 			</Row>
 		</StyledContainer>
