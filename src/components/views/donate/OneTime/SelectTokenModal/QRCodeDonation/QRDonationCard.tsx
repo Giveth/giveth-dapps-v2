@@ -135,6 +135,10 @@ export const QRDonationCard: FC<QRDonationCardProps> = ({
 			return 'label.sign_into_giveth_for_a_chance_to_win_givbacks';
 		}
 
+		if (!!activeStartedRound) {
+			return 'label.please_connect_your_wallet_to_match';
+		}
+
 		return null;
 	};
 

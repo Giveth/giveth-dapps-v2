@@ -37,6 +37,7 @@ import { client } from '@/apollo/apolloClient';
 import { ProjectCardTotalRaised } from './ProjectCardTotalRaised';
 import { ProjectCardTotalRaisedQF } from './ProjectCardTotalRaisedQF';
 import config from '@/configuration';
+
 const cardRadius = '12px';
 const imgHeight = '226px';
 const SIDE_PADDING = '26px';
