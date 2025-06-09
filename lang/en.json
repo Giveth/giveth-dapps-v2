@@ -1817,5 +1817,6 @@
 	"label.cause.select_projects_dec_intro": "Choose 5-50 verified projects from the Giveth database to include in your cause.",
 	"label.cause.all_categories": "All Categories",
 	"label.cause.filter_by_categories": "Filter by category",
-	"label.cause.only_projects_polygon": "Only projects on Polygon will be shown."
+	"label.cause.only_projects_polygon": "Only projects on Polygon will be shown.",
+	"label.cause.no_projects_found": "No projects found"
 }
