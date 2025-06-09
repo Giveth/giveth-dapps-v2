@@ -108,8 +108,6 @@ export const QRDonationCard: FC<QRDonationCardProps> = ({
 		address => address.chainType === ChainType.STELLAR,
 	);
 
-	const isStellar = router.query.chain === ChainType.STELLAR.toLowerCase();
-
 	const isOnEligibleNetworks = activeStartedRound?.eligibleNetworks?.includes(
 		config.STELLAR_NETWORK_NUMBER,
 	);
