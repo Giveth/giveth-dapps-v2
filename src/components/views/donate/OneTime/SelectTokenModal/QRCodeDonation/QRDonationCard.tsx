@@ -118,21 +118,24 @@ export const QRDonationCard: FC<QRDonationCardProps> = ({
 	const showConnectWallet = isProjectGivbacksEligible || isInQF;
 
 	const textToDisplayOnConnect = () => {
-		if (isStellar) {
-			return isProjectGivbacksEligible
-				? 'label.sign_into_giveth_for_a_chance_to_win_givbacks'
-				: null;
+		const onlyInQF =
+			activeStartedRound?.eligibleNetworks?.length === 1 &&
+			activeStartedRound?.eligibleNetworks[0] ===
+				config.STELLAR_NETWORK_NUMBER;
+
+		if (isProjectGivbacksEligible && onlyInQF) {
+			return 'label.sign_into_giveth_for_a_chance_to_win_givbacks';
 		}
 
-		if (isProjectGivbacksEligible && isInQF) {
+		if (isProjectGivbacksEligible && isInQF && !!activeStartedRound) {
 			return 'label.please_connect_your_wallet_to_win_givbacks_and_match';
 		}
 
 		if (isProjectGivbacksEligible) {
-			return 'label.please_connect_your_wallet_to_win_givbacks';
+			return 'label.sign_into_giveth_for_a_chance_to_win_givbacks';
 		}
 
-		return 'label.please_connect_your_wallet_to_match';
+		return null;
 	};
 
 	const donationUsdValue =
