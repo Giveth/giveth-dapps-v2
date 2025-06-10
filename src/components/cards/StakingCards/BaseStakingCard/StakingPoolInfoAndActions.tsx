@@ -190,7 +190,8 @@ export const StakingPoolInfoAndActions: FC<IStakingPoolInfoAndActionsProps> = ({
 
 	useEffect(() => {
 		const now = Date.now();
-		const isZkEvmPool = poolStakingConfig.network === 2442;
+		const isZkEvmPool =
+			poolStakingConfig.network === config.ZKEVM_NETWORK_NUMBER; // ZKEVM network number
 
 		const inArchivingWindow =
 			now >= POLYGON_ZKEVM_DEPRECATION_MS &&
