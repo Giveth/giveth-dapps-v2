@@ -65,6 +65,7 @@ const CreateCause: FC<ICreateCauseProps> = () => {
 		description: watchDescription,
 		categories: watchCategories,
 		image: watchImage,
+		selectedProjects: watchSelectedProjects,
 	} = formDataWatch;
 
 	useEffect(() => {
@@ -72,11 +73,13 @@ const CreateCause: FC<ICreateCauseProps> = () => {
 			StorageLabel.CREATE_CAUSE_FORM,
 			JSON.stringify(formDataWatch),
 		);
+		console.log('watchSelectedProjects', watchSelectedProjects);
 	}, [
 		watchTitle,
 		watchDescription,
 		watchCategories,
 		watchImage,
+		watchSelectedProjects,
 		formDataWatch,
 	]);
 
@@ -200,7 +203,9 @@ const CreateCause: FC<ICreateCauseProps> = () => {
 							onNext={() => setCurrentStep(3)}
 						/>
 					)}
-					{currentStep === 3 && <CauseReviewStep />}
+					{currentStep === 3 && (
+						<CauseReviewStep onPrevious={handlePreviousStep} />
+					)}
 				</form>
 			</FormProvider>
 		</>

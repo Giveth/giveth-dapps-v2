@@ -788,6 +788,12 @@ const config: EnvConfig = {
 		coingeckoChainName: 'stellar',
 		chainLogo: (logoSize?: number) => <IconStellar size={logoSize} />,
 	},
+
+	// Causes config
+	CAUSES_CONFIG: {
+		minSelectedProjects: 5,
+		maxSelectedProjects: 10,
+	},
 };
 
 export default config;

@@ -123,6 +123,7 @@ export const CauseProjectsSearch = ({
 		});
 	};
 
+	// Handle filter selection
 	const handleSelectFilter = (e: boolean, filter: EProjectsFilter) => {
 		let updatedFilters: EProjectsFilter[];
 

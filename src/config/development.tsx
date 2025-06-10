@@ -550,6 +550,12 @@ const config: EnvConfig = {
 		coingeckoChainName: 'solana',
 		chainLogo: (logoSize?: number) => <IconSolana size={logoSize} />,
 	},
+
+	// Causes config
+	CAUSES_CONFIG: {
+		minSelectedProjects: 5,
+		maxSelectedProjects: 10,
+	},
 };
 
 export default config;

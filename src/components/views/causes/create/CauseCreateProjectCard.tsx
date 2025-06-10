@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { FC, useState } from 'react';
 import styled from 'styled-components';
 import {
 	brandColors,
@@ -6,6 +6,7 @@ import {
 	H6,
 	IconGIVBack16,
 	IconVerifiedBadge16,
+	IconExternalLink16,
 	neutralColors,
 	P,
 	semanticColors,
@@ -21,18 +22,27 @@ import { ProjectCardUserName } from '@/components/project-card/ProjectCardUserNa
 import { getActiveRound } from '@/helpers/qf';
 import { ProjectCardTotalRaised } from '@/components/project-card/ProjectCardTotalRaised';
 import { ProjectCardTotalRaisedQF } from '@/components/project-card/ProjectCardTotalRaisedQF';
+import config from '@/configuration';
 
 const SIDE_PADDING = '26px';
 
-export const CauseCreateProjectCard: FC<{ project: IProject }> = ({
+export const CauseCreateProjectCard: FC<{
+	project: IProject;
+	isSelected?: boolean;
+	onProjectSelect?: (project: IProject[]) => void;
+	selectedProjects?: IProject[];
+	showErrorModal?: (show: boolean) => void;
+}> = ({
 	project,
+	isSelected = false,
+	onProjectSelect,
+	selectedProjects,
+	showErrorModal,
 }) => {
 	const { formatMessage } = useIntl();
 	const {
-		id,
 		title,
 		descriptionSummary,
-		image,
 		slug,
 		adminUser,
 		totalDonations,
@@ -40,7 +50,6 @@ export const CauseCreateProjectCard: FC<{ project: IProject }> = ({
 		organization,
 		verified,
 		isGivbackEligible,
-		latestUpdateCreationDate,
 		countUniqueDonors,
 		qfRounds,
 		countUniqueDonorsForActiveQfRound,
@@ -50,19 +59,58 @@ export const CauseCreateProjectCard: FC<{ project: IProject }> = ({
 	const isForeignOrg =
 		orgLabel !== ORGANIZATION.trace && orgLabel !== ORGANIZATION.giveth;
 	const name = adminUser?.name;
-	const { activeStartedRound, activeQFRound } = getActiveRound(qfRounds);
+	const { activeStartedRound } = getActiveRound(qfRounds);
 	const hasFooter = activeStartedRound || verified || isGivbackEligible;
 	const showVerifiedBadge = verified || isGivbackEligible;
 
 	const projectLink = slugToProjectView(slug);
 
-	const isHover = false;
+	const [isHover, setIsHover] = useState(false);
+
+	// Handle checkbox change
+	const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+		e.stopPropagation();
+		if (onProjectSelect) {
+			if (e.target.checked) {
+				// Don't allow to select more than defined max projects
+				if (
+					(selectedProjects?.length || 0) >=
+					config.CAUSES_CONFIG.maxSelectedProjects
+				) {
+					showErrorModal?.(true);
+					return;
+				}
+				onProjectSelect([...(selectedProjects || []), project]);
+			} else {
+				onProjectSelect(
+					selectedProjects?.filter((selectedProject: IProject) => {
+						return selectedProject.id !== project.id;
+					}) as IProject[],
+				);
+			}
+		}
+	};
 
 	return (
-		<Wrapper>
+		<Wrapper
+			onMouseEnter={() => {
+				setIsHover(true);
+			}}
+			onMouseLeave={() => {
+				setIsHover(false);
+			}}
+		>
 			<CardBody $isOtherOrganization={isForeignOrg}>
 				<TitleWrapper>
-					<Title weight={700}>{title}</Title>
+					<TitleRow>
+						<Title weight={700}>{title}</Title>
+						<ProjectCheckbox
+							type='checkbox'
+							checked={isSelected}
+							onChange={handleCheckboxChange}
+							$isSelected={isSelected}
+						/>
+					</TitleRow>
 				</TitleWrapper>
 				<ProjectCardUserName
 					name={name}
@@ -133,8 +181,19 @@ export const CauseCreateProjectCard: FC<{ project: IProject }> = ({
 				)}
 			</CardBody>
 			{isHover && (
-				<CardBodyHover>
-					<Link href={projectLink}>Learn more</Link>
+				<CardBodyHover $isHover={isHover}>
+					<Link
+						href={projectLink}
+						target='_blank'
+						rel='noopener noreferrer'
+					>
+						<Flex $alignItems='center' gap='8px'>
+							{formatMessage({
+								id: 'label.learn_more',
+							})}
+							<IconExternalLink16 />
+						</Flex>
+					</Link>
 				</CardBodyHover>
 			)}
 		</Wrapper>
@@ -156,6 +215,13 @@ const Wrapper = styled.div<IWrapperProps>`
 	box-shadow: ${Shadow.Neutral[400]};
 	order: ${props => props.$order};
 	min-height: 326px;
+	transition: all 0.5s ease;
+	transform: translateY(0);
+
+	&:hover {
+		transform: translateY(-8px) scale(1.02);
+		box-shadow: ${Shadow.Neutral[500]};
+	}
 `;
 
 interface ICardBody {
@@ -167,6 +233,8 @@ const CardBody = styled.div<ICardBody>`
 	transition: top 0.3s ease;
 	border-radius: ${props =>
 		props.$isOtherOrganization ? '0 12px 12px 12px' : '12px'};
+
+	transition: all 0.5s ease;
 
 	a {
 		pointer-events: none;
@@ -182,11 +250,59 @@ const TitleWrapper = styled.div`
 	position: relative;
 `;
 
+const TitleRow = styled.div`
+	display: flex;
+	justify-content: space-between;
+	align-items: flex-start;
+	gap: 12px;
+`;
+
 const Title = styled(H6)`
 	overflow: hidden;
 	margin-bottom: 2px;
+	flex: 1;
 	&:hover {
 		color: ${brandColors.pinky[500]};
+	}
+`;
+
+const ProjectCheckbox = styled.input<{ $isSelected: boolean }>`
+	width: 24px;
+	height: 24px;
+	cursor: pointer;
+	margin-top: 2px;
+	flex-shrink: 0;
+
+	-webkit-appearance: none;
+	-moz-appearance: none;
+	appearance: none;
+
+	border: 2px solid ${neutralColors.gray[900]};
+	border-radius: 4px;
+	background-color: ${props =>
+		props.$isSelected ? neutralColors.gray[900] : 'white'};
+	transition: all 0.2s ease;
+	position: relative;
+
+	&:hover {
+		border-color: ${brandColors.giv[500]};
+	}
+
+	&:focus {
+		outline: none;
+		box-shadow: none;
+	}
+
+	&::after {
+		content: ${props => (props.$isSelected ? "'✓'" : "''")};
+		position: absolute;
+		top: 50%;
+		left: 50%;
+		transform: translate(-50%, -50%);
+		color: white;
+		font-size: 16px;
+		font-weight: bold;
+		line-height: 1;
 	}
 `;
 
@@ -207,9 +323,11 @@ export const PaddedRow = styled(Flex)<IPaddedRowProps>`
 `;
 
 const Hr = styled.hr`
+	height: 1px;
 	margin-left: ${SIDE_PADDING};
 	margin-right: ${SIDE_PADDING};
-	border: 1px solid ${neutralColors.gray[300]};
+	border: none;
+	border-top: 1px solid ${neutralColors.gray[300]};
 `;
 
 const VerifiedText = styled(Subline)`
@@ -227,4 +345,46 @@ const QFBadge = styled(Subline)`
 	border-radius: 16px;
 	display: flex;
 	align-items: center;
+`;
+interface ICardBodyHoverProps {
+	$isHover?: boolean;
+}
+
+const CardBodyHover = styled.div<ICardBodyHoverProps>`
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	padding: 32px 16px;
+	margin-top: 10px;
+	margin-left: ${SIDE_PADDING};
+	margin-right: ${SIDE_PADDING};
+	border-top: 1px solid ${neutralColors.gray[300]};
+
+	transition: all 0.5s ease;
+
+	animation: slideIn 0.3s ease;
+
+	@keyframes slideIn {
+		from {
+			opacity: 0;
+			transform: translateY(10px);
+		}
+		to {
+			opacity: 1;
+			transform: translateY(0);
+		}
+	}
+
+	a {
+		transition: color 0.3s ease;
+		text-decoration: none;
+		color: ${brandColors.giv[300]};
+		font-size: 12px;
+		font-weight: 700;
+		text-transform: uppercase;
+
+		&:hover {
+			color: ${brandColors.giv[100]};
+		}
+	}
 `;

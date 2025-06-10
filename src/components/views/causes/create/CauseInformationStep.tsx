@@ -36,7 +36,6 @@ export const CauseInformationStep = ({
 		register,
 		watch,
 		formState: { errors: formErrors, isValid },
-		getValues,
 	} = useFormContext();
 
 	const titleValue = watch('title');

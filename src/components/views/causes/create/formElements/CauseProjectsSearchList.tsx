@@ -5,12 +5,16 @@ import styled from 'styled-components';
 import { Caption, FlexCenter, neutralColors } from '@giveth/ui-design-system';
 import { useQuery } from '@tanstack/react-query';
 import { client } from '@/apollo/apolloClient';
-import { EInputs } from '../types';
-import { FETCH_ALL_PROJECTS } from '@/apollo/gql/gqlProjects';
+import { FETCH_ALL_PROJECTS_CAUSES } from '@/apollo/gql/gqlProjects';
 import { EProjectsFilter, IProject } from '@/apollo/types/types';
 
 import { CauseCreateProjectCard } from '@/components/views/causes/create/CauseCreateProjectCard';
 
+/**
+ * Fetch projects from the database
+ * @param searchFilters - The search filters
+ * @returns The projects
+ */
 const fetchProjectsPage = async (searchFilters: {
 	searchTerm: string;
 	selectedMainCategory: string;
@@ -22,7 +26,7 @@ const fetchProjectsPage = async (searchFilters: {
 			: [EProjectsFilter.ACCEPT_FUND_ON_POLYGON];
 
 	const { data: projectsData } = await client.query({
-		query: FETCH_ALL_PROJECTS,
+		query: FETCH_ALL_PROJECTS_CAUSES,
 		variables: {
 			limit: 50,
 			skip: 0,
@@ -41,16 +45,18 @@ const fetchProjectsPage = async (searchFilters: {
 
 export const CauseProjectsSearchList = ({
 	searchFilters,
+	showErrorModal,
 }: {
 	searchFilters: {
 		searchTerm: string;
 		selectedMainCategory: string;
 		filters: EProjectsFilter[];
 	};
+	showErrorModal: (show: boolean) => void;
 }) => {
 	const [projects, setProjects] = useState<IProject[]>([]);
 	const { watch, setValue } = useFormContext();
-	const selectedProjectIds = watch(EInputs.selectedProjects) || [];
+	const selectedProjects = watch('selectedProjects') || [];
 
 	const { formatMessage } = useIntl();
 
@@ -89,6 +95,15 @@ export const CauseProjectsSearchList = ({
 						<CauseCreateProjectCard
 							key={project.id}
 							project={project}
+							onProjectSelect={(updatedProjects: IProject[]) => {
+								setValue('selectedProjects', updatedProjects);
+							}}
+							selectedProjects={selectedProjects}
+							isSelected={selectedProjects.some(
+								(selectedProject: IProject) =>
+									selectedProject.id === project.id,
+							)}
+							showErrorModal={showErrorModal}
 						/>
 					))}
 				</ProjectsList>
@@ -111,6 +126,7 @@ const EmptyState = styled.div`
 const ProjectsList = styled.div`
 	display: flex;
 	flex-direction: row;
+	align-items: flex-end;
 	gap: 16px;
 	flex-wrap: wrap;
 	padding: 16px 0;

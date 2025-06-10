@@ -1818,5 +1818,9 @@
 	"label.cause.all_categories": "All Categories",
 	"label.cause.filter_by_categories": "Filter by category",
 	"label.cause.only_projects_polygon": "Only projects on Polygon will be shown.",
-	"label.cause.no_projects_found": "No projects found"
+	"label.cause.no_projects_found": "No projects found",
+	"label.cause.selected_projects_info_desc": "Select between 5-50 verified projects to include in your Cause. The AI Agent will distribute funds among these projects based on the agent's <link>evaluation criteria</link>.",
+	"label.cause.back": "Back",
+	"label.cause.projects_limit_exceeded": "Projects Limit Exceeded",
+	"label.cause.reached_limit_of_projects": "You've reached the limit of projects you can add to this Cause."
 }
