@@ -187,6 +187,8 @@ export const StakingPoolInfoAndActions: FC<IStakingPoolInfoAndActionsProps> = ({
 	const isZeroGIVStacked =
 		isGIVpower && (!address || userGIVPowerBalance.balance === '0');
 	const [showArchiveNotice, setShowArchiveNotice] = useState(false);
+	const isZkEvmPool =
+		poolStakingConfig.network === config.ZKEVM_NETWORK_NUMBER; // ZKEVM network number
 
 	useEffect(() => {
 		const now = Date.now();
@@ -409,7 +411,7 @@ export const StakingPoolInfoAndActions: FC<IStakingPoolInfoAndActionsProps> = ({
 							isArchived ||
 							availableStakedToken <= 0n ||
 							!subgraphSyncedInfo.isSynced ||
-							isArchivingPeriod
+							(isArchivingPeriod && isZkEvmPool)
 						}
 						onClick={() => setShowLockModal(true)}
 						label={
@@ -436,7 +438,7 @@ export const StakingPoolInfoAndActions: FC<IStakingPoolInfoAndActionsProps> = ({
 							exploited ||
 							userNotStakedAmount === 0n ||
 							!subgraphSyncedInfo.isSynced ||
-							isArchivingPeriod
+							(isArchivingPeriod && isZkEvmPool)
 						}
 						onClick={() => setShowStakeModal(true)}
 					/>
