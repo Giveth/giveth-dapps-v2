@@ -33,9 +33,16 @@ import { RegenStreamSection } from '@/components/givfarm/RegenStreamSection';
 import ToggleSwitch from '@/components/ToggleSwitch';
 import { getNetworkConfig } from '@/helpers/givpower';
 
-const renderPool = (pool: SimplePoolStakingConfig, id: number) => (
+const renderPool = (
+	pool: SimplePoolStakingConfig,
+	id: number,
+	isArchived: boolean = false,
+) => (
 	<Col sm={6} lg={4} key={`staking_pool_card_${pool.network}_${id}`}>
-		<StakingPoolCard poolStakingConfig={pool as SimplePoolStakingConfig} />
+		<StakingPoolCard
+			poolStakingConfig={pool as SimplePoolStakingConfig}
+			isArchived={isArchived}
+		/>
 	</Col>
 );
 
@@ -114,6 +121,9 @@ const getPoolsInfoByChainID = (
 	}
 };
 
+const POLYGON_ZKEVM_HIDE_DATE_MS = Date.UTC(2025, 5, 10, 0, 0, 0); // July 10, 2025
+const ZKEVM_CHAIN_ID = config.ZKEVM_NETWORK_NUMBER; // Polygon zkEVM chain ID
+
 const renderPools = (chainId?: number, showArchivedPools?: boolean) => {
 	const pools = getPoolsInfoByChainID(chainId);
 
@@ -122,14 +132,24 @@ const renderPools = (chainId?: number, showArchivedPools?: boolean) => {
 	const archivedPools = [];
 	for (let i = 0; i < pools.length; i++) {
 		const pool = pools[i];
-		const { farmEndTimeMS } = pool;
-		const archived = farmEndTimeMS && now > farmEndTimeMS + TWO_WEEK;
+		const { farmEndTimeMS, network } = pool;
+
+		const isZkEvmPool = network === ZKEVM_CHAIN_ID;
+
+		const archivedByFarmEnd =
+			farmEndTimeMS && now > farmEndTimeMS + TWO_WEEK;
+
+		const zkEvmArchived = isZkEvmPool && now >= POLYGON_ZKEVM_HIDE_DATE_MS;
+
+		const archived = archivedByFarmEnd || zkEvmArchived;
+
 		if (archived) {
-			archivedPools.push(renderPool(pool, i));
+			archivedPools.push(renderPool(pool, i, true));
 		} else {
-			filteredPools.push(renderPool(pool, i));
+			filteredPools.push(renderPool(pool, i, false));
 		}
 	}
+
 	return showArchivedPools ? archivedPools : filteredPools;
 };
 

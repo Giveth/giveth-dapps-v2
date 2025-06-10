@@ -95,7 +95,7 @@ export const QRDonationCard: FC<QRDonationCardProps> = ({
 		retrieveDraftDonation,
 	} = useQRCodeDonation(project);
 
-	const { addresses, id, verified } = project;
+	const { addresses, id, isGivbackEligible } = project;
 	const draftDonationId = Number(router.query.draft_donation!);
 	const [amount, setAmount] = useState(0n);
 	const [usdAmount, setUsdAmount] = useState(0);
@@ -111,15 +111,35 @@ export const QRDonationCard: FC<QRDonationCardProps> = ({
 	const isOnEligibleNetworks = activeStartedRound?.eligibleNetworks?.includes(
 		config.STELLAR_NETWORK_NUMBER,
 	);
-	const isProjectGivbacksEligible = !!verified;
+	const isProjectGivbacksEligible = !!isGivbackEligible;
 	const isInQF = !!isOnEligibleNetworks;
 	const showConnectWallet = isProjectGivbacksEligible || isInQF;
-	const textToDisplayOnConnect =
-		isProjectGivbacksEligible && isInQF
-			? 'label.please_connect_your_wallet_to_win_givbacks_and_match'
-			: isProjectGivbacksEligible
-				? 'label.please_connect_your_wallet_to_win_givbacks'
-				: 'label.please_connect_your_wallet_to_match';
+
+	const textToDisplayOnConnect = () => {
+		const onlyInQF =
+			activeStartedRound?.eligibleNetworks?.length === 1 &&
+			activeStartedRound?.eligibleNetworks[0] ===
+				config.STELLAR_NETWORK_NUMBER;
+
+		if (isProjectGivbacksEligible && onlyInQF) {
+			return 'label.sign_into_giveth_for_a_chance_to_win_givbacks';
+		}
+
+		if (isProjectGivbacksEligible && isInQF && !!activeStartedRound) {
+			return 'label.please_connect_your_wallet_to_win_givbacks_and_match';
+		}
+
+		if (isProjectGivbacksEligible) {
+			return 'label.sign_into_giveth_for_a_chance_to_win_givbacks';
+		}
+
+		if (!onlyInQF) {
+			return 'label.please_connect_your_wallet_to_match';
+		}
+
+		return null;
+	};
+
 	const donationUsdValue =
 		(tokenPrice || 0) * Number(ethers.utils.formatEther(amount));
 	const isDonationMatched =
@@ -323,14 +343,17 @@ export const QRDonationCard: FC<QRDonationCardProps> = ({
 					})}
 				/>
 			)}
-			{!showQRCode && !isConnected && showConnectWallet && (
-				<ConnectWallet>
-					<IconWalletOutline24 color={neutralColors.gray[700]} />
-					{formatMessage({
-						id: textToDisplayOnConnect,
-					})}
-				</ConnectWallet>
-			)}
+			{!showQRCode &&
+				!isConnected &&
+				showConnectWallet &&
+				textToDisplayOnConnect() && (
+					<ConnectWallet>
+						<IconWalletOutline24 color={neutralColors.gray[700]} />
+						{formatMessage({
+							id: textToDisplayOnConnect() || '',
+						})}
+					</ConnectWallet>
+				)}
 			{!showQRCode && (
 				<EligibilityBadges
 					amount={amount}

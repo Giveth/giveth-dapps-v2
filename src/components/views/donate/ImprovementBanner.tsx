@@ -128,7 +128,7 @@ const BannerWrapper = styled.div<{ isExpanded: boolean }>`
 	border-bottom-right-radius: ${props => (props.isExpanded ? '0' : '16px')};
 	box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
 	transition: all 0.3s ease-in-out;
-	z-index: 10020;
+	z-index: 10;
 `;
 
 const BannerHeader = styled(Flex)`
@@ -184,13 +184,13 @@ const ToggleIcon = styled.div`
 
 const ExpandableContent = styled.div<{ isExpanded: boolean }>`
 	width: 100%;
-	position: ${props => (props.isExpanded ? 'absolute' : 'static')};
+	position: relative;
 	max-height: ${props => (props.isExpanded ? '840px' : '0')};
 	overflow: hidden;
 	transition: all 0.3s ease-in-out;
 	background: white;
 	padding: ${props => (props.isExpanded ? '0 24px 24px 24px' : '0')};
-	z-index: 10020;
+	z-index: 10;
 	border-bottom-left-radius: 16px;
 	border-bottom-right-radius: 16px;
 
@@ -212,7 +212,7 @@ const Overlay = styled.div<{ isExpanded: boolean }>`
 	width: 100%;
 	height: 100%;
 	background: rgba(255, 255, 255, 0.4);
-	z-index: 10000;
+	z-index: 10;
 	display: flex;
 	justify-content: center;
 	align-items: center;
