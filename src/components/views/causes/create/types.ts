@@ -6,6 +6,9 @@ export enum ECreateCauseSections {
 	description = 'description',
 	categories = 'categories',
 	image = 'image',
+	transactionNetworkId = 'transactionNetworkId',
+	transactionHash = 'transactionHash',
+	transactionStatus = 'transactionStatus',
 }
 
 export enum EInputs {
@@ -14,6 +17,9 @@ export enum EInputs {
 	categories = 'categories',
 	selectedProjects = 'selectedProjects',
 	image = 'image',
+	transactionNetworkId = 'transactionNetworkId',
+	transactionHash = 'transactionHash',
+	transactionStatus = 'transactionStatus',
 }
 
 export type TCauseInputs = {
@@ -22,4 +28,7 @@ export type TCauseInputs = {
 	[EInputs.categories]?: ICategory[];
 	[EInputs.image]?: string;
 	[EInputs.selectedProjects]?: string[];
+	[EInputs.transactionNetworkId]?: number;
+	[EInputs.transactionHash]?: string;
+	[EInputs.transactionStatus]?: string;
 };

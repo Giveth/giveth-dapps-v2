@@ -32,12 +32,14 @@ export const CauseCreateProjectCard: FC<{
 	onProjectSelect?: (project: IProject[]) => void;
 	selectedProjects?: IProject[];
 	showErrorModal?: (show: boolean) => void;
+	showOptions?: boolean;
 }> = ({
 	project,
 	isSelected = false,
 	onProjectSelect,
 	selectedProjects,
 	showErrorModal,
+	showOptions = true,
 }) => {
 	const { formatMessage } = useIntl();
 	const {
@@ -99,17 +101,20 @@ export const CauseCreateProjectCard: FC<{
 			onMouseLeave={() => {
 				setIsHover(false);
 			}}
+			$showOptions={showOptions}
 		>
 			<CardBody $isOtherOrganization={isForeignOrg}>
 				<TitleWrapper>
 					<TitleRow>
 						<Title weight={700}>{title}</Title>
-						<ProjectCheckbox
-							type='checkbox'
-							checked={isSelected}
-							onChange={handleCheckboxChange}
-							$isSelected={isSelected}
-						/>
+						{showOptions && (
+							<ProjectCheckbox
+								type='checkbox'
+								checked={isSelected}
+								onChange={handleCheckboxChange}
+								$isSelected={isSelected}
+							/>
+						)}
 					</TitleRow>
 				</TitleWrapper>
 				<ProjectCardUserName
@@ -119,30 +124,32 @@ export const CauseCreateProjectCard: FC<{
 					isForeignOrg={isForeignOrg}
 				/>
 				<Description>{descriptionSummary}</Description>
-				<PaddedRow $justifyContent='space-between'>
-					{!activeStartedRound && (
-						<ProjectCardTotalRaised
-							activeStartedRound={!!activeStartedRound}
-							totalDonations={totalDonations || 0}
-							sumDonationValueUsdForActiveQfRound={
-								sumDonationValueUsdForActiveQfRound || 0
-							}
-							countUniqueDonors={countUniqueDonors || 0}
-						/>
-					)}
-					{activeStartedRound && (
-						<ProjectCardTotalRaisedQF
-							activeStartedRound={!!activeStartedRound}
-							totalDonations={totalDonations || 0}
-							sumDonationValueUsdForActiveQfRound={
-								sumDonationValueUsdForActiveQfRound || 0
-							}
-							countUniqueDonors={
-								countUniqueDonorsForActiveQfRound || 0
-							}
-						/>
-					)}
-				</PaddedRow>
+				{showOptions && (
+					<PaddedRow $justifyContent='space-between'>
+						{!activeStartedRound && (
+							<ProjectCardTotalRaised
+								activeStartedRound={!!activeStartedRound}
+								totalDonations={totalDonations || 0}
+								sumDonationValueUsdForActiveQfRound={
+									sumDonationValueUsdForActiveQfRound || 0
+								}
+								countUniqueDonors={countUniqueDonors || 0}
+							/>
+						)}
+						{activeStartedRound && (
+							<ProjectCardTotalRaisedQF
+								activeStartedRound={!!activeStartedRound}
+								totalDonations={totalDonations || 0}
+								sumDonationValueUsdForActiveQfRound={
+									sumDonationValueUsdForActiveQfRound || 0
+								}
+								countUniqueDonors={
+									countUniqueDonorsForActiveQfRound || 0
+								}
+							/>
+						)}
+					</PaddedRow>
+				)}
 				{hasFooter && (
 					<>
 						<Hr />
@@ -180,7 +187,7 @@ export const CauseCreateProjectCard: FC<{
 					</>
 				)}
 			</CardBody>
-			{isHover && (
+			{isHover && showOptions && (
 				<CardBodyHover $isHover={isHover}>
 					<Link
 						href={projectLink}
@@ -203,24 +210,27 @@ export const CauseCreateProjectCard: FC<{
 interface IWrapperProps {
 	$order?: number;
 	$activeStartedRound?: boolean;
+	$showOptions?: boolean;
 }
 
 const Wrapper = styled.div<IWrapperProps>`
 	position: relative;
-	width: 50%;
+	width: ${props => (props.$showOptions ? '50%' : '100%')};
 	border-radius: 12px;
 	margin: 4px 0 0 0;
 	background: white;
 	overflow: hidden;
-	box-shadow: ${Shadow.Neutral[400]};
+	box-shadow: ${props => (props.$showOptions ? Shadow.Neutral[400] : 'none')};
 	order: ${props => props.$order};
-	min-height: 326px;
+	min-height: ${props => (props.$showOptions ? '326px' : '200px')};
 	transition: all 0.5s ease;
 	transform: translateY(0);
 
 	&:hover {
-		transform: translateY(-8px) scale(1.02);
-		box-shadow: ${Shadow.Neutral[500]};
+		transform: ${props =>
+			props.$showOptions ? 'translateY(-8px) scale(1.02)' : 'none'};
+		box-shadow: ${props =>
+			props.$showOptions ? Shadow.Neutral[500] : 'none'};
 	}
 `;
 

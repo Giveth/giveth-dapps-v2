@@ -19,6 +19,10 @@ import { ECreateCauseSections } from '@/components/views/causes/create/types';
 import CauseDescriptionInput from '@/components/views/causes/create/formElements/CauseDescriptionInput';
 import CauseImageInput from '@/components/views/causes/create/formElements/CauseImageInput';
 import CauseCategoryInput from '@/components/views/causes/create/formElements/CauseCategoryInput';
+import {
+	ButtonContainer,
+	NextDescription,
+} from '@/components/views/causes/create/Create.sc';
 
 interface ICauseInformationStepProps {
 	onNext: () => void;
@@ -143,38 +147,4 @@ const Desc = styled(P)`
 
 const InputWrapper = styled.div`
 	margin-bottom: 24px;
-`;
-
-const NextDescription = styled.div`
-	margin-bottom: 36px;
-
-	h4 {
-		font-weight: 700;
-		font-size: 32px;
-		line-height: 56px;
-		color: ${brandColors.deep[900]};
-	}
-
-	p {
-		font-size: 16px;
-		line-height: 24px;
-		color: ${brandColors.deep[600]};
-	}
-`;
-
-const ButtonContainer = styled.div`
-	margin-top: 32px;
-	display: flex;
-	justify-content: flex-start;
-	padding: 0;
-
-	button {
-		padding: 12px 8em;
-	}
-
-	span {
-		text-transform: uppercase !important;
-		font-size: 14px !important;
-		line-height: 20px !important;
-	}
 `;

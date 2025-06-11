@@ -8,7 +8,6 @@ import {
 	H4,
 	P,
 	Row,
-	neutralColors,
 } from '@giveth/ui-design-system';
 import { useEffect, useState } from 'react';
 import { useFormContext } from 'react-hook-form';
@@ -20,6 +19,12 @@ import { CauseSelectedProjects } from '@/components/views/causes/create/CauseSel
 import config from '@/configuration';
 import InlineToast, { EToastType } from '@/components/toasts/InlineToast';
 import { Modal } from '@/components/modals/Modal';
+import {
+	BackButton,
+	PreviousButtonContainer,
+	ButtonContainer,
+	NextDescription,
+} from '@/components/views/causes/create/Create.sc';
 
 interface ICauseSelectProjectsStepProps {
 	onNext: () => void;
@@ -190,66 +195,6 @@ const Title = styled(H3)`
 const Desc = styled(P)`
 	margin-bottom: 48px;
 	color: ${brandColors.deep[600]};
-`;
-
-const NextDescription = styled.div`
-	margin-bottom: 36px;
-
-	h4 {
-		font-weight: 700;
-		font-size: 32px;
-		line-height: 56px;
-		color: ${brandColors.deep[900]};
-	}
-
-	p {
-		font-size: 16px;
-		line-height: 24px;
-		color: ${brandColors.deep[600]};
-	}
-`;
-
-const PreviousButtonContainer = styled.div`
-	margin-right: 12px;
-`;
-
-const ButtonContainer = styled.div`
-	margin-top: 32px;
-	display: flex;
-	justify-content: flex-start;
-	padding: 0;
-
-	button {
-		padding: 12px 8em;
-	}
-
-	span {
-		text-transform: uppercase !important;
-		font-size: 14px !important;
-		line-height: 20px !important;
-	}
-`;
-
-const BackButton = styled.button`
-	background-color: ${neutralColors.gray[200]};
-	color: ${neutralColors.gray[600]};
-	border: 2px solid ${neutralColors.gray[600]};
-	border-radius: 48px;
-	padding: 12px 8em;
-	font-size: 14px;
-	font-weight: 500;
-	text-transform: uppercase;
-	cursor: pointer;
-	transition: all 0.2s ease;
-
-	&:hover {
-		background-color: ${neutralColors.gray[300]};
-		color: ${neutralColors.gray[800]};
-	}
-
-	&:active {
-		background-color: ${neutralColors.gray[400]};
-	}
 `;
 
 const ModalErrorInner = styled.div`

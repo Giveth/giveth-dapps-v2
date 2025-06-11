@@ -241,6 +241,16 @@ export interface EnvConfig {
 	CAUSES_CONFIG: {
 		minSelectedProjects: number;
 		maxSelectedProjects: number;
+		launchToken: string;
+		launchFee: number;
+		launchNetworks: {
+			network: number;
+			name: string;
+			token: string;
+			symbol: string;
+			decimals: number;
+			destinationAddress: Address;
+		}[];
 	};
 }
 

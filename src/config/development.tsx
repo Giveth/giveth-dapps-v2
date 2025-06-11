@@ -50,6 +50,7 @@ const SEPT_8TH_2022 = 1662595200000;
 const GNOSIS_GIV_TOKEN_ADDRESS = '0x83a8eea6427985C523a0c4d9d3E62C051B6580d3';
 const OPTIMISM_GIV_TOKEN_ADDRESS = '0x2f2c819210191750F2E11F7CfC5664a0eB4fd5e6';
 const ZKEVM_GIV_TOKEN_ADDRESS = '0xa77390562986F5d08F5aECF5D3Fb82BD16B44548';
+const POLYGON_GIV_TOKEN_ADDRESS = '0xc4df120d75604307dcB604fde2AD3b8a8B7c6FAA';
 
 const MAINNET_NETWORK_NUMBER = sepolia.id; // sepolia
 const GNOSIS_NETWORK_NUMBER = gnosis.id; // xDAI
@@ -344,6 +345,7 @@ const config: EnvConfig = {
 		},
 		coingeckoChainName: 'polygon-pos',
 		chainLogo: (logoSize?: number) => <IconPolygon size={logoSize} />,
+		GIV_TOKEN_ADDRESS: POLYGON_GIV_TOKEN_ADDRESS,
 	},
 
 	OPTIMISM_CONFIG: {
@@ -555,6 +557,37 @@ const config: EnvConfig = {
 	CAUSES_CONFIG: {
 		minSelectedProjects: 5,
 		maxSelectedProjects: 10,
+		launchToken: 'GIV',
+		launchFee: 1,
+		launchNetworks: [
+			{
+				network: GNOSIS_NETWORK_NUMBER,
+				name: 'Gnosis',
+				token: 'GIV',
+				symbol: 'GIV',
+				decimals: 18,
+				destinationAddress:
+					'0x4D9339dd97db55e3B9bCBE65dE39fF9c04d1C2cd',
+			},
+			{
+				network: POLYGON_NETWORK_NUMBER,
+				name: 'Polygon',
+				token: 'GIV',
+				symbol: 'GIV',
+				decimals: 18,
+				destinationAddress:
+					'0x4D9339dd97db55e3B9bCBE65dE39fF9c04d1C2cd',
+			},
+			{
+				network: OPTIMISM_NETWORK_NUMBER,
+				name: 'Optimism',
+				token: 'GIV',
+				symbol: 'GIV',
+				decimals: 18,
+				destinationAddress:
+					'0x4D9339dd97db55e3B9bCBE65dE39fF9c04d1C2cd',
+			},
+		],
 	},
 };
 

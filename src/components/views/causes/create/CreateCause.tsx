@@ -11,6 +11,7 @@ import StorageLabel from '@/lib/localStorage';
 import { showToastError } from '@/lib/helpers';
 import { gToast, ToastType } from '@/components/toasts';
 import { EInputs, TCauseInputs } from '@/components/views/causes/create/types';
+import config from '@/configuration';
 
 interface ICreateCauseProps {
 	project?: ICauseEdition;
@@ -30,7 +31,7 @@ const CreateCause: FC<ICreateCauseProps> = () => {
 	const [currentStep, setCurrentStep] = useState(1);
 	const [isSubmitting, setIsSubmitting] = useState(false);
 
-	// Initialize react-hook-form
+	// Load storage data
 	let storageCauseData: TCauseInputs | undefined;
 
 	const storedCause = localStorage.getItem(StorageLabel.CREATE_CAUSE_FORM);
@@ -44,6 +45,9 @@ const CreateCause: FC<ICreateCauseProps> = () => {
 		categories: storageCategories,
 		image: storageImage,
 		selectedProjects: storageSelectedProjects,
+		transactionNetworkId: storageTransactionNetworkId,
+		transactionHash: storageTransactionHash,
+		transactionStatus: storageTransactionStatus,
 	} = storageCauseData || {};
 
 	const formMethods = useForm({
@@ -54,6 +58,9 @@ const CreateCause: FC<ICreateCauseProps> = () => {
 			[EInputs.selectedProjects]: storageSelectedProjects || '',
 			[EInputs.categories]: storageCategories || [],
 			[EInputs.image]: storageImage || '',
+			[EInputs.transactionNetworkId]: storageTransactionNetworkId || 0,
+			[EInputs.transactionHash]: storageTransactionHash || '',
+			[EInputs.transactionStatus]: storageTransactionStatus || '',
 		},
 	});
 
@@ -66,6 +73,9 @@ const CreateCause: FC<ICreateCauseProps> = () => {
 		categories: watchCategories,
 		image: watchImage,
 		selectedProjects: watchSelectedProjects,
+		transactionNetworkId: watchTransactionNetworkId,
+		transactionHash: watchTransactionHash,
+		transactionStatus: watchTransactionStatus,
 	} = formDataWatch;
 
 	useEffect(() => {
@@ -80,6 +90,9 @@ const CreateCause: FC<ICreateCauseProps> = () => {
 		watchCategories,
 		watchImage,
 		watchSelectedProjects,
+		watchTransactionNetworkId,
+		watchTransactionHash,
+		watchTransactionStatus,
 		formDataWatch,
 	]);
 
@@ -102,15 +115,36 @@ const CreateCause: FC<ICreateCauseProps> = () => {
 				id: 'error.cause_description_required',
 			});
 		}
+		if (!formDataWatch.image?.trim()) {
+			formErrors.image = formatMessage({
+				id: 'label.cause.image_required',
+			});
+		}
+		if (!formDataWatch.categories?.length) {
+			formErrors.categories = formatMessage({
+				id: 'label.cause.categories_required',
+			});
+		}
 
 		// Step 2 validation (Select Projects)
 		if (
 			!formDataWatch.selectedProjects ||
 			(Array.isArray(formDataWatch.selectedProjects) &&
-				formDataWatch.selectedProjects.length === 0)
+				formDataWatch.selectedProjects.length === 0) ||
+			formDataWatch.selectedProjects.length <
+				config.CAUSES_CONFIG.minSelectedProjects ||
+			formDataWatch.selectedProjects.length >
+				config.CAUSES_CONFIG.maxSelectedProjects
 		) {
 			formErrors.selectedProjects = formatMessage({
-				id: 'error.projects_required',
+				id: 'label.cause.projects_required',
+			});
+		}
+
+		// Step 3 validation (Review)
+		if (!formDataWatch.transactionStatus) {
+			formErrors.transactionStatus = formatMessage({
+				id: 'label.cause.transaction_status_required',
 			});
 		}
 
@@ -121,15 +155,22 @@ const CreateCause: FC<ICreateCauseProps> = () => {
 	const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
 
+		console.log('handleSubmitintro', currentStep);
+
 		// If not on the last step, go to next step
 		if (currentStep < 3) {
+			console.log('handleSubmit', currentStep);
 			setCurrentStep(currentStep + 1);
 			return;
 		}
 
 		// Final submission (step 3)
 		if (!validateForm()) {
-			showToastError('Please fix the form errors before submitting');
+			showToastError(
+				formatMessage({
+					id: 'label.cause.form_errors_before_submitting',
+				}),
+			);
 			return;
 		}
 
@@ -148,14 +189,17 @@ const CreateCause: FC<ICreateCauseProps> = () => {
 			// });
 
 			showToastSuccess('Cause created successfully!');
-			clearStorage();
+			// clearStorage();
 
-			// Redirect to success page or cause detail page
-			// router.push(`/causes/${response.id}`);
-			router.push('/causes');
+			console.log('FINISHED');
+
+			// TODO Redirect to success page or cause detail page
+			// router.push('/causes');
 		} catch (error) {
 			console.error('Error creating cause:', error);
-			showToastError('Failed to create cause. Please try again.');
+			showToastError(
+				formatMessage({ id: 'label.cause.failed_to_create_cause' }),
+			);
 		} finally {
 			setIsSubmitting(false);
 		}
