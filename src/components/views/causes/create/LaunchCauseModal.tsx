@@ -13,6 +13,7 @@ import { useIntl } from 'react-intl';
 import { useFormContext } from 'react-hook-form';
 import { Modal } from '@/components/modals/Modal';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
+import { useNetworkId } from '@/hooks/useNetworkId';
 import { IModal } from '@/types/common';
 import { formatDonation } from '@/helpers/number';
 import { useTokenPrice } from '@/hooks/useTokenPrice';
@@ -45,7 +46,7 @@ const LaunchCauseModal: FC<ILaunchCauseModalProps> = ({
 	const { formatMessage } = useIntl();
 	const { getValues } = useFormContext();
 
-	// Get GIV token price using CoinGecko
+	// Get token price using CoinGecko
 	const givTokenPrice = useTokenPrice({
 		symbol: 'GIV',
 		coingeckoId: 'giveth',
@@ -54,7 +55,10 @@ const LaunchCauseModal: FC<ILaunchCauseModalProps> = ({
 	// Get values from form
 	const title = getValues('title');
 	const launchFee = config.CAUSES_CONFIG.launchFee;
-	const launchToken = config.CAUSES_CONFIG.launchToken;
+	const currentNetworkId = useNetworkId();
+	const launchToken = config.CAUSES_CONFIG.launchNetworks.find(
+		network => network.network === currentNetworkId,
+	)?.token;
 
 	// Calculate USD value of launch fee
 	const launchFeeUSD = givTokenPrice

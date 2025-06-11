@@ -795,13 +795,13 @@ const config: EnvConfig = {
 	CAUSES_CONFIG: {
 		minSelectedProjects: 5,
 		maxSelectedProjects: 10,
-		launchToken: 'GIV',
 		launchFee: 1000,
 		launchNetworks: [
 			{
 				network: GNOSIS_NETWORK_NUMBER,
 				name: 'Gnosis',
 				token: 'GIV',
+				tokenAddress: GNOSIS_GIV_TOKEN_ADDRESS,
 				symbol: 'GIV',
 				decimals: 18,
 				destinationAddress:
@@ -811,6 +811,7 @@ const config: EnvConfig = {
 				network: POLYGON_NETWORK_NUMBER,
 				name: 'Polygon',
 				token: 'GIV',
+				tokenAddress: POLYGON_GIV_TOKEN_ADDRESS,
 				symbol: 'GIV',
 				decimals: 18,
 				destinationAddress:
@@ -820,6 +821,7 @@ const config: EnvConfig = {
 				network: OPTIMISM_NETWORK_NUMBER,
 				name: 'Optimism',
 				token: 'GIV',
+				tokenAddress: OPTIMISM_GIV_TOKEN_ADDRESS,
 				symbol: 'GIV',
 				decimals: 18,
 				destinationAddress:

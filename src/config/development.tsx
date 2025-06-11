@@ -557,23 +557,24 @@ const config: EnvConfig = {
 	CAUSES_CONFIG: {
 		minSelectedProjects: 5,
 		maxSelectedProjects: 10,
-		launchToken: 'GIV',
 		launchFee: 1,
 		launchNetworks: [
 			{
 				network: GNOSIS_NETWORK_NUMBER,
 				name: 'Gnosis',
-				token: 'GIV',
-				symbol: 'GIV',
+				token: 'DRGIV3',
+				tokenAddress: '0x29434A25abd94AE882aA883eea81585Aaa5b078D',
+				symbol: 'DRGIV3',
 				decimals: 18,
 				destinationAddress:
-					'0x4D9339dd97db55e3B9bCBE65dE39fF9c04d1C2cd',
+					'0xc20CAf8deE81059ec0c8E5971b2AF7347eC131f4',
 			},
 			{
 				network: POLYGON_NETWORK_NUMBER,
 				name: 'Polygon',
-				token: 'GIV',
-				symbol: 'GIV',
+				token: 'TPOL',
+				tokenAddress: '0xc20CAf8deE81059ec0c8E5971b2AF7347eC131f4',
+				symbol: 'TPOL',
 				decimals: 18,
 				destinationAddress:
 					'0x4D9339dd97db55e3B9bCBE65dE39fF9c04d1C2cd',
@@ -581,6 +582,7 @@ const config: EnvConfig = {
 			{
 				network: OPTIMISM_NETWORK_NUMBER,
 				name: 'Optimism',
+				tokenAddress: '0x2f2c819210191750F2E11F7CfC5664a0eB4fd5e6',
 				token: 'GIV',
 				symbol: 'GIV',
 				decimals: 18,

@@ -36,6 +36,7 @@ import config from '@/configuration';
 import { CauseCreateProjectCard } from '@/components/views/causes/create/CauseCreateProjectCard';
 import { formatDonation } from '@/helpers/number';
 import { useTokenPrice } from '@/hooks/useTokenPrice';
+import { useNetworkId } from '@/hooks/useNetworkId';
 import {
 	BackButton,
 	ButtonContainer,
@@ -122,10 +123,16 @@ export const CauseReviewStep = ({ onPrevious }: { onPrevious: () => void }) => {
 	const { chain } = useAccount();
 	const currentChainId = chain?.id;
 
+	// Use network ID hook
+	const currentNetworkId = useNetworkId();
+
 	// Check if current network supports cause creation
 	const supportedNetwork = config.CAUSES_CONFIG.launchNetworks.find(
 		network => network.network === currentChainId,
 	);
+	
+	// Get launch token for current network
+	const launchToken = supportedNetwork?.token || 'GIV';
 
 	// Get native token info for current network
 	const nativeTokenInfo = useMemo(() => {
@@ -457,7 +464,7 @@ export const CauseReviewStep = ({ onPrevious }: { onPrevious: () => void }) => {
 				<LaunchFeeInfo>
 					<TokenAmount>
 						{formatDonation(config.CAUSES_CONFIG.launchFee, '')}{' '}
-						{config.CAUSES_CONFIG.launchToken}
+						{launchToken}
 					</TokenAmount>
 					<UsdAmount>
 						<span>≈ ${launchFeeUSD}</span>
@@ -477,7 +484,7 @@ export const CauseReviewStep = ({ onPrevious }: { onPrevious: () => void }) => {
 										config.CAUSES_CONFIG.launchFee,
 										'',
 									)}{' '}
-									{config.CAUSES_CONFIG.launchToken}
+									{launchToken}
 								</InfoValue>
 							</InfoRow>
 							<InfoRow>
@@ -499,7 +506,7 @@ export const CauseReviewStep = ({ onPrevious }: { onPrevious: () => void }) => {
 									{givTokenAddress ? (
 										<>
 											{givBalanceFormatted}{' '}
-											{config.CAUSES_CONFIG.launchToken}
+											{launchToken}
 										</>
 									) : (
 										<span style={{ color: '#666' }}>
