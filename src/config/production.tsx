@@ -803,6 +803,7 @@ const config: EnvConfig = {
 				token: 'GIV',
 				tokenAddress: GNOSIS_GIV_TOKEN_ADDRESS,
 				symbol: 'GIV',
+				coingeckoId: 'giveth',
 				decimals: 18,
 				destinationAddress:
 					'0x4D9339dd97db55e3B9bCBE65dE39fF9c04d1C2cd',
@@ -813,6 +814,7 @@ const config: EnvConfig = {
 				token: 'GIV',
 				tokenAddress: POLYGON_GIV_TOKEN_ADDRESS,
 				symbol: 'GIV',
+				coingeckoId: 'giveth',
 				decimals: 18,
 				destinationAddress:
 					'0x4D9339dd97db55e3B9bCBE65dE39fF9c04d1C2cd',
@@ -823,6 +825,7 @@ const config: EnvConfig = {
 				token: 'GIV',
 				tokenAddress: OPTIMISM_GIV_TOKEN_ADDRESS,
 				symbol: 'GIV',
+				coingeckoId: 'giveth',
 				decimals: 18,
 				destinationAddress:
 					'0x4D9339dd97db55e3B9bCBE65dE39fF9c04d1C2cd',

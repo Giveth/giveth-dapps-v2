@@ -6,9 +6,6 @@ export enum ECreateCauseSections {
 	description = 'description',
 	categories = 'categories',
 	image = 'image',
-	transactionNetworkId = 'transactionNetworkId',
-	transactionHash = 'transactionHash',
-	transactionStatus = 'transactionStatus',
 }
 
 export enum EInputs {

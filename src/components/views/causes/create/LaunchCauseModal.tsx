@@ -60,7 +60,7 @@ const LaunchCauseModal: FC<ILaunchCauseModalProps> = ({
 	// Get token price using CoinGecko
 	const launchTokenPrice = useTokenPrice({
 		symbol: launchToken,
-		coingeckoId: launchToken.toLowerCase(),
+		coingeckoId: supportedNetwork?.coingeckoId,
 	});
 
 	// Get values from form

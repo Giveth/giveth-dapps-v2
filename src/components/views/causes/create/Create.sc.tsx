@@ -1,5 +1,27 @@
 import styled from 'styled-components';
-import { neutralColors, GLink, brandColors } from '@giveth/ui-design-system';
+import {
+	neutralColors,
+	GLink,
+	brandColors,
+	Container,
+	H3,
+	P,
+} from '@giveth/ui-design-system';
+
+export const StyledContainer = styled(Container)`
+	margin-top: 56px;
+`;
+
+export const Title = styled(H3)`
+	margin-bottom: 12px;
+	color: ${brandColors.deep[600]};
+	font-weight: bold;
+`;
+
+export const Desc = styled(P)`
+	margin-bottom: 48px;
+	color: ${brandColors.deep[600]};
+`;
 
 export const InputContainer = styled.div`
 	margin: 24px 0 64px 0;

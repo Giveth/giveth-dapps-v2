@@ -248,6 +248,7 @@ export interface EnvConfig {
 			token: string;
 			tokenAddress: Address;
 			symbol: string;
+			coingeckoId?: string;
 			decimals: number;
 			destinationAddress: Address;
 		}[];

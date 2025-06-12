@@ -12,7 +12,6 @@ import { formatUnits, Address, Chain, parseUnits, erc20Abi } from 'viem';
 import {
 	brandColors,
 	P,
-	Container,
 	H3,
 	neutralColors,
 	H6,
@@ -34,6 +33,9 @@ import {
 	ButtonContainer,
 	PreviousButtonContainer,
 	NextDescription,
+	StyledContainer,
+	Title,
+	Desc,
 } from '@/components/views/causes/create/Create.sc';
 import LaunchCauseModal from '@/components/views/causes/create/LaunchCauseModal';
 
@@ -72,7 +74,7 @@ export const CauseReviewStep = ({ onPrevious }: { onPrevious: () => void }) => {
 	// Get token price using CoinGecko
 	const launchTokenPrice = useTokenPrice({
 		symbol: supportedNetwork?.symbol || '',
-		coingeckoId: supportedNetwork?.symbol.toLowerCase() || '',
+		coingeckoId: supportedNetwork?.coingeckoId || '',
 	});
 
 	// Modal states
@@ -408,17 +410,18 @@ export const CauseReviewStep = ({ onPrevious }: { onPrevious: () => void }) => {
 					{formatMessage({
 						id: 'label.cause.selected_projects',
 					})}{' '}
-					({selectedProjects.length})
+					({selectedProjects?.length})
 				</InfoTitle>
 				<Row>
-					{selectedProjects.map((project: any) => (
-						<Col lg={4} md={12} key={project.id}>
-							<CauseCreateProjectCard
-								project={project}
-								showOptions={false}
-							/>
-						</Col>
-					))}
+					{selectedProjects &&
+						selectedProjects.map((project: any) => (
+							<Col lg={4} md={12} key={project.id}>
+								<CauseCreateProjectCard
+									project={project}
+									showOptions={false}
+								/>
+							</Col>
+						))}
 				</Row>
 			</CauseProjects>
 			<CauseLaunch>
@@ -611,21 +614,6 @@ export const CauseReviewStep = ({ onPrevious }: { onPrevious: () => void }) => {
 		</StyledContainer>
 	);
 };
-
-const StyledContainer = styled(Container)`
-	margin-top: 56px;
-`;
-
-const Title = styled(H3)`
-	margin-bottom: 12px;
-	color: ${brandColors.deep[600]};
-	font-weight: bold;
-`;
-
-const Desc = styled(P)`
-	margin-bottom: 48px;
-	color: ${brandColors.deep[600]};
-`;
 
 const CauseInfo = styled.div`
 	padding: 24px;

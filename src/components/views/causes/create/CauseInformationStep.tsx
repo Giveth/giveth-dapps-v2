@@ -1,14 +1,4 @@
-import styled from 'styled-components';
-import {
-	brandColors,
-	Col,
-	Container,
-	H3,
-	P,
-	Row,
-	Button,
-	H4,
-} from '@giveth/ui-design-system';
+import { Col, P, Row, Button, H4 } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
 import { useFormContext } from 'react-hook-form';
 import { useState } from 'react';
@@ -21,6 +11,9 @@ import CauseCategoryInput from '@/components/views/causes/create/formElements/Ca
 import {
 	ButtonContainer,
 	NextDescription,
+	StyledContainer,
+	Title,
+	Desc,
 } from '@/components/views/causes/create/Create.sc';
 
 interface ICauseInformationStepProps {
@@ -113,18 +106,3 @@ export const CauseInformationStep = ({
 		</StyledContainer>
 	);
 };
-
-const StyledContainer = styled(Container)`
-	margin-top: 56px;
-`;
-
-const Title = styled(H3)`
-	margin-bottom: 12px;
-	color: ${brandColors.deep[600]};
-	font-weight: bold;
-`;
-
-const Desc = styled(P)`
-	margin-bottom: 48px;
-	color: ${brandColors.deep[600]};
-`;

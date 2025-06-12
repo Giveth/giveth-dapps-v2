@@ -1,14 +1,5 @@
 import styled from 'styled-components';
-import {
-	brandColors,
-	Button,
-	Col,
-	Container,
-	H3,
-	H4,
-	P,
-	Row,
-} from '@giveth/ui-design-system';
+import { Button, Col, H4, P, Row } from '@giveth/ui-design-system';
 import { useEffect, useState } from 'react';
 import { useFormContext } from 'react-hook-form';
 import { useIntl } from 'react-intl';
@@ -24,6 +15,9 @@ import {
 	PreviousButtonContainer,
 	ButtonContainer,
 	NextDescription,
+	StyledContainer,
+	Title,
+	Desc,
 } from '@/components/views/causes/create/Create.sc';
 
 interface ICauseSelectProjectsStepProps {
@@ -182,20 +176,6 @@ export const CauseSelectProjectsStep = ({
 		</StyledContainer>
 	);
 };
-const StyledContainer = styled(Container)`
-	margin-top: 56px;
-`;
-
-const Title = styled(H3)`
-	margin-bottom: 12px;
-	color: ${brandColors.deep[600]};
-	font-weight: bold;
-`;
-
-const Desc = styled(P)`
-	margin-bottom: 48px;
-	color: ${brandColors.deep[600]};
-`;
 
 const ModalErrorInner = styled.div`
 	padding: 28px 24px 0 24px;
