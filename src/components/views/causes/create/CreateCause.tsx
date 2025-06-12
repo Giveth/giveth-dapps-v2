@@ -67,37 +67,26 @@ const CreateCause: FC<ICreateCauseProps> = () => {
 	const { watch } = formMethods;
 	const formDataWatch = watch();
 
-	const {
-		title: watchTitle,
-		description: watchDescription,
-		categories: watchCategories,
-		image: watchImage,
-		selectedProjects: watchSelectedProjects,
-		transactionNetworkId: watchTransactionNetworkId,
-		transactionHash: watchTransactionHash,
-		transactionStatus: watchTransactionStatus,
-	} = formDataWatch;
-
 	useEffect(() => {
 		localStorage.setItem(
 			StorageLabel.CREATE_CAUSE_FORM,
 			JSON.stringify(formDataWatch),
 		);
-		console.log('watchSelectedProjects', watchSelectedProjects);
-	}, [
-		watchTitle,
-		watchDescription,
-		watchCategories,
-		watchImage,
-		watchSelectedProjects,
-		watchTransactionNetworkId,
-		watchTransactionHash,
-		watchTransactionStatus,
-		formDataWatch,
-	]);
+	}, [formDataWatch]);
 
 	// Function to clear storage (call this when form is submitted or cancelled)
 	const clearStorage = () => {
+		// Reset form to prevent useEffect from re-saving
+		formMethods.reset({
+			[EInputs.title]: '',
+			[EInputs.description]: '',
+			[EInputs.selectedProjects]: '',
+			[EInputs.categories]: [],
+			[EInputs.image]: '',
+			[EInputs.transactionNetworkId]: 0,
+			[EInputs.transactionHash]: '',
+			[EInputs.transactionStatus]: '',
+		});
 		localStorage.removeItem(StorageLabel.CREATE_CAUSE_FORM);
 	};
 
@@ -155,11 +144,8 @@ const CreateCause: FC<ICreateCauseProps> = () => {
 	const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
 
-		console.log('handleSubmitintro', currentStep);
-
 		// If not on the last step, go to next step
 		if (currentStep < 3) {
-			console.log('handleSubmit', currentStep);
 			setCurrentStep(currentStep + 1);
 			return;
 		}
@@ -189,7 +175,7 @@ const CreateCause: FC<ICreateCauseProps> = () => {
 			// });
 
 			showToastSuccess('Cause created successfully!');
-			// clearStorage();
+			clearStorage();
 
 			console.log('FINISHED');
 

@@ -12,10 +12,9 @@ import {
 import { useIntl } from 'react-intl';
 import { useFormContext } from 'react-hook-form';
 import { useState } from 'react';
-import Input, { InputSize } from '@/components/Input';
-import { requiredOptions } from '@/lib/constants/regex';
 import { CauseProGuide } from '@/components/views/causes/create/CauseProGuide';
 import { ECreateCauseSections } from '@/components/views/causes/create/types';
+import CauseTitleInput from '@/components/views/causes/create/formElements/CauseTitleInput';
 import CauseDescriptionInput from '@/components/views/causes/create/formElements/CauseDescriptionInput';
 import CauseImageInput from '@/components/views/causes/create/formElements/CauseImageInput';
 import CauseCategoryInput from '@/components/views/causes/create/formElements/CauseCategoryInput';
@@ -37,9 +36,8 @@ export const CauseInformationStep = ({
 	const [isLoading, setIsLoading] = useState(false);
 
 	const {
-		register,
 		watch,
-		formState: { errors: formErrors, isValid },
+		formState: { isValid },
 	} = useFormContext();
 
 	const titleValue = watch('title');
@@ -70,21 +68,7 @@ export const CauseInformationStep = ({
 					<Desc>
 						{formatMessage({ id: 'label.cause.info_desc' })}
 					</Desc>
-					<InputWrapper>
-						<Input
-							label={formatMessage({ id: 'label.cause.title' })}
-							placeholder={formatMessage({
-								id: 'label.cause.title_placeholder',
-							})}
-							maxLength={100}
-							autoFocus
-							size={InputSize.LARGE}
-							register={register}
-							registerName='title'
-							registerOptions={requiredOptions.title}
-							error={formErrors.title}
-						/>
-					</InputWrapper>
+					<CauseTitleInput />
 					<CauseDescriptionInput
 						setActiveCauseSection={setActiveCauseSection}
 					/>
@@ -143,8 +127,4 @@ const Title = styled(H3)`
 const Desc = styled(P)`
 	margin-bottom: 48px;
 	color: ${brandColors.deep[600]};
-`;
-
-const InputWrapper = styled.div`
-	margin-bottom: 24px;
 `;

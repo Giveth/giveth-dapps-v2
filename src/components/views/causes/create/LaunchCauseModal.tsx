@@ -11,9 +11,9 @@ import {
 } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
 import { useFormContext } from 'react-hook-form';
+import { useAccount } from 'wagmi';
 import { Modal } from '@/components/modals/Modal';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
-import { useNetworkId } from '@/hooks/useNetworkId';
 import { IModal } from '@/types/common';
 import { formatDonation } from '@/helpers/number';
 import { useTokenPrice } from '@/hooks/useTokenPrice';
@@ -42,36 +42,41 @@ const LaunchCauseModal: FC<ILaunchCauseModalProps> = ({
 	isApprovalPending,
 	handleLaunchComplete,
 }) => {
+	const { chain } = useAccount();
+	const currentNetworkId = chain?.id;
+
 	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
 	const { formatMessage } = useIntl();
 	const { getValues } = useFormContext();
 
+	// Check if current network supports cause creation
+	const supportedNetwork = config.CAUSES_CONFIG.launchNetworks.find(
+		network => network.network === currentNetworkId,
+	);
+
+	// Get launch token for current network
+	const launchToken = supportedNetwork?.token || '';
+
 	// Get token price using CoinGecko
-	const givTokenPrice = useTokenPrice({
-		symbol: 'GIV',
-		coingeckoId: 'giveth',
+	const launchTokenPrice = useTokenPrice({
+		symbol: launchToken,
+		coingeckoId: launchToken.toLowerCase(),
 	});
 
 	// Get values from form
 	const title = getValues('title');
 	const launchFee = config.CAUSES_CONFIG.launchFee;
-	const currentNetworkId = useNetworkId();
-	const launchToken = config.CAUSES_CONFIG.launchNetworks.find(
-		network => network.network === currentNetworkId,
-	)?.token;
 
 	// Calculate USD value of launch fee
-	const launchFeeUSD = givTokenPrice
-		? (givTokenPrice * launchFee).toFixed(2)
+	const launchFeeUSD = launchTokenPrice
+		? (launchTokenPrice * launchFee).toFixed(2)
 		: '0.00';
 
 	const handleLaunch = () => {
-		console.log('handleLaunch', transactionStatus);
 		if (transactionStatus === 'success') {
 			closeModal();
 			handleLaunchComplete?.();
 		} else if (!isLaunching && !launched) {
-			console.log('opet launh');
 			onLaunch();
 		}
 	};

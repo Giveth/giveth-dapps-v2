@@ -8,14 +8,7 @@ import {
 	useWriteContract,
 	useWaitForTransactionReceipt,
 } from 'wagmi';
-import {
-	formatUnits,
-	Address,
-	Chain,
-	zeroAddress,
-	parseUnits,
-	erc20Abi,
-} from 'viem';
+import { formatUnits, Address, Chain, parseUnits, erc20Abi } from 'viem';
 import {
 	brandColors,
 	P,
@@ -36,7 +29,6 @@ import config from '@/configuration';
 import { CauseCreateProjectCard } from '@/components/views/causes/create/CauseCreateProjectCard';
 import { formatDonation } from '@/helpers/number';
 import { useTokenPrice } from '@/hooks/useTokenPrice';
-import { useNetworkId } from '@/hooks/useNetworkId';
 import {
 	BackButton,
 	ButtonContainer,
@@ -64,6 +56,24 @@ export const CauseReviewStep = ({ onPrevious }: { onPrevious: () => void }) => {
 	) {
 		onPrevious();
 	}
+
+	// Get current account and chain for gas estimation
+	const { chain } = useAccount();
+	const currentChainId = chain?.id;
+
+	// Check if current network supports cause creation
+	const supportedNetwork = config.CAUSES_CONFIG.launchNetworks.find(
+		network => network.network === currentChainId,
+	);
+
+	// Get launch token for current network
+	const launchToken = supportedNetwork?.token || '';
+
+	// Get token price using CoinGecko
+	const launchTokenPrice = useTokenPrice({
+		symbol: supportedNetwork?.symbol || '',
+		coingeckoId: supportedNetwork?.symbol.toLowerCase() || '',
+	});
 
 	// Modal states
 	const [showLaunchModal, setShowLaunchModal] = useState(false);
@@ -113,27 +123,6 @@ export const CauseReviewStep = ({ onPrevious }: { onPrevious: () => void }) => {
 		setValue,
 	]);
 
-	// Get GIV token price using CoinGecko
-	const givTokenPrice = useTokenPrice({
-		symbol: 'GIV',
-		coingeckoId: 'giveth',
-	});
-
-	// Get current account and chain for gas estimation
-	const { chain } = useAccount();
-	const currentChainId = chain?.id;
-
-	// Use network ID hook
-	const currentNetworkId = useNetworkId();
-
-	// Check if current network supports cause creation
-	const supportedNetwork = config.CAUSES_CONFIG.launchNetworks.find(
-		network => network.network === currentChainId,
-	);
-	
-	// Get launch token for current network
-	const launchToken = supportedNetwork?.token || 'GIV';
-
 	// Get native token info for current network
 	const nativeTokenInfo = useMemo(() => {
 		switch (currentChainId) {
@@ -159,6 +148,7 @@ export const CauseReviewStep = ({ onPrevious }: { onPrevious: () => void }) => {
 		if (!supportedNetwork || !chain) return null;
 
 		const selectedChain = chain as Chain;
+
 		// Using GIV token address for the current network as placeholder
 		const tokenAddress =
 			currentChainId === config.GNOSIS_NETWORK_NUMBER
@@ -215,49 +205,26 @@ export const CauseReviewStep = ({ onPrevious }: { onPrevious: () => void }) => {
 		return (nativeTokenPrice * tokenAmount).toFixed(2);
 	}, [nativeTokenPrice, gasFee, supportedNetwork]);
 
-	// Get current user's GIV token balance
+	// Get current user's token balance
 	const { address } = useAccount();
-	const givTokenAddress = useMemo(() => {
-		if (!supportedNetwork) return undefined;
-		const address =
-			currentChainId === config.GNOSIS_NETWORK_NUMBER
-				? config.GNOSIS_CONFIG.GIV_TOKEN_ADDRESS
-				: currentChainId === config.POLYGON_NETWORK_NUMBER
-					? config.POLYGON_CONFIG.GIV_TOKEN_ADDRESS
-					: currentChainId === config.OPTIMISM_NETWORK_NUMBER
-						? config.OPTIMISM_CONFIG.GIV_TOKEN_ADDRESS
-						: undefined;
 
-		console.log('Token address debug:', {
-			currentChainId,
-			supportedNetwork,
-			polygonGivAddress: config.POLYGON_CONFIG?.GIV_TOKEN_ADDRESS,
-			resolvedAddress: address,
-		});
-
-		return address;
-	}, [supportedNetwork, currentChainId]);
-
-	const { data: givBalance } = useBalance({
+	const { data: balance } = useBalance({
 		address: address,
-		token:
-			givTokenAddress && givTokenAddress !== zeroAddress
-				? (givTokenAddress as Address)
-				: undefined,
+		token: supportedNetwork?.tokenAddress,
 	});
 
 	const givBalanceFormatted = useMemo(() => {
 		if (!supportedNetwork) return '0.00';
-		if (!givTokenAddress) {
-			// GIV token not available on this network
+		if (!supportedNetwork.tokenAddress) {
+			// Token not available on this network
 			return 'N/A';
 		}
-		if (!givBalance) return '0.00';
+		if (!balance) return '0.00';
 		return formatDonation(
-			parseFloat(formatUnits(givBalance.value, givBalance.decimals)),
+			parseFloat(formatUnits(balance.value, balance.decimals)),
 			'',
 		);
-	}, [givBalance, supportedNetwork, givTokenAddress]);
+	}, [balance, supportedNetwork]);
 
 	// Get value from previous step
 	const title = getValues('title');
@@ -272,8 +239,8 @@ export const CauseReviewStep = ({ onPrevious }: { onPrevious: () => void }) => {
 	const transactionError = getValues('transactionError');
 
 	// Calculate USD value of launch fee
-	const launchFeeUSD = givTokenPrice
-		? (givTokenPrice * config.CAUSES_CONFIG.launchFee).toFixed(2)
+	const launchFeeUSD = launchTokenPrice
+		? (launchTokenPrice * config.CAUSES_CONFIG.launchFee).toFixed(2)
 		: '0.00';
 
 	// If someone skipped first step return to first step
@@ -310,9 +277,9 @@ export const CauseReviewStep = ({ onPrevious }: { onPrevious: () => void }) => {
 				config.CAUSES_CONFIG.minSelectedProjects ||
 			selectedProjects.length >
 				config.CAUSES_CONFIG.maxSelectedProjects ||
-			!givBalance ||
+			!balance ||
 			parseFloat(givBalanceFormatted) < config.CAUSES_CONFIG.launchFee ||
-			!givTokenAddress ||
+			!supportedNetwork?.tokenAddress ||
 			!supportedNetwork
 		) {
 			return;
@@ -324,7 +291,6 @@ export const CauseReviewStep = ({ onPrevious }: { onPrevious: () => void }) => {
 		console.log('handleLaunchComplete');
 		setTimeout(() => {
 			const form = document.querySelector('form');
-			console.log('form', form);
 			if (form) {
 				const submitEvent = new Event('submit', {
 					bubbles: true,
@@ -343,7 +309,7 @@ export const CauseReviewStep = ({ onPrevious }: { onPrevious: () => void }) => {
 			if (
 				!address ||
 				!currentChainId ||
-				!givTokenAddress ||
+				!supportedNetwork?.tokenAddress ||
 				!supportedNetwork
 			) {
 				throw new Error('Missing required parameters for approval');
@@ -360,7 +326,7 @@ export const CauseReviewStep = ({ onPrevious }: { onPrevious: () => void }) => {
 
 			// Approve GIV token transfer using writeContract to get transaction hash
 			const txHash = await writeContractAsync({
-				address: givTokenAddress as Address,
+				address: supportedNetwork?.tokenAddress as Address,
 				abi: erc20Abi,
 				functionName: 'approve',
 				args: [destinationAddress, launchFeeAmount],
@@ -503,10 +469,9 @@ export const CauseReviewStep = ({ onPrevious }: { onPrevious: () => void }) => {
 									{formatMessage({
 										id: 'label.cause.balance',
 									})}{' '}
-									{givTokenAddress ? (
+									{supportedNetwork?.tokenAddress ? (
 										<>
-											{givBalanceFormatted}{' '}
-											{launchToken}
+											{givBalanceFormatted} {launchToken}
 										</>
 									) : (
 										<span style={{ color: '#666' }}>

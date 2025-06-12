@@ -50,8 +50,6 @@ export const CreateCauseHeader: FC<IHeader> = ({
 						$completed={index + 1 < currentStep}
 						$baseTheme={theme}
 						onClick={() => {
-							console.log('index + 1', index + 1);
-							console.log('currentStep', currentStep);
 							if (index + 1 !== currentStep) {
 								setCurrentStep(index + 1);
 							}
