@@ -14,6 +14,7 @@ import {
 } from '@/apollo/gql/gqlPrice';
 import { IProjectAcceptedToken } from '@/apollo/types/gqlTypes';
 import { IToken } from '@/types/superFluid';
+import superToken from '@/artifacts/superToken.json';
 
 export const fetchPrice = async (
 	chainId: number | ChainType,
@@ -73,7 +74,7 @@ export const fetchRecurringBalance = async (
 		} else {
 			return await readContract(wagmiConfig, {
 				address: tokenAddress,
-				abi: erc20Abi,
+				abi: superToken.abi,
 				functionName: 'balanceOf',
 				args: [userAddress],
 				chainId: chainID,

@@ -32,7 +32,7 @@ export const useProjectClaimableDonations = (
 				if (balance) {
 					return {
 						token,
-						balance: balance,
+						balance: balance as bigint,
 					};
 				}
 				return null;
