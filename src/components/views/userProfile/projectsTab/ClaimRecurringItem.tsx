@@ -47,7 +47,7 @@ export const ClaimRecurringItem = ({
 				[symbol]: tokenValueInUsd!,
 			});
 		}
-	}, [price]);
+	}, [price, tokenWithBalance.balance]);
 
 	return (
 		<ItemContainer
