@@ -557,7 +557,7 @@ const config: EnvConfig = {
 	CAUSES_CONFIG: {
 		minSelectedProjects: 5,
 		maxSelectedProjects: 10,
-		launchFee: 1,
+		launchFee: 10,
 		launchNetworks: [
 			{
 				network: GNOSIS_NETWORK_NUMBER,
@@ -568,7 +568,7 @@ const config: EnvConfig = {
 				coingeckoId: 'giveth',
 				decimals: 18,
 				destinationAddress:
-					'0xc20CAf8deE81059ec0c8E5971b2AF7347eC131f4',
+					'0x864af8991100d5E2Df52a3c7ae64db111E983D24',
 			},
 			{
 				network: POLYGON_NETWORK_NUMBER,
@@ -579,7 +579,7 @@ const config: EnvConfig = {
 				coingeckoId: 'giveth',
 				decimals: 18,
 				destinationAddress:
-					'0x4D9339dd97db55e3B9bCBE65dE39fF9c04d1C2cd',
+					'0x864af8991100d5E2Df52a3c7ae64db111E983D24',
 			},
 			{
 				network: OPTIMISM_NETWORK_NUMBER,
@@ -590,7 +590,7 @@ const config: EnvConfig = {
 				coingeckoId: 'giveth',
 				decimals: 18,
 				destinationAddress:
-					'0x4D9339dd97db55e3B9bCBE65dE39fF9c04d1C2cd',
+					'0x864af8991100d5E2Df52a3c7ae64db111E983D24',
 			},
 		],
 	},
