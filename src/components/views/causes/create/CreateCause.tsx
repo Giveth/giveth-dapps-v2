@@ -194,7 +194,7 @@ const CreateCause: FC<ICreateCauseProps> = () => {
 			console.log('cause', cause);
 
 			showToastSuccess('Cause created successfully!');
-			// DO NOT DO NOW: clearStorage();
+			clearStorage();
 
 			console.log('FINISHED');
 
