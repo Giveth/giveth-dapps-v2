@@ -68,6 +68,7 @@ const Routes = {
 	AllCauses: '/causes/all',
 	Causes: '/causes',
 	CreateCause: '/causes/create',
+	Cause: '/cause',
 };
 
 export default Routes;
