@@ -1,4 +1,4 @@
-import { ICategory } from '@/apollo/types/types';
+import { ICategory, IProject } from '@/apollo/types/types';
 
 export enum ECreateCauseSections {
 	default = 'default',
@@ -24,7 +24,7 @@ export type TCauseInputs = {
 	[EInputs.description]?: string;
 	[EInputs.categories]?: ICategory[];
 	[EInputs.image]?: string;
-	[EInputs.selectedProjects]?: string[];
+	[EInputs.selectedProjects]?: IProject[];
 	[EInputs.transactionNetworkId]?: number;
 	[EInputs.transactionHash]?: string;
 	[EInputs.transactionStatus]?: string;

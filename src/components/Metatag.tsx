@@ -1,5 +1,5 @@
 import Head from 'next/head';
-import { IProject } from '@/apollo/types/types';
+import { ICause, IProject } from '@/apollo/types/types';
 import { htmlToText } from '@/lib/helpers';
 import type { FC } from 'react';
 
@@ -60,6 +60,27 @@ export const ProjectMeta = (props: {
 			/>
 			<meta property='twitter:description' content={metaDescription} />
 			<meta property='twitter:image' content={project?.image} />
+		</>
+	);
+};
+
+export const CauseMeta = (props: { cause?: ICause; preTitle?: string }) => {
+	const { cause, preTitle } = props;
+	const metaDescription = htmlToText(cause?.description?.slice(0, 100));
+	return (
+		<>
+			<meta
+				name='title'
+				content={(preTitle || '') + ' ' + cause?.title}
+			/>
+			<meta name='description' content={metaDescription} />
+			<meta property='og:type' content='website' />
+			<meta
+				property='og:title'
+				content={(preTitle || '') + ' ' + cause?.title}
+			/>
+			<meta property='og:description' content={metaDescription} />
+			<meta property='og:image' content={cause?.image} />
 		</>
 	);
 };

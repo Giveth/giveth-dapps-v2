@@ -544,3 +544,67 @@ export enum ERecurringDonationStatus {
 	FAILED = 'failed',
 	ACTIVE = 'active',
 }
+
+export interface ICauseCreation {
+	title: string;
+	description: string;
+	chainId: number;
+	projectIds: number[];
+	mainCategory: string;
+	subCategories: any;
+	bannerImage: string;
+	depositTxHash: string;
+	depositTxChainId: number;
+}
+
+export interface ICause {
+	id: string;
+	title?: string;
+	balance?: number;
+	image?: string;
+	slug: string;
+	creationDate?: string;
+	adminUserId?: number;
+	description?: string;
+	descriptionSummary?: string;
+	addresses?: IWalletAddress[];
+	impactLocation?: string;
+	qualityScore?: number;
+	verified?: boolean;
+	isGivbackEligible?: boolean;
+	verificationStatus?: EProjectVerificationStatus;
+	listed?: boolean | null;
+	categories: ICategory[];
+	reaction?: IReaction;
+	adminUser: IAdminUser;
+	donations: {
+		id?: string;
+	}[];
+	totalDonations?: number;
+	totalProjectUpdates?: number;
+	status: {
+		id?: string;
+		name?: EProjectStatus;
+	};
+	updatedAt: string;
+	latestUpdateCreationDate?: string;
+	organization?: {
+		name: string;
+		label: string;
+		supportCustomTokens: boolean;
+		disableRecurringDonations?: boolean;
+	};
+	projectVerificationForm?: IProjectVerification;
+	projectPower: IProjectPower;
+	verificationFormStatus?: EVerificationStatus;
+	projectFuturePower: IProjectPower;
+	givbackFactor?: number;
+	countUniqueDonors?: number;
+	countUniqueDonorsForActiveQfRound?: number;
+	estimatedMatching: IEstimatedMatching;
+	sumDonationValueUsdForActiveQfRound?: number;
+	qfRounds?: IQFRound[];
+	campaigns?: ICampaign[];
+	anchorContracts: IAnchorContractData[];
+	socialMedia: IProjectSocialMedia[];
+}

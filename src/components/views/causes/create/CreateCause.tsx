@@ -2,7 +2,8 @@ import { useState, FC, useEffect } from 'react';
 import { useIntl } from 'react-intl';
 import { useRouter } from 'next/router';
 import { useForm, FormProvider } from 'react-hook-form';
-import { ICauseEdition } from '@/apollo/types/types';
+import { useMutation } from '@apollo/client';
+import { ICauseCreation, ICauseEdition } from '@/apollo/types/types';
 import { CreateCauseHeader } from '@/components/views/causes/create/CreateCauseHeader';
 import { CauseInformationStep } from '@/components/views/causes/create/CauseInformationStep';
 import { CauseSelectProjectsStep } from '@/components/views/causes/create/CauseSelectProjectsStep';
@@ -12,6 +13,7 @@ import { showToastError } from '@/lib/helpers';
 import { gToast, ToastType } from '@/components/toasts';
 import { EInputs, TCauseInputs } from '@/components/views/causes/create/types';
 import config from '@/configuration';
+import { CREATE_CAUSE } from '@/apollo/gql/gqlCauses';
 
 interface ICreateCauseProps {
 	project?: ICauseEdition;
@@ -26,10 +28,13 @@ const showToastSuccess = (message: string) => {
 };
 
 const CreateCause: FC<ICreateCauseProps> = () => {
+	// Get current account and chain for gas estimation
+
 	const { formatMessage } = useIntl();
 	const router = useRouter();
 	const [currentStep, setCurrentStep] = useState(1);
 	const [isSubmitting, setIsSubmitting] = useState(false);
+	const [addCauseMutation] = useMutation(CREATE_CAUSE);
 
 	// Load storage data
 	let storageCauseData: TCauseInputs | undefined;
@@ -55,7 +60,7 @@ const CreateCause: FC<ICreateCauseProps> = () => {
 		defaultValues: {
 			[EInputs.title]: storageTitle || '',
 			[EInputs.description]: storageDescription || '',
-			[EInputs.selectedProjects]: storageSelectedProjects || '',
+			[EInputs.selectedProjects]: storageSelectedProjects || [],
 			[EInputs.categories]: storageCategories || [],
 			[EInputs.image]: storageImage || '',
 			[EInputs.transactionNetworkId]: storageTransactionNetworkId || 0,
@@ -80,7 +85,7 @@ const CreateCause: FC<ICreateCauseProps> = () => {
 		formMethods.reset({
 			[EInputs.title]: '',
 			[EInputs.description]: '',
-			[EInputs.selectedProjects]: '',
+			[EInputs.selectedProjects]: [],
 			[EInputs.categories]: [],
 			[EInputs.image]: '',
 			[EInputs.transactionNetworkId]: 0,
@@ -163,19 +168,33 @@ const CreateCause: FC<ICreateCauseProps> = () => {
 		setIsSubmitting(true);
 
 		try {
-			// TODO: Replace this with actual API call
-			await new Promise(resolve => setTimeout(resolve, 2000)); // Simulate API call
+			const causeData: ICauseCreation = {
+				title: formDataWatch.title,
+				description: formDataWatch.description,
+				chainId: 137, // Polygon chain id
+				bannerImage: formDataWatch.image,
+				mainCategory: formDataWatch.categories?.[0]?.name || '',
+				subCategories:
+					formDataWatch.categories?.map(category => category.name) ||
+					[],
+				projectIds:
+					formDataWatch.selectedProjects?.map(project =>
+						parseInt(project.id),
+					) || [],
+				depositTxHash: formDataWatch.transactionHash,
+				depositTxChainId: formDataWatch.transactionNetworkId,
+			};
 
-			// Example API call structure:
-			// const response = await createCause({
-			//   name: formData.name,
-			//   description: formData.description,
-			//   projectIds: formData.selectedProjects.split(','),
-			//   ...otherFormData
-			// });
+			console.log('🧪 causeData', causeData);
+
+			const cause = await addCauseMutation({
+				variables: causeData,
+			});
+
+			console.log('cause', cause);
 
 			showToastSuccess('Cause created successfully!');
-			clearStorage();
+			// DO NOT DO NOW: clearStorage();
 
 			console.log('FINISHED');
 
