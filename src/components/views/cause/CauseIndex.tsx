@@ -168,11 +168,9 @@ const CauseIndex: FC<ICauseBySlug> = () => {
 						{isMobile && (
 							<MobileContainer $hasActiveRound={hasActiveQFRound}>
 								{hasActiveQFRound ? (
-									<CauseQFSection projectData={causeData} />
+									<CauseQFSection causeData={causeData} />
 								) : (
-									<CauseDonateSection
-										projectData={causeData}
-									/>
+									<CauseDonateSection causeData={causeData} />
 								)}
 							</MobileContainer>
 						)}
