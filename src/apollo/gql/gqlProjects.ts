@@ -20,6 +20,7 @@ export const PROJECT_CORE_FIELDS = gql`
 			allocatedTokenSymbol
 			allocatedFundUSDPreferred
 			allocatedFundUSD
+			eligibleNetworks
 		}
 	}
 `;

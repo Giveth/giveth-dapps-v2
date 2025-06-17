@@ -39,8 +39,9 @@ import ImprovementBanner from './ImprovementBanner';
 
 interface ISuccessView {
 	isStellar?: boolean;
+	isStellarInQF?: boolean;
 }
-export const SuccessView: FC<ISuccessView> = ({ isStellar }) => {
+export const SuccessView: FC<ISuccessView> = ({ isStellar, isStellarInQF }) => {
 	const { formatMessage } = useIntl();
 	const { successDonation, hasActiveQFRound, project } = useDonateData();
 	const {
@@ -100,12 +101,13 @@ export const SuccessView: FC<ISuccessView> = ({ isStellar }) => {
 		!isSafeEnv &&
 		hasActiveQFRound &&
 		isOnEligibleNetworks &&
-		passportState !== EPassportState.CONNECTING &&
-		passportState !== EPassportState.LOADING_SCORE &&
-		qfEligibilityState !== EQFElegibilityState.LOADING &&
-		qfEligibilityState !== EQFElegibilityState.PROCESSING &&
-		qfEligibilityState !== EQFElegibilityState.NOT_CONNECTED &&
-		qfEligibilityState !== EQFElegibilityState.ERROR;
+		((isStellarInQF && isStellar) ||
+			(passportState !== EPassportState.CONNECTING &&
+				passportState !== EPassportState.LOADING_SCORE &&
+				qfEligibilityState !== EQFElegibilityState.LOADING &&
+				qfEligibilityState !== EQFElegibilityState.PROCESSING &&
+				qfEligibilityState !== EQFElegibilityState.NOT_CONNECTED &&
+				qfEligibilityState !== EQFElegibilityState.ERROR));
 
 	return (
 		<Wrapper>
@@ -158,7 +160,12 @@ export const SuccessView: FC<ISuccessView> = ({ isStellar }) => {
 								<br />
 							</>
 						)}
-						{showQFToast && <QFToast />}
+						{showQFToast && (
+							<QFToast
+								isStellar={isStellar}
+								isStellarInQF={isStellarInQF}
+							/>
+						)}
 						{isRecurring && <ManageRecurringDonation />}
 						<SocialBoxWrapper>
 							<SocialBox

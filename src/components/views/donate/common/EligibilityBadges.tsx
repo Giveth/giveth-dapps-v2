@@ -48,6 +48,7 @@ const EligibilityBadges: FC<IEligibilityBadges> = props => {
 
 	const isOnQFEligibleNetworks =
 		activeStartedRound?.eligibleNetworks?.includes(networkId || 0);
+
 	const decimals = isStellar ? 18 : token?.decimals || 18;
 
 	const donationUsdValue =
@@ -66,6 +67,11 @@ const EligibilityBadges: FC<IEligibilityBadges> = props => {
 		isProjectGivbacksEligible &&
 		donationUsdValue >= GIVBACKS_DONATION_QUALIFICATION_VALUE_USD;
 
+	const isStellarOnlyRound =
+		activeStartedRound?.eligibleNetworks?.length === 1 &&
+		activeStartedRound?.eligibleNetworks[0] ===
+			config.STELLAR_NETWORK_NUMBER;
+
 	//  Define messageId BEFORE rendering to avoid issues
 	const messageId = isDonationMatched
 		? 'page.donate.donations_will_be_matched'
@@ -75,7 +81,8 @@ const EligibilityBadges: FC<IEligibilityBadges> = props => {
 				? 'page.donate.unlocks_matching_funds'
 				: null; // Prevents invalid id values
 
-	return isConnected ? (
+	return isConnected ||
+		(isStellar && isStellarOnlyRound && !isProjectGivbacksEligible) ? (
 		<EligibilityBadgeWrapper style={style}>
 			{/* Prevents QF Badge from rendering when !isOnQFEligibleNetworks && !activeStartedRound */}
 			{!(isOnQFEligibleNetworks || activeStartedRound) ? null : (
