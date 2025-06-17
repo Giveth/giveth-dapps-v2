@@ -149,7 +149,7 @@ const moduleExports = withBundleAnalyzer({
 		localeDetection: false,
 	},
 	env: {
-		locales,
+		locales: JSON.stringify(['en', 'ct', 'es']),
 		defaultLocale,
 	},
 	headers: async () => {
