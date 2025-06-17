@@ -21,25 +21,31 @@ import config from '@/configuration';
 import { mediaQueries } from '@/lib/constants/constants';
 
 interface ILaunchCauseModalProps extends IModal {
-	onLaunch: () => void;
 	isLaunching: boolean;
-	launched: boolean;
+	lunchStatus:
+		| 'approval'
+		| 'approval_success'
+		| 'approval_failed'
+		| 'transfer_success'
+		| 'transfer_failed'
+		| null;
 	transactionStatus?: 'pending' | 'success' | 'failed';
 	transactionHash?: string;
 	transactionError?: string;
-	isApprovalPending?: boolean;
+	handleApproval?: () => void;
+	handleTransfer?: () => void;
 	handleLaunchComplete?: () => void;
 }
 
 const LaunchCauseModal: FC<ILaunchCauseModalProps> = ({
 	setShowModal,
-	onLaunch,
 	isLaunching,
-	launched,
+	lunchStatus,
 	transactionStatus,
 	transactionHash,
 	transactionError,
-	isApprovalPending,
+	handleApproval,
+	handleTransfer,
 	handleLaunchComplete,
 }) => {
 	const { chain } = useAccount();
@@ -72,46 +78,79 @@ const LaunchCauseModal: FC<ILaunchCauseModalProps> = ({
 		? (launchTokenPrice * launchFee).toFixed(2)
 		: '0.00';
 
+	// Handle launch flow
 	const handleLaunch = () => {
-		if (transactionStatus === 'success') {
-			closeModal();
+		// First try to approve the token
+		if (lunchStatus === 'approval' || lunchStatus === 'approval_failed') {
+			handleApproval?.();
+		}
+
+		// Then try to transfer the token
+		if (
+			lunchStatus === 'approval_success' ||
+			lunchStatus === 'transfer_failed'
+		) {
+			handleTransfer?.();
+		}
+
+		// Finally try to launch the cause
+		if (
+			lunchStatus === 'transfer_success' &&
+			transactionHash &&
+			transactionStatus === 'success'
+		) {
 			handleLaunchComplete?.();
-		} else if (!isLaunching && !launched) {
-			onLaunch();
 		}
 	};
 
 	const buttonText = () => {
-		if (transactionStatus === 'failed') {
+		if (
+			lunchStatus === 'approval_failed' ||
+			lunchStatus === 'transfer_failed' ||
+			transactionStatus === 'failed'
+		) {
 			return formatMessage({ id: 'label.cause.try_again' });
 		}
-		if (launched || transactionStatus === 'success') {
+		if (lunchStatus === 'approval_success') {
+			return formatMessage({ id: 'label.cause.transfer' });
+		}
+		if (
+			lunchStatus === 'transfer_success' ||
+			transactionStatus === 'success'
+		) {
 			return formatMessage({ id: 'label.cause.launch_complete' });
 		}
-		if (isLaunching || transactionStatus === 'pending') {
-			if (isApprovalPending) {
-				return formatMessage({ id: 'label.cause.confirming' });
-			}
-			return formatMessage({ id: 'label.cause.launching' });
-		}
-		return formatMessage({ id: 'label.cause.launch_cause' });
+		return formatMessage({ id: 'label.approve' });
 	};
 
 	const getHeaderTitle = () => {
-		if (transactionStatus === 'failed') {
+		if (
+			lunchStatus === 'approval_failed' ||
+			lunchStatus === 'transfer_failed'
+		) {
 			return formatMessage({ id: 'label.cause.launch_failed' });
 		}
-		if (launched || transactionStatus === 'success') {
-			return formatMessage({ id: 'label.cause.launch_successful' });
+		if (
+			lunchStatus === 'transfer_success' ||
+			transactionStatus === 'success'
+		) {
+			return formatMessage({ id: 'label.cause.launch_complete' });
 		}
-		return formatMessage({ id: 'label.cause.launching_cause' });
+		return formatMessage({ id: 'label.approve' });
 	};
 
 	const getLeadText = () => {
-		if (transactionStatus === 'failed') {
+		if (
+			lunchStatus === 'approval_failed' ||
+			lunchStatus === 'transfer_failed' ||
+			transactionStatus === 'failed'
+		) {
 			return formatMessage({ id: 'label.cause.launch_failed_desc' });
 		}
-		if (launched || transactionStatus === 'success') {
+		if (
+			lunchStatus === 'transfer_success' ||
+			transactionStatus === 'success'
+		) {
 			return formatMessage({ id: 'label.cause.launch_successful' });
 		}
 		return formatMessage({ id: 'label.cause.you_are_launching' });
@@ -138,7 +177,7 @@ const LaunchCauseModal: FC<ILaunchCauseModalProps> = ({
 						<UsdAmount>
 							<span>≈ ${launchFeeUSD} USD</span>
 						</UsdAmount>
-						<CauseTitle>to launch "{title}"</CauseTitle>
+						<CauseTitle>to launch &quot;{title}&quot;</CauseTitle>
 					</LaunchSummary>
 					{transactionStatus === 'failed' && transactionError && (
 						<ErrorMessage>
@@ -150,7 +189,8 @@ const LaunchCauseModal: FC<ILaunchCauseModalProps> = ({
 							<ErrorDetail>{transactionError}</ErrorDetail>
 						</ErrorMessage>
 					)}
-					{(launched || transactionStatus === 'success') && (
+					{(lunchStatus === 'transfer_success' ||
+						transactionStatus === 'success') && (
 						<SuccessMessage>
 							<P>
 								{formatMessage({
@@ -182,17 +222,13 @@ const LaunchCauseModal: FC<ILaunchCauseModalProps> = ({
 						</InfoMessage>
 					)}
 					<LaunchButton
-						loading={isLaunching || transactionStatus === 'pending'}
+						loading={isLaunching}
 						buttonType={
-							launched || transactionStatus === 'success'
+							lunchStatus || transactionStatus === 'success'
 								? 'primary'
 								: 'secondary'
 						}
-						disabled={
-							isLaunching ||
-							transactionStatus === 'pending' ||
-							(launched && transactionStatus !== 'failed')
-						}
+						disabled={false}
 						label={buttonText()}
 						onClick={handleLaunch}
 					/>

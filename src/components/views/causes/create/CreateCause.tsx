@@ -243,7 +243,7 @@ const CreateCause: FC<ICreateCauseProps> = () => {
 				<form onSubmit={handleSubmit} noValidate>
 					{currentStep === 1 && (
 						<CauseInformationStep
-							onNext={() => setCurrentStep(2)}
+							onNext={() => setCurrentStep(3)}
 						/>
 					)}
 					{currentStep === 2 && (

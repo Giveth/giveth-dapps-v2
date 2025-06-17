@@ -35,6 +35,7 @@ export const CauseInformationStep = ({
 
 	const titleValue = watch('title');
 	const descriptionValue = watch('description');
+	const imageValue = watch('image');
 
 	// Check if description meets minimum length requirement
 	const isDescriptionValid =
@@ -42,7 +43,11 @@ export const CauseInformationStep = ({
 		descriptionValue.replace(/<[^>]*>/g, '').trim().length >= 2000;
 
 	const handleContinue = () => {
+		console.log('titleValue', titleValue);
+		console.log('isValid', isValid);
+		console.log('isDescriptionValid', isDescriptionValid);
 		if (titleValue?.trim() && isValid && isDescriptionValid) {
+			console.log('onNext');
 			onNext();
 		}
 	};
@@ -93,6 +98,7 @@ export const CauseInformationStep = ({
 								!titleValue?.trim() ||
 								!isValid ||
 								!isDescriptionValid ||
+								!imageValue ||
 								isLoading
 							}
 							label={formatMessage({ id: 'label.continue' })}

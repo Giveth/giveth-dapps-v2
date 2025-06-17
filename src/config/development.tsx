@@ -557,7 +557,7 @@ const config: EnvConfig = {
 	CAUSES_CONFIG: {
 		minSelectedProjects: 5,
 		maxSelectedProjects: 10,
-		launchFee: 10,
+		launchFee: 12,
 		launchNetworks: [
 			{
 				network: GNOSIS_NETWORK_NUMBER,

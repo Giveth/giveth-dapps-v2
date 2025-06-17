@@ -5,10 +5,8 @@ import {
 	useAccount,
 	useBalance,
 	useSwitchChain,
-	useWriteContract,
-	useWaitForTransactionReceipt,
 } from 'wagmi';
-import { formatUnits, Address, Chain, parseUnits, erc20Abi } from 'viem';
+import { formatUnits, Address, Chain, parseUnits } from 'viem';
 import {
 	brandColors,
 	P,
@@ -38,6 +36,11 @@ import {
 	Desc,
 } from '@/components/views/causes/create/Create.sc';
 import LaunchCauseModal from '@/components/views/causes/create/LaunchCauseModal';
+import {
+	approveTokenTransfer,
+	checkTokenApproval,
+	transferToken,
+} from './helpers';
 
 export const CauseReviewStep = ({ onPrevious }: { onPrevious: () => void }) => {
 	const { formatMessage } = useIntl();
@@ -80,50 +83,58 @@ export const CauseReviewStep = ({ onPrevious }: { onPrevious: () => void }) => {
 	// Modal states
 	const [showLaunchModal, setShowLaunchModal] = useState(false);
 	const [isLaunching, setIsLaunching] = useState(false);
-	const [launched, setLaunched] = useState(false);
+	const [lunchStatus, setLunchStatus] = useState<
+		| 'approval'
+		| 'approval_success'
+		| 'approval_failed'
+		| 'transfer_success'
+		| 'transfer_failed'
+		| null
+	>('approval');
 
 	// Contract writing hook
-	const { writeContractAsync } = useWriteContract();
+	// const { writeContractAsync } = useWriteContract();
 
-	// Transaction state
-	const [approvalTxHash, setApprovalTxHash] = useState<
-		`0x${string}` | undefined
-	>();
+	// // Handle approval confirmation
+	// useEffect(() => {
+	// 	if (isApprovalSuccess && approvalTxHash) {
+	// 		console.log('Approval transaction confirmed:', approvalTxHash);
+	// 		// Show transfer modal after approval succeeds
+	// 		setShowTransferModal(true);
+	// 		setShowLaunchModal(false);
+	// 	} else if (isApprovalError && approvalTxHash) {
+	// 		console.error('Approval transaction failed:', approvalError);
+	// 		setValue('transactionStatus', 'failed');
+	// 		setValue(
+	// 			'transactionError',
+	// 			approvalError?.message || 'Approval transaction failed',
+	// 		);
+	// 		setIsLaunching(false);
+	// 		setShowLaunchModal(false);
+	// 	}
+	// }, [isApprovalSuccess, isApprovalError, approvalTxHash, approvalError]);
 
-	// Wait for transaction receipt
-	const {
-		isSuccess: isApprovalSuccess,
-		isLoading: isApprovalPending,
-		isError: isApprovalError,
-		error: approvalError,
-	} = useWaitForTransactionReceipt({
-		hash: approvalTxHash,
-	});
-
-	// Handle transaction confirmation
-	useEffect(() => {
-		if (isApprovalSuccess && approvalTxHash) {
-			console.log('Approval transaction confirmed:', approvalTxHash);
-			setValue('transactionStatus', 'success');
-			setValue('approvalConfirmed', true);
-			setLaunched(true);
-			setIsLaunching(false);
-		} else if (isApprovalError && approvalTxHash) {
-			console.error('Approval transaction failed:', approvalError);
-			setValue('transactionStatus', 'failed');
-			setValue(
-				'transactionError',
-				approvalError?.message || 'Transaction failed',
-			);
-			setIsLaunching(false);
-		}
-	}, [
-		isApprovalSuccess,
-		isApprovalError,
-		approvalTxHash,
-		approvalError,
-		setValue,
-	]);
+	// // Handle transfer confirmation
+	// useEffect(() => {
+	// 	if (isTransferSuccess && transferTxHash) {
+	// 		console.log('Transfer transaction confirmed:', transferTxHash);
+	// 		setValue('transactionStatus', 'success');
+	// 		setValue('approvalConfirmed', true);
+	// 		setLaunched(true);
+	// 		setIsLaunching(false);
+	// 		setShowTransferModal(false);
+	// 		handleLaunchComplete();
+	// 	} else if (isTransferError && transferTxHash) {
+	// 		console.error('Transfer transaction failed:', transferError);
+	// 		setValue('transactionStatus', 'failed');
+	// 		setValue(
+	// 			'transactionError',
+	// 			transferError?.message || 'Transfer transaction failed',
+	// 		);
+	// 		setIsLaunching(false);
+	// 		setShowTransferModal(false);
+	// 	}
+	// }, [isTransferSuccess, isTransferError, transferTxHash, transferError]);
 
 	// Get native token info for current network
 	const nativeTokenInfo = useMemo(() => {
@@ -215,7 +226,7 @@ export const CauseReviewStep = ({ onPrevious }: { onPrevious: () => void }) => {
 		token: supportedNetwork?.tokenAddress,
 	});
 
-	const givBalanceFormatted = useMemo(() => {
+	const tokenBalanceFormatted = useMemo(() => {
 		if (!supportedNetwork) return '0.00';
 		if (!supportedNetwork.tokenAddress) {
 			// Token not available on this network
@@ -239,6 +250,12 @@ export const CauseReviewStep = ({ onPrevious }: { onPrevious: () => void }) => {
 	const transactionStatus = getValues('transactionStatus'); // 'pending' | 'success' | 'failed'
 	const transactionHash = getValues('transactionHash');
 	const transactionError = getValues('transactionError');
+
+	// Get launch fee amount in wei
+	const launchFeeAmount = parseUnits(
+		config.CAUSES_CONFIG.launchFee.toString(),
+		18,
+	);
 
 	// Calculate USD value of launch fee
 	const launchFeeUSD = launchTokenPrice
@@ -267,6 +284,37 @@ export const CauseReviewStep = ({ onPrevious }: { onPrevious: () => void }) => {
 	};
 
 	const handleLastStep = () => {
+		const tokenBalance =
+			balance?.value && balance?.decimals
+				? parseFloat(formatUnits(balance.value, balance.decimals))
+				: 0;
+
+		console.log('--- handleLastStep checks ---');
+		console.log('title:', title);
+		console.log('description:', description);
+		console.log('categories:', categories);
+		console.log('categories.length === 0:', categories?.length === 0);
+		console.log('image:', image);
+		console.log('selectedProjects:', selectedProjects);
+		console.log(
+			'selectedProjects.length < min:',
+			selectedProjects?.length < config.CAUSES_CONFIG.minSelectedProjects,
+		);
+		console.log(
+			'selectedProjects.length > max:',
+			selectedProjects?.length > config.CAUSES_CONFIG.maxSelectedProjects,
+		);
+		console.log('tokenBalance:', tokenBalance);
+		console.log('launchFee:', config.CAUSES_CONFIG.launchFee);
+		console.log(
+			'tokenBalance < launchFee:',
+			tokenBalance < config.CAUSES_CONFIG.launchFee,
+		);
+		console.log(
+			'supportedNetwork?.tokenAddress:',
+			supportedNetwork?.tokenAddress,
+		);
+		console.log('supportedNetwork:', supportedNetwork);
 		// Check are all data provided and valid
 		if (
 			!title ||
@@ -280,7 +328,9 @@ export const CauseReviewStep = ({ onPrevious }: { onPrevious: () => void }) => {
 			selectedProjects.length >
 				config.CAUSES_CONFIG.maxSelectedProjects ||
 			!balance ||
-			parseFloat(givBalanceFormatted) < config.CAUSES_CONFIG.launchFee ||
+			parseInt(
+				formatUnits(balance?.value || 0n, balance?.decimals || 18),
+			) < config.CAUSES_CONFIG.launchFee ||
 			!supportedNetwork?.tokenAddress ||
 			!supportedNetwork
 		) {
@@ -289,6 +339,111 @@ export const CauseReviewStep = ({ onPrevious }: { onPrevious: () => void }) => {
 		setShowLaunchModal(true);
 	};
 
+	const handleApproval = async () => {
+		setIsLaunching(true);
+		setValue('transactionStatus', 'pending');
+		try {
+			if (
+				!address ||
+				!currentChainId ||
+				!supportedNetwork?.tokenAddress ||
+				!supportedNetwork?.destinationAddress
+			) {
+				throw new Error('Missing required parameters for approval');
+			}
+
+			const checkApproval = await checkTokenApproval({
+				tokenAddress: supportedNetwork.tokenAddress,
+				owner: address,
+				spender: supportedNetwork.destinationAddress,
+				requiredAmount: launchFeeAmount,
+				chainId: currentChainId,
+			});
+
+			console.log('checkApproval', checkApproval);
+
+			// Approval already done
+			if (checkApproval) {
+				setLunchStatus('approval_success');
+				setIsLaunching(false);
+				return;
+			}
+			// Approval not done ask for it
+			else {
+				const approvalTxHash = await approveTokenTransfer({
+					tokenAddress: supportedNetwork.tokenAddress,
+					spender: supportedNetwork.destinationAddress,
+					amount: launchFeeAmount,
+					chainId: currentChainId,
+				});
+
+				if (!approvalTxHash) {
+					setLunchStatus('approval_failed');
+					setIsLaunching(false);
+					throw new Error('Token approval transaction failed');
+				}
+
+				setLunchStatus('approval_success');
+				setIsLaunching(false);
+			}
+		} catch (error) {
+			console.error('Approval failed:', error);
+			setLunchStatus('approval_failed');
+			setValue(
+				'transactionError',
+				(error as Error)?.message || 'Approval failed',
+			);
+			setIsLaunching(false);
+		}
+	};
+
+	const handleTransfer = async () => {
+		setIsLaunching(true);
+		setValue('transactionStatus', 'pending');
+		try {
+			if (
+				!address ||
+				!currentChainId ||
+				!supportedNetwork?.tokenAddress
+			) {
+				throw new Error('Missing required parameters for transfer');
+			}
+
+			const txHash = await transferToken({
+				tokenAddress: supportedNetwork.tokenAddress,
+				to: supportedNetwork.destinationAddress,
+				amount: launchFeeAmount,
+				chainId: currentChainId,
+			});
+
+			if (!txHash) {
+				setValue('transactionStatus', 'failed');
+				setValue('transactionHash', txHash);
+				setValue('transactionError', 'Transfer failed');
+				setLunchStatus('transfer_failed');
+				setIsLaunching(false);
+				throw new Error('Token transfer transaction failed');
+			}
+
+			setValue('transactionStatus', 'success');
+			setValue('transactionHash', txHash);
+			setValue('transactionNetworkId', currentChainId);
+			setValue('transactionError', '');
+			setLunchStatus('transfer_success');
+			setIsLaunching(false);
+		} catch (error) {
+			console.error('Transfer failed:', error);
+			setLunchStatus('transfer_failed');
+			setValue(
+				'transactionError',
+				(error as Error)?.message || 'Transfer failed',
+			);
+			setIsLaunching(false);
+		}
+	};
+
+	// Handle launch complete - submit form
+	// Added 3 seconds delay to allow for transaction to be confirmed
 	const handleLaunchComplete = () => {
 		console.log('handleLaunchComplete');
 		setTimeout(() => {
@@ -301,61 +456,6 @@ export const CauseReviewStep = ({ onPrevious }: { onPrevious: () => void }) => {
 				form.dispatchEvent(submitEvent);
 			}
 		}, 3000);
-	};
-
-	// Handle launch cause transaction - approve GIV token transfer and submit form
-	const handleLaunch = async () => {
-		setIsLaunching(true);
-		try {
-			// Approve GIV token transaction
-			if (
-				!address ||
-				!currentChainId ||
-				!supportedNetwork?.tokenAddress ||
-				!supportedNetwork
-			) {
-				throw new Error('Missing required parameters for approval');
-			}
-
-			// Get the destination address for the current network
-			const destinationAddress = supportedNetwork.destinationAddress;
-
-			// Convert launch fee to wei (18 decimals for GIV token)
-			const launchFeeAmount = parseUnits(
-				config.CAUSES_CONFIG.launchFee.toString(),
-				18,
-			);
-
-			// Approve GIV token transfer using writeContract to get transaction hash
-			const txHash = await writeContractAsync({
-				address: supportedNetwork?.tokenAddress as Address,
-				abi: erc20Abi,
-				functionName: 'approve',
-				args: [destinationAddress, launchFeeAmount],
-				chainId: currentChainId,
-			});
-
-			// Set transaction hash to trigger useWaitForTransactionReceipt
-			setApprovalTxHash(txHash);
-
-			// Save transaction details to form
-			setValue('transactionNetworkId', currentChainId);
-			setValue('transactionHash', txHash);
-
-			if (txHash) {
-				setValue('transactionStatus', 'success');
-			}
-
-			setIsLaunching(false);
-			handleLaunchComplete();
-		} catch (error) {
-			setValue('transactionStatus', 'failed');
-			setValue(
-				'transactionError',
-				(error as Error)?.message || 'Transaction failed',
-			);
-			setIsLaunching(false);
-		}
 	};
 
 	return (
@@ -474,7 +574,8 @@ export const CauseReviewStep = ({ onPrevious }: { onPrevious: () => void }) => {
 									})}{' '}
 									{supportedNetwork?.tokenAddress ? (
 										<>
-											{givBalanceFormatted} {launchToken}
+											{tokenBalanceFormatted}{' '}
+											{launchToken}
 										</>
 									) : (
 										<span style={{ color: '#666' }}>
@@ -601,13 +702,13 @@ export const CauseReviewStep = ({ onPrevious }: { onPrevious: () => void }) => {
 			{showLaunchModal && (
 				<LaunchCauseModal
 					setShowModal={setShowLaunchModal}
-					onLaunch={handleLaunch}
 					isLaunching={isLaunching}
-					launched={launched}
+					lunchStatus={lunchStatus}
 					transactionStatus={transactionStatus}
 					transactionHash={transactionHash}
 					transactionError={transactionError}
-					isApprovalPending={isApprovalPending}
+					handleApproval={handleApproval}
+					handleTransfer={handleTransfer}
 					handleLaunchComplete={handleLaunchComplete}
 				/>
 			)}
