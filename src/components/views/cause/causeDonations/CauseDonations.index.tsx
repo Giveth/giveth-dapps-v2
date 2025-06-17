@@ -4,29 +4,29 @@ import { useState } from 'react';
 import { useIntl } from 'react-intl';
 import ProjectTotalFundCard from './ProjectTotalFundCard';
 import ProjectDonationTable from './ProjectDonationTable';
-import { QfRoundSelector } from './QfRoundSelector';
+import { CauseQfRoundSelector } from '@/components/views/cause/causeDonations/CauseQfRoundSelector';
 import { IQFRound } from '@/apollo/types/types';
 import ProjectRecurringDonationTable from './ProjectRecurringDonationTable';
 
-export interface ProjectDonationSwiperState {
+export interface CauseDonationSwiperState {
 	selectedQF: IQFRound | null;
 	isRecurringSelected: boolean;
 }
 
 const CauseDonationsIndex = () => {
-	const [projectDonationSwiperState, setProjectDonationSwiperState] =
-		useState<ProjectDonationSwiperState>({
+	const [causeDonationSwiperState, setCauseDonationSwiperState] =
+		useState<CauseDonationSwiperState>({
 			selectedQF: null,
 			isRecurringSelected: false,
 		});
 	const { formatMessage } = useIntl();
-	const { selectedQF, isRecurringSelected } = projectDonationSwiperState;
+	const { selectedQF, isRecurringSelected } = causeDonationSwiperState;
 
 	return (
 		<>
-			<QfRoundSelector
-				projectDonationSwiperState={projectDonationSwiperState}
-				setProjectDonationSwiperState={setProjectDonationSwiperState}
+			<CauseQfRoundSelector
+				causeDonationSwiperState={causeDonationSwiperState}
+				setCauseDonationSwiperState={setCauseDonationSwiperState}
 			/>
 			<StyledRow>
 				<Col lg={4}>

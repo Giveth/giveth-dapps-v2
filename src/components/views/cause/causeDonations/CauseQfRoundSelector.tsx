@@ -18,18 +18,18 @@ import { useProjectContext } from '@/context/project.context';
 import 'swiper/css';
 import 'swiper/css/navigation';
 import { NavigationWrapper } from '@/components/styled-components/SwiperPagination';
-import { ProjectDonationSwiperState } from './ProjectDonations.index';
+import { CauseDonationSwiperState } from '@/components/views/cause/causeDonations/CauseDonations.index';
 import { IQFRound } from '@/apollo/types/types';
 interface IQfRoundSelectorProps {
-	projectDonationSwiperState: ProjectDonationSwiperState;
-	setProjectDonationSwiperState: Dispatch<
-		SetStateAction<ProjectDonationSwiperState>
+	causeDonationSwiperState: CauseDonationSwiperState;
+	setCauseDonationSwiperState: Dispatch<
+		SetStateAction<CauseDonationSwiperState>
 	>;
 }
 
-export const QfRoundSelector: FC<IQfRoundSelectorProps> = ({
-	projectDonationSwiperState,
-	setProjectDonationSwiperState,
+export const CauseQfRoundSelector: FC<IQfRoundSelectorProps> = ({
+	causeDonationSwiperState,
+	setCauseDonationSwiperState,
 }) => {
 	const { formatMessage } = useIntl();
 	const { projectData } = useProjectContext();
@@ -45,12 +45,12 @@ export const QfRoundSelector: FC<IQfRoundSelectorProps> = ({
 			return activeFirstCompare;
 		}) || [];
 
-	const isRecurringSelected = projectDonationSwiperState.isRecurringSelected;
-	const selectedQF = projectDonationSwiperState.selectedQF;
+	const isRecurringSelected = causeDonationSwiperState.isRecurringSelected;
+	const selectedQF = causeDonationSwiperState.selectedQF;
 	const setSelectedQF = (selectedQF: IQFRound | null) =>
-		setProjectDonationSwiperState(prev => ({ ...prev, selectedQF }));
+		setCauseDonationSwiperState(prev => ({ ...prev, selectedQF }));
 	const setIsRecurringSelected = (isRecurringSelected: boolean) =>
-		setProjectDonationSwiperState(prev => ({
+		setCauseDonationSwiperState(prev => ({
 			...prev,
 			isRecurringSelected,
 		}));
@@ -107,7 +107,7 @@ export const QfRoundSelector: FC<IQfRoundSelectorProps> = ({
 						}}
 						$isSelected={isRecurringSelected === true}
 					>
-						{(projectDonationSwiperState.selectedQF === null) ===
+						{(causeDonationSwiperState.selectedQF === null) ===
 						null ? (
 							<B>Recurring Donations</B>
 						) : (
