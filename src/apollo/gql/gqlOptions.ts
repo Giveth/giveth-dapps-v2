@@ -8,3 +8,12 @@ export const OPTIONS_HOME_PROJECTS = {
 	},
 	notifyOnNetworkStatusChange: true,
 };
+
+export const OPTIONS_HOME_CAUSES = {
+	variables: {
+		limit: 15,
+		skip: 0,
+		sortingBy: EProjectsSortBy.INSTANT_BOOSTING,
+	},
+	notifyOnNetworkStatusChange: true,
+};
