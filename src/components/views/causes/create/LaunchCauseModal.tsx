@@ -136,6 +136,9 @@ const LaunchCauseModal: FC<ILaunchCauseModalProps> = ({
 		) {
 			return formatMessage({ id: 'label.cause.launch_complete' });
 		}
+		if (lunchStatus === 'approval_success') {
+			return formatMessage({ id: 'label.cause.transfer' });
+		}
 		return formatMessage({ id: 'label.approve' });
 	};
 

@@ -431,6 +431,7 @@ export const CauseReviewStep = ({ onPrevious }: { onPrevious: () => void }) => {
 			setValue('transactionError', '');
 			setLunchStatus('transfer_success');
 			setIsLaunching(false);
+			handleLaunchComplete();
 		} catch (error) {
 			console.error('Transfer failed:', error);
 			setLunchStatus('transfer_failed');
