@@ -6,6 +6,14 @@ export enum EContentType {
 	verifyProject = 'verifyProject',
 }
 
+export enum EContentTypeCause {
+	thisCause = 'thisCause',
+	ourCause = 'ourCause',
+	justDonated = 'justDonated',
+	justDonatedRecurring = 'justDonatedRecurring',
+	verifyCause = 'verifyCause',
+}
+
 export enum ESocialType {
 	twitter = 'X (Twitter)',
 	facebook = 'facebook',

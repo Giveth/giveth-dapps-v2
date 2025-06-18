@@ -38,7 +38,7 @@ const DonateSocialBox: FC<ISocialBox> = props => {
 				<ShareModal
 					contentType={EContentType.thisProject}
 					setShowModal={setShowModal}
-					itemHref={slug}
+					projectHref={slug}
 				/>
 			)}
 			<BLead>
