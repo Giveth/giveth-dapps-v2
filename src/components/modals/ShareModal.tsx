@@ -36,7 +36,7 @@ import {
 } from '@/lib/constants/shareContent';
 
 interface IShareModal extends IModal {
-	projectHref: string;
+	itemHref: string;
 	contentType: EContentType;
 	shareTitle?: string | undefined;
 	shareDescription?: string | undefined;
@@ -45,7 +45,7 @@ interface IShareModal extends IModal {
 
 const ShareModal: FC<IShareModal> = props => {
 	const {
-		projectHref,
+		itemHref,
 		setShowModal,
 		contentType,
 		shareTitle,
@@ -53,8 +53,8 @@ const ShareModal: FC<IShareModal> = props => {
 		isCause = false,
 	} = props;
 	const url = isCause
-		? fullPath(slugToCauseView(projectHref))
-		: fullPath(slugToProjectView(projectHref));
+		? fullPath(slugToCauseView(itemHref))
+		: fullPath(slugToProjectView(itemHref));
 	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
 	const { formatMessage } = useIntl();
 

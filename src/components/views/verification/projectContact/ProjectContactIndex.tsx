@@ -219,7 +219,7 @@ export default function ProjectContactIndex() {
 				<ShareModal
 					contentType={EContentType.verifyProject}
 					setShowModal={setShowShareModal}
-					projectHref={slug}
+					itemHref={slug}
 					shareTitle='label.share_your'
 					shareDescription='label.share_your_desc'
 				/>

@@ -165,7 +165,7 @@ export const AdminActions = () => {
 					<ShareModal
 						contentType={EContentType.thisProject}
 						setShowModal={setShowShareModal}
-						projectHref={slug}
+						itemHref={slug}
 					/>
 				)}
 				{showClaimModal && (

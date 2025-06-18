@@ -47,7 +47,7 @@ const ProjectCardBadgeButtons: FC<IProjectCardBadgeButtons> = ({ project }) => {
 			{showShare && (
 				<ShareModal
 					setShowModal={setShowShare}
-					projectHref={slug}
+					itemHref={slug}
 					contentType={EContentType.thisProject}
 					isCause={projectType === EProjectType.CAUSE}
 				/>

@@ -1897,5 +1897,8 @@
 	"label.cause.there_are_no_causes_matching_your_search": "There are no causes matching your search",
 	"label.cause.search_for_cause": "Search for a cause on all of the categories",
 	"label.cause.most_number_of_projects": "Most Projects",
-	"label.cause.least_number_of_projects": "Least Projects"
+	"label.cause.least_number_of_projects": "Least Projects",
+	"label.cause.cause_not_available": "Oops! This cause is no longer available or not found!",
+	"label.cause.edit_cause": "Edit Cause",
+	"label.cause.cause_actions": "Cause Actions"
 }

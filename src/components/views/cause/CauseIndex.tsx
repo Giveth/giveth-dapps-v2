@@ -469,7 +469,7 @@ const TooltipWrapper = styled.div<TooltipWrapperProps>`
 	${ContinueCreationButton}:hover & {
 		opacity: 1;
 		visibility: visible;
-	display: 'inline-block', // Ensures it wraps the button
+		display: 'inline-block',
     cursor: !isEmailVerifiedStatus ? 'not-allowed' : 'pointer'
 	}
 `;
