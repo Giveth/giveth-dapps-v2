@@ -19,8 +19,8 @@ import DeactivateProjectModal from '@/components/modals/deactivateProject/Deacti
 import { capitalizeAllWords } from '@/lib/helpers';
 import { Dropdown, IOption, EOptionType } from '@/components/Dropdown';
 import { idToCauseEdit } from '@/lib/routeCreators';
-import ShareModal from '@/components/modals/ShareModal';
-import { EContentType } from '@/lib/constants/shareContent';
+import ShareModalCause from '@/components/modals/ShareModalCause';
+import { EContentTypeCause } from '@/lib/constants/shareContent';
 import useMediaQuery from '@/hooks/useMediaQuery';
 import { device } from '@/lib/constants/constants';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
@@ -139,10 +139,10 @@ export const CauseAdminActions = () => {
 					/>
 				)}
 				{showShareModal && (
-					<ShareModal
-						contentType={EContentType.thisProject}
+					<ShareModalCause
+						contentType={EContentTypeCause.thisCause}
 						setShowModal={setShowShareModal}
-						projectHref={slug}
+						causeHref={`test`}
 					/>
 				)}
 				<ProjectCardNotification />
@@ -189,15 +189,15 @@ export const CauseAdminActions = () => {
 						{deactivateModal && (
 							<DeactivateProjectModal
 								setShowModal={setDeactivateModal}
-								projectId={projectData?.id}
-								onSuccess={fetchProjectBySlug}
+								projectId={causeData?.id}
+								onSuccess={fetchCauseBySlug}
 							/>
 						)}
 						{showShareModal && (
-							<ShareModal
-								contentType={EContentType.thisProject}
+							<ShareModalCause
+								contentType={EContentTypeCause.thisCause}
 								setShowModal={setShowShareModal}
-								projectHref={slug}
+								causeHref={`test`}
 							/>
 						)}
 					</MobileActionsModal>

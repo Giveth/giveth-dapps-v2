@@ -23,41 +23,41 @@ import FacebookIcon from '../../../public/images/social-fb.svg';
 import LinkedinIcon from '../../../public/images/social-linkedin.svg';
 import ShareIcon from '../../../public/images/icons/share_dots.svg';
 import Warpcast from '../../../public/images/icons/social-warpcast.svg';
-import { slugToProjectView } from '@/lib/routeCreators';
+import { slugToCauseView } from '@/lib/routeCreators';
 import { IModal } from '@/types/common';
 import CopyLink from '@/components/CopyLink';
 import { fullPath } from '@/lib/helpers';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
 import {
-	EContentType,
+	EContentTypeCause,
 	ESocialType,
-	shareContentCreator,
+	shareContentCreatorCause,
 } from '@/lib/constants/shareContent';
 
 interface IShareModal extends IModal {
-	projectHref: string;
-	contentType: EContentType;
+	causeHref: string;
+	contentType: EContentTypeCause;
 	shareTitle?: string | undefined;
 	shareDescription?: string | undefined;
 }
 
-const ShareModal: FC<IShareModal> = props => {
+const ShareModalCause: FC<IShareModal> = props => {
 	const {
-		projectHref,
+		causeHref,
 		setShowModal,
 		contentType,
 		shareTitle,
 		shareDescription,
 	} = props;
-	const url = fullPath(slugToProjectView(projectHref));
+	const url = fullPath(slugToCauseView(causeHref));
 	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
 	const { formatMessage } = useIntl();
 
-	const shareTitleTwitter = shareContentCreator(
+	const shareTitleTwitter = shareContentCreatorCause(
 		contentType,
 		ESocialType.twitter,
 	);
-	const shareTitleFacebookAndLinkedin = shareContentCreator(
+	const shareTitleFacebookAndLinkedin = shareContentCreatorCause(
 		contentType,
 		ESocialType.facebook,
 	);
@@ -193,4 +193,4 @@ const CustomOutlineButton = styled(OutlineButton)`
 	margin: 24px auto 0;
 `;
 
-export default ShareModal;
+export default ShareModalCause;
