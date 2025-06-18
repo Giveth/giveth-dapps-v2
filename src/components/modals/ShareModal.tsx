@@ -23,7 +23,7 @@ import FacebookIcon from '../../../public/images/social-fb.svg';
 import LinkedinIcon from '../../../public/images/social-linkedin.svg';
 import ShareIcon from '../../../public/images/icons/share_dots.svg';
 import Warpcast from '../../../public/images/icons/social-warpcast.svg';
-import { slugToProjectView } from '@/lib/routeCreators';
+import { slugToCauseView, slugToProjectView } from '@/lib/routeCreators';
 import { IModal } from '@/types/common';
 import CopyLink from '@/components/CopyLink';
 import { fullPath } from '@/lib/helpers';
@@ -35,21 +35,25 @@ import {
 } from '@/lib/constants/shareContent';
 
 interface IShareModal extends IModal {
-	projectHref: string;
+	itemHref: string;
 	contentType: EContentType;
 	shareTitle?: string | undefined;
 	shareDescription?: string | undefined;
+	isCause?: boolean;
 }
 
 const ShareModal: FC<IShareModal> = props => {
 	const {
-		projectHref,
+		itemHref,
 		setShowModal,
 		contentType,
 		shareTitle,
 		shareDescription,
+		isCause,
 	} = props;
-	const url = fullPath(slugToProjectView(projectHref));
+	const url = fullPath(
+		isCause ? slugToCauseView(itemHref) : slugToProjectView(itemHref),
+	);
 	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
 	const { formatMessage } = useIntl();
 

@@ -15,7 +15,7 @@ import {
 	FETCH_PROJECTED_RANK,
 	FETCH_PROJECT_BOOSTERS,
 } from '@/apollo/gql/gqlPowerBoosting';
-import { IPowerBoosting, IProject } from '@/apollo/types/types';
+import { ICause, IPowerBoosting } from '@/apollo/types/types';
 import { formatWeiHelper } from '@/helpers/number';
 import { backendGQLRequest } from '@/helpers/requests';
 import { compareAddresses, showToastError } from '@/lib/helpers';
@@ -35,6 +35,7 @@ import { FETCH_PROJECT_DONATIONS_COUNT } from '@/apollo/gql/gqlDonations';
 import { hasActiveRound } from '@/helpers/qf';
 import { getGIVpowerBalanceByAddress } from '@/services/givpower';
 import { setShowSignWithWallet } from '@/features/modal/modal.slice';
+import { FETCH_CAUSE_BY_ID_SINGLE_CAUSE } from '@/apollo/gql/gqlCauses';
 
 interface IBoostersData {
 	powerBoostings: IPowerBoostingWithUserGIVpower[];
@@ -52,7 +53,7 @@ interface ICauseContext {
 	) => Promise<void>;
 	fetchCauseBySlug: () => Promise<void>;
 	activateProject: () => Promise<void>;
-	causeData?: IProject;
+	causeData?: ICause;
 	isActive: boolean;
 	isDraft: boolean;
 	isAdmin: boolean;
@@ -84,10 +85,10 @@ CauseContext.displayName = 'CauseContext';
 
 export const CauseProvider = ({
 	children,
-	project,
+	cause,
 }: {
 	children: ReactNode;
-	project?: IProject;
+	cause?: ICause;
 }) => {
 	const [isLoading, setIsLoading] = useState(false);
 	const [totalDonationsCount, setTotalDonationsCount] = useState(0);
@@ -97,18 +98,20 @@ export const CauseProvider = ({
 		number | undefined | null
 	>(undefined);
 
-	const [causeData, setCauseData] = useState(project);
+	const [causeData, setCauseData] = useState(cause);
 	const [isCancelled, setIsCancelled] = useState(false);
 
 	const { isSignedIn, userData: user } = useAppSelector(state => state.user);
 	const dispatch = useAppDispatch();
 	const router = useRouter();
-	const slug = (router.query.projectIdSlug as string)
-		? router.query.projectIdSlug
-		: project?.slug;
+	const slug = (router.query.causeIdSlug as string)
+		? router.query.causeIdSlug
+		: cause?.id;
+
+	console.log('🧪 causeData', causeData);
 
 	const isAdmin = compareAddresses(
-		causeData?.adminUser?.walletAddress,
+		causeData?.owner?.walletAddress,
 		user?.walletAddress,
 	);
 
@@ -119,14 +122,19 @@ export const CauseProvider = ({
 	const fetchCauseBySlug = useCallback(async () => {
 		setIsLoading(true);
 		client
+			//TODO: Remove this after testing add by slug, remove by ID
+			// .query({
+			// 	query: FETCH_PROJECT_BY_SLUG_SINGLE_PROJECT,
+			// 	variables: { slug, connectedWalletUserId: Number(user?.id) },
+			// })
 			.query({
-				query: FETCH_PROJECT_BY_SLUG_SINGLE_PROJECT,
-				variables: { slug, connectedWalletUserId: Number(user?.id) },
+				query: FETCH_CAUSE_BY_ID_SINGLE_CAUSE,
+				variables: { id: Number(cause?.id) },
 			})
-			.then((res: { data: { projectBySlug: IProject } }) => {
-				const _project = res.data.projectBySlug;
-				if (_project.status.name !== EProjectStatus.CANCEL) {
-					setCauseData(_project);
+			.then((res: { data: { causeBySlug: ICause } }) => {
+				const _cause = res.data.causeBySlug;
+				if (_cause.status.name !== EProjectStatus.CANCEL) {
+					setCauseData(_cause);
 				} else {
 					setIsCancelled(true);
 					setCauseData(undefined);
@@ -296,18 +304,18 @@ export const CauseProvider = ({
 	const isDraft = causeData?.status.name === EProjectStatus.DRAFT;
 
 	useEffect(() => {
-		if (project && project.status.name === EProjectStatus.CANCEL) {
+		if (cause && cause.status.name === EProjectStatus.CANCEL) {
 			setIsCancelled(true);
 		} else {
 			setIsCancelled(false);
 		}
 
-		if (user?.isSignedIn && !project) {
+		if (user?.isSignedIn && !cause) {
 			fetchCauseBySlug();
 		} else {
-			setCauseData(project);
+			setCauseData(cause);
 		}
-	}, [fetchCauseBySlug, project, user?.isSignedIn]);
+	}, [fetchCauseBySlug, cause, user?.isSignedIn]);
 
 	return (
 		<CauseContext.Provider

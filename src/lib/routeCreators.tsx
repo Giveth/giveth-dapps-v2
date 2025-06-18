@@ -4,6 +4,10 @@ export const slugToProjectView = (slug: string) => {
 	return Routes.Project + '/' + slug;
 };
 
+export const slugToCauseView = (slug: string) => {
+	return Routes.Cause + '/' + slug;
+};
+
 export const slugToSuccessView = (slug: string) => {
 	return Routes.Success + '/' + slug;
 };
@@ -18,6 +22,10 @@ export const slugToProjectDonateStellar = (slug: string) => {
 
 export const idToProjectEdit = (id?: string) => {
 	return Routes.Project + '/' + id + '/edit';
+};
+
+export const idToCauseEdit = (id?: string) => {
+	return Routes.Cause + '/' + id + '/edit';
 };
 
 export const addressToUserView = (address?: string) => {

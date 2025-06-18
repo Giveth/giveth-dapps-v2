@@ -8,20 +8,17 @@ import {
 	neutralColors,
 	Flex,
 	FlexCenter,
-	IconArrowDownCircle16,
 	semanticColors,
 } from '@giveth/ui-design-system';
 import React, { FC, useState } from 'react';
 import { useIntl } from 'react-intl';
 import { useRouter } from 'next/router';
 import styled from 'styled-components';
-import { useAccount } from 'wagmi';
-import { useProjectContext } from '@/context/project.context';
 import { VerificationModal } from '@/components/modals/VerificationModal';
 import DeactivateProjectModal from '@/components/modals/deactivateProject/DeactivateProjectIndex';
 import { capitalizeAllWords } from '@/lib/helpers';
 import { Dropdown, IOption, EOptionType } from '@/components/Dropdown';
-import { idToProjectEdit } from '@/lib/routeCreators';
+import { idToCauseEdit } from '@/lib/routeCreators';
 import ShareModal from '@/components/modals/ShareModal';
 import { EContentType } from '@/lib/constants/shareContent';
 import useMediaQuery from '@/hooks/useMediaQuery';
@@ -29,9 +26,8 @@ import { device } from '@/lib/constants/constants';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
 import { Modal } from '@/components/modals/Modal';
 import { EVerificationStatus } from '@/apollo/types/types';
-import ClaimRecurringDonationModal from '../../userProfile/projectsTab/ClaimRecurringDonationModal';
-import { findAnchorContractAddress } from '@/helpers/superfluid';
 import { ProjectCardNotification } from './ProjectCardNotification';
+import { useCauseContext } from '@/context/cause.context';
 
 interface IMobileActionsModalProps {
 	setShowModal: (value: boolean) => void;
@@ -43,18 +39,16 @@ export const CauseAdminActions = () => {
 	const [deactivateModal, setDeactivateModal] = useState(false);
 	const [showShareModal, setShowShareModal] = useState(false);
 	const [showMobileActionsModal, setShowMobileActionsModal] = useState(false);
-	const [showClaimModal, setShowClaimModal] = useState(false);
-	const { projectData, isActive, activateProject, fetchProjectBySlug } =
-		useProjectContext();
-	const project = projectData!;
+	const { causeData, isActive, activateProject, fetchCauseBySlug } =
+		useCauseContext();
+	const cause = causeData!;
 
-	const { slug, isGivbackEligible, verificationFormStatus } = project;
+	const { slug, isGivbackEligible, verificationFormStatus } = cause;
 	const { formatMessage } = useIntl();
 	const router = useRouter();
 	const isMobile = !useMediaQuery(device.tablet);
-	const { chain } = useAccount();
 
-	const { isAdminEmailVerified } = useProjectContext();
+	const { isAdminEmailVerified } = useCauseContext();
 
 	const isVerificationDisabled =
 		isGivbackEligible ||
@@ -62,19 +56,14 @@ export const CauseAdminActions = () => {
 		verificationFormStatus === EVerificationStatus.REJECTED ||
 		!isActive;
 
-	const anchorContractAddress = findAnchorContractAddress(
-		project.anchorContracts,
-		chain?.id,
-	);
-
 	const options: IOption[] = [
 		{
 			label: formatMessage({
-				id: 'label.edit_project',
+				id: 'label.cause.edit_cause',
 			}),
 			type: EOptionType.ITEM,
 			icon: <IconEdit16 />,
-			cb: () => router.push(idToProjectEdit(projectData?.id || '')),
+			cb: () => router.push(idToCauseEdit(causeData?.id || '')),
 		},
 		{
 			label: formatMessage({
@@ -114,18 +103,6 @@ export const CauseAdminActions = () => {
 		},
 	];
 
-	const recurringDonationOption: IOption = {
-		label: formatMessage({
-			id: 'label.claim_recurring_donation',
-		}),
-		icon: <IconArrowDownCircle16 />,
-		cb: () => {
-			setShowClaimModal && setShowClaimModal(true);
-		},
-	};
-
-	anchorContractAddress && options.push(recurringDonationOption);
-
 	const dropdownStyle = {
 		padding: '10px 16px',
 		background: neutralColors.gray[300],
@@ -144,7 +121,9 @@ export const CauseAdminActions = () => {
 			<Wrapper $verified={isAdminEmailVerified}>
 				<Dropdown
 					style={dropdownStyle}
-					label='Project Actions'
+					label={formatMessage({
+						id: 'label.cause.cause_actions',
+					})}
 					options={options}
 				/>
 				{showVerificationModal && (
@@ -155,8 +134,8 @@ export const CauseAdminActions = () => {
 				{deactivateModal && (
 					<DeactivateProjectModal
 						setShowModal={setDeactivateModal}
-						projectId={projectData?.id}
-						onSuccess={fetchProjectBySlug}
+						projectId={causeData?.id}
+						onSuccess={fetchCauseBySlug}
 					/>
 				)}
 				{showShareModal && (
@@ -164,12 +143,6 @@ export const CauseAdminActions = () => {
 						contentType={EContentType.thisProject}
 						setShowModal={setShowShareModal}
 						projectHref={slug}
-					/>
-				)}
-				{showClaimModal && (
-					<ClaimRecurringDonationModal
-						setShowModal={setShowClaimModal}
-						project={project}
 					/>
 				)}
 				<ProjectCardNotification />
@@ -228,12 +201,6 @@ export const CauseAdminActions = () => {
 							/>
 						)}
 					</MobileActionsModal>
-				)}
-				{showClaimModal && (
-					<ClaimRecurringDonationModal
-						setShowModal={setShowClaimModal}
-						project={project}
-					/>
 				)}
 			</MobileWrapper>
 			<ProjectCardNotification />

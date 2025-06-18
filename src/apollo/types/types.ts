@@ -576,7 +576,7 @@ export interface ICause {
 	listed?: boolean | null;
 	categories: ICategory[];
 	reaction?: IReaction;
-	adminUser: IAdminUser;
+	owner: IAdminUser;
 	donations: {
 		id?: string;
 	}[];

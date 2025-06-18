@@ -50,6 +50,46 @@ export const CREATE_CAUSE = gql`
 	}
 `;
 
+export const FETCH_CAUSE_BY_ID_SINGLE_CAUSE = gql`
+	query cause($id: Float!) {
+		cause(id: $id) {
+			id
+			title
+			description
+			chainId
+			fundingPoolAddress
+			causeId
+			depositTxHash
+			depositTxChainId
+			givpowerRank
+			instantBoostingRank
+			mainCategory
+			subCategories
+			owner {
+				id
+				name
+				walletAddress
+			}
+			createdAt
+			updatedAt
+			status
+			statusValue
+			listingStatus
+			listingStatusValue
+			projects {
+				id
+				title
+			}
+			activeProjectsCount
+			totalRaised
+			totalDistributed
+			totalDonated
+			givPower
+			givBack
+		}
+	}
+`;
+
 export const FETCH_CAUSE_BY_SLUG_SINGLE_CAUSE = gql`
 	query ProjectBySlug($slug: String!, $connectedWalletUserId: Int) {
 		projectBySlug(

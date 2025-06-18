@@ -179,7 +179,7 @@ export const ProjectPublicActions = () => {
 				<ShareModal
 					contentType={EContentType.thisProject}
 					setShowModal={setShowShareModal}
-					projectHref={slug}
+					itemHref={slug}
 				/>
 			)}
 		</ProjectPublicActionsWrapper>
