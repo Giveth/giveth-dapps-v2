@@ -306,3 +306,15 @@ export const FETCH_ALL_CAUSES = gql`
 		}
 	}
 `;
+
+export const DEACTIVATE_CAUSE = gql`
+	mutation ($causeId: Float!, $reasonId: Float) {
+		deactivateCause(causeId: $causeId, reasonId: $reasonId)
+	}
+`;
+
+export const ACTIVATE_CAUSE = gql`
+	mutation ($causeId: Float!) {
+		activateCause(causeId: $causeId)
+	}
+`;

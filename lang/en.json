@@ -1900,5 +1900,7 @@
 	"label.cause.least_number_of_projects": "Least Projects",
 	"label.cause.cause_not_available": "Oops! This cause is no longer available or not found!",
 	"label.cause.edit_cause": "Edit Cause",
-	"label.cause.cause_actions": "Cause Actions"
+	"label.cause.cause_actions": "Cause Actions",
+	"label.cause.deactivate_cause": "Deactivate Cause",
+	"label.cause.activate_cause": "Activate Cause"
 }
