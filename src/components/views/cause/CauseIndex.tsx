@@ -120,8 +120,6 @@ const CauseIndex: FC<ICauseBySlug> = () => {
 		fetchCauseBoosters(+id, causeData?.status.name);
 	}, [id]);
 
-	console.log('causeData', causeData);
-
 	if (!causeData || (isDraft && !isAdmin)) {
 		return (
 			<NotAvailableHandler

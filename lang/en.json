@@ -1862,5 +1862,7 @@
 	"label.cause.cause_not_available": "Oops! This cause is no longer available or not found!",
 	"label.cause.there_are_no_causes_matching_your_search": "There are no causes matching your search",
 	"label.cause.edit_cause": "Edit Cause",
-	"label.cause.cause_actions": "Cause Actions"
+	"label.cause.cause_actions": "Cause Actions",
+	"label.cause.deactivate_cause": "Deactivate Cause",
+	"label.cause.activate_cause": "Activate Cause"
 }

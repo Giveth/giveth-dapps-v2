@@ -564,14 +564,13 @@ export interface ICause {
 	image?: string;
 	slug: string;
 	creationDate?: string;
-	adminUserId?: number;
+	projects?: IProject[];
 	description?: string;
 	descriptionSummary?: string;
 	addresses?: IWalletAddress[];
 	impactLocation?: string;
 	qualityScore?: number;
 	verified?: boolean;
-	isGivbackEligible?: boolean;
 	verificationStatus?: EProjectVerificationStatus;
 	listed?: boolean | null;
 	categories: ICategory[];
@@ -596,7 +595,6 @@ export interface ICause {
 	};
 	projectVerificationForm?: IProjectVerification;
 	projectPower: IProjectPower;
-	verificationFormStatus?: EVerificationStatus;
 	projectFuturePower: IProjectPower;
 	givbackFactor?: number;
 	countUniqueDonors?: number;

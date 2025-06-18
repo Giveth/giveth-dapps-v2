@@ -26,16 +26,15 @@ import {
 	ESortby,
 } from '@/apollo/types/gqlEnums';
 import { useAppDispatch, useAppSelector } from '@/features/hooks';
-import {
-	ACTIVATE_PROJECT,
-	FETCH_PROJECT_BY_SLUG_SINGLE_PROJECT,
-} from '@/apollo/gql/gqlProjects';
 import { IDonationsByProjectIdGQL } from '@/apollo/types/gqlTypes';
 import { FETCH_PROJECT_DONATIONS_COUNT } from '@/apollo/gql/gqlDonations';
 import { hasActiveRound } from '@/helpers/qf';
 import { getGIVpowerBalanceByAddress } from '@/services/givpower';
 import { setShowSignWithWallet } from '@/features/modal/modal.slice';
-import { FETCH_CAUSE_BY_ID_SINGLE_CAUSE } from '@/apollo/gql/gqlCauses';
+import {
+	ACTIVATE_CAUSE,
+	FETCH_CAUSE_BY_ID_SINGLE_CAUSE,
+} from '@/apollo/gql/gqlCauses';
 
 interface IBoostersData {
 	powerBoostings: IPowerBoostingWithUserGIVpower[];
@@ -52,7 +51,7 @@ interface ICauseContext {
 		status?: EProjectStatus,
 	) => Promise<void>;
 	fetchCauseBySlug: () => Promise<void>;
-	activateProject: () => Promise<void>;
+	activateCause: () => Promise<void>;
 	causeData?: ICause;
 	isActive: boolean;
 	isDraft: boolean;
@@ -70,7 +69,7 @@ const CauseContext = createContext<ICauseContext>({
 		Promise.reject('fetchCauseBoosters not initialed yet!'),
 	fetchCauseBySlug: () =>
 		Promise.reject('fetchProjectBySlug not initialed yet!'),
-	activateProject: () => Promise.reject('activateProject not initialed yet!'),
+	activateCause: () => Promise.reject('activateCause not initialed yet!'),
 	causeData: undefined,
 	isActive: true,
 	isDraft: false,
@@ -107,8 +106,6 @@ export const CauseProvider = ({
 	const slug = (router.query.causeIdSlug as string)
 		? router.query.causeIdSlug
 		: cause?.id;
-
-	console.log('🧪 causeData', causeData);
 
 	const isAdmin = compareAddresses(
 		causeData?.owner?.walletAddress,
@@ -152,15 +149,15 @@ export const CauseProvider = ({
 			});
 	}, [slug, user?.id]);
 
-	const activateProject = async () => {
+	const activateCause = async () => {
 		try {
 			if (!isSignedIn) {
 				dispatch(setShowSignWithWallet(true));
 				return;
 			}
 			await client.mutate({
-				mutation: ACTIVATE_PROJECT,
-				variables: { projectId: Number(causeData?.id || '') },
+				mutation: ACTIVATE_CAUSE,
+				variables: { causeId: Number(causeData?.id || '') },
 			});
 			await fetchCauseBySlug();
 		} catch (e) {
@@ -325,7 +322,7 @@ export const CauseProvider = ({
 				isBoostingsLoading,
 				fetchCauseBoosters,
 				fetchCauseBySlug,
-				activateProject,
+				activateCause,
 				causeData,
 				isActive,
 				isDraft,

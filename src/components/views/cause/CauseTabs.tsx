@@ -26,14 +26,13 @@ const badgeCount = (count?: number) => {
 const CauseTabs = (props: ICauseTabs) => {
 	const { activeTab, slug } = props;
 	const { causeData, totalDonationsCount, boostersData } = useCauseContext();
-	const { totalProjectUpdates } = causeData || {};
 	const { formatMessage } = useIntl();
 
 	const tabsArray = [
 		{ title: 'label.about' },
 		{
 			title: 'label.projects',
-			badge: totalProjectUpdates, // TODO: change to totalProjectsCount
+			badge: causeData?.projects?.length,
 			query: ECausePageTabs.PROJECTS,
 		},
 		{

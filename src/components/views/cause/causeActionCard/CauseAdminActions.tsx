@@ -3,7 +3,6 @@ import {
 	IconChevronDown24,
 	IconEdit16,
 	IconShare16,
-	IconVerifiedBadge16,
 	mediaQueries,
 	neutralColors,
 	Flex,
@@ -15,7 +14,7 @@ import { useIntl } from 'react-intl';
 import { useRouter } from 'next/router';
 import styled from 'styled-components';
 import { VerificationModal } from '@/components/modals/VerificationModal';
-import DeactivateProjectModal from '@/components/modals/deactivateProject/DeactivateProjectIndex';
+import DeactivateCauseModal from '@/components/modals/deactivateCause/DeactivateCauseIndex';
 import { capitalizeAllWords } from '@/lib/helpers';
 import { Dropdown, IOption, EOptionType } from '@/components/Dropdown';
 import { idToCauseEdit } from '@/lib/routeCreators';
@@ -25,7 +24,6 @@ import useMediaQuery from '@/hooks/useMediaQuery';
 import { device } from '@/lib/constants/constants';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
 import { Modal } from '@/components/modals/Modal';
-import { EVerificationStatus } from '@/apollo/types/types';
 import { ProjectCardNotification } from './ProjectCardNotification';
 import { useCauseContext } from '@/context/cause.context';
 
@@ -43,18 +41,12 @@ export const CauseAdminActions = () => {
 		useCauseContext();
 	const cause = causeData!;
 
-	const { slug, isGivbackEligible, verificationFormStatus } = cause;
+	const { slug } = cause;
 	const { formatMessage } = useIntl();
 	const router = useRouter();
 	const isMobile = !useMediaQuery(device.tablet);
 
 	const { isAdminEmailVerified } = useCauseContext();
-
-	const isVerificationDisabled =
-		isGivbackEligible ||
-		verificationFormStatus === EVerificationStatus.SUBMITTED ||
-		verificationFormStatus === EVerificationStatus.REJECTED ||
-		!isActive;
 
 	const options: IOption[] = [
 		{
@@ -66,26 +58,11 @@ export const CauseAdminActions = () => {
 			cb: () => router.push(idToCauseEdit(causeData?.id || '')),
 		},
 		{
-			label: formatMessage({
-				id: formatMessage({
-					id:
-						verificationFormStatus === EVerificationStatus.DRAFT
-							? 'label.resume_your_project'
-							: 'label.verify_your_project',
-				}),
-			}),
-
-			type: EOptionType.ITEM,
-			icon: <IconVerifiedBadge16 />,
-			cb: () => setShowVerificationModal(true),
-			isHidden: isVerificationDisabled,
-		},
-		{
 			label: capitalizeAllWords(
 				formatMessage({
 					id: isActive
-						? 'label.deactivate_project'
-						: 'label.activate_project',
+						? 'label.cause.deactivate_cause'
+						: 'label.cause.activate_cause',
 				}),
 			),
 			type: EOptionType.ITEM,
@@ -132,9 +109,9 @@ export const CauseAdminActions = () => {
 					/>
 				)}
 				{deactivateModal && (
-					<DeactivateProjectModal
+					<DeactivateCauseModal
 						setShowModal={setDeactivateModal}
-						projectId={causeData?.id}
+						causeId={causeData?.id}
 						onSuccess={fetchCauseBySlug}
 					/>
 				)}
@@ -187,9 +164,9 @@ export const CauseAdminActions = () => {
 							/>
 						)}
 						{deactivateModal && (
-							<DeactivateProjectModal
+							<DeactivateCauseModal
 								setShowModal={setDeactivateModal}
-								projectId={causeData?.id}
+								causeId={causeData?.id}
 								onSuccess={fetchCauseBySlug}
 							/>
 						)}

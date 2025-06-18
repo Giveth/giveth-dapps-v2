@@ -1,4 +1,5 @@
 import { gql } from '@apollo/client';
+import { PROJECT_CARD_FIELDS } from './gqlProjects';
 
 export const CAUSE_TITLE_IS_VALID = `
 	query IsValidCauseTitle($title: String!) {
@@ -281,5 +282,17 @@ export const FETCH_ALL_CAUSES = gql`
 			}
 			totalCount
 		}
+	}
+`;
+
+export const DEACTIVATE_CAUSE = gql`
+	mutation ($causeId: Float!, $reasonId: Float) {
+		deactivateCause(causeId: $causeId, reasonId: $reasonId)
+	}
+`;
+
+export const ACTIVATE_CAUSE = gql`
+	mutation ($causeId: Float!) {
+		activateCause(causeId: $causeId)
 	}
 `;

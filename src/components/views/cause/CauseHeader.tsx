@@ -7,7 +7,7 @@ import { useCauseContext } from '@/context/cause.context';
 
 const CauseHeader = () => {
 	const { causeData } = useCauseContext();
-	const { title, image, adminUser } = causeData || {};
+	const { title, image, owner } = causeData || {};
 	const [adjustTitle, setAdjustTitle] = useState<boolean>(false);
 	const containerRef = useRef(null);
 
@@ -39,7 +39,7 @@ const CauseHeader = () => {
 			<GradientOverlay />
 			<Title color='white'>
 				<div>{title}</div>
-				<CauseOwnerWithPfp user={adminUser} />
+				<CauseOwnerWithPfp user={owner} />
 			</Title>
 		</ImageWrapper>
 	);
