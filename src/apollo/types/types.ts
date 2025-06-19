@@ -596,4 +596,5 @@ export interface ICause {
 	givbackFactor?: number;
 	image?: string;
 	campaigns?: ICampaign[];
+	categories?: ICategory[];
 }
