@@ -15,7 +15,7 @@ import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { useIntl } from 'react-intl';
 import { IconWithTooltip } from '@/components/IconWithToolTip';
-import { CurrentRank, NextRank } from '@/components/GIVpowerRank';
+// import { CurrentRank, NextRank } from '@/components/GIVpowerRank';
 import useGIVTokenDistroHelper from '@/hooks/useGIVTokenDistroHelper';
 import { getNowUnixMS } from '@/helpers/time';
 import { smallFormatDate } from '@/lib/helpers';
@@ -26,7 +26,9 @@ export const CauseGIVpowerCard = () => {
 	const { formatMessage, locale } = useIntl();
 	const { givTokenDistroHelper, isLoaded } = useGIVTokenDistroHelper();
 	const { causeData } = useCauseContext();
-	const { projectPower, projectFuturePower } = causeData!;
+	const { causePower, causeFuturePower } = causeData!;
+
+	// TODO: fix next rank and current rank
 
 	useEffect(() => {
 		if (
@@ -70,7 +72,7 @@ export const CauseGIVpowerCard = () => {
 			</Flex>
 			<CurrentRankSection>
 				<Lead>{formatMessage({ id: 'label.current_rank' })}</Lead>
-				<CurrentRank projectPower={projectPower} />
+				{/* <CurrentRank projectPower={causePower} /> */}
 				<Flex gap='8px'>
 					<div>
 						<NextRoundDate>
@@ -94,10 +96,10 @@ export const CauseGIVpowerCard = () => {
 							id: 'label.projected_rank',
 						})}
 					</P>
-					<NextRank
-						projectPower={projectPower}
-						projectFuturePower={projectFuturePower}
-					/>
+					{/* <NextRank
+						projectPower={causePower}
+						projectFuturePower={causeFuturePower}
+					/> */}
 				</Flex>
 				<Separator />
 				<Flex gap='8px'>

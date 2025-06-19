@@ -611,4 +611,6 @@ export interface ICause {
 		disableRecurringDonations?: boolean;
 	};
 	countUniqueDonorsForActiveQfRound?: number;
+	causePower?: number;
+	causeFuturePower?: number;
 }
