@@ -1,5 +1,7 @@
 import { Address } from 'viem';
 import {
+	ECauseStatus,
+	ECauseVerificationStatus,
 	EDonationStatus,
 	EDonationType,
 	EProjectStatus,
