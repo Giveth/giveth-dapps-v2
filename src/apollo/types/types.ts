@@ -594,4 +594,5 @@ export interface ICause {
 	// TODO: Add other fields
 	qfRounds?: IQFRound[];
 	givbackFactor?: number;
+	image?: string;
 }
