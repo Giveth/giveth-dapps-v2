@@ -115,10 +115,11 @@ const CauseIndex: FC<ICauseBySlug> = () => {
 
 	const { description = '', title, id = '' } = causeData || {};
 
-	useEffect(() => {
-		if (!id) return;
-		fetchCauseBoosters(+id, causeData?.status.name);
-	}, [id]);
+	// TODO: Uncomment this after testing
+	// useEffect(() => {
+	// 	if (!id) return;
+	// 	fetchCauseBoosters(+id, causeData?.status);
+	// }, [id]);
 
 	if (!causeData || (isDraft && !isAdmin)) {
 		return (

@@ -42,7 +42,7 @@ const CauseTabs = (props: ICauseTabs) => {
 		},
 	];
 
-	if (causeData?.verified) {
+	if (causeData?.status) {
 		tabsArray.push({
 			title: 'label.givpower',
 			badge: boostersData?.powerBoostings.length,

@@ -21,19 +21,19 @@ interface IDonateSectionProps {
 
 export const CauseDonateSection: FC<IDonateSectionProps> = ({ causeData }) => {
 	const { formatMessage, locale } = useIntl();
-	const { totalDonations } = causeData || {};
+	const { totalDonated } = causeData || {};
 	const isMobile = !useMediaQuery(device.tablet);
 
 	return (
 		<DonationSectionWrapper gap='24px'>
-			{totalDonations && totalDonations !== 0 ? (
+			{totalDonated && totalDonated !== 0 ? (
 				<DonateInfo>
 					{isMobile && <br />}
 					<Title>
 						{formatMessage({ id: 'label.total_amount_raised' })}
 					</Title>
 					<Amount weight={700}>
-						{formatDonation(totalDonations || 0, '$', locale)}
+						{formatDonation(totalDonated || 0, '$', locale)}
 					</Amount>
 					<Description>
 						{formatMessage({

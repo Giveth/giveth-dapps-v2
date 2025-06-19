@@ -592,9 +592,23 @@ export interface ICause {
 	givBack: number;
 
 	// TODO: Add other fields
+	slug?: string;
 	qfRounds?: IQFRound[];
 	givbackFactor?: number;
 	image?: string;
 	campaigns?: ICampaign[];
 	categories?: ICategory[];
+	countUniqueDonors?: number;
+	reaction?: IReaction;
+	estimatedMatching?: IEstimatedMatching;
+	sumDonationValueUsdForActiveQfRound?: number;
+	totalDonations?: number;
+	adminUser?: IAdminUser;
+	organization?: {
+		name: string;
+		label: string;
+		supportCustomTokens: boolean;
+		disableRecurringDonations?: boolean;
+	};
+	countUniqueDonorsForActiveQfRound?: number;
 }

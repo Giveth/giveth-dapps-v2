@@ -28,7 +28,7 @@ import { bookmarkProject, unBookmarkProject } from '@/lib/reaction';
 import { FETCH_PROJECT_REACTION_BY_ID } from '@/apollo/gql/gqlProjects';
 import { client } from '@/apollo/apolloClient';
 import { slugToProjectDonate } from '@/lib/routeCreators';
-import { useAlreadyDonatedToProject } from '@/hooks/useAlreadyDonatedToProject';
+// import { useAlreadyDonatedToProject } from '@/hooks/useAlreadyDonatedToProject';
 import { BadgeButton } from '@/components/project-card/ProjectCardBadgeButtons';
 
 export const CausePublicActions = () => {
@@ -46,7 +46,9 @@ export const CausePublicActions = () => {
 	} = useAppSelector(state => state.user);
 	const { formatMessage } = useIntl();
 	const { open: openConnectModal } = useWeb3Modal();
-	const alreadyDonated = useAlreadyDonatedToProject(causeData);
+	// TODO fix this
+	// const alreadyDonated = useAlreadyDonatedToProject(causeData);
+	const alreadyDonated = true;
 
 	useEffect(() => {
 		const fetchProjectReaction = async () => {
