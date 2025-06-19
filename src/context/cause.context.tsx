@@ -20,6 +20,7 @@ import { formatWeiHelper } from '@/helpers/number';
 import { backendGQLRequest } from '@/helpers/requests';
 import { compareAddresses, showToastError } from '@/lib/helpers';
 import {
+	ECauseStatus,
 	EDirection,
 	EDonationStatus,
 	EProjectStatus,
@@ -130,7 +131,7 @@ export const CauseProvider = ({
 			})
 			.then((res: { data: { causeBySlug: ICause } }) => {
 				const _cause = res.data.causeBySlug;
-				if (_cause.status.name !== EProjectStatus.CANCEL) {
+				if (_cause.status !== ECauseStatus.CANCEL) {
 					setCauseData(_cause);
 				} else {
 					setIsCancelled(true);
@@ -297,11 +298,11 @@ export const CauseProvider = ({
 		[],
 	);
 
-	const isActive = causeData?.status.name === EProjectStatus.ACTIVE;
-	const isDraft = causeData?.status.name === EProjectStatus.DRAFT;
+	const isActive = causeData?.status === ECauseStatus.ACTIVE;
+	const isDraft = causeData?.status === ECauseStatus.DRAFT;
 
 	useEffect(() => {
-		if (cause && cause.status.name === EProjectStatus.CANCEL) {
+		if (cause && cause.status === ECauseStatus.CANCEL) {
 			setIsCancelled(true);
 		} else {
 			setIsCancelled(false);

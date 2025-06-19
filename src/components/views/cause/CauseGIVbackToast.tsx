@@ -29,8 +29,10 @@ import { useModalCallback } from '@/hooks/useModalCallback';
 import { isSSRMode } from '@/lib/helpers';
 import BoostModal from '@/components/modals/Boost/BoostModal';
 import { useAppSelector } from '@/features/hooks';
-import { EProjectStatus } from '@/apollo/types/gqlEnums';
-import { EVerificationStatus } from '@/apollo/types/types';
+import {
+	ECauseStatus,
+	ECauseVerificationStatus,
+} from '@/apollo/types/gqlEnums';
 import Routes from '@/lib/constants/Routes';
 import { VerificationModal } from '@/components/modals/VerificationModal';
 import { GIVBACKS_DONATION_QUALIFICATION_VALUE_USD } from '@/lib/constants/constants';
@@ -38,12 +40,13 @@ import { GIVBACKS_DONATION_QUALIFICATION_VALUE_USD } from '@/lib/constants/const
 const CauseGIVbackToast = () => {
 	const [showBoost, setShowBoost] = useState(false);
 	const [showVerification, setShowVerification] = useState(false);
-	const { causeData, isAdmin, activateProject, isAdminEmailVerified } =
+	const { causeData, isAdmin, isAdminEmailVerified, activateCause } =
 		useCauseContext();
-	const verStatus = causeData?.verificationFormStatus;
-	const projectStatus = causeData?.status.name;
-	const isGivbackEligible = causeData?.isGivbackEligible;
-	const isVerified = causeData?.verified;
+	console.log('🧪 causeData', causeData);
+	const verStatus = causeData?.statusValue;
+	const causeStatus = causeData?.status;
+	const isGivbackEligible = true;
+	const isVerified = causeData?.status === ECauseStatus.ACTIVE;
 	const { givbackFactor } = causeData || {};
 	const isOwnerGivbackEligible = isGivbackEligible && isAdmin;
 	const isOwnerNotVerified = !isGivbackEligible && isAdmin;
@@ -56,7 +59,7 @@ const CauseGIVbackToast = () => {
 		isVerified &&
 		isAdmin &&
 		!isGivbackEligible &&
-		causeData.verificationFormStatus !== EVerificationStatus.VERIFIED;
+		causeStatus !== ECauseStatus.ACTIVE;
 
 	const isEmailVerifiedStatus = isAdmin ? isAdminEmailVerified : true;
 
@@ -153,7 +156,7 @@ const CauseGIVbackToast = () => {
 			/>
 		);
 	} else if (isOwnerNotVerified) {
-		if (verStatus === EVerificationStatus.SUBMITTED) {
+		if (verStatus === ECauseVerificationStatus.REVOKED) {
 			title = formatMessage({
 				id: `${useIntlTitle}non_verified_owner_submitted`,
 			});
@@ -161,7 +164,10 @@ const CauseGIVbackToast = () => {
 				id: `${useIntlDescription}non_verified_owner_submitted`,
 			});
 			link = links.VERIFICATION_DOCS;
-		} else if (verStatus === EVerificationStatus.REJECTED) {
+		} else if (
+			verStatus === ECauseVerificationStatus.WARNING ||
+			verStatus === ECauseVerificationStatus.LASTCHANCE
+		) {
 			title = formatMessage({
 				id: `${useIntlTitle}non_verified_owner_rejected`,
 			});
@@ -208,7 +214,7 @@ const CauseGIVbackToast = () => {
 					icon={<IconRocketInSpace16 />}
 				/>
 			);
-		} else if (verStatus === EVerificationStatus.DRAFT) {
+		} else if (verStatus === ECauseVerificationStatus.REMINDER) {
 			title = formatMessage({
 				id: `${useIntlTitle}non_verified_owner_incomplete`,
 			});
@@ -224,7 +230,7 @@ const CauseGIVbackToast = () => {
 					/>
 				</ExternalLink>
 			);
-		} else if (projectStatus === EProjectStatus.DRAFT) {
+		} else if (causeStatus === ECauseStatus.DRAFT) {
 			title = formatMessage({
 				id: `${useIntlTitle}non_verified_owner_draft`,
 			});
@@ -233,7 +239,7 @@ const CauseGIVbackToast = () => {
 			});
 			icon = <IconPublish24 />;
 			link = Routes.OnboardingProjects;
-		} else if (projectStatus === EProjectStatus.DEACTIVE) {
+		} else if (causeStatus === ECauseStatus.DEACTIVE) {
 			title = formatMessage({
 				id: `${useIntlTitle}non_verified_owner_deactive`,
 			});
@@ -244,12 +250,12 @@ const CauseGIVbackToast = () => {
 			link = '';
 			Button = (
 				<OutlineButton
-					onClick={activateProject}
+					onClick={activateCause}
 					label='Reactivate Project'
 					icon={<IconSunrise16 />}
 				/>
 			);
-		} else if (projectStatus === EProjectStatus.CANCEL) {
+		} else if (causeStatus === ECauseStatus.CANCEL) {
 			title = formatMessage({
 				id: `${useIntlTitle}non_verified_owner_cancelled`,
 			});

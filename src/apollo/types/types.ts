@@ -1,5 +1,7 @@
 import { Address } from 'viem';
 import {
+	ECauseStatus,
+	ECauseVerificationStatus,
 	EDonationStatus,
 	EDonationType,
 	EProjectStatus,
@@ -559,50 +561,37 @@ export interface ICauseCreation {
 
 export interface ICause {
 	id: string;
-	title?: string;
-	balance?: number;
-	image?: string;
-	slug: string;
-	creationDate?: string;
-	projects?: IProject[];
-	description?: string;
-	descriptionSummary?: string;
-	addresses?: IWalletAddress[];
-	impactLocation?: string;
-	qualityScore?: number;
-	verified?: boolean;
-	verificationStatus?: EProjectVerificationStatus;
-	listed?: boolean | null;
-	categories: ICategory[];
-	reaction?: IReaction;
-	owner: IAdminUser;
-	donations: {
-		id?: string;
-	}[];
-	totalDonations?: number;
-	totalProjectUpdates?: number;
-	status: {
-		id?: string;
-		name?: EProjectStatus;
-	};
-	updatedAt: string;
-	latestUpdateCreationDate?: string;
-	organization?: {
+	title: string;
+	description: string;
+	chainId: number;
+	fundingPoolAddress: string;
+	causeId: string;
+	depositTxHash: string;
+	depositTxChainId: number;
+	givpowerRank: number;
+	instantBoostingRank: number;
+	mainCategory: string;
+	subCategories: string[];
+	owner: {
+		id: string;
 		name: string;
-		label: string;
-		supportCustomTokens: boolean;
-		disableRecurringDonations?: boolean;
+		walletAddress: string;
 	};
-	projectVerificationForm?: IProjectVerification;
-	projectPower: IProjectPower;
-	projectFuturePower: IProjectPower;
-	givbackFactor?: number;
-	countUniqueDonors?: number;
-	countUniqueDonorsForActiveQfRound?: number;
-	estimatedMatching: IEstimatedMatching;
-	sumDonationValueUsdForActiveQfRound?: number;
+	createdAt: string;
+	updatedAt: string;
+	status: ECauseStatus;
+	statusValue: ECauseVerificationStatus;
+	listingStatus: string;
+	listingStatusValue: string;
+	projects: IProject[];
+	activeProjectsCount: number;
+	totalRaised: number;
+	totalDistributed: number;
+	totalDonated: number;
+	givPower: number;
+	givBack: number;
+
+	// TODO: Add other fields
 	qfRounds?: IQFRound[];
-	campaigns?: ICampaign[];
-	anchorContracts: IAnchorContractData[];
-	socialMedia: IProjectSocialMedia[];
+	givbackFactor?: number;
 }
