@@ -1,5 +1,7 @@
 import { Address } from 'viem';
 import {
+	ECauseStatus,
+	ECauseVerificationStatus,
 	EDonationStatus,
 	EDonationType,
 	EProjectStatus,
@@ -190,6 +192,15 @@ export interface IProjectEdition {
 	slug: string;
 	anchorContracts?: IAnchorContractData[];
 	socialMedia: IProjectSocialMedia[];
+}
+
+export interface ICauseEdition {
+	id?: string;
+	title?: string;
+	image?: string;
+	description?: string;
+	categories: ICategory[];
+	selectedProjects: IProject[];
 }
 
 export enum EProjectSocialMediaType {
@@ -534,4 +545,72 @@ export enum ERecurringDonationStatus {
 	ENDED = 'ended',
 	FAILED = 'failed',
 	ACTIVE = 'active',
+}
+
+export interface ICauseCreation {
+	title: string;
+	description: string;
+	chainId: number;
+	projectIds: number[];
+	mainCategory: string;
+	subCategories: any;
+	bannerImage: string;
+	depositTxHash: string;
+	depositTxChainId: number;
+}
+
+export interface ICause {
+	id: string;
+	title: string;
+	description: string;
+	chainId: number;
+	fundingPoolAddress: string;
+	causeId: string;
+	depositTxHash: string;
+	depositTxChainId: number;
+	givpowerRank: number;
+	instantBoostingRank: number;
+	mainCategory: string;
+	subCategories: string[];
+	owner: {
+		id: string;
+		name: string;
+		walletAddress: string;
+	};
+	createdAt: string;
+	updatedAt: string;
+	status: ECauseStatus;
+	statusValue: ECauseVerificationStatus;
+	listingStatus: string;
+	listingStatusValue: string;
+	projects: IProject[];
+	activeProjectsCount: number;
+	totalRaised: number;
+	totalDistributed: number;
+	totalDonated: number;
+	givPower: number;
+	givBack: number;
+
+	// TODO: Add other fields
+	slug?: string;
+	qfRounds?: IQFRound[];
+	givbackFactor?: number;
+	image?: string;
+	campaigns?: ICampaign[];
+	categories?: ICategory[];
+	countUniqueDonors?: number;
+	reaction?: IReaction;
+	estimatedMatching?: IEstimatedMatching;
+	sumDonationValueUsdForActiveQfRound?: number;
+	totalDonations?: number;
+	adminUser?: IAdminUser;
+	organization?: {
+		name: string;
+		label: string;
+		supportCustomTokens: boolean;
+		disableRecurringDonations?: boolean;
+	};
+	countUniqueDonorsForActiveQfRound?: number;
+	causePower?: number;
+	causeFuturePower?: number;
 }

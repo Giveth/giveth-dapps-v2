@@ -8,6 +8,7 @@ import {
 	IWalletAddress,
 	IWalletDonation,
 	IWalletRecurringDonation,
+	ICause,
 } from './types';
 
 export interface IFetchAllProjects {
@@ -137,4 +138,8 @@ export interface IDraftDonation {
 
 export interface GetDraftDonation {
 	getDraftDonation: IDraftDonation;
+}
+
+export interface ICauseBySlug {
+	cause?: ICause;
 }
