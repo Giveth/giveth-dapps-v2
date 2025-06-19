@@ -18,7 +18,7 @@ const CauseBadges = () => {
 	const { causeData } = useCauseContext();
 	const isGivbackEligible = true;
 
-	const { verified: causeVerified, qfRounds, campaigns } = causeData || {};
+	const { status: causeVerified, qfRounds, campaigns } = causeData || {};
 	const { formatMessage } = useIntl();
 	const isQF = hasActiveRound(qfRounds);
 	const verified = causeVerified || isGivbackEligible;

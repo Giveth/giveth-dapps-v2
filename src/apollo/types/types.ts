@@ -595,4 +595,5 @@ export interface ICause {
 	qfRounds?: IQFRound[];
 	givbackFactor?: number;
 	image?: string;
+	campaigns?: ICampaign[];
 }
