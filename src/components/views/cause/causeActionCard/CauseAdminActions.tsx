@@ -37,7 +37,7 @@ export const CauseAdminActions = () => {
 	const [deactivateModal, setDeactivateModal] = useState(false);
 	const [showShareModal, setShowShareModal] = useState(false);
 	const [showMobileActionsModal, setShowMobileActionsModal] = useState(false);
-	const { causeData, isActive, activateProject, fetchCauseBySlug } =
+	const { causeData, isActive, activateCause, fetchCauseBySlug } =
 		useCauseContext();
 	const cause = causeData!;
 
@@ -67,7 +67,7 @@ export const CauseAdminActions = () => {
 			),
 			type: EOptionType.ITEM,
 			icon: <IconArchiving size={16} />,
-			cb: () => (isActive ? setDeactivateModal(true) : activateProject()),
+			cb: () => (isActive ? setDeactivateModal(true) : activateCause()),
 		},
 		{
 			label: formatMessage({
