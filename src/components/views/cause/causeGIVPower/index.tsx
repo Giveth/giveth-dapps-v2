@@ -23,6 +23,8 @@ const itemPerPage = 10;
 const CauseGIVPowerIndex: FC = () => {
 	const [page, setPage] = useState(0);
 
+	const isGivbackEligible = true;
+
 	const { isBoostingsLoading, boostersData, causeData } = useCauseContext();
 	const hasGivPower = boostersData ? boostersData.totalCount > 0 : false;
 	if (isBoostingsLoading) return <WrappedSpinner size={250} />;
@@ -53,7 +55,7 @@ const CauseGIVPowerIndex: FC = () => {
 						/>
 					</Flex>
 				</Col>
-				{causeData?.isGivbackEligible && (
+				{isGivbackEligible && (
 					<Col lg={4}>
 						<CauseGIVpowerCard />
 					</Col>
