@@ -73,7 +73,7 @@ export const CAUSE_FULL_FIELDS = gql`
 `;
 
 // Validation query
-export const CAUSE_TITLE_IS_VALID = gql`
+export const CAUSE_TITLE_IS_VALID = `
 	query IsValidCauseTitle($title: String!) {
 		isValidCauseTitle(title: $title)
 	}
