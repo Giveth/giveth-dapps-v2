@@ -14,7 +14,7 @@ import { useIntl } from 'react-intl';
 import { captureException } from '@sentry/nextjs';
 import { useInfiniteQuery } from '@tanstack/react-query';
 import styled from 'styled-components';
-import ProjectCard from '@/components/project-card/ProjectCard';
+// import ProjectCard from '@/components/project-card/ProjectCard';
 import Routes from '@/lib/constants/Routes';
 import { isUserRegistered, showToastError } from '@/lib/helpers';
 import { useAppDispatch, useAppSelector } from '@/features/hooks';
@@ -261,22 +261,25 @@ const CausesIndex = (props: ICausesView) => {
 								<ProjectsMiddleGivethVaultBanner />
 							)}
 							{data.pages.map((page, pageIndex) => (
-								<Fragment key={pageIndex}>
-									{page.data.map((project, idx) => (
-										<div
-											key={project.id}
-											id={project.slug}
-											onClick={() =>
-												handleProjectClick(project.slug)
-											}
-										>
-											<ProjectCard
-												project={project}
-												order={idx}
-											/>
-										</div>
-									))}
-								</Fragment>
+								<>nothing for now TODO</>
+								// <Fragment key={pageIndex}>
+								// 	{page.data.map((project, idx) => (
+								// 		<div
+								// 			key={project.id}
+								// 			id={project.slug}
+								// 			onClick={() =>
+								// 				handleProjectClick(
+								// 					project.slug!,
+								// 				)
+								// 			}
+								// 		>
+								// 			<ProjectCard
+								// 				project={project as IProject}
+								// 				order={idx}
+								// 			/>
+								// 		</div>
+								// 	))}
+								// </Fragment>
 							))}
 						</ProjectsContainer>
 						{/* <FloatingButtonReferral /> */}
