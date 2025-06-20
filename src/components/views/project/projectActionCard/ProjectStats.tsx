@@ -54,7 +54,9 @@ export const ProjectStats = () => {
 				>
 					<Flex $alignItems='center' gap='4px'>
 						<P>
-							{formatMessage({ id: 'label.verification_status' })}
+							{formatMessage({
+								id: 'label.verification_status_backs',
+							})}
 						</P>
 						<IconWithTooltip
 							icon={<IconHelpFilled16 />}
