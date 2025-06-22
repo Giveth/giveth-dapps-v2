@@ -157,7 +157,7 @@ export const fetchUserStreams = async (address: Address) => {
 		combinedTokenStreams[tokenId].push(...optimismTokenStreams[tokenId]);
 	});
 
-	// Combina and sort by flow rate in descending order
+	// Combine and sort by flow rate in descending order
 	const sortedTokenStreams = Object.entries(combinedTokenStreams)
 		.map(([tokenId, streams]) => {
 			const totalFlowRate = streams.reduce(
