@@ -212,14 +212,6 @@ const ProjectsIndex = (props: IProjectsView) => {
 		}
 	}, [isError, error]);
 
-	// Determine if no results should be shown
-	const isNotFound =
-		(mainCategories.length > 0 && !selectedMainCategory && !isArchivedQF) ||
-		(!isQF && data?.pages?.[0]?.data.length === 0);
-
-	if (isNotFound)
-		return <NotAvailable description='Oops! Page Not Found...' />;
-
 	const totalCount = data?.pages[data.pages.length - 1].totalCount || 0;
 	console.log('data', totalCount, data);
 
