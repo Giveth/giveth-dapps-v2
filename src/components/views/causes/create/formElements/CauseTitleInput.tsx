@@ -38,6 +38,7 @@ export default function CauseTitleInput() {
 				placeholder={formatMessage({
 					id: 'label.cause.title_placeholder',
 				})}
+				value={titleValue}
 				maxLength={100}
 				autoFocus
 				size={InputSize.LARGE}

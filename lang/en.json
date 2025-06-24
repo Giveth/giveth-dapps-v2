@@ -1858,5 +1858,8 @@
 	"label.cause.transaction_status_required": "Transaction status is required",
 	"label.cause.form_errors_before_submitting": "Please fix the form errors before submitting",
 	"label.cause.failed_to_create_cause": "Failed to create cause. Please try again.",
-	"label.cause.transfer": "Transfer"
+	"label.cause.transfer": "Transfer",
+	"label.cause.please_note": "Please note",
+	"label.cause.please_note_desc": "Your input here will be used by the AI donation agent to evaluate and distribute funds to projects. Be specific about the impact you want to achieve.",
+	"label.cause.description_required": "Description is required"
 }

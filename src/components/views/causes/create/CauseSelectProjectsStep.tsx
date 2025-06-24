@@ -108,6 +108,15 @@ export const CauseSelectProjectsStep = ({
 						searchFilters={searchFilters}
 						showErrorModal={setShowErrorModal}
 					/>
+					{selectedProjects?.length <
+						config.CAUSES_CONFIG.minSelectedProjects && (
+						<InlineToast
+							type={EToastType.Warning}
+							message={formatMessage({
+								id: 'label.cause.select_projects_dec_intro',
+							})}
+						/>
+					)}
 					<NextDescription>
 						<H4>
 							{formatMessage({
