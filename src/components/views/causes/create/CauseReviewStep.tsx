@@ -240,11 +240,6 @@ export const CauseReviewStep = ({ onPrevious }: { onPrevious: () => void }) => {
 	};
 
 	const handleLastStep = () => {
-		const tokenBalance =
-			balance?.value && balance?.decimals
-				? parseFloat(formatUnits(balance.value, balance.decimals))
-				: 0;
-
 		// Check are all data provided and valid
 		if (
 			!title ||
