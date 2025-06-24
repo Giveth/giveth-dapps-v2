@@ -35,7 +35,6 @@ import { ArchivedQFProjectsBanner } from './qfBanner/ArchivedQFProjectsBanner';
 import { ActiveQFRoundStats } from './ActiveQFRoundStats';
 import useMediaQuery from '@/hooks/useMediaQuery';
 import { DefaultQFBanner } from '@/components/DefaultQFBanner';
-import NotAvailable from '@/components/NotAvailable';
 import { fetchProjects, IQueries } from './services';
 import { IProject } from '@/apollo/types/types';
 import { LAST_PROJECT_CLICKED } from './constants';
