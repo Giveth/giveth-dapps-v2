@@ -176,7 +176,6 @@ const CreateCause: FC<ICreateCauseProps> = () => {
 				description: formDataWatch.description,
 				chainId: currentChainId || 137,
 				bannerImage: formDataWatch.image,
-				mainCategory: formDataWatch.categories?.[0]?.name || '',
 				subCategories:
 					formDataWatch.categories?.map(category => category.name) ||
 					[],
