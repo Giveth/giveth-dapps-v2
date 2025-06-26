@@ -11,6 +11,7 @@ import { projectsMetatags } from '@/content/metatags';
 import { CausesProvider } from '@/context/causes.context';
 import { getMainCategorySlug } from '@/helpers/projects';
 import { EProjectsSortBy } from '@/apollo/types/gqlEnums';
+import { FETCH_ALL_PROJECTS } from '@/apollo/gql/gqlProjects';
 
 export interface ICausesRouteProps {
 	causes: ICause[];
@@ -38,7 +39,7 @@ export const getServerSideProps: GetServerSideProps = async context => {
 		const slug = query.slug as string;
 		const apolloClient = initializeApollo();
 		const { data } = await apolloClient.query({
-			query: FETCH_ALL_CAUSES,
+			query: FETCH_ALL_PROJECTS,
 			variables: {
 				...variables,
 				sortingBy: query.sort || EProjectsSortBy.INSTANT_BOOSTING,
@@ -55,7 +56,7 @@ export const getServerSideProps: GetServerSideProps = async context => {
 			},
 			fetchPolicy: 'no-cache',
 		});
-		const { causes, totalCount } = data.allCauses;
+		const { projects: causes, totalCount } = data.allProjects;
 		return {
 			props: {
 				causes,
