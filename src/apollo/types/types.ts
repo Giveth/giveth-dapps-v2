@@ -550,8 +550,7 @@ export interface ICauseCreation {
 	description: string;
 	chainId: number;
 	projectIds: number[];
-	mainCategory: string;
-	subCategories: any;
+	subCategories: string[];
 	bannerImage: string;
 	depositTxHash: string;
 	depositTxChainId: number;

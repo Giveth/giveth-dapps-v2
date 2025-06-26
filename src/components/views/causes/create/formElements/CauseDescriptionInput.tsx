@@ -80,8 +80,8 @@ const CauseDescriptionInput = ({
 			</Label>
 			<InlineToast
 				type={EToastType.Info}
-				title='Please note'
-				message='Your input here will be used by the AI donation agent to evaluate and distribute funds to projects. Be specific about the impact you want to achieve.'
+				title={formatMessage({ id: 'label.cause.please_note' })}
+				message={formatMessage({ id: 'label.cause.please_note_desc' })}
 			/>
 			<InputContainer>
 				<RichTextInput
