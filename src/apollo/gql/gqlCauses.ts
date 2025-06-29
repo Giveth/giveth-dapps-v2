@@ -1,87 +1,14 @@
 import { gql } from '@apollo/client';
 import { PROJECT_CARD_FIELDS } from '@/apollo/gql/gqlProjects';
 
-// Base cause fields that are used in multiple queries
-export const CAUSE_BASE_FIELDS = gql`
-	fragment CauseBaseFields on Cause {
-		id
-		title
-		description
-		chainId
-		fundingPoolAddress
-		causeId
-		depositTxHash
-		depositTxChainId
-		mainCategory
-		subCategories
-		status
-		statusValue
-		listingStatus
-		listingStatusValue
-		activeProjectsCount
-		totalRaised
-		totalDistributed
-		totalDonated
-		createdAt
-		updatedAt
-	}
-`;
-
-// Owner fields fragment
-export const CAUSE_OWNER_FIELDS = gql`
-	fragment CauseOwnerFields on Cause {
-		owner {
-			id
-			name
-			walletAddress
-		}
-	}
-`;
-
-// Projects fields fragment
-export const CAUSE_PROJECTS_FIELDS = gql`
-	${PROJECT_CARD_FIELDS}
-	fragment CauseProjectsFields on Cause {
-		projects {
-			...ProjectCardFields
-		}
-	}
-`;
-
-// GivPower and ranking fields fragment
-export const CAUSE_GIVPOWER_FIELDS = gql`
-	fragment CauseGivPowerFields on Cause {
-		givpowerRank
-		instantBoostingRank
-		givPower
-		givBack
-	}
-`;
-
-// Complete cause fields for single cause queries
-export const CAUSE_FULL_FIELDS = gql`
-	${CAUSE_BASE_FIELDS}
-	${CAUSE_OWNER_FIELDS}
-	${CAUSE_PROJECTS_FIELDS}
-	${CAUSE_GIVPOWER_FIELDS}
-	fragment CauseFullFields on Cause {
-		...CauseBaseFields
-		...CauseOwnerFields
-		...CauseProjectsFields
-		...CauseGivPowerFields
-	}
-`;
-
-// Validation query
 export const CAUSE_TITLE_IS_VALID = `
 	query IsValidCauseTitle($title: String!) {
 		isValidCauseTitle(title: $title)
 	}
 `;
 
-// Create cause mutation
+// Note: TypeGraphQL uses Float for numbers by default
 export const CREATE_CAUSE = gql`
-	${CAUSE_BASE_FIELDS}
 	mutation CreateCause(
 		$title: String!
 		$description: String!
@@ -177,27 +104,9 @@ export const CAUSE_CORE_FIELDS = gql`
 		totalDonations
 		qfRounds {
 			id
-			name
-			isActive
-			beginDate
-			endDate
-			maximumReward
-			allocatedTokenSymbol
-			allocatedFundUSDPreferred
-			allocatedFundUSD
-			eligibleNetworks
-		}
-	}
-`;
-
-// Extended fields for cause cards
-export const CAUSE_CARD_FIELDS = gql`
-	${CAUSE_CORE_FIELDS}
-	fragment CauseCardFields on Cause {
-		...CauseCoreFields
-		descriptionSummary
-		adminUser {
-			name
+			title
+			description
+			chainId
 			walletAddress
 			avatar
 		}
@@ -282,26 +191,137 @@ export const GET_CAUSE_BY_SLUG = gql`
 		cause(slug: $slug) {
 			id
 			slug
-			title
-			description
-			mainCategory
-			subCategories
-			bannerImage
-			# Add more fields as needed
+			creationDate
+			updatedAt
+			categories {
+				id
+				name
+				mainCategory {
+					id
+					title
+					slug
+					banner
+					description
+				}
+			}
+			status {
+				id
+				name
+			}
+			reviewStatus
+			totalRaised
+			totalDistributed
+			totalDonated
+			activeProjectsCount
+			adminUser {
+				id
+				walletAddress
+				name
+			}
+			projects {
+				id
+				title
+				slug
+			}
 		}
 	}
 `;
 
-export const GET_CAUSE_BY_ID = gql`
-	query GetCauseById($id: Int!) {
-		cause(id: $id) {
+export const FETCH_CAUSE_BY_SLUG_SINGLE_CAUSE = gql`
+	query ProjectBySlug($slug: String!, $connectedWalletUserId: Int) {
+		projectBySlug(
+			slug: $slug
+			connectedWalletUserId: $connectedWalletUserId
+		) {
+			__typename
 			id
 			title
+			image
+			slug
+			verified
+			isGivbackEligible
+			totalDonations
 			description
-			mainCategory
-			subCategories
-			bannerImage
-			# add any other fields needed for the success page
+			addresses {
+				address
+				isRecipient
+				networkId
+				chainType
+			}
+			socialMedia {
+				type
+				link
+			}
+			totalProjectUpdates
+			creationDate
+			reaction {
+				id
+				userId
+			}
+			categories {
+				name
+				value
+				mainCategory {
+					title
+				}
+			}
+			adminUser {
+				id
+				name
+				walletAddress
+				avatar
+			}
+			listed
+			status {
+				id
+				name
+			}
+			organization {
+				name
+				label
+				supportCustomTokens
+			}
+			verificationFormStatus
+			projectPower {
+				powerRank
+				totalPower
+				round
+			}
+			projectFuturePower {
+				totalPower
+				powerRank
+				round
+			}
+			givbackFactor
+			sumDonationValueUsdForActiveQfRound
+			countUniqueDonorsForActiveQfRound
+			countUniqueDonors
+			estimatedMatching {
+				projectDonationsSqrtRootSum
+				allProjectsSum
+				matchingPool
+			}
+			qfRounds {
+				id
+				name
+				isActive
+				beginDate
+				endDate
+				eligibleNetworks
+				maximumReward
+				allocatedTokenSymbol
+				allocatedFundUSDPreferred
+				allocatedFundUSD
+			}
+			campaigns {
+				id
+				title
+			}
+			anchorContracts {
+				address
+				isActive
+				networkId
+			}
 		}
 	}
 `;
