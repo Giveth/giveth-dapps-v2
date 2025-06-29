@@ -4,10 +4,6 @@ export const slugToProjectView = (slug: string) => {
 	return Routes.Project + '/' + slug;
 };
 
-export const slugToCauseView = (slug: string) => {
-	return Routes.Cause + '/' + slug;
-};
-
 export const slugToSuccessView = (slug: string) => {
 	return Routes.Success + '/' + slug;
 };
@@ -35,3 +31,4 @@ export const addressToUserView = (address?: string) => {
 export const slugToVerification = (slug?: string) => {
 	return Routes.Verification + '/' + slug;
 };
+export const slugToCauseView = (slug: string): string => `/cause/${slug}`;

@@ -10,37 +10,61 @@ import { IconXSocial24, Lead, neutralColors } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import Link from 'next/link';
 import { fullPath } from '@/lib/helpers';
-import { IProject } from '@/apollo/types/types';
-import { slugToProjectView } from '@/lib/routeCreators';
+import { IProject, ICause } from '@/apollo/types/types';
+import { slugToProjectView, slugToCauseView } from '@/lib/routeCreators';
 import {
 	EContentType,
+	EContentTypeCause,
 	ESocialType,
 	shareContentCreator,
+	shareContentCreatorCause,
 } from '@/lib/constants/shareContent';
+
 import Warpcast from '../../public/images/icons/social-warpcast.svg';
 
 interface ISocialBox {
-	project: IProject;
-	contentType: EContentType;
+	project?: IProject;
+	cause?: ICause;
+	contentType: EContentType | EContentTypeCause;
 	isDonateFooter?: boolean;
 }
 
 const SocialBox: FC<ISocialBox> = props => {
-	const { project, contentType, isDonateFooter } = props;
-	const { descriptionSummary, slug } = project;
+	const { project, cause, contentType, isDonateFooter } = props;
 	const { formatMessage } = useIntl();
 
-	const projectUrl = fullPath(slugToProjectView(slug));
+	if (!project && !cause) return null;
 
-	const shareTitleTwitter = shareContentCreator(
-		contentType,
-		ESocialType.twitter,
+	let descriptionSummary: string = '';
+	let slug: string = '';
+
+	if (project) {
+		descriptionSummary = project.descriptionSummary || '';
+		slug = project.slug || '';
+	} else if (cause) {
+		descriptionSummary = cause.descriptionSummary || '';
+		slug = cause.slug || '';
+	}
+
+	const entityUrl = fullPath(
+		project ? slugToProjectView(slug) : slugToCauseView(slug),
 	);
 
-	const shareTitleFacebookAndLinkedin = shareContentCreator(
-		contentType,
-		ESocialType.facebook,
-	);
+	const shareTitleTwitter = project
+		? shareContentCreator(contentType as EContentType, ESocialType.twitter)
+		: shareContentCreatorCause(
+				contentType as EContentTypeCause,
+				ESocialType.twitter,
+				cause?.projects?.length || 0,
+			);
+
+	const shareTitleFacebookAndLinkedin = project
+		? shareContentCreator(contentType as EContentType, ESocialType.facebook)
+		: shareContentCreatorCause(
+				contentType as EContentTypeCause,
+				ESocialType.facebook,
+				cause?.projects?.length || 0,
+			);
 
 	return (
 		<Social $isDonateFooter={isDonateFooter}>
@@ -53,7 +77,7 @@ const SocialBox: FC<ISocialBox> = props => {
 				<SocialItem $isDonateFooter={isDonateFooter}>
 					<TwitterShareButton
 						title={shareTitleTwitter}
-						url={projectUrl || ''}
+						url={entityUrl}
 						hashtags={['Giveth']}
 					>
 						<IconXSocial24 />
@@ -63,7 +87,7 @@ const SocialBox: FC<ISocialBox> = props => {
 					<LinkedinShareButton
 						title={shareTitleFacebookAndLinkedin}
 						summary={descriptionSummary}
-						url={projectUrl || ''}
+						url={entityUrl}
 					>
 						<Image
 							src={'/images/social-linkedin.svg'}
@@ -74,10 +98,7 @@ const SocialBox: FC<ISocialBox> = props => {
 					</LinkedinShareButton>
 				</SocialItem>
 				<SocialItem $isDonateFooter={isDonateFooter}>
-					<FacebookShareButton
-						url={projectUrl || ''}
-						hashtag='#Giveth'
-					>
+					<FacebookShareButton url={entityUrl} hashtag='#Giveth'>
 						<Image
 							src={'/images/social-fb.svg'}
 							alt='facebook'
@@ -88,7 +109,7 @@ const SocialBox: FC<ISocialBox> = props => {
 				</SocialItem>
 				<SocialItem $isDonateFooter={isDonateFooter}>
 					<Link
-						href={`https://warpcast.com/~/compose?embeds[]=${projectUrl}&text=${shareTitleTwitter} ${projectUrl}`}
+						href={`https://warpcast.com/~/compose?text=${encodeURIComponent(`${shareTitleTwitter}\n\n${entityUrl}`)}`}
 						target='_blank'
 					>
 						<Image

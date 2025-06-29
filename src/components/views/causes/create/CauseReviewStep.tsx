@@ -22,6 +22,7 @@ import { useIntl } from 'react-intl';
 import { useFormContext } from 'react-hook-form';
 import { useEffect, useMemo, useState } from 'react';
 import Image from 'next/image';
+import router from 'next/router';
 import config from '@/configuration';
 import { CauseCreateProjectCard } from '@/components/views/causes/create/CauseCreateProjectCard';
 import { formatDonation } from '@/helpers/number';
@@ -42,7 +43,12 @@ import {
 	transferToken,
 } from './helpers';
 
-export const CauseReviewStep = ({ onPrevious }: { onPrevious: () => void }) => {
+interface IProps {
+	onPrevious: () => void;
+	slug?: string;
+}
+
+export const CauseReviewStep = ({ onPrevious, slug }: IProps) => {
 	const { formatMessage } = useIntl();
 	const {
 		getValues,
@@ -396,6 +402,7 @@ export const CauseReviewStep = ({ onPrevious }: { onPrevious: () => void }) => {
 			setIsLaunching(false);
 		}
 	};
+	const { handleSubmit } = useFormContext();
 
 	const handleTransfer = async () => {
 		setIsLaunching(true);
@@ -447,15 +454,20 @@ export const CauseReviewStep = ({ onPrevious }: { onPrevious: () => void }) => {
 	// Added 3 seconds delay to allow for transaction to be confirmed
 	const handleLaunchComplete = () => {
 		console.log('handleLaunchComplete');
+
+		const savedSlug =
+			slug ||
+			getValues('slug') ||
+			localStorage.getItem('GIV_CREATED_CAUSE_SLUG');
+
+		if (!savedSlug) {
+			console.error('Slug not available for redirect');
+			return;
+		}
+
 		setTimeout(() => {
-			const form = document.querySelector('form');
-			if (form) {
-				const submitEvent = new Event('submit', {
-					bubbles: true,
-					cancelable: true,
-				});
-				form.dispatchEvent(submitEvent);
-			}
+			localStorage.removeItem('GIV_CREATED_CAUSE_SLUG');
+			router.push(`/causes/create/success/${savedSlug}`);
 		}, 3000);
 	};
 
