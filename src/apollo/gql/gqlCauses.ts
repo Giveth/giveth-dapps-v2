@@ -276,3 +276,32 @@ export const ACTIVATE_CAUSE = gql`
 		activateCause(causeId: $causeId)
 	}
 `;
+
+export const GET_CAUSE_BY_SLUG = gql`
+	query GetCauseBySlug($slug: String!) {
+		cause(slug: $slug) {
+			id
+			slug
+			title
+			description
+			mainCategory
+			subCategories
+			bannerImage
+			# Add more fields as needed
+		}
+	}
+`;
+
+export const GET_CAUSE_BY_ID = gql`
+	query GetCauseById($id: Int!) {
+		cause(id: $id) {
+			id
+			title
+			description
+			mainCategory
+			subCategories
+			bannerImage
+			# add any other fields needed for the success page
+		}
+	}
+`;

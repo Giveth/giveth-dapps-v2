@@ -1902,5 +1902,7 @@
 	"label.cause.edit_cause": "Edit Cause",
 	"label.cause.cause_actions": "Cause Actions",
 	"label.cause.deactivate_cause": "Deactivate Cause",
-	"label.cause.activate_cause": "Activate Cause"
+	"label.cause.activate_cause": "Activate Cause",
+	"label.cause.congratulations": "Congratulations",
+  "label.cause.success_message": "Your Cause has been published."
 }

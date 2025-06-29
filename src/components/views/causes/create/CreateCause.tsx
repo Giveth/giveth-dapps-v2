@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/rules-of-hooks */
 import { useState, FC, useEffect } from 'react';
 import { useIntl } from 'react-intl';
 import { useRouter } from 'next/router';
@@ -8,13 +9,13 @@ import { ICauseCreation, ICauseEdition } from '@/apollo/types/types';
 import { CreateCauseHeader } from '@/components/views/causes/create/CreateCauseHeader';
 import { CauseInformationStep } from '@/components/views/causes/create/CauseInformationStep';
 import { CauseSelectProjectsStep } from '@/components/views/causes/create/CauseSelectProjectsStep';
-import { CauseReviewStep } from '@/components/views/causes/create/CauseReviewStep';
 import StorageLabel from '@/lib/localStorage';
 import { showToastError } from '@/lib/helpers';
 import { gToast, ToastType } from '@/components/toasts';
 import { EInputs, TCauseInputs } from '@/components/views/causes/create/types';
 import config from '@/configuration';
 import { CREATE_CAUSE } from '@/apollo/gql/gqlCauses';
+import { CauseReviewStep } from './CauseReviewStep';
 
 interface ICreateCauseProps {
 	project?: ICauseEdition;
@@ -35,6 +36,7 @@ const CreateCause: FC<ICreateCauseProps> = () => {
 	const router = useRouter();
 	const [currentStep, setCurrentStep] = useState(1);
 	const [isSubmitting, setIsSubmitting] = useState(false);
+	const [createdSlug, setCreatedSlug] = useState('');
 	const [addCauseMutation] = useMutation(CREATE_CAUSE);
 	const { chain } = useAccount();
 	const currentChainId = chain?.id;
@@ -69,6 +71,7 @@ const CreateCause: FC<ICreateCauseProps> = () => {
 			[EInputs.transactionNetworkId]: storageTransactionNetworkId || 0,
 			[EInputs.transactionHash]: storageTransactionHash || '',
 			[EInputs.transactionStatus]: storageTransactionStatus || '',
+			slug: '',
 		},
 	});
 
@@ -189,19 +192,17 @@ const CreateCause: FC<ICreateCauseProps> = () => {
 
 			console.log('🧪 causeData', causeData);
 
-			const cause = await addCauseMutation({
-				variables: causeData,
-			});
+			const cause = await addCauseMutation({ variables: causeData });
 
-			console.log('cause', cause);
-
-			showToastSuccess('Cause created successfully!');
-			clearStorage();
-
-			console.log('FINISHED');
-
-			// TODO Redirect to success page or cause detail page
-			// router.push('/causes');
+			const createdCause = cause?.data?.createCause;
+			if (createdCause?.slug) {
+				setCreatedSlug(createdCause.slug);
+				formMethods.setValue('slug', createdCause.slug);
+				localStorage.setItem(
+					'GIV_CREATED_CAUSE_SLUG',
+					createdCause.slug,
+				); // 🔁 Add this
+			}
 		} catch (error) {
 			console.error('Error creating cause:', error);
 			showToastError(
@@ -233,7 +234,6 @@ const CreateCause: FC<ICreateCauseProps> = () => {
 			step: 3,
 		},
 	];
-
 	return (
 		<>
 			<CreateCauseHeader
@@ -255,7 +255,10 @@ const CreateCause: FC<ICreateCauseProps> = () => {
 						/>
 					)}
 					{currentStep === 3 && (
-						<CauseReviewStep onPrevious={handlePreviousStep} />
+						<CauseReviewStepWrapper
+							onPrevious={handlePreviousStep}
+							slug={createdSlug}
+						/>
 					)}
 				</form>
 			</FormProvider>
@@ -264,3 +267,12 @@ const CreateCause: FC<ICreateCauseProps> = () => {
 };
 
 export default CreateCause;
+const CauseReviewStepWrapper = ({
+	onPrevious,
+	slug,
+}: {
+	onPrevious: () => void;
+	slug: string;
+}) => {
+	return <CauseReviewStep onPrevious={onPrevious} slug={slug} />;
+};
