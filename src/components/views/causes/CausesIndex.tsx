@@ -41,6 +41,7 @@ import { hasRoundStarted } from '@/helpers/qf';
 import config from '@/configuration';
 import { useCausesContext } from '@/context/causes.context';
 import { CausesArchivedQFBanner } from './qfBanner/CausesArchivedQFBanner';
+import { EProjectType } from '@/apollo/types/gqlEnums';
 
 export interface ICausesView {
 	causes: ICause[];
@@ -74,6 +75,7 @@ const CausesIndex = (props: ICausesView) => {
 		const variables: IQueries = {
 			limit: 20, // Adjust the limit as needed
 			skip: 20 * pageParam,
+			projectType: EProjectType.CAUSE,
 		};
 
 		if (user?.id) {
@@ -101,7 +103,7 @@ const CausesIndex = (props: ICausesView) => {
 		isFetchingNextPage,
 	} = useInfiniteQuery({
 		queryKey: [
-			'projects',
+			'causes',
 			contextVariables,
 			isArchivedQF,
 			selectedMainCategory,
@@ -116,6 +118,8 @@ const CausesIndex = (props: ICausesView) => {
 			pages: [{ data: causes, totalCount: _totalCount }],
 		},
 	});
+
+	console.log('DATA FETCHED', data);
 
 	// Function to load more data when scrolling
 	const loadMore = useCallback(() => {

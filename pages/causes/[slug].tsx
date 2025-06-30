@@ -10,19 +10,31 @@ import { useReferral } from '@/hooks/useReferral';
 import { projectsMetatags } from '@/content/metatags';
 import { CausesProvider } from '@/context/causes.context';
 import { getMainCategorySlug } from '@/helpers/projects';
-import { EProjectsSortBy } from '@/apollo/types/gqlEnums';
-import { FETCH_ALL_PROJECTS } from '@/apollo/gql/gqlProjects';
+import { EProjectsSortBy, EProjectType } from '@/apollo/types/gqlEnums';
 
 export interface ICausesRouteProps {
 	causes: ICause[];
 	totalCount: number;
 	mainCategories: IMainCategory[];
+	errorStatus?: number;
 }
 
 const CausesCategoriesRoute = (props: ICausesRouteProps) => {
-	const { causes, totalCount } = props;
+	const { causes = [], totalCount = 0, errorStatus } = props;
 
 	useReferral();
+
+	console.log('CAUSES', causes);
+
+	// Handle error case
+	if (errorStatus) {
+		return (
+			<div>
+				<h1>Error {errorStatus}</h1>
+				<p>Something went wrong loading the causes.</p>
+			</div>
+		);
+	}
 
 	return (
 		<CausesProvider>
@@ -37,9 +49,15 @@ export const getServerSideProps: GetServerSideProps = async context => {
 	try {
 		const { query } = context;
 		const slug = query.slug as string;
+		console.log('SLUG:', slug);
+		console.log('QUERY:', query);
+
+		console.log('Sending variables:', variables);
+		console.log('Project Type:', EProjectType.CAUSE);
+
 		const apolloClient = initializeApollo();
 		const { data } = await apolloClient.query({
-			query: FETCH_ALL_PROJECTS,
+			query: FETCH_ALL_CAUSES,
 			variables: {
 				...variables,
 				sortingBy: query.sort || EProjectsSortBy.INSTANT_BOOSTING,
@@ -56,7 +74,8 @@ export const getServerSideProps: GetServerSideProps = async context => {
 			},
 			fetchPolicy: 'no-cache',
 		});
-		const { projects: causes, totalCount } = data.allProjects;
+		console.log('GRAPHQL DATA:', data);
+		const { projects: causes = [], totalCount = 0 } = data.allProjects;
 		return {
 			props: {
 				causes,
@@ -64,6 +83,7 @@ export const getServerSideProps: GetServerSideProps = async context => {
 			},
 		};
 	} catch (error: any) {
+		console.error('GRAPHQL ERROR:', error);
 		const statusCode = transformGraphQLErrorsToStatusCode(
 			error?.graphQLErrors,
 		);

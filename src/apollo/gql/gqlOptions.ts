@@ -1,4 +1,4 @@
-import { EProjectsSortBy } from '../types/gqlEnums';
+import { EProjectsSortBy, EProjectType } from '@/apollo/types/gqlEnums';
 
 export const OPTIONS_HOME_PROJECTS = {
 	variables: {
@@ -14,6 +14,7 @@ export const OPTIONS_HOME_CAUSES = {
 		limit: 15,
 		skip: 0,
 		sortingBy: EProjectsSortBy.INSTANT_BOOSTING,
+		projectType: EProjectType.CAUSE,
 	},
 	notifyOnNetworkStatusChange: true,
 };

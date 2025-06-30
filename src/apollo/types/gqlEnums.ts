@@ -60,3 +60,8 @@ export enum EProjectVerificationStatus {
 	UPFORREVOKING = 'upForRevoking', // Projects without updates that will be revoked after Oct 15th 2022
 	REVOKED = 'revoked',
 }
+
+export enum EProjectType {
+	CAUSE = 'cause',
+	PROJECT = 'project',
+}

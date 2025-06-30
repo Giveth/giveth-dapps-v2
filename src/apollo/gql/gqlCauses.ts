@@ -1,4 +1,5 @@
 import { gql } from '@apollo/client';
+import { PROJECT_CARD_FIELDS } from '@/apollo/gql/gqlProjects';
 
 export const CAUSE_TITLE_IS_VALID = `
 	query IsValidCauseTitle($title: String!) {
@@ -231,7 +232,7 @@ export const CAUSE_CARD_FIELDS = gql`
 `;
 
 export const FETCH_ALL_CAUSES = gql`
-	${CAUSE_CARD_FIELDS}
+	${PROJECT_CARD_FIELDS}
 	query FetchAllCauses(
 		$limit: Int
 		$skip: Int
@@ -243,6 +244,7 @@ export const FETCH_ALL_CAUSES = gql`
 		$campaignSlug: String
 		$connectedWalletUserId: Int
 		$qfRoundSlug: String
+		$projectType: String
 	) {
 		allProjects(
 			limit: $limit
@@ -255,6 +257,7 @@ export const FETCH_ALL_CAUSES = gql`
 			campaignSlug: $campaignSlug
 			connectedWalletUserId: $connectedWalletUserId
 			qfRoundSlug: $qfRoundSlug
+			projectType: $projectType
 		) {
 			projects {
 				...ProjectCardFields

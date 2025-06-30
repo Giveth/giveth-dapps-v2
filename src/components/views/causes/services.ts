@@ -11,6 +11,7 @@ export interface IQueries {
 	connectedWalletUserId?: number;
 	mainCategory?: string;
 	qfRoundSlug?: string | null;
+	projectType?: string;
 }
 
 export interface Page {
@@ -42,12 +43,12 @@ export const fetchCauses = async (
 		},
 	});
 
-	const dataCauses: ICause[] = res.data?.allCauses?.causes;
+	const dataCauses: ICause[] = res.data?.allProjects?.projects;
 
 	return {
 		data: dataCauses,
 		previousCursor: currentPage > 0 ? currentPage - 1 : undefined,
 		nextCursor: dataCauses.length > 0 ? currentPage + 1 : undefined,
-		totalCount: res.data?.allCauses?.totalCount,
+		totalCount: res.data?.allProjects?.totalCount,
 	};
 };
