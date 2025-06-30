@@ -19,7 +19,7 @@ function CausesMainCategories() {
 	const { query } = useRouter();
 	const { formatMessage } = useIntl();
 
-	const projectsRoute = (isQF ? Routes.QFProjects : Routes.Projects) + '/';
+	const projectsRoute = (isQF ? Routes.QFProjects : Routes.Causes) + '/';
 
 	const handleIsSelected = (categorySlug: string) => {
 		if (!query?.slug) {

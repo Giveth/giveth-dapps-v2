@@ -3,7 +3,6 @@ import { ICause, IMainCategory } from '@/apollo/types/types';
 import { transformGraphQLErrorsToStatusCode } from '@/helpers/requests';
 import { initializeApollo } from '@/apollo/apolloClient';
 import { OPTIONS_HOME_CAUSES } from '@/apollo/gql/gqlOptions';
-import { FETCH_ALL_CAUSES } from '@/apollo/gql/gqlCauses';
 import { GeneralMetatags } from '@/components/Metatag';
 import CausesIndex from '@/components/views/causes/CausesIndex';
 import { useReferral } from '@/hooks/useReferral';
@@ -11,6 +10,7 @@ import { projectsMetatags } from '@/content/metatags';
 import { CausesProvider } from '@/context/causes.context';
 import { getMainCategorySlug } from '@/helpers/projects';
 import { EProjectsSortBy, EProjectType } from '@/apollo/types/gqlEnums';
+import { FETCH_ALL_PROJECTS } from '@/apollo/gql/gqlProjects';
 
 export interface ICausesRouteProps {
 	causes: ICause[];
@@ -49,15 +49,10 @@ export const getServerSideProps: GetServerSideProps = async context => {
 	try {
 		const { query } = context;
 		const slug = query.slug as string;
-		console.log('SLUG:', slug);
-		console.log('QUERY:', query);
-
-		console.log('Sending variables:', variables);
-		console.log('Project Type:', EProjectType.CAUSE);
 
 		const apolloClient = initializeApollo();
 		const { data } = await apolloClient.query({
-			query: FETCH_ALL_CAUSES,
+			query: FETCH_ALL_PROJECTS,
 			variables: {
 				...variables,
 				sortingBy: query.sort || EProjectsSortBy.INSTANT_BOOSTING,
@@ -71,10 +66,10 @@ export const getServerSideProps: GetServerSideProps = async context => {
 				category: query.category,
 				mainCategory: getMainCategorySlug({ slug }),
 				notifyOnNetworkStatusChange,
+				projectType: EProjectType.CAUSE,
 			},
 			fetchPolicy: 'no-cache',
 		});
-		console.log('GRAPHQL DATA:', data);
 		const { projects: causes = [], totalCount = 0 } = data.allProjects;
 		return {
 			props: {
@@ -83,7 +78,6 @@ export const getServerSideProps: GetServerSideProps = async context => {
 			},
 		};
 	} catch (error: any) {
-		console.error('GRAPHQL ERROR:', error);
 		const statusCode = transformGraphQLErrorsToStatusCode(
 			error?.graphQLErrors,
 		);

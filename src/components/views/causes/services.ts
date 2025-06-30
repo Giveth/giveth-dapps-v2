@@ -1,7 +1,7 @@
 // services/causesService.ts
 
 import { client } from '@/apollo/apolloClient';
-import { FETCH_ALL_CAUSES } from '@/apollo/gql/gqlCauses';
+import { FETCH_ALL_PROJECTS } from '@/apollo/gql/gqlProjects';
 import { IMainCategory, ICause } from '@/apollo/types/types';
 import { getMainCategorySlug } from '@/helpers/projects';
 
@@ -32,7 +32,7 @@ export const fetchCauses = async (
 	const currentPage = pageParam;
 
 	const res = await client.query({
-		query: FETCH_ALL_CAUSES,
+		query: FETCH_ALL_PROJECTS,
 		variables: {
 			...variables,
 			...contextVariables,

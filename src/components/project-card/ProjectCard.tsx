@@ -23,6 +23,7 @@ import { IAdminUser, IProject } from '@/apollo/types/types';
 import { timeFromNow } from '@/lib/helpers';
 import ProjectCardImage from './ProjectCardImage';
 import {
+	slugToCauseView,
 	slugToProjectDonate,
 	slugToProjectDonateStellar,
 	slugToProjectView,
@@ -37,6 +38,7 @@ import { client } from '@/apollo/apolloClient';
 import { ProjectCardTotalRaised } from './ProjectCardTotalRaised';
 import { ProjectCardTotalRaisedQF } from './ProjectCardTotalRaisedQF';
 import config from '@/configuration';
+import { EProjectType } from '@/apollo/types/gqlEnums';
 
 const cardRadius = '12px';
 const imgHeight = '226px';
@@ -80,6 +82,7 @@ const ProjectCard = (props: IProjectCard) => {
 		countUniqueDonors,
 		qfRounds,
 		countUniqueDonorsForActiveQfRound,
+		projectType,
 	} = project;
 	const [recurringDonationSumInQF, setRecurringDonationSumInQF] = useState(0);
 	const [isHover, setIsHover] = useState(false);
@@ -101,7 +104,10 @@ const ProjectCard = (props: IProjectCard) => {
 		activeStartedRound?.eligibleNetworks[0] ===
 			config.STELLAR_NETWORK_NUMBER;
 
-	const projectLink = slugToProjectView(slug);
+	const projectLink =
+		projectType === EProjectType.CAUSE
+			? slugToCauseView(slug)
+			: slugToProjectView(slug);
 	const donateLink = isStellarOnlyRound
 		? slugToProjectDonateStellar(slug)
 		: slugToProjectDonate(slug);

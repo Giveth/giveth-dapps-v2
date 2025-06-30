@@ -3,6 +3,7 @@ import {
 	EDonationStatus,
 	EDonationType,
 	EProjectStatus,
+	EProjectType,
 	EProjectVerificationStatus,
 	EProjectsSortBy,
 } from '@/apollo/types/gqlEnums';
@@ -93,6 +94,7 @@ export interface IProject {
 	campaigns?: ICampaign[];
 	anchorContracts: IAnchorContractData[];
 	socialMedia: IProjectSocialMedia[];
+	projectType: EProjectType;
 }
 
 export enum EProjectsFilter {
@@ -606,4 +608,5 @@ export interface ICause {
 	campaigns?: ICampaign[];
 	anchorContracts: IAnchorContractData[];
 	socialMedia: IProjectSocialMedia[];
+	projectType: EProjectType;
 }
