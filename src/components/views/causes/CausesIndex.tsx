@@ -241,19 +241,14 @@ const CausesIndex = (props: ICausesView) => {
 					<ArchivedQFRoundStats />
 				) : (
 					<>
-						{!isQF && <ProjectsBanner isCauses={true} />}
-						{onProjectsPageOrActiveQFPage && (
-							<FilterContainer isCauses={true} />
-						)}
+						{!isQF && <ProjectsBanner />}
+						{onProjectsPageOrActiveQFPage && <FilterContainer />}
 						{isQF && activeQFRound && <ActiveQFRoundStats />}
 					</>
 				)}
 				{onProjectsPageOrActiveQFPage && (
 					<SortingContainer>
-						<SortContainer
-							totalCount={totalCount}
-							isCauses={true}
-						/>
+						<SortContainer totalCount={totalCount} />
 					</SortingContainer>
 				)}
 				{isFetchingNextPage && <Loader className='dot-flashing' />}

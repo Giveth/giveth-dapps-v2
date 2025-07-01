@@ -47,14 +47,9 @@ export const DropdownIndicator: ComponentType<
 	return props.selectProps.menuIsOpen ? <IconCaretUp /> : <IconCaretDown />;
 };
 
-export interface IProjectsSortSelectProps {
-	isCauses?: boolean;
-}
-
-const ProjectsSortSelect = (props: IProjectsSortSelectProps) => {
-	const { isCauses = false } = props;
+const ProjectsSortSelect = () => {
 	const { formatMessage } = useIntl();
-	const { isQF } = useProjectsContext();
+	const { isQF, isCauses } = useProjectsContext();
 	const router = useRouter();
 
 	// Default sortByOptions without Best Match

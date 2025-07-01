@@ -77,8 +77,8 @@ const fundsFilterProjects = [
 
 const fundsFilterCauses = [
 	{
-		label: 'Solana',
-		value: EProjectsFilter.ACCEPT_FUND_ON_SOLANA,
+		label: 'Polygon',
+		value: EProjectsFilter.ACCEPT_FUND_ON_POLYGON,
 	},
 ];
 

@@ -11,14 +11,9 @@ import Image from 'next/image';
 import { mediaQueries } from '@/lib/constants/constants';
 import { useProjectsContext } from '@/context/projects.context';
 
-export interface IProjectsBannerProps {
-	isCauses?: boolean;
-}
-
-export const ProjectsBanner = (props: IProjectsBannerProps) => {
-	const { isCauses = false } = props;
+export const ProjectsBanner = () => {
 	const { formatMessage } = useIntl();
-	const { selectedMainCategory } = useProjectsContext();
+	const { selectedMainCategory, isCauses } = useProjectsContext();
 
 	const allCategory = {
 		title: formatMessage({ id: 'label.giveth_projects' }),

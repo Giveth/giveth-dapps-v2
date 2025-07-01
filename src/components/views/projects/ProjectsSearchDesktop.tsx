@@ -14,13 +14,8 @@ import { useProjectsContext } from '@/context/projects.context';
 import useFocus from '@/hooks/useFocus';
 import { EProjectsSortBy } from '@/apollo/types/gqlEnums';
 
-export interface IProjectsSearchDesktopProps {
-	isCauses?: boolean;
-}
-
-const ProjectsSearchDesktop = (props: IProjectsSearchDesktopProps) => {
-	const { isCauses = false } = props;
-	const { variables } = useProjectsContext();
+const ProjectsSearchDesktop = () => {
+	const { variables, isCauses } = useProjectsContext();
 	const [searchValue, setSearchValue] = useState(variables.searchTerm);
 	const router = useRouter();
 	const { formatMessage } = useIntl();

@@ -11,13 +11,8 @@ import Routes from '@/lib/constants/Routes';
 import { useProjectsContext } from '@/context/projects.context';
 import { useAppSelector } from '@/features/hooks';
 
-export interface IProjectsMainCategoriesProps {
-	isCauses?: boolean;
-}
-
-function ProjectsMainCategories(props: IProjectsMainCategoriesProps) {
-	const { isCauses = false } = props;
-	const { isQF } = useProjectsContext();
+function ProjectsMainCategories() {
+	const { isQF, isCauses } = useProjectsContext();
 	const mainCategories = useAppSelector(
 		state => state.general.mainCategories,
 	);
