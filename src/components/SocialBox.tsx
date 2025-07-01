@@ -11,7 +11,6 @@ import styled from 'styled-components';
 import Link from 'next/link';
 import { fullPath } from '@/lib/helpers';
 import { IProject, ICause } from '@/apollo/types/types';
-import { slugToProjectView, slugToCauseView } from '@/lib/routeCreators';
 import {
 	EContentType,
 	EContentTypeCause,
@@ -21,6 +20,7 @@ import {
 } from '@/lib/constants/shareContent';
 
 import Warpcast from '../../public/images/icons/social-warpcast.svg';
+import { slugToProjectView, slugToCauseView } from '@/lib/routeCreators';
 
 interface ISocialBox {
 	project?: IProject;
