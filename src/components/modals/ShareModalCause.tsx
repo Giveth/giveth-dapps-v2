@@ -56,10 +56,12 @@ const ShareModalCause: FC<IShareModal> = props => {
 	const shareTitleTwitter = shareContentCreatorCause(
 		contentType,
 		ESocialType.twitter,
+		1,
 	);
 	const shareTitleFacebookAndLinkedin = shareContentCreatorCause(
 		contentType,
 		ESocialType.facebook,
+		1,
 	);
 
 	const shareModalTitle = formatMessage({
