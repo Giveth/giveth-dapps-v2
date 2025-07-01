@@ -31,3 +31,7 @@ export const addressToUserView = (address?: string) => {
 export const slugToVerification = (slug?: string) => {
 	return Routes.Verification + '/' + slug;
 };
+
+export const slugToCauseDonate = (slug: string) => {
+	return Routes.Donate + '/' + slug + '?cause=true';
+};

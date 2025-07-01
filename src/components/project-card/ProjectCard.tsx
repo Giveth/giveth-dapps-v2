@@ -23,6 +23,7 @@ import { IAdminUser, IProject } from '@/apollo/types/types';
 import { timeFromNow } from '@/lib/helpers';
 import ProjectCardImage from './ProjectCardImage';
 import {
+	slugToCauseDonate,
 	slugToCauseView,
 	slugToProjectDonate,
 	slugToProjectDonateStellar,
@@ -108,9 +109,12 @@ const ProjectCard = (props: IProjectCard) => {
 		projectType === EProjectType.CAUSE
 			? slugToCauseView(slug)
 			: slugToProjectView(slug);
+
 	const donateLink = isStellarOnlyRound
 		? slugToProjectDonateStellar(slug)
-		: slugToProjectDonate(slug);
+		: projectType === EProjectType.CAUSE
+			? slugToCauseDonate(slug)
+			: slugToProjectDonate(slug);
 
 	// Show hint modal if the user clicks on the card and the round is not started
 	const handleClick = (e: any) => {
@@ -292,6 +296,13 @@ const ProjectCard = (props: IProjectCard) => {
 									<QFBadge>
 										{activeStartedRound?.name}
 									</QFBadge>
+								)}
+								{projectType === EProjectType.CAUSE && (
+									<CauseBadge>
+										{formatMessage({
+											id: 'label.cause',
+										})}
+									</CauseBadge>
 								)}
 							</Flex>
 						</PaddedRow>
@@ -493,6 +504,11 @@ const QFBadge = styled(Subline)`
 	border-radius: 16px;
 	display: flex;
 	align-items: center;
+`;
+
+const CauseBadge = styled(QFBadge)`
+	background-color: ${neutralColors.gray[800]};
+	color: ${neutralColors.gray[100]};
 `;
 
 export default ProjectCard;
