@@ -41,6 +41,7 @@ interface IShareModal extends IModal {
 	shareTitle?: string | undefined;
 	shareDescription?: string | undefined;
 	isCause?: boolean;
+	numberOfProjects?: number;
 }
 
 const ShareModal: FC<IShareModal> = props => {
@@ -51,6 +52,7 @@ const ShareModal: FC<IShareModal> = props => {
 		shareTitle,
 		shareDescription,
 		isCause = false,
+		numberOfProjects = 0,
 	} = props;
 	const url = isCause
 		? fullPath(slugToCauseView(projectHref))
@@ -59,10 +61,18 @@ const ShareModal: FC<IShareModal> = props => {
 	const { formatMessage } = useIntl();
 
 	const shareTitleTwitter = isCause
-		? shareContentCreatorCause(contentType, ESocialType.twitter)
+		? shareContentCreatorCause(
+				contentType,
+				ESocialType.twitter,
+				numberOfProjects,
+			)
 		: shareContentCreator(contentType, ESocialType.twitter);
 	const shareTitleFacebookAndLinkedin = isCause
-		? shareContentCreatorCause(contentType, ESocialType.facebook)
+		? shareContentCreatorCause(
+				contentType,
+				ESocialType.facebook,
+				numberOfProjects,
+			)
 		: shareContentCreator(contentType, ESocialType.facebook);
 
 	const shareModalTitle = formatMessage({

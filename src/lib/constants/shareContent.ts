@@ -51,7 +51,7 @@ export const shareContentCreator = (
 };
 
 export const shareContentCreatorCause = (
-	contentType: EContentTypeCause,
+	contentType: EContentType | EContentTypeCause,
 	socialType: ESocialType,
 	numberOfProjects: number,
 ) => {
