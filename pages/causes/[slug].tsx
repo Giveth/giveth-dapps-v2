@@ -24,8 +24,6 @@ const CausesCategoriesRoute = (props: ICausesRouteProps) => {
 
 	useReferral();
 
-	console.log('CAUSES', causes);
-
 	// Handle error case
 	if (errorStatus) {
 		return (
@@ -37,7 +35,7 @@ const CausesCategoriesRoute = (props: ICausesRouteProps) => {
 	}
 
 	return (
-		<ProjectsProvider>
+		<ProjectsProvider isCauses={true}>
 			<GeneralMetatags info={projectsMetatags} />
 			<CausesIndex causes={causes} totalCount={totalCount} />
 		</ProjectsProvider>
