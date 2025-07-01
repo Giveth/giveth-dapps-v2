@@ -22,7 +22,6 @@ import { useIntl } from 'react-intl';
 import { useFormContext } from 'react-hook-form';
 import { useEffect, useMemo, useState } from 'react';
 import Image from 'next/image';
-import router from 'next/router';
 import config from '@/configuration';
 import { CauseCreateProjectCard } from '@/components/views/causes/create/CauseCreateProjectCard';
 import { formatDonation } from '@/helpers/number';
@@ -376,24 +375,15 @@ export const CauseReviewStep = ({ onPrevious, slug }: IProps) => {
 	};
 
 	// Handle launch complete - submit form
-	// Added 3 seconds delay to allow for transaction to be confirmed
 	const handleLaunchComplete = () => {
-		console.log('handleLaunchComplete');
-
-		const savedSlug =
-			slug ||
-			getValues('slug') ||
-			localStorage.getItem('GIV_CREATED_CAUSE_SLUG');
-
-		if (!savedSlug) {
-			console.error('Slug not available for redirect');
-			return;
+		const form = document.querySelector('form');
+		if (form) {
+			const submitEvent = new Event('submit', {
+				bubbles: true,
+				cancelable: true,
+			});
+			form.dispatchEvent(submitEvent);
 		}
-
-		setTimeout(() => {
-			localStorage.removeItem('GIV_CREATED_CAUSE_SLUG');
-			router.push(`/causes/create/success/${savedSlug}`);
-		}, 3000);
 	};
 
 	return (
