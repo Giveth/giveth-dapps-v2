@@ -8,8 +8,10 @@ import {
 } from '@giveth/ui-design-system';
 
 import { client } from '@/apollo/apolloClient';
-import { DEACTIVATE_CAUSE } from '@/apollo/gql/gqlCauses';
-import { GET_STATUS_REASONS } from '@/apollo/gql/gqlProjects';
+import {
+	DEACTIVATE_PROJECT,
+	GET_STATUS_REASONS,
+} from '@/apollo/gql/gqlProjects';
 import QuestionBadge from '@/components/badges/QuestionBadge';
 import FormProgress from '@/components/FormProgress';
 import { Modal } from '../Modal';
@@ -79,9 +81,9 @@ const DeactivateCauseModal: FC<IDeactivateCauseModal> = ({
 					return;
 				}
 				await client.mutate({
-					mutation: DEACTIVATE_CAUSE,
+					mutation: DEACTIVATE_PROJECT,
 					variables: {
-						causeId: Number(causeId),
+						projectId: Number(causeId),
 						reasonId: Number(selectedReason.value),
 					},
 				});
