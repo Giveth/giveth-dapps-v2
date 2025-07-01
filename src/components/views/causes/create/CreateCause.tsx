@@ -4,7 +4,6 @@ import { useIntl } from 'react-intl';
 import { useRouter } from 'next/router';
 import { useForm, FormProvider } from 'react-hook-form';
 import { useMutation } from '@apollo/client';
-import { useAccount } from 'wagmi';
 import { ICauseCreation, ICauseEdition } from '@/apollo/types/types';
 import { CreateCauseHeader } from '@/components/views/causes/create/CreateCauseHeader';
 import { CauseInformationStep } from '@/components/views/causes/create/CauseInformationStep';
@@ -39,8 +38,6 @@ const CreateCause: FC<ICreateCauseProps> = () => {
 	const [isSubmitting, setIsSubmitting] = useState(false);
 	const [createdSlug, setCreatedSlug] = useState('');
 	const [addCauseMutation] = useMutation(CREATE_CAUSE);
-	const { chain } = useAccount();
-	const currentChainId = chain?.id;
 
 	// Load storage data
 	let storageCauseData: TCauseInputs | undefined;
@@ -175,13 +172,17 @@ const CreateCause: FC<ICreateCauseProps> = () => {
 		setIsSubmitting(true);
 
 		try {
+			console.log('🧪 formDataWatch', formDataWatch);
+
 			// REMOVE AFTER BE FIX IT
 			await new Promise(resolve => setTimeout(resolve, 7000));
+
+			console.log('🧪 after 7 seconds');
 
 			const causeData: ICauseCreation = {
 				title: formDataWatch.title,
 				description: formDataWatch.description,
-				chainId: currentChainId || 137,
+				chainId: 137,
 				bannerImage: formDataWatch.image,
 				subCategories:
 					formDataWatch.categories?.map(category => category.name) ||
@@ -196,19 +197,11 @@ const CreateCause: FC<ICreateCauseProps> = () => {
 
 			const cause = await addCauseMutation({ variables: causeData });
 
-			const createdCause = cause?.data?.createCause;
-			if (createdCause?.slug) {
-				setCreatedSlug(createdCause.slug);
-				formMethods.setValue('slug', createdCause.slug);
-				localStorage.setItem(
-					'GIV_CREATED_CAUSE_SLUG',
-					createdCause.slug,
-				);
-
-				router.push(slugToSuccessCauseView(createdCause.slug));
-			}
+			console.log('🧪 cause', cause);
 
 			clearStorage();
+
+			router.push(slugToSuccessCauseView(cause.data.createCause.slug));
 		} catch (error) {
 			console.error('Error creating cause:', error);
 			showToastError(
@@ -261,7 +254,7 @@ const CreateCause: FC<ICreateCauseProps> = () => {
 						/>
 					)}
 					{currentStep === 3 && (
-						<CauseReviewStepWrapper
+						<CauseReviewStep
 							onPrevious={handlePreviousStep}
 							slug={createdSlug}
 						/>
@@ -273,12 +266,3 @@ const CreateCause: FC<ICreateCauseProps> = () => {
 };
 
 export default CreateCause;
-const CauseReviewStepWrapper = ({
-	onPrevious,
-	slug,
-}: {
-	onPrevious: () => void;
-	slug: string;
-}) => {
-	return <CauseReviewStep onPrevious={onPrevious} slug={slug} />;
-};

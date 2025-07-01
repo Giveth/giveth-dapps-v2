@@ -25,7 +25,7 @@ import CongratsAnimation from '@/animations/congrats.json';
 import LottieControl from '@/components/LottieControl';
 import { EContentType } from '@/lib/constants/shareContent';
 import NotAvailableHandler from '@/components/NotAvailableHandler';
-import { CauseCreateProjectCard } from '@/components/views/causes/create/CauseCreateProjectCard';
+import ProjectCard from '@/components/project-card/ProjectCard';
 
 interface IProps {
 	cause?: ICause;
@@ -48,12 +48,6 @@ const SuccessfulCauseCreation = ({ cause, isLoading }: IProps) => {
 
 	const causePath = slugToCauseView(cause.slug!);
 
-	function castCauseToProject(
-		cause: ICause,
-	): import('@/apollo/types/types').IProject {
-		throw new Error('Function not implemented.');
-	}
-
 	return (
 		<Wrapper>
 			<ContainerStyled>
@@ -74,9 +68,7 @@ const SuccessfulCauseCreation = ({ cause, isLoading }: IProps) => {
 
 				<Row>
 					<Left xs={12} md={6}>
-						<CauseCreateProjectCard
-							project={castCauseToProject(cause)}
-						/>
+						<ProjectCard project={cause} />
 					</Left>
 
 					<Right xs={12} md={6}>
