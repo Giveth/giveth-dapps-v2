@@ -19,6 +19,7 @@ import { PinkyColoredNumber } from '../styled-components/PinkyColoredNumber';
 interface IFilterMenuProps {
 	handleClose: (e?: any) => void;
 	isOpen?: boolean;
+	isCauses?: boolean;
 }
 
 const projectsFeatures = [
@@ -77,7 +78,7 @@ fundsFilter.push({
 });
 
 export const FilterMenu = forwardRef<HTMLDivElement, IFilterMenuProps>(
-	({ handleClose, isOpen }, ref) => {
+	({ handleClose, isOpen, isCauses = false }, ref) => {
 		const { formatMessage } = useIntl();
 		const { variables, isQF, setIsQF } = useProjectsContext();
 		const filtersCount = variables?.filters?.length ?? 0;
@@ -145,7 +146,9 @@ export const FilterMenu = forwardRef<HTMLDivElement, IFilterMenuProps>(
 				<Section>
 					<B>
 						{formatMessage({
-							id: 'label.project_features',
+							id: isCauses
+								? 'label.cause.project_features'
+								: 'label.project_features',
 						})}
 					</B>
 					{projectsFeatures.map((projectFeature, idx) => (

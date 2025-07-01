@@ -41,11 +41,13 @@ export const CausesBanner = () => {
 				alt={_mainCategory.title}
 			/>
 			<Title weight={700}>
-				{formatMessage({ id: `cause.cause_${_mainCategory.slug}` })}
+				{formatMessage({
+					id: `label.cause.cause_${_mainCategory.slug}`,
+				})}
 			</Title>
 			<Desc>
 				{formatMessage({
-					id: `cause.cause_${_mainCategory.slug}_desc`,
+					id: `label.cause.cause_${_mainCategory.slug}_desc`,
 				})}
 			</Desc>
 		</BannerContainer>

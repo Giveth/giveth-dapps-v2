@@ -33,7 +33,6 @@ import { ArchivedQFRoundStats } from '@/components/views/projects/ArchivedQFRoun
 import { ActiveQFRoundStats } from '@/components/views/projects/ActiveQFRoundStats';
 import useMediaQuery from '@/hooks/useMediaQuery';
 import { DefaultQFBanner } from '@/components/DefaultQFBanner';
-import NotAvailable from '@/components/NotAvailable';
 import { fetchCauses, IQueries } from '@/components/views/causes/services';
 import { ICause } from '@/apollo/types/types';
 import { LAST_CAUSE_CLICKED } from '@/components/views/causes/constants';
@@ -216,16 +215,7 @@ const CausesIndex = (props: ICausesView) => {
 		}
 	}, [isError, error]);
 
-	// Determine if no results should be shown
-	const isNotFound =
-		(mainCategories.length > 0 && !selectedMainCategory && !isArchivedQF) ||
-		(!isQF && data?.pages?.[0]?.data.length === 0);
-
-	if (isNotFound)
-		return <NotAvailable description='Oops! Page Not Found...' />;
-
 	const totalCount = data?.pages[data.pages.length - 1].totalCount || 0;
-	console.log('data', totalCount, data);
 
 	return (
 		<>
