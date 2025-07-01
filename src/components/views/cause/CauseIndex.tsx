@@ -12,37 +12,55 @@ import {
 	Row,
 	Flex,
 	deviceSize,
+	brandColors,
+	P,
+	IconSpark,
 } from '@giveth/ui-design-system';
+import Link from 'next/link';
 import styled from 'styled-components';
 import { useIntl } from 'react-intl';
-import CauseHeader from '@/components/views/cause/CauseHeader';
-import CauseTabs from '@/components/views/cause/CauseTabs';
+import ProjectHeader from '@/components/views/project/ProjectHeader';
+import ProjectTabs from '@/components/views/project/ProjectTabs';
 import InfoBadge from '@/components/badges/InfoBadge';
-import { ICauseBySlug } from '@/apollo/types/gqlTypes';
+import { IProjectBySlug } from '@/apollo/types/gqlTypes';
 import InlineToast, { EToastType } from '@/components/toasts/InlineToast';
+import SimilarProjects from '@/components/views/project/SimilarProjects';
 import { isSSRMode } from '@/lib/helpers';
 import { idToProjectEdit } from '@/lib/routeCreators';
-import { CauseMeta } from '@/components/Metatag';
-import CauseGIVPowerIndex from '@/components/views/cause/causeGIVPower';
-import { useCauseContext } from '@/context/cause.context';
-import { CauseActionCard } from '@/components/views/cause/causeActionCard/CauseActionCard';
-import CauseBadges from '@/components/views/cause/CauseBadges';
-import CauseCategoriesBadges from '@/components/views/cause/CauseCategoriesBadges';
+import { ProjectMeta } from '@/components/Metatag';
+import ProjectGIVPowerIndex from '@/components/views/project/projectGIVPower';
+import { useProjectContext } from '@/context/project.context';
+import { ProjectActionCard } from '@/components/views/project/projectActionCard/ProjectActionCard';
+import ProjectBadges from '@/components/views/project/ProjectBadges';
+import ProjectCategoriesBadges from '@/components/views/project/ProjectCategoriesBadges';
 import { PassportBanner } from '@/components/PassportBanner';
-import CauseGIVbackToast from '@/components/views/cause/CauseGIVbackToast';
+import ProjectGIVbackToast from '@/components/views/project/ProjectGIVbackToast';
 import useMediaQuery from '@/hooks/useMediaQuery';
-import { device } from '@/lib/constants/constants';
-import CauseQFSection from '@/components/views/cause/causeActionCard/CauseQFSection';
-import { CauseDonateSection } from '@/components/views/cause/causeActionCard/CauseDonationSection';
-import { CauseStats } from '@/components/views/cause/causeActionCard/CauseStats';
-import { CauseAdminActions } from '@/components/views/cause/causeActionCard/CauseAdminActions';
-import CauseOwnerBanner from '@/components/views/cause/CauseOwnerBanner';
+import { device, mediaQueries } from '@/lib/constants/constants';
+import QFSection from '@/components/views/project/projectActionCard/QFSection';
+import { DonateSection } from '@/components/views/project/projectActionCard/DonationSection';
+import { ProjectStats } from '@/components/views/project/projectActionCard/ProjectStats';
+import { AdminActions } from '@/components/views/project/projectActionCard/AdminActions';
+import ProjectOwnerBanner from '@/components/views/project/ProjectOwnerBanner';
 import { useGeneralWallet } from '@/providers/generalWalletProvider';
-import VerifyEmailBanner from '@/components/views/userProfile/VerifyEmailBanner';
-import CauseProjects from '@/components/views/cause/CauseProjects';
+import ProjectSocials from '@/components/views/project/ProjectSocials';
+import ProjectDevouchBox from '@/components/views/project/ProjectDevouchBox';
+import Routes from '@/lib/constants/Routes';
+import { ChainType } from '@/types/config';
+import { useAppSelector } from '@/features/hooks';
+import { EndaomentProjectsInfo } from '@/components/views/project/EndaomentProjectsInfo';
+import VerifyEmailBanner from '../userProfile/VerifyEmailBanner';
+import config from '@/configuration';
+import { getActiveRound } from '@/helpers/qf';
 
-const CauseDonationsIndex = dynamic(
-	() => import('./causeDonations/CauseDonations.index'),
+const ProjectDonations = dynamic(
+	() =>
+		import(
+			'@/components/views/project/projectDonations/ProjectDonations.index'
+		),
+);
+const ProjectUpdates = dynamic(
+	() => import('@/components/views/project/projectUpdates'),
 );
 const NotAvailableHandler = dynamic(() => import('../../NotAvailableHandler'), {
 	ssr: false,
@@ -54,20 +72,21 @@ const RichTextViewer = dynamic(
 	},
 );
 
-export enum ECausePageTabs {
-	PROJECTS = 'projects',
+export enum EProjectPageTabs {
 	DONATIONS = 'donations',
+	UPDATES = 'updates',
 	GIVPOWER = 'givpower',
 }
 
-const CauseIndex: FC<ICauseBySlug> = () => {
+const CauseIndex: FC<IProjectBySlug> = () => {
 	const { formatMessage } = useIntl();
 	const [activeTab, setActiveTab] = useState(0);
+	const { isLoading: userDataLoading } = useAppSelector(state => state.user);
 
 	const isMobile = !useMediaQuery(device.tablet);
 	const {
-		fetchCauseBoosters,
-		causeData,
+		fetchProjectBoosters,
+		projectData,
 		isActive,
 		isDraft,
 		hasActiveQFRound,
@@ -75,13 +94,18 @@ const CauseIndex: FC<ICauseBySlug> = () => {
 		isAdmin,
 		isAdminEmailVerified,
 		isLoading,
-	} = useCauseContext();
+	} = useProjectContext();
 
 	const { isOnSolana } = useGeneralWallet();
+	const { activeStartedRound } = getActiveRound(projectData?.qfRounds);
 
 	const router = useRouter();
-	const slug = router.query.causeIdSlug as string;
-	const { categories } = causeData || {};
+	const slug = router.query.projectIdSlug as string;
+	const { categories, addresses } = projectData || {};
+	const recipientAddresses = addresses?.filter(a => a.isRecipient);
+	const hasStellarAddress = recipientAddresses?.some(
+		address => address.chainType === ChainType.STELLAR,
+	);
 	const [isTooltipVisible, setTooltipVisible] = useState(false);
 
 	const handleMouseEnter = () => {
@@ -93,17 +117,23 @@ const CauseIndex: FC<ICauseBySlug> = () => {
 	};
 
 	const isEmailVerifiedStatus = isAdmin ? isAdminEmailVerified : true;
+	const isStellarOnlyQF =
+		hasActiveQFRound &&
+		activeStartedRound?.eligibleNetworks?.length === 1 &&
+		activeStartedRound?.eligibleNetworks?.includes(
+			config.STELLAR_NETWORK_NUMBER,
+		);
 
 	useEffect(() => {
 		if (!isSSRMode) {
 			switch (router.query.tab) {
-				case ECausePageTabs.PROJECTS:
+				case EProjectPageTabs.UPDATES:
 					setActiveTab(1);
 					break;
-				case ECausePageTabs.DONATIONS:
+				case EProjectPageTabs.DONATIONS:
 					setActiveTab(2);
 					break;
-				case ECausePageTabs.GIVPOWER:
+				case EProjectPageTabs.GIVPOWER:
 					setActiveTab(3);
 					break;
 				default:
@@ -113,16 +143,14 @@ const CauseIndex: FC<ICauseBySlug> = () => {
 		}
 	}, [router.query.tab]);
 
-	const { description = '', title, id = '' } = causeData || {};
+	const { description = '', title, id = '' } = projectData || {};
 
 	useEffect(() => {
 		if (!id) return;
-		fetchCauseBoosters(+id, causeData?.status.name);
+		fetchProjectBoosters(+id, projectData?.status.name);
 	}, [id]);
 
-	console.log('causeData', causeData);
-
-	if (!causeData || (isDraft && !isAdmin)) {
+	if (!projectData || (isDraft && !isAdmin)) {
 		return (
 			<NotAvailableHandler
 				isCancelled={isCancelled}
@@ -132,6 +160,7 @@ const CauseIndex: FC<ICauseBySlug> = () => {
 	}
 
 	if (!isAdmin && isCancelled) {
+		console.log('Project is cancelled');
 		return (
 			<NotAvailableHandler
 				isCancelled={isCancelled}
@@ -143,41 +172,79 @@ const CauseIndex: FC<ICauseBySlug> = () => {
 	return (
 		<Wrapper>
 			{!isAdminEmailVerified && isAdmin && <VerifyEmailBanner />}
-			{hasActiveQFRound && !isOnSolana && isAdminEmailVerified && (
-				<PassportBanner />
-			)}
+			{hasActiveQFRound &&
+				!isOnSolana &&
+				!isStellarOnlyQF &&
+				isAdminEmailVerified && <PassportBanner />}
 			<Head>
 				<title>{title && `${title} |`} Giveth</title>
-				<CauseMeta cause={causeData} />
+				<ProjectMeta project={projectData} />
 			</Head>
 			<HeadContainer>
-				{isAdmin && <CauseOwnerBanner />}
-				<CauseBadges />
+				{isAdmin && <ProjectOwnerBanner />}
+				<ProjectBadges />
+				{hasStellarAddress &&
+					!isAdmin &&
+					!userDataLoading &&
+					!isLoading && (
+						<StellarSupportToast>
+							<Flex>
+								<IconSpark
+									color={brandColors.giv[300]}
+									size={20}
+								/>
+								<ToastText>
+									<P>
+										{formatMessage({
+											id: 'page.project.we_are_supporting_stellar',
+										})}
+									</P>
+									<P>
+										{formatMessage({
+											id: 'page.project.you_can_try_donating',
+										})}
+									</P>
+								</ToastText>
+							</Flex>
+							<Link
+								href={Routes.Donate + `/${slug}?chain=stellar`}
+							>
+								<LinkItem color={brandColors.giv[300]}>
+									{formatMessage({
+										id: 'page.project.donate_with_stellar',
+									})}
+								</LinkItem>
+							</Link>
+						</StellarSupportToast>
+					)}
+				<EndaomentProjectsInfo
+					orgLabel={projectData?.organization?.label}
+				/>
 				<Row>
 					<Col xs={12} md={8} lg={8.5} style={{ margin: '0' }}>
-						<CauseHeader />
+						<ProjectHeader />
 						{isMobile && isAdmin && (
 							<MobileActionsContainer
 								$flexDirection='column'
 								gap='24px'
 							>
-								<CauseStats />
-								{!isDraft && <CauseAdminActions />}
+								<ProjectStats />
+								{!isDraft && <AdminActions />}
 							</MobileActionsContainer>
 						)}
 						{isMobile && (
 							<MobileContainer $hasActiveRound={hasActiveQFRound}>
 								{hasActiveQFRound ? (
-									<CauseQFSection causeData={causeData} />
+									<QFSection projectData={projectData} />
 								) : (
-									<CauseDonateSection causeData={causeData} />
+									<DonateSection projectData={projectData} />
 								)}
 							</MobileContainer>
 						)}
-						<CauseGIVbackToast />
+						<ProjectGIVbackToast />
 					</Col>
 					<Col xs={12} md={4} lg={3.5} style={{ margin: '0' }}>
-						<CauseActionCard />
+						<ProjectActionCard />
 					</Col>
 					{isDraft && (
 						<DraftIndicator>
@@ -191,29 +258,39 @@ const CauseIndex: FC<ICauseBySlug> = () => {
 					)}
 				</Row>
 			</HeadContainer>
-			{causeData && !isDraft && (
-				<CauseTabs activeTab={activeTab} slug={slug} />
+			{projectData && !isDraft && (
+				<ProjectTabs
+					activeTab={activeTab}
+					slug={slug}
+					verified={isEmailVerifiedStatus}
+				/>
 			)}
 			<BodyWrapper>
 				<ContainerStyled>
 					{!isActive && !isDraft && (
 						<InlineToast
 							type={EToastType.Warning}
-							message='This cause is not active.'
+							message='This project is not active.'
 						/>
 					)}
 					{activeTab === 0 && (
 						<>
 							<RichTextViewer content={description} />
+							{projectData?.socialMedia?.length !== 0 && (
+								<>
+									<Separator />
+									<ProjectSocials />
+								</>
+							)}
 							<Separator />
-							<CauseCategoriesBadges
+							<ProjectCategoriesBadges
 								categories={categories || []}
 							/>
 						</>
 					)}
-					{activeTab === 1 && <CauseProjects />}
-					{activeTab === 2 && <CauseDonationsIndex />}
-					{activeTab === 3 && <CauseGIVPowerIndex />}
+					{activeTab === 1 && <ProjectUpdates />}
+					{activeTab === 2 && <ProjectDonations />}
+					{activeTab === 3 && <ProjectGIVPowerIndex />}
 					{isDraft && (
 						<Flex
 							$justifyContent='flex-end'
@@ -245,7 +322,7 @@ const CauseIndex: FC<ICauseBySlug> = () => {
 									onClick={() =>
 										router.push(
 											idToProjectEdit(
-												causeData?.id || '',
+												projectData?.id || '',
 											),
 										)
 									}
@@ -253,7 +330,9 @@ const CauseIndex: FC<ICauseBySlug> = () => {
 							</div>
 						</Flex>
 					)}
+					<ProjectDevouchBox />
 				</ContainerStyled>
+				<SimilarProjects slug={slug} />
 			</BodyWrapper>
 		</Wrapper>
 	);
@@ -310,18 +389,67 @@ const MobileActionsContainer = styled(Flex)`
 	margin-bottom: 8px;
 `;
 
+const StellarSupportToast = styled(Flex)`
+	margin-block: 24px;
+	padding: 16px;
+	border: 1px solid ${brandColors.giv[300]};
+	border-radius: 8px;
+	background-color: ${neutralColors.gray[100]};
+	color: ${brandColors.giv[300]};
+	justify-content: space-between;
+	flex-direction: column;
+	align-items: start;
+	gap: 30px;
+
+	> :first-child {
+		gap: 16px;
+
+		> :first-child {
+			margin-top: 2px;
+		}
+	}
+
+	> :last-child {
+		width: 100%;
+		text-align: center;
+	}
+
+	${mediaQueries.laptopS} {
+		flex-direction: row;
+		align-items: center;
+
+		> :last-child {
+			width: auto;
+		}
+	}
+`;
+
+const ToastText = styled.div`
+	display: flex;
+	flex-direction: column;
+	gap: 4px;
+
+	> :first-child {
+		font-weight: 500;
+	}
+`;
+
+const LinkItem = styled(P)<{ color: string }>`
+	cursor: pointer;
+	color: ${props => props.color};
+	font-weight: 500;
+	text-transform: capitalize;
+`;
 const ContinueCreationButton = styled(Button)`
 	align-self: flex-end;
 	position: relative;
 	cursor: pointer;
 `;
-
 interface TooltipWrapperProps {
 	isTooltipVisible: boolean;
 	top?: string;
 	left?: string;
 }
-
 const TooltipWrapper = styled.div<TooltipWrapperProps>`
 	visibility: ${isTooltipVisible => (isTooltipVisible ? 'visible' : 'hidden')};
 	opacity: ${({ isTooltipVisible }) => (isTooltipVisible ? 1 : 0)};
