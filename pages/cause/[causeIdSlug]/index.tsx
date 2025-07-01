@@ -3,17 +3,17 @@ import { client } from '@/apollo/apolloClient';
 import { FETCH_CAUSE_BY_SLUG_SINGLE_CAUSE } from '@/apollo/gql/gqlCauses';
 
 import { useReferral } from '@/hooks/useReferral';
-import { CauseProvider } from '@/context/cause.context';
 import CauseIndex from '@/components/views/cause/CauseIndex';
 import { ICauseBySlug } from '@/apollo/types/gqlTypes';
+import { ProjectProvider } from '@/context/project.context';
 
 const CauseRoute: FC<ICauseBySlug> = ({ cause }) => {
 	useReferral();
 
 	return (
-		<CauseProvider cause={cause}>
+		<ProjectProvider project={cause}>
 			<CauseIndex />
-		</CauseProvider>
+		</ProjectProvider>
 	);
 };
 
