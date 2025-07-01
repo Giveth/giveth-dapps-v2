@@ -4,7 +4,12 @@ import ProjectsMainCategories from '@/components/views/projects/filter/ProjectsM
 import { mediaQueries } from '@/lib/constants/constants';
 import { IconContainer } from '@/components/views/projects/common.styled';
 
-const ProjectsFiltersSwiper = () => {
+export interface IProjectsFiltersSwiperProps {
+	isCauses?: boolean;
+}
+
+const ProjectsFiltersSwiper = (props: IProjectsFiltersSwiperProps) => {
+	const { isCauses = false } = props;
 	return (
 		<Container className='fadeIn'>
 			<PrevIcon id='prevIcon'>
@@ -15,7 +20,7 @@ const ProjectsFiltersSwiper = () => {
 					height={10}
 				/>
 			</PrevIcon>
-			<ProjectsMainCategories />
+			<ProjectsMainCategories isCauses={isCauses} />
 			<NextIcon id='nextIcon'>
 				<Image
 					src={'/images/caret_right.svg'}

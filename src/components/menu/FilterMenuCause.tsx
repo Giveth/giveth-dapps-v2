@@ -12,7 +12,7 @@ import { forwardRef } from 'react';
 import { useRouter } from 'next/router';
 import { mediaQueries, zIndex } from '@/lib/constants/constants';
 import CheckBox from '../Checkbox';
-import { useProjectsContext } from '@/context/projects.context';
+import { useCausesContext } from '@/context/causes.context';
 import { EProjectsFilter } from '@/apollo/types/types';
 import { PinkyColoredNumber } from '../styled-components/PinkyColoredNumber';
 
@@ -21,65 +21,17 @@ interface IFilterMenuProps {
 	isOpen?: boolean;
 }
 
-const projectsFeatures = [
-	{
-		label: { id: 'label.isGivbackEligible' },
-		value: EProjectsFilter.IS_GIVBACK_ELIGIBLE,
-	},
-];
-
 const fundsFilter = [
-	{
-		label: 'Mainnet',
-		value: EProjectsFilter.ACCEPT_FUND_ON_MAINNET,
-	},
-	{
-		label: 'Gnosis',
-		value: EProjectsFilter.ACCEPT_FUND_ON_GNOSIS,
-	},
 	{
 		label: 'Polygon',
 		value: EProjectsFilter.ACCEPT_FUND_ON_POLYGON,
 	},
-	{
-		label: 'Celo',
-		value: EProjectsFilter.ACCEPT_FUND_ON_CELO,
-	},
-	{
-		label: 'Optimism',
-		value: EProjectsFilter.ACCEPT_FUND_ON_OPTIMISM,
-	},
-	{
-		label: 'Ethereum Classic',
-		value: EProjectsFilter.ACCEPT_FUND_ON_ETC,
-	},
-	{
-		label: 'Arbitrum',
-		value: EProjectsFilter.ACCEPT_FUND_ON_ARBITRUM,
-	},
-	{
-		label: 'Base',
-		value: EProjectsFilter.ACCEPT_FUND_ON_BASE,
-	},
-	{
-		label: 'Polygon ZKEVM',
-		value: EProjectsFilter.ACCEPT_FUND_ON_ZKEVM,
-	},
-	{
-		label: 'Stellar',
-		value: EProjectsFilter.ACCEPT_FUND_ON_STELLAR,
-	},
 ];
 
-fundsFilter.push({
-	label: 'Solana',
-	value: EProjectsFilter.ACCEPT_FUND_ON_SOLANA,
-});
-
-export const FilterMenu = forwardRef<HTMLDivElement, IFilterMenuProps>(
+export const FilterMenuCause = forwardRef<HTMLDivElement, IFilterMenuProps>(
 	({ handleClose, isOpen }, ref) => {
 		const { formatMessage } = useIntl();
-		const { variables, isQF, setIsQF } = useProjectsContext();
+		const { variables, isQF, setIsQF } = useCausesContext();
 		const filtersCount = variables?.filters?.length ?? 0;
 		const campaignCount = variables?.campaignSlug ? 1 : 0;
 		const count = filtersCount + campaignCount;
@@ -145,28 +97,9 @@ export const FilterMenu = forwardRef<HTMLDivElement, IFilterMenuProps>(
 				<Section>
 					<B>
 						{formatMessage({
-							id: 'label.project_features',
+							id: 'label.cause.cause_features',
 						})}
 					</B>
-					{projectsFeatures.map((projectFeature, idx) => (
-						<FeatureItem key={idx}>
-							<CheckBox
-								label={formatMessage(
-									{ id: projectFeature.label.id },
-									projectFeature.label,
-								)}
-								onChange={e => {
-									handleSelectFilter(e, projectFeature.value);
-								}}
-								checked={
-									variables?.filters?.includes(
-										projectFeature.value,
-									) ?? false
-								}
-								size={14}
-							/>
-						</FeatureItem>
-					))}
 					<FeatureItem>
 						<CheckBox
 							label={formatMessage({
@@ -230,7 +163,7 @@ export const FilterMenu = forwardRef<HTMLDivElement, IFilterMenuProps>(
 	},
 );
 
-FilterMenu.displayName = 'FilterMenu';
+FilterMenuCause.displayName = 'FilterMenuCause';
 
 const ButtonStyled = styled(Button)`
 	margin: 0 auto;

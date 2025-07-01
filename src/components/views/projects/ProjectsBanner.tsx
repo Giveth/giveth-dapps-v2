@@ -11,7 +11,12 @@ import Image from 'next/image';
 import { mediaQueries } from '@/lib/constants/constants';
 import { useProjectsContext } from '@/context/projects.context';
 
-export const ProjectsBanner = () => {
+export interface IProjectsBannerProps {
+	isCauses?: boolean;
+}
+
+export const ProjectsBanner = (props: IProjectsBannerProps) => {
+	const { isCauses = false } = props;
 	const { formatMessage } = useIntl();
 	const { selectedMainCategory } = useProjectsContext();
 
@@ -41,10 +46,18 @@ export const ProjectsBanner = () => {
 				alt={_mainCategory.title}
 			/>
 			<Title weight={700}>
-				{formatMessage({ id: `projects_${_mainCategory.slug}` })}
+				{formatMessage({
+					id: isCauses
+						? `label.cause.cause_${_mainCategory.slug}`
+						: `projects_${_mainCategory.slug}`,
+				})}
 			</Title>
 			<Desc>
-				{formatMessage({ id: `projects_${_mainCategory.slug}_desc` })}
+				{formatMessage({
+					id: isCauses
+						? `label.cause.cause_${_mainCategory.slug}_desc`
+						: `projects_${_mainCategory.slug}_desc`,
+				})}
 			</Desc>
 		</BannerContainer>
 	);

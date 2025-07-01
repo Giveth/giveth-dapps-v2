@@ -13,7 +13,12 @@ import {
 import { useProjectsContext } from '@/context/projects.context';
 import ProjectsFiltersButton from '@/components/views/projects/filter/ProjectsFiltersButton';
 
-const ProjectsFiltersDesktop = () => {
+export interface IProjectsFiltersDesktopProps {
+	isCauses?: boolean;
+}
+
+const ProjectsFiltersDesktop = (props: IProjectsFiltersDesktopProps) => {
+	const { isCauses = false } = props;
 	const { selectedMainCategory, isQF } = useProjectsContext();
 	const [isSearchOpen, setIsSearchOpen] = useState(false);
 	const router = useRouter();
@@ -28,9 +33,9 @@ const ProjectsFiltersDesktop = () => {
 		<>
 			<FiltersSection>
 				{isSearchOpen ? (
-					<ProjectsSearchDesktop />
+					<ProjectsSearchDesktop isCauses={isCauses} />
 				) : (
-					<ProjectsFiltersSwiper />
+					<ProjectsFiltersSwiper isCauses={isCauses} />
 				)}
 				<FilterAndSearchContainer>
 					<BiggerIconContainer onClick={toggleSearch}>

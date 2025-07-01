@@ -6,11 +6,18 @@ import ProjectsFiltersTablet from '@/components/views/projects/filter/ProjectsFi
 import ProjectsFiltersMobile from '@/components/views/projects/filter/ProjectsFiltersMobile';
 import useDetectDevice from '@/hooks/useDetectDevice';
 
-export const FilterContainer = () => {
+export interface IFilterContainerProps {
+	isCauses?: boolean;
+}
+
+export const FilterContainer = (props: IFilterContainerProps) => {
+	const { isCauses = false } = props;
 	const { isTablet, isMobile } = useDetectDevice();
 	return (
 		<FiltersContainer>
-			{!isTablet && !isMobile && <ProjectsFiltersDesktop />}
+			{!isTablet && !isMobile && (
+				<ProjectsFiltersDesktop isCauses={isCauses} />
+			)}
 			{isTablet && <ProjectsFiltersTablet />}
 			{isMobile && <ProjectsFiltersMobile />}
 		</FiltersContainer>

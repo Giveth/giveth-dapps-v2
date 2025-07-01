@@ -69,6 +69,7 @@ const Routes = {
 	Causes: '/causes',
 	CreateCause: '/causes/create',
 	Cause: '/cause',
+	QFCauses: '/qf/causes',
 };
 
 export default Routes;

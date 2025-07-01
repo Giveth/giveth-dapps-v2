@@ -11,25 +11,33 @@ import ProjectsSortSelect from './ProjectsSortSelect';
 
 interface ISortContainerProps {
 	totalCount: number;
+	isCauses?: boolean;
 }
 
-export const SortContainer: FC<ISortContainerProps> = ({ totalCount }) => {
+export const SortContainer: FC<ISortContainerProps> = ({
+	totalCount,
+	isCauses = false,
+}) => {
 	const { formatMessage } = useIntl();
 	return (
 		<Wrapper>
 			<Title>
 				{formatMessage({
-					id: 'page.projects.title.explore',
+					id: isCauses
+						? 'label.causes'
+						: 'page.projects.title.explore',
 				})}
 				<span>
 					{' '}
 					{totalCount}{' '}
 					{formatMessage({
-						id: 'page.projects.title.projects',
+						id: isCauses
+							? 'label.causes'
+							: 'page.projects.title.projects',
 					})}
 				</span>
 			</Title>
-			<ProjectsSortSelect />
+			<ProjectsSortSelect isCauses={isCauses} />
 		</Wrapper>
 	);
 };

@@ -47,7 +47,12 @@ export const DropdownIndicator: ComponentType<
 	return props.selectProps.menuIsOpen ? <IconCaretUp /> : <IconCaretDown />;
 };
 
-const ProjectsSortSelect = () => {
+export interface IProjectsSortSelectProps {
+	isCauses?: boolean;
+}
+
+const ProjectsSortSelect = (props: IProjectsSortSelectProps) => {
+	const { isCauses = false } = props;
 	const { formatMessage } = useIntl();
 	const { isQF } = useProjectsContext();
 	const router = useRouter();

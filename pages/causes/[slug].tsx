@@ -7,7 +7,7 @@ import { GeneralMetatags } from '@/components/Metatag';
 import CausesIndex from '@/components/views/causes/CausesIndex';
 import { useReferral } from '@/hooks/useReferral';
 import { projectsMetatags } from '@/content/metatags';
-import { CausesProvider } from '@/context/causes.context';
+import { ProjectsProvider } from '@/context/projects.context';
 import { getMainCategorySlug } from '@/helpers/projects';
 import { EProjectsSortBy, EProjectType } from '@/apollo/types/gqlEnums';
 import { FETCH_ALL_PROJECTS } from '@/apollo/gql/gqlProjects';
@@ -37,10 +37,10 @@ const CausesCategoriesRoute = (props: ICausesRouteProps) => {
 	}
 
 	return (
-		<CausesProvider>
+		<ProjectsProvider>
 			<GeneralMetatags info={projectsMetatags} />
 			<CausesIndex causes={causes} totalCount={totalCount} />
-		</CausesProvider>
+		</ProjectsProvider>
 	);
 };
 
