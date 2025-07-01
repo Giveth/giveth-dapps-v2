@@ -18,12 +18,14 @@ const ProjectsNoResults = () => {
 		state => state.general.mainCategories,
 	);
 	const { formatMessage } = useIntl();
-	const { isQF } = useProjectsContext();
+	const { isQF, isCauses } = useProjectsContext();
 	const router = useRouter();
 
 	const handleSearch = (searchTerm?: string) => {
 		router.push({
-			pathname: router.pathname,
+			pathname: isCauses
+				? Routes.Causes + '/all'
+				: Routes.Projects + '/all',
 			query: { searchTerm: searchTerm },
 		});
 	};
@@ -32,7 +34,9 @@ const ProjectsNoResults = () => {
 		<Wrapper>
 			<Content>
 				{formatMessage({
-					id: 'label.there_are_no_projects_matching_your_search',
+					id: isCauses
+						? 'label.cause.there_are_no_causes_matching_your_search'
+						: 'label.there_are_no_projects_matching_your_search',
 				})}
 			</Content>
 			<LeadMedium>

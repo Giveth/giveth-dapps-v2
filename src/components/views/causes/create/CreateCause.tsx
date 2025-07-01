@@ -4,6 +4,7 @@ import { useIntl } from 'react-intl';
 import { useRouter } from 'next/router';
 import { useForm, FormProvider } from 'react-hook-form';
 import { useMutation } from '@apollo/client';
+import { useAccount } from 'wagmi';
 import { ICauseCreation, ICauseEdition } from '@/apollo/types/types';
 import { CreateCauseHeader } from '@/components/views/causes/create/CreateCauseHeader';
 import { CauseInformationStep } from '@/components/views/causes/create/CauseInformationStep';
@@ -37,6 +38,8 @@ const CreateCause: FC<ICreateCauseProps> = () => {
 	const [isSubmitting, setIsSubmitting] = useState(false);
 	const [createdSlug, setCreatedSlug] = useState('');
 	const [addCauseMutation] = useMutation(CREATE_CAUSE);
+	const { chain } = useAccount();
+	const currentChainId = chain?.id;
 
 	// Load storage data
 	let storageCauseData: TCauseInputs | undefined;
@@ -174,9 +177,8 @@ const CreateCause: FC<ICreateCauseProps> = () => {
 			const causeData: ICauseCreation = {
 				title: formDataWatch.title,
 				description: formDataWatch.description,
-				chainId: 137, // Polygon chain id
+				chainId: currentChainId || 137,
 				bannerImage: formDataWatch.image,
-				mainCategory: formDataWatch.categories?.[0]?.name || '',
 				subCategories:
 					formDataWatch.categories?.map(category => category.name) ||
 					[],

@@ -8,6 +8,7 @@ import { FC } from 'react';
 import { useIntl } from 'react-intl';
 import styled from 'styled-components';
 import ProjectsSortSelect from './ProjectsSortSelect';
+import { useProjectsContext } from '@/context/projects.context';
 
 interface ISortContainerProps {
 	totalCount: number;
@@ -15,17 +16,22 @@ interface ISortContainerProps {
 
 export const SortContainer: FC<ISortContainerProps> = ({ totalCount }) => {
 	const { formatMessage } = useIntl();
+	const { isCauses } = useProjectsContext();
 	return (
 		<Wrapper>
 			<Title>
 				{formatMessage({
-					id: 'page.projects.title.explore',
+					id: isCauses
+						? 'label.causes'
+						: 'page.projects.title.explore',
 				})}
 				<span>
 					{' '}
 					{totalCount}{' '}
 					{formatMessage({
-						id: 'page.projects.title.projects',
+						id: isCauses
+							? 'label.causes'
+							: 'page.projects.title.projects',
 					})}
 				</span>
 			</Title>

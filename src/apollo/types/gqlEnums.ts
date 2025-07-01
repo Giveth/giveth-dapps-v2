@@ -22,6 +22,8 @@ export enum EProjectsSortBy {
 	ActiveQfRoundRaisedFunds = 'ActiveQfRoundRaisedFunds',
 	EstimatedMatching = 'EstimatedMatching',
 	BestMatch = 'BestMatch',
+	LEAST_NUMBER_OF_PROJECTS = 'LeastNumberOfProjects',
+	MOST_NUMBER_OF_PROJECTS = 'MostNumberOfProjects',
 }
 
 export enum EQFRoundsSortBy {
@@ -74,4 +76,9 @@ export enum ECauseVerificationStatus {
 	LASTCHANCE = 'lastChance', // Last notice after 90 days of no updates
 	UPFORREVOKING = 'upForRevoking', // Projects without updates that will be revoked after Oct 15th 2022
 	REVOKED = 'revoked',
+}
+
+export enum EProjectType {
+	CAUSE = 'cause',
+	PROJECT = 'project',
 }

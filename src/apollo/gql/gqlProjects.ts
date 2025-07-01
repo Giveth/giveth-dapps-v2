@@ -10,6 +10,7 @@ export const PROJECT_CORE_FIELDS = gql`
 		verified
 		isGivbackEligible
 		totalDonations
+		projectType
 		qfRounds {
 			id
 			name
@@ -117,6 +118,7 @@ export const FETCH_ALL_PROJECTS = gql`
 		$campaignSlug: String
 		$connectedWalletUserId: Int
 		$qfRoundSlug: String
+		$projectType: String
 	) {
 		allProjects(
 			limit: $limit
@@ -129,6 +131,7 @@ export const FETCH_ALL_PROJECTS = gql`
 			campaignSlug: $campaignSlug
 			connectedWalletUserId: $connectedWalletUserId
 			qfRoundSlug: $qfRoundSlug
+			projectType: $projectType
 		) {
 			projects {
 				...ProjectCardFields

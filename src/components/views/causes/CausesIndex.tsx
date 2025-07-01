@@ -17,30 +17,31 @@ import styled from 'styled-components';
 // import ProjectCard from '@/components/project-card/ProjectCard';
 import Routes from '@/lib/constants/Routes';
 import { isUserRegistered, showToastError } from '@/lib/helpers';
-import CausesNoResults from '@/components/views/causes/CausesNoResults';
 import { useAppDispatch, useAppSelector } from '@/features/hooks';
 import { setShowCompleteProfile } from '@/features/modal/modal.slice';
-import { CausesBanner } from '@/components/views/causes/CausesBanner';
-import { CausesMiddleGivethVaultBanner } from '@/components/views/causes/MiddleBanners/CausesMiddleGivethVaultBanner';
-import { CauseActiveQFBanner } from '@/components/views/causes/qfBanner/CauseActiveQFBanner';
 import { PassportBanner } from '@/components/PassportBanner';
-import { CauseQFMiddleBanner } from '@/components/views/causes/MiddleBanners/CauseQFMiddleBanner';
 import { QFNoResultBanner } from '@/components/views/projects/MiddleBanners/QFNoResultBanner';
 import { Spinner } from '@/components/Spinner';
-import { CausesFilterContainer } from '@/components/views/causes/filter/CausesFilterContainer';
 import { SortContainer } from '@/components/views/projects/sort/SortContainer';
 import { ArchivedQFRoundStats } from '@/components/views/projects/ArchivedQFRoundStats';
 import { ActiveQFRoundStats } from '@/components/views/projects/ActiveQFRoundStats';
 import useMediaQuery from '@/hooks/useMediaQuery';
 import { DefaultQFBanner } from '@/components/DefaultQFBanner';
-import NotAvailable from '@/components/NotAvailable';
-import { fetchCauses, IQueries } from '@/components/views/causes/services';
+import { IQueries } from '@/components/views/causes/services';
 import { ICause } from '@/apollo/types/types';
 import { LAST_CAUSE_CLICKED } from '@/components/views/causes/constants';
 import { hasRoundStarted } from '@/helpers/qf';
 import config from '@/configuration';
-import { useCausesContext } from '@/context/causes.context';
-import { CausesArchivedQFBanner } from './qfBanner/CausesArchivedQFBanner';
+import { EProjectType } from '@/apollo/types/gqlEnums';
+import { useProjectsContext } from '@/context/projects.context';
+import { ActiveQFProjectsBanner } from '@/components/views/projects/qfBanner/ActiveQFProjectsBanner';
+import { fetchProjects } from '@/components/views/projects/services';
+import { ArchivedQFProjectsBanner } from '@/components/views/projects/qfBanner/ArchivedQFProjectsBanner';
+import { QFProjectsMiddleBanner } from '@/components/views/projects/MiddleBanners/QFMiddleBanner';
+import ProjectsMiddleGivethVaultBanner from '@/components/views/projects/MiddleBanners/ProjectsMiddleGivethVaultBanner';
+import ProjectsNoResults from '@/components/views/projects/ProjectsNoResults';
+import { ProjectsBanner } from '@/components/views/projects/ProjectsBanner';
+import { FilterContainer } from '@/components/views/projects/filter/FilterContainer';
 
 export interface ICausesView {
 	causes: ICause[];
@@ -61,7 +62,7 @@ const CausesIndex = (props: ICausesView) => {
 		selectedMainCategory,
 		isQF,
 		isArchivedQF,
-	} = useCausesContext();
+	} = useProjectsContext();
 
 	const activeRoundStarted = hasRoundStarted(activeQFRound);
 
@@ -74,13 +75,16 @@ const CausesIndex = (props: ICausesView) => {
 		const variables: IQueries = {
 			limit: 20, // Adjust the limit as needed
 			skip: 20 * pageParam,
+			projectType: EProjectType.CAUSE,
 		};
 
 		if (user?.id) {
 			variables.connectedWalletUserId = Number(user.id);
 		}
 
-		return await fetchCauses(
+		variables.projectType = EProjectType.CAUSE;
+
+		return await fetchProjects(
 			pageParam,
 			variables,
 			contextVariables,
@@ -101,7 +105,7 @@ const CausesIndex = (props: ICausesView) => {
 		isFetchingNextPage,
 	} = useInfiniteQuery({
 		queryKey: [
-			'projects',
+			'causes',
 			contextVariables,
 			isArchivedQF,
 			selectedMainCategory,
@@ -212,16 +216,7 @@ const CausesIndex = (props: ICausesView) => {
 		}
 	}, [isError, error]);
 
-	// Determine if no results should be shown
-	const isNotFound =
-		(mainCategories.length > 0 && !selectedMainCategory && !isArchivedQF) ||
-		(!isQF && data?.pages?.[0]?.data.length === 0);
-
-	if (isNotFound)
-		return <NotAvailable description='Oops! Page Not Found...' />;
-
 	const totalCount = data?.pages[data.pages.length - 1].totalCount || 0;
-	console.log('data', totalCount, data);
 
 	return (
 		<>
@@ -235,21 +230,19 @@ const CausesIndex = (props: ICausesView) => {
 				{isQF && !isArchivedQF && (
 					<>
 						{activeQFRound ? (
-							<CauseActiveQFBanner />
+							<ActiveQFProjectsBanner />
 						) : (
 							<DefaultQFBanner />
 						)}
 					</>
 				)}
-				{isArchivedQF && !isMobile && <CausesArchivedQFBanner />}
+				{isArchivedQF && !isMobile && <ArchivedQFProjectsBanner />}
 				{isArchivedQF ? (
 					<ArchivedQFRoundStats />
 				) : (
 					<>
-						{!isQF && <CausesBanner />}
-						{onProjectsPageOrActiveQFPage && (
-							<CausesFilterContainer />
-						)}
+						{!isQF && <ProjectsBanner />}
+						{onProjectsPageOrActiveQFPage && <FilterContainer />}
 						{isQF && activeQFRound && <ActiveQFRoundStats />}
 					</>
 				)}
@@ -263,9 +256,9 @@ const CausesIndex = (props: ICausesView) => {
 					<ProjectsWrapper>
 						<ProjectsContainer>
 							{isQF ? (
-								<CauseQFMiddleBanner />
+								<QFProjectsMiddleBanner />
 							) : (
-								<CausesMiddleGivethVaultBanner />
+								<ProjectsMiddleGivethVaultBanner />
 							)}
 							{data.pages.map((page, pageIndex) => (
 								<>nothing for now TODO</>
@@ -294,7 +287,7 @@ const CausesIndex = (props: ICausesView) => {
 				) : isQF && !activeQFRound ? (
 					<QFNoResultBanner />
 				) : (
-					<CausesNoResults />
+					<ProjectsNoResults />
 				)}
 				{hasNextPage && <div ref={lastElementRef} />}
 				{!isFetching && !isFetchingNextPage && hasNextPage && (

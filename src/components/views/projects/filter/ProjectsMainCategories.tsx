@@ -12,7 +12,7 @@ import { useProjectsContext } from '@/context/projects.context';
 import { useAppSelector } from '@/features/hooks';
 
 function ProjectsMainCategories() {
-	const { isQF } = useProjectsContext();
+	const { isQF, isCauses } = useProjectsContext();
 	const mainCategories = useAppSelector(
 		state => state.general.mainCategories,
 	);
@@ -20,6 +20,7 @@ function ProjectsMainCategories() {
 	const { formatMessage } = useIntl();
 
 	const projectsRoute = (isQF ? Routes.QFProjects : Routes.Projects) + '/';
+	const causeRoute = (isQF ? Routes.QFCauses : Routes.Causes) + '/';
 
 	const handleIsSelected = (categorySlug: string) => {
 		if (!query?.slug) {
@@ -59,14 +60,20 @@ function ProjectsMainCategories() {
 				<SwiperSlide key={category.slug} style={{ width: 'auto' }}>
 					<Link
 						href={{
-							pathname: projectsRoute + category.slug,
+							pathname: isCauses
+								? causeRoute + category.slug
+								: projectsRoute + category.slug,
 							query: newQuery,
 						}}
 					>
 						<MainCategoryItem
 							$isSelected={handleIsSelected(category.slug)}
 						>
-							{formatMessage({ id: 'projects_' + category.slug })}
+							{formatMessage({
+								id: isCauses
+									? 'label.cause.cause_' + category.slug
+									: 'projects_' + category.slug,
+							})}
 						</MainCategoryItem>
 					</Link>
 				</SwiperSlide>

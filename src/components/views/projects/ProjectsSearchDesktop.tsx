@@ -15,7 +15,7 @@ import useFocus from '@/hooks/useFocus';
 import { EProjectsSortBy } from '@/apollo/types/gqlEnums';
 
 const ProjectsSearchDesktop = () => {
-	const { variables } = useProjectsContext();
+	const { variables, isCauses } = useProjectsContext();
 	const [searchValue, setSearchValue] = useState(variables.searchTerm);
 	const router = useRouter();
 	const { formatMessage } = useIntl();
@@ -63,7 +63,9 @@ const ProjectsSearchDesktop = () => {
 			>
 				<Input
 					placeholder={formatMessage({
-						id: 'label.search_for_a_project_or_a_cause',
+						id: isCauses
+							? 'label.cause.search_for_cause'
+							: 'label.search_for_project',
 					})}
 					value={searchValue}
 					onChange={e => setSearchValue(e.target.value)}

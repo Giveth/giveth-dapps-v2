@@ -15,6 +15,7 @@ import {
 	Title,
 	Desc,
 } from '@/components/views/causes/create/Create.sc';
+import InlineToast, { EToastType } from '@/components/toasts/InlineToast';
 
 interface ICauseInformationStepProps {
 	onNext: () => void;
@@ -77,6 +78,30 @@ export const CauseInformationStep = ({
 					<CauseCategoryInput
 						setActiveCauseSection={setActiveCauseSection}
 					/>
+					{!titleValue?.trim() && (
+						<InlineToast
+							type={EToastType.Warning}
+							message={formatMessage({
+								id: 'label.cause.title_required',
+							})}
+						/>
+					)}
+					{!isDescriptionValid && descriptionValue && (
+						<InlineToast
+							type={EToastType.Warning}
+							message={formatMessage({
+								id: 'label.cause.description_required',
+							})}
+						/>
+					)}
+					{!imageValue && (
+						<InlineToast
+							type={EToastType.Warning}
+							message={formatMessage({
+								id: 'label.cause.image_required',
+							})}
+						/>
+					)}
 					<NextDescription>
 						<H4>
 							{formatMessage({

@@ -98,50 +98,6 @@ export const CauseReviewStep = ({ onPrevious, slug }: IProps) => {
 		| null
 	>('approval');
 
-	// Contract writing hook
-	// const { writeContractAsync } = useWriteContract();
-
-	// // Handle approval confirmation
-	// useEffect(() => {
-	// 	if (isApprovalSuccess && approvalTxHash) {
-	// 		console.log('Approval transaction confirmed:', approvalTxHash);
-	// 		// Show transfer modal after approval succeeds
-	// 		setShowTransferModal(true);
-	// 		setShowLaunchModal(false);
-	// 	} else if (isApprovalError && approvalTxHash) {
-	// 		console.error('Approval transaction failed:', approvalError);
-	// 		setValue('transactionStatus', 'failed');
-	// 		setValue(
-	// 			'transactionError',
-	// 			approvalError?.message || 'Approval transaction failed',
-	// 		);
-	// 		setIsLaunching(false);
-	// 		setShowLaunchModal(false);
-	// 	}
-	// }, [isApprovalSuccess, isApprovalError, approvalTxHash, approvalError]);
-
-	// // Handle transfer confirmation
-	// useEffect(() => {
-	// 	if (isTransferSuccess && transferTxHash) {
-	// 		console.log('Transfer transaction confirmed:', transferTxHash);
-	// 		setValue('transactionStatus', 'success');
-	// 		setValue('approvalConfirmed', true);
-	// 		setLaunched(true);
-	// 		setIsLaunching(false);
-	// 		setShowTransferModal(false);
-	// 		handleLaunchComplete();
-	// 	} else if (isTransferError && transferTxHash) {
-	// 		console.error('Transfer transaction failed:', transferError);
-	// 		setValue('transactionStatus', 'failed');
-	// 		setValue(
-	// 			'transactionError',
-	// 			transferError?.message || 'Transfer transaction failed',
-	// 		);
-	// 		setIsLaunching(false);
-	// 		setShowTransferModal(false);
-	// 	}
-	// }, [isTransferSuccess, isTransferError, transferTxHash, transferError]);
-
 	// Get native token info for current network
 	const nativeTokenInfo = useMemo(() => {
 		switch (currentChainId) {
@@ -290,37 +246,6 @@ export const CauseReviewStep = ({ onPrevious, slug }: IProps) => {
 	};
 
 	const handleLastStep = () => {
-		const tokenBalance =
-			balance?.value && balance?.decimals
-				? parseFloat(formatUnits(balance.value, balance.decimals))
-				: 0;
-
-		console.log('--- handleLastStep checks ---');
-		console.log('title:', title);
-		console.log('description:', description);
-		console.log('categories:', categories);
-		console.log('categories.length === 0:', categories?.length === 0);
-		console.log('image:', image);
-		console.log('selectedProjects:', selectedProjects);
-		console.log(
-			'selectedProjects.length < min:',
-			selectedProjects?.length < config.CAUSES_CONFIG.minSelectedProjects,
-		);
-		console.log(
-			'selectedProjects.length > max:',
-			selectedProjects?.length > config.CAUSES_CONFIG.maxSelectedProjects,
-		);
-		console.log('tokenBalance:', tokenBalance);
-		console.log('launchFee:', config.CAUSES_CONFIG.launchFee);
-		console.log(
-			'tokenBalance < launchFee:',
-			tokenBalance < config.CAUSES_CONFIG.launchFee,
-		);
-		console.log(
-			'supportedNetwork?.tokenAddress:',
-			supportedNetwork?.tokenAddress,
-		);
-		console.log('supportedNetwork:', supportedNetwork);
 		// Check are all data provided and valid
 		if (
 			!title ||

@@ -5,6 +5,7 @@ import {
 	EDonationStatus,
 	EDonationType,
 	EProjectStatus,
+	EProjectType,
 	EProjectVerificationStatus,
 	EProjectsSortBy,
 } from '@/apollo/types/gqlEnums';
@@ -95,6 +96,7 @@ export interface IProject {
 	campaigns?: ICampaign[];
 	anchorContracts: IAnchorContractData[];
 	socialMedia: IProjectSocialMedia[];
+	projectType: EProjectType;
 }
 
 export enum EProjectsFilter {
@@ -552,65 +554,12 @@ export interface ICauseCreation {
 	description: string;
 	chainId: number;
 	projectIds: number[];
-	mainCategory: string;
-	subCategories: any;
+	subCategories: string[];
 	bannerImage: string;
 	depositTxHash: string;
 	depositTxChainId: number;
 }
 
-export interface ICause {
-	id: string;
-	title: string;
-	description: string;
-	chainId: number;
-	fundingPoolAddress: string;
-	causeId: string;
-	depositTxHash: string;
-	depositTxChainId: number;
-	givpowerRank: number;
-	instantBoostingRank: number;
-	mainCategory: string;
-	subCategories: string[];
-	owner: {
-		id: string;
-		name: string;
-		walletAddress: string;
-	};
-	createdAt: string;
-	updatedAt: string;
-	status: ECauseStatus;
-	statusValue: ECauseVerificationStatus;
-	listingStatus: string;
-	listingStatusValue: string;
+export interface ICause extends IProject {
 	projects: IProject[];
-	activeProjectsCount: number;
-	totalRaised: number;
-	totalDistributed: number;
-	totalDonated: number;
-	givPower: number;
-	givBack: number;
-
-	// TODO: Add other fields
-	slug?: string;
-	qfRounds?: IQFRound[];
-	givbackFactor?: number;
-	image?: string;
-	campaigns?: ICampaign[];
-	categories?: ICategory[];
-	countUniqueDonors?: number;
-	reaction?: IReaction;
-	estimatedMatching?: IEstimatedMatching;
-	sumDonationValueUsdForActiveQfRound?: number;
-	totalDonations?: number;
-	adminUser?: IAdminUser;
-	organization?: {
-		name: string;
-		label: string;
-		supportCustomTokens: boolean;
-		disableRecurringDonations?: boolean;
-	};
-	countUniqueDonorsForActiveQfRound?: number;
-	causePower?: number;
-	causeFuturePower?: number;
 }

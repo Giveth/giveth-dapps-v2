@@ -13,7 +13,7 @@ import { useProjectsContext } from '@/context/projects.context';
 
 export const ProjectsBanner = () => {
 	const { formatMessage } = useIntl();
-	const { selectedMainCategory } = useProjectsContext();
+	const { selectedMainCategory, isCauses } = useProjectsContext();
 
 	const allCategory = {
 		title: formatMessage({ id: 'label.giveth_projects' }),
@@ -41,10 +41,18 @@ export const ProjectsBanner = () => {
 				alt={_mainCategory.title}
 			/>
 			<Title weight={700}>
-				{formatMessage({ id: `projects_${_mainCategory.slug}` })}
+				{formatMessage({
+					id: isCauses
+						? `label.cause.cause_${_mainCategory.slug}`
+						: `projects_${_mainCategory.slug}`,
+				})}
 			</Title>
 			<Desc>
-				{formatMessage({ id: `projects_${_mainCategory.slug}_desc` })}
+				{formatMessage({
+					id: isCauses
+						? `label.cause.cause_${_mainCategory.slug}_desc`
+						: `projects_${_mainCategory.slug}_desc`,
+				})}
 			</Desc>
 		</BannerContainer>
 	);
