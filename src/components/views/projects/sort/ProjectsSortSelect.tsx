@@ -81,14 +81,32 @@ const ProjectsSortSelect = () => {
 			value: EProjectsSortBy.MOST_FUNDED,
 			icon: <IconDonation16 />,
 		},
-		{
+	];
+
+	if (!isCauses) {
+		initialSortByOptions.push({
 			label: capitalizeFirstLetter(
 				formatMessage({ id: 'label.recently_updated' }),
 			),
 			value: EProjectsSortBy.RECENTLY_UPDATED,
 			icon: <IconPublish16 />,
-		},
-	];
+		});
+	} else {
+		initialSortByOptions.push({
+			label: capitalizeFirstLetter(
+				formatMessage({ id: 'label.cause.most_number_of_projects' }),
+			),
+			value: EProjectsSortBy.MOST_NUMBER_OF_PROJECTS,
+			icon: <IconArrowTop size={16} />,
+		});
+		initialSortByOptions.push({
+			label: capitalizeFirstLetter(
+				formatMessage({ id: 'label.cause.least_number_of_projects' }),
+			),
+			value: EProjectsSortBy.LEAST_NUMBER_OF_PROJECTS,
+			icon: <IconArrowBottom size={16} />,
+		});
+	}
 
 	const [sortByOptions, setSortByOptions] =
 		useState<ISelectedSort[]>(initialSortByOptions);

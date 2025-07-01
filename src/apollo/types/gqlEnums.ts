@@ -22,6 +22,8 @@ export enum EProjectsSortBy {
 	ActiveQfRoundRaisedFunds = 'ActiveQfRoundRaisedFunds',
 	EstimatedMatching = 'EstimatedMatching',
 	BestMatch = 'BestMatch',
+	LEAST_NUMBER_OF_PROJECTS = 'LeastNumberOfProjects',
+	MOST_NUMBER_OF_PROJECTS = 'MostNumberOfProjects',
 }
 
 export enum EQFRoundsSortBy {

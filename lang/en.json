@@ -1895,5 +1895,7 @@
 	"label.cause.cause_features": "Cause Features",
 	"label.cause.explore_causes": "Explore Causes",
 	"label.cause.there_are_no_causes_matching_your_search": "There are no causes matching your search",
-	"label.cause.search_for_cause": "Search for a cause on all of the categories"
+	"label.cause.search_for_cause": "Search for a cause on all of the categories",
+	"label.cause.most_number_of_projects": "Most Projects",
+	"label.cause.least_number_of_projects": "Least Projects"
 }
