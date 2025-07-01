@@ -16,6 +16,7 @@ import { EInputs, TCauseInputs } from '@/components/views/causes/create/types';
 import config from '@/configuration';
 import { CREATE_CAUSE } from '@/apollo/gql/gqlCauses';
 import { CauseReviewStep } from './CauseReviewStep';
+import { slugToSuccessCauseView } from '@/lib/routeCreators';
 
 interface ICreateCauseProps {
 	project?: ICauseEdition;
@@ -174,6 +175,9 @@ const CreateCause: FC<ICreateCauseProps> = () => {
 		setIsSubmitting(true);
 
 		try {
+			// REMOVE AFTER BE FIX IT
+			await new Promise(resolve => setTimeout(resolve, 7000));
+
 			const causeData: ICauseCreation = {
 				title: formDataWatch.title,
 				description: formDataWatch.description,
@@ -190,8 +194,6 @@ const CreateCause: FC<ICreateCauseProps> = () => {
 				depositTxChainId: formDataWatch.transactionNetworkId,
 			};
 
-			console.log('🧪 causeData', causeData);
-
 			const cause = await addCauseMutation({ variables: causeData });
 
 			const createdCause = cause?.data?.createCause;
@@ -201,8 +203,12 @@ const CreateCause: FC<ICreateCauseProps> = () => {
 				localStorage.setItem(
 					'GIV_CREATED_CAUSE_SLUG',
 					createdCause.slug,
-				); // 🔁 Add this
+				);
+
+				router.push(slugToSuccessCauseView(createdCause.slug));
 			}
+
+			clearStorage();
 		} catch (error) {
 			console.error('Error creating cause:', error);
 			showToastError(

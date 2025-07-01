@@ -12,6 +12,10 @@ export const slugToSuccessView = (slug: string) => {
 	return Routes.Success + '/' + slug;
 };
 
+export const slugToSuccessCauseView = (slug: string) => {
+	return Routes.CreateCause + '/success/' + slug;
+};
+
 export const slugToProjectDonate = (slug: string, recurring = false) => {
 	return Routes.Donate + '/' + slug + (recurring ? '?tab=recurring' : '');
 };
