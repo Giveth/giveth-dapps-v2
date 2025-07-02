@@ -1779,6 +1779,8 @@
 	"help_improve_description": "Share your feedback in a quick survey and help us enhance the donor experience.",
 	"label.button.create": "create",
 	"label.project.description": "A project lets you share your mission and collect crypto donations transparently.",
+	"label.project.owner_banner": "As the project owner, only you can see your project in this view",
+	"label.project.project_actions": "Project Actions",
 	"label.cause.description": "A collection of projects that share a common goal, vision or theme",
 	"label.causes": "Causes",
 	"label.cause": "Cause",
@@ -1904,5 +1906,8 @@
 	"label.cause.deactivate_cause": "Deactivate Cause",
 	"label.cause.activate_cause": "Activate Cause",
 	"label.cause.congratulations": "Congratulations",
-  "label.cause.success_message": "Your Cause has been published."
+  "label.cause.success_message": "Your Cause has been published.",
+	"label.cause.owner_banner": "As the cause owner, only you can see your cause in this view",
+	"label.cause.not_active": "This cause is not active.",
+	"label.cause.cause_status": "Cause Status"
 }

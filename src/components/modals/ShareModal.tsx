@@ -23,7 +23,7 @@ import FacebookIcon from '../../../public/images/social-fb.svg';
 import LinkedinIcon from '../../../public/images/social-linkedin.svg';
 import ShareIcon from '../../../public/images/icons/share_dots.svg';
 import Warpcast from '../../../public/images/icons/social-warpcast.svg';
-import { slugToProjectView } from '@/lib/routeCreators';
+import { slugToProjectView, slugToCauseView } from '@/lib/routeCreators';
 import { IModal } from '@/types/common';
 import CopyLink from '@/components/CopyLink';
 import { fullPath } from '@/lib/helpers';
@@ -40,6 +40,8 @@ interface IShareModal extends IModal {
 	contentType: EContentType;
 	shareTitle?: string | undefined;
 	shareDescription?: string | undefined;
+	isCause?: boolean;
+	numberOfProjects?: number;
 }
 
 const ShareModal: FC<IShareModal> = props => {

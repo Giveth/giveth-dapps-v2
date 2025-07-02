@@ -42,6 +42,7 @@ import ProjectsMiddleGivethVaultBanner from '@/components/views/projects/MiddleB
 import ProjectsNoResults from '@/components/views/projects/ProjectsNoResults';
 import { ProjectsBanner } from '@/components/views/projects/ProjectsBanner';
 import { FilterContainer } from '@/components/views/projects/filter/FilterContainer';
+import ProjectCard from '@/components/project-card/ProjectCard';
 
 export interface ICausesView {
 	causes: ICause[];
@@ -261,25 +262,24 @@ const CausesIndex = (props: ICausesView) => {
 								<ProjectsMiddleGivethVaultBanner />
 							)}
 							{data.pages.map((page, pageIndex) => (
-								<>nothing for now TODO</>
-								// <Fragment key={pageIndex}>
-								// 	{page.data.map((project, idx) => (
-								// 		<div
-								// 			key={project.id}
-								// 			id={project.slug}
-								// 			onClick={() =>
-								// 				handleProjectClick(
-								// 					project.slug!,
-								// 				)
-								// 			}
-								// 		>
-								// 			<ProjectCard
-								// 				project={project as IProject}
-								// 				order={idx}
-								// 			/>
-								// 		</div>
-								// 	))}
-								// </Fragment>
+								<Fragment key={pageIndex}>
+									{page.data.map((project, idx) => (
+										<div
+											key={project.id}
+											id={project.slug}
+											onClick={() =>
+												handleProjectClick(
+													project.slug!,
+												)
+											}
+										>
+											<ProjectCard
+												project={project}
+												order={idx}
+											/>
+										</div>
+									))}
+								</Fragment>
 							))}
 						</ProjectsContainer>
 						{/* <FloatingButtonReferral /> */}
