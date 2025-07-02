@@ -176,6 +176,7 @@ export const AdminActions = () => {
 						setShowModal={setDeactivateModal}
 						projectId={projectData?.id}
 						onSuccess={fetchProjectBySlug}
+						isCause={isCause}
 					/>
 				)}
 				{showShareModal && (

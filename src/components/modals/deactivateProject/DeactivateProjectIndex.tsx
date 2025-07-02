@@ -7,6 +7,7 @@ import {
 	semanticColors,
 } from '@giveth/ui-design-system';
 
+import { useIntl } from 'react-intl';
 import { client } from '@/apollo/apolloClient';
 import {
 	DEACTIVATE_PROJECT,
@@ -19,7 +20,7 @@ import { IModal } from '@/types/common';
 import { useAppDispatch, useAppSelector } from '@/features/hooks';
 import { setShowSignWithWallet } from '@/features/modal/modal.slice';
 import DoneContent from './DoneContent';
-import DeactivatingContent from './DeactivatingContent';
+import DeactivatingContent from '@/components/modals/deactivateProject/DeactivatingContent';
 import WhyContent from './WhyContent';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
 
@@ -37,13 +38,16 @@ const buttonLabels: { [key: string]: string }[] = [
 interface IDeactivateProjectModal extends IModal {
 	onSuccess: () => Promise<void>;
 	projectId?: string;
+	isCause?: boolean;
 }
 
 const DeactivateProjectModal: FC<IDeactivateProjectModal> = ({
 	projectId,
 	setShowModal,
 	onSuccess,
+	isCause = false,
 }) => {
+	const { formatMessage } = useIntl();
 	const [tab, setTab] = useState<number>(0);
 	const [motive, setMotive] = useState<string>('');
 	const [reasons, setReasons] = useState<ISelectObj[]>([]);
@@ -106,13 +110,19 @@ const DeactivateProjectModal: FC<IDeactivateProjectModal> = ({
 			closeModal={closeModal}
 			isAnimating={isAnimating}
 			headerIcon={<IconArchiving />}
-			headerTitle='Deactivating project'
+			headerTitle={
+				isCause
+					? formatMessage({
+							id: 'label.cause.deactivate_cause_modal.title',
+						})
+					: formatMessage({ id: 'label.project.deactivate_project' })
+			}
 			headerTitlePosition='left'
 		>
 			<Wrapper>
 				<FormProgress progress={tab} steps={formSteps} />
 				<TextWrapper>
-					{tab === 0 && <DeactivatingContent />}
+					{tab === 0 && <DeactivatingContent isCause={isCause} />}
 					{tab === 1 && (
 						<WhyContent
 							handleChange={handleChange}
@@ -128,8 +138,20 @@ const DeactivateProjectModal: FC<IDeactivateProjectModal> = ({
 					<QuestionBadge />
 					<GLink>
 						{tab < 2
-							? 'You can reactivate later from your projects section under your account space!'
-							: 'Your project is deactivated now, you can still find it on your own projects.'}
+							? isCause
+								? formatMessage({
+										id: 'label.cause.deactivate_cause_modal.description',
+									})
+								: formatMessage({
+										id: 'label.project.deactivate_project_modal.description',
+									})
+							: isCause
+								? formatMessage({
+										id: 'label.cause.deactivate_cause_modal.description_2',
+									})
+								: formatMessage({
+										id: 'label.project.deactivate_project_modal.description_2',
+									})}
 					</GLink>
 				</GivBackNotif>
 				{tab < 2 && (
