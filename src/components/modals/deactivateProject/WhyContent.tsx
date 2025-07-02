@@ -14,6 +14,7 @@ interface IWhyContent {
 	options: ISelectObj[];
 	selectedOption: ISelectObj | void;
 	textInput: string;
+	isCause: boolean;
 }
 
 const WhyContent = ({
@@ -29,12 +30,18 @@ const WhyContent = ({
 		<>
 			<Lead>
 				{formatMessage({
-					id: 'label.project.deactivate_project_modal.why_description',
+					id: isCause
+						? 'label.cause.deactivate_cause_modal.why_description'
+						: 'label.project.deactivate_project_modal.why_description',
 				})}
 			</Lead>
 			<Select
 				options={options}
-				placeholder='Select a reason for deactivating'
+				placeholder={formatMessage({
+					id: isCause
+						? 'label.cause.deactivate_cause_modal.select_reason'
+						: 'label.project.deactivate_project_modal.select_reason',
+				})}
 				styles={selectCustomStyles}
 				value={selectedOption}
 				onChange={e => handleSelect(e)}

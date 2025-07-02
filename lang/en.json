@@ -1790,6 +1790,7 @@
 	"label.project.deactivate_project_modal.description_5": "Your project will be accessible only via direct link and donations will be disabled",
 	"label.project.deactivate_project_modal.description_6": "If you decide to activate it later, your project will have to be reviewed again",
 	"label.project.deactivate_project_modal.why_description": "Please let us know why you are deactivating this project!",
+	"label.project.deactivate_project_modal.select_reason": "Select a reason for deactivating",
 	"label.cause.description": "A collection of projects that share a common goal, vision or theme",
 	"label.causes": "Causes",
 	"label.cause": "Cause",
@@ -1925,5 +1926,7 @@
 	"label.cause.deactivate_cause_modal.description_3": "Your cause will be unlisted from Giveth",
 	"label.cause.deactivate_cause_modal.description_4": "All donors will be notified about this action",
 	"label.cause.deactivate_cause_modal.description_5": "Your cause will be accessible only via direct link and donations will be disabled",
-	"label.cause.deactivate_cause_modal.description_6": "If you decide to activate it later, your cause will have to be reviewed again"
+	"label.cause.deactivate_cause_modal.description_6": "If you decide to activate it later, your cause will have to be reviewed again",
+	"label.cause.deactivate_cause_modal.why_description": "Please let us know why you are deactivating this cause!",
+	"label.cause.deactivate_cause_modal.select_reason": "Select a reason for deactivating"
 }

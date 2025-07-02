@@ -21,7 +21,7 @@ import { useAppDispatch, useAppSelector } from '@/features/hooks';
 import { setShowSignWithWallet } from '@/features/modal/modal.slice';
 import DoneContent from './DoneContent';
 import DeactivatingContent from '@/components/modals/deactivateProject/DeactivatingContent';
-import WhyContent from './WhyContent';
+import WhyContent from '@/components/modals/deactivateProject/WhyContent';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
 
 export interface ISelectObj {
@@ -130,6 +130,7 @@ const DeactivateProjectModal: FC<IDeactivateProjectModal> = ({
 							options={reasons}
 							selectedOption={selectedReason}
 							textInput={motive}
+							isCause={isCause}
 						/>
 					)}
 					{tab === 2 && <DoneContent />}
