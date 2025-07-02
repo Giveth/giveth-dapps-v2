@@ -1856,5 +1856,7 @@
 	"label.cause.projects_required": "Els projectes són obligatoris",
 	"label.cause.transaction_status_required": "L'estat de la transacció és obligatori",
 	"label.cause.form_errors_before_submitting": "Soluciona els errors abans d’enviar",
-	"label.cause.failed_to_create_cause": "No s’ha pogut crear la causa. Torna-ho a provar."
+	"label.cause.failed_to_create_cause": "No s’ha pogut crear la causa. Torna-ho a provar.",
+	"label.you_can_now_view_it": "També pots accedir a la teva causa des del teu compte i compartir-la amb els teus amics.",
+    "label.view_cause": "VEURE LA MEVA CAUSA"
 }

@@ -96,7 +96,7 @@ const CreateCause: FC<ICreateCauseProps> = () => {
 			[EInputs.transactionHash]: '',
 			[EInputs.transactionStatus]: '',
 		});
-		localStorage.removeItem(StorageLabel.CREATE_CAUSE_FORM);
+		//localStorage.removeItem(StorageLabel.CREATE_CAUSE_FORM);
 	};
 
 	// Validate form data
@@ -197,7 +197,10 @@ const CreateCause: FC<ICreateCauseProps> = () => {
 
 			const cause = await addCauseMutation({ variables: causeData });
 
-			console.log('🧪 cause', cause);
+			localStorage.setItem(
+				'causeProjectsCount',
+				String(cause.data.createCause.activeProjectsCount ?? 0),
+			);
 
 			clearStorage();
 

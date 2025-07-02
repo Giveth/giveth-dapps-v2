@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
 	brandColors,
 	Button,
@@ -13,6 +13,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import styled from 'styled-components';
 import { useIntl } from 'react-intl';
+import { useRouter } from 'next/router';
 import { ICause } from '@/apollo/types/types';
 import { slugToCauseView } from '@/lib/routeCreators';
 import SocialBox from '@/components/SocialBox';
@@ -25,7 +26,7 @@ import CongratsAnimation from '@/animations/congrats.json';
 import LottieControl from '@/components/LottieControl';
 import { EContentType } from '@/lib/constants/shareContent';
 import NotAvailableHandler from '@/components/NotAvailableHandler';
-import ProjectCard from '@/components/project-card/ProjectCard';
+import ProjectCard from '@/components/project-card/ProjectCardAlt';
 
 interface IProps {
 	cause?: ICause;
@@ -33,6 +34,16 @@ interface IProps {
 }
 
 const SuccessfulCauseCreation = ({ cause, isLoading }: IProps) => {
+	const router = useRouter();
+	const [projectsCount, setProjectsCount] = useState(0);
+
+	useEffect(() => {
+		const count = localStorage.getItem('causeProjectsCount');
+		if (count) {
+			setProjectsCount(parseInt(count, 10));
+			//localStorage.removeItem('causeProjectsCount');
+		}
+	}, []);
 	const dispatch = useAppDispatch();
 	const { formatMessage } = useIntl();
 
@@ -47,6 +58,7 @@ const SuccessfulCauseCreation = ({ cause, isLoading }: IProps) => {
 	if (!cause) return <NotAvailableHandler isProjectLoading={isLoading} />;
 
 	const causePath = slugToCauseView(cause.slug!);
+	console.log('Active Projects Count from query:', projectsCount);
 
 	return (
 		<Wrapper>
@@ -68,7 +80,13 @@ const SuccessfulCauseCreation = ({ cause, isLoading }: IProps) => {
 
 				<Row>
 					<Left xs={12} md={6}>
-						<ProjectCard project={cause} />
+						<CardWrapper>
+							<ProjectCard
+								project={cause}
+								isNew={true}
+								projectsCount={projectsCount}
+							/>
+						</CardWrapper>
 					</Left>
 
 					<Right xs={12} md={6}>
@@ -170,5 +188,18 @@ const ConfettiContainer = styled.div`
 	position: absolute;
 	z-index: -1;
 `;
-
+const CardWrapper = styled.div`
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+`;
+const ProjectCountLabel = styled.span`
+	font-size: 14px;
+	font-weight: 500;
+	color: #8c8c8c;
+	width: 100%;
+	text-align: left;
+	margin-top: 12px;
+	padding-left: 12px;
+`;
 export default SuccessfulCauseCreation;
