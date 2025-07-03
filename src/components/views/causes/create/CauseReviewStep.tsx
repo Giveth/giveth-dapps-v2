@@ -41,13 +41,20 @@ import {
 	checkTokenApproval,
 	transferToken,
 } from './helpers';
+import { gToast, ToastType } from '@/components/toasts';
+import { showToastError } from '@/lib/helpers';
 
 interface IProps {
 	onPrevious: () => void;
 	slug?: string;
+	setCurrentStep: (step: number) => void;
 }
 
-export const CauseReviewStep = ({ onPrevious, slug }: IProps) => {
+export const CauseReviewStep = ({
+	onPrevious,
+	slug,
+	setCurrentStep,
+}: IProps) => {
 	const { formatMessage } = useIntl();
 	const {
 		getValues,
@@ -362,27 +369,34 @@ export const CauseReviewStep = ({ onPrevious, slug }: IProps) => {
 			setValue('transactionError', '');
 			setLunchStatus('transfer_success');
 			setIsLaunching(false);
-			handleLaunchComplete();
+
+			// Show success toast
+			gToast(formatMessage({ id: 'label.cause.launch_successful' }), {
+				type: ToastType.SUCCESS,
+				title: 'Success',
+				position: 'top-center',
+			});
+
+			setShowLaunchModal(false);
+
+			// Submit form — triggers redirection in CreateCause
+			setCurrentStep(3);
+			handleSubmit(() => {})();
 		} catch (error) {
 			console.error('Transfer failed:', error);
+			const errMsg = (error as Error)?.message || 'Transfer failed';
 			setLunchStatus('transfer_failed');
-			setValue(
-				'transactionError',
-				(error as Error)?.message || 'Transfer failed',
-			);
+			setValue('transactionError', errMsg);
 			setIsLaunching(false);
-		}
-	};
 
-	// Handle launch complete - submit form
-	const handleLaunchComplete = () => {
-		const form = document.querySelector('form');
-		if (form) {
-			const submitEvent = new Event('submit', {
-				bubbles: true,
-				cancelable: true,
-			});
-			form.dispatchEvent(submitEvent);
+			// Optional: Show rejection error toast
+			if (errMsg.toLowerCase().includes('user rejected')) {
+				showToastError(
+					formatMessage({ id: 'label.cause.transaction_rejected' }),
+				);
+			} else {
+				showToastError(errMsg);
+			}
 		}
 	};
 
@@ -637,7 +651,7 @@ export const CauseReviewStep = ({ onPrevious, slug }: IProps) => {
 					transactionError={transactionError}
 					handleApproval={handleApproval}
 					handleTransfer={handleTransfer}
-					handleLaunchComplete={handleLaunchComplete}
+					//handleLaunchComplete={handleLaunchComplete}
 				/>
 			)}
 		</StyledContainer>
@@ -814,3 +828,6 @@ const NetworkLink = styled.a`
 		text-decoration: underline;
 	}
 `;
+function showToastSuccess(arg0: string) {
+	throw new Error('Function not implemented.');
+}

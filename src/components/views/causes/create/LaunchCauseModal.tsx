@@ -34,7 +34,7 @@ interface ILaunchCauseModalProps extends IModal {
 	transactionError?: string;
 	handleApproval?: () => void;
 	handleTransfer?: () => void;
-	handleLaunchComplete?: () => void;
+	//handleLaunchComplete?: () => void;
 }
 
 const LaunchCauseModal: FC<ILaunchCauseModalProps> = ({
@@ -46,7 +46,7 @@ const LaunchCauseModal: FC<ILaunchCauseModalProps> = ({
 	transactionError,
 	handleApproval,
 	handleTransfer,
-	handleLaunchComplete,
+	//handleLaunchComplete,
 }) => {
 	const { chain } = useAccount();
 	const currentNetworkId = chain?.id;
@@ -91,15 +91,6 @@ const LaunchCauseModal: FC<ILaunchCauseModalProps> = ({
 			lunchStatus === 'transfer_failed'
 		) {
 			handleTransfer?.();
-		}
-
-		// Finally try to launch the cause
-		if (
-			lunchStatus === 'transfer_success' &&
-			transactionHash &&
-			transactionStatus === 'success'
-		) {
-			handleLaunchComplete?.();
 		}
 	};
 
@@ -224,17 +215,15 @@ const LaunchCauseModal: FC<ILaunchCauseModalProps> = ({
 							</P>
 						</InfoMessage>
 					)}
-					<LaunchButton
-						loading={isLaunching}
-						buttonType={
-							lunchStatus || transactionStatus === 'success'
-								? 'primary'
-								: 'secondary'
-						}
-						disabled={false}
-						label={buttonText()}
-						onClick={handleLaunch}
-					/>
+					{lunchStatus !== 'transfer_success' &&
+						transactionStatus !== 'success' && (
+							<LaunchButton
+								loading={isLaunching}
+								buttonType='primary'
+								label={buttonText()}
+								onClick={handleLaunch}
+							/>
+						)}
 				</Buttons>
 			</LaunchContainer>
 		</Modal>

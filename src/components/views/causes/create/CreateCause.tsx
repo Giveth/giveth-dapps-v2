@@ -14,7 +14,7 @@ import { gToast, ToastType } from '@/components/toasts';
 import { EInputs, TCauseInputs } from '@/components/views/causes/create/types';
 import config from '@/configuration';
 import { CREATE_CAUSE } from '@/apollo/gql/gqlCauses';
-import { CauseReviewStep } from './CauseReviewStep';
+import { CauseReviewStep } from '@/components/views/causes/create/CauseReviewStep';
 import { slugToSuccessCauseView } from '@/lib/routeCreators';
 
 interface ICreateCauseProps {
@@ -260,6 +260,7 @@ const CreateCause: FC<ICreateCauseProps> = () => {
 						<CauseReviewStep
 							onPrevious={handlePreviousStep}
 							slug={createdSlug}
+							setCurrentStep={setCurrentStep}
 						/>
 					)}
 				</form>
