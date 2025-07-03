@@ -187,8 +187,6 @@ const CreateCause: FC<ICreateCauseProps> = () => {
 				depositTxChainId: formDataWatch.transactionNetworkId,
 			};
 
-			console.log('🧪 causeData', causeData);
-
 			const cause = await addCauseMutation({
 				variables: causeData,
 			});
