@@ -44,11 +44,7 @@ export const CauseInformationStep = ({
 		descriptionValue.replace(/<[^>]*>/g, '').trim().length >= 2000;
 
 	const handleContinue = () => {
-		console.log('titleValue', titleValue);
-		console.log('isValid', isValid);
-		console.log('isDescriptionValid', isDescriptionValid);
 		if (titleValue?.trim() && isValid && isDescriptionValid) {
-			console.log('onNext');
 			onNext();
 		}
 	};

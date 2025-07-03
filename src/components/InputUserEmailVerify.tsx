@@ -306,7 +306,7 @@ const InputUserEmailVerify = forwardRef<HTMLInputElement, InputType>(
 					resetCoolDown();
 					showToastError(error.message);
 				}
-				console.log(error);
+				console.error(error);
 			}
 		};
 

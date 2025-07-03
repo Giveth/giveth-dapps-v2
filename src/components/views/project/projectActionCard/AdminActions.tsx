@@ -54,8 +54,6 @@ export const AdminActions = () => {
 	} = useProjectContext();
 	const project = projectData!;
 
-	console.log('🧪 isCause', isCause);
-
 	const { slug, isGivbackEligible, verificationFormStatus } = project;
 	const { formatMessage } = useIntl();
 	const router = useRouter();

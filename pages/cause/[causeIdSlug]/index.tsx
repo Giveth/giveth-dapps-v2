@@ -24,8 +24,6 @@ export async function getServerSideProps(props: {
 		const { query } = props;
 		const slug = decodeURI(query.causeIdSlug).replace(/\s/g, '');
 
-		console.log('🧪 slug', slug);
-
 		const { data } = await client.query({
 			query: FETCH_PROJECT_BY_SLUG_SINGLE_PROJECT,
 			variables: { slug },

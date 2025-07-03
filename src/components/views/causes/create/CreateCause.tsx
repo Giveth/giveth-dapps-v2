@@ -172,13 +172,6 @@ const CreateCause: FC<ICreateCauseProps> = () => {
 		setIsSubmitting(true);
 
 		try {
-			console.log('🧪 formDataWatch', formDataWatch);
-
-			// REMOVE AFTER BE FIX IT
-			await new Promise(resolve => setTimeout(resolve, 7000));
-
-			console.log('🧪 after 7 seconds');
-
 			const causeData: ICauseCreation = {
 				title: formDataWatch.title,
 				description: formDataWatch.description,
@@ -196,8 +189,6 @@ const CreateCause: FC<ICreateCauseProps> = () => {
 			};
 
 			const cause = await addCauseMutation({ variables: causeData });
-
-			console.log('🧪 cause', cause);
 
 			clearStorage();
 
