@@ -36,7 +36,7 @@ const ProjectTabs = (props: IProjectTabs) => {
 		{
 			title: isCause ? 'label.projects' : 'label.updates',
 			badge: isCause
-				? projectData?.projects?.length
+				? projectData?.causeProjects?.length
 				: totalProjectUpdates,
 			query: isCause
 				? EProjectPageTabs.PROJECTS
