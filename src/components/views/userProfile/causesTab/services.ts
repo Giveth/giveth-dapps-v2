@@ -1,10 +1,10 @@
 import { client } from '@/apollo/apolloClient';
-import { IOrder } from './type';
 import { FETCH_USER_PROJECTS } from '@/apollo/gql/gqlUser';
-import { userProjectsPerPage } from './constants';
 import { IProject } from '@/apollo/types/types';
+import { IOrder } from '../projectsTab/type';
+import { userProjectsPerPage } from '../projectsTab/constants';
 
-export const fetchUserProjects = async (
+export const fetchUserCauses = async (
 	userId: string,
 	page: number,
 	order: IOrder,
@@ -17,7 +17,7 @@ export const fetchUserProjects = async (
 			skip: page * userProjectsPerPage,
 			orderBy: order.by,
 			direction: order.direction,
-			projectType: 'project',
+			projectType: 'cause',
 		},
 		fetchPolicy: 'network-only',
 	});

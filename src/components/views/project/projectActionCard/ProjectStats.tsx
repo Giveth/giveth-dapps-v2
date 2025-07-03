@@ -29,9 +29,13 @@ export const ProjectStats = () => {
 							direction='bottom'
 						>
 							<StatTooltip>
-								{formatMessage({
-									id: 'component.project-stats.status.tooltip',
-								})}
+								{isCause
+									? formatMessage({
+											id: 'label.cause.cause_status.tooltip',
+										})
+									: formatMessage({
+											id: 'component.project-stats.status.tooltip',
+										})}
 							</StatTooltip>
 						</IconWithTooltip>
 					</Flex>
@@ -45,9 +49,13 @@ export const ProjectStats = () => {
 							direction='bottom'
 						>
 							<StatTooltip>
-								{formatMessage({
-									id: 'component.project-stats.listing.tooltip',
-								})}
+								{isCause
+									? formatMessage({
+											id: 'label.cause.cause_listing.tooltip',
+										})
+									: formatMessage({
+											id: 'component.project-stats.listing.tooltip',
+										})}
 							</StatTooltip>
 						</IconWithTooltip>
 					</Flex>

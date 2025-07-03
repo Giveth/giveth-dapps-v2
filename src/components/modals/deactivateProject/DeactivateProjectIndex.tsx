@@ -29,12 +29,6 @@ export interface ISelectObj {
 	label: string;
 }
 
-const buttonLabels: { [key: string]: string }[] = [
-	{ confirm: 'okay, do it', cancel: "nope, don't do it" },
-	{ confirm: 'deactivate this project', cancel: 'cancel' },
-	{ confirm: '', cancel: 'close' },
-];
-
 interface IDeactivateProjectModal extends IModal {
 	onSuccess: () => Promise<void>;
 	projectId?: string;
@@ -48,6 +42,20 @@ const DeactivateProjectModal: FC<IDeactivateProjectModal> = ({
 	isCause = false,
 }) => {
 	const { formatMessage } = useIntl();
+	const buttonLabels: { [key: string]: string }[] = [
+		{ confirm: 'okay, do it', cancel: "nope, don't do it" },
+		{
+			confirm: isCause
+				? formatMessage({
+						id: 'label.cause.deactivate_cause_modal.confirm',
+					})
+				: formatMessage({
+						id: 'label.project.deactivate_project_modal.confirm',
+					}),
+			cancel: 'cancel',
+		},
+		{ confirm: '', cancel: 'close' },
+	];
 	const [tab, setTab] = useState<number>(0);
 	const [motive, setMotive] = useState<string>('');
 	const [reasons, setReasons] = useState<ISelectObj[]>([]);
@@ -62,6 +70,9 @@ const DeactivateProjectModal: FC<IDeactivateProjectModal> = ({
 	const fetchReasons = async () => {
 		const { data } = await client.query({
 			query: GET_STATUS_REASONS,
+			variables: {
+				statusId: isCause ? 7 : 6,
+			},
 		});
 		const fetchedReasons = data.getStatusReasons.map((elem: any) => ({
 			label: elem.description,

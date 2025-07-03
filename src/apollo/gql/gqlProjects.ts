@@ -734,8 +734,8 @@ export const UNLIKE_PROJECT_MUTATION = gql`
 `;
 
 export const GET_STATUS_REASONS = gql`
-	query {
-		getStatusReasons(statusId: 6) {
+	query GetStatusReasons($statusId: Int!) {
+		getStatusReasons(statusId: $statusId) {
 			id
 			description
 			status {

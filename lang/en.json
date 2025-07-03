@@ -1791,6 +1791,7 @@
 	"label.project.deactivate_project_modal.description_6": "If you decide to activate it later, your project will have to be reviewed again",
 	"label.project.deactivate_project_modal.why_description": "Please let us know why you are deactivating this project!",
 	"label.project.deactivate_project_modal.select_reason": "Select a reason for deactivating",
+	"label.project.deactivate_project_modal.confirm": "deactivate this project",
 	"label.cause.description": "A collection of projects that share a common goal, vision or theme",
 	"label.causes": "Causes",
 	"label.cause": "Cause",
@@ -1920,6 +1921,8 @@
 	"label.cause.owner_banner": "As the cause owner, only you can see your cause in this view",
 	"label.cause.not_active": "This cause is not active.",
 	"label.cause.cause_status": "Cause Status",
+	"label.cause.cause_status.tooltip": "The status of your cause. If it is active, it means that it is currently receiving donations and is available to the public. If it is inactive, it means that it is not currently receiving donations and is not available to the public.",
+	"label.cause.cause_listing.tooltip": "The listing status of your cause. If it is listed, it means that it is currently available to the public. If it is unlisted, it means that it is not currently available to the public.",
 	"label.cause.deactivate_cause_modal.title": "Deactivate Cause",
 	"label.cause.deactivate_cause_modal.description": "You can reactivate later from your causes section under your account space!",
 	"label.cause.deactivate_cause_modal.description_2": "Your cause is deactivated now, you can still find it on your own causes.",
@@ -1928,5 +1931,11 @@
 	"label.cause.deactivate_cause_modal.description_5": "Your cause will be accessible only via direct link and donations will be disabled",
 	"label.cause.deactivate_cause_modal.description_6": "If you decide to activate it later, your cause will have to be reviewed again",
 	"label.cause.deactivate_cause_modal.why_description": "Please let us know why you are deactivating this cause!",
-	"label.cause.deactivate_cause_modal.select_reason": "Select a reason for deactivating"
+	"label.cause.deactivate_cause_modal.select_reason": "Select a reason for deactivating",
+	"label.cause.deactivate_cause_modal.confirm": "deactivate this cause",
+	"label.cause.your_cause_hasnt_received_any_boosts_yet": "Your cause hasn't received any boosts yet",
+	"label.cause.share_this_cause_on_social_media_and_ask_friends_for_a_boost": "Share this cause on social media and ask friends for a boost",
+	"label.cause.this_cause_doesnt_have_any_givpower_behind_it": "This cause doesn't have any GIVpower behind it",
+	"label.cause.get_rewarded_with_up_to_percent_of_your_donation_value": "Get rewarded with up to {percent}% of your donation value!",
+	"label.cause.donations_of_5_or_more_are_eligible_for_givbacks": "Donations of $5 or more are eligible for GIVbacks. Boost this Cause to increase its rewards percentage and visibility on the Causes page!"
 }
