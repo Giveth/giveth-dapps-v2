@@ -183,7 +183,9 @@ export const AdminActions = () => {
 						setShowModal={setShowShareModal}
 						projectHref={slug}
 						isCause={isCause}
-						numberOfProjects={projectData?.projects?.length || 0}
+						numberOfProjects={
+							projectData?.causeProjects?.length || 0
+						}
 					/>
 				)}
 				{showClaimModal && (
