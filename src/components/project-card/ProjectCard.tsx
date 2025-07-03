@@ -67,6 +67,8 @@ interface IRecurringDonation {
 const ProjectCard = (props: IProjectCard) => {
 	const { project, className } = props;
 
+	console.log('🧪 project', project);
+
 	const {
 		id,
 		title,
@@ -243,6 +245,7 @@ const ProjectCard = (props: IProjectCard) => {
 									sumDonationValueUsdForActiveQfRound || 0
 								}
 								countUniqueDonors={countUniqueDonors || 0}
+								isCause={projectType === EProjectType.CAUSE}
 							/>
 						)}
 						{activeStartedRound && (

@@ -300,6 +300,27 @@ export const FETCH_PROJECT_BY_SLUG_SINGLE_PROJECT = gql`
 			totalDonations
 			description
 			projectType
+			causeProjects {
+				id
+				project {
+					id
+					title
+					image
+					slug
+					verified
+					isGivbackEligible
+					totalDonations
+					description
+					projectType
+					descriptionSummary
+					adminUser {
+						id
+						name
+						walletAddress
+						avatar
+					}
+				}
+			}
 			addresses {
 				address
 				isRecipient

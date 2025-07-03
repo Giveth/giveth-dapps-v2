@@ -95,6 +95,12 @@ export interface IProject {
 	anchorContracts: IAnchorContractData[];
 	socialMedia: IProjectSocialMedia[];
 	projectType: EProjectType;
+	causeProjects?: ICauseProject[];
+}
+
+export interface ICauseProject {
+	id: string;
+	project: IProject;
 }
 
 export enum EProjectsFilter {

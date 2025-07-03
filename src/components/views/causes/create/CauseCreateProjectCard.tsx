@@ -134,6 +134,7 @@ export const CauseCreateProjectCard: FC<{
 									sumDonationValueUsdForActiveQfRound || 0
 								}
 								countUniqueDonors={countUniqueDonors || 0}
+								isCause={false}
 							/>
 						)}
 						{activeStartedRound && (
