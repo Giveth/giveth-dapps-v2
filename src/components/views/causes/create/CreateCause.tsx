@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/rules-of-hooks */
-import { useState, FC, useEffect } from 'react';
+import { useState, FC, useEffect, useRef } from 'react';
 import { useIntl } from 'react-intl';
 import { useRouter } from 'next/router';
 import { useForm, FormProvider } from 'react-hook-form';
@@ -21,14 +21,6 @@ interface ICreateCauseProps {
 	project?: ICauseEdition;
 }
 
-// Custom success toast function
-const showToastSuccess = (message: string) => {
-	gToast(message, {
-		type: ToastType.SUCCESS,
-		position: 'top-center',
-	});
-};
-
 const CreateCause: FC<ICreateCauseProps> = () => {
 	// Get current account and chain for gas estimation
 
@@ -36,7 +28,6 @@ const CreateCause: FC<ICreateCauseProps> = () => {
 	const router = useRouter();
 	const [currentStep, setCurrentStep] = useState(1);
 	const [isSubmitting, setIsSubmitting] = useState(false);
-	const [createdSlug, setCreatedSlug] = useState('');
 	const [addCauseMutation] = useMutation(CREATE_CAUSE);
 
 	// Load storage data
@@ -46,6 +37,8 @@ const CreateCause: FC<ICreateCauseProps> = () => {
 	if (storedCause) {
 		storageCauseData = JSON.parse(storedCause);
 	}
+
+	const formRef = useRef<HTMLFormElement>(null);
 
 	const {
 		title: storageTitle,
@@ -84,8 +77,8 @@ const CreateCause: FC<ICreateCauseProps> = () => {
 	}, [formDataWatch]);
 
 	// Function to clear storage (call this when form is submitted or cancelled)
+	// Reset form to prevent useEffect from re-saving
 	const clearStorage = () => {
-		// Reset form to prevent useEffect from re-saving
 		formMethods.reset({
 			[EInputs.title]: '',
 			[EInputs.description]: '',
@@ -96,7 +89,6 @@ const CreateCause: FC<ICreateCauseProps> = () => {
 			[EInputs.transactionHash]: '',
 			[EInputs.transactionStatus]: '',
 		});
-		//localStorage.removeItem(StorageLabel.CREATE_CAUSE_FORM);
 	};
 
 	// Validate form data
@@ -172,35 +164,34 @@ const CreateCause: FC<ICreateCauseProps> = () => {
 		setIsSubmitting(true);
 
 		try {
-			console.log('🧪 formDataWatch', formDataWatch);
+			setIsSubmitting(true);
 
-			// REMOVE AFTER BE FIX IT
-			await new Promise(resolve => setTimeout(resolve, 7000));
-
-			console.log('🧪 after 7 seconds');
+			const formValues = formMethods.getValues();
 
 			const causeData: ICauseCreation = {
-				title: formDataWatch.title,
-				description: formDataWatch.description,
+				title: formValues.title,
+				description: formValues.description,
 				chainId: 137,
-				bannerImage: formDataWatch.image,
+				bannerImage: formValues.image,
 				subCategories:
-					formDataWatch.categories?.map(category => category.name) ||
-					[],
+					formValues.categories?.map(category => category.name) || [],
 				projectIds:
-					formDataWatch.selectedProjects?.map(project =>
+					formValues.selectedProjects?.map(project =>
 						parseInt(project.id),
 					) || [],
-				depositTxHash: formDataWatch.transactionHash,
-				depositTxChainId: formDataWatch.transactionNetworkId,
+				depositTxHash: formValues.transactionHash,
+				depositTxChainId: formValues.transactionNetworkId,
 			};
 
 			const cause = await addCauseMutation({ variables: causeData });
 
+			// TODO: why we need this here?
 			localStorage.setItem(
 				'causeProjectsCount',
 				String(cause.data.createCause.activeProjectsCount ?? 0),
 			);
+
+			setIsSubmitting(false);
 
 			clearStorage();
 
@@ -222,6 +213,13 @@ const CreateCause: FC<ICreateCauseProps> = () => {
 		}
 	};
 
+	// If on step 3, trigger form submission logic directly
+	const handleLaunchComplete = () => {
+		if (formRef.current) {
+			formRef.current?.requestSubmit();
+		}
+	};
+
 	const steps = [
 		{
 			label: formatMessage({ id: 'label.cause.cause_information' }),
@@ -236,6 +234,7 @@ const CreateCause: FC<ICreateCauseProps> = () => {
 			step: 3,
 		},
 	];
+
 	return (
 		<>
 			<CreateCauseHeader
@@ -244,7 +243,7 @@ const CreateCause: FC<ICreateCauseProps> = () => {
 				setCurrentStep={setCurrentStep}
 			/>
 			<FormProvider {...formMethods}>
-				<form onSubmit={handleSubmit} noValidate>
+				<form ref={formRef} onSubmit={handleSubmit} noValidate>
 					{currentStep === 1 && (
 						<CauseInformationStep
 							onNext={() => setCurrentStep(3)}
@@ -259,7 +258,8 @@ const CreateCause: FC<ICreateCauseProps> = () => {
 					{currentStep === 3 && (
 						<CauseReviewStep
 							onPrevious={handlePreviousStep}
-							slug={createdSlug}
+							handleLaunchComplete={handleLaunchComplete}
+							isSubmitting={isSubmitting}
 						/>
 					)}
 				</form>
