@@ -1776,5 +1776,11 @@
 	"water-and-sanitation": "Water & Sanitation",
 	"label.donations_amplified": "Get your donations amplified by a {amount} matching pool",
 	"help_improve": "Help Us Improve Giveth!",
-	"help_improve_description": "Share your feedback in a quick survey and help us enhance the donor experience."
+	"help_improve_description": "Share your feedback in a quick survey and help us enhance the donor experience.",
+	"label.button.create": "create",
+	"label.project.description": "A project lets you share your mission and collect crypto donations transparently.",
+	"label.cause.description": "A collection of projects that share a common goal, vision or theme",
+	"label.causes": "Causes",
+	"label.cause": "Cause",
+	"label.causes_all": "All Causes"
 }

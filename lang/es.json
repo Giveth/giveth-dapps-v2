@@ -1776,5 +1776,11 @@
 	"water-and-sanitation": "Agua & Saneamiento",
 	"label.donations_amplified": "Haz que tus donaciones se amplifiquen con un fondo de igualación de {amount}",
 	"help_improve": "¡Ayúdanos a mejorar Giveth!",
-	"help_improve_description": "Comparte tu opinión en una encuesta rápida y ayúdanos a mejorar la experiencia de los donantes."
+	"help_improve_description": "Comparte tu opinión en una encuesta rápida y ayúdanos a mejorar la experiencia de los donantes.",
+	"label.button.create": "crear",
+	"label.project.description": "Un proyecto te permite compartir tu misión y recibir donaciones en criptomonedas de forma transparente.",
+	"label.cause.description": "Una colección de proyectos que comparten un objetivo, visión o tema común",
+	"label.causes": "Causas",
+	"label.cause": "Causa",
+	"label.causes_all": "Todas las causas"
 }

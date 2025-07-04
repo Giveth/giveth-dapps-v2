@@ -65,6 +65,9 @@ const Routes = {
 	PurchaseXdai: '/purchase-xdai',
 	Referral: '/referral',
 	Invoice: '/transaction',
+	AllCauses: '/causes/all',
+	Causes: '/causes',
+	CreateCause: '/causes/create',
 };
 
 export default Routes;
