@@ -15,7 +15,7 @@ import { hasActiveRound } from '@/helpers/qf';
 import { IconWithTooltip } from '@/components/IconWithToolTip';
 
 const ProjectBadges = () => {
-	const { projectData } = useProjectContext();
+	const { projectData, isCause } = useProjectContext();
 
 	const {
 		verified: projectVerified,
@@ -97,6 +97,13 @@ const ProjectBadges = () => {
 						wrapperColor={neutralColors.gray[900]}
 					/>
 				))}
+			{isCause && (
+				<ProjectBadge
+					badgeText={formatMessage({
+						id: 'label.cause',
+					})}
+				/>
+			)}
 		</CustomFlex>
 	);
 };

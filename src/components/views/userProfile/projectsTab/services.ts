@@ -17,6 +17,7 @@ export const fetchUserProjects = async (
 			skip: page * userProjectsPerPage,
 			orderBy: order.by,
 			direction: order.direction,
+			projectType: 'project',
 		},
 		fetchPolicy: 'network-only',
 	});

@@ -109,8 +109,6 @@ export default async function handler(
 ) {
 	const authHeader = req.headers['authorization'];
 
-	console.log('API route /api/generate-sitemap was called');
-
 	// Only allow GET requests
 	if (req.method !== 'POST') {
 		return res.status(405).end();

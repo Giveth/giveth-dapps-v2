@@ -23,7 +23,6 @@ const SubgraphController: React.FC = () => {
 				address: Address;
 			}>,
 		) => {
-			console.log('event', event);
 			const {
 				type,
 				chainId: eventChainId,
@@ -32,8 +31,6 @@ const SubgraphController: React.FC = () => {
 			} = event.detail;
 
 			if (type === 'success' && eventChainId) {
-				console.log('event.detail', event.detail);
-
 				// Reset refetchedChainsRef for the current chain ID
 				refetchedChainsRef.current.delete(eventChainId);
 				queryClient.setQueryData(

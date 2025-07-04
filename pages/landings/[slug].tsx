@@ -21,11 +21,6 @@ export const getServerSideProps: GetServerSideProps = async context => {
 		rules.notFound = true;
 	}
 
-	console.log('props', {
-		props: {},
-		...rules,
-	});
-
 	return {
 		props: {},
 		...rules,

@@ -23,6 +23,8 @@ import { IAdminUser, IProject } from '@/apollo/types/types';
 import { timeFromNow } from '@/lib/helpers';
 import ProjectCardImage from './ProjectCardImage';
 import {
+	slugToCauseDonate,
+	slugToCauseView,
 	slugToProjectDonate,
 	slugToProjectDonateStellar,
 	slugToProjectView,
@@ -37,6 +39,7 @@ import { client } from '@/apollo/apolloClient';
 import { ProjectCardTotalRaised } from './ProjectCardTotalRaised';
 import { ProjectCardTotalRaisedQF } from './ProjectCardTotalRaisedQF';
 import config from '@/configuration';
+import { EProjectType } from '@/apollo/types/gqlEnums';
 
 const cardRadius = '12px';
 const imgHeight = '226px';
@@ -64,6 +67,8 @@ interface IRecurringDonation {
 const ProjectCard = (props: IProjectCard) => {
 	const { project, className } = props;
 
+	console.log('🧪 project', project);
+
 	const {
 		id,
 		title,
@@ -80,6 +85,7 @@ const ProjectCard = (props: IProjectCard) => {
 		countUniqueDonors,
 		qfRounds,
 		countUniqueDonorsForActiveQfRound,
+		projectType,
 	} = project;
 	const [recurringDonationSumInQF, setRecurringDonationSumInQF] = useState(0);
 	const [isHover, setIsHover] = useState(false);
@@ -101,10 +107,16 @@ const ProjectCard = (props: IProjectCard) => {
 		activeStartedRound?.eligibleNetworks[0] ===
 			config.STELLAR_NETWORK_NUMBER;
 
-	const projectLink = slugToProjectView(slug);
+	const projectLink =
+		projectType === EProjectType.CAUSE
+			? slugToCauseView(slug)
+			: slugToProjectView(slug);
+
 	const donateLink = isStellarOnlyRound
 		? slugToProjectDonateStellar(slug)
-		: slugToProjectDonate(slug);
+		: projectType === EProjectType.CAUSE
+			? slugToCauseDonate(slug)
+			: slugToProjectDonate(slug);
 
 	// Show hint modal if the user clicks on the card and the round is not started
 	const handleClick = (e: any) => {
@@ -233,6 +245,10 @@ const ProjectCard = (props: IProjectCard) => {
 									sumDonationValueUsdForActiveQfRound || 0
 								}
 								countUniqueDonors={countUniqueDonors || 0}
+								projectsCount={
+									project.causeProjects?.length || 0
+								}
+								isCause={projectType === EProjectType.CAUSE}
 							/>
 						)}
 						{activeStartedRound && (
@@ -286,6 +302,13 @@ const ProjectCard = (props: IProjectCard) => {
 									<QFBadge>
 										{activeStartedRound?.name}
 									</QFBadge>
+								)}
+								{projectType === EProjectType.CAUSE && (
+									<CauseBadge>
+										{formatMessage({
+											id: 'label.cause',
+										})}
+									</CauseBadge>
 								)}
 							</Flex>
 						</PaddedRow>
@@ -487,6 +510,11 @@ const QFBadge = styled(Subline)`
 	border-radius: 16px;
 	display: flex;
 	align-items: center;
+`;
+
+const CauseBadge = styled(QFBadge)`
+	background-color: ${neutralColors.gray[800]};
+	color: ${neutralColors.gray[100]};
 `;
 
 export default ProjectCard;

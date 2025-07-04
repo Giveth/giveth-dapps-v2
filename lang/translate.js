@@ -24,7 +24,6 @@ async function translate(text, language) {
 		);
 
 		const spanishText = response.data.choices[0].text.trim();
-		console.log('Spanish Translation:', spanishText);
 		return spanishText;
 	} catch (error) {
 		console.error('Error translating to Spanish:', error);
@@ -34,8 +33,6 @@ async function translate(text, language) {
 function save(obj, name) {
 	// Write the sorted data back to the JSON file
 	fs.writeFileSync(name, JSON.stringify(obj, null, 2));
-
-	console.log('Saving completed!');
 }
 
 // const englishText = 'Hello, how are you?\nI am doing great.';
@@ -55,7 +52,6 @@ async function FillSpanishJsonFile() {
 		if (Object.hasOwnProperty.call(es, key)) {
 			const value = es[key];
 			if (value === '') {
-				console.log(key, en[key]);
 				es[key] = await translate(en[key], 'Spanish');
 			}
 		}
@@ -75,7 +71,6 @@ async function FillCatalanJsonFile() {
 		if (Object.hasOwnProperty.call(ct, key)) {
 			const value = ct[key];
 			if (value === '') {
-				console.log(key, en[key]);
 				ct[key] = await translate(en[key], 'Catalan');
 			}
 		}

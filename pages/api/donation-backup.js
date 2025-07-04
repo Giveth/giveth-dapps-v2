@@ -24,7 +24,7 @@ const handler = async (req, res) => {
 			});
 		}
 	} catch (error) {
-		console.log('Error in saving donation to DB', error);
+		console.error('Error in saving donation to DB', error);
 		captureException(
 			{
 				data: body,

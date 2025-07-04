@@ -26,7 +26,7 @@ const badgeCount = (count?: number) => {
 
 const ProjectTabs = (props: IProjectTabs) => {
 	const { activeTab, slug, verified } = props;
-	const { projectData, totalDonationsCount, boostersData } =
+	const { projectData, totalDonationsCount, boostersData, isCause } =
 		useProjectContext();
 	const { totalProjectUpdates } = projectData || {};
 	const { formatMessage } = useIntl();
@@ -34,9 +34,13 @@ const ProjectTabs = (props: IProjectTabs) => {
 	const tabsArray = [
 		{ title: 'label.about' },
 		{
-			title: 'label.updates',
-			badge: totalProjectUpdates,
-			query: EProjectPageTabs.UPDATES,
+			title: isCause ? 'label.projects' : 'label.updates',
+			badge: isCause
+				? projectData?.causeProjects?.length
+				: totalProjectUpdates,
+			query: isCause
+				? EProjectPageTabs.PROJECTS
+				: EProjectPageTabs.UPDATES,
 		},
 		{
 			title: 'label.donations',
@@ -52,13 +56,15 @@ const ProjectTabs = (props: IProjectTabs) => {
 			query: EProjectPageTabs.GIVPOWER,
 		});
 
+	const tabRoute = isCause ? Routes.Cause : Routes.Project;
+
 	return (
 		<Wrapper>
 			<InnerWrapper>
 				{tabsArray.map((i, index) => (
 					<LinkWrapper
 						key={i.title}
-						href={`${Routes.Project}/${slug}${
+						href={`${tabRoute}/${slug}${
 							i.query ? `?tab=${i.query}` : ''
 						}`}
 						scroll={false}

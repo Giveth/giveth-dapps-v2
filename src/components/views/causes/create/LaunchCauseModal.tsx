@@ -1,0 +1,358 @@
+import React, { FC } from 'react';
+import styled from 'styled-components';
+import {
+	brandColors,
+	IconDonation,
+	Lead,
+	neutralColors,
+	Button,
+	P,
+	H3,
+} from '@giveth/ui-design-system';
+import { useIntl } from 'react-intl';
+import { useFormContext } from 'react-hook-form';
+import { useAccount } from 'wagmi';
+import { Modal } from '@/components/modals/Modal';
+import { useModalAnimation } from '@/hooks/useModalAnimation';
+import { IModal } from '@/types/common';
+import { formatDonation } from '@/helpers/number';
+import { useTokenPrice } from '@/hooks/useTokenPrice';
+import config from '@/configuration';
+import { mediaQueries } from '@/lib/constants/constants';
+
+interface ILaunchCauseModalProps extends IModal {
+	isLaunching: boolean;
+	lunchStatus:
+		| 'approval'
+		| 'approval_success'
+		| 'approval_failed'
+		| 'transfer_success'
+		| 'transfer_failed'
+		| null;
+	transactionStatus?: 'pending' | 'success' | 'failed';
+	transactionHash?: string;
+	transactionError?: string;
+	handleApproval?: () => void;
+	handleTransfer?: () => void;
+	handleLaunchComplete?: () => void;
+}
+
+const LaunchCauseModal: FC<ILaunchCauseModalProps> = ({
+	setShowModal,
+	isLaunching,
+	lunchStatus,
+	transactionStatus,
+	transactionHash,
+	transactionError,
+	handleApproval,
+	handleTransfer,
+	handleLaunchComplete,
+}) => {
+	const { chain } = useAccount();
+	const currentNetworkId = chain?.id;
+
+	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
+	const { formatMessage } = useIntl();
+	const { getValues } = useFormContext();
+
+	// Check if current network supports cause creation
+	const supportedNetwork = config.CAUSES_CONFIG.launchNetworks.find(
+		network => network.network === currentNetworkId,
+	);
+
+	// Get launch token for current network
+	const launchToken = supportedNetwork?.token || '';
+
+	// Get token price using CoinGecko
+	const launchTokenPrice = useTokenPrice({
+		symbol: launchToken,
+		coingeckoId: supportedNetwork?.coingeckoId,
+	});
+
+	// Get values from form
+	const title = getValues('title');
+	const launchFee = config.CAUSES_CONFIG.launchFee;
+
+	// Calculate USD value of launch fee
+	const launchFeeUSD = launchTokenPrice
+		? (launchTokenPrice * launchFee).toFixed(2)
+		: '0.00';
+
+	// Handle launch flow
+	const handleLaunch = () => {
+		// First try to approve the token
+		if (lunchStatus === 'approval' || lunchStatus === 'approval_failed') {
+			handleApproval?.();
+		}
+
+		// Then try to transfer the token
+		if (
+			lunchStatus === 'approval_success' ||
+			lunchStatus === 'transfer_failed'
+		) {
+			handleTransfer?.();
+		}
+
+		// Finally try to launch the cause
+		if (
+			lunchStatus === 'transfer_success' &&
+			transactionHash &&
+			transactionStatus === 'success'
+		) {
+			handleLaunchComplete?.();
+		}
+	};
+
+	const buttonText = () => {
+		if (
+			lunchStatus === 'approval_failed' ||
+			lunchStatus === 'transfer_failed' ||
+			transactionStatus === 'failed'
+		) {
+			return formatMessage({ id: 'label.cause.try_again' });
+		}
+		if (lunchStatus === 'approval_success') {
+			return formatMessage({ id: 'label.cause.transfer' });
+		}
+		if (
+			lunchStatus === 'transfer_success' ||
+			transactionStatus === 'success'
+		) {
+			return formatMessage({ id: 'label.cause.launch_complete' });
+		}
+		return formatMessage({ id: 'label.approve' });
+	};
+
+	const getHeaderTitle = () => {
+		if (
+			lunchStatus === 'approval_failed' ||
+			lunchStatus === 'transfer_failed'
+		) {
+			return formatMessage({ id: 'label.cause.launch_failed' });
+		}
+		if (
+			lunchStatus === 'transfer_success' ||
+			transactionStatus === 'success'
+		) {
+			return formatMessage({ id: 'label.cause.launch_complete' });
+		}
+		if (lunchStatus === 'approval_success') {
+			return formatMessage({ id: 'label.cause.transfer' });
+		}
+		return formatMessage({ id: 'label.approve' });
+	};
+
+	const getLeadText = () => {
+		if (
+			lunchStatus === 'approval_failed' ||
+			lunchStatus === 'transfer_failed' ||
+			transactionStatus === 'failed'
+		) {
+			return formatMessage({ id: 'label.cause.launch_failed_desc' });
+		}
+		if (
+			lunchStatus === 'transfer_success' ||
+			transactionStatus === 'success'
+		) {
+			return formatMessage({ id: 'label.cause.launch_successful' });
+		}
+		return formatMessage({ id: 'label.cause.you_are_launching' });
+	};
+
+	return (
+		<Modal
+			closeModal={closeModal}
+			isAnimating={isAnimating}
+			headerTitlePosition='left'
+			headerIcon={<IconDonation size={32} />}
+			doNotCloseOnClickOutside={
+				isLaunching || transactionStatus === 'pending'
+			}
+			headerTitle={getHeaderTitle()}
+		>
+			<LaunchContainer>
+				<LaunchingBox>
+					<Lead>{getLeadText()}</Lead>
+					<LaunchSummary>
+						<TokenAmount>
+							{formatDonation(launchFee, '')} {launchToken}
+						</TokenAmount>
+						<UsdAmount>
+							<span>≈ ${launchFeeUSD} USD</span>
+						</UsdAmount>
+						<CauseTitle>to launch &quot;{title}&quot;</CauseTitle>
+					</LaunchSummary>
+					{transactionStatus === 'failed' && transactionError && (
+						<ErrorMessage>
+							<P>
+								{formatMessage({
+									id: 'label.cause.transaction_failed',
+								})}
+							</P>
+							<ErrorDetail>{transactionError}</ErrorDetail>
+						</ErrorMessage>
+					)}
+					{(lunchStatus === 'transfer_success' ||
+						transactionStatus === 'success') && (
+						<SuccessMessage>
+							<P>
+								{formatMessage({
+									id: 'label.cause.launch_success_message',
+								})}
+							</P>
+							{transactionHash && (
+								<TransactionHash>
+									<P>
+										{formatMessage({
+											id: 'label.cause.transaction_hash',
+										})}
+										: {transactionHash.slice(0, 10)}...
+										{transactionHash.slice(-8)}
+									</P>
+								</TransactionHash>
+							)}
+						</SuccessMessage>
+					)}
+				</LaunchingBox>
+				<Buttons>
+					{isLaunching && (
+						<InfoMessage>
+							<P>
+								{formatMessage({
+									id: 'label.cause.launch_processing',
+								})}
+							</P>
+						</InfoMessage>
+					)}
+					<LaunchButton
+						loading={isLaunching}
+						buttonType={
+							lunchStatus || transactionStatus === 'success'
+								? 'primary'
+								: 'secondary'
+						}
+						disabled={false}
+						label={buttonText()}
+						onClick={handleLaunch}
+					/>
+				</Buttons>
+			</LaunchContainer>
+		</Modal>
+	);
+};
+
+export default LaunchCauseModal;
+
+const LaunchContainer = styled.div`
+	padding: 24px;
+	display: flex;
+	flex-direction: column;
+	gap: 32px;
+	text-align: center;
+	min-width: 400px;
+	${mediaQueries.tablet} {
+		min-width: 500px;
+	}
+`;
+
+const LaunchingBox = styled.div`
+	display: flex;
+	flex-direction: column;
+	gap: 16px;
+`;
+
+const LaunchSummary = styled.div`
+	padding: 24px;
+	border-radius: 16px;
+	background-color: ${neutralColors.gray[100]};
+	border: 2px solid ${brandColors.giv[200]};
+`;
+
+const TokenAmount = styled(H3)`
+	font-family: 'TeX Gyre Adventor';
+	font-style: normal;
+	font-weight: 700;
+	font-size: 32px;
+	line-height: 38px;
+	letter-spacing: -0.005em;
+	color: ${brandColors.deep[600]};
+	margin-bottom: 8px;
+`;
+
+const UsdAmount = styled(P)`
+	font-style: normal;
+	font-weight: 400;
+	font-size: 16px;
+	line-height: 150%;
+	color: ${neutralColors.gray[700]};
+	margin-bottom: 16px;
+
+	span {
+		display: inline-block;
+		padding: 4px 8px;
+		border-radius: 8px;
+		background: ${neutralColors.gray[200]};
+		color: ${neutralColors.gray[900]};
+		font-weight: 500;
+	}
+`;
+
+const CauseTitle = styled(P)`
+	font-weight: 500;
+	font-size: 18px;
+	line-height: 150%;
+	color: ${brandColors.deep[600]};
+`;
+
+const SuccessMessage = styled.div`
+	padding: 16px;
+	border-radius: 8px;
+	background-color: ${brandColors.giv[200]};
+	border: 1px solid ${brandColors.giv[300]};
+`;
+
+const InfoMessage = styled.div`
+	padding: 12px;
+	border-radius: 8px;
+	background-color: ${brandColors.cyan[200]};
+	border: 1px solid ${brandColors.cyan[300]};
+`;
+
+const Buttons = styled.div`
+	display: flex;
+	flex-direction: column;
+	gap: 16px;
+	cursor: pointer;
+`;
+
+const LaunchButton = styled(Button)`
+	padding: 16px 32px;
+	font-size: 16px;
+	font-weight: 500;
+	cursor: pointer;
+`;
+
+const ErrorMessage = styled.div`
+	padding: 16px;
+	border-radius: 8px;
+	background-color: ${brandColors.pinky[200]};
+	border: 1px solid ${brandColors.pinky[400]};
+`;
+
+const ErrorDetail = styled.div`
+	margin-top: 8px;
+	font-size: 12px;
+	color: ${brandColors.pinky[600]};
+	font-family: monospace;
+	word-break: break-all;
+`;
+
+const TransactionHash = styled.div`
+	margin-top: 12px;
+	padding: 8px;
+	border-radius: 4px;
+	background-color: ${neutralColors.gray[200]};
+	font-family: monospace;
+	font-size: 12px;
+	color: ${neutralColors.gray[700]};
+`;

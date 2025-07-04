@@ -23,8 +23,6 @@ function findSameKeyValue(obj) {
 function save(obj, name) {
 	// Write the sorted data back to the JSON file
 	fs.writeFileSync(name, JSON.stringify(obj, null, 2));
-
-	console.log('Saving completed!');
 }
 
 const ntEs = findSameKeyValue(es);

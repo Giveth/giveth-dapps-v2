@@ -25,12 +25,17 @@ const NotAvailableHandler: FC<IProps> = ({
 	const router = useRouter();
 	const isEditRoute = router?.route.split('/').slice(-1)[0] === 'edit';
 	const isVerificationRoute = router?.route.indexOf(Routes.Verification) > -1;
+	const isCause = router?.route.indexOf(Routes.Cause) > -1;
 
 	const isOwner = compareAddresses(userData?.walletAddress, ownerAddress);
 
+	const messageId = isCause
+		? 'label.cause.cause_not_available'
+		: 'label.project_not_available';
+
 	let description: string | JSX.Element = (
 		<>
-			{formatMessage({ id: 'label.project_not_available' })}
+			{formatMessage({ id: messageId })}
 			{isCancelled && (
 				<>
 					<br />

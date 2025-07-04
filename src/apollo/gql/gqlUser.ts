@@ -43,12 +43,14 @@ export const FETCH_USER_PROJECTS = gql`
 		$userId: Int!
 		$orderBy: OrderField!
 		$direction: OrderDirection!
+		$projectType: String!
 	) {
 		projectsByUserId(
 			take: $take
 			skip: $skip
 			userId: $userId
 			orderBy: { field: $orderBy, direction: $direction }
+			projectType: $projectType
 		) {
 			projects {
 				...ProjectCardFields

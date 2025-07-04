@@ -25,7 +25,6 @@ interface IProjectsItems {
 
 export const projectsItems = {
 	explore: [
-		// { name: 'Trending', query: '?q=?q=trending' },
 		{
 			name: 'All Projects',
 			url: Routes.AllProjects,

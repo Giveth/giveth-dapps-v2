@@ -15,13 +15,13 @@ import React, { FC, useState } from 'react';
 import { useIntl } from 'react-intl';
 import { useRouter } from 'next/router';
 import styled from 'styled-components';
-import { useAccount, useSwitchChain } from 'wagmi';
+import { useAccount } from 'wagmi';
 import { useProjectContext } from '@/context/project.context';
 import { VerificationModal } from '@/components/modals/VerificationModal';
 import DeactivateProjectModal from '@/components/modals/deactivateProject/DeactivateProjectIndex';
 import { capitalizeAllWords } from '@/lib/helpers';
 import { Dropdown, IOption, EOptionType } from '@/components/Dropdown';
-import { idToProjectEdit } from '@/lib/routeCreators';
+import { idToCauseEdit, idToProjectEdit } from '@/lib/routeCreators';
 import ShareModal from '@/components/modals/ShareModal';
 import { EContentType } from '@/lib/constants/shareContent';
 import useMediaQuery from '@/hooks/useMediaQuery';
@@ -44,8 +44,14 @@ export const AdminActions = () => {
 	const [showShareModal, setShowShareModal] = useState(false);
 	const [showMobileActionsModal, setShowMobileActionsModal] = useState(false);
 	const [showClaimModal, setShowClaimModal] = useState(false);
-	const { projectData, isActive, activateProject, fetchProjectBySlug } =
-		useProjectContext();
+	const {
+		projectData,
+		isActive,
+		activateProject,
+		fetchProjectBySlug,
+		isAdminEmailVerified,
+		isCause,
+	} = useProjectContext();
 	const project = projectData!;
 
 	const { slug, isGivbackEligible, verificationFormStatus } = project;
@@ -53,10 +59,6 @@ export const AdminActions = () => {
 	const router = useRouter();
 	const isMobile = !useMediaQuery(device.tablet);
 	const { chain } = useAccount();
-	const { switchChain } = useSwitchChain();
-	const chainId = chain?.id;
-
-	const { isAdminEmailVerified } = useProjectContext();
 
 	const isVerificationDisabled =
 		isGivbackEligible ||
@@ -72,20 +74,23 @@ export const AdminActions = () => {
 	const options: IOption[] = [
 		{
 			label: formatMessage({
-				id: 'label.edit_project',
+				id: isCause ? 'label.cause.edit_cause' : 'label.edit_project',
 			}),
 			type: EOptionType.ITEM,
 			icon: <IconEdit16 />,
-			cb: () => router.push(idToProjectEdit(projectData?.id || '')),
+			cb: () =>
+				router.push(
+					isCause
+						? idToCauseEdit(projectData?.id || '')
+						: idToProjectEdit(projectData?.id || ''),
+				),
 		},
 		{
 			label: formatMessage({
-				id: formatMessage({
-					id:
-						verificationFormStatus === EVerificationStatus.DRAFT
-							? 'label.resume_your_project'
-							: 'label.verify_your_project',
-				}),
+				id:
+					verificationFormStatus === EVerificationStatus.DRAFT
+						? 'label.resume_your_project'
+						: 'label.verify_your_project',
 			}),
 
 			type: EOptionType.ITEM,
@@ -97,8 +102,12 @@ export const AdminActions = () => {
 			label: capitalizeAllWords(
 				formatMessage({
 					id: isActive
-						? 'label.deactivate_project'
-						: 'label.activate_project',
+						? isCause
+							? 'label.cause.deactivate_cause'
+							: 'label.deactivate_project'
+						: isCause
+							? 'label.cause.activate_cause'
+							: 'label.activate_project',
 				}),
 			),
 			type: EOptionType.ITEM,
@@ -146,7 +155,11 @@ export const AdminActions = () => {
 			<Wrapper $verified={isAdminEmailVerified}>
 				<Dropdown
 					style={dropdownStyle}
-					label='Project Actions'
+					label={formatMessage({
+						id: isCause
+							? 'label.cause.cause_actions'
+							: 'label.project.project_actions',
+					})}
 					options={options}
 				/>
 				{showVerificationModal && (
@@ -159,6 +172,7 @@ export const AdminActions = () => {
 						setShowModal={setDeactivateModal}
 						projectId={projectData?.id}
 						onSuccess={fetchProjectBySlug}
+						isCause={isCause}
 					/>
 				)}
 				{showShareModal && (
@@ -166,6 +180,10 @@ export const AdminActions = () => {
 						contentType={EContentType.thisProject}
 						setShowModal={setShowShareModal}
 						projectHref={slug}
+						isCause={isCause}
+						numberOfProjects={
+							projectData?.causeProjects?.length || 0
+						}
 					/>
 				)}
 				{showClaimModal && (

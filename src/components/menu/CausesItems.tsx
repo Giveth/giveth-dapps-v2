@@ -25,11 +25,10 @@ interface ICausesItems {
 
 export const projectsItems = {
 	explore: [
-		// { name: 'Trending', query: '?q=?q=trending' },
 		{
 			name: 'All Causes',
 			url: Routes.AllCauses,
-			label: 'label.causes_all',
+			label: 'label.cause.causes_all',
 		},
 		{
 			name: 'Recently Updated',

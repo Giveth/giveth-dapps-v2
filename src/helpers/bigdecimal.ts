@@ -91,13 +91,3 @@ export class BigDecimal {
 		return this.fromBigInt(this.value);
 	}
 }
-
-// Example usage
-const a = new BigDecimal('1.23');
-const b = new BigDecimal('4.56');
-const c = BigInt(789);
-
-console.log(a.add(b).toString()); // BigDecimal + BigDecimal
-console.log(a.subtract(c).toString()); // BigDecimal - BigInt
-console.log(a.multiply(c).toString()); // BigDecimal * BigInt
-console.log(a.divide(c).toString()); // BigDecimal / BigInt

@@ -18,6 +18,7 @@ const moduleExports = withBundleAnalyzer({
 	reactStrictMode: true,
 	images: {
 		remotePatterns: [
+			{ protocol: 'https', port: '', hostname: 'placekitten.com' },
 			{ protocol: 'https', port: '', hostname: 'gateway.pinata.cloud' },
 			{ protocol: 'https', port: '', hostname: 'giveth.mypinata.cloud' },
 			{ protocol: 'https', port: '', hostname: 'static.tgbwidget.com' },
@@ -149,12 +150,15 @@ const moduleExports = withBundleAnalyzer({
 		localeDetection: false,
 	},
 	env: {
-		locales,
+		locales: JSON.stringify(['en', 'ct', 'es']),
 		defaultLocale,
 	},
 	headers: async () => {
-		const safe      = 'https://app.safe.global';
-		const nounspace = ['https://nounspace.com', 'https://www.nounspace.com'];
+		const safe = 'https://app.safe.global';
+		const nounspace = [
+			'https://nounspace.com',
+			'https://www.nounspace.com',
+		];
 		const frameAncestors = ["'self'", safe, ...nounspace].join(' ');
 		// Declare additional consts and include them in frameAncestors to enable additional domains to embed Giveth pages in iframes.
 		return [
@@ -172,7 +176,7 @@ const moduleExports = withBundleAnalyzer({
 					},
 					{
 						key: 'Access-Control-Allow-Methods',
-					  	value: 'GET,HEAD,POST,OPTIONS',
+						value: 'GET,HEAD,POST,OPTIONS',
 					},
 					{
 						key: 'Access-Control-Allow-Headers',

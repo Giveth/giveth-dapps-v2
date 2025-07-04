@@ -10,6 +10,13 @@ export const PROJECT_CORE_FIELDS = gql`
 		verified
 		isGivbackEligible
 		totalDonations
+		projectType
+		causeProjects {
+			id
+			project {
+				id
+			}
+		}
 		qfRounds {
 			id
 			name
@@ -61,8 +68,87 @@ export const PROJECT_CARD_FIELDS = gql`
 	}
 `;
 
+export const PROJECT_CARD_FIELDS_CAUSES = gql`
+	${PROJECT_CORE_FIELDS}
+	fragment ProjectCardFields on Project {
+		...ProjectCoreFields
+		descriptionSummary
+		categories {
+			name
+			value
+			mainCategory {
+				title
+			}
+		}
+		adminUser {
+			name
+			walletAddress
+			avatar
+		}
+		updatedAt
+		latestUpdateCreationDate
+		organization {
+			label
+		}
+		projectPower {
+			powerRank
+			totalPower
+			round
+		}
+		sumDonationValueUsdForActiveQfRound
+		countUniqueDonorsForActiveQfRound
+		countUniqueDonors
+		estimatedMatching {
+			projectDonationsSqrtRootSum
+			allProjectsSum
+			matchingPool
+		}
+		anchorContracts {
+			address
+			isActive
+			networkId
+		}
+	}
+`;
+
 export const FETCH_ALL_PROJECTS = gql`
 	${PROJECT_CARD_FIELDS}
+	query FetchAllProjects(
+		$limit: Int
+		$skip: Int
+		$sortingBy: SortingField
+		$filters: [FilterField!]
+		$searchTerm: String
+		$category: String
+		$mainCategory: String
+		$campaignSlug: String
+		$connectedWalletUserId: Int
+		$qfRoundSlug: String
+		$projectType: String
+	) {
+		allProjects(
+			limit: $limit
+			skip: $skip
+			sortingBy: $sortingBy
+			filters: $filters
+			searchTerm: $searchTerm
+			category: $category
+			mainCategory: $mainCategory
+			campaignSlug: $campaignSlug
+			connectedWalletUserId: $connectedWalletUserId
+			qfRoundSlug: $qfRoundSlug
+			projectType: $projectType
+		) {
+			projects {
+				...ProjectCardFields
+			}
+			totalCount
+		}
+	}
+`;
+
+export const FETCH_ALL_PROJECTS_CAUSES = gql`
+	${PROJECT_CARD_FIELDS_CAUSES}
 	query FetchAllProjects(
 		$limit: Int
 		$skip: Int
@@ -219,6 +305,28 @@ export const FETCH_PROJECT_BY_SLUG_SINGLE_PROJECT = gql`
 			isGivbackEligible
 			totalDonations
 			description
+			projectType
+			causeProjects {
+				id
+				project {
+					id
+					title
+					image
+					slug
+					verified
+					isGivbackEligible
+					totalDonations
+					description
+					projectType
+					descriptionSummary
+					adminUser {
+						id
+						name
+						walletAddress
+						avatar
+					}
+				}
+			}
 			addresses {
 				address
 				isRecipient
@@ -653,8 +761,8 @@ export const UNLIKE_PROJECT_MUTATION = gql`
 `;
 
 export const GET_STATUS_REASONS = gql`
-	query {
-		getStatusReasons(statusId: 6) {
+	query GetStatusReasons($statusId: Int!) {
+		getStatusReasons(statusId: $statusId) {
 			id
 			description
 			status {
