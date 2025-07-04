@@ -245,6 +245,9 @@ const ProjectCard = (props: IProjectCard) => {
 									sumDonationValueUsdForActiveQfRound || 0
 								}
 								countUniqueDonors={countUniqueDonors || 0}
+								projectsCount={
+									project.causeProjects?.length || 0
+								}
 								isCause={projectType === EProjectType.CAUSE}
 							/>
 						)}

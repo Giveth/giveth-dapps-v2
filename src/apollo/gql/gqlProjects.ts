@@ -11,6 +11,12 @@ export const PROJECT_CORE_FIELDS = gql`
 		isGivbackEligible
 		totalDonations
 		projectType
+		causeProjects {
+			id
+			project {
+				id
+			}
+		}
 		qfRounds {
 			id
 			name
