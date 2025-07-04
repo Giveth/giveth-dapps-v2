@@ -12,6 +12,10 @@ export const slugToProjectDonate = (slug: string, recurring = false) => {
 	return Routes.Donate + '/' + slug + (recurring ? '?tab=recurring' : '');
 };
 
+export const slugToProjectDonateStellar = (slug: string) => {
+	return Routes.Donate + '/' + slug + '?chain=stellar';
+};
+
 export const idToProjectEdit = (id?: string) => {
 	return Routes.Project + '/' + id + '/edit';
 };

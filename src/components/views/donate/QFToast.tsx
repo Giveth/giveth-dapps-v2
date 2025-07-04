@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { FC, useState } from 'react';
 import styled from 'styled-components';
 import {
 	Button,
@@ -14,7 +14,12 @@ import { useRouter } from 'next/router';
 import { EQFElegibilityState, usePassport } from '@/hooks/usePassport';
 import PassportModal from '@/components/modals/PassportModal';
 
-const QFToast = () => {
+interface IQFToast {
+	isStellarInQF?: boolean;
+	isStellar?: boolean;
+}
+
+const QFToast: FC<IQFToast> = ({ isStellarInQF, isStellar }) => {
 	const { formatMessage, locale } = useIntl();
 	const { info, updateState, refreshScore, handleSign, fetchUserMBDScore } =
 		usePassport();
@@ -23,7 +28,9 @@ const QFToast = () => {
 	const router = useRouter();
 	const [showModal, setShowModal] = useState<boolean>(false);
 
-	const isEligible = qfEligibilityState === EQFElegibilityState.ELIGIBLE;
+	const isEligible =
+		qfEligibilityState === EQFElegibilityState.ELIGIBLE ||
+		(isStellarInQF && isStellar);
 
 	const color = isEligible
 		? semanticColors.jade['500']

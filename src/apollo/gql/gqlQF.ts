@@ -19,6 +19,7 @@ export const QF_ROUNDS_QUERY = `
 			allocatedTokenSymbol
 			minMBDScore
 			minimumValidUsdValue
+			eligibleNetworks
 		}
 `;
 

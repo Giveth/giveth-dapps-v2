@@ -11,6 +11,7 @@ import { FC, useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
 import { useRouter } from 'next/router';
 import { useAccount } from 'wagmi';
+import { ArchiveCover } from '@/components/ArchiveAndNetworkCover/ArchiveCover';
 import FarmCountDown from '@/components/FarmCountDown';
 import { IconWithTooltip } from '@/components/IconWithToolTip';
 import { avgAPR } from '@/helpers/givpower';
@@ -63,6 +64,7 @@ interface IStakingPoolInfoAndActionsProps {
 	currentIncentive?: {
 		key?: (string | number)[] | null | undefined;
 	};
+	isArchived?: boolean; // <-- Add here, as a top-level prop!
 }
 
 export const StakingPoolInfoAndActions: FC<IStakingPoolInfoAndActionsProps> = ({
@@ -70,6 +72,7 @@ export const StakingPoolInfoAndActions: FC<IStakingPoolInfoAndActionsProps> = ({
 	isDiscontinued,
 	isGIVpower,
 	currentIncentive,
+	isArchived = false, // default to false if not passed
 }) => {
 	const [started, setStarted] = useState(true);
 	const [rewardLiquidPart, setRewardLiquidPart] = useState(0n);
@@ -127,6 +130,9 @@ export const StakingPoolInfoAndActions: FC<IStakingPoolInfoAndActionsProps> = ({
 	);
 
 	const userGIVLocked = sdh.getUserGIVLockedBalance();
+	const POLYGON_ZKEVM_DEPRECATION_MS = Date.UTC(2025, 5, 10, 16, 0, 0); // June 10, 2025 11am Panama
+	const POLYGON_ZKEVM_HIDE_DATE_MS = Date.UTC(2025, 6, 10, 0, 0, 0); // July 10, 2025
+	const ARCHIVE_NOTICE_KEY = 'givfarm_zkevm_archive_notice_dismissed';
 
 	useEffect(() => {
 		setStarted(farmStartTimeMS ? getNowUnixMS() > farmStartTimeMS : true);
@@ -180,9 +186,40 @@ export const StakingPoolInfoAndActions: FC<IStakingPoolInfoAndActionsProps> = ({
 	const rewardTokenSymbol = regenStreamConfig?.rewardTokenSymbol || 'GIV';
 	const isZeroGIVStacked =
 		isGIVpower && (!address || userGIVPowerBalance.balance === '0');
+	const [showArchiveNotice, setShowArchiveNotice] = useState(false);
+	const isZkEvmPool =
+		poolStakingConfig.network === config.ZKEVM_NETWORK_NUMBER; // ZKEVM network number
+
+	useEffect(() => {
+		const now = Date.now();
+		const isZkEvmPool =
+			poolStakingConfig.network === config.ZKEVM_NETWORK_NUMBER; // ZKEVM network number
+
+		const inArchivingWindow =
+			now >= POLYGON_ZKEVM_DEPRECATION_MS &&
+			now < POLYGON_ZKEVM_HIDE_DATE_MS;
+
+		const shouldShowArchive =
+			isZkEvmPool &&
+			(inArchivingWindow || isArchived) &&
+			!localStorage.getItem(ARCHIVE_NOTICE_KEY);
+
+		setShowArchiveNotice(shouldShowArchive);
+	}, [poolStakingConfig.network, isArchived]);
+	const isArchivingPeriod =
+		!isArchived &&
+		Date.now() >= POLYGON_ZKEVM_DEPRECATION_MS &&
+		Date.now() < POLYGON_ZKEVM_HIDE_DATE_MS;
 
 	return (
 		<StakePoolInfoContainer>
+			{showArchiveNotice && (
+				<ArchiveCover
+					isExploited={exploited}
+					isStream={!!regenStreamConfig}
+				/>
+			)}
+
 			{started ? (
 				<Details $flexDirection='column'>
 					<Flex $justifyContent='space-between'>
@@ -371,8 +408,10 @@ export const StakingPoolInfoAndActions: FC<IStakingPoolInfoAndActionsProps> = ({
 				{isGIVpower && (
 					<ClaimButton
 						disabled={
+							isArchived ||
 							availableStakedToken <= 0n ||
-							!subgraphSyncedInfo.isSynced
+							!subgraphSyncedInfo.isSynced ||
+							(isArchivingPeriod && isZkEvmPool)
 						}
 						onClick={() => setShowLockModal(true)}
 						label={
@@ -394,10 +433,12 @@ export const StakingPoolInfoAndActions: FC<IStakingPoolInfoAndActionsProps> = ({
 						})}
 						size='small'
 						disabled={
+							isArchived ||
 							isDiscontinued ||
 							exploited ||
 							userNotStakedAmount === 0n ||
-							!subgraphSyncedInfo.isSynced
+							!subgraphSyncedInfo.isSynced ||
+							(isArchivingPeriod && isZkEvmPool)
 						}
 						onClick={() => setShowStakeModal(true)}
 					/>
