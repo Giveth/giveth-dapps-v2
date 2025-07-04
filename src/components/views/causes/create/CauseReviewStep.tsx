@@ -42,7 +42,12 @@ import {
 	transferToken,
 } from './helpers';
 
-export const CauseReviewStep = ({ onPrevious }: { onPrevious: () => void }) => {
+interface IProps {
+	onPrevious: () => void;
+	slug?: string;
+}
+
+export const CauseReviewStep = ({ onPrevious, slug }: IProps) => {
 	const { formatMessage } = useIntl();
 	const {
 		getValues,
@@ -321,6 +326,7 @@ export const CauseReviewStep = ({ onPrevious }: { onPrevious: () => void }) => {
 			setIsLaunching(false);
 		}
 	};
+	const { handleSubmit } = useFormContext();
 
 	const handleTransfer = async () => {
 		setIsLaunching(true);
@@ -369,19 +375,15 @@ export const CauseReviewStep = ({ onPrevious }: { onPrevious: () => void }) => {
 	};
 
 	// Handle launch complete - submit form
-	// Added 3 seconds delay to allow for transaction to be confirmed
 	const handleLaunchComplete = () => {
-		console.log('handleLaunchComplete');
-		setTimeout(() => {
-			const form = document.querySelector('form');
-			if (form) {
-				const submitEvent = new Event('submit', {
-					bubbles: true,
-					cancelable: true,
-				});
-				form.dispatchEvent(submitEvent);
-			}
-		}, 3000);
+		const form = document.querySelector('form');
+		if (form) {
+			const submitEvent = new Event('submit', {
+				bubbles: true,
+				cancelable: true,
+			});
+			form.dispatchEvent(submitEvent);
+		}
 	};
 
 	return (

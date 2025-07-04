@@ -1757,7 +1757,7 @@
 	"schooling": "Schooling",
 	"section.get_the_latest_updates": "Get the latest updates",
 	"section.subscribe_to_our_newsletter": "Subscribe to our newsletter and get all updates straight to your mailbox!",
-	"section.we_wont_send_it": "We won’t send it every 5 seconds! Promise :)",
+	"section.we_wont_send_it": "We won't send it every 5 seconds! Promise :)",
 	"social-services": "Social Services",
 	"sustainable-cities-and-communities": "Sustainable cities & Communities",
 	"tech": "Tech",
@@ -1859,6 +1859,8 @@
 	"label.cause.form_errors_before_submitting": "Please fix the form errors before submitting",
 	"label.cause.failed_to_create_cause": "Failed to create cause. Please try again.",
 	"label.cause.transfer": "Transfer",
+	"label.cause.congratulations": "Congratulations",
+	"label.cause.success_message": "Your Cause has been published.",
 	"label.cause.please_note": "Please note",
 	"label.cause.please_note_desc": "Your input here will be used by the AI donation agent to evaluate and distribute funds to projects. Be specific about the impact you want to achieve.",
 	"label.cause.description_required": "Description is required",
@@ -1897,5 +1899,8 @@
 	"label.cause.there_are_no_causes_matching_your_search": "There are no causes matching your search",
 	"label.cause.search_for_cause": "Search for a cause on all of the categories",
 	"label.cause.most_number_of_projects": "Most Projects",
-	"label.cause.least_number_of_projects": "Least Projects"
+	"label.cause.least_number_of_projects": "Least Projects",
+	"label.you_can_now_view_it":"You can also access your cause from your account and share it with your friends.",
+	"label.view_cause":"VIEW MY CAUSE"
+
 }

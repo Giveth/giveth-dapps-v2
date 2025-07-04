@@ -26,7 +26,7 @@ import { IProjectBySlug } from '@/apollo/types/gqlTypes';
 import InlineToast, { EToastType } from '@/components/toasts/InlineToast';
 import SimilarProjects from '@/components/views/project/SimilarProjects';
 import { isSSRMode } from '@/lib/helpers';
-import { idToProjectEdit } from '@/lib/routeCreators';
+import { idToCauseEdit } from '@/lib/routeCreators';
 import { ProjectMeta } from '@/components/Metatag';
 import ProjectGIVPowerIndex from '@/components/views/project/projectGIVPower';
 import { useProjectContext } from '@/context/project.context';
@@ -321,7 +321,7 @@ const CauseIndex: FC<IProjectBySlug> = () => {
 									type='submit'
 									onClick={() =>
 										router.push(
-											idToProjectEdit(
+											idToCauseEdit(
 												projectData?.id || '',
 											),
 										)
@@ -469,7 +469,7 @@ const TooltipWrapper = styled.div<TooltipWrapperProps>`
 	${ContinueCreationButton}:hover & {
 		opacity: 1;
 		visibility: visible;
-	display: 'inline-block', // Ensures it wraps the button
+		display: 'inline-block',
     cursor: !isEmailVerifiedStatus ? 'not-allowed' : 'pointer'
 	}
 `;

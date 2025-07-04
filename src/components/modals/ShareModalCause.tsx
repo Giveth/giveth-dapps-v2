@@ -23,57 +23,46 @@ import FacebookIcon from '../../../public/images/social-fb.svg';
 import LinkedinIcon from '../../../public/images/social-linkedin.svg';
 import ShareIcon from '../../../public/images/icons/share_dots.svg';
 import Warpcast from '../../../public/images/icons/social-warpcast.svg';
-import { slugToCauseView, slugToProjectView } from '@/lib/routeCreators';
+import { slugToCauseView } from '@/lib/routeCreators';
 import { IModal } from '@/types/common';
 import CopyLink from '@/components/CopyLink';
 import { fullPath } from '@/lib/helpers';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
 import {
-	EContentType,
+	EContentTypeCause,
 	ESocialType,
-	shareContentCreator,
 	shareContentCreatorCause,
 } from '@/lib/constants/shareContent';
 
 interface IShareModal extends IModal {
-	projectHref: string;
-	contentType: EContentType;
+	causeHref: string;
+	contentType: EContentTypeCause;
 	shareTitle?: string | undefined;
 	shareDescription?: string | undefined;
-	isCause?: boolean;
-	numberOfProjects?: number;
 }
 
-const ShareModal: FC<IShareModal> = props => {
+const ShareModalCause: FC<IShareModal> = props => {
 	const {
-		projectHref,
+		causeHref,
 		setShowModal,
 		contentType,
 		shareTitle,
 		shareDescription,
-		isCause = false,
-		numberOfProjects = 0,
 	} = props;
-	const url = isCause
-		? fullPath(slugToCauseView(projectHref))
-		: fullPath(slugToProjectView(projectHref));
+	const url = fullPath(slugToCauseView(causeHref));
 	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
 	const { formatMessage } = useIntl();
 
-	const shareTitleTwitter = isCause
-		? shareContentCreatorCause(
-				contentType,
-				ESocialType.twitter,
-				numberOfProjects,
-			)
-		: shareContentCreator(contentType, ESocialType.twitter);
-	const shareTitleFacebookAndLinkedin = isCause
-		? shareContentCreatorCause(
-				contentType,
-				ESocialType.facebook,
-				numberOfProjects,
-			)
-		: shareContentCreator(contentType, ESocialType.facebook);
+	const shareTitleTwitter = shareContentCreatorCause(
+		contentType,
+		ESocialType.twitter,
+		1,
+	);
+	const shareTitleFacebookAndLinkedin = shareContentCreatorCause(
+		contentType,
+		ESocialType.facebook,
+		1,
+	);
 
 	const shareModalTitle = formatMessage({
 		id: shareTitle || 'label.share_this',
@@ -206,4 +195,4 @@ const CustomOutlineButton = styled(OutlineButton)`
 	margin: 24px auto 0;
 `;
 
-export default ShareModal;
+export default ShareModalCause;

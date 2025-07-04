@@ -3,17 +3,17 @@ import { client } from '@/apollo/apolloClient';
 import { FETCH_CAUSE_BY_SLUG_SINGLE_CAUSE } from '@/apollo/gql/gqlCauses';
 
 import { useReferral } from '@/hooks/useReferral';
-import { CauseProvider } from '@/context/cause.context';
 import CauseIndex from '@/components/views/cause/CauseIndex';
-import { IProjectBySlug } from '@/apollo/types/gqlTypes';
+import { ICauseBySlug } from '@/apollo/types/gqlTypes';
+import { ProjectProvider } from '@/context/project.context';
 
-const ProjectRoute: FC<IProjectBySlug> = ({ project }) => {
+const CauseRoute: FC<ICauseBySlug> = ({ cause }) => {
 	useReferral();
 
 	return (
-		<CauseProvider project={project}>
+		<ProjectProvider project={cause}>
 			<CauseIndex />
-		</CauseProvider>
+		</ProjectProvider>
 	);
 };
 
@@ -30,9 +30,11 @@ export async function getServerSideProps(props: {
 			fetchPolicy: 'no-cache',
 		});
 
+		console.log('🧪 data', data);
+
 		return {
 			props: {
-				project: data.projectBySlug,
+				cause: data.causeBySlug,
 			},
 		};
 	} catch (error) {
@@ -43,4 +45,4 @@ export async function getServerSideProps(props: {
 	}
 }
 
-export default ProjectRoute;
+export default CauseRoute;

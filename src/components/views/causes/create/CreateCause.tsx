@@ -1,20 +1,21 @@
+/* eslint-disable react-hooks/rules-of-hooks */
 import { useState, FC, useEffect } from 'react';
 import { useIntl } from 'react-intl';
 import { useRouter } from 'next/router';
 import { useForm, FormProvider } from 'react-hook-form';
 import { useMutation } from '@apollo/client';
-import { useAccount } from 'wagmi';
 import { ICauseCreation, ICauseEdition } from '@/apollo/types/types';
 import { CreateCauseHeader } from '@/components/views/causes/create/CreateCauseHeader';
 import { CauseInformationStep } from '@/components/views/causes/create/CauseInformationStep';
 import { CauseSelectProjectsStep } from '@/components/views/causes/create/CauseSelectProjectsStep';
-import { CauseReviewStep } from '@/components/views/causes/create/CauseReviewStep';
 import StorageLabel from '@/lib/localStorage';
 import { showToastError } from '@/lib/helpers';
 import { gToast, ToastType } from '@/components/toasts';
 import { EInputs, TCauseInputs } from '@/components/views/causes/create/types';
 import config from '@/configuration';
 import { CREATE_CAUSE } from '@/apollo/gql/gqlCauses';
+import { CauseReviewStep } from './CauseReviewStep';
+import { slugToSuccessCauseView } from '@/lib/routeCreators';
 
 interface ICreateCauseProps {
 	project?: ICauseEdition;
@@ -35,9 +36,8 @@ const CreateCause: FC<ICreateCauseProps> = () => {
 	const router = useRouter();
 	const [currentStep, setCurrentStep] = useState(1);
 	const [isSubmitting, setIsSubmitting] = useState(false);
+	const [createdSlug, setCreatedSlug] = useState('');
 	const [addCauseMutation] = useMutation(CREATE_CAUSE);
-	const { chain } = useAccount();
-	const currentChainId = chain?.id;
 
 	// Load storage data
 	let storageCauseData: TCauseInputs | undefined;
@@ -69,6 +69,7 @@ const CreateCause: FC<ICreateCauseProps> = () => {
 			[EInputs.transactionNetworkId]: storageTransactionNetworkId || 0,
 			[EInputs.transactionHash]: storageTransactionHash || '',
 			[EInputs.transactionStatus]: storageTransactionStatus || '',
+			slug: '',
 		},
 	});
 
@@ -95,7 +96,7 @@ const CreateCause: FC<ICreateCauseProps> = () => {
 			[EInputs.transactionHash]: '',
 			[EInputs.transactionStatus]: '',
 		});
-		localStorage.removeItem(StorageLabel.CREATE_CAUSE_FORM);
+		//localStorage.removeItem(StorageLabel.CREATE_CAUSE_FORM);
 	};
 
 	// Validate form data
@@ -171,10 +172,17 @@ const CreateCause: FC<ICreateCauseProps> = () => {
 		setIsSubmitting(true);
 
 		try {
+			console.log('🧪 formDataWatch', formDataWatch);
+
+			// REMOVE AFTER BE FIX IT
+			await new Promise(resolve => setTimeout(resolve, 7000));
+
+			console.log('🧪 after 7 seconds');
+
 			const causeData: ICauseCreation = {
 				title: formDataWatch.title,
 				description: formDataWatch.description,
-				chainId: currentChainId || 137,
+				chainId: 137,
 				bannerImage: formDataWatch.image,
 				subCategories:
 					formDataWatch.categories?.map(category => category.name) ||
@@ -187,19 +195,16 @@ const CreateCause: FC<ICreateCauseProps> = () => {
 				depositTxChainId: formDataWatch.transactionNetworkId,
 			};
 
-			const cause = await addCauseMutation({
-				variables: causeData,
-			});
+			const cause = await addCauseMutation({ variables: causeData });
 
-			console.log('cause', cause);
+			localStorage.setItem(
+				'causeProjectsCount',
+				String(cause.data.createCause.activeProjectsCount ?? 0),
+			);
 
-			showToastSuccess('Cause created successfully!');
 			clearStorage();
 
-			console.log('FINISHED');
-
-			// TODO Redirect to success page or cause detail page
-			// router.push('/causes');
+			router.push(slugToSuccessCauseView(cause.data.createCause.slug));
 		} catch (error) {
 			console.error('Error creating cause:', error);
 			showToastError(
@@ -231,7 +236,6 @@ const CreateCause: FC<ICreateCauseProps> = () => {
 			step: 3,
 		},
 	];
-
 	return (
 		<>
 			<CreateCauseHeader
@@ -253,7 +257,10 @@ const CreateCause: FC<ICreateCauseProps> = () => {
 						/>
 					)}
 					{currentStep === 3 && (
-						<CauseReviewStep onPrevious={handlePreviousStep} />
+						<CauseReviewStep
+							onPrevious={handlePreviousStep}
+							slug={createdSlug}
+						/>
 					)}
 				</form>
 			</FormProvider>

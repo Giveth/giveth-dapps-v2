@@ -559,5 +559,6 @@ export interface ICauseCreation {
 }
 
 export interface ICause extends IProject {
+	[x: string]: any;
 	projects: IProject[];
 }

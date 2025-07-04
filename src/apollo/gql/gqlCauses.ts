@@ -1,5 +1,4 @@
 import { gql } from '@apollo/client';
-import { PROJECT_CARD_FIELDS } from '@/apollo/gql/gqlProjects';
 
 export const CAUSE_TITLE_IS_VALID = `
 	query IsValidCauseTitle($title: String!) {
@@ -166,103 +165,6 @@ export const FETCH_CAUSE_BY_SLUG_SINGLE_CAUSE = gql`
 				isActive
 				networkId
 			}
-		}
-	}
-`;
-
-export const CAUSE_CORE_FIELDS = gql`
-	fragment CauseCoreFields on Cause {
-		__typename
-		id
-		title
-		image
-		slug
-		verified
-		isGivbackEligible
-		totalDonations
-		qfRounds {
-			id
-			name
-			isActive
-			beginDate
-			endDate
-			maximumReward
-			allocatedTokenSymbol
-			allocatedFundUSDPreferred
-			allocatedFundUSD
-			eligibleNetworks
-		}
-	}
-`;
-
-export const CAUSE_CARD_FIELDS = gql`
-	${CAUSE_CORE_FIELDS}
-	fragment CauseCardFields on Cause {
-		...CauseCoreFields
-		descriptionSummary
-		adminUser {
-			name
-			walletAddress
-			avatar
-		}
-		updatedAt
-		latestUpdateCreationDate
-		organization {
-			label
-		}
-		projectPower {
-			powerRank
-			totalPower
-			round
-		}
-		sumDonationValueUsdForActiveQfRound
-		countUniqueDonorsForActiveQfRound
-		countUniqueDonors
-		estimatedMatching {
-			projectDonationsSqrtRootSum
-			allProjectsSum
-			matchingPool
-		}
-		anchorContracts {
-			address
-			isActive
-			networkId
-		}
-	}
-`;
-
-export const FETCH_ALL_CAUSES = gql`
-	${PROJECT_CARD_FIELDS}
-	query FetchAllCauses(
-		$limit: Int
-		$skip: Int
-		$sortingBy: SortingField
-		$filters: [FilterField!]
-		$searchTerm: String
-		$category: String
-		$mainCategory: String
-		$campaignSlug: String
-		$connectedWalletUserId: Int
-		$qfRoundSlug: String
-		$projectType: String
-	) {
-		allProjects(
-			limit: $limit
-			skip: $skip
-			sortingBy: $sortingBy
-			filters: $filters
-			searchTerm: $searchTerm
-			category: $category
-			mainCategory: $mainCategory
-			campaignSlug: $campaignSlug
-			connectedWalletUserId: $connectedWalletUserId
-			qfRoundSlug: $qfRoundSlug
-			projectType: $projectType
-		) {
-			projects {
-				...ProjectCardFields
-			}
-			totalCount
 		}
 	}
 `;
