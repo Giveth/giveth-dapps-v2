@@ -30,6 +30,7 @@ import { fullPath } from '@/lib/helpers';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
 import {
 	EContentType,
+	EContentTypeCause,
 	ESocialType,
 	shareContentCreator,
 	shareContentCreatorCause,
@@ -37,7 +38,7 @@ import {
 
 interface IShareModal extends IModal {
 	projectHref: string;
-	contentType: EContentType;
+	contentType: EContentType | EContentTypeCause;
 	shareTitle?: string | undefined;
 	shareDescription?: string | undefined;
 	isCause?: boolean;
@@ -66,14 +67,18 @@ const ShareModal: FC<IShareModal> = props => {
 				ESocialType.twitter,
 				numberOfProjects,
 			)
-		: shareContentCreator(contentType, ESocialType.twitter);
+		: shareContentCreator(contentType as EContentType, ESocialType.twitter);
+
 	const shareTitleFacebookAndLinkedin = isCause
 		? shareContentCreatorCause(
 				contentType,
 				ESocialType.facebook,
 				numberOfProjects,
 			)
-		: shareContentCreator(contentType, ESocialType.facebook);
+		: shareContentCreator(
+				contentType as EContentType,
+				ESocialType.facebook,
+			);
 
 	const shareModalTitle = formatMessage({
 		id: shareTitle || 'label.share_this',
