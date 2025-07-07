@@ -13,7 +13,6 @@ import Link from 'next/link';
 import Image from 'next/image';
 import styled from 'styled-components';
 import { useIntl } from 'react-intl';
-import { useRouter } from 'next/router';
 import { ICause } from '@/apollo/types/types';
 import { slugToCauseView } from '@/lib/routeCreators';
 import SocialBox from '@/components/SocialBox';
