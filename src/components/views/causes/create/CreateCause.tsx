@@ -183,11 +183,7 @@ const CreateCause: FC<ICreateCauseProps> = () => {
 
 			const cause = await addCauseMutation({ variables: causeData });
 
-			setIsSubmitting(false);
-
 			clearStorage();
-
-			setIsSubmitting(false);
 
 			router.push(slugToSuccessCauseView(cause.data.createCause.slug));
 		} catch (error) {
