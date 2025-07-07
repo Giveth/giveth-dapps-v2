@@ -9,7 +9,6 @@ import {
 	Subline,
 	semanticColors,
 	IconVerifiedBadge16,
-	H5,
 	Flex,
 	IconGIVBack16,
 } from '@giveth/ui-design-system';
@@ -173,6 +172,7 @@ const ProjectCard = (props: IProjectCard) => {
 			className={className}
 			$order={props.order}
 			$activeStartedRound={!!activeStartedRound}
+			$projectType={projectType}
 		>
 			<ImagePlaceholder>
 				<ProjectCardBadges project={project} />
@@ -261,6 +261,10 @@ const ProjectCard = (props: IProjectCard) => {
 								countUniqueDonors={
 									countUniqueDonorsForActiveQfRound || 0
 								}
+								isCause={projectType === EProjectType.CAUSE}
+								projectsCount={
+									project.causeProjects?.length || 0
+								}
 							/>
 						)}
 					</PaddedRow>
@@ -275,7 +279,7 @@ const ProjectCard = (props: IProjectCard) => {
 					>
 						<Hr />
 						<PaddedRow $justifyContent='space-between'>
-							<Flex gap='16px'>
+							<Flex gap='16px' $flexWrap={true}>
 								{showVerifiedBadge && (
 									<Flex $alignItems='center' gap='4px'>
 										<IconVerifiedBadge16
@@ -354,17 +358,6 @@ const CustomizedDonateButton = styled(DonateButton)<{ $isHover: boolean }>`
 	}
 `;
 
-const PriceText = styled(H5)`
-	display: inline;
-	color: ${neutralColors.gray[900]};
-	font-weight: 700;
-`;
-
-const LightSubline = styled(Subline)`
-	display: inline-block;
-	color: ${neutralColors.gray[700]};
-`;
-
 const VerifiedText = styled(Subline)`
 	color: ${semanticColors.jade[500]};
 `;
@@ -415,6 +408,7 @@ interface ICardBody {
 interface IWrapperProps {
 	$order?: number;
 	$activeStartedRound?: boolean;
+	$projectType?: EProjectType;
 }
 
 const CardBody = styled.div<ICardBody>`
@@ -474,7 +468,11 @@ const Wrapper = styled.div<IWrapperProps>`
 		height: ${props => (props.$activeStartedRound ? '562px' : '536px')};
 	}
 	${mediaQueries.laptopS} {
-		height: 472px;
+		height: ${props =>
+			props.$activeStartedRound &&
+			props.$projectType === EProjectType.CAUSE
+				? '492px'
+				: '472px'};
 	}
 `;
 
@@ -514,7 +512,7 @@ const QFBadge = styled(Subline)`
 
 const CauseBadge = styled(QFBadge)`
 	background-color: ${neutralColors.gray[800]};
-	color: ${neutralColors.gray[100]};
+	color: ${neutralColors.gray[200]};
 `;
 
 export default ProjectCard;
