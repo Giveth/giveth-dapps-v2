@@ -35,7 +35,6 @@ import { ArchivedQFProjectsBanner } from './qfBanner/ArchivedQFProjectsBanner';
 import { ActiveQFRoundStats } from './ActiveQFRoundStats';
 import useMediaQuery from '@/hooks/useMediaQuery';
 import { DefaultQFBanner } from '@/components/DefaultQFBanner';
-import NotAvailable from '@/components/NotAvailable';
 import { fetchProjects, IQueries } from './services';
 import { IProject } from '@/apollo/types/types';
 import { LAST_PROJECT_CLICKED } from './constants';
@@ -211,14 +210,6 @@ const ProjectsIndex = (props: IProjectsView) => {
 			});
 		}
 	}, [isError, error]);
-
-	// Determine if no results should be shown
-	const isNotFound =
-		(mainCategories.length > 0 && !selectedMainCategory && !isArchivedQF) ||
-		(!isQF && data?.pages?.[0]?.data.length === 0);
-
-	if (isNotFound)
-		return <NotAvailable description='Oops! Page Not Found...' />;
 
 	const totalCount = data?.pages[data.pages.length - 1].totalCount || 0;
 	console.log('data', totalCount, data);
