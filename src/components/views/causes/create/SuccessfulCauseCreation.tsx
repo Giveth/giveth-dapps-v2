@@ -43,7 +43,7 @@ const SuccessfulCauseCreation = ({ cause, isLoading }: IProps) => {
 			dispatch(setShowFooter(true));
 		};
 	}, []);
-	console.log('cause', cause);
+
 	if (!cause) return <NotAvailableHandler isProjectLoading={isLoading} />;
 
 	const causePath = slugToCauseView(cause.slug!);
