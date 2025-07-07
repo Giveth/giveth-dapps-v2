@@ -17,7 +17,6 @@ import ProjectTabs from '@/components/views/project/ProjectTabs';
 import { ICauseBySlug } from '@/apollo/types/gqlTypes';
 import InlineToast, { EToastType } from '@/components/toasts/InlineToast';
 import { isSSRMode } from '@/lib/helpers';
-import { idToCauseEdit } from '@/lib/routeCreators';
 import { ProjectMeta } from '@/components/Metatag';
 import ProjectGIVPowerIndex from '@/components/views/project/projectGIVPower';
 import { useProjectContext } from '@/context/project.context';
@@ -38,8 +37,6 @@ import ProjectSocials from '@/components/views/project/ProjectSocials';
 import VerifyEmailBanner from '../userProfile/VerifyEmailBanner';
 import config from '@/configuration';
 import { getActiveRound } from '@/helpers/qf';
-import { CauseProjectsTab } from '@/components/views/causes/CauseProjectsTab';
-import { ICauseProject } from '@/apollo/types/types';
 
 const ProjectDonations = dynamic(
 	() =>
@@ -216,45 +213,6 @@ const CauseIndex: FC<ICauseBySlug> = () => {
 					)}
 					{activeTab === 2 && <ProjectDonations />}
 					{activeTab === 3 && <ProjectGIVPowerIndex />}
-					{isDraft && (
-						<Flex
-							$justifyContent='flex-end'
-							style={{ position: 'relative' }}
-						>
-							{/* Show tooltip only when the button is disabled (email not verified) */}
-							{!isEmailVerifiedStatus && (
-								<TooltipWrapper
-									isTooltipVisible={isTooltipVisible}
-								>
-									{formatMessage({
-										id: 'label.email_tooltip',
-									})}
-								</TooltipWrapper>
-							)}
-
-							{/* Wrapper for hover events */}
-							<div
-								onMouseEnter={handleMouseEnter}
-								onMouseLeave={handleMouseLeave}
-							>
-								<ContinueCreationButton
-									label={formatMessage({
-										id: 'label.continue_creation',
-									})}
-									disabled={!isEmailVerifiedStatus} // Button disabled when email is not verified
-									buttonType='primary'
-									type='submit'
-									onClick={() =>
-										router.push(
-											idToCauseEdit(
-												projectData?.id || '',
-											),
-										)
-									}
-								/>
-							</div>
-						</Flex>
-					)}
 				</ContainerStyled>
 			</BodyWrapper>
 		</Wrapper>
@@ -300,91 +258,6 @@ const MobileActionsContainer = styled(Flex)`
 	border-radius: 16px;
 	padding: 16px 24px;
 	margin-bottom: 8px;
-`;
-
-const StellarSupportToast = styled(Flex)`
-	margin-block: 24px;
-	padding: 16px;
-	border: 1px solid ${brandColors.giv[300]};
-	border-radius: 8px;
-	background-color: ${neutralColors.gray[100]};
-	color: ${brandColors.giv[300]};
-	justify-content: space-between;
-	flex-direction: column;
-	align-items: start;
-	gap: 30px;
-
-	> :first-child {
-		gap: 16px;
-
-		> :first-child {
-			margin-top: 2px;
-		}
-	}
-
-	> :last-child {
-		width: 100%;
-		text-align: center;
-	}
-
-	${mediaQueries.laptopS} {
-		flex-direction: row;
-		align-items: center;
-
-		> :last-child {
-			width: auto;
-		}
-	}
-`;
-
-const ToastText = styled.div`
-	display: flex;
-	flex-direction: column;
-	gap: 4px;
-
-	> :first-child {
-		font-weight: 500;
-	}
-`;
-
-const LinkItem = styled(P)<{ color: string }>`
-	cursor: pointer;
-	color: ${props => props.color};
-	font-weight: 500;
-	text-transform: capitalize;
-`;
-const ContinueCreationButton = styled(Button)`
-	align-self: flex-end;
-	position: relative;
-	cursor: pointer;
-`;
-interface TooltipWrapperProps {
-	isTooltipVisible: boolean;
-	top?: string;
-	left?: string;
-}
-const TooltipWrapper = styled.div<TooltipWrapperProps>`
-	visibility: ${isTooltipVisible => (isTooltipVisible ? 'visible' : 'hidden')};
-	opacity: ${({ isTooltipVisible }) => (isTooltipVisible ? 1 : 0)};
-	position: absolute;
-	bottom: -35px;
-	left: buttonRect.left + window.scrollX + 10;
-	transform: translateX(-50%);
-	background: #1a1a1a;
-	color: #fff;
-	padding: 8px 12px;
-	border-radius: 4px;
-	font-size: 12px;
-	white-space: nowrap;
-	transition: 'opacity 0.2s ease';
-	z-index: 1000;
-	/* Tooltip on hover */
-	${ContinueCreationButton}:hover & {
-		opacity: 1;
-		visibility: visible;
-		display: 'inline-block',
-    cursor: !isEmailVerifiedStatus ? 'not-allowed' : 'pointer'
-	}
 `;
 
 export default CauseIndex;
