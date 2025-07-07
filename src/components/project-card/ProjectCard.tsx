@@ -66,8 +66,6 @@ interface IRecurringDonation {
 const ProjectCard = (props: IProjectCard) => {
 	const { project, className } = props;
 
-	console.log('🧪 project', project);
-
 	const {
 		id,
 		title,

@@ -361,8 +361,6 @@ export const CauseReviewStep = ({
 				throw new Error('Token transfer transaction failed');
 			}
 
-			console.log('🧪 txHash', txHash);
-
 			setValue('transactionStatus', 'success');
 			setValue('transactionHash', txHash);
 			setValue('transactionNetworkId', currentChainId);
