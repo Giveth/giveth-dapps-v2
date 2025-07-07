@@ -25,7 +25,7 @@ import CongratsAnimation from '@/animations/congrats.json';
 import LottieControl from '@/components/LottieControl';
 import { EContentType } from '@/lib/constants/shareContent';
 import NotAvailableHandler from '@/components/NotAvailableHandler';
-import ProjectCard from '@/components/project-card/ProjectCard';
+import ProjectCard from '@/components/project-card/ProjectCardAlt';
 
 interface IProps {
 	cause?: ICause;
