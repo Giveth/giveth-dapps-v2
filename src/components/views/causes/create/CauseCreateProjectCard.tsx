@@ -147,6 +147,10 @@ export const CauseCreateProjectCard: FC<{
 								countUniqueDonors={
 									countUniqueDonorsForActiveQfRound || 0
 								}
+								isCause={true}
+								projectsCount={
+									project.causeProjects?.length || 0
+								}
 							/>
 						)}
 					</PaddedRow>
