@@ -79,11 +79,11 @@ const SuccessfulCauseCreation = ({ cause, isLoading }: IProps) => {
 							/>
 						</ConfettiContainer>
 						<GiverH4>
-							{formatMessage({ id: 'label.congrats' })}
+							{formatMessage({ id: 'label.congratulations' })}
 						</GiverH4>
 						<SuccessMessage>
 							{formatMessage({
-								id: 'label.your_cause_has_been_published',
+								id: 'label.cause.your_cause_has_been_published',
 							})}
 						</SuccessMessage>
 						<CopyBox>

@@ -5,7 +5,9 @@ import { useState } from 'react';
 import { CauseProGuide } from '@/components/views/causes/create/CauseProGuide';
 import { ECreateCauseSections } from '@/components/views/causes/create/types';
 import CauseTitleInput from '@/components/views/causes/create/formElements/CauseTitleInput';
-import CauseDescriptionInput from '@/components/views/causes/create/formElements/CauseDescriptionInput';
+import CauseDescriptionInput, {
+	CAUSE_DESCRIPTION_MIN_LIMIT,
+} from '@/components/views/causes/create/formElements/CauseDescriptionInput';
 import CauseImageInput from '@/components/views/causes/create/formElements/CauseImageInput';
 import CauseCategoryInput from '@/components/views/causes/create/formElements/CauseCategoryInput';
 import {
@@ -41,7 +43,8 @@ export const CauseInformationStep = ({
 	// Check if description meets minimum length requirement
 	const isDescriptionValid =
 		descriptionValue &&
-		descriptionValue.replace(/<[^>]*>/g, '').trim().length >= 2000;
+		descriptionValue.replace(/<[^>]*>/g, '').trim().length >=
+			CAUSE_DESCRIPTION_MIN_LIMIT;
 
 	const handleContinue = () => {
 		if (titleValue?.trim() && isValid && isDescriptionValid) {
