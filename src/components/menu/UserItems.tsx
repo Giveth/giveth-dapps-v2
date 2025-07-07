@@ -149,6 +149,11 @@ const walletMenuArray = [
 		requiresSign: true,
 	},
 	{
+		title: 'label.cause.my_causes',
+		url: Routes.MyCauses,
+		requiresSign: true,
+	},
+	{
 		title: 'label.my_donations',
 		url: Routes.MyDonations,
 		requiresSign: true,

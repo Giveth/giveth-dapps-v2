@@ -7,6 +7,7 @@ import {
 	neutralColors,
 	Flex,
 	mediaQueries,
+	IconUpdate24,
 } from '@giveth/ui-design-system';
 import { type FC, useState } from 'react';
 import styled from 'styled-components';
@@ -24,6 +25,7 @@ import { formatDonation } from '@/helpers/number';
 import VerificationBadge from '@/components/VerificationBadge';
 import DeleteProjectModal from './DeleteProjectModal';
 import ProjectVerificationStatus from './ProjectVerificationStatus';
+import { EProjectType } from '@/apollo/types/gqlEnums';
 
 interface IProjectItem {
 	project: IProject;
@@ -57,7 +59,13 @@ const ProjectItem: FC<IProjectItem> = props => {
 							)}
 						</Flex>
 					</Subline>
-					<Link href={`/project/${project.slug}`}>
+					<Link
+						href={
+							project.projectType === EProjectType.CAUSE
+								? `/cause/${project.slug}`
+								: `/project/${project.slug}`
+						}
+					>
 						<Title>{project.title}</Title>
 					</Link>
 				</Header>
@@ -74,17 +82,32 @@ const ProjectItem: FC<IProjectItem> = props => {
 			<ProjectInfoContainer $justifyContent='space-between' gap='8px'>
 				<ProjectStatusesContainer $flexDirection='column' gap='16px'>
 					<Flex $justifyContent='space-between'>
-						<P>{formatMessage({ id: 'label.project_status' })}</P>
+						<P>
+							{project.projectType === EProjectType.CAUSE
+								? formatMessage({
+										id: 'label.cause.cause_status_small',
+									})
+								: formatMessage({ id: 'label.project_status' })}
+						</P>
 						<div>
 							<ProjectStatusBadge project={project} />
 						</div>
 					</Flex>
 					<Flex $justifyContent='space-between'>
-						<P>Listed on public site</P>
+						<P>
+							{project.projectType === EProjectType.CAUSE
+								? formatMessage({
+										id: 'label.cause.listed_publicly',
+									})
+								: formatMessage({
+										id: 'label.project_listed_on_public_site',
+									})}
+						</P>
 						<div>
 							<ProjectListedStatus project={project} />
 						</div>
 					</Flex>
+
 					<Flex $justifyContent='space-between'>
 						<P>
 							{formatMessage({
@@ -100,21 +123,24 @@ const ProjectItem: FC<IProjectItem> = props => {
 							/>
 						</div>
 					</Flex>
-					<Flex $justifyContent='space-between'>
-						<P>
-							{formatMessage({
-								id: 'label.verification_status',
-							})}
-						</P>
-						<div>
-							<ProjectVerificationStatus
-								verified={
-									project.projectVerificationForm?.status ===
-									EVerificationStatus.VERIFIED
-								}
-							/>
-						</div>
-					</Flex>
+					{project.projectType === EProjectType.PROJECT && (
+						<Flex $justifyContent='space-between'>
+							<P>
+								{formatMessage({
+									id: 'label.verification_status',
+								})}
+							</P>
+							<div>
+								<ProjectVerificationStatus
+									verified={
+										project.projectVerificationForm
+											?.status ===
+										EVerificationStatus.VERIFIED
+									}
+								/>
+							</div>
+						</Flex>
+					)}
 					<Flex $justifyContent='space-between'>
 						<div>
 							{formatMessage({
@@ -127,6 +153,19 @@ const ProjectItem: FC<IProjectItem> = props => {
 					</Flex>
 				</ProjectStatusesContainer>
 				<ProjectStatusesContainer $flexDirection='column' gap='16px'>
+					{project.projectType === EProjectType.CAUSE && (
+						<Flex $justifyContent='space-between'>
+							<P>
+								<Flex $alignItems='center' gap='6px'>
+									<IconUpdate24 />
+									{formatMessage({
+										id: 'label.projects',
+									})}
+								</Flex>
+							</P>
+							{project.totalDonations || 0}
+						</Flex>
+					)}
 					<Flex $justifyContent='space-between'>
 						<P>
 							<Flex $alignItems='center' gap='6px'>
@@ -140,6 +179,23 @@ const ProjectItem: FC<IProjectItem> = props => {
 							locale,
 						)}
 					</Flex>
+					{project.projectType === EProjectType.CAUSE && (
+						<Flex $justifyContent='space-between'>
+							<P>
+								<Flex $alignItems='center' gap='6px'>
+									<IconFund24 />
+									{formatMessage({
+										id: 'label.cause.total_distributed',
+									})}
+								</Flex>
+							</P>
+							{formatDonation(
+								project.totalDonations || 0,
+								'$',
+								locale,
+							)}
+						</Flex>
+					)}
 				</ProjectStatusesContainer>
 			</ProjectInfoContainer>
 			{showAddressModal && selectedProject && (

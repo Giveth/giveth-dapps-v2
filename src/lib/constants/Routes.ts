@@ -11,6 +11,7 @@ export const profileTabs = {
 	donations: '?tab=donations',
 	recurringDonations: '?tab=recurring-donations',
 	boosted: '?tab=givpower',
+	causes: '?tab=causes',
 };
 
 export enum ProfileModal {
@@ -70,6 +71,7 @@ const Routes = {
 	CreateCause: '/causes/create',
 	Cause: '/cause',
 	QFCauses: '/qf/causes',
+	MyCauses: MyAccount + profileTabs.causes,
 };
 
 export default Routes;
