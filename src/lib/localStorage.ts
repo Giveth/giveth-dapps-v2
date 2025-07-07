@@ -20,6 +20,7 @@ const StorageLabel = {
 	WAGMI_WALLET: 'wagmi.wallet',
 	WAGMI_CONNECTED: 'wagmi.connected',
 	CREATE_PROJECT_FORM: 'createProjectForm',
+	CREATE_CAUSE_FORM: 'createCauseForm',
 	TORUS_BANNER_VIEWED: 'torusBannerViewed',
 	DRAFT_DONATIONS: 'draftDonations',
 };

@@ -15,10 +15,11 @@ import { captureException } from '@sentry/nextjs';
 import { useIntl } from 'react-intl';
 import Link from 'next/link';
 import { useWeb3Modal } from '@web3modal/wagmi/react';
+import { EProjectType } from '@/apollo/types/gqlEnums';
 import useDetectDevice from '@/hooks/useDetectDevice';
 import ShareModal from '@/components/modals/ShareModal';
 import ShareLikeBadge from '@/components/badges/ShareLikeBadge';
-import { EContentType } from '@/lib/constants/shareContent';
+import { EContentType, EContentTypeCause } from '@/lib/constants/shareContent';
 import { useProjectContext } from '@/context/project.context';
 import { useAppSelector } from '@/features/hooks';
 import { isSSRMode, showToastError } from '@/lib/helpers';
@@ -177,7 +178,13 @@ export const ProjectPublicActions = () => {
 			</BadgeWrapper>
 			{showModal && slug && (
 				<ShareModal
-					contentType={EContentType.thisProject}
+					contentType={
+						project.projectType === EProjectType.CAUSE
+							? EContentTypeCause.detailsPage
+							: EContentType.thisProject
+					}
+					isCause={project.projectType === EProjectType.CAUSE}
+					numberOfProjects={project.causeProjects?.length || 0}
 					setShowModal={setShowShareModal}
 					projectHref={slug}
 				/>

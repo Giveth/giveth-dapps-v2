@@ -3,6 +3,7 @@ import {
 	EDonationStatus,
 	EDonationType,
 	EProjectStatus,
+	EProjectType,
 	EProjectVerificationStatus,
 	EProjectsSortBy,
 } from '@/apollo/types/gqlEnums';
@@ -93,6 +94,13 @@ export interface IProject {
 	campaigns?: ICampaign[];
 	anchorContracts: IAnchorContractData[];
 	socialMedia: IProjectSocialMedia[];
+	projectType: EProjectType;
+	causeProjects?: ICauseProject[];
+}
+
+export interface ICauseProject {
+	id: string;
+	project: IProject;
 }
 
 export enum EProjectsFilter {
@@ -190,6 +198,15 @@ export interface IProjectEdition {
 	slug: string;
 	anchorContracts?: IAnchorContractData[];
 	socialMedia: IProjectSocialMedia[];
+}
+
+export interface ICauseEdition {
+	id?: string;
+	title?: string;
+	image?: string;
+	description?: string;
+	categories: ICategory[];
+	selectedProjects: IProject[];
 }
 
 export enum EProjectSocialMediaType {
@@ -534,4 +551,20 @@ export enum ERecurringDonationStatus {
 	ENDED = 'ended',
 	FAILED = 'failed',
 	ACTIVE = 'active',
+}
+
+export interface ICauseCreation {
+	title: string;
+	description: string;
+	chainId: number;
+	projectIds: number[];
+	subCategories: string[];
+	bannerImage: string;
+	depositTxHash: string;
+	depositTxChainId: number;
+}
+
+export interface ICause extends IProject {
+	[x: string]: any;
+	projects: IProject[];
 }

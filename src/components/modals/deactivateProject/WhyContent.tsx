@@ -3,6 +3,7 @@ import Select from 'react-select';
 import { AnimatePresence, motion } from 'framer-motion';
 import React from 'react';
 import styled from 'styled-components';
+import { useIntl } from 'react-intl';
 import { Shadow } from '@/components/styled-components/Shadow';
 import { ISelectObj } from './DeactivateProjectIndex';
 import type { CSSObjectWithLabel, StylesConfig } from 'react-select';
@@ -13,6 +14,7 @@ interface IWhyContent {
 	options: ISelectObj[];
 	selectedOption: ISelectObj | void;
 	textInput: string;
+	isCause: boolean;
 }
 
 const WhyContent = ({
@@ -21,49 +23,63 @@ const WhyContent = ({
 	options,
 	selectedOption,
 	textInput,
-}: IWhyContent) => (
-	<>
-		<Lead>Please let us know why you are deactivating this project!</Lead>
-		<Select
-			options={options}
-			placeholder='Select a reason for deactivating'
-			styles={selectCustomStyles}
-			value={selectedOption}
-			onChange={e => handleSelect(e)}
-		/>
-		<AnimatePresence>
-			{String(selectedOption?.value) === '5' && (
-				<motion.div
-					initial={{
-						height: 0,
-						opacity: 0,
-					}}
-					animate={{
-						height: 'auto',
-						opacity: 1,
-					}}
-					exit={{
-						height: 0,
-						opacity: 0,
-					}}
-					transition={{
-						duration: 1,
-					}}
-				>
-					<GLink>Or write your own reason:</GLink>
-					<InputBox
-						placeholder="I'm deactivating because..."
-						rows={5}
-						value={textInput}
-						onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) =>
-							handleChange(e)
-						}
-					/>
-				</motion.div>
-			)}
-		</AnimatePresence>
-	</>
-);
+	isCause,
+}: IWhyContent) => {
+	const { formatMessage } = useIntl();
+	return (
+		<>
+			<Lead>
+				{formatMessage({
+					id: isCause
+						? 'label.cause.deactivate_cause_modal.why_description'
+						: 'label.project.deactivate_project_modal.why_description',
+				})}
+			</Lead>
+			<Select
+				options={options}
+				placeholder={formatMessage({
+					id: isCause
+						? 'label.cause.deactivate_cause_modal.select_reason'
+						: 'label.project.deactivate_project_modal.select_reason',
+				})}
+				styles={selectCustomStyles}
+				value={selectedOption}
+				onChange={e => handleSelect(e)}
+			/>
+			<AnimatePresence>
+				{String(selectedOption?.value) === '5' && (
+					<motion.div
+						initial={{
+							height: 0,
+							opacity: 0,
+						}}
+						animate={{
+							height: 'auto',
+							opacity: 1,
+						}}
+						exit={{
+							height: 0,
+							opacity: 0,
+						}}
+						transition={{
+							duration: 1,
+						}}
+					>
+						<GLink>Or write your own reason:</GLink>
+						<InputBox
+							placeholder="I'm deactivating because..."
+							rows={5}
+							value={textInput}
+							onChange={(
+								e: React.ChangeEvent<HTMLTextAreaElement>,
+							) => handleChange(e)}
+						/>
+					</motion.div>
+				)}
+			</AnimatePresence>
+		</>
+	);
+};
 
 const selectCustomStyles: StylesConfig = {
 	control: (baseStyles, props) =>

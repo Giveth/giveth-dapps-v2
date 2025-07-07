@@ -21,6 +21,7 @@ import { IProject } from '@/apollo/types/types';
 import { useDonateData } from '@/context/donate.context';
 import { ORGANIZATION } from '@/lib/constants/organizations';
 import links from '@/lib/constants/links';
+import { EProjectType } from '@/apollo/types/gqlEnums';
 
 interface IDonateSectionProps {
 	projectData?: IProject;
@@ -31,6 +32,18 @@ export const DonateSection: FC<IDonateSectionProps> = ({ projectData }) => {
 	const { totalDonations } = projectData || {};
 	const isMobile = !useMediaQuery(device.tablet);
 	const { project } = useDonateData();
+
+	console.log(
+		'🧪 projectData',
+		projectData,
+		projectData?.projectType,
+		EProjectType.PROJECT,
+	);
+
+	console.log(
+		'🧪 projectData?.projectType',
+		projectData?.projectType === EProjectType.PROJECT,
+	);
 
 	return (
 		<DonationSectionWrapper gap='24px'>
@@ -69,35 +82,37 @@ export const DonateSection: FC<IDonateSectionProps> = ({ projectData }) => {
 					</NoFund>
 				</DonateInfo>
 			)}
-			{project?.organization?.label === ORGANIZATION.endaoment ? null : (
-				<DonateDescription $flexDirection='column' gap='8px'>
-					<B>
-						{formatMessage({
-							id: 'component.donation_section.100_to_the_project',
-						})}
-					</B>
-					<P>
-						{formatMessage({
-							id: 'component.donation_section.desc',
-						})}
-					</P>
-					<a
-						href={links.ZERO_FEES}
-						target='_blank'
-						referrerPolicy='no-referrer'
-						rel='noreferrer'
-					>
-						<LearnLink $alignItems='center' gap='2px'>
-							<Subline>
-								{formatMessage({
-									id: 'component.donation_section.learn_zero_fee',
-								})}
-							</Subline>
-							<IconChevronRight16 />
-						</LearnLink>
-					</a>
-				</DonateDescription>
-			)}
+			{projectData?.projectType !== EProjectType.CAUSE &&
+				(project?.organization?.label ===
+				ORGANIZATION.endaoment ? null : (
+					<DonateDescription $flexDirection='column' gap='8px'>
+						<B>
+							{formatMessage({
+								id: 'component.donation_section.100_to_the_project',
+							})}
+						</B>
+						<P>
+							{formatMessage({
+								id: 'component.donation_section.desc',
+							})}
+						</P>
+						<a
+							href={links.ZERO_FEES}
+							target='_blank'
+							referrerPolicy='no-referrer'
+							rel='noreferrer'
+						>
+							<LearnLink $alignItems='center' gap='2px'>
+								<Subline>
+									{formatMessage({
+										id: 'component.donation_section.learn_zero_fee',
+									})}
+								</Subline>
+								<IconChevronRight16 />
+							</LearnLink>
+						</a>
+					</DonateDescription>
+				))}
 		</DonationSectionWrapper>
 	);
 };

@@ -5,24 +5,34 @@ import { useProjectContext } from '@/context/project.context';
 
 const NoBoost = () => {
 	const { formatMessage } = useIntl();
-	const { isAdmin } = useProjectContext();
+	const { isAdmin, isCause } = useProjectContext();
 
 	return (
 		<Wrapper size='small'>
 			{isAdmin ? (
 				<div>
-					{formatMessage({
-						id: 'label.your_project_hasnt_received_any_boosts_yet',
-					})}
+					{isCause
+						? formatMessage({
+								id: 'label.cause.your_cause_hasnt_received_any_boosts_yet',
+							})
+						: formatMessage({
+								id: 'label.your_project_hasnt_received_any_boosts_yet',
+							})}
 					<br />
-					{formatMessage({
-						id: 'label.share_this_project_on_social_media_and_ask_friends_for_a_boost',
-					})}
+					{isCause
+						? formatMessage({
+								id: 'label.cause.share_this_cause_on_social_media_and_ask_friends_for_a_boost',
+							})
+						: formatMessage({
+								id: 'label.share_this_project_on_social_media_and_ask_friends_for_a_boost',
+							})}
 				</div>
 			) : (
 				<div>
 					{formatMessage({
-						id: 'label.this_project_doesnt_have_any_givpower_behind_it',
+						id: isCause
+							? 'label.cause.this_cause_doesnt_have_any_givpower_behind_it'
+							: 'label.this_project_doesnt_have_any_givpower_behind_it',
 					})}
 					<IconRocketInSpace24></IconRocketInSpace24>
 				</div>

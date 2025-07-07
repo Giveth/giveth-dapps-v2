@@ -271,24 +271,6 @@ export const SmallCreateProject = styled(Button)<IButton>`
 	}
 `;
 
-export const LargeCreateProject = styled.div<{
-	$isTexty?: boolean;
-	$baseTheme?: ETheme;
-}>`
-	display: none;
-	> button {
-		${props => props.$isTexty && `height: 50px;`}
-		box-shadow: ${props =>
-			props.$baseTheme === ETheme.Dark || props.$isTexty
-				? ''
-				: Shadow.Dark[500]};
-	}
-
-	${mediaQueries.laptopS} {
-		display: unset;
-	}
-`;
-
 export const SmallCreateProjectParent = styled.div`
 	display: none;
 	${mediaQueries.mobileL} {

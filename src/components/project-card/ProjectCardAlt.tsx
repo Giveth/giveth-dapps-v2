@@ -24,6 +24,7 @@ import { PFP } from '../PFP';
 interface IProjectCard {
 	project: IProject;
 	isNew?: boolean;
+	projectsCount?: number;
 }
 
 const ProjectCard = (props: IProjectCard) => {
@@ -83,6 +84,14 @@ const ProjectCard = (props: IProjectCard) => {
 								<Author>{name || '\u200C'}</Author>
 							)}
 						</InternalLink>
+						{props.projectsCount !== undefined && (
+							<ProjectsCount>
+								<strong>{props.projectsCount}</strong>{' '}
+								{props.projectsCount === 1
+									? 'Project'
+									: 'Projects'}
+							</ProjectsCount>
+						)}
 					</div>
 				)}
 				<Description>{htmlToText(description)}</Description>
@@ -95,6 +104,22 @@ const BadgeContainer = styled.div`
 	display: flex;
 	position: absolute;
 	padding: 16px;
+`;
+const ProjectsCount = styled.div`
+	position: absolute;
+	left: 12px;
+	bottom: 12px;
+	font-size: 12px;
+	font-weight: 600;
+	font-size: 14px;
+	font-weight: 400;
+	color: ${neutralColors.gray[500]};
+	margin-top: 4px;
+
+	strong {
+		font-weight: 700;
+		color: ${neutralColors.gray[800]};
+	}
 `;
 
 const BodyCaption = styled(Caption)`

@@ -39,8 +39,13 @@ import { GIVBACKS_DONATION_QUALIFICATION_VALUE_USD } from '@/lib/constants/const
 const ProjectGIVbackToast = () => {
 	const [showBoost, setShowBoost] = useState(false);
 	const [showVerification, setShowVerification] = useState(false);
-	const { projectData, isAdmin, activateProject, isAdminEmailVerified } =
-		useProjectContext();
+	const {
+		projectData,
+		isAdmin,
+		activateProject,
+		isAdminEmailVerified,
+		isCause,
+	} = useProjectContext();
 	const verStatus = projectData?.verificationFormStatus;
 	const projectStatus = projectData?.status.name;
 	const isGivbackEligible = projectData?.isGivbackEligible;
@@ -102,7 +107,28 @@ const ProjectGIVbackToast = () => {
 
 	const givbackFactorPercent = ((givbackFactor || 0) * 100).toFixed();
 
-	if (isPublicGivbackEligible) {
+	if (isCause) {
+		if (givbackFactor !== 0) {
+			title = formatMessage(
+				{
+					id: `label.cause.get_rewarded_with_up_to_percent_of_your_donation_value`,
+				},
+				{
+					percent: givbackFactorPercent,
+				},
+			);
+		}
+		description = formatMessage({
+			id: `label.cause.donations_of_5_or_more_are_eligible_for_givbacks`,
+		});
+		Button = (
+			<OutlineButton
+				onClick={handleBoostClick}
+				label='Boost'
+				icon={<IconRocketInSpace16 />}
+			/>
+		);
+	} else if (isPublicGivbackEligible) {
 		if (givbackFactor !== 0) {
 			title = formatMessage(
 				{

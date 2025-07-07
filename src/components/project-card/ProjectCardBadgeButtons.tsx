@@ -14,6 +14,7 @@ import { useModalCallback } from '@/hooks/useModalCallback';
 import { EContentType } from '@/lib/constants/shareContent';
 import ShareModal from '../modals/ShareModal';
 import BoostModal from '../modals/Boost/BoostModal';
+import { EProjectType } from '@/apollo/types/gqlEnums';
 
 interface IProjectCardBadgeButtons {
 	project: IProject;
@@ -22,7 +23,7 @@ interface IProjectCardBadgeButtons {
 const ProjectCardBadgeButtons: FC<IProjectCardBadgeButtons> = ({ project }) => {
 	const [showShare, setShowShare] = useState(false);
 	const [showBoost, setShowBoost] = useState(false);
-	const { slug, verified } = project;
+	const { slug, verified, projectType } = project;
 	const { isSignedIn, isEnabled } = useAppSelector(state => state.user);
 	const { open: openConnectModal } = useWeb3Modal();
 
@@ -48,6 +49,7 @@ const ProjectCardBadgeButtons: FC<IProjectCardBadgeButtons> = ({ project }) => {
 					setShowModal={setShowShare}
 					projectHref={slug}
 					contentType={EContentType.thisProject}
+					isCause={projectType === EProjectType.CAUSE}
 				/>
 			)}
 
