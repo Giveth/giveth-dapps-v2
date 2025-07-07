@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
 	brandColors,
 	Button,
@@ -13,6 +13,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import styled from 'styled-components';
 import { useIntl } from 'react-intl';
+import { useRouter } from 'next/router';
 import { ICause } from '@/apollo/types/types';
 import { slugToCauseView } from '@/lib/routeCreators';
 import SocialBox from '@/components/SocialBox';
@@ -25,7 +26,7 @@ import CongratsAnimation from '@/animations/congrats.json';
 import LottieControl from '@/components/LottieControl';
 import { EContentType } from '@/lib/constants/shareContent';
 import NotAvailableHandler from '@/components/NotAvailableHandler';
-import ProjectCard from '@/components/project-card/ProjectCard';
+import ProjectCard from '@/components/project-card/ProjectCardAlt';
 
 interface IProps {
 	cause?: ICause;
@@ -33,7 +34,7 @@ interface IProps {
 }
 
 const SuccessfulCauseCreation = ({ cause, isLoading }: IProps) => {
-		const router = useRouter();
+	const router = useRouter();
 	const [projectsCount, setProjectsCount] = useState(0);
 
 	useEffect(() => {
