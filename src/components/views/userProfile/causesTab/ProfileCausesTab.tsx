@@ -26,7 +26,7 @@ const ProfileCausesTab: FC<IUserProfileView> = () => {
 	const isOwner = myAccount; // Determines if the logged-in user is the profile owner
 
 	const { data, isLoading, refetch } = useQuery({
-		queryKey: ['dashboard-projects', user.id, page, projectsOrder],
+		queryKey: ['dashboard-causes', user.id, page, projectsOrder],
 		queryFn: () => fetchUserCauses(user.id!, page, projectsOrder),
 		enabled: !!user.id,
 	});

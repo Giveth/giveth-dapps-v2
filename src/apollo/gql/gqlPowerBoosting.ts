@@ -71,6 +71,7 @@ export const FETCH_POWER_BOOSTING_INFO = gql`
 					title
 					slug
 					verified
+					projectType
 				}
 				percentage
 			}
