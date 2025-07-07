@@ -182,7 +182,10 @@ const CreateCause: FC<ICreateCauseProps> = () => {
 			};
 
 			const cause = await addCauseMutation({ variables: causeData });
-
+			localStorage.setItem(
+				'causeProjectsCount',
+				String(cause.data.createCause.activeProjectsCount ?? 0),
+			);
 			clearStorage();
 
 			router.push(slugToSuccessCauseView(cause.data.createCause.slug));
