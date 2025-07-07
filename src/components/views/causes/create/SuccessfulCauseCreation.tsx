@@ -33,6 +33,16 @@ interface IProps {
 }
 
 const SuccessfulCauseCreation = ({ cause, isLoading }: IProps) => {
+		const router = useRouter();
+	const [projectsCount, setProjectsCount] = useState(0);
+
+	useEffect(() => {
+		const count = localStorage.getItem('causeProjectsCount');
+		if (count) {
+			setProjectsCount(parseInt(count, 10));
+			//localStorage.removeItem('causeProjectsCount');
+		}
+	}, []);
 	const dispatch = useAppDispatch();
 	const { formatMessage } = useIntl();
 
@@ -68,7 +78,13 @@ const SuccessfulCauseCreation = ({ cause, isLoading }: IProps) => {
 
 				<Row>
 					<Left xs={12} md={6}>
-						<ProjectCard project={cause} />
+						<CardWrapper>
+							<ProjectCard
+								project={cause}
+								isNew={true}
+								projectsCount={projectsCount}
+							/>
+						</CardWrapper>
 					</Left>
 
 					<Right xs={12} md={6}>
