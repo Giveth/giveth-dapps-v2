@@ -161,8 +161,6 @@ const CreateCause: FC<ICreateCauseProps> = () => {
 			return;
 		}
 
-		setIsSubmitting(true);
-
 		try {
 			setIsSubmitting(true);
 
@@ -185,15 +183,11 @@ const CreateCause: FC<ICreateCauseProps> = () => {
 
 			const cause = await addCauseMutation({ variables: causeData });
 
-			// TODO: why we need this here?
-			localStorage.setItem(
-				'causeProjectsCount',
-				String(cause.data.createCause.activeProjectsCount ?? 0),
-			);
-
 			setIsSubmitting(false);
 
 			clearStorage();
+
+			setIsSubmitting(false);
 
 			router.push(slugToSuccessCauseView(cause.data.createCause.slug));
 		} catch (error) {

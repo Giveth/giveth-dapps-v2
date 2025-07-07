@@ -18,7 +18,7 @@ const RichTextInput = dynamic(
 	},
 );
 
-const DESCRIPTION_MIN_LIMIT = 2000;
+export const CAUSE_DESCRIPTION_MIN_LIMIT = 1200;
 
 interface ICauseDescriptionInputProps {
 	setActiveCauseSection: (section: ECreateCauseSections) => void;
@@ -57,7 +57,7 @@ const CauseDescriptionInput = ({
 					message: formatMessage(
 						{ id: 'label.cause.create_description_desc' },
 						{
-							min: DESCRIPTION_MIN_LIMIT,
+							min: CAUSE_DESCRIPTION_MIN_LIMIT,
 						},
 					),
 				},
@@ -89,7 +89,7 @@ const CauseDescriptionInput = ({
 					setValue={handleDescription}
 					value={description}
 					noShadow
-					minLimit={DESCRIPTION_MIN_LIMIT}
+					minLimit={CAUSE_DESCRIPTION_MIN_LIMIT}
 					setHasLimitError={setHasLimitError}
 					error={errors[EInputs.description]?.message}
 				/>

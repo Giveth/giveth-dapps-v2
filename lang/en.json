@@ -1826,7 +1826,7 @@
 	"label.cause.categories_for_your_cause": "Categories for your cause.",
 	"label.cause.select_projects_desc": "Select projects to include in your Cause.",
 	"label.cause.categories_right_category": "Choose the Right Category",
-	"label.cause.select_categories_desc": "Select the categories that best represents the area of interest for your Case.",
+	"label.cause.select_categories_desc": "Select the categories that best represents the area of interest for your Cause.",
 	"label.cause.select_categories_desc_2": "Think about where your potential donors might look for a Cause like yours.",
 	"label.cause.select_projects_dec_intro": "Choose 5-50 verified projects from the Giveth database to include in your cause.",
 	"label.cause.all_categories": "All Categories",
@@ -1939,5 +1939,6 @@
 	"label.cause.share_this_cause_on_social_media_and_ask_friends_for_a_boost": "Share this cause on social media and ask friends for a boost",
 	"label.cause.this_cause_doesnt_have_any_givpower_behind_it": "This cause doesn't have any GIVpower behind it",
 	"label.cause.get_rewarded_with_up_to_percent_of_your_donation_value": "Get rewarded with up to {percent}% of your donation value!",
-	"label.cause.donations_of_5_or_more_are_eligible_for_givbacks": "Donations of $5 or more are eligible for GIVbacks. Boost this Cause to increase its rewards percentage and visibility on the Causes page!"
+	"label.cause.donations_of_5_or_more_are_eligible_for_givbacks": "Donations of $5 or more are eligible for GIVbacks. Boost this Cause to increase its rewards percentage and visibility on the Causes page!",
+	"label.cause.your_cause_has_been_published": "Your Cause has been published."
 }
