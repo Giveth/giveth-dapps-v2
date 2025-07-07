@@ -1,5 +1,4 @@
 import { gql } from '@apollo/client';
-import { PROJECT_CARD_FIELDS } from '@/apollo/gql/gqlProjects';
 
 export const CAUSE_TITLE_IS_VALID = `
 	query IsValidCauseTitle($title: String!) {
@@ -71,137 +70,100 @@ export const CREATE_CAUSE = gql`
 	}
 `;
 
-// Core fields for cause cards
-export const CAUSE_CORE_FIELDS = gql`
-	fragment CauseCoreFields on Cause {
-		__typename
-		id
-		title
-		image
-		slug
-		verified
-		isGivbackEligible
-		totalDonations
-		qfRounds {
+export const FETCH_CAUSE_BY_SLUG_SINGLE_CAUSE = gql`
+	query ProjectBySlug($slug: String!, $connectedWalletUserId: Int) {
+		projectBySlug(
+			slug: $slug
+			connectedWalletUserId: $connectedWalletUserId
+		) {
+			__typename
 			id
 			title
-			description
-			chainId
-			walletAddress
-			avatar
-		}
-		updatedAt
-		latestUpdateCreationDate
-		organization {
-			label
-		}
-		projectPower {
-			powerRank
-			totalPower
-			round
-		}
-		sumDonationValueUsdForActiveQfRound
-		countUniqueDonorsForActiveQfRound
-		countUniqueDonors
-		estimatedMatching {
-			projectDonationsSqrtRootSum
-			allProjectsSum
-			matchingPool
-		}
-		anchorContracts {
-			address
-			isActive
-			networkId
-		}
-	}
-`;
-
-// Fetch all causes (note: this seems to be fetching projects, might need correction)
-export const FETCH_ALL_CAUSES = gql`
-	${PROJECT_CARD_FIELDS}
-	query FetchAllCauses(
-		$limit: Int
-		$skip: Int
-		$sortingBy: SortingField
-		$filters: [FilterField!]
-		$searchTerm: String
-		$category: String
-		$mainCategory: String
-		$campaignSlug: String
-		$connectedWalletUserId: Int
-		$qfRoundSlug: String
-		$projectType: String
-	) {
-		allProjects(
-			limit: $limit
-			skip: $skip
-			sortingBy: $sortingBy
-			filters: $filters
-			searchTerm: $searchTerm
-			category: $category
-			mainCategory: $mainCategory
-			campaignSlug: $campaignSlug
-			connectedWalletUserId: $connectedWalletUserId
-			qfRoundSlug: $qfRoundSlug
-			projectType: $projectType
-		) {
-			projects {
-				...ProjectCardFields
-			}
-			totalCount
-		}
-	}
-`;
-
-// Cause management mutations
-export const DEACTIVATE_CAUSE = gql`
-	mutation DeactivateCause($causeId: Float!, $reasonId: Float) {
-		deactivateCause(causeId: $causeId, reasonId: $reasonId)
-	}
-`;
-
-export const ACTIVATE_CAUSE = gql`
-	mutation ActivateCause($causeId: Float!) {
-		activateCause(causeId: $causeId)
-	}
-`;
-
-export const GET_CAUSE_BY_SLUG = gql`
-	query GetCauseBySlug($slug: String!) {
-		cause(slug: $slug) {
-			id
+			image
 			slug
+			verified
+			isGivbackEligible
+			totalDonations
+			description
+			addresses {
+				address
+				isRecipient
+				networkId
+				chainType
+			}
+			socialMedia {
+				type
+				link
+			}
+			totalProjectUpdates
 			creationDate
-			updatedAt
-			categories {
+			reaction {
 				id
+				userId
+			}
+			categories {
 				name
+				value
 				mainCategory {
-					id
 					title
-					slug
-					banner
-					description
 				}
 			}
+			adminUser {
+				id
+				name
+				walletAddress
+				avatar
+			}
+			listed
 			status {
 				id
 				name
 			}
-			reviewStatus
-			totalRaised
-			totalDistributed
-			totalDonated
-			activeProjectsCount
-			adminUser {
-				id
-				walletAddress
+			organization {
 				name
+				label
+				supportCustomTokens
 			}
-			projects {
+			verificationFormStatus
+			projectPower {
+				powerRank
+				totalPower
+				round
+			}
+			projectFuturePower {
+				totalPower
+				powerRank
+				round
+			}
+			givbackFactor
+			sumDonationValueUsdForActiveQfRound
+			countUniqueDonorsForActiveQfRound
+			countUniqueDonors
+			estimatedMatching {
+				projectDonationsSqrtRootSum
+				allProjectsSum
+				matchingPool
+			}
+			qfRounds {
+				id
+				name
+				isActive
+				beginDate
+				endDate
+				eligibleNetworks
+				maximumReward
+				allocatedTokenSymbol
+				allocatedFundUSDPreferred
+				allocatedFundUSD
+			}
+			campaigns {
 				id
 				title
-				slug
+			}
+			anchorContracts {
+				address
+				isActive
+				networkId
 			}
 		}
 	}

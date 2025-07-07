@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/rules-of-hooks */
-import { useState, FC, useEffect } from 'react';
+import { useState, FC, useEffect, useRef } from 'react';
 import { useIntl } from 'react-intl';
 import { useRouter } from 'next/router';
 import { useForm, FormProvider } from 'react-hook-form';
@@ -10,7 +10,6 @@ import { CauseInformationStep } from '@/components/views/causes/create/CauseInfo
 import { CauseSelectProjectsStep } from '@/components/views/causes/create/CauseSelectProjectsStep';
 import StorageLabel from '@/lib/localStorage';
 import { showToastError } from '@/lib/helpers';
-import { gToast, ToastType } from '@/components/toasts';
 import { EInputs, TCauseInputs } from '@/components/views/causes/create/types';
 import config from '@/configuration';
 import { CREATE_CAUSE } from '@/apollo/gql/gqlCauses';
@@ -20,14 +19,6 @@ import { slugToSuccessCauseView } from '@/lib/routeCreators';
 interface ICreateCauseProps {
 	project?: ICauseEdition;
 }
-
-// Custom success toast function
-const showToastSuccess = (message: string) => {
-	gToast(message, {
-		type: ToastType.SUCCESS,
-		position: 'top-center',
-	});
-};
 
 const CreateCause: FC<ICreateCauseProps> = () => {
 	// Get current account and chain for gas estimation
@@ -46,6 +37,8 @@ const CreateCause: FC<ICreateCauseProps> = () => {
 	if (storedCause) {
 		storageCauseData = JSON.parse(storedCause);
 	}
+
+	const formRef = useRef<HTMLFormElement>(null);
 
 	const {
 		title: storageTitle,
@@ -84,8 +77,8 @@ const CreateCause: FC<ICreateCauseProps> = () => {
 	}, [formDataWatch]);
 
 	// Function to clear storage (call this when form is submitted or cancelled)
+	// Reset form to prevent useEffect from re-saving
 	const clearStorage = () => {
-		// Reset form to prevent useEffect from re-saving
 		formMethods.reset({
 			[EInputs.title]: '',
 			[EInputs.description]: '',
@@ -96,7 +89,6 @@ const CreateCause: FC<ICreateCauseProps> = () => {
 			[EInputs.transactionHash]: '',
 			[EInputs.transactionStatus]: '',
 		});
-		localStorage.removeItem(StorageLabel.CREATE_CAUSE_FORM);
 	};
 
 	// Validate form data
@@ -172,23 +164,34 @@ const CreateCause: FC<ICreateCauseProps> = () => {
 		setIsSubmitting(true);
 
 		try {
+			setIsSubmitting(true);
+
+			const formValues = formMethods.getValues();
+
 			const causeData: ICauseCreation = {
-				title: formDataWatch.title,
-				description: formDataWatch.description,
+				title: formValues.title,
+				description: formValues.description,
 				chainId: 137,
-				bannerImage: formDataWatch.image,
+				bannerImage: formValues.image,
 				subCategories:
-					formDataWatch.categories?.map(category => category.name) ||
-					[],
+					formValues.categories?.map(category => category.name) || [],
 				projectIds:
-					formDataWatch.selectedProjects?.map(project =>
+					formValues.selectedProjects?.map(project =>
 						parseInt(project.id),
 					) || [],
-				depositTxHash: formDataWatch.transactionHash,
-				depositTxChainId: formDataWatch.transactionNetworkId,
+				depositTxHash: formValues.transactionHash,
+				depositTxChainId: formValues.transactionNetworkId,
 			};
 
 			const cause = await addCauseMutation({ variables: causeData });
+
+			// TODO: why we need this here?
+			localStorage.setItem(
+				'causeProjectsCount',
+				String(cause.data.createCause.activeProjectsCount ?? 0),
+			);
+
+			setIsSubmitting(false);
 
 			clearStorage();
 
@@ -207,6 +210,13 @@ const CreateCause: FC<ICreateCauseProps> = () => {
 	const handlePreviousStep = () => {
 		if (currentStep > 1) {
 			setCurrentStep(currentStep - 1);
+		}
+	};
+
+	// If on step 3, trigger form submission logic directly
+	const handleLaunchComplete = () => {
+		if (formRef.current) {
+			formRef.current?.requestSubmit();
 		}
 	};
 
@@ -232,7 +242,7 @@ const CreateCause: FC<ICreateCauseProps> = () => {
 				setCurrentStep={setCurrentStep}
 			/>
 			<FormProvider {...formMethods}>
-				<form onSubmit={handleSubmit} noValidate>
+				<form ref={formRef} onSubmit={handleSubmit} noValidate>
 					{currentStep === 1 && (
 						<CauseInformationStep
 							onNext={() => setCurrentStep(3)}
@@ -247,7 +257,8 @@ const CreateCause: FC<ICreateCauseProps> = () => {
 					{currentStep === 3 && (
 						<CauseReviewStep
 							onPrevious={handlePreviousStep}
-							slug={createdSlug}
+							handleLaunchComplete={handleLaunchComplete}
+							isSubmitting={isSubmitting}
 						/>
 					)}
 				</form>

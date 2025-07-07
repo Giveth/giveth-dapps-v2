@@ -35,6 +35,7 @@ interface ILaunchCauseModalProps extends IModal {
 	handleApproval?: () => void;
 	handleTransfer?: () => void;
 	handleLaunchComplete?: () => void;
+	isSubmitting?: boolean;
 }
 
 const LaunchCauseModal: FC<ILaunchCauseModalProps> = ({
@@ -47,6 +48,7 @@ const LaunchCauseModal: FC<ILaunchCauseModalProps> = ({
 	handleApproval,
 	handleTransfer,
 	handleLaunchComplete,
+	isSubmitting = false,
 }) => {
 	const { chain } = useAccount();
 	const currentNetworkId = chain?.id;
@@ -120,6 +122,9 @@ const LaunchCauseModal: FC<ILaunchCauseModalProps> = ({
 		) {
 			return formatMessage({ id: 'label.cause.launch_complete' });
 		}
+		if (isSubmitting) {
+			return formatMessage({ id: 'label.cause.launch_processing' });
+		}
 		return formatMessage({ id: 'label.approve' });
 	};
 
@@ -138,6 +143,9 @@ const LaunchCauseModal: FC<ILaunchCauseModalProps> = ({
 		}
 		if (lunchStatus === 'approval_success') {
 			return formatMessage({ id: 'label.cause.transfer' });
+		}
+		if (isSubmitting) {
+			return formatMessage({ id: 'label.cause.launching_cause' });
 		}
 		return formatMessage({ id: 'label.approve' });
 	};

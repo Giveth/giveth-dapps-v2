@@ -43,7 +43,7 @@ const SuccessfulCauseCreation = ({ cause, isLoading }: IProps) => {
 			dispatch(setShowFooter(true));
 		};
 	}, []);
-	console.log('cause', cause);
+
 	if (!cause) return <NotAvailableHandler isProjectLoading={isLoading} />;
 
 	const causePath = slugToCauseView(cause.slug!);
@@ -170,5 +170,18 @@ const ConfettiContainer = styled.div`
 	position: absolute;
 	z-index: -1;
 `;
-
+const CardWrapper = styled.div`
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+`;
+const ProjectCountLabel = styled.span`
+	font-size: 14px;
+	font-weight: 500;
+	color: #8c8c8c;
+	width: 100%;
+	text-align: left;
+	margin-top: 12px;
+	padding-left: 12px;
+`;
 export default SuccessfulCauseCreation;

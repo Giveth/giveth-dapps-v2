@@ -44,10 +44,15 @@ import {
 
 interface IProps {
 	onPrevious: () => void;
-	slug?: string;
+	isSubmitting?: boolean;
+	handleLaunchComplete: () => void;
 }
 
-export const CauseReviewStep = ({ onPrevious, slug }: IProps) => {
+export const CauseReviewStep = ({
+	onPrevious,
+	isSubmitting = false,
+	handleLaunchComplete,
+}: IProps) => {
 	const { formatMessage } = useIntl();
 	const {
 		getValues,
@@ -356,6 +361,8 @@ export const CauseReviewStep = ({ onPrevious, slug }: IProps) => {
 				throw new Error('Token transfer transaction failed');
 			}
 
+			console.log('🧪 txHash', txHash);
+
 			setValue('transactionStatus', 'success');
 			setValue('transactionHash', txHash);
 			setValue('transactionNetworkId', currentChainId);
@@ -371,18 +378,6 @@ export const CauseReviewStep = ({ onPrevious, slug }: IProps) => {
 				(error as Error)?.message || 'Transfer failed',
 			);
 			setIsLaunching(false);
-		}
-	};
-
-	// Handle launch complete - submit form
-	const handleLaunchComplete = () => {
-		const form = document.querySelector('form');
-		if (form) {
-			const submitEvent = new Event('submit', {
-				bubbles: true,
-				cancelable: true,
-			});
-			form.dispatchEvent(submitEvent);
 		}
 	};
 
@@ -638,6 +633,7 @@ export const CauseReviewStep = ({ onPrevious, slug }: IProps) => {
 					handleApproval={handleApproval}
 					handleTransfer={handleTransfer}
 					handleLaunchComplete={handleLaunchComplete}
+					isSubmitting={isSubmitting}
 				/>
 			)}
 		</StyledContainer>

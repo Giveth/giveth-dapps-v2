@@ -63,6 +63,14 @@ export enum EProjectVerificationStatus {
 	REVOKED = 'revoked',
 }
 
+export enum ECauseVerificationStatus {
+	REMINDER = 'reminder', // First notice after 30 days of no updates
+	WARNING = 'warning', // Second notice after 60 days of no updates
+	LASTCHANCE = 'lastChance', // Last notice after 90 days of no updates
+	UPFORREVOKING = 'upForRevoking', // Projects without updates that will be revoked after Oct 15th 2022
+	REVOKED = 'revoked',
+}
+
 export enum EProjectType {
 	CAUSE = 'cause',
 	PROJECT = 'project',
@@ -73,12 +81,4 @@ export enum ECauseStatus {
 	ACTIVE = 'activate',
 	DEACTIVE = 'deactivate',
 	CANCEL = 'cancelled',
-}
-
-export enum ECauseVerificationStatus {
-	REMINDER = 'reminder', // First notice after 30 days of no updates
-	WARNING = 'warning', // Second notice after 60 days of no updates
-	LASTCHANCE = 'lastChance', // Last notice after 90 days of no updates
-	UPFORREVOKING = 'upForRevoking', // Projects without updates that will be revoked after Oct 15th 2022
-	REVOKED = 'revoked',
 }

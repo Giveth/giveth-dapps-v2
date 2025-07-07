@@ -37,8 +37,6 @@ import ProjectSocials from '@/components/views/project/ProjectSocials';
 import VerifyEmailBanner from '../userProfile/VerifyEmailBanner';
 import config from '@/configuration';
 import { getActiveRound } from '@/helpers/qf';
-import { CauseProjectsTab } from '@/components/views/causes/CauseProjectsTab';
-import { ICauseProject } from '@/apollo/types/types';
 
 const ProjectDonations = dynamic(
 	() =>
@@ -215,13 +213,6 @@ const CauseIndex: FC<ICauseBySlug> = () => {
 					)}
 					{activeTab === 2 && <ProjectDonations />}
 					{activeTab === 3 && <ProjectGIVPowerIndex />}
-					{activeTab === 4 && (
-						<CauseProjectsTab
-							causeProjects={
-								projectData?.causeProjects as ICauseProject[]
-							}
-						/>
-					)}
 				</ContainerStyled>
 			</BodyWrapper>
 		</Wrapper>

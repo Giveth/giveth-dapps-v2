@@ -1857,5 +1857,7 @@
 	"label.cause.projects_required": "Los proyectos son obligatorios",
 	"label.cause.transaction_status_required": "El estado de la transacción es obligatorio",
 	"label.cause.form_errors_before_submitting": "Por favor, corrige los errores del formulario antes de enviar",
-	"label.cause.failed_to_create_cause": "No se pudo crear la causa. Por favor, inténtalo de nuevo."
+	"label.cause.failed_to_create_cause": "No se pudo crear la causa. Por favor, inténtalo de nuevo.",
+	"label.you_can_now_view_it": "También puedes acceder a tu causa desde tu cuenta y compartirla con tus amigos.",
+    "label.view_cause": "VER MI CAUSA"
 }
