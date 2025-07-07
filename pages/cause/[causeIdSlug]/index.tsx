@@ -1,6 +1,5 @@
 import { FC } from 'react';
 import { client } from '@/apollo/apolloClient';
-import { FETCH_CAUSE_BY_SLUG_SINGLE_CAUSE } from '@/apollo/gql/gqlCauses';
 
 import { useReferral } from '@/hooks/useReferral';
 import CauseIndex from '@/components/views/cause/CauseIndex';
@@ -25,7 +24,7 @@ export async function getServerSideProps(props: {
 		const slug = decodeURI(query.causeIdSlug).replace(/\s/g, '');
 
 		const { data } = await client.query({
-			query: FETCH_CAUSE_BY_SLUG_SINGLE_CAUSE,
+			query: FETCH_PROJECT_BY_SLUG_SINGLE_PROJECT,
 			variables: { slug },
 			fetchPolicy: 'no-cache',
 		});
@@ -34,7 +33,7 @@ export async function getServerSideProps(props: {
 
 		return {
 			props: {
-				cause: data.causeBySlug,
+				cause: data.projectBySlug,
 			},
 		};
 	} catch (error) {

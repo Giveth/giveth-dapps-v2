@@ -10,7 +10,6 @@ import { CauseInformationStep } from '@/components/views/causes/create/CauseInfo
 import { CauseSelectProjectsStep } from '@/components/views/causes/create/CauseSelectProjectsStep';
 import StorageLabel from '@/lib/localStorage';
 import { showToastError } from '@/lib/helpers';
-import { gToast, ToastType } from '@/components/toasts';
 import { EInputs, TCauseInputs } from '@/components/views/causes/create/types';
 import config from '@/configuration';
 import { CREATE_CAUSE } from '@/apollo/gql/gqlCauses';
@@ -28,6 +27,7 @@ const CreateCause: FC<ICreateCauseProps> = () => {
 	const router = useRouter();
 	const [currentStep, setCurrentStep] = useState(1);
 	const [isSubmitting, setIsSubmitting] = useState(false);
+	const [createdSlug, setCreatedSlug] = useState('');
 	const [addCauseMutation] = useMutation(CREATE_CAUSE);
 
 	// Load storage data
@@ -234,7 +234,6 @@ const CreateCause: FC<ICreateCauseProps> = () => {
 			step: 3,
 		},
 	];
-
 	return (
 		<>
 			<CreateCauseHeader

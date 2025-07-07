@@ -5,13 +5,20 @@ import {
 	Flex,
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
+import { useIntl } from 'react-intl';
+import { useProjectContext } from '@/context/project.context';
 
 const ProjectOwnerBanner = () => {
+	const { formatMessage } = useIntl();
+	const { isCause } = useProjectContext();
+
 	return (
 		<Wrapper gap='16px' $alignItems='center'>
 			<IconEye16 />
 			<Caption>
-				As the project owner, only you can see your project in this view
+				{isCause
+					? formatMessage({ id: 'label.cause.owner_banner' })
+					: formatMessage({ id: 'label.project.owner_banner' })}
 			</Caption>
 		</Wrapper>
 	);

@@ -11,6 +11,12 @@ export const PROJECT_CORE_FIELDS = gql`
 		isGivbackEligible
 		totalDonations
 		projectType
+		causeProjects {
+			id
+			project {
+				id
+			}
+		}
 		qfRounds {
 			id
 			name
@@ -299,6 +305,28 @@ export const FETCH_PROJECT_BY_SLUG_SINGLE_PROJECT = gql`
 			isGivbackEligible
 			totalDonations
 			description
+			projectType
+			causeProjects {
+				id
+				project {
+					id
+					title
+					image
+					slug
+					verified
+					isGivbackEligible
+					totalDonations
+					description
+					projectType
+					descriptionSummary
+					adminUser {
+						id
+						name
+						walletAddress
+						avatar
+					}
+				}
+			}
 			addresses {
 				address
 				isRecipient
@@ -733,8 +761,8 @@ export const UNLIKE_PROJECT_MUTATION = gql`
 `;
 
 export const GET_STATUS_REASONS = gql`
-	query {
-		getStatusReasons(statusId: 6) {
+	query GetStatusReasons($statusId: Int!) {
+		getStatusReasons(statusId: $statusId) {
 			id
 			description
 			status {

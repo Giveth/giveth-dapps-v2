@@ -381,18 +381,6 @@ export const CauseReviewStep = ({
 		}
 	};
 
-	// Handle launch complete - submit form
-	// const handleLaunchComplete = () => {
-	// 	const form = document.querySelector('form');
-	// 	if (form) {
-	// 		const submitEvent = new Event('submit', {
-	// 			bubbles: true,
-	// 			cancelable: true,
-	// 		});
-	// 		form.dispatchEvent(submitEvent);
-	// 	}
-	// };
-
 	return (
 		<StyledContainer>
 			<Title>

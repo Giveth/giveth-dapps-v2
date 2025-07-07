@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import {
 	brandColors,
 	Button,
@@ -26,7 +26,7 @@ import CongratsAnimation from '@/animations/congrats.json';
 import LottieControl from '@/components/LottieControl';
 import { EContentType } from '@/lib/constants/shareContent';
 import NotAvailableHandler from '@/components/NotAvailableHandler';
-import ProjectCard from '@/components/project-card/ProjectCardAlt';
+import ProjectCard from '@/components/project-card/ProjectCard';
 
 interface IProps {
 	cause?: ICause;
@@ -34,16 +34,6 @@ interface IProps {
 }
 
 const SuccessfulCauseCreation = ({ cause, isLoading }: IProps) => {
-	const router = useRouter();
-	const [projectsCount, setProjectsCount] = useState(0);
-
-	useEffect(() => {
-		const count = localStorage.getItem('causeProjectsCount');
-		if (count) {
-			setProjectsCount(parseInt(count, 10));
-			//localStorage.removeItem('causeProjectsCount');
-		}
-	}, []);
 	const dispatch = useAppDispatch();
 	const { formatMessage } = useIntl();
 
@@ -58,7 +48,6 @@ const SuccessfulCauseCreation = ({ cause, isLoading }: IProps) => {
 	if (!cause) return <NotAvailableHandler isProjectLoading={isLoading} />;
 
 	const causePath = slugToCauseView(cause.slug!);
-	console.log('Active Projects Count from query:', projectsCount);
 
 	return (
 		<Wrapper>
@@ -80,13 +69,7 @@ const SuccessfulCauseCreation = ({ cause, isLoading }: IProps) => {
 
 				<Row>
 					<Left xs={12} md={6}>
-						<CardWrapper>
-							<ProjectCard
-								project={cause}
-								isNew={true}
-								projectsCount={projectsCount}
-							/>
-						</CardWrapper>
+						<ProjectCard project={cause} />
 					</Left>
 
 					<Right xs={12} md={6}>
@@ -97,11 +80,11 @@ const SuccessfulCauseCreation = ({ cause, isLoading }: IProps) => {
 							/>
 						</ConfettiContainer>
 						<GiverH4>
-							{formatMessage({ id: 'label.congratulations' })}
+							{formatMessage({ id: 'label.congrats' })}
 						</GiverH4>
 						<SuccessMessage>
 							{formatMessage({
-								id: 'label.cause.success_message',
+								id: 'label.your_cause_has_been_published',
 							})}
 						</SuccessMessage>
 						<CopyBox>

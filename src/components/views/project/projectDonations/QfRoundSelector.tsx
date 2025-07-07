@@ -32,7 +32,7 @@ export const QfRoundSelector: FC<IQfRoundSelectorProps> = ({
 	setProjectDonationSwiperState,
 }) => {
 	const { formatMessage } = useIntl();
-	const { projectData } = useProjectContext();
+	const { projectData, isCause } = useProjectContext();
 	const navigationPrevRef = useRef(null);
 	const navigationNextRef = useRef(null);
 
@@ -97,24 +97,27 @@ export const QfRoundSelector: FC<IQfRoundSelectorProps> = ({
 						)}
 					</TabItem>
 				</SwiperSlide>
-				<SwiperSlide style={{ width: 'auto' }}>
-					<TabItem
-						$alignItems='center'
-						gap='4px'
-						onClick={() => {
-							setSelectedQF(null);
-							setIsRecurringSelected(true);
-						}}
-						$isSelected={isRecurringSelected === true}
-					>
-						{(projectDonationSwiperState.selectedQF === null) ===
-						null ? (
-							<B>Recurring Donations</B>
-						) : (
-							<P>Recurring Donations</P>
-						)}
-					</TabItem>
-				</SwiperSlide>
+				{!isCause && (
+					<SwiperSlide style={{ width: 'auto' }}>
+						<TabItem
+							$alignItems='center'
+							gap='4px'
+							onClick={() => {
+								setSelectedQF(null);
+								setIsRecurringSelected(true);
+							}}
+							$isSelected={isRecurringSelected === true}
+						>
+							{(projectDonationSwiperState.selectedQF ===
+								null) ===
+							null ? (
+								<B>Recurring Donations</B>
+							) : (
+								<P>Recurring Donations</P>
+							)}
+						</TabItem>
+					</SwiperSlide>
+				)}
 				{sortedRounds.map((round, index) => {
 					const isSelected = selectedQF?.id === round.id;
 					return (

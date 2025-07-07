@@ -23,7 +23,7 @@ import FacebookIcon from '../../../public/images/social-fb.svg';
 import LinkedinIcon from '../../../public/images/social-linkedin.svg';
 import ShareIcon from '../../../public/images/icons/share_dots.svg';
 import Warpcast from '../../../public/images/icons/social-warpcast.svg';
-import { slugToCauseView, slugToProjectView } from '@/lib/routeCreators';
+import { slugToProjectView, slugToCauseView } from '@/lib/routeCreators';
 import { IModal } from '@/types/common';
 import CopyLink from '@/components/CopyLink';
 import { fullPath } from '@/lib/helpers';
