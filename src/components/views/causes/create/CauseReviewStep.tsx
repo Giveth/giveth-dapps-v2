@@ -331,7 +331,6 @@ export const CauseReviewStep = ({
 			setIsLaunching(false);
 		}
 	};
-	const { handleSubmit } = useFormContext();
 
 	const handleTransfer = async () => {
 		setIsLaunching(true);
