@@ -208,6 +208,11 @@ export const FETCH_PROJECT_BY_SLUG_SUCCESS = gql`
 			title
 			image
 			slug
+			description
+			chainId
+			depositTxHash
+			depositTxStatus
+			depositTxChainId
 			descriptionSummary
 			adminUser {
 				id
@@ -418,6 +423,12 @@ export const FETCH_PROJECT_BY_ID = gql`
 			title
 			image
 			description
+			projects {
+				id
+				title
+				image
+				slug
+			}
 			addresses {
 				address
 				memo

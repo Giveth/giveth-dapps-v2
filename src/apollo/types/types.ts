@@ -564,7 +564,18 @@ export interface ICauseCreation {
 	depositTxChainId: number;
 }
 
+export interface ICauseUpdate {
+	title: string;
+	description: string;
+	projectIds: number[];
+	subCategories: string[];
+	bannerImage: string;
+}
+
 export interface ICause extends IProject {
-	[x: string]: any;
 	projects: IProject[];
+	chainId?: number;
+	depositTxHash?: string;
+	depositTxStatus?: string;
+	depositTxChainId?: number;
 }

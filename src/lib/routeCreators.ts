@@ -25,7 +25,7 @@ export const idToProjectEdit = (id?: string) => {
 };
 
 export const idToCauseEdit = (id?: string) => {
-	return Routes.Cause + '/' + id + '/edit';
+	return Routes.Causes + '/edit/' + id;
 };
 
 export const addressToUserView = (address?: string) => {

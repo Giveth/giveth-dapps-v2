@@ -168,3 +168,38 @@ export const FETCH_CAUSE_BY_SLUG_SINGLE_CAUSE = gql`
 		}
 	}
 `;
+
+export const UPDATE_CAUSE = gql`
+	mutation UpdateCause(
+		$id: String!
+		$title: String!
+		$description: String!
+		$chainId: Float!
+		$projectIds: [Float!]!
+		$subCategories: [String!]!
+		$depositTxHash: String!
+		$depositTxChainId: Float!
+		$bannerImage: String
+	) {
+		updateCause(
+			id: $id
+			title: $title
+			description: $description
+			chainId: $chainId
+			projectIds: $projectIds
+			subCategories: $subCategories
+			depositTxHash: $depositTxHash
+			depositTxChainId: $depositTxChainId
+			bannerImage: $bannerImage
+		) {
+			id
+			title
+			description
+			chainId
+			walletAddress
+			slug
+			creationDate
+			updatedAt
+		}
+	}
+`;
