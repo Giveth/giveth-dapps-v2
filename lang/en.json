@@ -1947,6 +1947,7 @@
 	"label.cause.listed_publicly": "Listed publicly",
 	"label.cause.view_cause": "View Cause",
 	"label.cause.total_distributed": "Total distributed",
+	"label.cause.create_cause": "Create a cause",
 	"label.cause.cause_rank": "Cause Rank",
 	"label.cause.boost_this_cause_with_givpower_to_improve_its_rank": "Boost this cause with GIVpower to improve its rank! Rank is updated at the beginning of every GIVbacks round. You can see the projected rank for next round as well below.",
 	"label.cause.boost_this_cause_with_givpower": "Boost this cause with GIVpower to improve its rank!"
