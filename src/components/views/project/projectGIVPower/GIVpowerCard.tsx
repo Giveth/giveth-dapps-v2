@@ -25,7 +25,7 @@ export const GIVpowerCard = () => {
 	const [roundEndTime, setRoundEndTime] = useState(new Date());
 	const { formatMessage, locale } = useIntl();
 	const { givTokenDistroHelper, isLoaded } = useGIVTokenDistroHelper();
-	const { projectData } = useProjectContext();
+	const { projectData, isCause } = useProjectContext();
 	const { projectPower, projectFuturePower } = projectData!;
 
 	useEffect(() => {
@@ -63,7 +63,9 @@ export const GIVpowerCard = () => {
 				>
 					<BoostTooltip>
 						{formatMessage({
-							id: 'label.boost_this_project_with_givpower_to_improve_its_rank',
+							id: isCause
+								? 'label.cause.boost_this_cause_with_givpower_to_improve_its_rank'
+								: 'label.boost_this_project_with_givpower_to_improve_its_rank',
 						})}
 					</BoostTooltip>
 				</IconWithTooltip>
@@ -91,7 +93,9 @@ export const GIVpowerCard = () => {
 				<Flex $alignItems='center' $justifyContent='space-between'>
 					<P>
 						{formatMessage({
-							id: 'label.projected_rank',
+							id: isCause
+								? 'label.cause.cause_rank'
+								: 'label.projected_rank',
 						})}
 					</P>
 					<NextRank
@@ -120,7 +124,9 @@ export const GIVpowerCard = () => {
 			<Separator />
 			<Desc>
 				{formatMessage({
-					id: 'label.boost_this_project_with_givpower',
+					id: isCause
+						? 'label.cause.boost_this_cause_with_givpower'
+						: 'label.boost_this_project_with_givpower',
 				})}
 			</Desc>
 		</GIVpowerCardWrapper>
