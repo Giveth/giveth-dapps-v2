@@ -22,8 +22,15 @@ const fetchProjectsPage = async (searchFilters: {
 }) => {
 	const filterBy =
 		searchFilters.filters.length > 0
-			? [...searchFilters.filters, EProjectsFilter.ACCEPT_FUND_ON_POLYGON]
-			: [EProjectsFilter.ACCEPT_FUND_ON_POLYGON];
+			? [
+					...searchFilters.filters,
+					EProjectsFilter.ACCEPT_FUND_ON_POLYGON,
+					EProjectsFilter.VERIFIED,
+				]
+			: [
+					EProjectsFilter.ACCEPT_FUND_ON_POLYGON,
+					EProjectsFilter.VERIFIED,
+				];
 
 	const { data: projectsData } = await client.query({
 		query: FETCH_ALL_PROJECTS_CAUSES,
