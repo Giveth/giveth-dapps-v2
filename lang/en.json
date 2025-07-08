@@ -1864,6 +1864,7 @@
 	"label.cause.transaction_failed": "Transaction Failed",
 	"label.cause.try_again": "Try again",
 	"label.cause.transaction_hash": "Transaction Hash",
+	"label.cause.transaction_success": "Transaction Successful",
 	"label.cause.launch_successful": "Launch Successful",
 	"label.cause.confirming": "Confirming...",
 	"label.cause.image_required": "Image is required",
