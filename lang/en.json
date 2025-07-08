@@ -1946,5 +1946,6 @@
 	"label.cause.my_causes": "My Causes",
 	"label.cause.listed_publicly": "Listed publicly",
 	"label.cause.view_cause": "View Cause",
-	"label.cause.total_distributed": "Total distributed"
+	"label.cause.total_distributed": "Total distributed",
+	"label.cause.create_cause": "Create a cause"
 }

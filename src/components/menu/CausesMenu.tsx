@@ -15,5 +15,5 @@ export const CausesMenu = () => {
 };
 
 const MenuContainer = styled(BaseMenuContainer)`
-	width: 697px;
+	width: 827px;
 `;
