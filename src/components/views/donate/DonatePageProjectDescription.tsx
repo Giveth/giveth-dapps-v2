@@ -24,7 +24,7 @@ import { ORGANIZATION } from '@/lib/constants/organizations';
 import { useDonateData } from '@/context/donate.context';
 import { ChainType } from '@/types/config';
 import config from '@/configuration';
-import { calculateTotalEstimatedMatching, getActiveRound } from '@/helpers/qf';
+import { getActiveRound } from '@/helpers/qf';
 import { GivBackBadge } from '@/components/badges/GivBackBadge';
 import links from '@/lib/constants/links';
 
@@ -138,25 +138,6 @@ export const DonatePageProjectDescription: FC<
 									)}
 								</LightSubline>
 							</div>
-							<EstimatedMatchingPrice>
-								+&nbsp;
-								{formatDonation(
-									calculateTotalEstimatedMatching(
-										projectDonationsSqrtRootSum,
-										allProjectsSum,
-										allocatedFundUSDPreferred
-											? allocatedFundUSD
-											: matchingPool,
-										activeStartedRound?.maximumReward,
-									),
-									allocatedFundUSDPreferred ? '$' : '',
-									locale,
-									true,
-								)}
-								{allocatedFundUSDPreferred
-									? ''
-									: ` ${allocatedTokenSymbol}`}
-							</EstimatedMatchingPrice>
 						</>
 					) : (
 						<DonateInfo>
