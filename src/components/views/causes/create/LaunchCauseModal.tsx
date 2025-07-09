@@ -9,10 +9,12 @@ import {
 	P,
 	H3,
 	IconCopy,
+	semanticColors,
 } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
 import { useFormContext } from 'react-hook-form';
 import { useAccount } from 'wagmi';
+import Image from 'next/image';
 import { Modal } from '@/components/modals/Modal';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
 import { IModal } from '@/types/common';
@@ -21,6 +23,7 @@ import { useTokenPrice } from '@/hooks/useTokenPrice';
 import config from '@/configuration';
 import { mediaQueries } from '@/lib/constants/constants';
 import { gToast, ToastType } from '@/components/toasts';
+import DangerIcon from '/public/images/icons/danger_triangle.svg';
 
 interface ILaunchCauseModalProps extends IModal {
 	isLaunching: boolean;
@@ -122,11 +125,10 @@ const LaunchCauseModal: FC<ILaunchCauseModalProps> = ({
 			return formatMessage({ id: 'label.cause.launching' });
 		}
 		if (
-			lunchStatus === 'approval_failed' ||
-			lunchStatus === 'transfer_failed' ||
+			lunchStatus === 'transfer_failed' &&
 			transactionStatus === 'failed'
 		) {
-			return formatMessage({ id: 'label.cause.try_again' });
+			return formatMessage({ id: 'label.cause.transfer' });
 		}
 		if (lunchStatus === 'approval_success') {
 			return formatMessage({ id: 'label.cause.transfer' });
@@ -188,32 +190,48 @@ const LaunchCauseModal: FC<ILaunchCauseModalProps> = ({
 			closeModal={closeModal}
 			isAnimating={isAnimating}
 			headerTitlePosition='left'
-			headerIcon={<IconDonation size={32} />}
+			headerIcon={
+				transactionError ? (
+					<Image src={DangerIcon} alt='danger' />
+				) : (
+					<IconDonation size={32} />
+				)
+			}
 			doNotCloseOnClickOutside={
 				isLaunching || transactionStatus === 'pending'
 			}
 			headerTitle={getHeaderTitle()}
+			headerColor={
+				transactionError ? semanticColors.punch[500] : undefined
+			}
 		>
 			<LaunchContainer>
 				<LaunchingBox>
-					<Lead>{getLeadText()}</Lead>
-					<LaunchSummary>
-						<TokenAmount>
-							{formatDonation(launchFee, '')} {launchToken}
-						</TokenAmount>
-						<UsdAmount>
-							<span>≈ ${launchFeeUSD} USD</span>
-						</UsdAmount>
-						<CauseTitle>to launch &quot;{title}&quot;</CauseTitle>
-					</LaunchSummary>
+					{!transactionError && <Lead>{getLeadText()}</Lead>}
+					{!transactionError && (
+						<LaunchSummary>
+							<TokenAmount>
+								{formatDonation(launchFee, '')} {launchToken}
+							</TokenAmount>
+							<UsdAmount>
+								<span>≈ ${launchFeeUSD} USD</span>
+							</UsdAmount>
+							<CauseTitle>
+								to launch &quot;{title}&quot;
+							</CauseTitle>
+						</LaunchSummary>
+					)}
 					{transactionStatus === 'failed' && transactionError && (
 						<ErrorMessage>
-							<P>
+							<p>
 								{formatMessage({
-									id: 'label.cause.transaction_failed',
+									id: 'label.cause.transaction_failed_desc',
 								})}
-							</P>
-							<ErrorDetail>{transactionError}</ErrorDetail>
+								<br />
+								{formatMessage({
+									id: 'label.cause.transaction_failed_desc_2',
+								})}
+							</p>
 						</ErrorMessage>
 					)}
 					{(lunchStatus === 'transfer_success' ||
@@ -243,28 +261,30 @@ const LaunchCauseModal: FC<ILaunchCauseModalProps> = ({
 						</SuccessMessage>
 					)}
 				</LaunchingBox>
-				<Buttons>
-					{isLaunching && (
-						<InfoMessage>
-							<P>
-								{formatMessage({
-									id: 'label.cause.launch_processing',
-								})}
-							</P>
-						</InfoMessage>
-					)}
-					<LaunchButton
-						loading={isLaunching || isSubmitting}
-						buttonType={
-							lunchStatus || transactionStatus === 'success'
-								? 'primary'
-								: 'secondary'
-						}
-						disabled={isSubmitting}
-						label={buttonText()}
-						onClick={handleLaunch}
-					/>
-				</Buttons>
+				{!transactionError && (
+					<Buttons>
+						{isLaunching && (
+							<InfoMessage>
+								<P>
+									{formatMessage({
+										id: 'label.cause.launch_processing',
+									})}
+								</P>
+							</InfoMessage>
+						)}
+						<LaunchButton
+							loading={isLaunching || isSubmitting}
+							buttonType={
+								lunchStatus || transactionStatus === 'success'
+									? 'primary'
+									: 'secondary'
+							}
+							disabled={isSubmitting}
+							label={buttonText()}
+							onClick={handleLaunch}
+						/>
+					</Buttons>
+				)}
 			</LaunchContainer>
 		</Modal>
 	);
@@ -362,18 +382,23 @@ const LaunchButton = styled(Button)`
 `;
 
 const ErrorMessage = styled.div`
-	padding: 16px;
-	border-radius: 8px;
-	background-color: ${brandColors.pinky[200]};
-	border: 1px solid ${brandColors.pinky[400]};
-`;
+	border-radius: 16px;
+	background: ${semanticColors.punch[100]};
+	padding: 30px 20px;
+	color: ${semanticColors.punch[700]};
+	border: 1px solid ${semanticColors.punch[700]};
+	margin-top: 42px;
+	margin-bottom: 48px;
+	font-size: 18px;
+	font-weight: 400;
+	line-height: 150%;
+	p {
+		margin: 0 0 5px;
+	}
 
-const ErrorDetail = styled.div`
-	margin-top: 8px;
-	font-size: 12px;
-	color: ${brandColors.pinky[600]};
-	font-family: monospace;
-	word-break: break-all;
+	${mediaQueries.mobileL} {
+		padding: 24px;
+	}
 `;
 
 const TransactionHash = styled.div`
