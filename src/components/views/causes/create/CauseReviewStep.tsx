@@ -271,6 +271,10 @@ export const CauseReviewStep = ({
 		) {
 			return;
 		}
+
+		// Reset transaction error
+		setValue('transactionError', '');
+
 		setShowLaunchModal(true);
 	};
 
