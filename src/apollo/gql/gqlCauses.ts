@@ -168,3 +168,46 @@ export const FETCH_CAUSE_BY_SLUG_SINGLE_CAUSE = gql`
 		}
 	}
 `;
+
+export const UPDATE_CAUSE = gql`
+	mutation UpdateCause(
+		$projectId: Float!
+		$newProjectData: UpdateProjectInput!
+	) {
+		updateCause(projectId: $projectId, newProjectData: $newProjectData) {
+			id
+			title
+			description
+			image
+			slug
+			updatedAt
+			adminUserId
+			walletAddress
+			categories {
+				name
+				mainCategory {
+					title
+					slug
+					banner
+					description
+				}
+			}
+			projects {
+				id
+				title
+				slug
+			}
+			adminUser {
+				id
+				name
+				email
+				walletAddress
+				isEmailVerified
+			}
+			status {
+				id
+				name
+			}
+		}
+	}
+`;

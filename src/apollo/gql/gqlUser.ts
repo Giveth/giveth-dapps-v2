@@ -56,6 +56,7 @@ export const FETCH_USER_PROJECTS = gql`
 				...ProjectCardFields
 				creationDate
 				listed
+				activeProjectsCount
 				status {
 					id
 					name
