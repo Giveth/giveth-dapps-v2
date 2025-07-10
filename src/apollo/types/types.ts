@@ -96,6 +96,7 @@ export interface IProject {
 	socialMedia: IProjectSocialMedia[];
 	projectType: EProjectType;
 	causeProjects?: ICauseProject[];
+	activeProjectsCount?: number;
 }
 
 export interface ICauseProject {
@@ -264,6 +265,7 @@ export interface IUser {
 	isReferrer?: boolean;
 	chainvineId?: string;
 	isEmailVerified?: boolean;
+	ownedCausesCount?: number;
 }
 
 export interface IPassportInfo {

@@ -153,6 +153,11 @@ export const CauseProjectsSearch = ({
 						})}
 						value={searchTerm}
 						onChange={handleSearchChange}
+						onKeyDown={e => {
+							if (e.key === 'Enter') {
+								e.preventDefault(); // Prevent form submit
+							}
+						}}
 					/>
 					<IconSearch size={18} color={neutralColors.gray[900]} />
 				</SearchInputWrapper>
