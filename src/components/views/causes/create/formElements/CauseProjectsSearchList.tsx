@@ -35,7 +35,7 @@ const fetchProjectsPage = async (searchFilters: {
 	const { data: projectsData } = await client.query({
 		query: FETCH_ALL_PROJECTS_CAUSES,
 		variables: {
-			limit: 50,
+			limit: 24,
 			skip: 0,
 			searchTerm: searchFilters.searchTerm,
 			mainCategory: searchFilters.selectedMainCategory,
