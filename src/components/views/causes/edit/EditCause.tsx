@@ -36,8 +36,6 @@ const EditCause: FC<ICreateCauseProps> = ({ project }) => {
 
 	const formRef = useRef<HTMLFormElement>(null);
 
-	console.log('project', project);
-
 	const formMethods = useForm({
 		mode: 'onChange',
 		defaultValues: {
@@ -118,7 +116,7 @@ const EditCause: FC<ICreateCauseProps> = ({ project }) => {
 				title: formValues.title,
 				description: formValues.description,
 				bannerImage: formValues.image,
-				subCategories:
+				categories:
 					formValues.categories?.map(category => category.name) || [],
 				projectIds:
 					formValues.selectedProjects?.map(project =>
@@ -126,7 +124,12 @@ const EditCause: FC<ICreateCauseProps> = ({ project }) => {
 					) || [],
 			};
 
-			await updateCauseMutation({ variables: causeData });
+			await updateCauseMutation({
+				variables: {
+					projectId: Number(project?.id),
+					newProjectData: causeData,
+				},
+			});
 
 			router.push(slugToCauseView(project?.slug || ''));
 		} catch (error) {

@@ -429,6 +429,14 @@ export const FETCH_PROJECT_BY_ID = gql`
 				title
 				image
 				slug
+				description
+				categories {
+					name
+					value
+					mainCategory {
+						title
+					}
+				}
 			}
 			addresses {
 				address
@@ -445,6 +453,9 @@ export const FETCH_PROJECT_BY_ID = gql`
 			categories {
 				name
 				value
+				mainCategory {
+					title
+				}
 			}
 			adminUser {
 				walletAddress

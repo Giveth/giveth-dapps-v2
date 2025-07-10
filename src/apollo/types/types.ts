@@ -570,7 +570,7 @@ export interface ICauseUpdate {
 	title: string;
 	description: string;
 	projectIds: number[];
-	subCategories: string[];
+	categories: string[];
 	bannerImage: string;
 }
 
