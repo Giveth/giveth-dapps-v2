@@ -68,14 +68,14 @@ export const ProjectCardTotalRaisedQF = ({
 					}) + ' '}
 				</AmountRaisedText>
 			</div>
-			<div>
-				{isCause && (
+			{isCause && (
+				<div>
 					<ProjectsText>
 						{projectsCount}
 						<span>{formatMessage({ id: 'label.projects' })}</span>
 					</ProjectsText>
-				)}
-			</div>
+				</div>
+			)}
 		</FlexWrap>
 	);
 };
