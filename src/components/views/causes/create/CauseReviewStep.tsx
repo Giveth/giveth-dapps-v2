@@ -271,6 +271,10 @@ export const CauseReviewStep = ({
 		) {
 			return;
 		}
+
+		// Reset transaction error
+		setValue('transactionError', '');
+
 		setShowLaunchModal(true);
 	};
 
@@ -331,7 +335,6 @@ export const CauseReviewStep = ({
 			setIsLaunching(false);
 		}
 	};
-	const { handleSubmit } = useFormContext();
 
 	const handleTransfer = async () => {
 		setIsLaunching(true);

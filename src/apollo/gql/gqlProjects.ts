@@ -65,6 +65,7 @@ export const PROJECT_CARD_FIELDS = gql`
 			isActive
 			networkId
 		}
+		activeProjectsCount
 	}
 `;
 

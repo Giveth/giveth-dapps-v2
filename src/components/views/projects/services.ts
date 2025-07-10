@@ -2,6 +2,7 @@
 
 import { client } from '@/apollo/apolloClient';
 import { FETCH_ALL_PROJECTS } from '@/apollo/gql/gqlProjects';
+import { EProjectType } from '@/apollo/types/gqlEnums';
 import { IMainCategory, IProject } from '@/apollo/types/types';
 import { getMainCategorySlug } from '@/helpers/projects';
 
@@ -11,6 +12,7 @@ export interface IQueries {
 	connectedWalletUserId?: number;
 	mainCategory?: string;
 	qfRoundSlug?: string | null;
+	projectType?: EProjectType;
 }
 
 export interface Page {

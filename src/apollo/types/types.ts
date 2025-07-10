@@ -265,6 +265,7 @@ export interface IUser {
 	isReferrer?: boolean;
 	chainvineId?: string;
 	isEmailVerified?: boolean;
+	ownedCausesCount?: number;
 }
 
 export interface IPassportInfo {

@@ -8,10 +8,13 @@ import {
 	Button,
 	P,
 	H3,
+	IconCopy,
+	semanticColors,
 } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
 import { useFormContext } from 'react-hook-form';
 import { useAccount } from 'wagmi';
+import Image from 'next/image';
 import { Modal } from '@/components/modals/Modal';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
 import { IModal } from '@/types/common';
@@ -19,6 +22,8 @@ import { formatDonation } from '@/helpers/number';
 import { useTokenPrice } from '@/hooks/useTokenPrice';
 import config from '@/configuration';
 import { mediaQueries } from '@/lib/constants/constants';
+import { gToast, ToastType } from '@/components/toasts';
+import DangerIcon from '/public/images/icons/danger_triangle.svg';
 
 interface ILaunchCauseModalProps extends IModal {
 	isLaunching: boolean;
@@ -80,6 +85,16 @@ const LaunchCauseModal: FC<ILaunchCauseModalProps> = ({
 		? (launchTokenPrice * launchFee).toFixed(2)
 		: '0.00';
 
+	// Handle copy transaction hash
+	const handleCopyTransactionHash = () => {
+		if (transactionHash) {
+			navigator.clipboard.writeText(transactionHash);
+			gToast(formatMessage({ id: 'label.copied' }), {
+				type: ToastType.SUCCESS,
+			});
+		}
+	};
+
 	// Handle launch flow
 	const handleLaunch = () => {
 		// First try to approve the token
@@ -106,12 +121,14 @@ const LaunchCauseModal: FC<ILaunchCauseModalProps> = ({
 	};
 
 	const buttonText = () => {
+		if (isSubmitting) {
+			return formatMessage({ id: 'label.cause.launching' });
+		}
 		if (
-			lunchStatus === 'approval_failed' ||
-			lunchStatus === 'transfer_failed' ||
+			lunchStatus === 'transfer_failed' &&
 			transactionStatus === 'failed'
 		) {
-			return formatMessage({ id: 'label.cause.try_again' });
+			return formatMessage({ id: 'label.cause.transfer' });
 		}
 		if (lunchStatus === 'approval_success') {
 			return formatMessage({ id: 'label.cause.transfer' });
@@ -122,13 +139,14 @@ const LaunchCauseModal: FC<ILaunchCauseModalProps> = ({
 		) {
 			return formatMessage({ id: 'label.cause.launch_complete' });
 		}
-		if (isSubmitting) {
-			return formatMessage({ id: 'label.cause.launch_processing' });
-		}
+
 		return formatMessage({ id: 'label.approve' });
 	};
 
 	const getHeaderTitle = () => {
+		if (isSubmitting) {
+			return formatMessage({ id: 'label.cause.launching_cause' });
+		}
 		if (
 			lunchStatus === 'approval_failed' ||
 			lunchStatus === 'transfer_failed'
@@ -144,13 +162,13 @@ const LaunchCauseModal: FC<ILaunchCauseModalProps> = ({
 		if (lunchStatus === 'approval_success') {
 			return formatMessage({ id: 'label.cause.transfer' });
 		}
-		if (isSubmitting) {
-			return formatMessage({ id: 'label.cause.launching_cause' });
-		}
 		return formatMessage({ id: 'label.approve' });
 	};
 
 	const getLeadText = () => {
+		if (isSubmitting) {
+			return formatMessage({ id: 'label.cause.launching_cause' });
+		}
 		if (
 			lunchStatus === 'approval_failed' ||
 			lunchStatus === 'transfer_failed' ||
@@ -172,32 +190,48 @@ const LaunchCauseModal: FC<ILaunchCauseModalProps> = ({
 			closeModal={closeModal}
 			isAnimating={isAnimating}
 			headerTitlePosition='left'
-			headerIcon={<IconDonation size={32} />}
+			headerIcon={
+				transactionError ? (
+					<Image src={DangerIcon} alt='danger' />
+				) : (
+					<IconDonation size={32} />
+				)
+			}
 			doNotCloseOnClickOutside={
 				isLaunching || transactionStatus === 'pending'
 			}
 			headerTitle={getHeaderTitle()}
+			headerColor={
+				transactionError ? semanticColors.punch[500] : undefined
+			}
 		>
 			<LaunchContainer>
 				<LaunchingBox>
-					<Lead>{getLeadText()}</Lead>
-					<LaunchSummary>
-						<TokenAmount>
-							{formatDonation(launchFee, '')} {launchToken}
-						</TokenAmount>
-						<UsdAmount>
-							<span>≈ ${launchFeeUSD} USD</span>
-						</UsdAmount>
-						<CauseTitle>to launch &quot;{title}&quot;</CauseTitle>
-					</LaunchSummary>
+					{!transactionError && <Lead>{getLeadText()}</Lead>}
+					{!transactionError && (
+						<LaunchSummary>
+							<TokenAmount>
+								{formatDonation(launchFee, '')} {launchToken}
+							</TokenAmount>
+							<UsdAmount>
+								<span>≈ ${launchFeeUSD} USD</span>
+							</UsdAmount>
+							<CauseTitle>
+								to launch &quot;{title}&quot;
+							</CauseTitle>
+						</LaunchSummary>
+					)}
 					{transactionStatus === 'failed' && transactionError && (
 						<ErrorMessage>
-							<P>
+							<p>
 								{formatMessage({
-									id: 'label.cause.transaction_failed',
+									id: 'label.cause.transaction_failed_desc',
 								})}
-							</P>
-							<ErrorDetail>{transactionError}</ErrorDetail>
+								<br />
+								{formatMessage({
+									id: 'label.cause.transaction_failed_desc_2',
+								})}
+							</p>
 						</ErrorMessage>
 					)}
 					{(lunchStatus === 'transfer_success' ||
@@ -205,7 +239,7 @@ const LaunchCauseModal: FC<ILaunchCauseModalProps> = ({
 						<SuccessMessage>
 							<P>
 								{formatMessage({
-									id: 'label.cause.launch_success_message',
+									id: 'label.cause.transaction_success',
 								})}
 							</P>
 							{transactionHash && (
@@ -217,33 +251,40 @@ const LaunchCauseModal: FC<ILaunchCauseModalProps> = ({
 										: {transactionHash.slice(0, 10)}...
 										{transactionHash.slice(-8)}
 									</P>
+									<CopyIcon
+										onClick={handleCopyTransactionHash}
+									>
+										<IconCopy size={16} />
+									</CopyIcon>
 								</TransactionHash>
 							)}
 						</SuccessMessage>
 					)}
 				</LaunchingBox>
-				<Buttons>
-					{isLaunching && (
-						<InfoMessage>
-							<P>
-								{formatMessage({
-									id: 'label.cause.launch_processing',
-								})}
-							</P>
-						</InfoMessage>
-					)}
-					<LaunchButton
-						loading={isLaunching}
-						buttonType={
-							lunchStatus || transactionStatus === 'success'
-								? 'primary'
-								: 'secondary'
-						}
-						disabled={false}
-						label={buttonText()}
-						onClick={handleLaunch}
-					/>
-				</Buttons>
+				{!transactionError && (
+					<Buttons>
+						{isLaunching && (
+							<InfoMessage>
+								<P>
+									{formatMessage({
+										id: 'label.cause.launch_processing',
+									})}
+								</P>
+							</InfoMessage>
+						)}
+						<LaunchButton
+							loading={isLaunching || isSubmitting}
+							buttonType={
+								lunchStatus || transactionStatus === 'success'
+									? 'primary'
+									: 'secondary'
+							}
+							disabled={isSubmitting}
+							label={buttonText()}
+							onClick={handleLaunch}
+						/>
+					</Buttons>
+				)}
 			</LaunchContainer>
 		</Modal>
 	);
@@ -341,18 +382,23 @@ const LaunchButton = styled(Button)`
 `;
 
 const ErrorMessage = styled.div`
-	padding: 16px;
-	border-radius: 8px;
-	background-color: ${brandColors.pinky[200]};
-	border: 1px solid ${brandColors.pinky[400]};
-`;
+	border-radius: 16px;
+	background: ${semanticColors.punch[100]};
+	padding: 30px 20px;
+	color: ${semanticColors.punch[700]};
+	border: 1px solid ${semanticColors.punch[700]};
+	margin-top: 42px;
+	margin-bottom: 48px;
+	font-size: 18px;
+	font-weight: 400;
+	line-height: 150%;
+	p {
+		margin: 0 0 5px;
+	}
 
-const ErrorDetail = styled.div`
-	margin-top: 8px;
-	font-size: 12px;
-	color: ${brandColors.pinky[600]};
-	font-family: monospace;
-	word-break: break-all;
+	${mediaQueries.mobileL} {
+		padding: 24px;
+	}
 `;
 
 const TransactionHash = styled.div`
@@ -363,4 +409,27 @@ const TransactionHash = styled.div`
 	font-family: monospace;
 	font-size: 12px;
 	color: ${neutralColors.gray[700]};
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 8px;
+`;
+
+const CopyIcon = styled.div`
+	cursor: pointer;
+	color: ${brandColors.cyan[500]};
+	display: flex;
+	align-items: center;
+	padding: 2px;
+	border-radius: 4px;
+	transition: all 0.2s ease;
+
+	&:hover {
+		color: ${brandColors.cyan[300]};
+		background-color: ${neutralColors.gray[300]};
+	}
+
+	&:active {
+		transform: scale(0.95);
+	}
 `;

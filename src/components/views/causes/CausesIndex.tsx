@@ -27,7 +27,6 @@ import { ArchivedQFRoundStats } from '@/components/views/projects/ArchivedQFRoun
 import { ActiveQFRoundStats } from '@/components/views/projects/ActiveQFRoundStats';
 import useMediaQuery from '@/hooks/useMediaQuery';
 import { DefaultQFBanner } from '@/components/DefaultQFBanner';
-import { IQueries } from '@/components/views/causes/services';
 import { ICause } from '@/apollo/types/types';
 import { LAST_CAUSE_CLICKED } from '@/components/views/causes/constants';
 import { hasRoundStarted } from '@/helpers/qf';
@@ -35,7 +34,7 @@ import config from '@/configuration';
 import { EProjectType } from '@/apollo/types/gqlEnums';
 import { useProjectsContext } from '@/context/projects.context';
 import { ActiveQFProjectsBanner } from '@/components/views/projects/qfBanner/ActiveQFProjectsBanner';
-import { fetchProjects } from '@/components/views/projects/services';
+import { fetchProjects, IQueries } from '@/components/views/projects/services';
 import { ArchivedQFProjectsBanner } from '@/components/views/projects/qfBanner/ArchivedQFProjectsBanner';
 import { QFProjectsMiddleBanner } from '@/components/views/projects/MiddleBanners/QFMiddleBanner';
 import ProjectsMiddleGivethVaultBanner from '@/components/views/projects/MiddleBanners/ProjectsMiddleGivethVaultBanner';

@@ -69,6 +69,7 @@ export const CausesItems: FC<ICausesItems> = ({ inSidebar = false }) => {
 				<ExploreByRow
 					gap='16px'
 					$flexDirection={inSidebar ? 'column' : undefined}
+					$flexWrap={inSidebar ? false : true}
 				>
 					{projectsItems.explore.map((explore, idx) => (
 						<Link key={idx} href={explore.url}>
@@ -88,6 +89,19 @@ export const CausesItems: FC<ICausesItems> = ({ inSidebar = false }) => {
 							</ExploreItem>
 						</Link>
 					)}
+					<Link href={Routes.CreateCause}>
+						<ExploreItemCreate
+							className='qf-item'
+							baseTheme={theme}
+							isHighlighted
+						>
+							<B>
+								{formatMessage({
+									id: 'label.cause.create_cause',
+								})}
+							</B>
+						</ExploreItemCreate>
+					</Link>
 				</ExploreByRow>
 			</HighlightSection>
 			<NormalSection $inSidebar={inSidebar}>
@@ -115,6 +129,7 @@ export const CausesItems: FC<ICausesItems> = ({ inSidebar = false }) => {
 
 const ExploreByRow = styled(Flex)`
 	margin-top: 16px;
+	flex-wrap: ${props => (props.$flexWrap ? 'wrap' : 'nowrap')};
 `;
 
 const ExploreItem = styled(Item)`
@@ -124,6 +139,13 @@ const ExploreItem = styled(Item)`
 		border-radius: 16px;
 		color: white;
 	}
+`;
+
+const ExploreItemCreate = styled(Item)`
+	padding: 2px 8px;
+	font-size: 14px;
+	color: ${brandColors.pinky[500]};
+	text-transform: uppercase;
 `;
 
 const NormalSection = styled.div<{ $inSidebar?: boolean }>`

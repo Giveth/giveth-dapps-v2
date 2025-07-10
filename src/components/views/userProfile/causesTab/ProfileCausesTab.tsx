@@ -55,10 +55,10 @@ const ProfileCausesTab: FC<IUserProfileView> = () => {
 							title={
 								myAccount
 									? formatMessage({
-											id: 'label.you_havent_created_any_projects_yet',
+											id: 'label.you_havent_created_any_causes_yet',
 										})
 									: formatMessage({
-											id: 'label.this_user_hasnt_created_any_project_yet',
+											id: 'label.this_user_hasnt_created_any_cause_yet',
 										})
 							}
 						/>

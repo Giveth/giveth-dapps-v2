@@ -40,6 +40,7 @@ import { IProject } from '@/apollo/types/types';
 import { LAST_PROJECT_CLICKED } from './constants';
 import { hasRoundStarted } from '@/helpers/qf';
 import config from '@/configuration';
+import { EProjectType } from '@/apollo/types/gqlEnums';
 
 export interface IProjectsView {
 	projects: IProject[];
@@ -70,9 +71,15 @@ const ProjectsIndex = (props: IProjectsView) => {
 
 	// Define the fetch function for React Query
 	const fetchProjectsPage = async ({ pageParam = 0 }) => {
+		const projectType =
+			router.pathname === '/qf/[slug]'
+				? EProjectType.ALL
+				: EProjectType.PROJECT;
+
 		const variables: IQueries = {
 			limit: 20, // Adjust the limit as needed
 			skip: 20 * pageParam,
+			projectType,
 		};
 
 		if (user?.id) {
