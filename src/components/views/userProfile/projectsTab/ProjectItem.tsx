@@ -163,7 +163,7 @@ const ProjectItem: FC<IProjectItem> = props => {
 									})}
 								</Flex>
 							</P>
-							{project.totalDonations || 0}
+							{project.activeProjectsCount || 0}
 						</Flex>
 					)}
 					<Flex $justifyContent='space-between'>

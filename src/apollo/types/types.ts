@@ -96,6 +96,7 @@ export interface IProject {
 	socialMedia: IProjectSocialMedia[];
 	projectType: EProjectType;
 	causeProjects?: ICauseProject[];
+	activeProjectsCount?: number;
 }
 
 export interface ICauseProject {
