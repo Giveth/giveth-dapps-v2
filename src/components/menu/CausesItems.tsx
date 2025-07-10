@@ -69,6 +69,7 @@ export const CausesItems: FC<ICausesItems> = ({ inSidebar = false }) => {
 				<ExploreByRow
 					gap='16px'
 					$flexDirection={inSidebar ? 'column' : undefined}
+					$flexWrap={inSidebar ? false : true}
 				>
 					{projectsItems.explore.map((explore, idx) => (
 						<Link key={idx} href={explore.url}>
@@ -128,6 +129,7 @@ export const CausesItems: FC<ICausesItems> = ({ inSidebar = false }) => {
 
 const ExploreByRow = styled(Flex)`
 	margin-top: 16px;
+	flex-wrap: ${props => (props.$flexWrap ? 'wrap' : 'nowrap')};
 `;
 
 const ExploreItem = styled(Item)`
