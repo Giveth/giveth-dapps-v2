@@ -36,11 +36,7 @@ import {
 	Desc,
 } from '@/components/views/causes/create/Create.sc';
 import LaunchCauseModal from '@/components/views/causes/create/LaunchCauseModal';
-import {
-	approveTokenTransfer,
-	checkTokenApproval,
-	transferToken,
-} from './helpers';
+import { transferToken } from './helpers';
 
 interface IProps {
 	onPrevious: () => void;
@@ -94,13 +90,8 @@ export const CauseReviewStep = ({
 	const [showLaunchModal, setShowLaunchModal] = useState(false);
 	const [isLaunching, setIsLaunching] = useState(false);
 	const [lunchStatus, setLunchStatus] = useState<
-		| 'approval'
-		| 'approval_success'
-		| 'approval_failed'
-		| 'transfer_success'
-		| 'transfer_failed'
-		| null
-	>('approval');
+		'transfer' | 'transfer_success' | 'transfer_failed' | null
+	>('transfer');
 
 	// Get native token info for current network
 	const nativeTokenInfo = useMemo(() => {
@@ -276,64 +267,6 @@ export const CauseReviewStep = ({
 		setValue('transactionError', '');
 
 		setShowLaunchModal(true);
-	};
-
-	const handleApproval = async () => {
-		setIsLaunching(true);
-		setValue('transactionStatus', 'pending');
-		try {
-			if (
-				!address ||
-				!currentChainId ||
-				!supportedNetwork?.tokenAddress ||
-				!supportedNetwork?.destinationAddress
-			) {
-				throw new Error('Missing required parameters for approval');
-			}
-
-			const checkApproval = await checkTokenApproval({
-				tokenAddress: supportedNetwork.tokenAddress,
-				owner: address,
-				spender: supportedNetwork.destinationAddress,
-				requiredAmount: launchFeeAmount,
-				chainId: currentChainId,
-			});
-
-			console.log('checkApproval', checkApproval);
-
-			// Approval already done
-			if (checkApproval) {
-				setLunchStatus('approval_success');
-				setIsLaunching(false);
-				return;
-			}
-			// Approval not done ask for it
-			else {
-				const approvalTxHash = await approveTokenTransfer({
-					tokenAddress: supportedNetwork.tokenAddress,
-					spender: supportedNetwork.destinationAddress,
-					amount: launchFeeAmount,
-					chainId: currentChainId,
-				});
-
-				if (!approvalTxHash) {
-					setLunchStatus('approval_failed');
-					setIsLaunching(false);
-					throw new Error('Token approval transaction failed');
-				}
-
-				setLunchStatus('approval_success');
-				setIsLaunching(false);
-			}
-		} catch (error) {
-			console.error('Approval failed:', error);
-			setLunchStatus('approval_failed');
-			setValue(
-				'transactionError',
-				(error as Error)?.message || 'Approval failed',
-			);
-			setIsLaunching(false);
-		}
 	};
 
 	const handleTransfer = async () => {
@@ -631,7 +564,6 @@ export const CauseReviewStep = ({
 					transactionStatus={transactionStatus}
 					transactionHash={transactionHash}
 					transactionError={transactionError}
-					handleApproval={handleApproval}
 					handleTransfer={handleTransfer}
 					handleLaunchComplete={handleLaunchComplete}
 					isSubmitting={isSubmitting}

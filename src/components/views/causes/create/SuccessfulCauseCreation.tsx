@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import {
 	brandColors,
 	Button,
@@ -13,7 +13,6 @@ import Link from 'next/link';
 import Image from 'next/image';
 import styled from 'styled-components';
 import { useIntl } from 'react-intl';
-import { useRouter } from 'next/router';
 import { ICause } from '@/apollo/types/types';
 import { slugToCauseView } from '@/lib/routeCreators';
 import SocialBox from '@/components/SocialBox';
@@ -34,16 +33,6 @@ interface IProps {
 }
 
 const SuccessfulCauseCreation = ({ cause, isLoading }: IProps) => {
-	const router = useRouter();
-	const [projectsCount, setProjectsCount] = useState(0);
-
-	useEffect(() => {
-		const count = localStorage.getItem('causeProjectsCount');
-		if (count) {
-			setProjectsCount(parseInt(count, 10));
-			//localStorage.removeItem('causeProjectsCount');
-		}
-	}, []);
 	const dispatch = useAppDispatch();
 	const { formatMessage } = useIntl();
 
@@ -83,7 +72,7 @@ const SuccessfulCauseCreation = ({ cause, isLoading }: IProps) => {
 							<ProjectCard
 								project={cause}
 								isNew={true}
-								projectsCount={projectsCount}
+								projectsCount={cause.activeProjectsCount || 0}
 							/>
 						</CardWrapper>
 					</Left>
