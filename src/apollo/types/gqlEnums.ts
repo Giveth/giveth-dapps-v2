@@ -74,6 +74,7 @@ export enum ECauseVerificationStatus {
 export enum EProjectType {
 	CAUSE = 'cause',
 	PROJECT = 'project',
+	ALL = 'all',
 }
 
 export enum ECauseStatus {
