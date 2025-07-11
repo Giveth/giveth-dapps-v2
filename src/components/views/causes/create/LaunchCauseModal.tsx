@@ -27,17 +27,10 @@ import DangerIcon from '/public/images/icons/danger_triangle.svg';
 
 interface ILaunchCauseModalProps extends IModal {
 	isLaunching: boolean;
-	lunchStatus:
-		| 'approval'
-		| 'approval_success'
-		| 'approval_failed'
-		| 'transfer_success'
-		| 'transfer_failed'
-		| null;
+	lunchStatus: 'transfer' | 'transfer_success' | 'transfer_failed' | null;
 	transactionStatus?: 'pending' | 'success' | 'failed';
 	transactionHash?: string;
 	transactionError?: string;
-	handleApproval?: () => void;
 	handleTransfer?: () => void;
 	handleLaunchComplete?: () => void;
 	isSubmitting?: boolean;
@@ -50,7 +43,6 @@ const LaunchCauseModal: FC<ILaunchCauseModalProps> = ({
 	transactionStatus,
 	transactionHash,
 	transactionError,
-	handleApproval,
 	handleTransfer,
 	handleLaunchComplete,
 	isSubmitting = false,
@@ -97,16 +89,8 @@ const LaunchCauseModal: FC<ILaunchCauseModalProps> = ({
 
 	// Handle launch flow
 	const handleLaunch = () => {
-		// First try to approve the token
-		if (lunchStatus === 'approval' || lunchStatus === 'approval_failed') {
-			handleApproval?.();
-		}
-
-		// Then try to transfer the token
-		if (
-			lunchStatus === 'approval_success' ||
-			lunchStatus === 'transfer_failed'
-		) {
+		// First try to transfer the token
+		if (lunchStatus === 'transfer_failed' || lunchStatus === 'transfer') {
 			handleTransfer?.();
 		}
 
@@ -130,9 +114,6 @@ const LaunchCauseModal: FC<ILaunchCauseModalProps> = ({
 		) {
 			return formatMessage({ id: 'label.cause.transfer' });
 		}
-		if (lunchStatus === 'approval_success') {
-			return formatMessage({ id: 'label.cause.transfer' });
-		}
 		if (
 			lunchStatus === 'transfer_success' ||
 			transactionStatus === 'success'
@@ -140,17 +121,14 @@ const LaunchCauseModal: FC<ILaunchCauseModalProps> = ({
 			return formatMessage({ id: 'label.cause.launch_complete' });
 		}
 
-		return formatMessage({ id: 'label.approve' });
+		return formatMessage({ id: 'label.cause.transfer' });
 	};
 
 	const getHeaderTitle = () => {
 		if (isSubmitting) {
 			return formatMessage({ id: 'label.cause.launching_cause' });
 		}
-		if (
-			lunchStatus === 'approval_failed' ||
-			lunchStatus === 'transfer_failed'
-		) {
+		if (lunchStatus === 'transfer_failed') {
 			return formatMessage({ id: 'label.cause.launch_failed' });
 		}
 		if (
@@ -159,10 +137,7 @@ const LaunchCauseModal: FC<ILaunchCauseModalProps> = ({
 		) {
 			return formatMessage({ id: 'label.cause.launch_complete' });
 		}
-		if (lunchStatus === 'approval_success') {
-			return formatMessage({ id: 'label.cause.transfer' });
-		}
-		return formatMessage({ id: 'label.approve' });
+		return formatMessage({ id: 'label.cause.transfer' });
 	};
 
 	const getLeadText = () => {
@@ -170,7 +145,6 @@ const LaunchCauseModal: FC<ILaunchCauseModalProps> = ({
 			return formatMessage({ id: 'label.cause.launching_cause' });
 		}
 		if (
-			lunchStatus === 'approval_failed' ||
 			lunchStatus === 'transfer_failed' ||
 			transactionStatus === 'failed'
 		) {
