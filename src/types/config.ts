@@ -239,6 +239,7 @@ export interface EnvConfig {
 	SOLANA_CONFIG: NonEVMNetworkConfig;
 	STELLAR_CONFIG: NonEVMNetworkConfig;
 	CAUSES_CONFIG: {
+		acceptedNetworks: number[];
 		minSelectedProjects: number;
 		maxSelectedProjects: number;
 		launchFee: number;

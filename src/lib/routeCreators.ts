@@ -37,6 +37,6 @@ export const slugToVerification = (slug?: string) => {
 };
 
 export const slugToCauseDonate = (slug: string) => {
-	return Routes.Donate + '/' + slug + '?cause=true';
+	return Routes.Cause + '/' + slug + '/donate';
 };
 export const slugToCauseView = (slug: string): string => `/cause/${slug}`;

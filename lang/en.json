@@ -1957,5 +1957,7 @@
 	"label.cause.boost_this_cause_with_givpower_to_improve_its_rank": "Boost this Cause with GIVpower to improve its rank! Rank is updated at the beginning of every GIVbacks round. You can see the projected rank for next round as well below.",
 	"label.cause.boost_this_cause_with_givpower": "Boost this Cause with GIVpower to improve its rank!",
 	"label.cause.transaction_failed_desc": "Your transaction has failed!",
-	"label.cause.transaction_failed_desc_2": "Please go back and try again."
+	"label.cause.transaction_failed_desc_2": "Please go back and try again.",
+	"label.cause.donate_to_cause": "Donate to Cause",
+	"label.cause.this_cause_doesnt_accept_on": "This cause doesn't accept"
 }

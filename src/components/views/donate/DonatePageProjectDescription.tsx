@@ -27,6 +27,7 @@ import config from '@/configuration';
 import { getActiveRound } from '@/helpers/qf';
 import { GivBackBadge } from '@/components/badges/GivBackBadge';
 import links from '@/lib/constants/links';
+import { EProjectType } from '@/apollo/types/gqlEnums';
 
 interface IDonatePageProjectDescriptionProps {
 	projectData?: IProject;
@@ -48,6 +49,7 @@ export const DonatePageProjectDescription: FC<
 		adminUser,
 		organization,
 		estimatedMatching,
+		projectType,
 	} = projectData || {};
 
 	const { allProjectsSum, matchingPool, projectDonationsSqrtRootSum } =
@@ -160,8 +162,8 @@ export const DonatePageProjectDescription: FC<
 					<DescriptionSummary>
 						{descriptionSummary}
 					</DescriptionSummary>
-					{project?.organization?.label ===
-					ORGANIZATION.endaoment ? null : (
+					{project?.organization?.label === ORGANIZATION.endaoment ||
+					projectType === EProjectType.CAUSE ? null : (
 						<DonateDescription $flexDirection='column' gap='8px'>
 							<B>
 								{formatMessage({
