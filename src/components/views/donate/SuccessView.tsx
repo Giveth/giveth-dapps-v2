@@ -12,6 +12,7 @@ import {
 import React, { FC, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { useIntl } from 'react-intl';
+import { useRouter } from 'next/router';
 import ExternalLink from '@/components/ExternalLink';
 import { client } from '@/apollo/apolloClient';
 import { FETCH_GIVETH_PROJECT_BY_ID } from '@/apollo/gql/gqlProjects';
@@ -30,7 +31,8 @@ import ProjectCardImage from '@/components/project-card/ProjectCardImage';
 import { DonatePageProjectDescription } from './DonatePageProjectDescription';
 import SocialBox from '@/components/SocialBox';
 import links from '@/lib/constants/links';
-import { EContentType } from '@/lib/constants/shareContent';
+import { EContentType, EContentTypeCause } from '@/lib/constants/shareContent';
+
 import QFToast from './QFToast';
 import { DonationInfo } from './DonationInfo';
 import { ManageRecurringDonation } from './Recurring/ManageRecurringDonation';
@@ -75,6 +77,8 @@ export const SuccessView: FC<ISuccessView> = ({ isStellar, isStellarInQF }) => {
 	);
 
 	const { activeStartedRound } = getActiveRound(project.qfRounds);
+	const router = useRouter();
+	const isCauseDonation = router.query.cause === 'true';
 
 	const isOnEligibleNetworks = activeStartedRound?.eligibleNetworks?.includes(
 		(isStellar ? config.STELLAR_NETWORK_NUMBER : chainId) || 0,
@@ -91,10 +95,13 @@ export const SuccessView: FC<ISuccessView> = ({ isStellar, isStellarInQF }) => {
 				setGivethSlug(res.data.projectById.slug),
 			);
 	}, []);
-
-	const socialContentType = isRecurring
-		? EContentType.justDonatedRecurring
-		: EContentType.justDonated;
+	const socialContentType = isCauseDonation
+		? isRecurring
+			? EContentTypeCause.justDonatedRecurring
+			: EContentTypeCause.justDonated
+		: isRecurring
+			? EContentType.justDonatedRecurring
+			: EContentType.justDonated;
 
 	const showQFToast =
 		!excludeFromQF &&
