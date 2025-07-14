@@ -29,6 +29,7 @@ import { bookmarkProject, unBookmarkProject } from '@/lib/reaction';
 import { FETCH_PROJECT_REACTION_BY_ID } from '@/apollo/gql/gqlProjects';
 import { client } from '@/apollo/apolloClient';
 import {
+	slugToCauseDonate,
 	slugToProjectDonate,
 	slugToProjectDonateStellar,
 } from '@/lib/routeCreators';
@@ -39,7 +40,7 @@ import { getActiveRound } from '@/helpers/qf';
 
 export const ProjectPublicActions = () => {
 	const [showModal, setShowShareModal] = useState<boolean>(false);
-	const { projectData, isActive } = useProjectContext();
+	const { projectData, isActive, isCause } = useProjectContext();
 	const project = projectData!;
 	const { slug, id: projectId } = project;
 	const [reaction, setReaction] = useState(project.reaction);
@@ -148,7 +149,9 @@ export const ProjectPublicActions = () => {
 					isActive
 						? isStellarOnlyRound
 							? slugToProjectDonateStellar(slug || '')
-							: slugToProjectDonate(slug || '')
+							: isCause
+								? slugToCauseDonate(slug || '')
+								: slugToProjectDonate(slug || '')
 						: '#'
 				}
 				onClick={e => !isActive && e.preventDefault()}
