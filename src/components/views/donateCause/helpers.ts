@@ -1,9 +1,17 @@
 import { Contract, ethers } from 'ethers';
-import { getEthersSigner } from '@/helpers/ethers';
+import { getConnectorClient } from 'wagmi/actions';
+import { wagmiConfig } from '@/wagmiConfigs';
 
 const NATIVE_TOKEN_ADDRESS = '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee';
 const ZERO_ADDRESS = '0x0000000000000000000000000000000000000000';
 
+/**
+ * Check if the token is supported by Squid router
+ *
+ * @param chainId - The chain ID
+ * @param tokenAddress - The token address
+ * @returns true if the token is supported, false otherwise
+ */
 export const isTokenSupportedBySquid = async (
 	chainId: number,
 	tokenAddress: string,
@@ -43,6 +51,14 @@ export const isTokenSupportedBySquid = async (
 	}
 };
 
+/**
+ * Check the allowance of a token
+ *
+ * @param owner - The owner of the token
+ * @param spender - The spender of the token
+ * @param tokenAddress - The token address
+ * @returns the allowance of the token
+ */
 export const checkAllowance = async (
 	owner: string,
 	spender: string,
@@ -63,6 +79,13 @@ export const checkAllowance = async (
 	}
 };
 
+/**
+ * Approve spending of a token
+ *
+ * @param spender - The spender of the token
+ * @param tokenAddress - The token address
+ * @param amount - The amount to approve
+ */
 export const approveSpending = async (
 	spender: string,
 	tokenAddress: string,
@@ -76,9 +99,14 @@ export const approveSpending = async (
 
 	const tx = await tokenContract.approve(spender, amount);
 	await tx.wait();
-	console.log(`Approved ${amount} tokens for ${spender}`);
+	return tx;
 };
 
+/**
+ * Execute a transaction through Squid router
+ *
+ * @param route - The route to execute
+ */
 export const executeSquidTransaction = async (route: any) => {
 	const txRequest = route?.transactionRequest;
 	if (!txRequest) throw new Error('No transaction request found');
@@ -93,4 +121,21 @@ export const executeSquidTransaction = async (route: any) => {
 
 	await tx.wait();
 	console.log('Transaction sent:', tx.hash);
+};
+
+/**
+ * Get the ethers signer
+ *
+ * @returns the ethers signer
+ */
+const getEthersSigner = async (): Promise<ethers.Signer> => {
+	const client = await getConnectorClient(wagmiConfig);
+
+	if (!client) {
+		throw new Error('No connector client found');
+	}
+
+	// ethers v5 compatible
+	const provider = new ethers.providers.Web3Provider(client as any); // cast needed if type mismatch
+	return provider.getSigner();
 };

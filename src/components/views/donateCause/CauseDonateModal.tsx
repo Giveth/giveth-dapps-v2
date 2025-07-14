@@ -10,7 +10,6 @@ import {
 } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
 import { Chain } from 'viem';
-import StorageLabel, { getWithExpiry } from '@/lib/localStorage';
 import { Modal } from '@/components/modals/Modal';
 import { compareAddresses, formatTxLink, showToastError } from '@/lib/helpers';
 import { mediaQueries } from '@/lib/constants/constants';
@@ -39,8 +38,9 @@ import { IWalletAddress } from '@/apollo/types/types';
 import { useCreateSolanaDonation } from '@/hooks/useCreateSolanaDonation';
 import { useTokenPrice } from '@/hooks/useTokenPrice';
 import { calcDonationShare } from '@/components/views/donate/common/helpers';
-import createGoogleTagEventPurchase from '@/helpers/googleAnalytics';
+// import createGoogleTagEventPurchase from '@/helpers/googleAnalytics';
 import SanctionModal from '@/components/modals/SanctionedModal';
+import { approveSpending, checkAllowance } from './helpers';
 
 interface IDonateModalProps extends IModal {
 	token: IProjectAcceptedToken;
@@ -69,21 +69,24 @@ const CauseDonateModal: FC<IDonateModalProps> = props => {
 	} = useGeneralWallet();
 
 	const chainId = (chain as Chain)?.id;
-	const chainName = (chain as Chain)?.name;
 	const dispatch = useAppDispatch();
 	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
-	const isDonatingToGiveth = false;
 	const { formatMessage } = useIntl();
 	const { setSuccessDonation, project, activeStartedRound } =
 		useCauseDonateData();
 
 	const [donating, setDonating] = useState(false);
+	const [approving, setApproving] = useState(false);
+	const [donateTitleLabel, setDonateTitleLabel] = useState(
+		formatMessage({ id: 'label.donating' }),
+	);
+	const [donateButtonLabel, setDonateButtonLabel] = useState(
+		formatMessage({ id: 'label.approve' }),
+	);
 	const [processFinished, setProcessFinished] = useState(false);
 	const [failedModalType, setFailedModalType] =
 		useState<EDonationFailedType>();
 	const [isSanctioned, setIsSanctioned] = useState<boolean>(false);
-
-	const categories = project?.categories || [];
 
 	const tokenPrice = useTokenPrice(token);
 
@@ -92,7 +95,6 @@ const CauseDonateModal: FC<IDonateModalProps> = props => {
 	);
 
 	const includeInQF = activeStartedRound && isOnEligibleNetworks;
-	const chainvineReferred = getWithExpiry(StorageLabel.CHAINVINEREFERRED);
 	const { title, addresses } = project || {};
 
 	const projectWalletAddress = findMatchingWalletAddress(
@@ -154,6 +156,30 @@ const CauseDonateModal: FC<IDonateModalProps> = props => {
 		}, 4000);
 	};
 
+	const approveToken = async () => {
+		const allowance = await checkAllowance(
+			address || '',
+			projectWalletAddress || '',
+			token.address,
+		);
+		setApproving(true);
+		if (allowance < projectDonation) {
+			const approveTx = await approveSpending(
+				projectWalletAddress || '',
+				token.address,
+				projectDonation.toString(),
+			);
+			if (approveTx) {
+				setDonateButtonLabel(formatMessage({ id: 'label.donate' }));
+			} else {
+				showToastError('Failed to approve token');
+			}
+		} else {
+			handleDonate();
+		}
+		setApproving(false);
+	};
+
 	const handleDonate = () => {
 		const txProps = {
 			anonymous,
@@ -161,6 +187,9 @@ const CauseDonateModal: FC<IDonateModalProps> = props => {
 			token,
 			setFailedModalType,
 		};
+
+		console.log('projectWalletAddress', projectWalletAddress);
+
 		if (!projectWalletAddress) {
 			setDonating(false);
 			return showToastError(
@@ -196,7 +225,7 @@ const CauseDonateModal: FC<IDonateModalProps> = props => {
 				headerTitle={
 					firstDonationSaved
 						? formatMessage({ id: 'label.donation_submitted' })
-						: formatMessage({ id: 'label.donating' })
+						: donateTitleLabel
 				}
 			>
 				<DonateContainer>
@@ -256,15 +285,15 @@ const CauseDonateModal: FC<IDonateModalProps> = props => {
 						<DonateButton
 							loading={donating}
 							buttonType='secondary'
-							disabled={donating || processFinished}
+							disabled={donating || processFinished || approving}
 							label={
 								donating
 									? formatMessage({
 											id: 'label.donating',
 										})
-									: formatMessage({ id: 'label.donate' })
+									: donateButtonLabel
 							}
-							onClick={validateTokenThenDonate}
+							onClick={approveToken}
 						/>
 					</Buttons>
 				</DonateContainer>
