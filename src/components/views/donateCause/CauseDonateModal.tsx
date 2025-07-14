@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useState } from 'react';
+import React, { FC, useState } from 'react';
 import styled from 'styled-components';
 import {
 	brandColors,
@@ -25,7 +25,6 @@ import { useAppDispatch } from '@/features/hooks';
 import { signOut } from '@/features/user/user.thunks';
 import { setShowSignWithWallet } from '@/features/modal/modal.slice';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
-import config from '@/configuration';
 import DonateSummary from '@/components/views/donate/DonateSummary';
 import ExternalLink from '@/components/ExternalLink';
 import InlineToast, { EToastType } from '@/components/toasts/InlineToast';
@@ -36,12 +35,10 @@ import {
 import { useCreateEvmDonation } from '@/hooks/useCreateEvmDonation';
 import { useGeneralWallet } from '@/providers/generalWalletProvider';
 import { ChainType } from '@/types/config';
-import { IProject, IWalletAddress } from '@/apollo/types/types';
+import { IWalletAddress } from '@/apollo/types/types';
 import { useCreateSolanaDonation } from '@/hooks/useCreateSolanaDonation';
 import { useTokenPrice } from '@/hooks/useTokenPrice';
 import { calcDonationShare } from '@/components/views/donate/common/helpers';
-import { Spinner } from '@/components/Spinner';
-import { FETCH_GIVETH_PROJECT_BY_ID } from '@/apollo/gql/gqlProjects';
 import createGoogleTagEventPurchase from '@/helpers/googleAnalytics';
 import SanctionModal from '@/components/modals/SanctionedModal';
 
@@ -66,11 +63,6 @@ const CauseDonateModal: FC<IDonateModalProps> = props => {
 		donationMinted: firstDonationMinted,
 	} = createDonationHook();
 	const {
-		createDonation: createSecondDonation,
-		txHash: secondTxHash,
-		donationSaved: secondDonationSaved,
-	} = createDonationHook();
-	const {
 		chain,
 		walletChainType,
 		walletAddress: address,
@@ -86,35 +78,12 @@ const CauseDonateModal: FC<IDonateModalProps> = props => {
 		useCauseDonateData();
 
 	const [donating, setDonating] = useState(false);
-	const [secondTxStatus, setSecondTxStatus] = useState<EToastType>();
 	const [processFinished, setProcessFinished] = useState(false);
-	const [isLoadingGivethAddress, setIsLoadingGivethAddress] =
-		useState(isDonatingToGiveth);
-	const [givethProject, setGivethProject] = useState<IProject>();
 	const [failedModalType, setFailedModalType] =
 		useState<EDonationFailedType>();
 	const [isSanctioned, setIsSanctioned] = useState<boolean>(false);
 
 	const categories = project?.categories || [];
-
-	useEffect(() => {
-		const fetchGivethProject = async () => {
-			try {
-				const { data } = await client.query({
-					query: FETCH_GIVETH_PROJECT_BY_ID,
-					variables: { id: config.GIVETH_PROJECT_ID },
-				});
-				setGivethProject(data.projectById);
-				setIsLoadingGivethAddress(false);
-			} catch (e) {
-				setIsLoadingGivethAddress(false);
-				showToastError('Failed to fetch Giveth wallet address');
-				console.error('Failed to fetch Giveth wallet address', e);
-				closeModal();
-			}
-		};
-		if (isDonatingToGiveth) fetchGivethProject().then();
-	}, []);
 
 	const tokenPrice = useTokenPrice(token);
 
@@ -131,13 +100,6 @@ const CauseDonateModal: FC<IDonateModalProps> = props => {
 		chainId,
 		walletChainType,
 	);
-	const givethWalletAddress = () => {
-		return findMatchingWalletAddress(
-			givethProject?.addresses,
-			chainId,
-			walletChainType,
-		);
-	};
 
 	const { projectDonation } = calcDonationShare(amount, 0, token.decimals);
 
@@ -205,34 +167,8 @@ const CauseDonateModal: FC<IDonateModalProps> = props => {
 				"Project wallet address for the destination network doesn't exist",
 			);
 		}
-		createFirstDonation({
-			...txProps,
-			amount: projectDonation,
-			walletAddress: projectWalletAddress,
-			projectId: Number(project.id),
-			chainvineReferred,
-			setFailedModalType,
-			symbol: token.symbol,
-			useDonationBox: isDonatingToGiveth,
-		})
-			.then(({ isSaved, txHash: firstHash }) => {
-				if (!firstHash) {
-					setDonating(false);
-					return;
-				}
 
-				// Send google tag purchase event using segement
-				createGoogleTagEventPurchase({
-					txHash: firstHash,
-					chainName: chainName,
-					amount: projectDonationPrice,
-					projectId: project.id,
-					projectName: project.title,
-					categories: categories,
-				});
-				delayedCloseModal(firstHash);
-			})
-			.catch(console.log);
+		console.log('txProps', txProps);
 	};
 
 	const handleTxLink = (txHash?: string) => {
@@ -242,13 +178,6 @@ const CauseDonateModal: FC<IDonateModalProps> = props => {
 			chainType: token.chainType,
 		});
 	};
-
-	if (isLoadingGivethAddress)
-		return (
-			<Loading>
-				<Spinner />
-			</Loading>
-		);
 
 	return isSanctioned ? (
 		<SanctionModal
@@ -314,56 +243,6 @@ const CauseDonateModal: FC<IDonateModalProps> = props => {
 								)}
 							</TxStatus>
 						)}
-						{isDonatingToGiveth && (
-							<>
-								<Lead>
-									{secondDonationSaved
-										? formatMessage({
-												id: 'label.donation_submitted',
-											})
-										: firstDonationSaved
-											? formatMessage({
-													id: 'label.you_are_donating',
-												})
-											: formatMessage({
-													id: 'label.and',
-												})}
-								</Lead>
-								{secondTxStatus && (
-									<TxStatus>
-										<InlineToast
-											type={secondTxStatus}
-											message={`
-												${formatMessage({
-													id: 'label.donation_to_the',
-												})} Giveth DAO
-													${
-														secondTxStatus ===
-														EToastType.Success
-															? formatMessage({
-																	id: 'label.successful',
-																})
-															: formatMessage({
-																	id: 'label.failed_lowercase',
-																})
-													}
-											`}
-										/>
-										{secondTxHash && (
-											<ExternalLink
-												href={handleTxLink(
-													secondTxHash,
-												)}
-												title={formatMessage({
-													id: 'label.view_on_block_explorer',
-												})}
-												color={brandColors.pinky[500]}
-											/>
-										)}
-									</TxStatus>
-								)}
-							</>
-						)}
 					</DonatingBox>
 					<Buttons>
 						{firstDonationSaved && !processFinished && (
@@ -392,7 +271,7 @@ const CauseDonateModal: FC<IDonateModalProps> = props => {
 			</Modal>
 			{failedModalType && (
 				<FailedDonation
-					txUrl={handleTxLink(firstTxHash || secondTxHash)}
+					txUrl={handleTxLink(firstTxHash)}
 					setShowModal={() => setFailedModalType(undefined)}
 					type={failedModalType}
 				/>

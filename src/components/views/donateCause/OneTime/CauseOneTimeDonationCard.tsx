@@ -91,7 +91,6 @@ const CauseCryptoDonation: FC<{
 
 	const {
 		isGivbackEligible,
-		id: projectId,
 		status,
 		addresses,
 		title: projectTitle,
@@ -537,7 +536,7 @@ const CauseCryptoDonation: FC<{
 					/>
 				)}
 				{isConnected &&
-					(donationDisabled ? (
+					(donationDisabled || !isTokenSupported ? (
 						<OutlineButtonStyled
 							label={formatMessage({ id: 'label.donate' })}
 							disabled
