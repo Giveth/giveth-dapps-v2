@@ -62,7 +62,7 @@ import EligibilityBadges from '@/components/views/donate/common/EligibilityBadge
 import DonateAnonymously from '@/components/views/donate/common/DonateAnonymously';
 import { GIVBACKS_DONATION_QUALIFICATION_VALUE_USD } from '@/lib/constants/constants';
 import DonateModal from '../../donate/OneTime/DonateModal';
-import { SelectTokenModal } from '../../donate/OneTime/SelectTokenModal/SelectTokenModal';
+import { CauseSelectTokenModal } from '@/components/views/donateCause/OneTime/SelectTokenModal/CauseSelectTokenModal';
 import SaveGasFees from '../../donate/OneTime/SaveGasFees';
 import CauseTotalDonation from '@/components/views/donateCause/OneTime/CauseTotalDonation';
 
@@ -570,7 +570,7 @@ const CauseCryptoDonation: FC<{
 					selectedToken={selectedOneTimeToken}
 				/>
 				{showSelectTokenModal && (
-					<SelectTokenModal
+					<CauseSelectTokenModal
 						setShowModal={setShowSelectTokenModal}
 						tokens={erc20List}
 						acceptCustomToken={
