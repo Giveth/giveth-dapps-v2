@@ -602,6 +602,12 @@ const config: EnvConfig = {
 			BASE_NETWORK_NUMBER,
 			CELO_NETWORK_NUMBER,
 		],
+		recepeintToken: {
+			network: POLYGON_NETWORK_NUMBER,
+			address: '0xc7B1807822160a8C5b6c9EaF5C584aAD0972deeC',
+			symbol: 'GIV',
+			decimals: 18,
+		},
 	},
 };
 

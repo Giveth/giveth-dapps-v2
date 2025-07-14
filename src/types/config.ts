@@ -253,6 +253,12 @@ export interface EnvConfig {
 			decimals: number;
 			destinationAddress: Address;
 		}[];
+		recepeintToken: {
+			network: number;
+			address: Address;
+			symbol: string;
+			decimals: number;
+		};
 	};
 }
 

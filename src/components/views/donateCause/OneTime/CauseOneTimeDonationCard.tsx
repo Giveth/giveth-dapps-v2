@@ -28,7 +28,6 @@ import { truncateToDecimalPlaces } from '@/lib/helpers';
 import { IProjectAcceptedToken } from '@/apollo/types/gqlTypes';
 import {
 	calcDonationShare,
-	calcDonationShareFor8Decimals,
 	prepareTokenList,
 } from '@/components/views/donate/common/helpers';
 import { DonateWrongNetwork } from '@/components/modals/DonateWrongNetwork';
@@ -56,19 +55,20 @@ import {
 } from '@/components/views/donate/common/common.styled';
 import { TokenIcon } from '@/components/views/donate/TokenIcon/TokenIcon';
 import { Spinner } from '@/components/Spinner';
-import { useSolanaBalance } from '@/hooks/useSolanaBalance';
 import { useTokenPrice } from '@/hooks/useTokenPrice';
 import EligibilityBadges from '@/components/views/donate/common/EligibilityBadges';
 import DonateAnonymously from '@/components/views/donate/common/DonateAnonymously';
 import { GIVBACKS_DONATION_QUALIFICATION_VALUE_USD } from '@/lib/constants/constants';
-import DonateModal from '../../donate/OneTime/DonateModal';
+import CauseDonateModal from '@/components/views/donateCause/CauseDonateModal';
 import { CauseSelectTokenModal } from '@/components/views/donateCause/OneTime/SelectTokenModal/CauseSelectTokenModal';
 import SaveGasFees from '../../donate/OneTime/SaveGasFees';
 import CauseTotalDonation from '@/components/views/donateCause/OneTime/CauseTotalDonation';
+import { isTokenSupportedBySquid } from '../helpers';
 
 const CauseCryptoDonation: FC<{
 	acceptedTokens: IProjectAcceptedToken[] | undefined;
 }> = ({ acceptedTokens }) => {
+	const [isTokenSupported, setIsTokenSupported] = useState(true);
 	const {
 		chain,
 		walletChainType,
@@ -130,18 +130,6 @@ const CauseCryptoDonation: FC<{
 		address:
 			walletChainType === ChainType.EVM && !!selectedOneTimeToken?.address // disable when selected token is undefined
 				? (address as Address)
-				: undefined,
-	});
-
-	const {
-		data: solanaBalance,
-		refetch: solanaRefetch,
-		isRefetching: solanaIsRefetching,
-	} = useSolanaBalance({
-		token: selectedOneTimeToken?.address,
-		address:
-			walletChainType === ChainType.SOLANA
-				? address || undefined
 				: undefined,
 	});
 
@@ -227,20 +215,28 @@ const CauseCryptoDonation: FC<{
 		}
 	}, [networkId, acceptedTokens, walletChainType, addresses]);
 
+	// check if token is supported by squid
+	// set up amount to zero because token has been changed
 	useEffect(() => {
+		const checkTokenSupported = async () => {
+			if (networkId && selectedOneTimeToken?.address) {
+				const isSupported = await isTokenSupportedBySquid(
+					networkId,
+					selectedOneTimeToken?.address,
+				);
+				console.log('isSupported', isSupported);
+				setIsTokenSupported(isSupported);
+			}
+		};
+		checkTokenSupported();
 		setAmount(0n);
 	}, [selectedOneTimeToken, isConnected, address, networkId]);
 
 	const selectedTokenBalance =
-		(walletChainType == ChainType.EVM
-			? evmBalance?.value
-			: solanaBalance) || 0n;
-	const refetch =
-		walletChainType === ChainType.EVM ? evmRefetch : solanaRefetch;
+		(walletChainType == ChainType.EVM ? evmBalance?.value : 0n) || 0n;
+	const refetch = walletChainType === ChainType.EVM ? evmRefetch : () => {};
 	const isRefetching =
-		walletChainType === ChainType.EVM
-			? evmIsRefetching
-			: solanaIsRefetching;
+		walletChainType === ChainType.EVM ? evmIsRefetching : false;
 
 	const handleDonate = () => {
 		if (amount > selectedTokenBalance) {
@@ -329,20 +325,11 @@ const CauseCryptoDonation: FC<{
 		],
 	);
 
-	// We need givethDonationAmount here because we need to calculate the donation share
-	// for Giveth. If user want to donate minimal amount to projecct, the donation share for Giveth
-	// has to be 0, disabled in UI and DonationModal
-	const {
-		givethDonation: givethDonationAmount,
-		projectDonation: projectDonationAmount,
-	} =
-		selectedOneTimeToken?.decimals === 8
-			? calcDonationShareFor8Decimals(amount, 0)
-			: calcDonationShare(
-					amount,
-					0,
-					selectedOneTimeToken?.decimals ?? 18,
-				);
+	const { projectDonation: projectDonationAmount } = calcDonationShare(
+		amount,
+		0,
+		selectedOneTimeToken?.decimals ?? 18,
+	);
 
 	const decimals = selectedOneTimeToken?.decimals || 18;
 	const donationUsdValue =
@@ -376,12 +363,10 @@ const CauseCryptoDonation: FC<{
 				/>
 			)}
 			{showDonateModal && selectedOneTimeToken && amount && (
-				<DonateModal
+				<CauseDonateModal
 					setShowModal={setShowDonateModal}
 					token={selectedOneTimeToken}
 					amount={amount}
-					donationToGiveth={0}
-					givethDonationAmount={givethDonationAmount}
 					anonymous={anonymous}
 					givBackEligible={
 						isGivbackEligible &&
@@ -413,6 +398,16 @@ const CauseCryptoDonation: FC<{
 					tokenPrice={tokenPrice}
 					style={{ margin: '12px 0 24px' }}
 				/>
+			)}
+			{!isTokenSupported && selectedOneTimeToken && (
+				<InlineToastContainer>
+					<InlineToast
+						type={EToastType.Warning}
+						message={formatMessage({
+							id: 'label.cause.this_token_is_not_supported_by_squid',
+						})}
+					/>
+				</InlineToastContainer>
 			)}
 			<EstimatedMatchingToast
 				projectData={project}
@@ -620,10 +615,6 @@ const WarnError = styled.div`
 	padding: 12px;
 `;
 
-const EmptySpace = styled.div`
-	margin-top: 70px;
-`;
-
 const MainContainer = styled.div`
 	display: flex;
 	flex-direction: column;
@@ -642,6 +633,10 @@ const MainButton = styled(Button)`
 		props.disabled ? brandColors.giv[200] : brandColors.giv[500]};
 	color: white;
 	text-transform: uppercase;
+`;
+
+const InlineToastContainer = styled.div`
+	margin-bottom: 36px;
 `;
 
 export default CauseCryptoDonation;
