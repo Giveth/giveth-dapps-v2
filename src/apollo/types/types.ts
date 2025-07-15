@@ -268,6 +268,7 @@ export interface IUser {
 	chainvineId?: string;
 	isEmailVerified?: boolean;
 	ownedCausesCount?: number;
+	totalCausesDistributed?: number;
 }
 
 export interface IPassportInfo {
