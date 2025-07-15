@@ -131,7 +131,7 @@ const ProfileContributes: FC<IUserProfileView> = () => {
 						{`${
 							myAccount
 								? formatMessage({ id: 'label.cause.my_causes' })
-								: formatMessage({ id: 'label.cause.causes' })
+								: formatMessage({ id: 'label.causes' })
 						}`}
 						{myAccount && user?.ownedCausesCount != 0 && (
 							<Count $active={tab === EProfile.CAUSES}>
