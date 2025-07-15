@@ -61,6 +61,8 @@ export const FETCH_USER_PROJECTS = gql`
 					id
 					name
 				}
+				totalRaised
+				totalDistributed
 				addresses {
 					address
 					memo

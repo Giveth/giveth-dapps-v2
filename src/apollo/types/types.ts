@@ -97,6 +97,8 @@ export interface IProject {
 	projectType: EProjectType;
 	causeProjects?: ICauseProject[];
 	activeProjectsCount?: number;
+	totalRaised?: number;
+	totalDistributed?: number;
 }
 
 export interface ICauseProject {
