@@ -70,13 +70,13 @@ export const SuccessView: FC<ISuccessView> = ({ isStellar, isStellarInQF }) => {
 				query: FETCH_PROJECT_BY_SLUG_SUCCESS,
 				variables: {
 					slug: project.slug,
-					connectedWalletUserId: undefined, // or pass actual userId if needed
+					connectedWalletUserId: undefined,
 				},
 			})
 			.then((res: any) => {
 				const fullData = res.data?.projectBySlug;
 				if (fullData) {
-					setFullCauseProject(fullData); // fullData.activeProjectsCount is available here
+					setFullCauseProject(fullData);
 				}
 			})
 			.catch(console.error);
@@ -126,7 +126,7 @@ export const SuccessView: FC<ISuccessView> = ({ isStellar, isStellarInQF }) => {
 	const socialContentType: EContentType | EContentTypeCause = isCauseDonation
 		? isRecurring
 			? EContentTypeCause.justDonatedRecurring
-			: EContentTypeCause.donationSuccess // ✅ changed from justDonated
+			: EContentTypeCause.donationSuccess
 		: isRecurring
 			? EContentType.justDonatedRecurring
 			: EContentType.justDonated;
@@ -160,6 +160,18 @@ export const SuccessView: FC<ISuccessView> = ({ isStellar, isStellarInQF }) => {
 							projectData={project}
 							showRaised={true}
 						/>
+						{isCauseDonation &&
+							(fullCauseProject?.activeProjectsCount ?? 0) >
+								0 && (
+								<ProjectsCount>
+									<strong>
+										{fullCauseProject?.activeProjectsCount}
+									</strong>{' '}
+									{fullCauseProject?.activeProjectsCount === 1
+										? 'Project'
+										: 'Projects'}
+								</ProjectsCount>
+							)}
 					</InfoWrapper>
 				</Col>
 				<Col xs={12} lg={6}>
@@ -295,4 +307,9 @@ const RightSectionWrapper = styled(Flex)`
 	padding: 32px;
 	border-radius: 16px;
 	height: 100%;
+`;
+const ProjectsCount = styled.div`
+	margin-top: 16px;
+	font-weight: 600;
+	color: ${brandColors.deep[700]};
 `;
