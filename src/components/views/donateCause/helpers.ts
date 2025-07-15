@@ -103,6 +103,65 @@ export const approveSpending = async (
 };
 
 /**
+ * Fetch a route from the Squid API
+ *
+ * @param params - Squid route parameters
+ * @returns the route object from Squid
+ */
+export const getSquidRoute = async (params: {
+	fromAddress: string;
+	fromChain: number;
+	fromToken: string;
+	fromAmount: string;
+	toChain: number;
+	toToken: string;
+	toAddress: string;
+	quoteOnly?: boolean;
+}) => {
+	const tokenAddressCheck =
+		params.toToken.toLowerCase() === ZERO_ADDRESS
+			? NATIVE_TOKEN_ADDRESS
+			: params.toToken;
+
+	console.log('params', params);
+
+	const checkedParams = {
+		...params,
+		toToken: tokenAddressCheck,
+	};
+
+	try {
+		const response = await fetch(
+			`${process.env.NEXT_PUBLIC_SQUID_API_BASE_URL}/v2/route`,
+			{
+				method: 'POST',
+				headers: {
+					'x-integrator-id':
+						process.env.NEXT_PUBLIC_SQUID_API_INTEGRATOR_ID || '',
+					'Content-Type': 'application/json',
+				},
+				body: JSON.stringify({
+					...checkedParams,
+					quoteOnly: checkedParams.quoteOnly ?? false,
+				}),
+			},
+		);
+
+		if (!response.ok) {
+			throw new Error(
+				`Failed to fetch Squid route: ${response.statusText}`,
+			);
+		}
+
+		const data = await response.json();
+		return data;
+	} catch (error) {
+		console.error('Error fetching Squid route:', error);
+		throw error;
+	}
+};
+
+/**
  * Execute a transaction through Squid router
  *
  * @param route - The route to execute

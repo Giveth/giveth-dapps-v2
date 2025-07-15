@@ -9,7 +9,7 @@ import {
 	FlexCenter,
 } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
-import { Chain } from 'viem';
+import { Chain, parseUnits } from 'viem';
 import { Modal } from '@/components/modals/Modal';
 import { compareAddresses, formatTxLink, showToastError } from '@/lib/helpers';
 import { mediaQueries } from '@/lib/constants/constants';
@@ -40,7 +40,8 @@ import { useTokenPrice } from '@/hooks/useTokenPrice';
 import { calcDonationShare } from '@/components/views/donate/common/helpers';
 // import createGoogleTagEventPurchase from '@/helpers/googleAnalytics';
 import SanctionModal from '@/components/modals/SanctionedModal';
-import { approveSpending, checkAllowance } from './helpers';
+import { approveSpending, checkAllowance, getSquidRoute } from './helpers';
+import config from '@/configuration';
 
 interface IDonateModalProps extends IModal {
 	token: IProjectAcceptedToken;
@@ -75,14 +76,9 @@ const CauseDonateModal: FC<IDonateModalProps> = props => {
 	const { setSuccessDonation, project, activeStartedRound } =
 		useCauseDonateData();
 
+	const [step, setStep] = useState('approve');
 	const [donating, setDonating] = useState(false);
 	const [approving, setApproving] = useState(false);
-	const [donateTitleLabel, setDonateTitleLabel] = useState(
-		formatMessage({ id: 'label.donating' }),
-	);
-	const [donateButtonLabel, setDonateButtonLabel] = useState(
-		formatMessage({ id: 'label.approve' }),
-	);
 	const [processFinished, setProcessFinished] = useState(false);
 	const [failedModalType, setFailedModalType] =
 		useState<EDonationFailedType>();
@@ -163,32 +159,36 @@ const CauseDonateModal: FC<IDonateModalProps> = props => {
 			token.address,
 		);
 		setApproving(true);
-		if (allowance < projectDonation) {
+
+		const donationInWei = parseUnits(
+			projectDonation.toString(),
+			token.decimals || 18,
+		);
+
+		if (allowance < donationInWei) {
 			const approveTx = await approveSpending(
 				projectWalletAddress || '',
 				token.address,
-				projectDonation.toString(),
+				donationInWei.toString(),
 			);
 			if (approveTx) {
-				setDonateButtonLabel(formatMessage({ id: 'label.donate' }));
+				setStep('donate');
 			} else {
 				showToastError('Failed to approve token');
 			}
 		} else {
-			handleDonate();
+			setStep('donate');
 		}
 		setApproving(false);
 	};
 
-	const handleDonate = () => {
+	const handleDonate = async () => {
 		const txProps = {
 			anonymous,
 			setDonating,
 			token,
 			setFailedModalType,
 		};
-
-		console.log('projectWalletAddress', projectWalletAddress);
 
 		if (!projectWalletAddress) {
 			setDonating(false);
@@ -197,7 +197,24 @@ const CauseDonateModal: FC<IDonateModalProps> = props => {
 			);
 		}
 
-		console.log('txProps', txProps);
+		try {
+			const squidParams = {
+				fromAddress: address || '',
+				fromChain: chainId,
+				fromToken: token.address,
+				fromAmount: amount.toString(),
+				toChain: chainId,
+				toToken: config.CAUSES_CONFIG.recepeintToken.address,
+				toAddress: projectWalletAddress || '',
+				quoteOnly: false,
+			};
+
+			const squidRoute = await getSquidRoute(squidParams);
+			console.log('squidRoute', squidRoute);
+		} catch (error) {
+			console.error('Error making donation:', error);
+			throw error;
+		}
 	};
 
 	const handleTxLink = (txHash?: string) => {
@@ -225,7 +242,9 @@ const CauseDonateModal: FC<IDonateModalProps> = props => {
 				headerTitle={
 					firstDonationSaved
 						? formatMessage({ id: 'label.donation_submitted' })
-						: donateTitleLabel
+						: step === 'approve'
+							? formatMessage({ id: 'label.approving' })
+							: formatMessage({ id: 'label.donating' })
 				}
 			>
 				<DonateContainer>
@@ -291,9 +310,13 @@ const CauseDonateModal: FC<IDonateModalProps> = props => {
 									? formatMessage({
 											id: 'label.donating',
 										})
-									: donateButtonLabel
+									: step === 'approve'
+										? formatMessage({ id: 'label.approve' })
+										: formatMessage({ id: 'label.donate' })
 							}
-							onClick={approveToken}
+							onClick={
+								step === 'approve' ? approveToken : handleDonate
+							}
 						/>
 					</Buttons>
 				</DonateContainer>
