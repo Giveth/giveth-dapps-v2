@@ -128,7 +128,7 @@ const BannerWrapper = styled.div<{ isExpanded: boolean }>`
 	border-bottom-right-radius: ${props => (props.isExpanded ? '0' : '16px')};
 	box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
 	transition: all 0.3s ease-in-out;
-	z-index: 10;
+	z-index: 20;
 `;
 
 const BannerHeader = styled(Flex)`
@@ -201,7 +201,7 @@ const ExpandableContent = styled.div<{ isExpanded: boolean }>`
 		left: 0;
 		right: 0;
 		bottom: 0;
-		z-index: 10030;
+		z-index: 10;
 	}
 `;
 
@@ -212,7 +212,7 @@ const Overlay = styled.div<{ isExpanded: boolean }>`
 	width: 100%;
 	height: 100%;
 	background: rgba(255, 255, 255, 0.4);
-	z-index: 10;
+	z-index: 9;
 	display: flex;
 	justify-content: center;
 	align-items: center;
