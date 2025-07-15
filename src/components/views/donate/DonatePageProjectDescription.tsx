@@ -59,7 +59,7 @@ export const DonatePageProjectDescription: FC<
 
 	const projectLink = slugToProjectView(slug!);
 	const { project } = useDonateData();
-
+	const isCauseDonation = router.query.cause === 'true';
 	const { activeStartedRound, activeQFRound } = getActiveRound(
 		project.qfRounds,
 	);
@@ -74,6 +74,9 @@ export const DonatePageProjectDescription: FC<
 		allocatedFundUSD,
 		allocatedTokenSymbol,
 	} = activeQFRound || {};
+
+	console.log('isCauseDonation', isCauseDonation);
+	console.log('project?.causeProjects', project?.causeProjects);
 
 	return (
 		<DonationSectionWrapper gap='16px'>
@@ -160,8 +163,19 @@ export const DonatePageProjectDescription: FC<
 					<DescriptionSummary>
 						{descriptionSummary}
 					</DescriptionSummary>
-					{project?.organization?.label ===
-					ORGANIZATION.endaoment ? null : (
+					{isCauseDonation && projectData?.causeProjects?.length ? (
+						<ProjectsCount>
+							<strong>{projectData.causeProjects.length}</strong>{' '}
+							{projectData.causeProjects.length === 1
+								? 'Project'
+								: 'Projects'}
+						</ProjectsCount>
+					) : null}
+
+					{!(
+						isCauseDonation ||
+						project?.organization?.label === ORGANIZATION.endaoment
+					) && (
 						<DonateDescription $flexDirection='column' gap='8px'>
 							<B>
 								{formatMessage({
@@ -259,4 +273,16 @@ const DonateInfo = styled.div`
 const NoFund = styled(H4)`
 	color: ${neutralColors.gray[800]};
 	margin-top: 16px;
+`;
+const ProjectsCount = styled.div`
+	font-size: 14px;
+	font-weight: 400;
+	color: ${neutralColors.gray[500]};
+	margin-top: -8px;
+	margin-bottom: 16px;
+
+	strong {
+		font-weight: 700;
+		color: ${neutralColors.gray[800]};
+	}
 `;
