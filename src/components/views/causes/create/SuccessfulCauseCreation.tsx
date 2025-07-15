@@ -23,7 +23,7 @@ import { setShowFooter } from '@/features/general/general.slice';
 import { useAppDispatch } from '@/features/hooks';
 import CongratsAnimation from '@/animations/congrats.json';
 import LottieControl from '@/components/LottieControl';
-import { EContentType } from '@/lib/constants/shareContent';
+import { EContentTypeCause } from '@/lib/constants/shareContent';
 import NotAvailableHandler from '@/components/NotAvailableHandler';
 import ProjectCard from '@/components/project-card/ProjectCardAlt';
 
@@ -97,7 +97,8 @@ const SuccessfulCauseCreation = ({ cause, isLoading }: IProps) => {
 						</CopyBox>
 						<SocialBox
 							cause={cause}
-							contentType={EContentType.ourCause}
+							contentType={EContentTypeCause.creationSuccess}
+							numberOfProjects={cause.activeProjectsCount ?? 0}
 						/>
 
 						<br />
