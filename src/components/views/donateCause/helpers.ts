@@ -110,26 +110,25 @@ export const approveSpending = async (
  */
 export const getSquidRoute = async (params: {
 	fromAddress: string;
-	fromChain: number;
+	fromChain: string;
 	fromToken: string;
 	fromAmount: string;
-	toChain: number;
+	toChain: string;
 	toToken: string;
 	toAddress: string;
 	quoteOnly?: boolean;
 }) => {
 	const tokenAddressCheck =
-		params.toToken.toLowerCase() === ZERO_ADDRESS
+		params.fromToken.toLowerCase() === ZERO_ADDRESS
 			? NATIVE_TOKEN_ADDRESS
-			: params.toToken;
-
-	console.log('params', params);
+			: params.fromToken;
 
 	const checkedParams = {
 		...params,
-		toToken: tokenAddressCheck,
+		fromToken: tokenAddressCheck,
 	};
 
+	console.log('params', checkedParams);
 	try {
 		const response = await fetch(
 			`${process.env.NEXT_PUBLIC_SQUID_API_BASE_URL}/v2/route`,
@@ -180,6 +179,7 @@ export const executeSquidTransaction = async (route: any) => {
 
 	await tx.wait();
 	console.log('Transaction sent:', tx.hash);
+	return tx;
 };
 
 /**

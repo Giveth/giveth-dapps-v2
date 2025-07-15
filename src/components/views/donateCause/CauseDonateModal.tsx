@@ -40,7 +40,12 @@ import { useTokenPrice } from '@/hooks/useTokenPrice';
 import { calcDonationShare } from '@/components/views/donate/common/helpers';
 // import createGoogleTagEventPurchase from '@/helpers/googleAnalytics';
 import SanctionModal from '@/components/modals/SanctionedModal';
-import { approveSpending, checkAllowance, getSquidRoute } from './helpers';
+import {
+	approveSpending,
+	checkAllowance,
+	executeSquidTransaction,
+	getSquidRoute,
+} from './helpers';
 import config from '@/configuration';
 
 interface IDonateModalProps extends IModal {
@@ -198,22 +203,36 @@ const CauseDonateModal: FC<IDonateModalProps> = props => {
 		}
 
 		try {
+			setDonating(true);
 			const squidParams = {
 				fromAddress: address || '',
-				fromChain: chainId,
+				fromChain: chainId.toString(),
 				fromToken: token.address,
 				fromAmount: amount.toString(),
-				toChain: chainId,
+				toChain: chainId.toString(),
 				toToken: config.CAUSES_CONFIG.recepeintToken.address,
 				toAddress: projectWalletAddress || '',
 				quoteOnly: false,
 			};
 
 			const squidRoute = await getSquidRoute(squidParams);
-			console.log('squidRoute', squidRoute);
+
+			if (squidRoute.error) {
+				setFailedModalType(EDonationFailedType.FAILED);
+				showToastError(squidRoute.error);
+				return;
+			}
+
+			if (squidRoute?.route) {
+				const tx = await executeSquidTransaction(squidRoute.route);
+				console.log('tx', tx);
+			}
 		} catch (error) {
+			setFailedModalType(EDonationFailedType.FAILED);
 			console.error('Error making donation:', error);
 			throw error;
+		} finally {
+			setDonating(false);
 		}
 	};
 
