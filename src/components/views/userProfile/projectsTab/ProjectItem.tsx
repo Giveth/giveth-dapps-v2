@@ -40,6 +40,8 @@ const ProjectItem: FC<IProjectItem> = props => {
 	const [showClaimModal, setShowClaimModal] = useState(false);
 	const [showDeleteModal, setShowDeleteModal] = useState(false);
 
+	console.log('project', project);
+
 	return (
 		<ProjectContainer>
 			<ProjectInfoContainer
@@ -173,11 +175,7 @@ const ProjectItem: FC<IProjectItem> = props => {
 								{formatMessage({ id: 'label.total_raised' })}
 							</Flex>
 						</P>
-						{formatDonation(
-							project.totalDonations || 0,
-							'$',
-							locale,
-						)}
+						{formatDonation(project.totalRaised || 0, '$', locale)}
 					</Flex>
 					{project.projectType === EProjectType.CAUSE && (
 						<Flex $justifyContent='space-between'>
@@ -190,7 +188,7 @@ const ProjectItem: FC<IProjectItem> = props => {
 								</Flex>
 							</P>
 							{formatDonation(
-								project.totalDonations || 0,
+								project.totalDistributed || 0,
 								'$',
 								locale,
 							)}
