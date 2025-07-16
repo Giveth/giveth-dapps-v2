@@ -106,15 +106,12 @@ const ImprovementBanner: FC<IImprovementBanner> = () => {
 
 				<ExpandableContent isExpanded={isExpanded}>
 					{isCause ? (
-						<iframe
-							src='https://giveth.typeform.com/to/e68DoSqk'
-							style={{
-								width: '100%',
-								height: '750px',
-								border: 'none',
-							}}
+						<Widget
+							id='e68DoSqk' // same form ID from iframe URL
+							style={{ width: '100%', height: '750px' }}
 							className='my-form'
-							allow='camera; microphone; autoplay; encrypted-media;'
+							onSubmit={handleFormSubmit}
+							onClose={handleFormClose}
 						/>
 					) : (
 						<Widget
