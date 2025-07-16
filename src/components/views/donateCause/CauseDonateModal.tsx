@@ -13,7 +13,11 @@ import { Chain, parseUnits } from 'viem';
 import { Modal } from '@/components/modals/Modal';
 import { compareAddresses, formatTxLink, showToastError } from '@/lib/helpers';
 import { mediaQueries } from '@/lib/constants/constants';
-import { IMeGQL, IProjectAcceptedToken } from '@/apollo/types/gqlTypes';
+import {
+	IMeGQL,
+	IProjectAcceptedToken,
+	SwapTransactionInput,
+} from '@/apollo/types/gqlTypes';
 import { IModal } from '@/types/common';
 import FailedDonation, {
 	EDonationFailedType,
@@ -43,10 +47,12 @@ import SanctionModal from '@/components/modals/SanctionedModal';
 import {
 	approveSpending,
 	checkAllowance,
+	executeEVMTransaction,
 	executeSquidTransaction,
 	getSquidRoute,
 } from './helpers';
 import config from '@/configuration';
+import { IOnTxHash, saveDonation } from '@/services/donation';
 
 interface IDonateModalProps extends IModal {
 	token: IProjectAcceptedToken;
@@ -204,28 +210,98 @@ const CauseDonateModal: FC<IDonateModalProps> = props => {
 
 		try {
 			setDonating(true);
-			const squidParams = {
-				fromAddress: address || '',
-				fromChain: chainId.toString(),
-				fromToken: token.address,
-				fromAmount: amount.toString(),
-				toChain: chainId.toString(),
-				toToken: config.CAUSES_CONFIG.recepeintToken.address,
-				toAddress: projectWalletAddress || '',
-				quoteOnly: false,
-			};
 
-			const squidRoute = await getSquidRoute(squidParams);
+			let tx;
+			let swapData: SwapTransactionInput | undefined;
 
-			if (squidRoute.error) {
-				setFailedModalType(EDonationFailedType.FAILED);
-				showToastError(squidRoute.error);
-				return;
+			// Same token same network
+			if (
+				token.networkId === chainId &&
+				token.address.toLowerCase() ===
+					config.CAUSES_CONFIG.recepeintToken.address.toLowerCase()
+			) {
+				console.log('same token same network');
+				const txRequest = {
+					target: projectWalletAddress,
+					data: '0x',
+					value: amount,
+				};
+
+				tx = await executeEVMTransaction(txRequest);
+			} else {
+				console.log('different token different network');
+				const squidParams = {
+					fromAddress: address || '',
+					fromChain: chainId.toString(),
+					fromToken: token.address,
+					fromAmount: amount.toString(),
+					toChain: chainId.toString(),
+					toToken: config.CAUSES_CONFIG.recepeintToken.address,
+					toAddress: projectWalletAddress || '',
+					quoteOnly: false,
+				};
+
+				const squidRoute = await getSquidRoute(squidParams);
+
+				console.log('squidRoute', squidRoute);
+
+				if (squidRoute.error) {
+					setFailedModalType(EDonationFailedType.FAILED);
+					showToastError(squidRoute.error);
+					return;
+				}
+
+				if (squidRoute?.route) {
+					tx = await executeSquidTransaction(squidRoute.route);
+					console.log('tx', tx);
+
+					swapData = {
+						squidRequestId: squidRoute.quoteId,
+						firstTxHash: tx?.hash,
+						fromChainId: parseInt(squidParams.fromChain),
+						toChainId: parseInt(squidParams.toChain),
+						fromTokenAddress: squidParams.fromToken,
+						toTokenAddress: squidParams.toToken,
+						fromAmount: parseFloat(squidParams.fromAmount),
+						toAmount: parseFloat(
+							squidRoute.route.estimate.toAmount,
+						),
+						fromTokenSymbol:
+							squidRoute.route.estimate.fromToken.symbol,
+						toTokenSymbol: squidRoute.route.estimate.toToken.symbol,
+						metadata: squidRoute.route,
+					};
+				}
 			}
 
-			if (squidRoute?.route) {
-				const tx = await executeSquidTransaction(squidRoute.route);
-				console.log('tx', tx);
+			// Save donation
+			if (tx) {
+				// delayedCloseModal(tx.hash);
+
+				const donationProps: IOnTxHash = {
+					chainId,
+					txHash: tx.hash,
+					amount: projectDonation,
+					token,
+					projectId: Number(project.id),
+					anonymous,
+					useDonationBox: false,
+					walletAddress: address || '',
+					symbol: token.symbol,
+					setFailedModalType,
+				};
+
+				if (swapData) {
+					donationProps.swapData = swapData;
+				}
+
+				await saveDonation(donationProps);
+
+				console.log('saved tx', tx);
+			} else {
+				setFailedModalType(EDonationFailedType.FAILED);
+				showToastError('Failed to make donation');
+				return;
 			}
 		} catch (error) {
 			setFailedModalType(EDonationFailedType.FAILED);

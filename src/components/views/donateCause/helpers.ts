@@ -128,7 +128,6 @@ export const getSquidRoute = async (params: {
 		fromToken: tokenAddressCheck,
 	};
 
-	console.log('params', checkedParams);
 	try {
 		const response = await fetch(
 			`${process.env.NEXT_PUBLIC_SQUID_API_BASE_URL}/v2/route`,
@@ -197,4 +196,19 @@ const getEthersSigner = async (): Promise<ethers.Signer> => {
 	// ethers v5 compatible
 	const provider = new ethers.providers.Web3Provider(client as any); // cast needed if type mismatch
 	return provider.getSigner();
+};
+
+export const executeEVMTransaction = async (txRequest: any) => {
+	if (!txRequest) throw new Error('No transaction request found');
+
+	const signer = await getEthersSigner();
+	const tx = await signer.sendTransaction({
+		to: txRequest.target,
+		data: txRequest.data,
+		value: txRequest.value,
+	});
+
+	await tx.wait();
+	console.log('Transaction sent:', tx.hash);
+	return tx;
 };

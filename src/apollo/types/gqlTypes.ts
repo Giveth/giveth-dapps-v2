@@ -149,3 +149,17 @@ export interface GetDraftDonation {
 export interface ICauseBySlug {
 	cause?: ICause;
 }
+
+export type SwapTransactionInput = {
+	squidRequestId?: string;
+	firstTxHash: string;
+	fromChainId: number;
+	toChainId: number;
+	fromTokenAddress: string;
+	toTokenAddress: string;
+	fromAmount: number;
+	toAmount: number;
+	fromTokenSymbol: string;
+	toTokenSymbol: string;
+	metadata?: Record<string, any>;
+};
