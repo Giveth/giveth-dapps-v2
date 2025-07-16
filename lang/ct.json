@@ -533,6 +533,8 @@
 	"label.go_to_my_givpower": "Anar a 'El meu GIVpower'",
 	"label.go_to_passport": "Anar a Passport",
 	"label.go_to_projects": "Anar a projectes",
+	"label.back_to_my_account": "Torna al meu compte",
+	"label.project_deactivated": "El teu projecte s'ha desactivat correctament. Gràcies per utilitzar Giveth.",
 	"label.go_to_projets_page": "Anar a la pàgina de projectes",
 	"label.great_projects_make_the_giveconomy_thrive": "Els grans projectes fan que la GIVeconomia prosperi! Com a propietari d'un projecte, quan obtens una insígnia de 'Elegible per a GIVbacks', els teus donants es tornen elegibles per rebre GIVbacks.",
 	"label.guess_what_you_are_awsome": "Endevina què? Ets increïble!",
@@ -1899,7 +1901,9 @@
 	"label.cause.boost_this_cause_with_givpower_to_improve_its_rank": "Impulsa aquesta causa amb GIVpower per millorar el seu rànquing! El rànquing s'actualitza al començament de cada ronda de GIVbacks. També pots veure el rànquing projectat per a la propera ronda a continuació.",
 	"label.cause.boost_this_cause_with_givpower": "Impulsa aquesta causa amb GIVpower per millorar el seu rànquing!",
 	"label.cause.transaction_failed_desc": "La teva transacció ha fallat!",
-	"label.cause.transaction_failed_desc_2": "Si us plau, torna enrere i intenta-ho de nou."
+	"label.cause.transaction_failed_desc_2": "Si us plau, torna enrere i intenta-ho de nou.",
+	"label.cause.cause_deactivated": "La teva causa ha estat desactivada correctament. Gràcies per utilitzar Giveth.",
+	"label.cause.go_to_causes": "Anar a Causes"
 }
 
 

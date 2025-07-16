@@ -533,6 +533,8 @@
 	"label.go_to_my_givpower": "Go to My GIVpower",
 	"label.go_to_passport": "Go to Passport",
 	"label.go_to_projects": "Go to projects",
+	"label.back_to_my_account": "Back to My account",
+	"label.project_deactivated": "Your project was successfully deactivated. Thank you for using Giveth.",
 	"label.go_to_projets_page": "Go to Projects page",
 	"label.great_projects_make_the_giveconomy_thrive": "Great projects make the GIVeconomy thrive! As a project owner, when you get a 'GIVbacks Eligible' badge, your donors become eligible to receive GIVbacks.",
 	"label.guess_what_you_are_awsome": "Guess what? You’re awesome!",
@@ -1960,5 +1962,7 @@
 	"label.cause.transaction_failed_desc_2": "Please go back and try again.",
 	"label.cause.donate_to_cause": "Donate to Cause",
 	"label.cause.this_cause_doesnt_accept_on": "This cause doesn't accept",
-	"label.cause.this_token_is_not_supported_by_squid": "This token is not supported by Squid router. Choose another token."
+	"label.cause.this_token_is_not_supported_by_squid": "This token is not supported by Squid router. Choose another token.",
+	"label.cause.cause_deactivated": "Your cause was successfully deactivated. Thank you for using Giveth.",
+	"label.cause.go_to_causes": "Go to Causes"
 }

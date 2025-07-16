@@ -531,6 +531,8 @@
 	"label.go_to_my_givpower": "Ir a Mi GIVpower",
 	"label.go_to_passport": "Ir a Passport",
 	"label.go_to_projects": "Ir a proyectos",
+	"label.back_to_my_account": "Volver a Mi cuenta",
+	"label.project_deactivated": "Tu proyecto fue desactivado correctamente. Gracias por usar Giveth.",
 	"label.go_to_projets_page": "Ir a los Proyectos",
 	"label.great_projects_make_the_giveconomy_thrive": "¡Los grandes proyectos hacen que la GIVeconomía prospere! Como propietario de un proyecto, cuando obtienes una insignia de 'Elegible para GIVbacks', tus donantes se vuelven elegibles para recibir GIVbacks.",
 	"label.guess_what_you_are_awsome": "¿Adivina qué? ¡Eres increíble!",
@@ -1861,7 +1863,7 @@
 	"label.cause.form_errors_before_submitting": "Por favor, corrige los errores del formulario antes de enviar",
 	"label.cause.failed_to_create_cause": "No se pudo crear la causa. Por favor, inténtalo de nuevo.",
 	"label.you_can_now_view_it": "También puedes acceder a tu causa desde tu cuenta y compartirla con tus amigos.",
-    "label.view_cause": "VER MI CAUSA",
+	"label.view_cause": "VER MI CAUSA",
 	"label.cause.cause_not_available": "¡Ups! Esta causa ya no está disponible o no se encontró.",
 	"label.cause.edit_cause": "Editar causa",
 	"label.cause.cause_actions": "Acciones de la causa",
@@ -1900,6 +1902,7 @@
 	"label.cause.boost_this_cause_with_givpower_to_improve_its_rank": "¡Impulsa esta causa con GIVpower para mejorar su rango! El rango se actualiza al inicio de cada ronda de GIVbacks. También puedes ver el rango proyectado para la próxima ronda abajo.",
 	"label.cause.boost_this_cause_with_givpower": "¡Impulsa esta causa con GIVpower para mejorar su rango!",
 	"label.cause.transaction_failed_desc": "¡Tu transacción ha fallado!",
-	"label.cause.transaction_failed_desc_2": "Por favor vuelve atrás e intenta de nuevo."
+	"label.cause.transaction_failed_desc_2": "Por favor vuelve atrás e intenta de nuevo.",
+	"label.cause.cause_deactivated": "Tu causa fue desactivada correctamente. Gracias por usar Giveth.",
+	"label.cause.go_to_causes": "Ir a Causas"
 }
-
