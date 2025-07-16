@@ -64,6 +64,12 @@ export interface IProjectAcceptedTokensGQL {
 	};
 }
 
+export interface ICauseAcceptedTokensGQL {
+	data: {
+		getCauseAcceptTokens: IProjectAcceptedToken[];
+	};
+}
+
 export interface ISuggestedProjectsGQL {
 	data: {
 		similarProjectsBySlug: {

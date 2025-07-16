@@ -57,6 +57,7 @@ const CauseDonateIndex: FC = () => {
 	const isSafeEnv = useIsSafeEnvironment();
 	const { isOnSolana } = useGeneralWallet();
 	const { chainId } = useAccount();
+
 	const { walletAddress: address } = useGeneralWallet();
 
 	useEffect(() => {
@@ -75,8 +76,6 @@ const CauseDonateIndex: FC = () => {
 	useEffect(() => {
 		validateSanctions();
 	}, [project, address, validateSanctions]);
-
-	console.log(project);
 
 	useEffect(() => {
 		if (
@@ -154,7 +153,7 @@ const CauseDonateIndex: FC = () => {
 					)}
 					<Row>
 						<Col xs={12} lg={6}>
-							<CauseDonationCard />
+							<CauseDonationCard chainId={chainId || 0} />
 						</Col>
 						<Col xs={12} lg={6}>
 							<InfoWrapper>

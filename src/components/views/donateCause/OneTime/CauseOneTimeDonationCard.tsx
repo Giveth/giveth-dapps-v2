@@ -168,14 +168,7 @@ const CauseCryptoDonation: FC<{
 			const filteredTokens = acceptedTokens.filter(token => {
 				switch (walletChainType) {
 					case ChainType.EVM:
-						return (
-							token.networkId === networkId &&
-							addresses?.some(
-								token =>
-									token.networkId === networkId &&
-									token.chainType === walletChainType,
-							)
-						);
+						return token.networkId === networkId;
 					case ChainType.SOLANA:
 						return (
 							addressesChainTypes.has(ChainType.SOLANA) &&

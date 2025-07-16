@@ -5,18 +5,20 @@ import { useIntl } from 'react-intl';
 import { captureException } from '@sentry/nextjs';
 import { Shadow } from '@/components/styled-components/Shadow';
 import {
+	ICauseAcceptedTokensGQL,
 	IProjectAcceptedToken,
-	IProjectAcceptedTokensGQL,
 } from '@/apollo/types/gqlTypes';
 import CauseCryptoDonation from './OneTime/CauseOneTimeDonationCard';
 import { showToastError } from '@/lib/helpers';
-import { PROJECT_ACCEPTED_TOKENS } from '@/apollo/gql/gqlProjects';
+import { CAUSE_ACCEPTED_TOKENS } from '@/apollo/gql/gqlProjects';
 import { client } from '@/apollo/apolloClient';
 import { useCauseDonateData } from '@/context/donate.cause.context';
 
-export interface IDonationCardProps {}
+export interface IDonationCardProps {
+	chainId: number;
+}
 
-export const CauseDonationCard: FC<IDonationCardProps> = ({}) => {
+export const CauseDonationCard: FC<IDonationCardProps> = ({ chainId }) => {
 	const { project } = useCauseDonateData();
 	const { formatMessage } = useIntl();
 
@@ -26,12 +28,15 @@ export const CauseDonationCard: FC<IDonationCardProps> = ({}) => {
 	useEffect(() => {
 		client
 			.query({
-				query: PROJECT_ACCEPTED_TOKENS,
-				variables: { projectId: Number(project.id) },
+				query: CAUSE_ACCEPTED_TOKENS,
+				variables: {
+					causeId: Number(project.id),
+					networkId: chainId,
+				},
 				fetchPolicy: 'no-cache',
 			})
-			.then((res: IProjectAcceptedTokensGQL) => {
-				setAcceptedTokens(res.data.getProjectAcceptTokens);
+			.then((res: ICauseAcceptedTokensGQL) => {
+				setAcceptedTokens(res.data.getCauseAcceptTokens);
 			})
 			.catch((error: unknown) => {
 				showToastError(error);
@@ -41,7 +46,7 @@ export const CauseDonationCard: FC<IDonationCardProps> = ({}) => {
 					},
 				});
 			});
-	}, []);
+	}, [chainId, project.id]);
 
 	return (
 		<DonationCardWrapper>
