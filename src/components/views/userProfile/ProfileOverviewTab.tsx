@@ -24,6 +24,7 @@ import { useAppDispatch, useAppSelector } from '@/features/hooks';
 import { setShowCompleteProfile } from '@/features/modal/modal.slice';
 import { IUserProfileView } from '@/components/views/userProfile/UserProfile.view';
 import {
+	CausesContributeCard,
 	ContributeCard,
 	DonateContributeCard,
 	ProjectsContributeCard,
@@ -165,6 +166,9 @@ const ProfileOverviewTab: FC<IUserProfileView> = () => {
 					) : (
 						<PublicGIVpowerContributeCard />
 					)}
+				</Col>
+				<Col lg={6}>
+					<CausesContributeCard />
 				</Col>
 			</Row>
 			{myAccount && isSafeEnv ? (

@@ -10,6 +10,7 @@ import Link from 'next/link';
 import React from 'react';
 import styled from 'styled-components';
 import { useIntl } from 'react-intl';
+import { useRouter } from 'next/router';
 import { Chain } from 'viem';
 import Routes from '@/lib/constants/Routes';
 import { useDonateData } from '@/context/donate.context';
@@ -58,6 +59,8 @@ export const DonationInfo = () => {
 	const { txHash = [] } = successDonation || {};
 	const hasMultipleTxs = txHash.length > 1;
 	const isStellar = txHash[0]?.chainType === ChainType.STELLAR;
+	const router = useRouter();
+	const isCauseDonation = router.query.cause === 'true';
 
 	return (
 		<Options>
@@ -100,8 +103,17 @@ export const DonationInfo = () => {
 					chainType={txHash[1]?.chainType}
 				/>
 			)}
-			<Link href={Routes.AllProjects}>
-				<ProjectsButton size='small' label='SEE MORE PROJECTS' />
+			<Link
+				href={isCauseDonation ? Routes.AllCauses : Routes.AllProjects}
+			>
+				<ProjectsButton
+					size='small'
+					label={
+						isCauseDonation
+							? 'SEE MORE CAUSES'
+							: 'SEE MORE PROJECTS'
+					}
+				/>
 			</Link>
 		</Options>
 	);

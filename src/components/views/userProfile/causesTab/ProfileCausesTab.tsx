@@ -8,7 +8,7 @@ import NothingToSee from '@/components/views/userProfile/NothingToSee';
 import Pagination from '@/components/Pagination';
 import ProjectCard from '@/components/project-card/ProjectCard';
 import { UserContributeTitle, UserProfileTab } from '../common.sc';
-import { ProjectsContributeCard } from '@/components/ContributeCard';
+import { CausesContributeCard } from '@/components/ContributeCard';
 import { useProfileContext } from '@/context/profile.context';
 import { getUserName } from '@/helpers/user';
 import { fetchUserCauses } from './services';
@@ -36,7 +36,7 @@ const ProfileCausesTab: FC<IUserProfileView> = () => {
 			{!myAccount && (
 				<Row>
 					<Col lg={6}>
-						<ProjectsContributeCard />
+						<CausesContributeCard />
 					</Col>
 				</Row>
 			)}

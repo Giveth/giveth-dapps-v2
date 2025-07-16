@@ -31,6 +31,8 @@ export const GET_USER_BY_ADDRESS = gql`
 			passportScore
 			passportStamps
 			activeQFMBDScore
+			ownedCausesCount
+			totalCausesDistributed
 		}
 	}
 `;
@@ -61,6 +63,8 @@ export const FETCH_USER_PROJECTS = gql`
 					id
 					name
 				}
+				totalRaised
+				totalDistributed
 				addresses {
 					address
 					memo

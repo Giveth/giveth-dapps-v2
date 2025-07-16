@@ -12,12 +12,16 @@ import {
 import React, { FC, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { useIntl } from 'react-intl';
+import { useRouter } from 'next/router';
+import { ICause } from '@/apollo/types/types';
 import ExternalLink from '@/components/ExternalLink';
 import { client } from '@/apollo/apolloClient';
-import { FETCH_GIVETH_PROJECT_BY_ID } from '@/apollo/gql/gqlProjects';
+import {
+	FETCH_PROJECT_BY_SLUG_SUCCESS,
+	FETCH_GIVETH_PROJECT_BY_ID,
+} from '@/apollo/gql/gqlProjects';
 import config from '@/configuration';
 import { slugToProjectView } from '@/lib/routeCreators';
-import { IFetchGivethProjectGQL } from '@/apollo/types/gqlTypes';
 import { useDonateData } from '@/context/donate.context';
 import { useIsSafeEnvironment } from '@/hooks/useSafeAutoConnect';
 import {
@@ -30,7 +34,8 @@ import ProjectCardImage from '@/components/project-card/ProjectCardImage';
 import { DonatePageProjectDescription } from './DonatePageProjectDescription';
 import SocialBox from '@/components/SocialBox';
 import links from '@/lib/constants/links';
-import { EContentType } from '@/lib/constants/shareContent';
+import { EContentType, EContentTypeCause } from '@/lib/constants/shareContent';
+
 import QFToast from './QFToast';
 import { DonationInfo } from './DonationInfo';
 import { ManageRecurringDonation } from './Recurring/ManageRecurringDonation';
@@ -54,6 +59,28 @@ export const SuccessView: FC<ISuccessView> = ({ isStellar, isStellarInQF }) => {
 	const hasMultipleTxs = txHash.length > 1;
 	const isSafeEnv = useIsSafeEnvironment();
 	const [givethSlug, setGivethSlug] = useState<string>('');
+	const [fullCauseProject, setFullCauseProject] = useState<ICause>();
+	const router = useRouter();
+	const isCauseDonation = router.query.cause === 'true';
+	useEffect(() => {
+		if (!isCauseDonation || !project?.slug) return;
+
+		client
+			.query({
+				query: FETCH_PROJECT_BY_SLUG_SUCCESS,
+				variables: {
+					slug: project.slug,
+					connectedWalletUserId: undefined,
+				},
+			})
+			.then((res: any) => {
+				const fullData = res.data?.projectBySlug;
+				if (fullData) {
+					setFullCauseProject(fullData);
+				}
+			})
+			.catch(console.error);
+	}, [isCauseDonation, project?.slug]);
 
 	const {
 		info: { passportState, qfEligibilityState },
@@ -82,20 +109,27 @@ export const SuccessView: FC<ISuccessView> = ({ isStellar, isStellarInQF }) => {
 
 	useEffect(() => {
 		if (!hasMultipleTxs) return;
+		client;
 		client
 			.query({
 				query: FETCH_GIVETH_PROJECT_BY_ID,
-				variables: { id: config.GIVETH_PROJECT_ID },
+				variables: { id: project.id },
 			})
-			.then((res: IFetchGivethProjectGQL) =>
-				setGivethSlug(res.data.projectById.slug),
-			);
+			.then(res => {
+				const fullData = res.data?.projectById;
+				if (fullData?.projectType === 'CAUSE') {
+					setFullCauseProject(fullData);
+				}
+			});
 	}, []);
 
-	const socialContentType = isRecurring
-		? EContentType.justDonatedRecurring
-		: EContentType.justDonated;
-
+	const socialContentType: EContentType | EContentTypeCause = isCauseDonation
+		? isRecurring
+			? EContentTypeCause.justDonatedRecurring
+			: EContentTypeCause.donationSuccess
+		: isRecurring
+			? EContentType.justDonatedRecurring
+			: EContentType.justDonated;
 	const showQFToast =
 		!excludeFromQF &&
 		!isSafeEnv &&
@@ -108,6 +142,7 @@ export const SuccessView: FC<ISuccessView> = ({ isStellar, isStellarInQF }) => {
 				qfEligibilityState !== EQFElegibilityState.PROCESSING &&
 				qfEligibilityState !== EQFElegibilityState.NOT_CONNECTED &&
 				qfEligibilityState !== EQFElegibilityState.ERROR));
+	console.log('🎯 Cause project:', fullCauseProject);
 
 	return (
 		<Wrapper>
@@ -125,6 +160,18 @@ export const SuccessView: FC<ISuccessView> = ({ isStellar, isStellarInQF }) => {
 							projectData={project}
 							showRaised={true}
 						/>
+						{isCauseDonation &&
+							(fullCauseProject?.activeProjectsCount ?? 0) >
+								0 && (
+								<ProjectsCount>
+									<strong>
+										{fullCauseProject?.activeProjectsCount}
+									</strong>{' '}
+									{fullCauseProject?.activeProjectsCount === 1
+										? 'Project'
+										: 'Projects'}
+								</ProjectsCount>
+							)}
 					</InfoWrapper>
 				</Col>
 				<Col xs={12} lg={6}>
@@ -169,7 +216,16 @@ export const SuccessView: FC<ISuccessView> = ({ isStellar, isStellarInQF }) => {
 						{isRecurring && <ManageRecurringDonation />}
 						<SocialBoxWrapper>
 							<SocialBox
-								project={project}
+								{...(isCauseDonation
+									? {
+											cause:
+												fullCauseProject ??
+												(project as unknown as ICause),
+											numberOfProjects:
+												fullCauseProject?.activeProjectsCount ??
+												0,
+										}
+									: { project })}
 								contentType={socialContentType}
 							/>
 						</SocialBoxWrapper>
@@ -251,4 +307,9 @@ const RightSectionWrapper = styled(Flex)`
 	padding: 32px;
 	border-radius: 16px;
 	height: 100%;
+`;
+const ProjectsCount = styled.div`
+	margin-top: 16px;
+	font-weight: 600;
+	color: ${brandColors.deep[700]};
 `;

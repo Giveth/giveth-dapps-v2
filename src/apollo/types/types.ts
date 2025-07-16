@@ -97,6 +97,8 @@ export interface IProject {
 	projectType: EProjectType;
 	causeProjects?: ICauseProject[];
 	activeProjectsCount?: number;
+	totalRaised?: number;
+	totalDistributed?: number;
 }
 
 export interface ICauseProject {
@@ -266,6 +268,7 @@ export interface IUser {
 	chainvineId?: string;
 	isEmailVerified?: boolean;
 	ownedCausesCount?: number;
+	totalCausesDistributed?: number;
 }
 
 export interface IPassportInfo {

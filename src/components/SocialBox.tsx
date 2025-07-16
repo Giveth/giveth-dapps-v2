@@ -27,6 +27,7 @@ interface ISocialBox {
 	cause?: ICause;
 	contentType: EContentType | EContentTypeCause;
 	isDonateFooter?: boolean;
+	numberOfProjects?: number;
 }
 
 const SocialBox: FC<ISocialBox> = props => {
@@ -55,7 +56,7 @@ const SocialBox: FC<ISocialBox> = props => {
 		: shareContentCreatorCause(
 				contentType as EContentTypeCause,
 				ESocialType.twitter,
-				cause?.projects?.length || 0,
+				props.numberOfProjects ?? cause?.projects?.length ?? 0,
 			);
 
 	const shareTitleFacebookAndLinkedin = project
@@ -63,7 +64,7 @@ const SocialBox: FC<ISocialBox> = props => {
 		: shareContentCreatorCause(
 				contentType as EContentTypeCause,
 				ESocialType.facebook,
-				cause?.projects?.length || 0,
+				props.numberOfProjects ?? cause?.projects?.length ?? 0,
 			);
 
 	return (

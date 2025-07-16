@@ -78,3 +78,22 @@ export const PublicGIVpowerContributeCard: FC<IUserProfileView> = () => {
 		/>
 	);
 };
+
+export const CausesContributeCard: FC<IUserProfileView> = () => {
+	const { user } = useProfileContext();
+	const { formatMessage } = useIntl();
+
+	console.log('user', user);
+	return (
+		<ContributeCard
+			data1={{
+				label: formatMessage({ id: 'label.causes' }),
+				value: user.ownedCausesCount || 0,
+			}}
+			data2={{
+				label: formatMessage({ id: 'label.cause.total_distributed' }),
+				value: `$${formatUSD(user.totalCausesDistributed || 0)}`,
+			}}
+		/>
+	);
+};
