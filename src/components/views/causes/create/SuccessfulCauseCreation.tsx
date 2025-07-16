@@ -6,6 +6,7 @@ import {
 	Container,
 	H2,
 	Lead,
+	neutralColors,
 	P,
 	Row,
 } from '@giveth/ui-design-system';
@@ -102,6 +103,28 @@ const SuccessfulCauseCreation = ({ cause, isLoading }: IProps) => {
 						/>
 
 						<br />
+						<P
+							style={{
+								fontSize: 14,
+								marginTop: 24,
+								color: neutralColors.gray[700],
+							}}
+						>
+							Provide us feedback on your experience with Causes
+							by filling out{' '}
+							<Link
+								href='https://giveth.typeform.com/to/e68DoSqk'
+								target='_blank'
+								rel='noopener noreferrer'
+								passHref
+							>
+								<StyledSurveyLink>
+									this 2 minute survey
+								</StyledSurveyLink>
+							</Link>
+							. Your feedback helps us make Giveth better!
+						</P>
+
 						<P>
 							{formatMessage({ id: 'label.you_can_now_view_it' })}
 						</P>
@@ -112,6 +135,20 @@ const SuccessfulCauseCreation = ({ cause, isLoading }: IProps) => {
 								})}
 							/>
 						</Link>
+
+						<P style={{ marginTop: 16, fontSize: 14 }}>
+							Want to learn more about Causes?{' '}
+							<Link
+								href='https://docs.giveth.io/donation-agents'
+								target='_blank'
+								rel='noopener noreferrer'
+								passHref
+							>
+								<StyledDocLink>
+									Visit our documentation
+								</StyledDocLink>
+							</Link>
+						</P>
 					</Right>
 				</Row>
 			</ContainerStyled>
@@ -188,7 +225,29 @@ const ProjectCountLabel = styled.span`
 	color: #8c8c8c;
 	width: 100%;
 	text-align: left;
-	margin-top: 12px;
-	padding-left: 12px;
+	padding: 10px 12px 10px 12px; // top & bottom: 10px, left & right: 12px
+	box-sizing: border-box;
 `;
+
+const StyledDocLink = styled.a`
+	color: ${brandColors.pinky[500]};
+	text-decoration: underline;
+	font-size: 14px;
+	display: inline-flex;
+	align-items: center;
+	gap: 4px;
+	margin-top: 8px;
+	&:hover {
+		color: ${brandColors.pinky[700]};
+	}
+`;
+const StyledSurveyLink = styled.a`
+	color: ${brandColors.pinky[500]};
+	text-decoration: underline;
+	font-weight: 500;
+	&:hover {
+		color: ${brandColors.pinky[700]};
+	}
+`;
+
 export default SuccessfulCauseCreation;
