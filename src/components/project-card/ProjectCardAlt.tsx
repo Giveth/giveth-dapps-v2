@@ -84,6 +84,7 @@ const ProjectCard = (props: IProjectCard) => {
 								<Author>{name || '\u200C'}</Author>
 							)}
 						</InternalLink>
+						<Description>{htmlToText(description)}</Description>
 						{props.projectsCount !== undefined && (
 							<ProjectsCount>
 								<strong>{props.projectsCount}</strong>{' '}
@@ -94,7 +95,6 @@ const ProjectCard = (props: IProjectCard) => {
 						)}
 					</div>
 				)}
-				<Description>{htmlToText(description)}</Description>
 			</CardBody>
 		</Wrapper>
 	);
@@ -106,15 +106,12 @@ const BadgeContainer = styled.div`
 	padding: 16px;
 `;
 const ProjectsCount = styled.div`
-	position: absolute;
-	left: 12px;
-	bottom: 12px;
-	font-size: 12px;
-	font-weight: 600;
+	margin-top: 10px;
+	padding: 0 12px;
 	font-size: 14px;
 	font-weight: 400;
 	color: ${neutralColors.gray[500]};
-	margin-top: 4px;
+	text-align: left;
 
 	strong {
 		font-weight: 700;
@@ -131,7 +128,7 @@ const Description = styled(P)`
 	height: 76px;
 	overflow: hidden;
 	color: ${neutralColors.gray[900]};
-	margin-bottom: 20px;
+	margin-bottom: 8px;
 	margin-top: 8px;
 `;
 
