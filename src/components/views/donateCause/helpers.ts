@@ -98,9 +98,18 @@ export const approveSpending = async (
 	const signer = await getEthersSigner();
 	const tokenContract = new ethers.Contract(tokenAddress, erc20Abi, signer);
 
-	const tx = await tokenContract.approve(spender, amount);
-	await tx.wait();
-	return tx;
+	try {
+		const tx = await tokenContract.approve(spender, amount);
+		await tx.wait();
+		return tx;
+	} catch (error: any) {
+		if (error.code === 'ACTION_REJECTED') {
+			console.warn('User rejected the transaction.');
+			return null;
+		}
+		console.error('Approval transaction failed:', error);
+		throw error;
+	}
 };
 
 /**
@@ -109,19 +118,16 @@ export const approveSpending = async (
  * @param params - Squid route parameters
  * @returns the route object from Squid
  */
-export const getSquidRoute = async (
-	params: {
-		fromAddress: string;
-		fromChain: string;
-		fromToken: string;
-		fromAmount: string;
-		toChain: string;
-		toToken: string;
-		toAddress: string;
-		quoteOnly?: boolean;
-	},
-	setFailedModalType?: (type: EDonationFailedType) => void,
-) => {
+export const getSquidRoute = async (params: {
+	fromAddress: string;
+	fromChain: string;
+	fromToken: string;
+	fromAmount: string;
+	toChain: string;
+	toToken: string;
+	toAddress: string;
+	quoteOnly?: boolean;
+}) => {
 	const tokenAddressCheck =
 		params.fromToken.toLowerCase() === ZERO_ADDRESS
 			? NATIVE_TOKEN_ADDRESS
@@ -150,9 +156,9 @@ export const getSquidRoute = async (
 		);
 
 		if (!response.ok) {
-			setFailedModalType?.(EDonationFailedType.FAILED);
 			console.error(
-				`Failed to fetch Squid route: ${response.statusText}`,
+				`Failed to fetch Squid route: ${response.status}`,
+				response,
 			);
 		}
 
@@ -160,7 +166,7 @@ export const getSquidRoute = async (
 		return data;
 	} catch (error) {
 		console.error('Error fetching Squid route:', error);
-		throw error;
+		return error;
 	}
 };
 
@@ -169,7 +175,10 @@ export const getSquidRoute = async (
  *
  * @param route - The route to execute
  */
-export const executeSquidTransaction = async (route: any) => {
+export const executeSquidTransaction = async (
+	route: any,
+	setFailedModalType?: (type: EDonationFailedType) => void,
+) => {
 	const txRequest = route?.transactionRequest;
 	if (!txRequest) throw new Error('No transaction request found');
 
@@ -181,9 +190,18 @@ export const executeSquidTransaction = async (route: any) => {
 		gasLimit: txRequest.gasLimit,
 	});
 
-	await tx.wait();
-	console.log('Transaction sent:', tx.hash);
-	return tx;
+	try {
+		await tx.wait();
+		console.log('Squid transaction sent:', tx.hash);
+		return tx;
+	} catch (error: any) {
+		if (error.code === 'ACTION_REJECTED') {
+			setFailedModalType?.(EDonationFailedType.REJECTED);
+			return error;
+		}
+		console.error('Squid transaction failed:', error);
+		return error;
+	}
 };
 
 /**
@@ -201,19 +219,4 @@ const getEthersSigner = async (): Promise<ethers.Signer> => {
 	// ethers v5 compatible
 	const provider = new ethers.providers.Web3Provider(client as any); // cast needed if type mismatch
 	return provider.getSigner();
-};
-
-export const executeEVMTransaction = async (txRequest: any) => {
-	if (!txRequest) throw new Error('No transaction request found');
-
-	const signer = await getEthersSigner();
-	const tx = await signer.sendTransaction({
-		to: txRequest.target,
-		data: txRequest.data,
-		value: txRequest.value,
-	});
-
-	await tx.wait();
-	console.log('Transaction sent:', tx.hash);
-	return tx;
 };

@@ -9,9 +9,14 @@ import {
 	FlexCenter,
 } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
-import { Chain, parseUnits } from 'viem';
+import { Chain, parseUnits, Address } from 'viem';
 import { Modal } from '@/components/modals/Modal';
-import { compareAddresses, formatTxLink, showToastError } from '@/lib/helpers';
+import {
+	compareAddresses,
+	formatTxLink,
+	sendEvmTransaction,
+	showToastError,
+} from '@/lib/helpers';
 import { mediaQueries } from '@/lib/constants/constants';
 import {
 	IMeGQL,
@@ -47,7 +52,6 @@ import SanctionModal from '@/components/modals/SanctionedModal';
 import {
 	approveSpending,
 	checkAllowance,
-	executeEVMTransaction,
 	executeSquidTransaction,
 	getSquidRoute,
 } from './helpers';
@@ -187,6 +191,7 @@ const CauseDonateModal: FC<IDonateModalProps> = props => {
 			if (approveTx) {
 				setStep('donate');
 			} else {
+				setFailedModalType(EDonationFailedType.CANCELLED);
 				showToastError('Failed to approve token');
 			}
 		} else {
@@ -215,15 +220,25 @@ const CauseDonateModal: FC<IDonateModalProps> = props => {
 				token.address.toLowerCase() ===
 					config.CAUSES_CONFIG.recepeintToken.address.toLowerCase()
 			) {
-				console.log('same token same network');
+				console.log('same token same network', amount);
 				const txRequest = {
-					target: projectWalletAddress,
-					data: '0x',
-					value: amount,
+					to: projectWalletAddress as Address,
+					value: projectDonation.toString(),
 				};
 
-				tx = await executeEVMTransaction(txRequest);
+				tx = await sendEvmTransaction(
+					txRequest,
+					chainId,
+					token.address,
+				);
+
+				if (!tx) {
+					setFailedModalType(EDonationFailedType.FAILED);
+					showToastError('ova greška');
+					return;
+				}
 			} else {
+				// different token then recipient token
 				console.log('different token different network');
 				const squidParams = {
 					fromAddress: address || '',
@@ -237,22 +252,15 @@ const CauseDonateModal: FC<IDonateModalProps> = props => {
 					quoteOnly: false,
 				};
 
-				const squidRoute = await getSquidRoute(
-					squidParams,
-					setFailedModalType,
-				);
-
-				console.log('squidRoute', squidRoute);
-
-				if (squidRoute.error) {
-					setFailedModalType(EDonationFailedType.FAILED);
-					showToastError(squidRoute.error);
-					return;
-				}
+				const squidRoute = await getSquidRoute(squidParams);
 
 				if (squidRoute?.route) {
 					tx = await executeSquidTransaction(squidRoute.route);
-					console.log('tx', tx);
+
+					if (tx.error) {
+						setFailedModalType(EDonationFailedType.REJECTED);
+						return;
+					}
 
 					swapData = {
 						squidRequestId: squidRoute.quoteId,
@@ -270,6 +278,9 @@ const CauseDonateModal: FC<IDonateModalProps> = props => {
 						toTokenSymbol: squidRoute.route.estimate.toToken.symbol,
 						metadata: squidRoute.route,
 					};
+				} else {
+					setFailedModalType(EDonationFailedType.FAILED);
+					return;
 				}
 			}
 
@@ -303,9 +314,9 @@ const CauseDonateModal: FC<IDonateModalProps> = props => {
 				return;
 			}
 		} catch (error) {
-			setFailedModalType(EDonationFailedType.FAILED);
+			setFailedModalType(EDonationFailedType.REJECTED);
+			showToastError('ona greška');
 			console.error('Error making donation:', error);
-			throw error;
 		} finally {
 			setDonating(false);
 		}
