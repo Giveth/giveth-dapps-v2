@@ -52,6 +52,15 @@ const FailedDonation: FC<IProps> = ({ setShowModal, txUrl, type }) => {
 						/>
 					</NotSaved>
 				);
+			case EDonationFailedType.FAILED:
+				return (
+					<div>
+						<p>
+							Low liquidity, please reduce swap amount and try
+							again
+						</p>
+					</div>
+				);
 			default:
 				return (
 					<div>

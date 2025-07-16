@@ -69,7 +69,6 @@ const CauseDonateModal: FC<IDonateModalProps> = props => {
 			? useCreateSolanaDonation
 			: useCreateEvmDonation;
 	const {
-		createDonation: createFirstDonation,
 		txHash: firstTxHash,
 		donationSaved: firstDonationSaved,
 		donationMinted: firstDonationMinted,
@@ -106,7 +105,7 @@ const CauseDonateModal: FC<IDonateModalProps> = props => {
 
 	const projectWalletAddress = findMatchingWalletAddress(
 		addresses,
-		chainId,
+		137, // for now we are using polygon as the default chain
 		walletChainType,
 	);
 
@@ -116,7 +115,6 @@ const CauseDonateModal: FC<IDonateModalProps> = props => {
 
 	// this function is used to validate the token and check if the wallet is sanctioned
 	const validateTokenThenDonate = async () => {
-		setDonating(true);
 		client
 			.query({
 				query: VALIDATE_TOKEN,
@@ -125,9 +123,10 @@ const CauseDonateModal: FC<IDonateModalProps> = props => {
 			.then((res: IMeGQL) => {
 				const _address = res.data?.me?.walletAddress;
 				if (compareAddresses(_address, address)) {
-					handleDonate();
+					return true;
 				} else {
 					handleFailedValidation();
+					return false;
 				}
 			})
 			.catch(handleFailedValidation);
@@ -164,11 +163,14 @@ const CauseDonateModal: FC<IDonateModalProps> = props => {
 	};
 
 	const approveToken = async () => {
+		await validateTokenThenDonate();
+
 		const allowance = await checkAllowance(
 			address || '',
 			projectWalletAddress || '',
 			token.address,
 		);
+
 		setApproving(true);
 
 		const donationInWei = parseUnits(
@@ -194,13 +196,6 @@ const CauseDonateModal: FC<IDonateModalProps> = props => {
 	};
 
 	const handleDonate = async () => {
-		const txProps = {
-			anonymous,
-			setDonating,
-			token,
-			setFailedModalType,
-		};
-
 		if (!projectWalletAddress) {
 			setDonating(false);
 			return showToastError(
@@ -235,13 +230,17 @@ const CauseDonateModal: FC<IDonateModalProps> = props => {
 					fromChain: chainId.toString(),
 					fromToken: token.address,
 					fromAmount: amount.toString(),
-					toChain: chainId.toString(),
+					toChain:
+						config.CAUSES_CONFIG.recepeintToken.network.toString(),
 					toToken: config.CAUSES_CONFIG.recepeintToken.address,
 					toAddress: projectWalletAddress || '',
 					quoteOnly: false,
 				};
 
-				const squidRoute = await getSquidRoute(squidParams);
+				const squidRoute = await getSquidRoute(
+					squidParams,
+					setFailedModalType,
+				);
 
 				console.log('squidRoute', squidRoute);
 
@@ -397,7 +396,7 @@ const CauseDonateModal: FC<IDonateModalProps> = props => {
 							/>
 						)}
 						<DonateButton
-							loading={donating}
+							loading={donating || approving}
 							buttonType='secondary'
 							disabled={donating || processFinished || approving}
 							label={

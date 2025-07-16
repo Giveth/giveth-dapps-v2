@@ -1,6 +1,7 @@
 import { Contract, ethers } from 'ethers';
 import { getConnectorClient } from 'wagmi/actions';
 import { wagmiConfig } from '@/wagmiConfigs';
+import { EDonationFailedType } from '@/components/modals/FailedDonation';
 
 const NATIVE_TOKEN_ADDRESS = '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee';
 const ZERO_ADDRESS = '0x0000000000000000000000000000000000000000';
@@ -108,16 +109,19 @@ export const approveSpending = async (
  * @param params - Squid route parameters
  * @returns the route object from Squid
  */
-export const getSquidRoute = async (params: {
-	fromAddress: string;
-	fromChain: string;
-	fromToken: string;
-	fromAmount: string;
-	toChain: string;
-	toToken: string;
-	toAddress: string;
-	quoteOnly?: boolean;
-}) => {
+export const getSquidRoute = async (
+	params: {
+		fromAddress: string;
+		fromChain: string;
+		fromToken: string;
+		fromAmount: string;
+		toChain: string;
+		toToken: string;
+		toAddress: string;
+		quoteOnly?: boolean;
+	},
+	setFailedModalType?: (type: EDonationFailedType) => void,
+) => {
 	const tokenAddressCheck =
 		params.fromToken.toLowerCase() === ZERO_ADDRESS
 			? NATIVE_TOKEN_ADDRESS
@@ -146,7 +150,8 @@ export const getSquidRoute = async (params: {
 		);
 
 		if (!response.ok) {
-			throw new Error(
+			setFailedModalType?.(EDonationFailedType.FAILED);
+			console.error(
 				`Failed to fetch Squid route: ${response.statusText}`,
 			);
 		}
