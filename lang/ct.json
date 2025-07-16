@@ -1862,7 +1862,7 @@
 	"label.cause.form_errors_before_submitting": "Soluciona els errors abans d’enviar",
 	"label.cause.failed_to_create_cause": "No s’ha pogut crear la causa. Torna-ho a provar.",
 	"label.you_can_now_view_it": "També pots accedir a la teva causa des del teu compte i compartir-la amb els teus amics.",
-    "label.view_cause": "VEURE LA MEVA CAUSA",
+  "label.view_cause": "VEURE LA MEVA CAUSA",
 	"label.cause.cause_not_available": "Ups! Aquesta causa ja no està disponible o no s'ha trobat.",
 	"label.cause.edit_cause": "Edita la causa",
 	"label.cause.cause_actions": "Accions de la causa",

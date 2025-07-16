@@ -59,7 +59,6 @@ export const CauseReviewStep = ({
 	const { switchChain } = useSwitchChain();
 	const { open: openConnectModal } = useWeb3Modal();
 
-
 	// Check previus form states - return to second step if not valid
 	if (
 		!getValues('title') ||
