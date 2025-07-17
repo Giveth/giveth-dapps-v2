@@ -42,17 +42,23 @@ const ProjectItem: FC<IProjectItem> = props => {
 	const [showClaimModal, setShowClaimModal] = useState(false);
 	const [showDeleteModal, setShowDeleteModal] = useState(false);
 
-	console.log('project', project);
-
-	// Check does cause have some projects that has been deactivated
+	// Check does cause have some projects that has been not active
+	// or missing network 137 address
 	let projectStatus = '';
 	if (project.projectType === EProjectType.CAUSE) {
 		if (project.loadCauseProjects) {
-			projectStatus = project.loadCauseProjects.some(
-				project =>
-					project.project.status.name !== EProjectStatus.ACTIVE ||
-					!project.project.verified,
-			)
+			projectStatus = project.loadCauseProjects.some(p => {
+				const isInactiveOrUnverifiedAndIncluded =
+					(p.project.status.name !== EProjectStatus.ACTIVE ||
+						!p.project.verified) &&
+					p.isIncluded;
+
+				const isMissingNetwork137 = !p.project.addresses?.some(
+					address => address.networkId === 137,
+				);
+
+				return isInactiveOrUnverifiedAndIncluded || isMissingNetwork137;
+			})
 				? 'label.cause.review_status'
 				: '';
 		}

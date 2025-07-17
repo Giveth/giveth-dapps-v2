@@ -85,6 +85,10 @@ export const FETCH_USER_PROJECTS = gql`
 						status {
 							name
 						}
+						addresses {
+							id
+							networkId
+						}
 					}
 				}
 			}

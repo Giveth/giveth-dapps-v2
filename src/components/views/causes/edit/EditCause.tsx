@@ -31,8 +31,6 @@ const EditCause: FC<ICreateCauseProps> = ({ project }) => {
 	const router = useRouter();
 	const { formatMessage } = useIntl();
 
-	console.log('project', project);
-
 	// if user is not owner, redirect to cause view
 	if (!isOwner) {
 		router.push(slugToCauseView(project?.slug || ''));
@@ -44,14 +42,25 @@ const EditCause: FC<ICreateCauseProps> = ({ project }) => {
 
 	const formRef = useRef<HTMLFormElement>(null);
 
-	// Check does cause have some projects that has been deactivated
+	// Check does cause have some projects that has been no active
+	// or missing network 137 address
 	let projectStatus = '';
 	if (project?.loadCauseProjects) {
-		projectStatus = project.loadCauseProjects.some(
-			project =>
-				project.project.status.name !== EProjectStatus.ACTIVE &&
-				!project.project.verified,
-		)
+		projectStatus = project.loadCauseProjects.some(project => {
+			const isInactiveOrUnverified =
+				(project.project.status.name !== EProjectStatus.ACTIVE ||
+					!project.project.verified) &&
+				project.isIncluded;
+
+			const missingNetwork137 = !project.project.addresses?.some(
+				address => address.networkId === 137,
+			);
+
+			console.log('isInactiveOrUnverified', isInactiveOrUnverified);
+			console.log('missingNetwork137', missingNetwork137);
+
+			return isInactiveOrUnverified || missingNetwork137;
+		})
 			? 'label.cause.review_status'
 			: '';
 	}
