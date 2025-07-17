@@ -109,6 +109,9 @@ export const PROJECT_CARD_FIELDS_CAUSES = gql`
 			isActive
 			networkId
 		}
+		status {
+			name
+		}
 	}
 `;
 

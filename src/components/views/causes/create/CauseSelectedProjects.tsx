@@ -10,6 +10,7 @@ import Link from 'next/link';
 import { IProject } from '@/apollo/types/types';
 import InlineToast, { EToastType } from '@/components/toasts/InlineToast';
 import config from '@/configuration';
+import { EProjectStatus } from '@/apollo/types/gqlEnums';
 
 export const CauseSelectedProjects = () => {
 	const { watch, setValue } = useFormContext();
@@ -60,6 +61,14 @@ export const CauseSelectedProjects = () => {
 			<ProjectsList>
 				{selectedProjects.map((project: IProject) => (
 					<ProjectItem key={project.id}>
+						{project.status?.name !== EProjectStatus.ACTIVE && (
+							<InlineToastWrapper
+								type={EToastType.Warning}
+								message={formatMessage({
+									id: 'label.cause.project_deativated_notice',
+								})}
+							/>
+						)}
 						<ProjectInfo>
 							<ProjectTitle>{project.title}</ProjectTitle>
 							<ProjectCategory>
@@ -136,6 +145,7 @@ const ProjectsList = styled.div`
 
 const ProjectItem = styled.div`
 	display: flex;
+	flex-wrap: wrap;
 	justify-content: space-between;
 	align-items: center;
 	padding: 16px;
@@ -181,4 +191,8 @@ const RemoveButton = styled.button`
 		background-color: ${neutralColors.gray[200]};
 		color: ${neutralColors.gray[900]};
 	}
+`;
+
+const InlineToastWrapper = styled(InlineToast)`
+	width: 100%;
 `;

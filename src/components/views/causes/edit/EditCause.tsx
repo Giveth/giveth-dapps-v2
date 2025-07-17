@@ -48,7 +48,9 @@ const EditCause: FC<ICreateCauseProps> = ({ project }) => {
 	let projectStatus = '';
 	if (project?.loadCauseProjects) {
 		projectStatus = project.loadCauseProjects.some(
-			project => project.project.status.name !== EProjectStatus.ACTIVE,
+			project =>
+				project.project.status.name !== EProjectStatus.ACTIVE &&
+				project.isIncluded,
 		)
 			? 'label.cause.review_status'
 			: '';
