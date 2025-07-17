@@ -239,6 +239,7 @@ export const FETCH_PROJECT_BY_SLUG_DONATION = gql`
 			totalDonations
 			sumDonationValueUsdForActiveQfRound
 			countUniqueDonorsForActiveQfRound
+			projectType
 			categories {
 				name
 				value
@@ -815,6 +816,26 @@ export const TITLE_IS_VALID = `
 export const PROJECT_ACCEPTED_TOKENS = gql`
 	query GetProjectAcceptTokens($projectId: Float!) {
 		getProjectAcceptTokens(projectId: $projectId) {
+			id
+			symbol
+			networkId
+			chainType
+			address
+			name
+			decimals
+			mainnetAddress
+			isGivbackEligible
+			order
+			isStableCoin
+			coingeckoId
+			isQR
+		}
+	}
+`;
+
+export const CAUSE_ACCEPTED_TOKENS = gql`
+	query GetCauseAcceptTokens($causeId: Float!, $networkId: Float!) {
+		getCauseAcceptTokens(causeId: $causeId, networkId: $networkId) {
 			id
 			symbol
 			networkId

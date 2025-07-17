@@ -17,6 +17,7 @@ import { EContentType } from '@/lib/constants/shareContent';
 import ShareLikeBadge from '@/components/badges/ShareLikeBadge';
 import ShareModal from '@/components/modals/ShareModal';
 import Routes from '@/lib/constants/Routes';
+import { EProjectType } from '@/apollo/types/gqlEnums';
 
 interface ISocialBox {
 	project: IProject;
@@ -39,6 +40,7 @@ const DonateSocialBox: FC<ISocialBox> = props => {
 					contentType={EContentType.thisProject}
 					setShowModal={setShowModal}
 					projectHref={slug}
+					isCause={project.projectType === EProjectType.CAUSE}
 				/>
 			)}
 			<BLead>

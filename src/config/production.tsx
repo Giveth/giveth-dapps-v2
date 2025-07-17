@@ -831,6 +831,21 @@ const config: EnvConfig = {
 					'0x4D9339dd97db55e3B9bCBE65dE39fF9c04d1C2cd',
 			},
 		],
+		acceptedNetworks: [
+			MAINNET_NETWORK_NUMBER,
+			GNOSIS_NETWORK_NUMBER,
+			POLYGON_NETWORK_NUMBER,
+			OPTIMISM_NETWORK_NUMBER,
+			ARBITRUM_NETWORK_NUMBER,
+			BASE_NETWORK_NUMBER,
+			CELO_NETWORK_NUMBER,
+		],
+		recipientToken: {
+			network: POLYGON_NETWORK_NUMBER,
+			address: '0xc7B1807822160a8C5b6c9EaF5C584aAD0972deeC',
+			symbol: 'GIV',
+			decimals: 18,
+		},
 	},
 };
 

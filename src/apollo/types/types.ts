@@ -269,6 +269,7 @@ export interface IUser {
 	isEmailVerified?: boolean;
 	ownedCausesCount?: number;
 	totalCausesDistributed?: number;
+	totalCausesRaised?: number;
 }
 
 export interface IPassportInfo {

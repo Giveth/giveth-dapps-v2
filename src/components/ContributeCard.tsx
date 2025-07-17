@@ -10,15 +10,26 @@ import { formatWeiHelper } from '@/helpers/number';
 interface IContributeCard {
 	data1: { label: string; value: string | number };
 	data2: { label: string; value: string | number };
+	data3?: { label: string; value: string | number };
 }
 
-export const ContributeCard: FC<IContributeCard> = ({ data1, data2 }) => {
+export const ContributeCard: FC<IContributeCard> = ({
+	data1,
+	data2,
+	data3,
+}) => {
 	return (
-		<ContributeCardBox>
+		<ContributeCardBox
+			$gridTemplateColumns={data3 ? '1fr 1fr 1fr' : '1fr 1fr'}
+		>
 			<ContributeCardTitles>{data1.label}</ContributeCardTitles>
 			<ContributeCardTitles>{data2.label}</ContributeCardTitles>
+			{data3 && (
+				<ContributeCardTitles>{data3.label}</ContributeCardTitles>
+			)}
 			<H3 weight={700}>{data1.value}</H3>
 			<H5>{data2.value}</H5>
+			{data3 && <H5>{data3.value}</H5>}
 		</ContributeCardBox>
 	);
 };
@@ -83,7 +94,6 @@ export const CausesContributeCard: FC<IUserProfileView> = () => {
 	const { user } = useProfileContext();
 	const { formatMessage } = useIntl();
 
-	console.log('user', user);
 	return (
 		<ContributeCard
 			data1={{
@@ -91,6 +101,10 @@ export const CausesContributeCard: FC<IUserProfileView> = () => {
 				value: user.ownedCausesCount || 0,
 			}}
 			data2={{
+				label: formatMessage({ id: 'label.total_raised' }),
+				value: `$${formatUSD(user.totalCausesRaised || 0)}`,
+			}}
+			data3={{
 				label: formatMessage({ id: 'label.cause.total_distributed' }),
 				value: `$${formatUSD(user.totalCausesDistributed || 0)}`,
 			}}

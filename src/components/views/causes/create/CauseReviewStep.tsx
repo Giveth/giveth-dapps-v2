@@ -22,6 +22,7 @@ import { useIntl } from 'react-intl';
 import { useFormContext } from 'react-hook-form';
 import { useEffect, useMemo, useState } from 'react';
 import Image from 'next/image';
+import { useWeb3Modal } from '@web3modal/wagmi/react';
 import config from '@/configuration';
 import { CauseCreateProjectCard } from '@/components/views/causes/create/CauseCreateProjectCard';
 import { formatDonation } from '@/helpers/number';
@@ -56,6 +57,7 @@ export const CauseReviewStep = ({
 		formState: { isValid },
 	} = useFormContext();
 	const { switchChain } = useSwitchChain();
+	const { open: openConnectModal } = useWeb3Modal();
 
 	// Check previus form states - return to second step if not valid
 	if (
@@ -260,6 +262,13 @@ export const CauseReviewStep = ({
 			!supportedNetwork?.tokenAddress ||
 			!supportedNetwork
 		) {
+			// Check supproted networks - load switch network modal
+			if (!supportedNetwork?.tokenAddress) {
+				// call modal for switching network
+				openConnectModal({ view: 'Networks' });
+				return;
+			}
+
 			return;
 		}
 

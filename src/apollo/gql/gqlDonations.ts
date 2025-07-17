@@ -127,6 +127,7 @@ export const CREATE_DONATION = gql`
 		$draftDonationId: Float
 		$useDonationBox: Boolean
 		$relevantDonationTxHash: String
+		$swapData: SwapTransactionInput
 	) {
 		createDonation(
 			transactionId: $transactionId
@@ -143,6 +144,7 @@ export const CREATE_DONATION = gql`
 			draftDonationId: $draftDonationId
 			useDonationBox: $useDonationBox
 			relevantDonationTxHash: $relevantDonationTxHash
+			swapData: $swapData
 		)
 	}
 `;
