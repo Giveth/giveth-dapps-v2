@@ -20,6 +20,7 @@ const EditCauseIndex = ({
 	cause: ICause;
 	isLoadingPage: boolean;
 }) => {
+	console.log('cause', cause);
 	const dispatch = useAppDispatch();
 	const {
 		isLoading,
