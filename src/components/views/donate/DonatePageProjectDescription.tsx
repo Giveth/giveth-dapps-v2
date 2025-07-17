@@ -61,7 +61,6 @@ export const DonatePageProjectDescription: FC<
 
 	const projectLink = slugToProjectView(slug!);
 	const { project } = useDonateData();
-	const isCauseDonation = router.query.cause === 'true';
 	const { activeStartedRound, activeQFRound } = getActiveRound(
 		project.qfRounds,
 	);

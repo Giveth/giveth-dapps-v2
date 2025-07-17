@@ -25,7 +25,9 @@ import { formatDonation } from '@/helpers/number';
 import VerificationBadge from '@/components/VerificationBadge';
 import DeleteProjectModal from './DeleteProjectModal';
 import ProjectVerificationStatus from './ProjectVerificationStatus';
-import { EProjectType } from '@/apollo/types/gqlEnums';
+import { EProjectStatus, EProjectType } from '@/apollo/types/gqlEnums';
+import InlineToast, { EToastType } from '@/components/toasts/InlineToast';
+import { idToCauseEdit } from '@/lib/routeCreators';
 
 interface IProjectItem {
 	project: IProject;
@@ -40,10 +42,40 @@ const ProjectItem: FC<IProjectItem> = props => {
 	const [showClaimModal, setShowClaimModal] = useState(false);
 	const [showDeleteModal, setShowDeleteModal] = useState(false);
 
-	console.log('project', project);
+	// Check does cause have some projects that has been not active
+	// or missing network 137 address
+	let projectStatus = '';
+	if (project.projectType === EProjectType.CAUSE) {
+		if (project.loadCauseProjects) {
+			projectStatus = project.loadCauseProjects.some(p => {
+				const isInactiveOrUnverifiedAndIncluded =
+					(p.project.status.name !== EProjectStatus.ACTIVE ||
+						!p.project.verified) &&
+					p.isIncluded;
+
+				const isMissingNetwork137 = !p.project.addresses?.some(
+					address => address.networkId === 137,
+				);
+
+				return isInactiveOrUnverifiedAndIncluded || isMissingNetwork137;
+			})
+				? 'label.cause.review_status'
+				: '';
+		}
+	}
 
 	return (
 		<ProjectContainer>
+			{project.projectType === EProjectType.CAUSE && projectStatus && (
+				<InlineToastWrapper
+					type={EToastType.Warning}
+					message={formatMessage({ id: projectStatus })}
+					link={idToCauseEdit(project.id)}
+					linkText={formatMessage({
+						id: 'label.cause.review',
+					})}
+				/>
+			)}
 			<ProjectInfoContainer
 				$justifyContent='space-between'
 				$alignItems='center'
@@ -259,6 +291,10 @@ const ProjectStatusesContainer = styled(Flex)`
 	${mediaQueries.tablet} {
 		width: 330px;
 	}
+`;
+
+const InlineToastWrapper = styled(InlineToast)`
+	width: 100%;
 `;
 
 export default ProjectItem;

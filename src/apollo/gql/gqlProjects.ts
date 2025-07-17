@@ -109,6 +109,9 @@ export const PROJECT_CARD_FIELDS_CAUSES = gql`
 			isActive
 			networkId
 		}
+		status {
+			name
+		}
 	}
 `;
 
@@ -434,6 +437,33 @@ export const FETCH_PROJECT_BY_ID = gql`
 					value
 					mainCategory {
 						title
+					}
+				}
+			}
+			loadCauseProjects {
+				id
+				projectId
+				isIncluded
+				project {
+					id
+					title
+					image
+					slug
+					description
+					verified
+					categories {
+						name
+						value
+						mainCategory {
+							title
+						}
+					}
+					addresses {
+						id
+						networkId
+					}
+					status {
+						name
 					}
 				}
 			}

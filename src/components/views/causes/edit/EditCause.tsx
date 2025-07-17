@@ -4,6 +4,7 @@ import { useIntl } from 'react-intl';
 import { useRouter } from 'next/router';
 import { useForm, FormProvider } from 'react-hook-form';
 import { useMutation } from '@apollo/client';
+import styled from 'styled-components';
 import { ICause, ICauseUpdate } from '@/apollo/types/types';
 import { showToastError } from '@/lib/helpers';
 import { EInputs } from '@/components/views/causes/create/types';
@@ -14,6 +15,9 @@ import { EditCauseInformationStep } from '@/components/views/causes/edit/EditCau
 import { EditCauseSelectProjectsStep } from '@/components/views/causes/edit/EditCauseSelectProjectsStep';
 import { EditCauseHeader } from '@/components/views/causes/edit/EditCauseHeader';
 import { useGeneralWallet } from '@/providers/generalWalletProvider';
+import { EProjectStatus } from '@/apollo/types/gqlEnums';
+import InlineToast, { EToastType } from '@/components/toasts/InlineToast';
+import { StyledContainer } from '../create/Create.sc';
 
 interface ICreateCauseProps {
 	project?: ICause;
@@ -21,13 +25,15 @@ interface ICreateCauseProps {
 
 const EditCause: FC<ICreateCauseProps> = ({ project }) => {
 	const { walletAddress } = useGeneralWallet();
-	const isOwner = project?.adminUser?.walletAddress === walletAddress;
+	const isOwner =
+		project?.adminUser?.walletAddress?.toLowerCase() ===
+		walletAddress?.toLowerCase();
 	const router = useRouter();
 	const { formatMessage } = useIntl();
 
 	// if user is not owner, redirect to cause view
 	if (!isOwner) {
-		// router.push(slugToCauseView(project?.slug || ''));
+		router.push(slugToCauseView(project?.slug || ''));
 	}
 
 	const [currentStep, setCurrentStep] = useState(1);
@@ -36,12 +42,40 @@ const EditCause: FC<ICreateCauseProps> = ({ project }) => {
 
 	const formRef = useRef<HTMLFormElement>(null);
 
+	// Check does cause have some projects that has been no active
+	// or missing network 137 address
+	let projectStatus = '';
+	if (project?.loadCauseProjects) {
+		projectStatus = project.loadCauseProjects.some(project => {
+			const isInactiveOrUnverified =
+				(project.project.status.name !== EProjectStatus.ACTIVE ||
+					!project.project.verified) &&
+				project.isIncluded;
+
+			const missingNetwork137 = !project.project.addresses?.some(
+				address => address.networkId === 137,
+			);
+
+			console.log('isInactiveOrUnverified', isInactiveOrUnverified);
+			console.log('missingNetwork137', missingNetwork137);
+
+			return isInactiveOrUnverified || missingNetwork137;
+		})
+			? 'label.cause.review_status'
+			: '';
+	}
+
+	// Prepare previous selected projects remove not included projects
+	const previousSelectedProjects = project?.loadCauseProjects
+		?.filter(project => project.isIncluded)
+		.map(project => project.project);
+
 	const formMethods = useForm({
 		mode: 'onChange',
 		defaultValues: {
 			[EInputs.title]: project?.title || '',
 			[EInputs.description]: project?.description || '',
-			[EInputs.selectedProjects]: project?.projects || [],
+			[EInputs.selectedProjects]: previousSelectedProjects || [],
 			[EInputs.categories]: project?.categories || [],
 			[EInputs.image]: project?.image || '',
 		},
@@ -173,6 +207,15 @@ const EditCause: FC<ICreateCauseProps> = ({ project }) => {
 				currentStep={currentStep}
 				setCurrentStep={setCurrentStep}
 			/>
+			{projectStatus && (
+				<StyledContainer>
+					<InlineToastWrapper
+						type={EToastType.Warning}
+						message={formatMessage({ id: projectStatus })}
+					/>
+				</StyledContainer>
+			)}
+
 			<FormProvider {...formMethods}>
 				<form ref={formRef} onSubmit={handleSubmit} noValidate>
 					{currentStep === 1 && (
@@ -194,3 +237,7 @@ const EditCause: FC<ICreateCauseProps> = ({ project }) => {
 };
 
 export default EditCause;
+
+const InlineToastWrapper = styled(InlineToast)`
+	width: 100%;
+`;

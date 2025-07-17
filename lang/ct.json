@@ -1964,5 +1964,7 @@
 	"label.cause.this_cause_doesnt_accept_on": "Aquesta causa no accepta",
 	"label.cause.this_token_is_not_supported_by_squid": "Aquest token no és compatible amb el router Squid. Tria un altre token.",
 	"label.cause.cause_deactivated": "La teva causa ha estat desactivada correctament. Gràcies per utilitzar Giveth.",
-	"label.cause.go_to_causes": "Anar a Causes"
+	"label.cause.go_to_causes": "Anar a Causes",
+	"label.cause.review_status": "Alguns projectes d'aquesta causa ja no són vàlids. Revisa i actualitza la causa.",
+	"label.cause.project_deactivated_notice": "Projecte desactivat. Ja no rebrà fons d'aquesta causa."
 }

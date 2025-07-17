@@ -10,6 +10,7 @@ import Link from 'next/link';
 import { IProject } from '@/apollo/types/types';
 import InlineToast, { EToastType } from '@/components/toasts/InlineToast';
 import config from '@/configuration';
+import { EProjectStatus } from '@/apollo/types/gqlEnums';
 
 export const CauseSelectedProjects = () => {
 	const { watch, setValue } = useFormContext();
@@ -58,23 +59,47 @@ export const CauseSelectedProjects = () => {
 			</InfoBox>
 
 			<ProjectsList>
-				{selectedProjects.map((project: IProject) => (
-					<ProjectItem key={project.id}>
-						<ProjectInfo>
-							<ProjectTitle>{project.title}</ProjectTitle>
-							<ProjectCategory>
-								{project.categories?.[0]?.mainCategory?.title ||
-									'Uncategorized'}
-							</ProjectCategory>
-						</ProjectInfo>
-						<RemoveButton
-							onClick={() => handleRemoveProject(project)}
-							aria-label='Remove project'
-						>
-							<IconTrash16 />
-						</RemoveButton>
-					</ProjectItem>
-				))}
+				{selectedProjects.map((project: IProject) => {
+					// Check does cause have some projects that has been not active
+					// or missing network 137 address
+					const isInactiveOrUnverifiedAndIncluded =
+						project.status?.name !== EProjectStatus.ACTIVE ||
+						!project.verified;
+
+					const isMissingNetwork137 = !project.addresses?.some(
+						address => address.networkId === 137,
+					);
+
+					const shouldShowWarning =
+						isInactiveOrUnverifiedAndIncluded ||
+						isMissingNetwork137;
+
+					return (
+						<ProjectItem key={project.id}>
+							{shouldShowWarning ? (
+								<InlineToastWrapper
+									type={EToastType.Warning}
+									message={formatMessage({
+										id: 'label.cause.project_deactivated_notice',
+									})}
+								/>
+							) : null}
+							<ProjectInfo>
+								<ProjectTitle>{project.title}</ProjectTitle>
+								<ProjectCategory>
+									{project.categories?.[0]?.mainCategory
+										?.title || 'Uncategorized'}
+								</ProjectCategory>
+							</ProjectInfo>
+							<RemoveButton
+								onClick={() => handleRemoveProject(project)}
+								aria-label='Remove project'
+							>
+								<IconTrash16 />
+							</RemoveButton>
+						</ProjectItem>
+					);
+				})}
 			</ProjectsList>
 		</Container>
 	);
@@ -136,6 +161,7 @@ const ProjectsList = styled.div`
 
 const ProjectItem = styled.div`
 	display: flex;
+	flex-wrap: wrap;
 	justify-content: space-between;
 	align-items: center;
 	padding: 16px;
@@ -181,4 +207,8 @@ const RemoveButton = styled.button`
 		background-color: ${neutralColors.gray[200]};
 		color: ${neutralColors.gray[900]};
 	}
+`;
+
+const InlineToastWrapper = styled(InlineToast)`
+	width: 100%;
 `;
