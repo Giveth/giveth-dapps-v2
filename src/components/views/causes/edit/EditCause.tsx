@@ -27,6 +27,8 @@ const EditCause: FC<ICreateCauseProps> = ({ project }) => {
 	const router = useRouter();
 	const { formatMessage } = useIntl();
 
+	console.log('project', project);
+
 	// if user is not owner, redirect to cause view
 	if (!isOwner) {
 		router.push(slugToCauseView(project?.slug || ''));

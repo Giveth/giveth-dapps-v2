@@ -75,6 +75,17 @@ export const FETCH_USER_PROJECTS = gql`
 				projectVerificationForm {
 					status
 				}
+				loadCauseProjects {
+					id
+					projectId
+					isIncluded
+					project {
+						id
+						status {
+							name
+						}
+					}
+				}
 			}
 			totalCount
 		}

@@ -99,6 +99,7 @@ export interface IProject {
 	activeProjectsCount?: number;
 	totalRaised?: number;
 	totalDistributed?: number;
+	loadCauseProjects?: ICauseProject[];
 }
 
 export interface ICauseProject {

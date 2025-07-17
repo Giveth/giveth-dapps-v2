@@ -25,7 +25,8 @@ import { formatDonation } from '@/helpers/number';
 import VerificationBadge from '@/components/VerificationBadge';
 import DeleteProjectModal from './DeleteProjectModal';
 import ProjectVerificationStatus from './ProjectVerificationStatus';
-import { EProjectType } from '@/apollo/types/gqlEnums';
+import { EProjectStatus, EProjectType } from '@/apollo/types/gqlEnums';
+import InlineToast, { EToastType } from '@/components/toasts/InlineToast';
 
 interface IProjectItem {
 	project: IProject;
@@ -40,10 +41,31 @@ const ProjectItem: FC<IProjectItem> = props => {
 	const [showClaimModal, setShowClaimModal] = useState(false);
 	const [showDeleteModal, setShowDeleteModal] = useState(false);
 
-	console.log('project', project);
+	// Check does cause have some projects that has been deactivated
+	let projectStatus = '';
+	if (project.projectType === EProjectType.CAUSE) {
+		if (project.loadCauseProjects) {
+			projectStatus = project.loadCauseProjects.some(
+				project =>
+					project.project.status.name === EProjectStatus.DEACTIVE,
+			)
+				? 'label.cause.review_status'
+				: '';
+		}
+	}
 
 	return (
 		<ProjectContainer>
+			{project.projectType === EProjectType.CAUSE && projectStatus && (
+				<InlineToastWrapper
+					type={EToastType.Warning}
+					message={formatMessage({ id: projectStatus })}
+					link={`/cause/${project.slug}`}
+					linkText={formatMessage({
+						id: 'label.cause.review',
+					})}
+				/>
+			)}
 			<ProjectInfoContainer
 				$justifyContent='space-between'
 				$alignItems='center'
@@ -259,6 +281,10 @@ const ProjectStatusesContainer = styled(Flex)`
 	${mediaQueries.tablet} {
 		width: 330px;
 	}
+`;
+
+const InlineToastWrapper = styled(InlineToast)`
+	width: 100%;
 `;
 
 export default ProjectItem;
