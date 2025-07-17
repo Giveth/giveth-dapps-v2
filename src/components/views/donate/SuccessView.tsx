@@ -12,7 +12,6 @@ import {
 import React, { FC, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { useIntl } from 'react-intl';
-import { useRouter } from 'next/router';
 import { ICause } from '@/apollo/types/types';
 import ExternalLink from '@/components/ExternalLink';
 import { client } from '@/apollo/apolloClient';
@@ -41,6 +40,7 @@ import { DonationInfo } from './DonationInfo';
 import { ManageRecurringDonation } from './Recurring/ManageRecurringDonation';
 import EndaomentProjectsInfo from '../project/EndaomentProjectsInfo';
 import ImprovementBanner from './ImprovementBanner';
+import { EProjectType } from '@/apollo/types/gqlEnums';
 
 interface ISuccessView {
 	isStellar?: boolean;
@@ -60,8 +60,8 @@ export const SuccessView: FC<ISuccessView> = ({ isStellar, isStellarInQF }) => {
 	const isSafeEnv = useIsSafeEnvironment();
 	const [givethSlug, setGivethSlug] = useState<string>('');
 	const [fullCauseProject, setFullCauseProject] = useState<ICause>();
-	const router = useRouter();
-	const isCauseDonation = router.query.cause === 'true';
+	const isCauseDonation = project.projectType === EProjectType.CAUSE;
+
 	useEffect(() => {
 		if (!isCauseDonation || !project?.slug) return;
 
@@ -142,11 +142,10 @@ export const SuccessView: FC<ISuccessView> = ({ isStellar, isStellarInQF }) => {
 				qfEligibilityState !== EQFElegibilityState.PROCESSING &&
 				qfEligibilityState !== EQFElegibilityState.NOT_CONNECTED &&
 				qfEligibilityState !== EQFElegibilityState.ERROR));
-	console.log('🎯 Cause project:', fullCauseProject);
 
 	return (
 		<Wrapper>
-			<ImprovementBanner />
+			<ImprovementBanner isCauseDonation={isCauseDonation} />
 			<Row>
 				<Col xs={12} lg={6}>
 					<InfoWrapper>

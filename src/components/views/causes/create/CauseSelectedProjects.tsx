@@ -61,14 +61,15 @@ export const CauseSelectedProjects = () => {
 			<ProjectsList>
 				{selectedProjects.map((project: IProject) => (
 					<ProjectItem key={project.id}>
-						{project.status?.name !== EProjectStatus.ACTIVE && (
+						{project.status?.name !== EProjectStatus.ACTIVE ||
+						!project.verified ? (
 							<InlineToastWrapper
 								type={EToastType.Warning}
 								message={formatMessage({
-									id: 'label.cause.project_deativated_notice',
+									id: 'label.cause.project_deactivated_notice',
 								})}
 							/>
-						)}
+						) : null}
 						<ProjectInfo>
 							<ProjectTitle>{project.title}</ProjectTitle>
 							<ProjectCategory>

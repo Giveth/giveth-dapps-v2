@@ -1966,5 +1966,5 @@
 	"label.cause.cause_deactivated": "Tu causa fue desactivada correctamente. Gracias por usar Giveth.",
 	"label.cause.go_to_causes": "Ir a Causas",
 	"label.cause.review_status": "Algunos proyectos de esta causa ya no son válidos. Por favor, revisa y actualiza la causa.",
-	"label.cause.project_deativated_notice": "Este proyecto ya no está activo. Por favor, revisa y actualiza la causa."
+	"label.cause.project_deactivated_notice": "Este proyecto ya no está activo. Por favor, revisa y actualiza la causa."
 }

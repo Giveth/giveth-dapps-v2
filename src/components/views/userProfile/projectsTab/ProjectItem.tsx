@@ -42,13 +42,16 @@ const ProjectItem: FC<IProjectItem> = props => {
 	const [showClaimModal, setShowClaimModal] = useState(false);
 	const [showDeleteModal, setShowDeleteModal] = useState(false);
 
+	console.log('project', project);
+
 	// Check does cause have some projects that has been deactivated
 	let projectStatus = '';
 	if (project.projectType === EProjectType.CAUSE) {
 		if (project.loadCauseProjects) {
 			projectStatus = project.loadCauseProjects.some(
 				project =>
-					project.project.status.name !== EProjectStatus.ACTIVE,
+					project.project.status.name !== EProjectStatus.ACTIVE ||
+					!project.project.verified,
 			)
 				? 'label.cause.review_status'
 				: '';

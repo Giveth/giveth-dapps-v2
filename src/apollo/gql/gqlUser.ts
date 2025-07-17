@@ -81,6 +81,7 @@ export const FETCH_USER_PROJECTS = gql`
 					isIncluded
 					project {
 						id
+						verified
 						status {
 							name
 						}

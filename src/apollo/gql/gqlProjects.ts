@@ -450,6 +450,7 @@ export const FETCH_PROJECT_BY_ID = gql`
 					image
 					slug
 					description
+					verified
 					categories {
 						name
 						value

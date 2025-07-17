@@ -10,12 +10,13 @@ import {
 	neutralColors,
 	Flex,
 } from '@giveth/ui-design-system';
-import { useRouter } from 'next/router';
+
 interface IImprovementBanner {
 	onClose?: () => void;
+	isCauseDonation?: boolean;
 }
 
-const ImprovementBanner: FC<IImprovementBanner> = () => {
+const ImprovementBanner: FC<IImprovementBanner> = ({ isCauseDonation }) => {
 	const { formatMessage } = useIntl();
 	const [isExpanded, setIsExpanded] = useState(false);
 	const [shouldShow, setShouldShow] = useState(false);
@@ -54,9 +55,6 @@ const ImprovementBanner: FC<IImprovementBanner> = () => {
 	const handleFormClose = () => {
 		setIsExpanded(false);
 	};
-
-	const router = useRouter();
-	const isCause = router.query.cause === 'true';
 	if (!shouldShow) return null;
 
 	return (
@@ -105,7 +103,7 @@ const ImprovementBanner: FC<IImprovementBanner> = () => {
 				</BannerHeader>
 
 				<ExpandableContent isExpanded={isExpanded}>
-					{isCause ? (
+					{isCauseDonation ? (
 						<Widget
 							id='e68DoSqk'
 							style={{ width: '100%', height: '750px' }}
