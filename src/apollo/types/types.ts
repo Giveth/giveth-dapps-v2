@@ -103,7 +103,9 @@ export interface IProject {
 
 export interface ICauseProject {
 	id: string;
+	projectId?: string;
 	project: IProject;
+	isIncluded?: boolean;
 }
 
 export enum EProjectsFilter {
@@ -580,6 +582,7 @@ export interface ICauseUpdate {
 
 export interface ICause extends IProject {
 	projects: IProject[];
+	loadCauseProjects: ICauseProject[];
 	chainId?: number;
 	depositTxHash?: string;
 	depositTxStatus?: string;

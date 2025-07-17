@@ -437,6 +437,28 @@ export const FETCH_PROJECT_BY_ID = gql`
 					}
 				}
 			}
+			loadCauseProjects {
+				id
+				projectId
+				isIncluded
+				project {
+					id
+					title
+					image
+					slug
+					description
+					categories {
+						name
+						value
+						mainCategory {
+							title
+						}
+					}
+					status {
+						name
+					}
+				}
+			}
 			addresses {
 				address
 				memo

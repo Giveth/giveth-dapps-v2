@@ -21,13 +21,15 @@ interface ICreateCauseProps {
 
 const EditCause: FC<ICreateCauseProps> = ({ project }) => {
 	const { walletAddress } = useGeneralWallet();
-	const isOwner = project?.adminUser?.walletAddress === walletAddress;
+	const isOwner =
+		project?.adminUser?.walletAddress?.toLowerCase() ===
+		walletAddress?.toLowerCase();
 	const router = useRouter();
 	const { formatMessage } = useIntl();
 
 	// if user is not owner, redirect to cause view
 	if (!isOwner) {
-		// router.push(slugToCauseView(project?.slug || ''));
+		router.push(slugToCauseView(project?.slug || ''));
 	}
 
 	const [currentStep, setCurrentStep] = useState(1);
@@ -36,12 +38,17 @@ const EditCause: FC<ICreateCauseProps> = ({ project }) => {
 
 	const formRef = useRef<HTMLFormElement>(null);
 
+	// Prepare previous selected projects remove not included projects
+	const previousSelectedProjects = project?.loadCauseProjects
+		?.filter(project => project.isIncluded)
+		.map(project => project.project);
+
 	const formMethods = useForm({
 		mode: 'onChange',
 		defaultValues: {
 			[EInputs.title]: project?.title || '',
 			[EInputs.description]: project?.description || '',
-			[EInputs.selectedProjects]: project?.projects || [],
+			[EInputs.selectedProjects]: previousSelectedProjects || [],
 			[EInputs.categories]: project?.categories || [],
 			[EInputs.image]: project?.image || '',
 		},
