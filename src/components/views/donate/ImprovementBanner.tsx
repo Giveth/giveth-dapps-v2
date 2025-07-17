@@ -107,7 +107,7 @@ const ImprovementBanner: FC<IImprovementBanner> = () => {
 				<ExpandableContent isExpanded={isExpanded}>
 					{isCause ? (
 						<Widget
-							id='e68DoSqk' // same form ID from iframe URL
+							id='e68DoSqk'
 							style={{ width: '100%', height: '750px' }}
 							className='my-form'
 							onSubmit={handleFormSubmit}
