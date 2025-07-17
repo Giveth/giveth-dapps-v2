@@ -99,9 +99,6 @@ export const signToGetToken = createAsyncThunk(
 		}
 
 		const { signature, nonce, message } = siweMessage;
-		console.log('signature', signature);
-		console.log('nonce', nonce);
-		console.log('message', message);
 
 		try {
 			if (signature) {

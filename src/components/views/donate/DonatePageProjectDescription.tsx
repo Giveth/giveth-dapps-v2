@@ -77,9 +77,6 @@ export const DonatePageProjectDescription: FC<
 		allocatedTokenSymbol,
 	} = activeQFRound || {};
 
-	console.log('isCauseDonation', isCauseDonation);
-	console.log('project?.causeProjects', project?.causeProjects);
-
 	return (
 		<DonationSectionWrapper gap='16px'>
 			{projectData?.isGivbackEligible && (

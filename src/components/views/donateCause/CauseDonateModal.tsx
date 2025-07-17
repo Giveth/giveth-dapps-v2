@@ -214,13 +214,12 @@ const CauseDonateModal: FC<IDonateModalProps> = props => {
 			let tx;
 			let swapData: SwapTransactionInput | undefined;
 
-			// Same token same network
+			// Same token as recipient token same network
 			if (
 				token.networkId === chainId &&
 				token.address.toLowerCase() ===
 					config.CAUSES_CONFIG.recepeintToken.address.toLowerCase()
 			) {
-				console.log('same token same network', amount);
 				const txRequest = {
 					to: projectWalletAddress as Address,
 					value: projectDonation.toString(),
@@ -238,8 +237,7 @@ const CauseDonateModal: FC<IDonateModalProps> = props => {
 					return;
 				}
 			} else {
-				// different token then recipient token
-				console.log('different token different network');
+				// different token or different network then recipient token
 				const squidParams = {
 					fromAddress: address || '',
 					fromChain: chainId.toString(),
@@ -286,8 +284,6 @@ const CauseDonateModal: FC<IDonateModalProps> = props => {
 
 			// Save donation
 			if (tx) {
-				// delayedCloseModal(tx.hash);
-
 				const donationProps: IOnTxHash = {
 					chainId,
 					txHash: tx.hash,
@@ -307,15 +303,15 @@ const CauseDonateModal: FC<IDonateModalProps> = props => {
 
 				await saveDonation(donationProps);
 
-				console.log('saved tx', tx);
+				console.log('Transaction saved', tx);
+
+				delayedCloseModal(tx.hash);
 			} else {
 				setFailedModalType(EDonationFailedType.FAILED);
-				showToastError('Failed to make donation');
 				return;
 			}
 		} catch (error) {
 			setFailedModalType(EDonationFailedType.REJECTED);
-			showToastError('ona greška');
 			console.error('Error making donation:', error);
 		} finally {
 			setDonating(false);
