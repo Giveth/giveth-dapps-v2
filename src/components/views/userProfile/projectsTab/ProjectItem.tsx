@@ -27,6 +27,7 @@ import DeleteProjectModal from './DeleteProjectModal';
 import ProjectVerificationStatus from './ProjectVerificationStatus';
 import { EProjectStatus, EProjectType } from '@/apollo/types/gqlEnums';
 import InlineToast, { EToastType } from '@/components/toasts/InlineToast';
+import { idToCauseEdit } from '@/lib/routeCreators';
 
 interface IProjectItem {
 	project: IProject;
@@ -47,7 +48,7 @@ const ProjectItem: FC<IProjectItem> = props => {
 		if (project.loadCauseProjects) {
 			projectStatus = project.loadCauseProjects.some(
 				project =>
-					project.project.status.name === EProjectStatus.DEACTIVE,
+					project.project.status.name !== EProjectStatus.ACTIVE,
 			)
 				? 'label.cause.review_status'
 				: '';
@@ -60,7 +61,7 @@ const ProjectItem: FC<IProjectItem> = props => {
 				<InlineToastWrapper
 					type={EToastType.Warning}
 					message={formatMessage({ id: projectStatus })}
-					link={`/cause/${project.slug}`}
+					link={idToCauseEdit(project.id)}
 					linkText={formatMessage({
 						id: 'label.cause.review',
 					})}
