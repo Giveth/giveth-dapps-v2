@@ -4,6 +4,7 @@ import { useIntl } from 'react-intl';
 import { useRouter } from 'next/router';
 import { useForm, FormProvider } from 'react-hook-form';
 import { useMutation } from '@apollo/client';
+import styled from 'styled-components';
 import { ICause, ICauseUpdate } from '@/apollo/types/types';
 import { showToastError } from '@/lib/helpers';
 import { EInputs } from '@/components/views/causes/create/types';
@@ -14,6 +15,9 @@ import { EditCauseInformationStep } from '@/components/views/causes/edit/EditCau
 import { EditCauseSelectProjectsStep } from '@/components/views/causes/edit/EditCauseSelectProjectsStep';
 import { EditCauseHeader } from '@/components/views/causes/edit/EditCauseHeader';
 import { useGeneralWallet } from '@/providers/generalWalletProvider';
+import { EProjectStatus } from '@/apollo/types/gqlEnums';
+import InlineToast, { EToastType } from '@/components/toasts/InlineToast';
+import { StyledContainer } from '../create/Create.sc';
 
 interface ICreateCauseProps {
 	project?: ICause;
@@ -39,6 +43,16 @@ const EditCause: FC<ICreateCauseProps> = ({ project }) => {
 	const [updateCauseMutation] = useMutation(UPDATE_CAUSE);
 
 	const formRef = useRef<HTMLFormElement>(null);
+
+	// Check does cause have some projects that has been deactivated
+	let projectStatus = '';
+	if (project?.loadCauseProjects) {
+		projectStatus = project.loadCauseProjects.some(
+			project => project.project.status.name !== EProjectStatus.ACTIVE,
+		)
+			? 'label.cause.review_status'
+			: '';
+	}
 
 	// Prepare previous selected projects remove not included projects
 	const previousSelectedProjects = project?.loadCauseProjects
@@ -182,6 +196,15 @@ const EditCause: FC<ICreateCauseProps> = ({ project }) => {
 				currentStep={currentStep}
 				setCurrentStep={setCurrentStep}
 			/>
+			{projectStatus && (
+				<StyledContainer>
+					<InlineToastWrapper
+						type={EToastType.Warning}
+						message={formatMessage({ id: projectStatus })}
+					/>
+				</StyledContainer>
+			)}
+
 			<FormProvider {...formMethods}>
 				<form ref={formRef} onSubmit={handleSubmit} noValidate>
 					{currentStep === 1 && (
@@ -203,3 +226,7 @@ const EditCause: FC<ICreateCauseProps> = ({ project }) => {
 };
 
 export default EditCause;
+
+const InlineToastWrapper = styled(InlineToast)`
+	width: 100%;
+`;
