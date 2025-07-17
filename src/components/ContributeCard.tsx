@@ -93,7 +93,7 @@ export const PublicGIVpowerContributeCard: FC<IUserProfileView> = () => {
 export const CausesContributeCard: FC<IUserProfileView> = () => {
 	const { user } = useProfileContext();
 	const { formatMessage } = useIntl();
-	
+
 	return (
 		<ContributeCard
 			data1={{
