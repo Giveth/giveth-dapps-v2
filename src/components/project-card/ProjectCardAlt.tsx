@@ -107,7 +107,6 @@ const BadgeContainer = styled.div`
 `;
 const ProjectsCount = styled.div`
 	margin-top: 10px;
-	padding: 0 12px;
 	font-size: 14px;
 	font-weight: 400;
 	color: ${neutralColors.gray[500]};
@@ -133,10 +132,10 @@ const Description = styled(P)`
 `;
 
 const CardBody = styled.div<{ $isNew?: boolean }>`
-	margin: ${props => (props.$isNew ? '50px 24px 0' : '50px 0 0')};
+	margin-top: ${props => (props.$isNew ? '50px' : '50px')};
+	padding: 0 24px 24px 24px;
 	text-align: left;
 `;
-
 const Author = styled(P)`
 	color: ${brandColors.pinky[500]};
 	margin-bottom: 10px;
