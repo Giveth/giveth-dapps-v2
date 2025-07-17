@@ -253,7 +253,7 @@ export interface EnvConfig {
 			decimals: number;
 			destinationAddress: Address;
 		}[];
-		recepeintToken: {
+		recipientToken: {
 			network: number;
 			address: Address;
 			symbol: string;

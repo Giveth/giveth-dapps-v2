@@ -218,7 +218,7 @@ const CauseDonateModal: FC<IDonateModalProps> = props => {
 			if (
 				token.networkId === chainId &&
 				token.address.toLowerCase() ===
-					config.CAUSES_CONFIG.recepeintToken.address.toLowerCase()
+					config.CAUSES_CONFIG.recipientToken.address.toLowerCase()
 			) {
 				const txRequest = {
 					to: projectWalletAddress as Address,
@@ -244,8 +244,8 @@ const CauseDonateModal: FC<IDonateModalProps> = props => {
 					fromToken: token.address,
 					fromAmount: amount.toString(),
 					toChain:
-						config.CAUSES_CONFIG.recepeintToken.network.toString(),
-					toToken: config.CAUSES_CONFIG.recepeintToken.address,
+						config.CAUSES_CONFIG.recipientToken.network.toString(),
+					toToken: config.CAUSES_CONFIG.recipientToken.address,
 					toAddress: projectWalletAddress || '',
 					quoteOnly: false,
 				};
