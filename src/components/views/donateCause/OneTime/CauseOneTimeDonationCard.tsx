@@ -56,7 +56,6 @@ import {
 import { TokenIcon } from '@/components/views/donate/TokenIcon/TokenIcon';
 import { Spinner } from '@/components/Spinner';
 import { useTokenPrice } from '@/hooks/useTokenPrice';
-import EligibilityBadges from '@/components/views/donate/common/EligibilityBadges';
 import DonateAnonymously from '@/components/views/donate/common/DonateAnonymously';
 import { GIVBACKS_DONATION_QUALIFICATION_VALUE_USD } from '@/lib/constants/constants';
 import CauseDonateModal from '@/components/views/donateCause/CauseDonateModal';
@@ -64,6 +63,7 @@ import { CauseSelectTokenModal } from '@/components/views/donateCause/OneTime/Se
 import SaveGasFees from '../../donate/OneTime/SaveGasFees';
 import CauseTotalDonation from '@/components/views/donateCause/OneTime/CauseTotalDonation';
 import { isTokenSupportedBySquid } from '../helpers';
+import CauseEligibilityBadges from '../common/CauseEligibilityBadges';
 
 const CauseCryptoDonation: FC<{
 	acceptedTokens: IProjectAcceptedToken[] | undefined;
@@ -338,6 +338,8 @@ const CauseCryptoDonation: FC<{
 		!!isDonationMatched;
 	const selectTokenDisabled = !isConnected || erc20List?.length === 0;
 
+	console.log({ selectTokenDisabled });
+
 	return (
 		<MainContainer>
 			{shouldRenderModal(DonateModalPriorityValues.ShowNetworkModal) &&
@@ -384,7 +386,7 @@ const CauseCryptoDonation: FC<{
 				</ConnectWallet>
 			)}
 			{!selectTokenDisabled && (
-				<EligibilityBadges
+				<CauseEligibilityBadges
 					token={selectedOneTimeToken}
 					amount={amount}
 					tokenPrice={tokenPrice}
