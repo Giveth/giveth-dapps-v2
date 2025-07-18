@@ -13,9 +13,8 @@ import {
 import { useAccount } from 'wagmi';
 import { IProject, IQFRound } from '@/apollo/types/types';
 import { getActiveRound, hasActiveRound } from '@/helpers/qf';
-import { ISuperfluidStream, IToken } from '@/types/superFluid';
+import { IToken } from '@/types/superFluid';
 import { ChainType } from '@/types/config';
-import { useUserStreams } from '@/hooks/useUserStreams';
 import { client } from '@/apollo/apolloClient';
 import { FETCH_PROJECT_BY_SLUG_DONATION } from '@/apollo/gql/gqlProjects';
 import { IProjectAcceptedToken, IDraftDonation } from '@/apollo/types/gqlTypes';
@@ -37,19 +36,14 @@ interface IDonateContext {
 	activeStartedRound?: IQFRound;
 	project: IProject;
 	successDonation?: ISuccessDonation;
-	tokenStreams: ITokenStreams;
 	setSuccessDonation: (successDonation?: ISuccessDonation) => void;
 	selectedOneTimeToken?: IProjectAcceptedToken;
-	selectedRecurringToken?: ISelectTokenWithBalance;
 	setSelectedOneTimeToken: Dispatch<
 		SetStateAction<IProjectAcceptedToken | undefined>
 	>;
 	setDonateModalByPriority: (
 		changeCurrentModal: DonateModalPriorityValues,
 	) => void;
-	setSelectedRecurringToken: Dispatch<
-		SetStateAction<ISelectTokenWithBalance | undefined>
-	>;
 	setIsModalPriorityChecked: (modal: DonateModalPriorityValues) => void;
 	shouldRenderModal: (modalRender: DonateModalPriorityValues) => boolean;
 	fetchProject: () => Promise<void>;
@@ -81,7 +75,6 @@ export enum DonateModalPriorityValues {
 const DonateCauseContext = createContext<IDonateContext>({
 	setSuccessDonation: () => {},
 	setSelectedOneTimeToken: () => {},
-	setSelectedRecurringToken: () => {},
 	project: {} as IProject,
 	tokenStreams: {},
 	fetchProject: async () => {},
@@ -103,21 +96,12 @@ DonateCauseContext.displayName = 'DonateCauseContext';
 
 export interface ISelectTokenWithBalance {
 	token: IToken;
-	// stream: ISuperfluidStream;
 	balance?: bigint;
-	// isStream: boolean;
-}
-
-export interface ITokenStreams {
-	[key: string]: ISuperfluidStream[];
 }
 
 export const CauseProvider: FC<IProviderProps> = ({ children, project }) => {
 	const [selectedOneTimeToken, setSelectedOneTimeToken] = useState<
 		IProjectAcceptedToken | undefined
-	>();
-	const [selectedRecurringToken, setSelectedRecurringToken] = useState<
-		ISelectTokenWithBalance | undefined
 	>();
 	const isModalStatusChecked = useRef<
 		Map<DonateModalPriorityValues, boolean>
@@ -135,7 +119,6 @@ export const CauseProvider: FC<IProviderProps> = ({ children, project }) => {
 
 	useEffect(() => {
 		setSelectedOneTimeToken(undefined);
-		setSelectedRecurringToken(undefined);
 	}, [chain]);
 
 	const setIsModalPriorityChecked = useCallback(
@@ -208,8 +191,6 @@ export const CauseProvider: FC<IProviderProps> = ({ children, project }) => {
 		setProjectData(data.projectBySlug);
 	}, [project.slug]);
 
-	const { tokenStreams } = useUserStreams();
-
 	const {
 		draftDonation,
 		status,
@@ -237,13 +218,10 @@ export const CauseProvider: FC<IProviderProps> = ({ children, project }) => {
 				setSuccessDonation,
 				selectedOneTimeToken,
 				pendingDonationExists,
-				selectedRecurringToken,
 				setDonateModalByPriority,
 				setSelectedOneTimeToken,
 				shouldRenderModal,
-				setSelectedRecurringToken,
 				setIsModalPriorityChecked,
-				tokenStreams,
 				fetchProject,
 				draftDonationData: draftDonation as IDraftDonation,
 				setDraftDonationData: setDraftDonation,
