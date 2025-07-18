@@ -29,7 +29,8 @@ interface IDonateSectionProps {
 
 export const DonateSection: FC<IDonateSectionProps> = ({ projectData }) => {
 	const { formatMessage, locale } = useIntl();
-	const { totalDonations } = projectData || {};
+	const { totalDonations, totalDistributed, activeProjectsCount } =
+		projectData || {};
 	const isMobile = !useMediaQuery(device.tablet);
 	const { project } = useDonateData();
 
@@ -70,6 +71,34 @@ export const DonateSection: FC<IDonateSectionProps> = ({ projectData }) => {
 					</NoFund>
 				</DonateInfo>
 			)}
+			{totalDonations &&
+				projectData?.projectType === EProjectType.CAUSE && (
+					<DonateInfoContributed>
+						{isMobile && <br />}
+						<Title>
+							{formatMessage({
+								id: 'label.cause.total_distributed',
+							})}
+						</Title>
+						<Amount weight={700}>
+							{formatDonation(totalDistributed || 0, '$', locale)}
+						</Amount>
+						<Description>
+							{formatMessage(
+								{
+									id: 'label.cause.total_distributed_projects',
+								},
+								{
+									count: (
+										<Caption $medium>
+											{activeProjectsCount || 0}
+										</Caption>
+									),
+								},
+							)}
+						</Description>
+					</DonateInfoContributed>
+				)}
 			{projectData?.projectType !== EProjectType.CAUSE &&
 				(project?.organization?.label ===
 				ORGANIZATION.endaoment ? null : (
@@ -140,6 +169,10 @@ const DonationSectionWrapper = styled(Flex)`
 
 const DonateInfo = styled.div`
 	height: 130px;
+`;
+
+const DonateInfoContributed = styled(DonateInfo)`
+	height: auto;
 `;
 
 const NoFund = styled(H4)`

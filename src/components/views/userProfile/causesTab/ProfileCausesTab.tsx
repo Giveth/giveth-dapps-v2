@@ -42,7 +42,10 @@ const ProfileCausesTab: FC<IUserProfileView> = () => {
 			)}
 			{!myAccount && (
 				<UserContributeTitle weight={700}>
-					{formatMessage({ id: 'label.user_projects' }, { userName })}
+					{formatMessage(
+						{ id: 'label.cause.user_causes' },
+						{ userName },
+					)}
 				</UserContributeTitle>
 			)}
 			<ProjectsContainer

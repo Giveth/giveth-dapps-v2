@@ -1966,5 +1966,7 @@
 	"label.cause.cause_deactivated": "Your cause was successfully deactivated. Thank you for using Giveth.",
 	"label.cause.go_to_causes": "Go to Causes",
 	"label.cause.review_status": "Some projects in this Cause are no longer valid. Please review and update the Cause.",
-	"label.cause.project_deactivated_notice": "Project deactivated. It will no longer receive funds from this Cause."
+	"label.cause.project_deactivated_notice": "Project deactivated. It will no longer receive funds from this Cause.",
+	"label.cause.total_distributed_projects": "Distributed to {count} Projects",
+	"label.cause.user_causes": "{userName}'s Causes"
 }

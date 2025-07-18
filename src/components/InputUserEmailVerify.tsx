@@ -360,7 +360,7 @@ const InputUserEmailVerify = forwardRef<HTMLInputElement, InputType>(
 				if (error instanceof Error) {
 					showToastError(error.message);
 				}
-				console.log(error);
+				console.error(error);
 			}
 		};
 

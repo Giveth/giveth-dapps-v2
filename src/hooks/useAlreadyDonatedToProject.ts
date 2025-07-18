@@ -27,7 +27,10 @@ export const useAlreadyDonatedToProject = (project?: IProject) => {
 					data.doesDonatedToProjectInQfRound as boolean,
 				);
 			} catch (error) {
-				console.log('error', error);
+				console.error(
+					'Error checking if user already donated to project',
+					error,
+				);
 			}
 		};
 		doesAlreadyDonated();

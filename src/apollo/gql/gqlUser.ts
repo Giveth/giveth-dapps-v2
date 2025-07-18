@@ -33,6 +33,7 @@ export const GET_USER_BY_ADDRESS = gql`
 			activeQFMBDScore
 			ownedCausesCount
 			totalCausesDistributed
+			totalCausesRaised
 		}
 	}
 `;

@@ -22,7 +22,7 @@ import { Shadow } from '@/components/styled-components/Shadow';
 import { useAppDispatch, useAppSelector } from '@/features/hooks';
 import { setShowHeader } from '@/features/general/general.slice';
 import { DonateHeader } from '../donate/DonateHeader';
-import { SuccessView } from '../donate/SuccessView';
+import { CauseSuccessView } from '@/components/views/donateCause/CauseSuccessView';
 import QFSection from '../project/projectActionCard/QFSection';
 import ProjectCardImage from '@/components/project-card/ProjectCardImage';
 import { useGeneralWallet } from '@/providers/generalWalletProvider';
@@ -106,7 +106,7 @@ const CauseDonateIndex: FC = () => {
 				isSuccessDonation={Object.keys(successDonation).length > 0}
 			/>
 			<DonateSuccessContainer>
-				<SuccessView isStellar={false} isStellarInQF={false} />
+				<CauseSuccessView isStellar={false} isStellarInQF={false} />
 			</DonateSuccessContainer>
 		</>
 	) : (
