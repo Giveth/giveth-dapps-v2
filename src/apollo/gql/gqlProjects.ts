@@ -314,6 +314,9 @@ export const FETCH_PROJECT_BY_SLUG_SINGLE_PROJECT = gql`
 			totalDonations
 			description
 			projectType
+			totalRaised
+			totalDistributed
+			activeProjectsCount
 			causeProjects {
 				id
 				project {
