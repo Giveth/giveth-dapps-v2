@@ -216,7 +216,6 @@ const CauseCryptoDonation: FC<{
 					networkId,
 					selectedOneTimeToken?.address,
 				);
-				console.log('isSupported', isSupported);
 				setIsTokenSupported(isSupported);
 			}
 		};

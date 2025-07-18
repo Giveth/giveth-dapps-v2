@@ -34,8 +34,6 @@ export const DonateSection: FC<IDonateSectionProps> = ({ projectData }) => {
 	const isMobile = !useMediaQuery(device.tablet);
 	const { project } = useDonateData();
 
-	console.log({ projectData });
-
 	return (
 		<DonationSectionWrapper gap='24px'>
 			{totalDonations && totalDonations !== 0 ? (

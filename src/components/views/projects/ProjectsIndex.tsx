@@ -219,7 +219,6 @@ const ProjectsIndex = (props: IProjectsView) => {
 	}, [isError, error]);
 
 	const totalCount = data?.pages[data.pages.length - 1].totalCount || 0;
-	console.log('data', totalCount, data);
 
 	return (
 		<>

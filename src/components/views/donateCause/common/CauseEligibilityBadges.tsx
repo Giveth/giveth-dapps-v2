@@ -37,8 +37,6 @@ const CauseEligibilityBadges: FC<IEligibilityBadges> = props => {
 	const { activeStartedRound, project } = useCauseDonateData();
 	const { formatMessage } = useIntl();
 	const { isGivbackEligible } = project || {};
-	console.log('TU SAM');
-	console.log('isGivbackEligible', project);
 	const router = useRouter();
 	const isStellar = router.query.chain === ChainType.STELLAR.toLowerCase();
 	const isTokenGivbacksEligible = token?.isGivbackEligible;

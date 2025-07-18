@@ -56,9 +56,6 @@ const EditCause: FC<ICreateCauseProps> = ({ project }) => {
 				address => address.networkId === 137,
 			);
 
-			console.log('isInactiveOrUnverified', isInactiveOrUnverified);
-			console.log('missingNetwork137', missingNetwork137);
-
 			return isInactiveOrUnverified || missingNetwork137;
 		})
 			? 'label.cause.review_status'
