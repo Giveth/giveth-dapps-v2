@@ -76,7 +76,6 @@ const DonateCauseContext = createContext<IDonateContext>({
 	setSuccessDonation: () => {},
 	setSelectedOneTimeToken: () => {},
 	project: {} as IProject,
-	tokenStreams: {},
 	fetchProject: async () => {},
 	setDonateModalByPriority: (changeModal: DonateModalPriorityValues) => {},
 	shouldRenderModal: (modalRender: DonateModalPriorityValues) => false,
