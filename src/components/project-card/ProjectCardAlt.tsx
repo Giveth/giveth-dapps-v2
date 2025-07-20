@@ -133,8 +133,8 @@ const Description = styled(P)`
 
 const CardBody = styled.div<{ $isNew?: boolean }>`
 	margin-top: ${props => (props.$isNew ? '50px' : '50px')};
-	padding: 0 24px 24px 24px;
 	text-align: left;
+	padding: 0 24px 34px 24px; // Bottom padding set here
 `;
 const Author = styled(P)`
 	color: ${brandColors.pinky[500]};
@@ -159,7 +159,8 @@ const ImagePlaceholder = styled.div`
 
 const Wrapper = styled.div<{ $isNew?: boolean }>`
 	position: relative;
-	height: 430px;
+	height: ${props =>
+		props.$isNew ? '450px' : '440px'}; // add 10px if it's new
 	max-width: 440px;
 	min-width: 300px;
 	border-radius: 12px;
