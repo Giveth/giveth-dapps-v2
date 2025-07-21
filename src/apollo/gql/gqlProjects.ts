@@ -81,6 +81,13 @@ export const PROJECT_CARD_FIELDS_CAUSES = gql`
 				title
 			}
 		}
+		verified
+		addresses {
+			address
+			isRecipient
+			networkId
+			chainType
+		}
 		adminUser {
 			name
 			walletAddress
