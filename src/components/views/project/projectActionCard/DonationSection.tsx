@@ -71,7 +71,8 @@ export const DonateSection: FC<IDonateSectionProps> = ({ projectData }) => {
 					</NoFund>
 				</DonateInfo>
 			)}
-			{totalDonations &&
+			{totalDistributed !== undefined &&
+				totalDonations !== 0 &&
 				projectData?.projectType === EProjectType.CAUSE && (
 					<DonateInfoContributed>
 						{isMobile && <br />}
