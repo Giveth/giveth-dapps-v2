@@ -8,7 +8,9 @@ import Routes from '@/lib/constants/Routes';
 const DoneContent = () => {
 	const { formatMessage } = useIntl();
 	const router = useRouter();
-	const isCause = router.query.tab === 'causes';
+	const isCause =
+		router.query.tab === 'causes' ||
+		router.pathname === '/cause/[causeIdSlug]';
 	return (
 		<>
 			<Lead>
