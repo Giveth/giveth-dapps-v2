@@ -1,4 +1,5 @@
 import { FC } from 'react';
+import Head from 'next/head';
 import { client } from '@/apollo/apolloClient';
 
 import { useReferral } from '@/hooks/useReferral';
@@ -6,12 +7,17 @@ import CauseIndex from '@/components/views/cause/CauseIndex';
 import { ICauseBySlug } from '@/apollo/types/gqlTypes';
 import { ProjectProvider } from '@/context/project.context';
 import { FETCH_PROJECT_BY_SLUG_SINGLE_PROJECT } from '@/apollo/gql/gqlProjects';
+import { ProjectMeta } from '@/components/Metatag';
 
 const CauseRoute: FC<ICauseBySlug> = ({ cause }) => {
 	useReferral();
 
 	return (
 		<ProjectProvider project={cause}>
+			<Head>
+				<title>{cause?.title} | Giveth</title>
+				<ProjectMeta project={cause} preTitle='Cause' />
+			</Head>
 			<CauseIndex />
 		</ProjectProvider>
 	);

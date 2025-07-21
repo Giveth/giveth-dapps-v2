@@ -71,7 +71,7 @@ export const shareContentCreatorCause = (
 			message = `I just donated to this Cause on ${socialHandle}, supporting ${numberOfProjects} verified projects! 💜 An AI-powered agent will automatically redistribute my funds to the most impactful projects.\n\nLearn more about this Cause 👇`;
 			break;
 		default:
-			message = `This cause is raising funds in crypto on ${socialHandle}! 💜\n100% of every donation goes directly to the cause to help them make an impact. Check it out 👇`;
+			message = `This cause is raising funds in crypto on ${socialHandle}! 💜\n100﹪ of every donation goes directly to the cause to help them make an impact. Check it out 👇`;
 	}
 
 	return message;

@@ -125,7 +125,11 @@ const ShareModal: FC<IShareModal> = props => {
 						</LinkedinShareButton>
 					</SocialButtonContainer>
 					<SocialButtonContainer>
-						<FacebookShareButton hashtag='#giveth' url={url}>
+						<FacebookShareButton
+							hashtag='#giveth'
+							url={url}
+							title={shareTitleFacebookAndLinkedin}
+						>
 							<Image
 								src={FacebookIcon}
 								alt='facebook icon'
@@ -136,7 +140,9 @@ const ShareModal: FC<IShareModal> = props => {
 					</SocialButtonContainer>
 					<SocialButtonContainer>
 						<Link
-							href={`https://warpcast.com/~/compose?embeds[]=${url}&text=${shareTitleTwitter}`}
+							href={`https://warpcast.com/~/compose?embeds[]=${url}&text=${encodeURIComponent(
+								shareTitleTwitter,
+							)}`}
 							target='_blank'
 							className='warpcast-share-button'
 						>
