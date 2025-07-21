@@ -35,7 +35,7 @@ import links from '@/lib/constants/links';
 import { EContentType, EContentTypeCause } from '@/lib/constants/shareContent';
 
 import QFToast from '@/components/views/donate/QFToast';
-import { DonationInfo } from '@/components/views/donate/DonationInfo';
+import { CauseDonationInfo } from '@/components/views/donateCause/CauseDonationInfo';
 import { ManageRecurringDonation } from '@/components/views/donate/Recurring/ManageRecurringDonation';
 import EndaomentProjectsInfo from '@/components/views/project/EndaomentProjectsInfo';
 import ImprovementBanner from '@/components/views/donate/ImprovementBanner';
@@ -234,7 +234,7 @@ export const CauseSuccessView: FC<ISuccessView> = ({
 					</RightSectionWrapper>
 				</Col>
 			</Row>
-			<DonationInfo />
+			<CauseDonationInfo />
 		</Wrapper>
 	);
 };

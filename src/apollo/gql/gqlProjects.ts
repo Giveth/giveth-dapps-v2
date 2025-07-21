@@ -81,6 +81,13 @@ export const PROJECT_CARD_FIELDS_CAUSES = gql`
 				title
 			}
 		}
+		verified
+		addresses {
+			address
+			isRecipient
+			networkId
+			chainType
+		}
 		adminUser {
 			name
 			walletAddress
@@ -195,6 +202,7 @@ export const FETCH_PROJECT_BY_SLUG_VERIFICATION = gql`
 			status {
 				name
 			}
+			projectType
 			adminUser {
 				walletAddress
 			}
@@ -216,6 +224,7 @@ export const FETCH_PROJECT_BY_SLUG_SUCCESS = gql`
 			chainId
 			descriptionSummary
 			activeProjectsCount
+			projectType
 			adminUser {
 				id
 				name
