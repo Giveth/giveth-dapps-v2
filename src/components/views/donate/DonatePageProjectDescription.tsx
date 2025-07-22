@@ -18,7 +18,7 @@ import { useRouter } from 'next/router';
 import { formatDonation } from '@/helpers/number';
 import { IProject } from '@/apollo/types/types';
 import { VerifiedBadge } from '@/components/badges/VerifiedBadge';
-import { slugToProjectView } from '@/lib/routeCreators';
+import { slugToCauseView, slugToProjectView } from '@/lib/routeCreators';
 import { ProjectCardUserName } from '@/components/project-card/ProjectCardUserName';
 import { ORGANIZATION } from '@/lib/constants/organizations';
 import { useDonateData } from '@/context/donate.context';
@@ -59,7 +59,10 @@ export const DonatePageProjectDescription: FC<
 	const isForeignOrg =
 		orgLabel !== ORGANIZATION.trace && orgLabel !== ORGANIZATION.giveth;
 
-	const projectLink = slugToProjectView(slug!);
+	const projectLink =
+		projectType === EProjectType.CAUSE
+			? slugToCauseView(slug!)
+			: slugToProjectView(slug!);
 	const { project } = useDonateData();
 	const { activeStartedRound, activeQFRound } = getActiveRound(
 		project.qfRounds,

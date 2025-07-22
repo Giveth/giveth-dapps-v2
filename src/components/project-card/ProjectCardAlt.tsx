@@ -16,10 +16,15 @@ import { htmlToText } from '@/lib/helpers';
 import { Shadow } from '@/components/styled-components/Shadow';
 import { mediaQueries } from '@/lib/constants/constants';
 import InternalLink from '@/components/InternalLink';
-import { addressToUserView, slugToProjectView } from '@/lib/routeCreators';
+import {
+	addressToUserView,
+	slugToCauseView,
+	slugToProjectView,
+} from '@/lib/routeCreators';
 import { VerifiedBadge } from '@/components/badges/VerifiedBadge';
 import { useGiverPFPToken } from '@/hooks/useGiverPFPToken';
 import { PFP } from '../PFP';
+import { EProjectType } from '@/apollo/types/gqlEnums';
 
 interface IProjectCard {
 	project: IProject;
@@ -38,6 +43,7 @@ const ProjectCard = (props: IProjectCard) => {
 		adminUser,
 		slug,
 		organization,
+		projectType,
 	} = project;
 
 	const { name, walletAddress } = adminUser || {};
@@ -47,10 +53,15 @@ const ProjectCard = (props: IProjectCard) => {
 		adminUser?.avatar,
 	);
 	const showVerifiedBadge = verified || isGivbackEligible;
+
+	const projectLink =
+		projectType === EProjectType.CAUSE
+			? slugToCauseView(slug!)
+			: slugToProjectView(slug!);
 	return (
 		<Wrapper $isNew={isNew}>
 			<ImagePlaceholder>
-				<Link href={slugToProjectView(slug)}>
+				<Link href={projectLink}>
 					<ProjectCardImage image={image} />
 				</Link>
 			</ImagePlaceholder>
@@ -65,7 +76,7 @@ const ProjectCard = (props: IProjectCard) => {
 				</BadgeContainer>
 			)}
 			<CardBody $isNew={isNew}>
-				<InternalLink href={slugToProjectView(slug)}>
+				<InternalLink href={projectLink}>
 					<Title>{title}</Title>
 				</InternalLink>
 				{name && (
