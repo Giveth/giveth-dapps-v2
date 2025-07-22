@@ -50,6 +50,16 @@ const ProjectCardBadgeButtons: FC<IProjectCardBadgeButtons> = ({ project }) => {
 					projectHref={slug}
 					contentType={EContentType.thisProject}
 					isCause={projectType === EProjectType.CAUSE}
+					{...(projectType === EProjectType.CAUSE
+						? {
+								cause: project as any,
+								numberOfProjects:
+									(project as any)?.activeProjectsCount ??
+									(project as any)?.fullCauseProject
+										?.activeProjectsCount ??
+									0,
+							}
+						: {})}
 				/>
 			)}
 
@@ -61,7 +71,7 @@ const ProjectCardBadgeButtons: FC<IProjectCardBadgeButtons> = ({ project }) => {
 						</BadgeButton>
 					)}
 					<BadgeButton
-						onClick={e => {
+						onClick={() => {
 							setShowShare(true);
 						}}
 					>
