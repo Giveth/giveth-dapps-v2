@@ -1,4 +1,4 @@
-import React, { FC, useState } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import {
 	brandColors,
@@ -9,7 +9,7 @@ import {
 	FlexCenter,
 } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
-import { Chain, parseUnits, Address } from 'viem';
+import { Chain, parseUnits, Address, zeroAddress } from 'viem';
 import { Modal } from '@/components/modals/Modal';
 import {
 	compareAddresses,
@@ -325,6 +325,16 @@ const CauseDonateModal: FC<IDonateModalProps> = props => {
 			chainType: token.chainType,
 		});
 	};
+
+	// Check if selected token is native token of the network
+	useEffect(() => {
+		if (
+			token.chainType === ChainType.EVM &&
+			token.address === zeroAddress
+		) {
+			setStep('donate');
+		}
+	}, [token]);
 
 	return isSanctioned ? (
 		<SanctionModal
