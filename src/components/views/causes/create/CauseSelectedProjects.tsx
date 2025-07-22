@@ -62,17 +62,34 @@ export const CauseSelectedProjects = () => {
 				{selectedProjects.map((project: IProject) => {
 					// Check does cause have some projects that has been not active
 					// or missing network 137 address
-					const isInactiveOrUnverifiedAndIncluded =
-						project.status?.name !== EProjectStatus.ACTIVE ||
-						!project.verified;
+					let shouldShowWarning = false;
+					let warningMessage =
+						'label.cause.project_deactivated_notice';
 
-					const isMissingNetwork137 = !project.addresses?.some(
-						address => address.networkId === 137,
-					);
+					// Check activation status
+					if (project.status?.name !== EProjectStatus.ACTIVE) {
+						shouldShowWarning = true;
+						warningMessage =
+							'label.cause.project_deactivated_notice';
+					}
 
-					const shouldShowWarning =
-						isInactiveOrUnverifiedAndIncluded ||
-						isMissingNetwork137;
+					// Check unverified status
+					if (!project.verified) {
+						shouldShowWarning = true;
+						warningMessage =
+							'label.cause.project_unverified_notice';
+					}
+
+					// Check if project has no Polygon address
+					if (
+						!project.addresses?.some(
+							address => address.networkId === 137,
+						)
+					) {
+						shouldShowWarning = true;
+						warningMessage =
+							'label.cause.project_no_polygon_notice';
+					}
 
 					return (
 						<ProjectItem key={project.id}>
@@ -80,7 +97,7 @@ export const CauseSelectedProjects = () => {
 								<InlineToastWrapper
 									type={EToastType.Warning}
 									message={formatMessage({
-										id: 'label.cause.project_deactivated_notice',
+										id: warningMessage,
 									})}
 								/>
 							) : null}

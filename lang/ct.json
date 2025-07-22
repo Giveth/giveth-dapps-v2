@@ -1967,6 +1967,8 @@
 	"label.cause.go_to_causes": "Anar a Causes",
 	"label.cause.review_status": "Alguns projectes d'aquesta causa ja no són vàlids. Revisa i actualitza la causa.",
 	"label.cause.project_deactivated_notice": "Projecte desactivat. Ja no rebrà fons d'aquesta causa.",
+	"label.cause.project_unverified_notice": "Projecte no verificat. Ja no rebrà fons d'aquesta causa.",
+	"label.cause.project_no_polygon_notice": "El projecte no té adreça de Polygon. Ja no rebrà fons d'aquesta causa.",
 	"label.cause.total_distributed_projects": "Distribuït a {count} projectes",
 	"label.cause.user_causes": "Causes de {userName}"
 }
