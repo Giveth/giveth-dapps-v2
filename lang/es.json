@@ -822,6 +822,7 @@
 	"label.project_features": "Caracteristicas de Proyectos",
 	"label.project_launched": "Proyecto Lanzado!",
 	"label.project_name": "Nombre del Proyecto",
+	"label.project_name_invalid": "El nombre del proyecto no es válido, por favor, solo use letras y números",
 	"label.project_not_available": "¡Ups! ¡Este proyecto ya no está disponible o no se encuentra!",
 	"label.project_official_name": "Nombre oficial del proyecto",
 	"label.project_owner_address_detected": "Dirección del propietario del proyecto detectada",
@@ -1970,5 +1971,6 @@
 	"label.cause.project_unverified_notice": "Proyecto no verificado. Ya no recibirá fondos de esta causa.",
 	"label.cause.project_no_polygon_notice": "El proyecto no tiene dirección en Polygon. Ya no recibirá fondos de esta causa.",
 	"label.cause.total_distributed_projects": "Distribuido a {count} proyectos",
-	"label.cause.user_causes": "Causas de {userName}"
+	"label.cause.user_causes": "Causas de {userName}",
+	"label.cause.title_invalid": "El título no es válido, por favor, solo use letras y números"
 }

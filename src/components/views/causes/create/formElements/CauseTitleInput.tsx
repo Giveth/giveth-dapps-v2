@@ -23,8 +23,17 @@ export default function CauseTitleInput() {
 
 	const noTitleValidation = (i: string) => titleValue && titleValue === i;
 
+	const validateTitleCharacter = (title: string): boolean => {
+		const htmlTagRegex = /<\/?[a-z][\s\S]*?>/i;
+		return !htmlTagRegex.test(title);
+	};
+
 	const titleValidation = async (title: string) => {
 		if (noTitleValidation(title)) return true;
+		if (!validateTitleCharacter(title))
+			return formatMessage({
+				id: 'label.cause.title_invalid',
+			});
 		setIsTitleValidating(true);
 		const result = await gqlCauseTitleValidation(title, locale);
 		setIsTitleValidating(false);

@@ -30,8 +30,17 @@ const NameInput: FC<IProps> = ({ preTitle, setActiveProjectSection }) => {
 
 	const noTitleValidation = (i: string) => preTitle && preTitle === i;
 
+	const validateTitleCharacter = (title: string): boolean => {
+		const htmlTagRegex = /<\/?[a-z][\s\S]*?>/i;
+		return !htmlTagRegex.test(title);
+	};
+
 	const titleValidation = async (title: string) => {
 		if (noTitleValidation(title)) return true;
+		if (!validateTitleCharacter(title))
+			return formatMessage({
+				id: 'label.project_name_invalid',
+			});
 		setIsTitleValidating(true);
 		const result = await gqlTitleValidation(title, locale);
 		setIsTitleValidating(false);
