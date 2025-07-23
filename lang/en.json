@@ -823,6 +823,7 @@
 	"label.project_features": "Project features",
 	"label.project_launched": "Project Launched!",
 	"label.project_name": "Project Name",
+	"label.project_name_invalid": "Your project name isnt valid, please only use letters and numbers",
 	"label.project_not_available": "Oops! This project is no longer available or not found!",
 	"label.project_official_name": "Project official name",
 	"label.project_owner_address_detected": "Project Owner Address Detected",
@@ -1971,5 +1972,6 @@
 	"label.cause.project_no_polygon_notice": "Project has no Polygon address. It will no longer receive funds from this Cause.",
 	"label.cause.project_cancelled_notice": "Project cancelled. It will no longer receive funds from this Cause.",
 	"label.cause.total_distributed_projects": "Distributed to {count} Projects",
-	"label.cause.user_causes": "{userName}'s Causes"
+	"label.cause.user_causes": "{userName}'s Causes",
+	"label.cause.title_invalid": "Your title isn't valid, please only use letters and numbers"
 }
