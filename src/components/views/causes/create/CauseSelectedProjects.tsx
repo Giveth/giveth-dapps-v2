@@ -66,18 +66,9 @@ export const CauseSelectedProjects = () => {
 					let warningMessage =
 						'label.cause.project_deactivated_notice';
 
-					// Check activation status
+					// Check activation status - default to fetch another statuses then active status
 					if (project.status?.name !== EProjectStatus.ACTIVE) {
 						shouldShowWarning = true;
-						warningMessage =
-							'label.cause.project_deactivated_notice';
-					}
-
-					// Check unverified status
-					if (!project.verified) {
-						shouldShowWarning = true;
-						warningMessage =
-							'label.cause.project_unverified_notice';
 					}
 
 					// Check if project has no Polygon address
@@ -89,6 +80,26 @@ export const CauseSelectedProjects = () => {
 						shouldShowWarning = true;
 						warningMessage =
 							'label.cause.project_no_polygon_notice';
+					}
+
+					// Check unverified status
+					if (!project.verified) {
+						shouldShowWarning = true;
+						warningMessage =
+							'label.cause.project_unverified_notice';
+					}
+
+					// Check cancelled status
+					if (project.status?.name === EProjectStatus.CANCEL) {
+						shouldShowWarning = true;
+						warningMessage = 'label.cause.project_cancelled_notice';
+					}
+
+					// Check deactivation status
+					if (project.status?.name === EProjectStatus.DEACTIVE) {
+						shouldShowWarning = true;
+						warningMessage =
+							'label.cause.project_deactivated_notice';
 					}
 
 					return (
