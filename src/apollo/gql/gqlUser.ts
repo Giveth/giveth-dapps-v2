@@ -76,7 +76,7 @@ export const FETCH_USER_PROJECTS = gql`
 				projectVerificationForm {
 					status
 				}
-				loadCauseProjects {
+				causeProjects {
 					id
 					projectId
 					isIncluded

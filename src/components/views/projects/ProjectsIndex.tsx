@@ -71,8 +71,11 @@ const ProjectsIndex = (props: IProjectsView) => {
 
 	// Define the fetch function for React Query
 	const fetchProjectsPage = async ({ pageParam = 0 }) => {
+		// Fetch all projects and causes if qf round page or search page
 		const projectType =
-			router.pathname === '/qf/[slug]'
+			router.pathname === '/qf/[slug]' ||
+			(typeof router.query.searchTerm === 'string' &&
+				router.query.searchTerm.trim() !== '')
 				? EProjectType.ALL
 				: EProjectType.PROJECT;
 

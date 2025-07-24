@@ -227,7 +227,7 @@ const Header: FC<IHeader> = ({ showQFBanner }) => {
 					>
 						<Flex $alignItems='center' gap='16px'>
 							<GLinkNoWrap size='Big'>
-								{formatMessage({ id: 'label.search_projects' })}
+								{formatMessage({ id: 'label.search' })}
 							</GLinkNoWrap>
 							<IconSearch24 />
 						</Flex>

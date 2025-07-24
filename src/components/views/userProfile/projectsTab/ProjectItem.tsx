@@ -46,8 +46,8 @@ const ProjectItem: FC<IProjectItem> = props => {
 	// or missing network 137 address
 	let projectStatus = '';
 	if (project.projectType === EProjectType.CAUSE) {
-		if (project.loadCauseProjects) {
-			projectStatus = project.loadCauseProjects.some(p => {
+		if (project.causeProjects) {
+			projectStatus = project.causeProjects.some(p => {
 				const isInactiveOrUnverifiedAndIncluded =
 					(p.project.status.name !== EProjectStatus.ACTIVE ||
 						!p.project.verified) &&
