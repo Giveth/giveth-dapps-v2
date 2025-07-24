@@ -45,8 +45,8 @@ const EditCause: FC<ICreateCauseProps> = ({ project }) => {
 	// Check does cause have some projects that has been no active
 	// or missing network 137 address
 	let projectStatus = '';
-	if (project?.loadCauseProjects) {
-		projectStatus = project.loadCauseProjects.some(project => {
+	if (project?.causeProjects) {
+		projectStatus = project.causeProjects.some(project => {
 			const isInactiveOrUnverified =
 				(project.project.status.name !== EProjectStatus.ACTIVE ||
 					!project.project.verified) &&
@@ -63,7 +63,7 @@ const EditCause: FC<ICreateCauseProps> = ({ project }) => {
 	}
 
 	// Prepare previous selected projects remove not included projects
-	const previousSelectedProjects = project?.loadCauseProjects
+	const previousSelectedProjects = project?.causeProjects
 		?.filter(project => project.isIncluded)
 		.map(project => project.project);
 

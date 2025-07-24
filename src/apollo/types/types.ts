@@ -99,7 +99,6 @@ export interface IProject {
 	activeProjectsCount?: number;
 	totalRaised?: number;
 	totalDistributed?: number;
-	loadCauseProjects?: ICauseProject[];
 }
 
 export interface ICauseProject {
@@ -583,7 +582,7 @@ export interface ICauseUpdate {
 
 export interface ICause extends IProject {
 	projects: IProject[];
-	loadCauseProjects: ICauseProject[];
+	causeProjects: ICauseProject[];
 	chainId?: number;
 	depositTxHash?: string;
 	depositTxStatus?: string;
