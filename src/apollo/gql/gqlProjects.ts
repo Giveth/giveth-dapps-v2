@@ -152,6 +152,12 @@ export const FETCH_ALL_PROJECTS = gql`
 		) {
 			projects {
 				...ProjectCardFields
+				addresses {
+					address
+					isRecipient
+					networkId
+					chainType
+				}
 			}
 			totalCount
 		}

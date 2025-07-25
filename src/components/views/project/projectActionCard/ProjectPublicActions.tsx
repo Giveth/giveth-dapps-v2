@@ -56,6 +56,11 @@ export const ProjectPublicActions = () => {
 	const { activeStartedRound } = getActiveRound(projectData?.qfRounds);
 	const alreadyDonated = useAlreadyDonatedToProject(projectData);
 
+	// Check if the project has only one address and it is a Stellar address
+	const isOnlyStellar =
+		project?.addresses?.length === 1 &&
+		project?.addresses[0]?.chainType === 'STELLAR';
+
 	const isStellarOnlyRound =
 		activeStartedRound?.eligibleNetworks?.length === 1 &&
 		activeStartedRound?.eligibleNetworks[0] ===
@@ -151,7 +156,9 @@ export const ProjectPublicActions = () => {
 							? slugToProjectDonateStellar(slug || '')
 							: isCause
 								? slugToCauseDonate(slug || '')
-								: slugToProjectDonate(slug || '')
+								: isOnlyStellar
+									? slugToProjectDonateStellar(slug || '')
+									: slugToProjectDonate(slug || '')
 						: '#'
 				}
 				onClick={e => !isActive && e.preventDefault()}
