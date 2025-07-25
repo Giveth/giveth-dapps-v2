@@ -438,20 +438,6 @@ export const FETCH_PROJECT_BY_ID = gql`
 			title
 			image
 			description
-			projects {
-				id
-				title
-				image
-				slug
-				description
-				categories {
-					name
-					value
-					mainCategory {
-						title
-					}
-				}
-			}
 			causeProjects {
 				id
 				projectId
