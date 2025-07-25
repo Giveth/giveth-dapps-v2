@@ -19,4 +19,4 @@ Breaking this down:
 For example, user stories might look like:
 As Max, I want to invite my friends, so we can enjoy this service together.
 As Sascha, I want to organize my work, so I can feel more in control.
-As a manager, I want to be able to understand my colleagues progress, so I can better report our sucess and failures.
+As a manager, I want to be able to understand my colleagues progress, so I can better report our success and failures.
