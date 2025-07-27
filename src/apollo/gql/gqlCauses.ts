@@ -153,6 +153,16 @@ export const PROJECT_CARD_FIELDS_CAUSES = gql`
 		organization {
 			label
 		}
+		addresses {
+			address
+			memo
+			isRecipient
+			networkId
+			chainType
+		}
+		status {
+			name
+		}
 		sumDonationValueUsdForActiveQfRound
 		countUniqueDonorsForActiveQfRound
 		countUniqueDonors

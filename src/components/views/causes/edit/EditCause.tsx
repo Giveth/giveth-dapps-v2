@@ -64,7 +64,7 @@ const EditCause: FC<ICreateCauseProps> = ({ project }) => {
 
 	// Prepare previous selected projects remove not included projects
 	const previousSelectedProjects = project?.causeProjects
-		?.filter(project => project.isIncluded)
+		?.filter(project => !project.isUserRemoved)
 		.map(project => project.project);
 
 	const formMethods = useForm({
