@@ -5,7 +5,7 @@ import styled from 'styled-components';
 import { Caption, FlexCenter, neutralColors } from '@giveth/ui-design-system';
 import { useQuery } from '@tanstack/react-query';
 import { client } from '@/apollo/apolloClient';
-import { FETCH_ALL_PROJECTS_CAUSES } from '@/apollo/gql/gqlProjects';
+import { FETCH_ALL_PROJECTS_CAUSES } from '@/apollo/gql/gqlCauses';
 import { EProjectsFilter, IProject } from '@/apollo/types/types';
 
 import { CauseCreateProjectCard } from '@/components/views/causes/create/CauseCreateProjectCard';

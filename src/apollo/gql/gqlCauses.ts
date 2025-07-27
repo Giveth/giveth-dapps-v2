@@ -112,3 +112,88 @@ export const UPDATE_CAUSE = gql`
 		}
 	}
 `;
+
+export const PROJECT_CORE_FIELDS_CAUSES_ALL = gql`
+	fragment ProjectCoreFields on Project {
+		__typename
+		id
+		title
+		slug
+		verified
+		isGivbackEligible
+		totalDonations
+		projectType
+		qfRounds {
+			id
+			name
+			isActive
+			beginDate
+			endDate
+		}
+	}
+`;
+
+export const PROJECT_CARD_FIELDS_CAUSES = gql`
+	${PROJECT_CORE_FIELDS_CAUSES_ALL}
+	fragment ProjectCardFields on Project {
+		...ProjectCoreFields
+		descriptionSummary
+		categories {
+			name
+			value
+			mainCategory {
+				title
+			}
+		}
+		verified
+		adminUser {
+			name
+			walletAddress
+		}
+		organization {
+			label
+		}
+		sumDonationValueUsdForActiveQfRound
+		countUniqueDonorsForActiveQfRound
+		countUniqueDonors
+		estimatedMatching {
+			projectDonationsSqrtRootSum
+			allProjectsSum
+			matchingPool
+		}
+	}
+`;
+
+export const FETCH_ALL_PROJECTS_CAUSES = gql`
+	${PROJECT_CARD_FIELDS_CAUSES}
+	query FetchAllProjects(
+		$limit: Int
+		$skip: Int
+		$sortingBy: SortingField
+		$filters: [FilterField!]
+		$searchTerm: String
+		$category: String
+		$mainCategory: String
+		$campaignSlug: String
+		$connectedWalletUserId: Int
+		$qfRoundSlug: String
+	) {
+		allProjects(
+			limit: $limit
+			skip: $skip
+			sortingBy: $sortingBy
+			filters: $filters
+			searchTerm: $searchTerm
+			category: $category
+			mainCategory: $mainCategory
+			campaignSlug: $campaignSlug
+			connectedWalletUserId: $connectedWalletUserId
+			qfRoundSlug: $qfRoundSlug
+		) {
+			projects {
+				...ProjectCardFields
+			}
+			totalCount
+		}
+	}
+`;
