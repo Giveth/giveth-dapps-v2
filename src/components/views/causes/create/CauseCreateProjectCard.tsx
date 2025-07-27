@@ -106,7 +106,7 @@ export const CauseCreateProjectCard: FC<{
 			<CardBody $isOtherOrganization={isForeignOrg}>
 				<TitleWrapper>
 					<TitleRow>
-						<Title weight={700}>{title}AAAA</Title>
+						<Title weight={700}>{title}</Title>
 						{showOptions && (
 							<ProjectCheckbox
 								type='checkbox'
@@ -147,10 +147,7 @@ export const CauseCreateProjectCard: FC<{
 								countUniqueDonors={
 									countUniqueDonorsForActiveQfRound || 0
 								}
-								isCause={true}
-								projectsCount={
-									project.causeProjects?.length || 0
-								}
+								isCause={false}
 							/>
 						)}
 					</PaddedRow>

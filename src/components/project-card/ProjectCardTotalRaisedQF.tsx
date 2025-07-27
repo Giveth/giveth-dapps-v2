@@ -16,7 +16,7 @@ export const ProjectCardTotalRaisedQF = ({
 	sumDonationValueUsdForActiveQfRound: number;
 	countUniqueDonors: number;
 	isCause: boolean;
-	projectsCount: number;
+	projectsCount?: number;
 }) => {
 	const { formatMessage, locale } = useIntl();
 	return (
@@ -71,7 +71,7 @@ export const ProjectCardTotalRaisedQF = ({
 			{isCause && (
 				<div>
 					<ProjectsText>
-						{projectsCount}
+						{projectsCount} {isCause.toString()}
 						<span>{formatMessage({ id: 'label.projects' })}</span>
 					</ProjectsText>
 				</div>
