@@ -59,7 +59,6 @@ export const FETCH_USER_PROJECTS = gql`
 				...ProjectCardFields
 				creationDate
 				listed
-				activeProjectsCount
 				status {
 					id
 					name
@@ -75,22 +74,6 @@ export const FETCH_USER_PROJECTS = gql`
 				}
 				projectVerificationForm {
 					status
-				}
-				causeProjects {
-					id
-					projectId
-					isIncluded
-					project {
-						id
-						verified
-						status {
-							name
-						}
-						addresses {
-							id
-							networkId
-						}
-					}
 				}
 			}
 			totalCount

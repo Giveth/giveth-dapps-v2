@@ -197,3 +197,110 @@ export const FETCH_ALL_PROJECTS_CAUSES = gql`
 		}
 	}
 `;
+
+export const FETCH_CAUSE_BY_ID_EDIT = gql`
+	query ProjectById($id: Float!) {
+		projectById(id: $id) {
+			id
+			title
+			image
+			description
+			causeProjects {
+				id
+				projectId
+				isIncluded
+				userRemoved
+				project {
+					id
+					title
+					verified
+					categories {
+						name
+						value
+						mainCategory {
+							title
+						}
+					}
+					addresses {
+						id
+						networkId
+					}
+					status {
+						name
+					}
+				}
+			}
+			categories {
+				name
+				value
+				mainCategory {
+					title
+				}
+			}
+			adminUser {
+				walletAddress
+			}
+			status {
+				name
+			}
+			slug
+		}
+	}
+`;
+
+export const FETCH_USER_CAUSES = gql`
+	${PROJECT_CARD_FIELDS_CAUSES}
+	query FetchUserProjects(
+		$take: Float
+		$skip: Float
+		$userId: Int!
+		$orderBy: OrderField!
+		$direction: OrderDirection!
+		$projectType: String!
+	) {
+		projectsByUserId(
+			take: $take
+			skip: $skip
+			userId: $userId
+			orderBy: { field: $orderBy, direction: $direction }
+			projectType: $projectType
+		) {
+			projects {
+				...ProjectCardFields
+				creationDate
+				listed
+				activeProjectsCount
+				status {
+					id
+					name
+				}
+				totalRaised
+				totalDistributed
+				addresses {
+					address
+					memo
+					isRecipient
+					networkId
+					chainType
+				}
+				causeProjects {
+					id
+					projectId
+					isIncluded
+					project {
+						id
+						verified
+						status {
+							name
+						}
+						addresses {
+							id
+							networkId
+						}
+					}
+				}
+			}
+			totalCount
+		}
+	}
+`;

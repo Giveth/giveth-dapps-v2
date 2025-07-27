@@ -50,7 +50,7 @@ const EditCause: FC<ICreateCauseProps> = ({ project }) => {
 			const isInactiveOrUnverified =
 				(project.project.status.name !== EProjectStatus.ACTIVE ||
 					!project.project.verified) &&
-				project.isIncluded;
+				!project.isUserRemoved;
 
 			const missingNetwork137 = !project.project.addresses?.some(
 				address => address.networkId === 137,

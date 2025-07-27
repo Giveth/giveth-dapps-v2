@@ -365,33 +365,6 @@ export const FETCH_PROJECT_BY_ID = gql`
 					}
 				}
 			}
-			causeProjects {
-				id
-				projectId
-				isIncluded
-				project {
-					id
-					title
-					image
-					slug
-					description
-					verified
-					categories {
-						name
-						value
-						mainCategory {
-							title
-						}
-					}
-					addresses {
-						id
-						networkId
-					}
-					status {
-						name
-					}
-				}
-			}
 			addresses {
 				address
 				memo
