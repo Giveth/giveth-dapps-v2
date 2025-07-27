@@ -106,7 +106,7 @@ export const CauseCreateProjectCard: FC<{
 			<CardBody $isOtherOrganization={isForeignOrg}>
 				<TitleWrapper>
 					<TitleRow>
-						<Title weight={700}>{title}</Title>
+						<Title weight={700}>{title}AAAA</Title>
 						{showOptions && (
 							<ProjectCheckbox
 								type='checkbox'
@@ -159,7 +159,7 @@ export const CauseCreateProjectCard: FC<{
 					<>
 						<Hr />
 						<PaddedRow $justifyContent='space-between'>
-							<Flex gap='16px'>
+							<Flex gap='16px' $flexWrap={true}>
 								{showVerifiedBadge && (
 									<Flex $alignItems='center' gap='4px'>
 										<IconVerifiedBadge16
@@ -335,6 +335,7 @@ interface IPaddedRowProps {
 
 export const PaddedRow = styled(Flex)<IPaddedRowProps>`
 	padding: 0 ${props => props.$sidePadding || SIDE_PADDING};
+	padding-bottom: 6px;
 `;
 
 const Hr = styled.hr`
