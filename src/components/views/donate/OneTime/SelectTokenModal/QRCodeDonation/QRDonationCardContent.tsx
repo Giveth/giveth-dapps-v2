@@ -172,12 +172,22 @@ const QRDonationCardContent: FC<IQRDonationCardContentProps> = ({
 						<CopyConatainer text={projectAddress.memo ?? ''} />
 					</>
 				) : (
-					<InlineToast
-						type={EToastType.Info}
-						message={formatMessage({
-							id: 'label.no_memo_is_needed_for_this_address',
-						})}
-					/>
+					<>
+						<B>
+							{formatMessage({
+								id: 'label.copy_the_memo_to_use_in_your_app',
+							})}
+						</B>
+						<CopyConatainer
+							text={draftDonationData?.id?.toString() ?? ''}
+						/>
+						<InlineToast
+							type={EToastType.Info}
+							message={formatMessage({
+								id: 'label.the_recipient_wallet_doesnt_require_a_memo_but_giveth_requires_one',
+							})}
+						/>
+					</>
 				)}
 			</QRDataWrapper>
 		</>
