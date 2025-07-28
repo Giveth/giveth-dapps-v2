@@ -83,6 +83,7 @@ const ProjectCard = (props: IProjectCard) => {
 		qfRounds,
 		countUniqueDonorsForActiveQfRound,
 		projectType,
+		addresses,
 	} = project;
 	const [recurringDonationSumInQF, setRecurringDonationSumInQF] = useState(0);
 	const [isHover, setIsHover] = useState(false);
@@ -99,6 +100,10 @@ const ProjectCard = (props: IProjectCard) => {
 	const hasFooter = activeStartedRound || verified || isGivbackEligible;
 	const showVerifiedBadge = verified || isGivbackEligible;
 
+	// Check if the project has only one address and it is a Stellar address
+	const isOnlyStellar =
+		addresses?.length === 1 && addresses[0]?.chainType === 'STELLAR';
+
 	const isStellarOnlyRound =
 		activeStartedRound?.eligibleNetworks?.length === 1 &&
 		activeStartedRound?.eligibleNetworks[0] ===
@@ -113,7 +118,9 @@ const ProjectCard = (props: IProjectCard) => {
 		? slugToProjectDonateStellar(slug)
 		: projectType === EProjectType.CAUSE
 			? slugToCauseDonate(slug)
-			: slugToProjectDonate(slug);
+			: isOnlyStellar
+				? slugToProjectDonateStellar(slug)
+				: slugToProjectDonate(slug);
 
 	// Show hint modal if the user clicks on the card and the round is not started
 	const handleClick = (e: any) => {
