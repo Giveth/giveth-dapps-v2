@@ -50,7 +50,7 @@ const EditCause: FC<ICreateCauseProps> = ({ project }) => {
 			const isInactiveOrUnverified =
 				(project.project.status.name !== EProjectStatus.ACTIVE ||
 					!project.project.verified) &&
-				!project.isUserRemoved;
+				!project.userRemoved;
 
 			const missingNetwork137 = !project.project.addresses?.some(
 				address => address.networkId === 137,
@@ -62,9 +62,9 @@ const EditCause: FC<ICreateCauseProps> = ({ project }) => {
 			: '';
 	}
 
-	// Prepare previous selected projects remove not included projects
+	// Prepare previous selected projects, remove user removed projects
 	const previousSelectedProjects = project?.causeProjects
-		?.filter(project => !project.isUserRemoved)
+		?.filter(project => !project.userRemoved)
 		.map(project => project.project);
 
 	const formMethods = useForm({
