@@ -1,5 +1,5 @@
 import { client } from '@/apollo/apolloClient';
-import { FETCH_USER_PROJECTS } from '@/apollo/gql/gqlUser';
+import { FETCH_USER_CAUSES } from '@/apollo/gql/gqlCauses';
 import { IProject } from '@/apollo/types/types';
 import { IOrder } from '../projectsTab/type';
 import { userProjectsPerPage } from '../projectsTab/constants';
@@ -10,7 +10,7 @@ export const fetchUserCauses = async (
 	order: IOrder,
 ) => {
 	const { data } = await client.query({
-		query: FETCH_USER_PROJECTS,
+		query: FETCH_USER_CAUSES,
 		variables: {
 			userId: parseFloat(userId || '') || -1,
 			take: userProjectsPerPage,
