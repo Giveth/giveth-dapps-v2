@@ -35,6 +35,7 @@ import { ProjectCardUserName } from '@/components/project-card/ProjectCardUserNa
 import { CustomH5 } from '@/components/setProfilePic/SetProfilePic';
 import { ORGANIZATION } from '@/lib/constants/organizations';
 import { slugToProjectView } from '@/lib/routeCreators';
+import { EProjectType } from '@/apollo/types/gqlEnums';
 
 interface IQFSectionProps {
 	projectData?: IProject;
@@ -51,6 +52,8 @@ const QFSection: FC<IQFSectionProps> = ({ projectData }) => {
 		slug,
 		organization,
 		title: projectTitle,
+		totalDistributed,
+		activeProjectsCount,
 	} = projectData || {};
 	const isMobile = !useMediaQuery(device.tablet);
 	const router = useRouter();
@@ -231,6 +234,35 @@ const QFSection: FC<IQFSectionProps> = ({ projectData }) => {
 					</TabletEstimatedMatchingContainer>
 				</div>
 			)}
+			{totalDistributed !== undefined &&
+				totalDonations !== 0 &&
+				projectData?.projectType === EProjectType.CAUSE && (
+					<DonateInfoContributed>
+						{isMobile && <br />}
+						<Title>
+							{formatMessage({
+								id: 'label.cause.total_distributed',
+							})}
+						</Title>
+						<Amount weight={700}>
+							{formatDonation(totalDistributed || 0, '$', locale)}
+						</Amount>
+						<Description>
+							{formatMessage(
+								{
+									id: 'label.cause.total_distributed_projects',
+								},
+								{
+									count: (
+										<Caption $medium>
+											{activeProjectsCount || 0}
+										</Caption>
+									),
+								},
+							)}
+						</Description>
+					</DonateInfoContributed>
+				)}
 			{!isOnDonatePage && (
 				<ChartContainer>
 					<Flex $justifyContent='space-between'>
@@ -385,4 +417,9 @@ const DefaultEstimatedMatchingContainer = styled.div`
 	@media (min-width: ${deviceSize.tablet}px) and (max-width: ${deviceSize.laptopS}px) {
 		display: none;
 	}
+`;
+
+const DonateInfoContributed = styled(DonateInfo)`
+	height: auto;
+	margin-top: 16px;
 `;

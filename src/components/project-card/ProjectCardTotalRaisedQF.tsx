@@ -71,7 +71,7 @@ export const ProjectCardTotalRaisedQF = ({
 			{isCause && (
 				<div>
 					<ProjectsText>
-						{projectsCount} {isCause.toString()}
+						{projectsCount}
 						<span>{formatMessage({ id: 'label.projects' })}</span>
 					</ProjectsText>
 				</div>
