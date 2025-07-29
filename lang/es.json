@@ -1975,5 +1975,6 @@
 	"label.cause.project_cancelled_notice": "Proyecto cancelado. Ya no recibirá fondos de esta causa.",
 	"label.cause.total_distributed_projects": "Distribuido a {count} proyectos",
 	"label.cause.user_causes": "Causas de {userName}",
-	"label.cause.title_invalid": "El título no es válido, por favor, solo use letras y números"
+	"label.cause.title_invalid": "El título no es válido, por favor, solo use letras y números",
+	"label.cause.amount_raised_from_this_cause": "Importe recaudado de esta causa"
 }

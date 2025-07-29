@@ -39,6 +39,7 @@ import { ProjectCardTotalRaised } from './ProjectCardTotalRaised';
 import { ProjectCardTotalRaisedQF } from './ProjectCardTotalRaisedQF';
 import config from '@/configuration';
 import { EProjectType } from '@/apollo/types/gqlEnums';
+import { ProjectCardCauseTotalRaised } from './ProjectCardCauseTotalRaised';
 
 const cardRadius = '12px';
 const imgHeight = '226px';
@@ -48,6 +49,8 @@ interface IProjectCard {
 	project: IProject;
 	className?: string;
 	order?: number;
+	amountReceived?: number;
+	amountReceivedUsdValue?: number;
 }
 interface IRecurringDonation {
 	id: string;
@@ -64,7 +67,8 @@ interface IRecurringDonation {
 	finished: boolean;
 }
 const ProjectCard = (props: IProjectCard) => {
-	const { project, className } = props;
+	const { project, className, amountReceived, amountReceivedUsdValue } =
+		props;
 
 	const {
 		id,
@@ -95,6 +99,12 @@ const ProjectCard = (props: IProjectCard) => {
 	const name = adminUser?.name;
 	const { formatMessage, formatRelativeTime } = useIntl();
 	const router = useRouter();
+
+	// Check if the project is listing inside the cause project tabs
+	// This will be used to show the amount received and amount received usd value only for cause projects
+	const isListingInsideCauseProjectTabs =
+		router.pathname === '/cause/[causeIdSlug]' &&
+		router.query?.tab === 'projects';
 
 	const { activeStartedRound, activeQFRound } = getActiveRound(qfRounds);
 	const hasFooter = activeStartedRound || verified || isGivbackEligible;
@@ -242,34 +252,46 @@ const ProjectCard = (props: IProjectCard) => {
 				>
 					<Description>{descriptionSummary}</Description>
 					<PaddedRow $justifyContent='space-between'>
-						{!activeStartedRound && (
-							<ProjectCardTotalRaised
-								activeStartedRound={!!activeStartedRound}
-								totalDonations={totalDonations || 0}
-								sumDonationValueUsdForActiveQfRound={
-									sumDonationValueUsdForActiveQfRound || 0
-								}
-								countUniqueDonors={countUniqueDonors || 0}
-								projectsCount={project.activeProjectsCount || 0}
-								isCause={projectType === EProjectType.CAUSE}
-							/>
-						)}
-						{activeStartedRound && (
-							<ProjectCardTotalRaisedQF
-								activeStartedRound={!!activeStartedRound}
-								totalDonations={totalDonations || 0}
-								sumDonationValueUsdForActiveQfRound={
-									sumDonationValueUsdForActiveQfRound || 0
-								}
-								countUniqueDonors={
-									countUniqueDonorsForActiveQfRound || 0
-								}
-								isCause={projectType === EProjectType.CAUSE}
-								projectsCount={
-									project.causeProjects?.length || 0
+						{isListingInsideCauseProjectTabs && (
+							<ProjectCardCauseTotalRaised
+								amountReceived={amountReceived ?? 0}
+								amountReceivedUsdValue={
+									amountReceivedUsdValue ?? 0
 								}
 							/>
 						)}
+						{!activeStartedRound &&
+							!isListingInsideCauseProjectTabs && (
+								<ProjectCardTotalRaised
+									activeStartedRound={!!activeStartedRound}
+									totalDonations={totalDonations || 0}
+									sumDonationValueUsdForActiveQfRound={
+										sumDonationValueUsdForActiveQfRound || 0
+									}
+									countUniqueDonors={countUniqueDonors || 0}
+									projectsCount={
+										project.activeProjectsCount || 0
+									}
+									isCause={projectType === EProjectType.CAUSE}
+								/>
+							)}
+						{activeStartedRound &&
+							!isListingInsideCauseProjectTabs && (
+								<ProjectCardTotalRaisedQF
+									activeStartedRound={!!activeStartedRound}
+									totalDonations={totalDonations || 0}
+									sumDonationValueUsdForActiveQfRound={
+										sumDonationValueUsdForActiveQfRound || 0
+									}
+									countUniqueDonors={
+										countUniqueDonorsForActiveQfRound || 0
+									}
+									isCause={projectType === EProjectType.CAUSE}
+									projectsCount={
+										project.causeProjects?.length || 0
+									}
+								/>
+							)}
 					</PaddedRow>
 				</Link>
 				{hasFooter && (
