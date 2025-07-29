@@ -64,8 +64,6 @@ const ProjectItem: FC<IProjectItem> = props => {
 		}
 	}
 
-	console.log('project', project);
-
 	return (
 		<ProjectContainer>
 			{project.projectType === EProjectType.CAUSE && projectStatus && (
