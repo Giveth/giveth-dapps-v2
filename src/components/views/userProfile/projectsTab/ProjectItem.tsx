@@ -13,7 +13,7 @@ import { type FC, useState } from 'react';
 import styled from 'styled-components';
 import { useIntl } from 'react-intl';
 import Link from 'next/link';
-import { EVerificationStatus, IProject } from '@/apollo/types/types';
+import { IProject } from '@/apollo/types/types';
 import { smallFormatDate } from '@/lib/helpers';
 import { ManageProjectAddressesModal } from '@/components/modals/ManageProjectAddresses/ManageProjectAddressesModal';
 import ProjectActions from './ProjectActions';
@@ -63,6 +63,8 @@ const ProjectItem: FC<IProjectItem> = props => {
 				: '';
 		}
 	}
+
+	console.log('project', project);
 
 	return (
 		<ProjectContainer>
@@ -166,11 +168,7 @@ const ProjectItem: FC<IProjectItem> = props => {
 							</P>
 							<div>
 								<ProjectVerificationStatus
-									verified={
-										project.projectVerificationForm
-											?.status ===
-										EVerificationStatus.VERIFIED
-									}
+									verified={project.verified}
 								/>
 							</div>
 						</Flex>
