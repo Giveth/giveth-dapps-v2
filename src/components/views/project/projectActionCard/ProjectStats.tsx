@@ -6,7 +6,6 @@ import { IconWithTooltip } from '@/components/IconWithToolTip';
 import { useProjectContext } from '@/context/project.context';
 import StatusBadge from './StatusBadge';
 import ListingBadge from '@/components/ListingBadge';
-import VerificationBadge from '@/components/VerificationBadge';
 import ProjectVerificationStatus from '../../userProfile/projectsTab/ProjectVerificationStatus';
 
 export const ProjectStats = () => {
