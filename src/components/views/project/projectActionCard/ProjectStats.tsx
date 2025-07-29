@@ -6,7 +6,7 @@ import { IconWithTooltip } from '@/components/IconWithToolTip';
 import { useProjectContext } from '@/context/project.context';
 import StatusBadge from './StatusBadge';
 import ListingBadge from '@/components/ListingBadge';
-import ProjectVerificationStatus from '../../userProfile/projectsTab/ProjectVerificationStatus';
+import VerificationBadge from '@/components/VerificationBadge';
 
 export const ProjectStats = () => {
 	const { formatMessage } = useIntl();
@@ -84,8 +84,11 @@ export const ProjectStats = () => {
 								</StatTooltip>
 							</IconWithTooltip>
 						</Flex>
-						<ProjectVerificationStatus
-							verified={projectData?.verified ?? false}
+						<VerificationBadge
+							isGivbackEligible={projectData?.isGivbackEligible}
+							verificationStatus={
+								projectData?.verificationFormStatus
+							}
 						/>
 					</StatRow>
 				)}
