@@ -101,6 +101,14 @@ export const CauseReviewStep = ({
 	// Check token balance
 	const [haveTokenBalance, setHaveTokenBalance] = useState(true);
 
+	useEffect(() => {
+		const timeout = setTimeout(() => {
+			setHaveTokenBalance(Boolean(balance && balance.value > 0n));
+		}, 1000); // 1 second delay
+
+		return () => clearTimeout(timeout);
+	}, [balance]);
+
 	const tokenBalanceFormatted = useMemo(() => {
 		if (!supportedNetwork) return '0.00';
 		if (!supportedNetwork.tokenAddress) {
@@ -113,12 +121,6 @@ export const CauseReviewStep = ({
 			'',
 		);
 	}, [balance, supportedNetwork]);
-
-	useEffect(() => {
-		if (!balance) {
-			setHaveTokenBalance(false);
-		}
-	}, [balance]);
 
 	// Get value from previous step
 	const title = getValues('title');
@@ -412,7 +414,7 @@ export const CauseReviewStep = ({
 									?
 								</InfoText>
 							</InfoRow>
-							{haveTokenBalance && (
+							{!haveTokenBalance && (
 								<InlineToast
 									type={EToastType.Warning}
 									message={formatMessage({
