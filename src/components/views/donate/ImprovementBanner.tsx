@@ -24,7 +24,9 @@ const ImprovementBanner: FC<IImprovementBanner> = ({ isCauseDonation }) => {
 	// Check if user has already completed the form
 	// If yes, show the form after 60 days
 	useEffect(() => {
-		const savedDate = localStorage.getItem('improvement_survey_date');
+		const savedDate = isCauseDonation
+			? localStorage.getItem('improvement_survey_date_cause')
+			: localStorage.getItem('improvement_survey_date');
 		if (!savedDate) {
 			setShouldShow(true);
 			return;
@@ -47,7 +49,12 @@ const ImprovementBanner: FC<IImprovementBanner> = ({ isCauseDonation }) => {
 
 	const handleFormSubmit = () => {
 		const today = new Date().toISOString();
-		localStorage.setItem('improvement_survey_date', today);
+		localStorage.setItem(
+			isCauseDonation
+				? 'improvement_survey_date_cause'
+				: 'improvement_survey_date',
+			today,
+		);
 		setShouldShow(false);
 		setIsExpanded(false);
 	};
