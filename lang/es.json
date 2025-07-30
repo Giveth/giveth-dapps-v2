@@ -1979,5 +1979,6 @@
 	"label.cause.amount_raised_from_this_cause": "Importe recaudado de esta causa",
 	"label.cause.sorry_this_cause_doesnt_support_your_current_net": "Lo sentimos, esta causa no es compatible con tu red actual",
 	"label.cause.go_to_cause_details": "Ir a la página de la causa",
-	"label.cause.insufficient_giv_for_launch_fee": "No tienes suficientes GIV para la tarifa de lanzamiento, prueba una red diferente o compra GIV usando el enlace superior"
+	"label.cause.insufficient_giv_for_launch_fee": "No tienes suficientes GIV para la tarifa de lanzamiento, prueba una red diferente o compra GIV usando el enlace superior",
+	"label.cause.launch_cause_failed": "Lanzamiento de causa fallido"
 }

@@ -232,7 +232,7 @@ const CauseDonateModal: FC<IDonateModalProps> = props => {
 				);
 
 				if (!tx) {
-					setFailedModalType(EDonationFailedType.FAILED);
+					setFailedModalType(EDonationFailedType.FAILED_LIQUIDITY);
 					showToastError('ova greška');
 					return;
 				}
@@ -277,7 +277,7 @@ const CauseDonateModal: FC<IDonateModalProps> = props => {
 						metadata: squidRoute.route,
 					};
 				} else {
-					setFailedModalType(EDonationFailedType.FAILED);
+					setFailedModalType(EDonationFailedType.FAILED_LIQUIDITY);
 					return;
 				}
 			}

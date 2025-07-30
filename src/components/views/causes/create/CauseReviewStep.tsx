@@ -32,6 +32,10 @@ import {
 } from '@/components/views/causes/create/Create.sc';
 import { transferToken } from './helpers';
 import InlineToast, { EToastType } from '@/components/toasts/InlineToast';
+import FailedDonation, {
+	EDonationFailedType,
+} from '@/components/modals/FailedDonation';
+import { formatTxLink } from '@/lib/helpers';
 
 interface IProps {
 	onPrevious: () => void;
@@ -83,7 +87,8 @@ export const CauseReviewStep = ({
 	});
 
 	// Modal states
-	const [showLaunchModal, setShowLaunchModal] = useState(false);
+	const [failedModalType, setFailedModalType] =
+		useState<EDonationFailedType>();
 	const [isLaunching, setIsLaunching] = useState(false);
 	const [lunchStatus, setLunchStatus] = useState<
 		'transfer' | 'transfer_success' | 'transfer_failed' | null
@@ -131,7 +136,15 @@ export const CauseReviewStep = ({
 	// Get transaction status
 	const transactionStatus = getValues('transactionStatus'); // 'pending' | 'success' | 'failed'
 	const transactionHash = getValues('transactionHash');
-	const transactionError = getValues('transactionError');
+
+	console.log('transactionHash', supportedNetwork);
+
+	const handleTxLink = (txHash?: string) => {
+		return formatTxLink({
+			txHash,
+			networkId: currentChainId,
+		});
+	};
 
 	// Get launch fee amount in wei
 	const launchFeeAmount = parseUnits(
@@ -198,8 +211,6 @@ export const CauseReviewStep = ({
 		// Reset transaction error
 		setValue('transactionError', '');
 
-		// setShowLaunchModal(true);
-
 		handleLaunch();
 	};
 
@@ -228,6 +239,7 @@ export const CauseReviewStep = ({
 				setValue('transactionError', 'Transfer failed');
 				setLunchStatus('transfer_failed');
 				setIsLaunching(false);
+				setFailedModalType(EDonationFailedType.FAILED);
 				throw new Error('Token transfer transaction failed');
 			}
 
@@ -245,6 +257,7 @@ export const CauseReviewStep = ({
 				'transactionError',
 				(error as Error)?.message || 'Transfer failed',
 			);
+			setFailedModalType(EDonationFailedType.FAILED);
 			setIsLaunching(false);
 		}
 	};
@@ -505,9 +518,16 @@ export const CauseReviewStep = ({
 				/>
 			</ButtonContainer>
 			{lunchStatus === 'transfer_failed' && (
-				<InlineToast
-					type={EToastType.Warning}
-					message={formatMessage({ id: 'label.cause.launch_failed' })}
+				<FailedDonation
+					title={formatMessage({
+						id: 'label.cause.launch_cause_failed',
+					})}
+					txUrl={handleTxLink(transactionHash)}
+					setShowModal={() => {
+						setFailedModalType(undefined);
+						setLunchStatus('transfer');
+					}}
+					type={failedModalType || EDonationFailedType.FAILED}
 				/>
 			)}
 		</StyledContainer>

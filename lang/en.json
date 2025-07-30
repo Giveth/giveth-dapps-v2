@@ -1979,5 +1979,6 @@
 	"label.cause.amount_raised_from_this_cause": "Amount raised from this Cause",
 	"label.cause.sorry_this_cause_doesnt_support_your_current_net": "Sorry, this Cause doesn't support your current network",
 	"label.cause.go_to_cause_details": "Go back to Cause Details",
-	"label.cause.insufficient_giv_for_launch_fee": "Insufficient GIV for launch fee, try a different network or buy GIV using link above"
+	"label.cause.insufficient_giv_for_launch_fee": "Insufficient GIV for launch fee, try a different network or buy GIV using link above",
+	"label.cause.launch_cause_failed": "Launch Cause Failed"
 }
