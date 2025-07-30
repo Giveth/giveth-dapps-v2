@@ -47,7 +47,7 @@ export const CauseDonateHeader: FC<IHeader> = props => {
 
 	const isGIVeconomyRoute = checkIsGIVeconomyRoute(router.route);
 
-	let routePath = Routes.Cause + '/' + project.slug;
+	let routePath = Routes.Cause + '/' + (project?.slug || '');
 
 	// Change route if donation done successfully
 	if (isSuccessDonation) {
