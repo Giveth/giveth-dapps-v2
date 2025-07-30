@@ -1981,5 +1981,6 @@
 	"label.cause.go_to_cause_details": "Go back to Cause Details",
 	"label.cause.insufficient_giv_for_launch_fee": "Insufficient GIV for launch fee, try a different network or buy GIV using link above",
 	"label.cause.launch_cause_failed": "Launch Cause Failed",
-	"label.transaction_submitted_processing": "Transaction Submitted. Processing..."
+	"label.transaction_submitted_processing": "Transaction Submitted. Processing...",
+	"label.transaction_successful": "Transaction Successful!"
 }

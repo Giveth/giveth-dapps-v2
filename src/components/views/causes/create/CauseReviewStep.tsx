@@ -17,6 +17,7 @@ import { useFormContext } from 'react-hook-form';
 import { useEffect, useMemo, useState } from 'react';
 import Image from 'next/image';
 import { useWeb3Modal } from '@web3modal/wagmi/react';
+import toast from 'react-hot-toast';
 import config from '@/configuration';
 import { CauseCreateProjectCard } from '@/components/views/causes/create/CauseCreateProjectCard';
 import { formatDonation } from '@/helpers/number';
@@ -36,6 +37,7 @@ import FailedDonation, {
 	EDonationFailedType,
 } from '@/components/modals/FailedDonation';
 import { formatTxLink } from '@/lib/helpers';
+import { gToast, ToastType } from '@/components/toasts';
 
 interface IProps {
 	onPrevious: () => void;
@@ -231,6 +233,18 @@ export const CauseReviewStep = ({
 				chainId: currentChainId,
 			});
 
+			const toastID = gToast(
+				formatMessage({
+					id: 'label.transaction_submitted_processing',
+				}),
+				{
+					type: ToastType.INFO_PRIMARY,
+					position: 'top-right',
+					returnID: true,
+					duration: Infinity,
+				},
+			);
+
 			if (!txHash) {
 				setValue('transactionStatus', 'failed');
 				setValue('transactionHash', txHash);
@@ -247,6 +261,23 @@ export const CauseReviewStep = ({
 			setValue('transactionError', '');
 			setLunchStatus('transfer_success');
 			setIsLaunching(false);
+
+			// Show toast success
+			if (txHash) {
+				toast.dismiss(toastID);
+
+				gToast(
+					formatMessage({
+						id: 'label.transaction_successful',
+					}),
+					{
+						type: ToastType.SUCCESS,
+						position: 'top-right',
+						duration: Infinity,
+					},
+				);
+			}
+
 			handleLaunchComplete();
 		} catch (error) {
 			console.error('Transfer failed:', error);

@@ -1981,5 +1981,6 @@
 	"label.cause.go_to_cause_details": "Ir a la página de la causa",
 	"label.cause.insufficient_giv_for_launch_fee": "No tienes suficientes GIV para la tarifa de lanzamiento, prueba una red diferente o compra GIV usando el enlace superior",
 	"label.cause.launch_cause_failed": "Lanzamiento de causa fallido",
-	"label.transaction_submitted_processing": "Transacción enviada. Procesando..."
+	"label.transaction_submitted_processing": "Transacción enviada. Procesando...",
+	"label.transaction_successful": "Transacción realizada!"
 }

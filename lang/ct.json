@@ -1981,5 +1981,6 @@
 	"label.cause.go_to_cause_details": "Anar a la pàgina de la causa",
 	"label.cause.insufficient_giv_for_launch_fee": "No tens suficients GIV per a la quota de llançament, prova una xarxa diferent o compra GIV utilitzant l'enllaç superior",
 	"label.cause.launch_cause_failed": "Llançament de causa fallit",
-	"label.transaction_submitted_processing": "Transacció enviada. Processant..."
+	"label.transaction_submitted_processing": "Transacció enviada. Processant...",
+	"label.transaction_successful": "Transacció realitzada!"
 }
