@@ -16,14 +16,16 @@ export enum EDonationFailedType {
 	FAILED = 'FAILED',
 	CANCELLED = 'CANCELLED',
 	NOT_SAVED = 'NOT_SAVED',
+	FAILED_LIQUIDITY = 'FAILED_LIQUIDITY',
 }
 
 interface IProps extends IModal {
+	title?: string;
 	txUrl?: string;
 	type: EDonationFailedType;
 }
 
-const FailedDonation: FC<IProps> = ({ setShowModal, txUrl, type }) => {
+const FailedDonation: FC<IProps> = ({ setShowModal, txUrl, type, title }) => {
 	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
 	const { formatMessage } = useIntl();
 
@@ -52,12 +54,13 @@ const FailedDonation: FC<IProps> = ({ setShowModal, txUrl, type }) => {
 						/>
 					</NotSaved>
 				);
-			case EDonationFailedType.FAILED:
+			case EDonationFailedType.FAILED_LIQUIDITY:
 				return (
 					<div>
 						<p>
-							Low liquidity, please reduce swap amount and try
-							again
+							Low donation swap liquidity, try donating a
+							different token or different chain or donating a
+							smaller amount
 						</p>
 					</div>
 				);
@@ -75,7 +78,7 @@ const FailedDonation: FC<IProps> = ({ setShowModal, txUrl, type }) => {
 		<Modal
 			closeModal={closeModal}
 			isAnimating={isAnimating}
-			headerTitle='Donation failed!'
+			headerTitle={title || 'Donation failed!'}
 			headerTitlePosition='left'
 			headerColor={semanticColors.punch[500]}
 			headerIcon={<Image src={DangerIcon} alt='danger' />}

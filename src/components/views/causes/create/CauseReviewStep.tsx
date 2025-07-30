@@ -1,12 +1,6 @@
 import styled from 'styled-components';
-import {
-	useEstimateGas,
-	useEstimateFeesPerGas,
-	useAccount,
-	useBalance,
-	useSwitchChain,
-} from 'wagmi';
-import { formatUnits, Address, Chain, parseUnits } from 'viem';
+import { useAccount, useBalance, useSwitchChain } from 'wagmi';
+import { formatUnits, parseUnits } from 'viem';
 import {
 	brandColors,
 	P,
@@ -23,6 +17,7 @@ import { useFormContext } from 'react-hook-form';
 import { useEffect, useMemo, useState } from 'react';
 import Image from 'next/image';
 import { useWeb3Modal } from '@web3modal/wagmi/react';
+import toast from 'react-hot-toast';
 import config from '@/configuration';
 import { CauseCreateProjectCard } from '@/components/views/causes/create/CauseCreateProjectCard';
 import { formatDonation } from '@/helpers/number';
@@ -36,8 +31,13 @@ import {
 	Title,
 	Desc,
 } from '@/components/views/causes/create/Create.sc';
-import LaunchCauseModal from '@/components/views/causes/create/LaunchCauseModal';
 import { transferToken } from './helpers';
+import InlineToast, { EToastType } from '@/components/toasts/InlineToast';
+import FailedDonation, {
+	EDonationFailedType,
+} from '@/components/modals/FailedDonation';
+import { formatTxLink } from '@/lib/helpers';
+import { gToast, ToastType } from '@/components/toasts';
 
 interface IProps {
 	onPrevious: () => void;
@@ -89,93 +89,12 @@ export const CauseReviewStep = ({
 	});
 
 	// Modal states
-	const [showLaunchModal, setShowLaunchModal] = useState(false);
+	const [failedModalType, setFailedModalType] =
+		useState<EDonationFailedType>();
 	const [isLaunching, setIsLaunching] = useState(false);
 	const [lunchStatus, setLunchStatus] = useState<
 		'transfer' | 'transfer_success' | 'transfer_failed' | null
 	>('transfer');
-
-	// Get native token info for current network
-	const nativeTokenInfo = useMemo(() => {
-		switch (currentChainId) {
-			case config.MAINNET_NETWORK_NUMBER:
-				return { symbol: 'ETH', coingeckoId: 'ethereum' };
-			case config.GNOSIS_NETWORK_NUMBER:
-				return { symbol: 'xDAI', coingeckoId: 'xdai' };
-			case config.POLYGON_NETWORK_NUMBER:
-				return { symbol: 'MATIC', coingeckoId: 'matic-network' };
-			case config.OPTIMISM_NETWORK_NUMBER:
-				return { symbol: 'ETH', coingeckoId: 'ethereum' };
-			case config.BASE_NETWORK_NUMBER:
-				return { symbol: 'ETH', coingeckoId: 'ethereum' };
-			case config.ARBITRUM_NETWORK_NUMBER:
-				return { symbol: 'ETH', coingeckoId: 'ethereum' };
-			default:
-				return { symbol: 'ETH', coingeckoId: 'ethereum' };
-		}
-	}, [currentChainId]);
-
-	// Estimate gas for a typical transaction (placeholder address for estimation)
-	const estimatedGasFeeObj = useMemo(() => {
-		if (!supportedNetwork || !chain) return null;
-
-		const selectedChain = chain as Chain;
-
-		// Using GIV token address for the current network as placeholder
-		const tokenAddress =
-			currentChainId === config.GNOSIS_NETWORK_NUMBER
-				? config.GNOSIS_CONFIG.GIV_TOKEN_ADDRESS
-				: currentChainId === config.POLYGON_NETWORK_NUMBER
-					? config.POLYGON_CONFIG.GIV_TOKEN_ADDRESS
-					: currentChainId === config.OPTIMISM_NETWORK_NUMBER
-						? config.OPTIMISM_CONFIG.GIV_TOKEN_ADDRESS
-						: '0x0000000000000000000000000000000000000000';
-
-		return {
-			chainId: selectedChain?.id,
-			to: tokenAddress as Address,
-			value: 0n,
-		};
-	}, [chain, supportedNetwork, currentChainId]);
-
-	const { data: estimatedGas } = useEstimateGas(
-		estimatedGasFeeObj || undefined,
-	);
-	const { data: estimatedGasPrice } = useEstimateFeesPerGas(
-		estimatedGasFeeObj || undefined,
-	);
-
-	// Calculate gas fee in native token
-	const gasFee = useMemo((): bigint => {
-		if (
-			!supportedNetwork ||
-			!estimatedGas ||
-			!estimatedGasPrice?.maxFeePerGas
-		) {
-			return 0n;
-		}
-		return estimatedGas * estimatedGasPrice.maxFeePerGas;
-	}, [supportedNetwork, estimatedGas, estimatedGasPrice?.maxFeePerGas]);
-
-	// Format gas fee for display
-	const gaseFeeFormatted = useMemo(() => {
-		if (gasFee === 0n || !supportedNetwork)
-			return `0.000000${nativeTokenInfo.symbol}`;
-		return `${parseFloat(formatUnits(gasFee, 18)).toFixed(6)}${nativeTokenInfo.symbol}`;
-	}, [gasFee, supportedNetwork, nativeTokenInfo.symbol]);
-
-	// Calculate USD value of gas fee using native token price
-	const nativeTokenPrice = useTokenPrice({
-		symbol: nativeTokenInfo.symbol,
-		coingeckoId: nativeTokenInfo.coingeckoId,
-	});
-
-	const gasFeeUSD = useMemo(() => {
-		if (!nativeTokenPrice || gasFee === 0n || !supportedNetwork)
-			return '0.00';
-		const tokenAmount = parseFloat(formatUnits(gasFee, 18));
-		return (nativeTokenPrice * tokenAmount).toFixed(2);
-	}, [nativeTokenPrice, gasFee, supportedNetwork]);
 
 	// Get current user's token balance
 	const { address } = useAccount();
@@ -184,6 +103,17 @@ export const CauseReviewStep = ({
 		address: address,
 		token: supportedNetwork?.tokenAddress,
 	});
+
+	// Check token balance
+	const [haveTokenBalance, setHaveTokenBalance] = useState(true);
+
+	useEffect(() => {
+		const timeout = setTimeout(() => {
+			setHaveTokenBalance(Boolean(balance && balance.value > 0n));
+		}, 1000); // 1 second delay
+
+		return () => clearTimeout(timeout);
+	}, [balance]);
 
 	const tokenBalanceFormatted = useMemo(() => {
 		if (!supportedNetwork) return '0.00';
@@ -208,7 +138,13 @@ export const CauseReviewStep = ({
 	// Get transaction status
 	const transactionStatus = getValues('transactionStatus'); // 'pending' | 'success' | 'failed'
 	const transactionHash = getValues('transactionHash');
-	const transactionError = getValues('transactionError');
+
+	const handleTxLink = (txHash?: string) => {
+		return formatTxLink({
+			txHash,
+			networkId: currentChainId,
+		});
+	};
 
 	// Get launch fee amount in wei
 	const launchFeeAmount = parseUnits(
@@ -275,7 +211,7 @@ export const CauseReviewStep = ({
 		// Reset transaction error
 		setValue('transactionError', '');
 
-		setShowLaunchModal(true);
+		handleLaunch();
 	};
 
 	const handleTransfer = async () => {
@@ -297,12 +233,25 @@ export const CauseReviewStep = ({
 				chainId: currentChainId,
 			});
 
+			const toastID = gToast(
+				formatMessage({
+					id: 'label.transaction_submitted_processing',
+				}),
+				{
+					type: ToastType.INFO_PRIMARY,
+					position: 'top-right',
+					returnID: true,
+					duration: Infinity,
+				},
+			);
+
 			if (!txHash) {
 				setValue('transactionStatus', 'failed');
 				setValue('transactionHash', txHash);
 				setValue('transactionError', 'Transfer failed');
 				setLunchStatus('transfer_failed');
 				setIsLaunching(false);
+				setFailedModalType(EDonationFailedType.FAILED);
 				throw new Error('Token transfer transaction failed');
 			}
 
@@ -312,6 +261,23 @@ export const CauseReviewStep = ({
 			setValue('transactionError', '');
 			setLunchStatus('transfer_success');
 			setIsLaunching(false);
+
+			// Show toast success
+			if (txHash) {
+				toast.dismiss(toastID);
+
+				gToast(
+					formatMessage({
+						id: 'label.transaction_successful',
+					}),
+					{
+						type: ToastType.SUCCESS,
+						position: 'top-right',
+						duration: Infinity,
+					},
+				);
+			}
+
 			handleLaunchComplete();
 		} catch (error) {
 			console.error('Transfer failed:', error);
@@ -320,7 +286,26 @@ export const CauseReviewStep = ({
 				'transactionError',
 				(error as Error)?.message || 'Transfer failed',
 			);
+			setFailedModalType(EDonationFailedType.FAILED);
 			setIsLaunching(false);
+		}
+	};
+
+	// Handle launch flow
+	const handleLaunch = () => {
+		// First try to transfer the token
+		if (lunchStatus === 'transfer_failed' || lunchStatus === 'transfer') {
+			handleTransfer?.();
+		}
+
+		// Finally try to launch the cause
+		if (
+			lunchStatus === 'transfer_success' &&
+			transactionHash &&
+			transactionStatus === 'success'
+		) {
+			console.log('launching cause');
+			handleLaunchComplete?.();
 		}
 	};
 
@@ -425,17 +410,6 @@ export const CauseReviewStep = ({
 							<InfoRow>
 								<InfoLabel>
 									{formatMessage({
-										id: 'label.cause.transaction_fee',
-									})}
-								</InfoLabel>
-								<InfoValueColumn>
-									<InfoValue>{gaseFeeFormatted}</InfoValue>
-									<InfoSubValue>${gasFeeUSD}USD</InfoSubValue>
-								</InfoValueColumn>
-							</InfoRow>
-							<InfoRow>
-								<InfoLabel>
-									{formatMessage({
 										id: 'label.cause.balance',
 									})}{' '}
 									{supportedNetwork?.tokenAddress ? (
@@ -450,60 +424,65 @@ export const CauseReviewStep = ({
 											})}
 										</span>
 									)}
-									<InfoText>
-										{formatMessage({
-											id: 'label.cause.check_network',
-										})}{' '}
-										<NetworkLink
-											onClick={() =>
-												changeUserWalletNetwork(
-													config.CAUSES_CONFIG
-														.launchNetworks[0]
-														.network,
-												)
-											}
-										>
-											{
-												config.CAUSES_CONFIG
-													.launchNetworks[0].name
-											}
-										</NetworkLink>
-										,{' '}
-										<NetworkLink
-											onClick={() =>
-												changeUserWalletNetwork(
-													config.CAUSES_CONFIG
-														.launchNetworks[1]
-														.network,
-												)
-											}
-										>
-											{
-												config.CAUSES_CONFIG
-													.launchNetworks[1].name
-											}
-										</NetworkLink>{' '}
-										{formatMessage({
-											id: 'label.or',
-										})}{' '}
-										<NetworkLink
-											onClick={() =>
-												changeUserWalletNetwork(
-													config.CAUSES_CONFIG
-														.launchNetworks[2]
-														.network,
-												)
-											}
-										>
-											{
-												config.CAUSES_CONFIG
-													.launchNetworks[2].name
-											}
-										</NetworkLink>
-										?
-									</InfoText>
 								</InfoLabel>
+								<InfoText>
+									{formatMessage({
+										id: 'label.cause.check_network',
+									})}{' '}
+									<NetworkLink
+										onClick={() =>
+											changeUserWalletNetwork(
+												config.CAUSES_CONFIG
+													.launchNetworks[0].network,
+											)
+										}
+									>
+										{
+											config.CAUSES_CONFIG
+												.launchNetworks[0].name
+										}
+									</NetworkLink>
+									,{' '}
+									<NetworkLink
+										onClick={() =>
+											changeUserWalletNetwork(
+												config.CAUSES_CONFIG
+													.launchNetworks[1].network,
+											)
+										}
+									>
+										{
+											config.CAUSES_CONFIG
+												.launchNetworks[1].name
+										}
+									</NetworkLink>{' '}
+									{formatMessage({
+										id: 'label.or',
+									})}{' '}
+									<NetworkLink
+										onClick={() =>
+											changeUserWalletNetwork(
+												config.CAUSES_CONFIG
+													.launchNetworks[2].network,
+											)
+										}
+									>
+										{
+											config.CAUSES_CONFIG
+												.launchNetworks[2].name
+										}
+									</NetworkLink>
+									?
+								</InfoText>
 							</InfoRow>
+							{!haveTokenBalance && (
+								<InlineToast
+									type={EToastType.Warning}
+									message={formatMessage({
+										id: 'label.cause.insufficient_giv_for_launch_fee',
+									})}
+								/>
+							)}
 						</Col>
 						<Col lg={6} md={12}>
 							<InfoText>
@@ -546,7 +525,7 @@ export const CauseReviewStep = ({
 						{formatMessage({ id: 'label.cause.back' })}
 					</BackButton>
 				</PreviousButtonContainer>
-				<Button
+				<ButtonWrapper
 					buttonType='primary'
 					size='large'
 					onClick={handleLastStep}
@@ -560,22 +539,25 @@ export const CauseReviewStep = ({
 						selectedProjects?.length <
 							config.CAUSES_CONFIG.minSelectedProjects ||
 						selectedProjects?.length >
-							config.CAUSES_CONFIG.maxSelectedProjects
+							config.CAUSES_CONFIG.maxSelectedProjects ||
+						!haveTokenBalance ||
+						isLaunching ||
+						isSubmitting
 					}
 					label={formatMessage({ id: 'label.cause.launch_cause' })}
 				/>
 			</ButtonContainer>
-			{showLaunchModal && (
-				<LaunchCauseModal
-					setShowModal={setShowLaunchModal}
-					isLaunching={isLaunching}
-					lunchStatus={lunchStatus}
-					transactionStatus={transactionStatus}
-					transactionHash={transactionHash}
-					transactionError={transactionError}
-					handleTransfer={handleTransfer}
-					handleLaunchComplete={handleLaunchComplete}
-					isSubmitting={isSubmitting}
+			{lunchStatus === 'transfer_failed' && (
+				<FailedDonation
+					title={formatMessage({
+						id: 'label.cause.launch_cause_failed',
+					})}
+					txUrl={handleTxLink(transactionHash)}
+					setShowModal={() => {
+						setFailedModalType(undefined);
+						setLunchStatus('transfer');
+					}}
+					type={failedModalType || EDonationFailedType.FAILED}
 				/>
 			)}
 		</StyledContainer>
@@ -707,22 +689,8 @@ const InfoValue = styled.div`
 	color: ${neutralColors.gray[800]};
 `;
 
-const InfoValueColumn = styled.div`
-	display: flex;
-	flex-direction: column;
-	align-items: flex-end;
-`;
-
-const InfoSubValue = styled.div`
-	font-weight: 400;
-	font-size: 12px;
-	line-height: 150%;
-	color: ${neutralColors.gray[600]};
-`;
-
 const InfoText = styled.div`
 	display: inline-block;
-	padding-left: 40px;
 	font-weight: 400;
 	font-size: 14px;
 	line-height: 150%;
@@ -750,5 +718,15 @@ const NetworkLink = styled.a`
 	&:hover {
 		color: ${brandColors.pinky[700]};
 		text-decoration: underline;
+	}
+`;
+
+const ButtonWrapper = styled(Button)`
+	&:disabled {
+		background-color: ${neutralColors.gray[300]} !important;
+		border-color: ${neutralColors.gray[300]} !important;
+		span {
+			color: ${neutralColors.gray[100]};
+		}
 	}
 `;
