@@ -21,7 +21,7 @@ import { useAlreadyDonatedToProject } from '@/hooks/useAlreadyDonatedToProject';
 import { Shadow } from '@/components/styled-components/Shadow';
 import { useAppDispatch, useAppSelector } from '@/features/hooks';
 import { setShowHeader } from '@/features/general/general.slice';
-import { DonateHeader } from '../donate/DonateHeader';
+import { CauseDonateHeader } from '@/components/views/donateCause/CauseDonateHeader';
 import { CauseSuccessView } from '@/components/views/donateCause/CauseSuccessView';
 import QFSection from '../project/projectActionCard/QFSection';
 import ProjectCardImage from '@/components/project-card/ProjectCardImage';
@@ -102,7 +102,7 @@ const CauseDonateIndex: FC = () => {
 
 	return successDonation ? (
 		<>
-			<DonateHeader
+			<CauseDonateHeader
 				isSuccessDonation={Object.keys(successDonation).length > 0}
 			/>
 			<DonateSuccessContainer>
@@ -111,7 +111,7 @@ const CauseDonateIndex: FC = () => {
 		</>
 	) : (
 		<>
-			<DonateHeader />
+			<CauseDonateHeader />
 			<Wrapper>
 				<DonateContainer>
 					{shouldRenderModal(
