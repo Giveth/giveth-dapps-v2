@@ -30,7 +30,6 @@ import {
 	Title,
 	Desc,
 } from '@/components/views/causes/create/Create.sc';
-import LaunchCauseModal from '@/components/views/causes/create/LaunchCauseModal';
 import { transferToken } from './helpers';
 import InlineToast, { EToastType } from '@/components/toasts/InlineToast';
 
@@ -199,7 +198,9 @@ export const CauseReviewStep = ({
 		// Reset transaction error
 		setValue('transactionError', '');
 
-		setShowLaunchModal(true);
+		// setShowLaunchModal(true);
+
+		handleLaunch();
 	};
 
 	const handleTransfer = async () => {
@@ -245,6 +246,24 @@ export const CauseReviewStep = ({
 				(error as Error)?.message || 'Transfer failed',
 			);
 			setIsLaunching(false);
+		}
+	};
+
+	// Handle launch flow
+	const handleLaunch = () => {
+		// First try to transfer the token
+		if (lunchStatus === 'transfer_failed' || lunchStatus === 'transfer') {
+			handleTransfer?.();
+		}
+
+		// Finally try to launch the cause
+		if (
+			lunchStatus === 'transfer_success' &&
+			transactionHash &&
+			transactionStatus === 'success'
+		) {
+			console.log('launching cause');
+			handleLaunchComplete?.();
 		}
 	};
 
@@ -464,7 +483,7 @@ export const CauseReviewStep = ({
 						{formatMessage({ id: 'label.cause.back' })}
 					</BackButton>
 				</PreviousButtonContainer>
-				<Button
+				<ButtonWrapper
 					buttonType='primary'
 					size='large'
 					onClick={handleLastStep}
@@ -478,22 +497,17 @@ export const CauseReviewStep = ({
 						selectedProjects?.length <
 							config.CAUSES_CONFIG.minSelectedProjects ||
 						selectedProjects?.length >
-							config.CAUSES_CONFIG.maxSelectedProjects
+							config.CAUSES_CONFIG.maxSelectedProjects ||
+						!haveTokenBalance ||
+						isLaunching
 					}
 					label={formatMessage({ id: 'label.cause.launch_cause' })}
 				/>
 			</ButtonContainer>
-			{showLaunchModal && (
-				<LaunchCauseModal
-					setShowModal={setShowLaunchModal}
-					isLaunching={isLaunching}
-					lunchStatus={lunchStatus}
-					transactionStatus={transactionStatus}
-					transactionHash={transactionHash}
-					transactionError={transactionError}
-					handleTransfer={handleTransfer}
-					handleLaunchComplete={handleLaunchComplete}
-					isSubmitting={isSubmitting}
+			{lunchStatus === 'transfer_failed' && (
+				<InlineToast
+					type={EToastType.Warning}
+					message={formatMessage({ id: 'label.cause.launch_failed' })}
 				/>
 			)}
 		</StyledContainer>
@@ -654,5 +668,15 @@ const NetworkLink = styled.a`
 	&:hover {
 		color: ${brandColors.pinky[700]};
 		text-decoration: underline;
+	}
+`;
+
+const ButtonWrapper = styled(Button)`
+	&:disabled {
+		background-color: ${neutralColors.gray[300]} !important;
+		border-color: ${neutralColors.gray[300]} !important;
+		span {
+			color: ${neutralColors.gray[100]};
+		}
 	}
 `;
