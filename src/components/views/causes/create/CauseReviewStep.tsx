@@ -425,17 +425,6 @@ export const CauseReviewStep = ({
 							<InfoRow>
 								<InfoLabel>
 									{formatMessage({
-										id: 'label.cause.transaction_fee',
-									})}
-								</InfoLabel>
-								<InfoValueColumn>
-									<InfoValue>{gaseFeeFormatted}</InfoValue>
-									<InfoSubValue>${gasFeeUSD}USD</InfoSubValue>
-								</InfoValueColumn>
-							</InfoRow>
-							<InfoRow>
-								<InfoLabel>
-									{formatMessage({
 										id: 'label.cause.balance',
 									})}{' '}
 									{supportedNetwork?.tokenAddress ? (
