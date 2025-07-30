@@ -1,12 +1,6 @@
 import styled from 'styled-components';
-import {
-	useEstimateGas,
-	useEstimateFeesPerGas,
-	useAccount,
-	useBalance,
-	useSwitchChain,
-} from 'wagmi';
-import { formatUnits, Address, Chain, parseUnits } from 'viem';
+import { useAccount, useBalance, useSwitchChain } from 'wagmi';
+import { formatUnits, parseUnits } from 'viem';
 import {
 	brandColors,
 	P,
@@ -347,7 +341,7 @@ export const CauseReviewStep = ({
 									})}{' '}
 									{supportedNetwork?.tokenAddress ? (
 										<>
-											{tokenBalanceFormatted}99999999999{' '}
+											{tokenBalanceFormatted}{' '}
 											{launchToken}
 										</>
 									) : (
@@ -357,59 +351,56 @@ export const CauseReviewStep = ({
 											})}
 										</span>
 									)}
-									<InfoText>
-										{formatMessage({
-											id: 'label.cause.check_network',
-										})}{' '}
-										<NetworkLink
-											onClick={() =>
-												changeUserWalletNetwork(
-													config.CAUSES_CONFIG
-														.launchNetworks[0]
-														.network,
-												)
-											}
-										>
-											{
-												config.CAUSES_CONFIG
-													.launchNetworks[0].name
-											}
-										</NetworkLink>
-										,{' '}
-										<NetworkLink
-											onClick={() =>
-												changeUserWalletNetwork(
-													config.CAUSES_CONFIG
-														.launchNetworks[1]
-														.network,
-												)
-											}
-										>
-											{
-												config.CAUSES_CONFIG
-													.launchNetworks[1].name
-											}
-										</NetworkLink>{' '}
-										{formatMessage({
-											id: 'label.or',
-										})}{' '}
-										<NetworkLink
-											onClick={() =>
-												changeUserWalletNetwork(
-													config.CAUSES_CONFIG
-														.launchNetworks[2]
-														.network,
-												)
-											}
-										>
-											{
-												config.CAUSES_CONFIG
-													.launchNetworks[2].name
-											}
-										</NetworkLink>
-										?
-									</InfoText>
 								</InfoLabel>
+								<InfoText>
+									{formatMessage({
+										id: 'label.cause.check_network',
+									})}{' '}
+									<NetworkLink
+										onClick={() =>
+											changeUserWalletNetwork(
+												config.CAUSES_CONFIG
+													.launchNetworks[0].network,
+											)
+										}
+									>
+										{
+											config.CAUSES_CONFIG
+												.launchNetworks[0].name
+										}
+									</NetworkLink>
+									,{' '}
+									<NetworkLink
+										onClick={() =>
+											changeUserWalletNetwork(
+												config.CAUSES_CONFIG
+													.launchNetworks[1].network,
+											)
+										}
+									>
+										{
+											config.CAUSES_CONFIG
+												.launchNetworks[1].name
+										}
+									</NetworkLink>{' '}
+									{formatMessage({
+										id: 'label.or',
+									})}{' '}
+									<NetworkLink
+										onClick={() =>
+											changeUserWalletNetwork(
+												config.CAUSES_CONFIG
+													.launchNetworks[2].network,
+											)
+										}
+									>
+										{
+											config.CAUSES_CONFIG
+												.launchNetworks[2].name
+										}
+									</NetworkLink>
+									?
+								</InfoText>
 							</InfoRow>
 						</Col>
 						<Col lg={6} md={12}>
