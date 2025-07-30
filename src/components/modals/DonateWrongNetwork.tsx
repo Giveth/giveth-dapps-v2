@@ -173,6 +173,7 @@ export const DonateWrongNetwork: FC<IDonateWrongNetwork> = props => {
 												network.chainType ===
 												ChainType.STELLAR
 											) {
+												if (!slug) return;
 												window.location.href =
 													slugToProjectDonateStellar(
 														slug as string,
