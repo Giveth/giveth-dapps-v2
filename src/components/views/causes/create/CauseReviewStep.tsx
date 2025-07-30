@@ -137,8 +137,6 @@ export const CauseReviewStep = ({
 	const transactionStatus = getValues('transactionStatus'); // 'pending' | 'success' | 'failed'
 	const transactionHash = getValues('transactionHash');
 
-	console.log('transactionHash', supportedNetwork);
-
 	const handleTxLink = (txHash?: string) => {
 		return formatTxLink({
 			txHash,
@@ -512,7 +510,8 @@ export const CauseReviewStep = ({
 						selectedProjects?.length >
 							config.CAUSES_CONFIG.maxSelectedProjects ||
 						!haveTokenBalance ||
-						isLaunching
+						isLaunching ||
+						isSubmitting
 					}
 					label={formatMessage({ id: 'label.cause.launch_cause' })}
 				/>
