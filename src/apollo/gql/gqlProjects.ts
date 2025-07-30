@@ -249,6 +249,7 @@ export const FETCH_PROJECT_BY_SLUG_SINGLE_PROJECT = gql`
 				id
 				amountReceived
 				amountReceivedUsdValue
+				userRemoved
 				project {
 					id
 					title
