@@ -58,8 +58,9 @@ const FailedDonation: FC<IProps> = ({ setShowModal, txUrl, type, title }) => {
 				return (
 					<div>
 						<p>
-							Low liquidity, please reduce swap amount and try
-							again
+							Low donation swap liquidity, try donating a
+							different token or different chain or donating a
+							smaller amount
 						</p>
 					</div>
 				);
