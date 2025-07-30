@@ -34,6 +34,7 @@ import {
 	DonateModalPriorityValues,
 	useDonateData,
 } from '@/context/donate.context';
+import { slugToProjectDonateStellar } from '@/lib/routeCreators';
 
 interface IDonateWrongNetwork extends IModal {
 	acceptedChains?: INetworkIdWithChain[];
@@ -168,6 +169,14 @@ export const DonateWrongNetwork: FC<IDonateWrongNetwork> = props => {
 											) {
 												await handleSignOutAndSignInWithSolana();
 												closeModal();
+											} else if (
+												network.chainType ===
+												ChainType.STELLAR
+											) {
+												window.location.href =
+													slugToProjectDonateStellar(
+														slug as string,
+													);
 											} else if (
 												network.chainType ===
 													ChainType.EVM &&
