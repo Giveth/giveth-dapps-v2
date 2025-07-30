@@ -8,6 +8,7 @@ import { ICauseBySlug } from '@/apollo/types/gqlTypes';
 import { ProjectProvider } from '@/context/project.context';
 import { FETCH_PROJECT_BY_SLUG_SINGLE_PROJECT } from '@/apollo/gql/gqlProjects';
 import { ProjectMeta } from '@/components/Metatag';
+import { EProjectType } from '@/apollo/types/gqlEnums';
 
 const CauseRoute: FC<ICauseBySlug> = ({ cause }) => {
 	useReferral();
@@ -35,6 +36,16 @@ export async function getServerSideProps(props: {
 			variables: { slug },
 			fetchPolicy: 'no-cache',
 		});
+
+		// Perform redirect on server side for projects
+		if (data.projectBySlug?.projectType === EProjectType.PROJECT) {
+			return {
+				redirect: {
+					destination: `/project/${data.projectBySlug.slug}`,
+					permanent: false,
+				},
+			};
+		}
 
 		return {
 			props: {
