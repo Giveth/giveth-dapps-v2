@@ -120,7 +120,7 @@ export const DonateWrongNetwork: FC<IDonateWrongNetwork> = props => {
 							id: isSafeEnv
 								? 'label.this_projet_doesnt_receive_donations_on'
 								: isCause
-									? 'label.cause.sorry_this_casue_doesnt_support_your_current_net'
+									? 'label.cause.sorry_this_cause_doesnt_support_your_current_net'
 									: 'label.sorry_this_projet_doesnt_support_your_current_net',
 						},
 						{ chainName },
