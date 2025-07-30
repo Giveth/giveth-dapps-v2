@@ -32,6 +32,7 @@ import {
 } from '@/components/views/causes/create/Create.sc';
 import LaunchCauseModal from '@/components/views/causes/create/LaunchCauseModal';
 import { transferToken } from './helpers';
+import InlineToast, { EToastType } from '@/components/toasts/InlineToast';
 
 interface IProps {
 	onPrevious: () => void;
@@ -97,6 +98,9 @@ export const CauseReviewStep = ({
 		token: supportedNetwork?.tokenAddress,
 	});
 
+	// Check token balance
+	const [haveTokenBalance, setHaveTokenBalance] = useState(true);
+
 	const tokenBalanceFormatted = useMemo(() => {
 		if (!supportedNetwork) return '0.00';
 		if (!supportedNetwork.tokenAddress) {
@@ -109,6 +113,12 @@ export const CauseReviewStep = ({
 			'',
 		);
 	}, [balance, supportedNetwork]);
+
+	useEffect(() => {
+		if (!balance) {
+			setHaveTokenBalance(false);
+		}
+	}, [balance]);
 
 	// Get value from previous step
 	const title = getValues('title');
@@ -402,6 +412,14 @@ export const CauseReviewStep = ({
 									?
 								</InfoText>
 							</InfoRow>
+							{haveTokenBalance && (
+								<InlineToast
+									type={EToastType.Warning}
+									message={formatMessage({
+										id: 'label.cause.insufficient_giv_for_launch_fee',
+									})}
+								/>
+							)}
 						</Col>
 						<Col lg={6} md={12}>
 							<InfoText>
