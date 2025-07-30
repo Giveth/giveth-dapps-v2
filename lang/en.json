@@ -1976,5 +1976,7 @@
 	"label.cause.total_distributed_projects": "Distributed to {count} Projects",
 	"label.cause.user_causes": "{userName}'s Causes",
 	"label.cause.title_invalid": "Your title isn't valid, please only use letters and numbers",
-	"label.cause.amount_raised_from_this_cause": "Amount raised from this Cause"
+	"label.cause.amount_raised_from_this_cause": "Amount raised from this Cause",
+	"label.cause.sorry_this_casue_doesnt_support_your_current_net": "Sorry, this cause doesn't support your current network",
+	"label.cause.go_to_cause_details": "Go to Cause Details"
 }

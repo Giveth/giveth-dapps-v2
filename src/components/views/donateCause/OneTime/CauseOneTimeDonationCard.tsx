@@ -348,6 +348,7 @@ const CauseCryptoDonation: FC<{
 							setShowChangeNetworkModal(show);
 						}}
 						acceptedChains={acceptedChains}
+						isCause={true}
 					/>
 				)}
 			{showInsufficientModal && (

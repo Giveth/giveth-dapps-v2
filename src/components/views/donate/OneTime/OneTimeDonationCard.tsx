@@ -385,6 +385,7 @@ const CryptoDonation: FC<{
 					acceptedChains={acceptedChains.filter(
 						chain => chain.chainType !== ChainType.STELLAR,
 					)}
+					isCause={false}
 				/>
 			)}
 			{showInsufficientModal && (
