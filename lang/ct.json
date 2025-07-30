@@ -1976,5 +1976,7 @@
 	"label.cause.total_distributed_projects": "Distribuït a {count} projectes",
 	"label.cause.user_causes": "Causes de {userName}",
 	"label.cause.title_invalid": "El títol no és vàlid, si us plau, només utilitzeu lletres i números",
-	"label.cause.amount_raised_from_this_cause": "Import recaptat d'aquesta causa"
+	"label.cause.amount_raised_from_this_cause": "Import recaptat d'aquesta causa",
+	"label.cause.sorry_this_cause_doesnt_support_your_current_net": "Ho sentim, aquesta causa no és compatible amb la teva xarxa actual",
+	"label.cause.go_to_cause_details": "Anar a la pàgina de la causa"
 }
