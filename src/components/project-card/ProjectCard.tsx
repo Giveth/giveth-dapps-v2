@@ -208,7 +208,7 @@ const ProjectCard = (props: IProjectCard) => {
 			<CardBody
 				id={`project-card-body-${slug}`}
 				$isHover={
-					isHover
+					isHover && !isListingInsideCauseProjectTabs
 						? hasFooter
 							? ECardBodyHover.FULL
 							: ECardBodyHover.HALF
@@ -343,23 +343,25 @@ const ProjectCard = (props: IProjectCard) => {
 						</PaddedRow>
 					</Link>
 				)}
-				<ActionButtons>
-					<Link
-						id='Donate_Card'
-						href={donateLink}
-						onClick={e => {
-							setDestination(donateLink);
-							handleClick(e);
-						}}
-					>
-						<CustomizedDonateButton
-							linkType='primary'
-							size='small'
-							label={formatMessage({ id: 'label.donate' })}
-							$isHover={isHover}
-						/>
-					</Link>
-				</ActionButtons>
+				{!isListingInsideCauseProjectTabs && (
+					<ActionButtons>
+						<Link
+							id='Donate_Card'
+							href={donateLink}
+							onClick={e => {
+								setDestination(donateLink);
+								handleClick(e);
+							}}
+						>
+							<CustomizedDonateButton
+								linkType='primary'
+								size='small'
+								label={formatMessage({ id: 'label.donate' })}
+								$isHover={isHover}
+							/>
+						</Link>
+					</ActionButtons>
+				)}
 			</CardBody>
 			{showHintModal && activeQFRound && (
 				<RoundNotStartedModal
@@ -492,13 +494,16 @@ const Wrapper = styled.div<IWrapperProps>`
 	${mediaQueries.mobileL} {
 		height: ${props => (props.$activeStartedRound ? '562px' : '536px')};
 	}
-	${mediaQueries.laptopS} {
-		height: ${props =>
-			props.$activeStartedRound &&
+	 ${mediaQueries.laptopS} {
+        height: ${props =>
 			props.$projectType === EProjectType.CAUSE
-				? '492px'
-				: '472px'};
-	}
+				? props.$activeStartedRound
+					? '460px' // Cause with active round
+					: '468px' // Cause without active round
+				: props.$activeStartedRound
+					? '460px' // Not a cause but in active round
+					: '448px'};  // Not a cause or active round
+    }
 `;
 
 interface IPaddedRowProps {
