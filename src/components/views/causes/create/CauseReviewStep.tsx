@@ -95,88 +95,6 @@ export const CauseReviewStep = ({
 		'transfer' | 'transfer_success' | 'transfer_failed' | null
 	>('transfer');
 
-	// Get native token info for current network
-	const nativeTokenInfo = useMemo(() => {
-		switch (currentChainId) {
-			case config.MAINNET_NETWORK_NUMBER:
-				return { symbol: 'ETH', coingeckoId: 'ethereum' };
-			case config.GNOSIS_NETWORK_NUMBER:
-				return { symbol: 'xDAI', coingeckoId: 'xdai' };
-			case config.POLYGON_NETWORK_NUMBER:
-				return { symbol: 'MATIC', coingeckoId: 'matic-network' };
-			case config.OPTIMISM_NETWORK_NUMBER:
-				return { symbol: 'ETH', coingeckoId: 'ethereum' };
-			case config.BASE_NETWORK_NUMBER:
-				return { symbol: 'ETH', coingeckoId: 'ethereum' };
-			case config.ARBITRUM_NETWORK_NUMBER:
-				return { symbol: 'ETH', coingeckoId: 'ethereum' };
-			default:
-				return { symbol: 'ETH', coingeckoId: 'ethereum' };
-		}
-	}, [currentChainId]);
-
-	// Estimate gas for a typical transaction (placeholder address for estimation)
-	const estimatedGasFeeObj = useMemo(() => {
-		if (!supportedNetwork || !chain) return null;
-
-		const selectedChain = chain as Chain;
-
-		// Using GIV token address for the current network as placeholder
-		const tokenAddress =
-			currentChainId === config.GNOSIS_NETWORK_NUMBER
-				? config.GNOSIS_CONFIG.GIV_TOKEN_ADDRESS
-				: currentChainId === config.POLYGON_NETWORK_NUMBER
-					? config.POLYGON_CONFIG.GIV_TOKEN_ADDRESS
-					: currentChainId === config.OPTIMISM_NETWORK_NUMBER
-						? config.OPTIMISM_CONFIG.GIV_TOKEN_ADDRESS
-						: '0x0000000000000000000000000000000000000000';
-
-		return {
-			chainId: selectedChain?.id,
-			to: tokenAddress as Address,
-			value: 0n,
-		};
-	}, [chain, supportedNetwork, currentChainId]);
-
-	const { data: estimatedGas } = useEstimateGas(
-		estimatedGasFeeObj || undefined,
-	);
-	const { data: estimatedGasPrice } = useEstimateFeesPerGas(
-		estimatedGasFeeObj || undefined,
-	);
-
-	// Calculate gas fee in native token
-	const gasFee = useMemo((): bigint => {
-		if (
-			!supportedNetwork ||
-			!estimatedGas ||
-			!estimatedGasPrice?.maxFeePerGas
-		) {
-			return 0n;
-		}
-		return estimatedGas * estimatedGasPrice.maxFeePerGas;
-	}, [supportedNetwork, estimatedGas, estimatedGasPrice?.maxFeePerGas]);
-
-	// Format gas fee for display
-	const gaseFeeFormatted = useMemo(() => {
-		if (gasFee === 0n || !supportedNetwork)
-			return `0.000000${nativeTokenInfo.symbol}`;
-		return `${parseFloat(formatUnits(gasFee, 18)).toFixed(6)}${nativeTokenInfo.symbol}`;
-	}, [gasFee, supportedNetwork, nativeTokenInfo.symbol]);
-
-	// Calculate USD value of gas fee using native token price
-	const nativeTokenPrice = useTokenPrice({
-		symbol: nativeTokenInfo.symbol,
-		coingeckoId: nativeTokenInfo.coingeckoId,
-	});
-
-	const gasFeeUSD = useMemo(() => {
-		if (!nativeTokenPrice || gasFee === 0n || !supportedNetwork)
-			return '0.00';
-		const tokenAmount = parseFloat(formatUnits(gasFee, 18));
-		return (nativeTokenPrice * tokenAmount).toFixed(2);
-	}, [nativeTokenPrice, gasFee, supportedNetwork]);
-
 	// Get current user's token balance
 	const { address } = useAccount();
 
@@ -429,7 +347,7 @@ export const CauseReviewStep = ({
 									})}{' '}
 									{supportedNetwork?.tokenAddress ? (
 										<>
-											{tokenBalanceFormatted}{' '}
+											{tokenBalanceFormatted}99999999999{' '}
 											{launchToken}
 										</>
 									) : (
@@ -696,22 +614,8 @@ const InfoValue = styled.div`
 	color: ${neutralColors.gray[800]};
 `;
 
-const InfoValueColumn = styled.div`
-	display: flex;
-	flex-direction: column;
-	align-items: flex-end;
-`;
-
-const InfoSubValue = styled.div`
-	font-weight: 400;
-	font-size: 12px;
-	line-height: 150%;
-	color: ${neutralColors.gray[600]};
-`;
-
 const InfoText = styled.div`
 	display: inline-block;
-	padding-left: 40px;
 	font-weight: 400;
 	font-size: 14px;
 	line-height: 150%;
