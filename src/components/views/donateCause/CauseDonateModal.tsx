@@ -233,7 +233,6 @@ const CauseDonateModal: FC<IDonateModalProps> = props => {
 
 				if (!tx) {
 					setFailedModalType(EDonationFailedType.FAILED);
-					showToastError('ova greška');
 					return;
 				}
 			} else {
@@ -277,7 +276,17 @@ const CauseDonateModal: FC<IDonateModalProps> = props => {
 						metadata: squidRoute.route,
 					};
 				} else {
-					setFailedModalType(EDonationFailedType.FAILED);
+					console.error(
+						'Error making donation, squidRoute:',
+						squidRoute,
+					);
+					if (squidRoute?.statusCode === 500) {
+						setFailedModalType(
+							EDonationFailedType.FAILED_LIQUIDITY,
+						);
+					} else {
+						setFailedModalType(EDonationFailedType.REJECTED);
+					}
 					return;
 				}
 			}
