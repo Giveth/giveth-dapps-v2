@@ -316,10 +316,15 @@ export const FETCH_USER_CAUSES = gql`
 `;
 
 export const FETCH_CAUSE_BY_SLUG_SINGLE_CAUSE = gql`
-	query ProjectBySlug($slug: String!, $connectedWalletUserId: Int) {
+	query ProjectBySlug(
+		$slug: String!
+		$connectedWalletUserId: Int
+		$userRemoved: Boolean
+	) {
 		projectBySlug(
 			slug: $slug
 			connectedWalletUserId: $connectedWalletUserId
+			userRemoved: $userRemoved
 		) {
 			__typename
 			id
