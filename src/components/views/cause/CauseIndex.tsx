@@ -218,7 +218,10 @@ const CauseIndex: FC<ICauseBySlug> = () => {
 					{activeTab === 4 && (
 						<CauseProjectsTab
 							causeProjects={
-								projectData?.causeProjects as ICauseProject[]
+								projectData?.causeProjects?.filter(
+									(project: ICauseProject) =>
+										!project.userRemoved,
+								) as ICauseProject[]
 							}
 						/>
 					)}

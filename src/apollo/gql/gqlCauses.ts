@@ -314,3 +314,122 @@ export const FETCH_USER_CAUSES = gql`
 		}
 	}
 `;
+
+export const FETCH_CAUSE_BY_SLUG_SINGLE_CAUSE = gql`
+	query ProjectBySlug(
+		$slug: String!
+		$connectedWalletUserId: Int
+		$userRemoved: Boolean
+	) {
+		projectBySlug(
+			slug: $slug
+			connectedWalletUserId: $connectedWalletUserId
+			userRemoved: $userRemoved
+		) {
+			__typename
+			id
+			title
+			image
+			slug
+			verified
+			isGivbackEligible
+			totalDonations
+			description
+			projectType
+			totalRaised
+			totalDistributed
+			activeProjectsCount
+			causeProjects {
+				id
+				amountReceived
+				amountReceivedUsdValue
+				project {
+					id
+					title
+					image
+					slug
+					verified
+					isGivbackEligible
+					totalDonations
+					description
+					projectType
+					descriptionSummary
+					latestUpdateCreationDate
+					adminUser {
+						id
+						name
+						walletAddress
+						avatar
+					}
+					organization {
+						name
+						label
+						supportCustomTokens
+					}
+				}
+			}
+			addresses {
+				address
+				isRecipient
+				networkId
+				chainType
+			}
+			totalProjectUpdates
+			creationDate
+			categories {
+				name
+				value
+				mainCategory {
+					title
+				}
+			}
+			adminUser {
+				id
+				name
+				walletAddress
+				avatar
+			}
+			listed
+			status {
+				id
+				name
+			}
+			verificationFormStatus
+			projectPower {
+				powerRank
+				totalPower
+				round
+			}
+			projectFuturePower {
+				totalPower
+				powerRank
+				round
+			}
+			givbackFactor
+			sumDonationValueUsdForActiveQfRound
+			countUniqueDonorsForActiveQfRound
+			countUniqueDonors
+			estimatedMatching {
+				projectDonationsSqrtRootSum
+				allProjectsSum
+				matchingPool
+			}
+			qfRounds {
+				id
+				name
+				isActive
+				beginDate
+				endDate
+				eligibleNetworks
+				maximumReward
+				allocatedTokenSymbol
+				allocatedFundUSDPreferred
+				allocatedFundUSD
+			}
+			campaigns {
+				id
+				title
+			}
+		}
+	}
+`;
