@@ -252,6 +252,7 @@ export const CauseReviewStep = ({
 				setLunchStatus('transfer_failed');
 				setIsLaunching(false);
 				setFailedModalType(EDonationFailedType.FAILED);
+				toast.dismiss(toastID);
 				throw new Error('Token transfer transaction failed');
 			}
 
@@ -264,6 +265,7 @@ export const CauseReviewStep = ({
 
 			// Show toast success
 			if (txHash) {
+				console.log('dismissing toast', toastID);
 				toast.dismiss(toastID);
 
 				gToast(
@@ -304,7 +306,6 @@ export const CauseReviewStep = ({
 			transactionHash &&
 			transactionStatus === 'success'
 		) {
-			console.log('launching cause');
 			handleLaunchComplete?.();
 		}
 	};

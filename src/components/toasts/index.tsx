@@ -70,7 +70,7 @@ export const gToast = (message: string, options: IToast) => {
 	const toastID = `toast-${Date.now()}`;
 
 	toast.custom(
-		<ToastContainer $type={options.type}>
+		<ToastContainer $type={options.type} id={toastID}>
 			{direction === ToastDirection.LEFT && (
 				<LeftIconContainer>{toastIcon(type)}</LeftIconContainer>
 			)}
