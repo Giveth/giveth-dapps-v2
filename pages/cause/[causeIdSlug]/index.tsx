@@ -6,9 +6,9 @@ import { useReferral } from '@/hooks/useReferral';
 import CauseIndex from '@/components/views/cause/CauseIndex';
 import { ICauseBySlug } from '@/apollo/types/gqlTypes';
 import { ProjectProvider } from '@/context/project.context';
-import { FETCH_PROJECT_BY_SLUG_SINGLE_PROJECT } from '@/apollo/gql/gqlProjects';
 import { ProjectMeta } from '@/components/Metatag';
 import { EProjectType } from '@/apollo/types/gqlEnums';
+import { FETCH_CAUSE_BY_SLUG_SINGLE_CAUSE } from '@/apollo/gql/gqlCauses';
 
 const CauseRoute: FC<ICauseBySlug> = ({ cause }) => {
 	useReferral();
@@ -32,7 +32,7 @@ export async function getServerSideProps(props: {
 		const slug = decodeURI(query.causeIdSlug).replace(/\s/g, '');
 
 		const { data } = await client.query({
-			query: FETCH_PROJECT_BY_SLUG_SINGLE_PROJECT,
+			query: FETCH_CAUSE_BY_SLUG_SINGLE_CAUSE,
 			variables: { slug },
 			fetchPolicy: 'no-cache',
 		});

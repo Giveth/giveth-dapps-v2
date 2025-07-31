@@ -273,7 +273,7 @@ export const CauseReviewStep = ({
 					{
 						type: ToastType.SUCCESS,
 						position: 'top-right',
-						duration: Infinity,
+						duration: 8000,
 					},
 				);
 			}

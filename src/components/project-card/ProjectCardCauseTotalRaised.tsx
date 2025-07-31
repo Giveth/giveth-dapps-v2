@@ -19,7 +19,7 @@ export const ProjectCardCauseTotalRaised = ({
 		>
 			<div>
 				<PriceText>
-					{amountReceived} GIV
+					{formatDonation(amountReceived, '', locale, true, 2)} GIV
 					<span>
 						~ {formatDonation(amountReceivedUsdValue, '$', locale)}{' '}
 						USD
