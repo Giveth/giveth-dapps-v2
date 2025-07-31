@@ -4,6 +4,7 @@ import { useIntl } from 'react-intl';
 import { useRouter } from 'next/router';
 import { useForm, FormProvider } from 'react-hook-form';
 import { useMutation } from '@apollo/client';
+import toast from 'react-hot-toast';
 import { ICauseCreation, ICauseEdition } from '@/apollo/types/types';
 import { CreateCauseHeader } from '@/components/views/causes/create/CreateCauseHeader';
 import { CauseInformationStep } from '@/components/views/causes/create/CauseInformationStep';
@@ -187,6 +188,11 @@ const CreateCause: FC<ICreateCauseProps> = () => {
 			clearStorage();
 
 			await Promise.resolve(); // allow event loop to cycle
+
+			// Remove all toast notifications
+			if (cause.data.createCause.slug) {
+				toast.remove();
+			}
 
 			router.push(slugToSuccessCauseView(cause.data.createCause.slug));
 		} catch (error) {

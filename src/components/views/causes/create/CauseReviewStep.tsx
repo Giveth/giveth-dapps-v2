@@ -282,6 +282,7 @@ export const CauseReviewStep = ({
 
 			handleLaunchComplete();
 		} catch (error) {
+			toast.remove(); // Remove all toast notifications
 			console.error('Transfer failed:', error);
 			setLunchStatus('transfer_failed');
 			setValue(
