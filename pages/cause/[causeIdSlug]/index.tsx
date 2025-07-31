@@ -33,7 +33,7 @@ export async function getServerSideProps(props: {
 
 		const { data } = await client.query({
 			query: FETCH_CAUSE_BY_SLUG_SINGLE_CAUSE,
-			variables: { slug },
+			variables: { slug, userRemoved: false },
 			fetchPolicy: 'no-cache',
 		});
 
