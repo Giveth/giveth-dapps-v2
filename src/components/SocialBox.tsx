@@ -56,7 +56,7 @@ const SocialBox: FC<ISocialBox> = props => {
 		: shareContentCreatorCause(
 				contentType as EContentTypeCause,
 				ESocialType.twitter,
-				props.numberOfProjects ?? cause?.projects?.length ?? 0,
+				props.numberOfProjects ?? cause?.causeProjects?.length ?? 0,
 			);
 
 	const shareTitleFacebookAndLinkedin = project
@@ -64,7 +64,7 @@ const SocialBox: FC<ISocialBox> = props => {
 		: shareContentCreatorCause(
 				contentType as EContentTypeCause,
 				ESocialType.facebook,
-				props.numberOfProjects ?? cause?.projects?.length ?? 0,
+				props.numberOfProjects ?? cause?.causeProjects?.length ?? 0,
 			);
 
 	return (
