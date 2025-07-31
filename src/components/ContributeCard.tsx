@@ -5,7 +5,7 @@ import { formatUSD } from '@/lib/helpers';
 import { ContributeCardBox, ContributeCardTitles } from './ContributeCard.sc';
 import { IUserProfileView } from './views/userProfile/UserProfile.view';
 import { useProfileContext } from '@/context/profile.context';
-import { formatWeiHelper } from '@/helpers/number';
+import { formatWeiHelper, limitFraction } from '@/helpers/number';
 
 interface IContributeCard {
 	data1: { label: string; value: string | number };
@@ -106,7 +106,7 @@ export const CausesContributeCard: FC<IUserProfileView> = () => {
 			}}
 			data3={{
 				label: formatMessage({ id: 'label.cause.total_distributed' }),
-				value: `$${formatUSD(user.totalCausesDistributed || 0)}`,
+				value: `${limitFraction(user.totalCausesDistributed?.toString() || '0', 2)} GIV`,
 			}}
 		/>
 	);

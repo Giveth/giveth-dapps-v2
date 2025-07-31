@@ -2,6 +2,7 @@ import {
 	H2,
 	IconFund24,
 	IconPublish16,
+	IconDonation24,
 	P,
 	Subline,
 	neutralColors,
@@ -21,7 +22,7 @@ import ClaimRecurringDonationModal from './ClaimRecurringDonationModal';
 import ProjectStatusBadge from './ProjectStatusBadge';
 import ProjectQFStatus from './ProjectQFStatus';
 import ProjectListedStatus from './ProjectListedStatus';
-import { formatDonation } from '@/helpers/number';
+import { formatDonation, limitFraction } from '@/helpers/number';
 import VerificationBadge from '@/components/VerificationBadge';
 import DeleteProjectModal from './DeleteProjectModal';
 import ProjectVerificationStatus from './ProjectVerificationStatus';
@@ -209,17 +210,17 @@ const ProjectItem: FC<IProjectItem> = props => {
 						<Flex $justifyContent='space-between'>
 							<P>
 								<Flex $alignItems='center' gap='6px'>
-									<IconFund24 />
+									<IconDonation24 />
 									{formatMessage({
 										id: 'label.cause.total_distributed',
 									})}
 								</Flex>
 							</P>
-							{formatDonation(
-								project.totalDistributed || 0,
-								'$',
-								locale,
-							)}
+							{limitFraction(
+								project.totalDistributed?.toString() || '0',
+								2,
+							)}{' '}
+							GIV
 						</Flex>
 					)}
 				</ProjectStatusesContainer>

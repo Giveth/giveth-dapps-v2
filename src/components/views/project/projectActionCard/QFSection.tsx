@@ -28,7 +28,7 @@ import {
 import links from '@/lib/constants/links';
 import { IconWithTooltip } from '@/components/IconWithToolTip';
 import { TooltipContent } from '@/components/modals/HarvestAll.sc';
-import { formatDonation } from '@/helpers/number';
+import { formatDonation, limitFraction } from '@/helpers/number';
 import ProjectEligibleQFChains from './ProjectEligibleQFChains';
 import { IProject } from '@/apollo/types/types';
 import { ProjectCardUserName } from '@/components/project-card/ProjectCardUserName';
@@ -245,7 +245,11 @@ const QFSection: FC<IQFSectionProps> = ({ projectData }) => {
 							})}
 						</Title>
 						<Amount weight={700}>
-							{formatDonation(totalDistributed || 0, '$', locale)}
+							{limitFraction(
+								totalDistributed?.toString() || '0',
+								2,
+							)}{' '}
+							GIV
 						</Amount>
 						<Description>
 							{formatMessage(
