@@ -70,6 +70,8 @@ const ProjectCard = (props: IProjectCard) => {
 	const { project, className, amountReceived, amountReceivedUsdValue } =
 		props;
 
+	console.log(project);
+
 	const {
 		id,
 		title,
