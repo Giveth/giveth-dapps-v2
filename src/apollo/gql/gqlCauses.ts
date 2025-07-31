@@ -70,105 +70,6 @@ export const CREATE_CAUSE = gql`
 	}
 `;
 
-export const FETCH_CAUSE_BY_SLUG_SINGLE_CAUSE = gql`
-	query ProjectBySlug($slug: String!, $connectedWalletUserId: Int) {
-		projectBySlug(
-			slug: $slug
-			connectedWalletUserId: $connectedWalletUserId
-		) {
-			__typename
-			id
-			title
-			image
-			slug
-			verified
-			isGivbackEligible
-			totalDonations
-			description
-			addresses {
-				address
-				isRecipient
-				networkId
-				chainType
-			}
-			socialMedia {
-				type
-				link
-			}
-			totalProjectUpdates
-			creationDate
-			reaction {
-				id
-				userId
-			}
-			categories {
-				name
-				value
-				mainCategory {
-					title
-				}
-			}
-			adminUser {
-				id
-				name
-				walletAddress
-				avatar
-			}
-			listed
-			status {
-				id
-				name
-			}
-			organization {
-				name
-				label
-				supportCustomTokens
-			}
-			verificationFormStatus
-			projectPower {
-				powerRank
-				totalPower
-				round
-			}
-			projectFuturePower {
-				totalPower
-				powerRank
-				round
-			}
-			givbackFactor
-			sumDonationValueUsdForActiveQfRound
-			countUniqueDonorsForActiveQfRound
-			countUniqueDonors
-			estimatedMatching {
-				projectDonationsSqrtRootSum
-				allProjectsSum
-				matchingPool
-			}
-			qfRounds {
-				id
-				name
-				isActive
-				beginDate
-				endDate
-				eligibleNetworks
-				maximumReward
-				allocatedTokenSymbol
-				allocatedFundUSDPreferred
-				allocatedFundUSD
-			}
-			campaigns {
-				id
-				title
-			}
-			anchorContracts {
-				address
-				isActive
-				networkId
-			}
-		}
-	}
-`;
-
 export const UPDATE_CAUSE = gql`
 	mutation UpdateCause(
 		$projectId: Float!
@@ -207,6 +108,327 @@ export const UPDATE_CAUSE = gql`
 			status {
 				id
 				name
+			}
+		}
+	}
+`;
+
+export const PROJECT_CORE_FIELDS_CAUSES_ALL = gql`
+	fragment ProjectCoreFields on Project {
+		__typename
+		id
+		title
+		slug
+		verified
+		isGivbackEligible
+		totalDonations
+		projectType
+		qfRounds {
+			id
+			name
+			isActive
+			beginDate
+			endDate
+		}
+	}
+`;
+
+export const PROJECT_CARD_FIELDS_CAUSES = gql`
+	${PROJECT_CORE_FIELDS_CAUSES_ALL}
+	fragment ProjectCardFields on Project {
+		...ProjectCoreFields
+		descriptionSummary
+		categories {
+			name
+			value
+			mainCategory {
+				title
+			}
+		}
+		verified
+		adminUser {
+			name
+			walletAddress
+		}
+		organization {
+			label
+		}
+		addresses {
+			address
+			memo
+			isRecipient
+			networkId
+			chainType
+		}
+		status {
+			name
+		}
+		sumDonationValueUsdForActiveQfRound
+		countUniqueDonorsForActiveQfRound
+		countUniqueDonors
+		estimatedMatching {
+			projectDonationsSqrtRootSum
+			allProjectsSum
+			matchingPool
+		}
+	}
+`;
+
+export const FETCH_ALL_PROJECTS_CAUSES = gql`
+	${PROJECT_CARD_FIELDS_CAUSES}
+	query FetchAllProjects(
+		$limit: Int
+		$skip: Int
+		$sortingBy: SortingField
+		$filters: [FilterField!]
+		$searchTerm: String
+		$category: String
+		$mainCategory: String
+		$campaignSlug: String
+		$connectedWalletUserId: Int
+		$qfRoundSlug: String
+	) {
+		allProjects(
+			limit: $limit
+			skip: $skip
+			sortingBy: $sortingBy
+			filters: $filters
+			searchTerm: $searchTerm
+			category: $category
+			mainCategory: $mainCategory
+			campaignSlug: $campaignSlug
+			connectedWalletUserId: $connectedWalletUserId
+			qfRoundSlug: $qfRoundSlug
+		) {
+			projects {
+				...ProjectCardFields
+			}
+			totalCount
+		}
+	}
+`;
+
+export const FETCH_CAUSE_BY_ID_EDIT = gql`
+	query ProjectById($id: Float!) {
+		projectById(id: $id) {
+			id
+			title
+			image
+			description
+			causeProjects {
+				id
+				projectId
+				isIncluded
+				userRemoved
+				project {
+					id
+					title
+					verified
+					categories {
+						name
+						value
+						mainCategory {
+							title
+						}
+					}
+					addresses {
+						id
+						networkId
+					}
+					status {
+						name
+					}
+				}
+			}
+			categories {
+				name
+				value
+				mainCategory {
+					title
+				}
+			}
+			adminUser {
+				walletAddress
+			}
+			status {
+				name
+			}
+			slug
+		}
+	}
+`;
+
+export const FETCH_USER_CAUSES = gql`
+	${PROJECT_CARD_FIELDS_CAUSES}
+	query FetchUserProjects(
+		$take: Float
+		$skip: Float
+		$userId: Int!
+		$orderBy: OrderField!
+		$direction: OrderDirection!
+		$projectType: String!
+	) {
+		projectsByUserId(
+			take: $take
+			skip: $skip
+			userId: $userId
+			orderBy: { field: $orderBy, direction: $direction }
+			projectType: $projectType
+		) {
+			projects {
+				...ProjectCardFields
+				creationDate
+				listed
+				activeProjectsCount
+				status {
+					id
+					name
+				}
+				totalRaised
+				totalDistributed
+				addresses {
+					address
+					memo
+					isRecipient
+					networkId
+					chainType
+				}
+				causeProjects {
+					id
+					projectId
+					isIncluded
+					project {
+						id
+						verified
+						status {
+							name
+						}
+						addresses {
+							id
+							networkId
+						}
+					}
+				}
+			}
+			totalCount
+		}
+	}
+`;
+
+export const FETCH_CAUSE_BY_SLUG_SINGLE_CAUSE = gql`
+	query ProjectBySlug(
+		$slug: String!
+		$connectedWalletUserId: Int
+		$userRemoved: Boolean
+	) {
+		projectBySlug(
+			slug: $slug
+			connectedWalletUserId: $connectedWalletUserId
+			userRemoved: $userRemoved
+		) {
+			__typename
+			id
+			title
+			image
+			slug
+			verified
+			isGivbackEligible
+			totalDonations
+			description
+			projectType
+			totalRaised
+			totalDistributed
+			activeProjectsCount
+			causeProjects {
+				id
+				amountReceived
+				amountReceivedUsdValue
+				project {
+					id
+					title
+					image
+					slug
+					verified
+					isGivbackEligible
+					totalDonations
+					description
+					projectType
+					descriptionSummary
+					latestUpdateCreationDate
+					adminUser {
+						id
+						name
+						walletAddress
+						avatar
+					}
+					organization {
+						name
+						label
+						supportCustomTokens
+					}
+				}
+			}
+			addresses {
+				address
+				isRecipient
+				networkId
+				chainType
+			}
+			totalProjectUpdates
+			creationDate
+			categories {
+				name
+				value
+				mainCategory {
+					title
+				}
+			}
+			adminUser {
+				id
+				name
+				walletAddress
+				avatar
+			}
+			listed
+			status {
+				id
+				name
+			}
+			verificationFormStatus
+			projectPower {
+				powerRank
+				totalPower
+				round
+			}
+			projectFuturePower {
+				totalPower
+				powerRank
+				round
+			}
+			givbackFactor
+			sumDonationValueUsdForActiveQfRound
+			countUniqueDonorsForActiveQfRound
+			countUniqueDonors
+			estimatedMatching {
+				projectDonationsSqrtRootSum
+				allProjectsSum
+				matchingPool
+			}
+			qfRounds {
+				id
+				name
+				isActive
+				beginDate
+				endDate
+				eligibleNetworks
+				maximumReward
+				allocatedTokenSymbol
+				allocatedFundUSDPreferred
+				allocatedFundUSD
+			}
+			campaigns {
+				id
+				title
 			}
 		}
 	}

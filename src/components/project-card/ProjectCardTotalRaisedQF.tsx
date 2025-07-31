@@ -16,7 +16,7 @@ export const ProjectCardTotalRaisedQF = ({
 	sumDonationValueUsdForActiveQfRound: number;
 	countUniqueDonors: number;
 	isCause: boolean;
-	projectsCount: number;
+	projectsCount?: number;
 }) => {
 	const { formatMessage, locale } = useIntl();
 	return (

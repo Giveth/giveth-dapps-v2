@@ -34,9 +34,11 @@ import {
 	DonateModalPriorityValues,
 	useDonateData,
 } from '@/context/donate.context';
+import { slugToProjectDonateStellar } from '@/lib/routeCreators';
 
 interface IDonateWrongNetwork extends IModal {
 	acceptedChains?: INetworkIdWithChain[];
+	isCause?: boolean;
 }
 
 const networks = [
@@ -54,7 +56,7 @@ const networks = [
 ];
 
 export const DonateWrongNetwork: FC<IDonateWrongNetwork> = props => {
-	const { setShowModal, acceptedChains } = props;
+	const { setShowModal, acceptedChains, isCause } = props;
 	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
 	const { formatMessage } = useIntl();
 	const theme = useAppSelector(state => state.general.theme);
@@ -97,6 +99,10 @@ export const DonateWrongNetwork: FC<IDonateWrongNetwork> = props => {
 		}
 	}, [networkId, acceptedChains]);
 
+	const returnLink = isCause
+		? `${Routes.Cause}/${router.query?.causeIdSlug}`
+		: `${Routes.Project}/${slug}`;
+
 	return (
 		<Modal
 			closeModal={closeModal}
@@ -113,7 +119,9 @@ export const DonateWrongNetwork: FC<IDonateWrongNetwork> = props => {
 						{
 							id: isSafeEnv
 								? 'label.this_projet_doesnt_receive_donations_on'
-								: 'label.sorry_this_projet_doesnt_support_your_current_net',
+								: isCause
+									? 'label.cause.sorry_this_cause_doesnt_support_your_current_net'
+									: 'label.sorry_this_projet_doesnt_support_your_current_net',
 						},
 						{ chainName },
 					)}
@@ -163,6 +171,15 @@ export const DonateWrongNetwork: FC<IDonateWrongNetwork> = props => {
 												closeModal();
 											} else if (
 												network.chainType ===
+												ChainType.STELLAR
+											) {
+												if (!slug) return;
+												window.location.href =
+													slugToProjectDonateStellar(
+														slug as string,
+													);
+											} else if (
+												network.chainType ===
 													ChainType.EVM &&
 												walletChainType ===
 													ChainType.SOLANA
@@ -204,12 +221,14 @@ export const DonateWrongNetwork: FC<IDonateWrongNetwork> = props => {
 				<CustomHr $margin='0' />
 				<FlexCenter direction='column'>
 					<FooterText>{formatMessage({ id: 'label.or' })}</FooterText>
-					<Link href={`${Routes.Project}/${slug}`}>
+					<Link href={returnLink}>
 						<Flex gap='12px' $alignItems='center'>
 							<IconBackward24 color={brandColors.giv[500]} />
 							<BackButton>
 								{formatMessage({
-									id: 'label.go_back_to_project_details',
+									id: isCause
+										? 'label.cause.go_to_cause_details'
+										: 'label.go_back_to_project_details',
 								})}
 							</BackButton>
 						</Flex>

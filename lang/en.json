@@ -203,7 +203,7 @@
 	"label.before_you_start": "Before you start",
 	"label.best_match": "Best Match",
 	"label.better_communicate_with_the_community": "Communicate with the community.",
-	"label.be_carefull_some_exchanges": "Be careful!  Some exchanges and wallets requires Memo to fund your account. Make sure to put it in the form if your wallet supports a memo.",
+	"label.be_carefull_some_exchanges": "Most personal wallets (like LOBSTR or Exodus) do not require a memo to receive Stellar funds. However, if your Stellar address comes with a memo — for example, from a custodial service or exchange like Binance or Coinbase — you must enter it here to receive funds correctly.",
 	"label.be_specific_about_your_projects_progress": "Be specific about your project's progress and goals and structure your information so it’s easy to read by adding headers and paragraphs.",
 	"label.be_the_first_booster": "Be the first one to boost this project with GIVpower.",
 	"label.be_the_first_to_give": "Be the first to give!",
@@ -287,6 +287,7 @@
 	"label.copied": "Copied!",
 	"label.copy_link": "Copy Link",
 	"label.copy_the_memo_to_use_in_your_app": "Copy the memo to use in your wallet app.",
+	"label.the_recipient_wallet_doesnt_require_a_memo_but_giveth_requires_one": "The recipient wallet doesn’t require a memo, but Giveth requires one to properly detect the donation. This random memo is safe to include.",
 	"label.covenant": "Covenant",
 	"label.created_at": "Created at",
 	"label.create_a_project": "Create a Project",
@@ -1974,5 +1975,12 @@
 	"label.cause.project_cancelled_notice": "Project cancelled. It will no longer receive funds from this Cause.",
 	"label.cause.total_distributed_projects": "Distributed to {count} Projects",
 	"label.cause.user_causes": "{userName}'s Causes",
-	"label.cause.title_invalid": "Your title isn't valid, please only use letters and numbers"
+	"label.cause.title_invalid": "Your title isn't valid, please only use letters and numbers",
+	"label.cause.amount_raised_from_this_cause": "Amount raised from this Cause",
+	"label.cause.sorry_this_cause_doesnt_support_your_current_net": "Sorry, this Cause doesn't support your current network",
+	"label.cause.go_to_cause_details": "Go back to Cause Details",
+	"label.cause.insufficient_giv_for_launch_fee": "Insufficient GIV for launch fee, try a different network or buy GIV using link above",
+	"label.cause.launch_cause_failed": "Launch Cause Failed",
+	"label.transaction_submitted_processing": "Transaction Submitted. Processing...",
+	"label.transaction_successful": "Transaction Successful!"
 }

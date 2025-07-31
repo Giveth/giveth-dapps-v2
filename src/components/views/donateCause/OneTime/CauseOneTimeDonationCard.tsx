@@ -337,8 +337,6 @@ const CauseCryptoDonation: FC<{
 		!!isDonationMatched;
 	const selectTokenDisabled = !isConnected || erc20List?.length === 0;
 
-	console.log({ selectTokenDisabled });
-
 	return (
 		<MainContainer>
 			{shouldRenderModal(DonateModalPriorityValues.ShowNetworkModal) &&
@@ -348,6 +346,7 @@ const CauseCryptoDonation: FC<{
 							setShowChangeNetworkModal(show);
 						}}
 						acceptedChains={acceptedChains}
+						isCause={true}
 					/>
 				)}
 			{showInsufficientModal && (

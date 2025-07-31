@@ -106,6 +106,9 @@ export interface ICauseProject {
 	projectId?: string;
 	project: IProject;
 	isIncluded?: boolean;
+	userRemoved?: boolean;
+	amountReceived?: number;
+	amountReceivedUsdValue?: number;
 }
 
 export enum EProjectsFilter {

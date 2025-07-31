@@ -5,21 +5,25 @@ import styled from 'styled-components';
 import { Caption, FlexCenter, neutralColors } from '@giveth/ui-design-system';
 import { useQuery } from '@tanstack/react-query';
 import { client } from '@/apollo/apolloClient';
-import { FETCH_ALL_PROJECTS_CAUSES } from '@/apollo/gql/gqlProjects';
+import { FETCH_ALL_PROJECTS_CAUSES } from '@/apollo/gql/gqlCauses';
 import { EProjectsFilter, IProject } from '@/apollo/types/types';
 
 import { CauseCreateProjectCard } from '@/components/views/causes/create/CauseCreateProjectCard';
+import Pagination from '@/components/Pagination';
 
 /**
  * Fetch projects from the database
  * @param searchFilters - The search filters
  * @returns The projects
  */
-const fetchProjectsPage = async (searchFilters: {
-	searchTerm: string;
-	selectedMainCategory: string;
-	filters: EProjectsFilter[];
-}) => {
+const fetchProjectsPage = async (
+	searchFilters: {
+		searchTerm: string;
+		selectedMainCategory: string;
+		filters: EProjectsFilter[];
+	},
+	page?: number,
+) => {
 	const filterBy =
 		searchFilters.filters.length > 0
 			? [
@@ -35,8 +39,8 @@ const fetchProjectsPage = async (searchFilters: {
 	const { data: projectsData } = await client.query({
 		query: FETCH_ALL_PROJECTS_CAUSES,
 		variables: {
-			limit: 24,
-			skip: 0,
+			limit: 16,
+			skip: page ? page * 16 : 0,
 			searchTerm: searchFilters.searchTerm,
 			mainCategory: searchFilters.selectedMainCategory,
 			filters: filterBy,
@@ -64,13 +68,14 @@ export const CauseProjectsSearchList = ({
 	const [projects, setProjects] = useState<IProject[]>([]);
 	const { watch, setValue } = useFormContext();
 	const selectedProjects = watch('selectedProjects') || [];
+	const [page, setPage] = useState(0);
 
 	const { formatMessage } = useIntl();
 
 	// GraphQL query for projects with Polygon filter by default
 	const { data, isLoading } = useQuery({
-		queryKey: ['projects', searchFilters],
-		queryFn: () => fetchProjectsPage(searchFilters),
+		queryKey: ['projects', searchFilters, page],
+		queryFn: () => fetchProjectsPage(searchFilters, page),
 	});
 
 	// Update projects when data changes
@@ -79,6 +84,8 @@ export const CauseProjectsSearchList = ({
 			setProjects(data.projects);
 		}
 	}, [data]);
+
+	const itemPerPage = 16;
 
 	return (
 		<>
@@ -97,23 +104,36 @@ export const CauseProjectsSearchList = ({
 					</Caption>
 				</EmptyState>
 			) : (
-				<ProjectsList>
-					{data?.projects.map((project: IProject) => (
-						<CauseCreateProjectCard
-							key={project.id}
-							project={project}
-							onProjectSelect={(updatedProjects: IProject[]) => {
-								setValue('selectedProjects', updatedProjects);
-							}}
-							selectedProjects={selectedProjects}
-							isSelected={selectedProjects.some(
-								(selectedProject: IProject) =>
-									selectedProject.id === project.id,
-							)}
-							showErrorModal={showErrorModal}
-						/>
-					))}
-				</ProjectsList>
+				<>
+					<ProjectsList>
+						{data?.projects.map((project: IProject) => (
+							<CauseCreateProjectCard
+								key={project.id}
+								project={project}
+								onProjectSelect={(
+									updatedProjects: IProject[],
+								) => {
+									setValue(
+										'selectedProjects',
+										updatedProjects,
+									);
+								}}
+								selectedProjects={selectedProjects}
+								isSelected={selectedProjects.some(
+									(selectedProject: IProject) =>
+										selectedProject.id === project.id,
+								)}
+								showErrorModal={showErrorModal}
+							/>
+						))}
+					</ProjectsList>
+					<Pagination
+						currentPage={page}
+						totalCount={data?.totalCount ?? 0}
+						setPage={setPage}
+						itemPerPage={itemPerPage}
+					/>
+				</>
 			)}
 		</>
 	);

@@ -8,7 +8,7 @@ export const CauseProjectsTab = ({
 }: {
 	causeProjects: ICauseProject[];
 }) => {
-	// list proejct cards
+	// List project cards
 	return (
 		<Wrapper>
 			<ProjectsWrapper>
@@ -17,6 +17,10 @@ export const CauseProjectsTab = ({
 						<ProjectCard
 							key={causeProject.id}
 							project={causeProject.project}
+							amountReceived={causeProject.amountReceived}
+							amountReceivedUsdValue={
+								causeProject.amountReceivedUsdValue
+							}
 						/>
 					))}
 				</ProjectsContainer>

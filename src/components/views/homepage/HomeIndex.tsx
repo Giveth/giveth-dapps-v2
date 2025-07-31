@@ -16,8 +16,6 @@ import { useAppSelector } from '@/features/hooks';
 import { client } from '@/apollo/apolloClient';
 import { FETCH_CAMPAIGNS_AND_FEATURED_PROJECTS } from '@/apollo/gql/gqlHomePage';
 import { LatestUpdatesBlock } from '@/components/views/homepage/latestUpdates/LatestUpdatesBlock';
-import StorageLabel from '@/lib/localStorage';
-import TorusBanner from '@/components/views/homepage/TorusBanner';
 import { IHomeRoute } from '../../../../pages';
 
 const HomeIndex: FC<IHomeRoute> = props => {
@@ -28,7 +26,6 @@ const HomeIndex: FC<IHomeRoute> = props => {
 		...rest
 	} = props;
 	const [campaigns, setCampaigns] = useState(campaignsFromServer);
-	const [showTorusBanner, setShowTorusBanner] = useState(false);
 	const [featuredProjects, setFeaturedProjects] = useState(
 		featuredProjectsFromServer,
 	);
@@ -57,15 +54,8 @@ const HomeIndex: FC<IHomeRoute> = props => {
 		fetchFeaturedUpdateProjects();
 	}, [userData?.id]);
 
-	useEffect(() => {
-		setShowTorusBanner(
-			!localStorage.getItem(StorageLabel.TORUS_BANNER_VIEWED),
-		);
-	}, []);
-
 	return (
 		<Wrapper>
-			{showTorusBanner && <TorusBanner />}
 			<IntroBlock />
 			<Separator />
 			<Separator />

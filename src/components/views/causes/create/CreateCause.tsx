@@ -89,6 +89,7 @@ const CreateCause: FC<ICreateCauseProps> = () => {
 			[EInputs.transactionHash]: '',
 			[EInputs.transactionStatus]: '',
 		});
+		localStorage.removeItem(StorageLabel.CREATE_CAUSE_FORM);
 	};
 
 	// Validate form data
@@ -184,6 +185,8 @@ const CreateCause: FC<ICreateCauseProps> = () => {
 			const cause = await addCauseMutation({ variables: causeData });
 
 			clearStorage();
+
+			await Promise.resolve(); // allow event loop to cycle
 
 			router.push(slugToSuccessCauseView(cause.data.createCause.slug));
 		} catch (error) {
