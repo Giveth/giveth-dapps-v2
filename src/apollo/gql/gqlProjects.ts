@@ -245,30 +245,6 @@ export const FETCH_PROJECT_BY_SLUG_SINGLE_PROJECT = gql`
 			totalRaised
 			totalDistributed
 			activeProjectsCount
-			causeProjects {
-				id
-				amountReceived
-				amountReceivedUsdValue
-				userRemoved
-				project {
-					id
-					title
-					image
-					slug
-					verified
-					isGivbackEligible
-					totalDonations
-					description
-					projectType
-					descriptionSummary
-					adminUser {
-						id
-						name
-						walletAddress
-						avatar
-					}
-				}
-			}
 			addresses {
 				address
 				isRecipient
