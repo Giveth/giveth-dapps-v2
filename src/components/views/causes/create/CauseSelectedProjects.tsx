@@ -115,8 +115,7 @@ export const CauseSelectedProjects = () => {
 							<ProjectInfo>
 								<ProjectTitle>{project.title}</ProjectTitle>
 								<ProjectCategory>
-									{project.categories?.[0]?.mainCategory
-										?.title || 'Uncategorized'}
+									{project.adminUser?.name}
 								</ProjectCategory>
 							</ProjectInfo>
 							<RemoveButton
