@@ -1,4 +1,4 @@
-import { FC, useState } from 'react';
+import { FC } from 'react';
 import styled from 'styled-components';
 import {
 	brandColors,
@@ -6,7 +6,6 @@ import {
 	H6,
 	IconGIVBack16,
 	IconVerifiedBadge16,
-	IconExternalLink16,
 	neutralColors,
 	P,
 	semanticColors,
@@ -67,8 +66,6 @@ export const CauseCreateProjectCard: FC<{
 
 	const projectLink = slugToProjectView(slug);
 
-	const [isHover, setIsHover] = useState(false);
-
 	// Handle checkbox change
 	const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		e.stopPropagation();
@@ -94,19 +91,19 @@ export const CauseCreateProjectCard: FC<{
 	};
 
 	return (
-		<Wrapper
-			onMouseEnter={() => {
-				setIsHover(true);
-			}}
-			onMouseLeave={() => {
-				setIsHover(false);
-			}}
-			$showOptions={showOptions}
-		>
+		<Wrapper $showOptions={showOptions}>
 			<CardBody $isOtherOrganization={isForeignOrg}>
 				<TitleWrapper>
 					<TitleRow>
-						<Title weight={700}>{title}</Title>
+						<Title weight={700}>
+							<Link
+								href={projectLink}
+								target='_blank'
+								rel='noopener noreferrer'
+							>
+								{title}
+							</Link>
+						</Title>
 						{showOptions && (
 							<ProjectCheckbox
 								type='checkbox'
@@ -117,13 +114,22 @@ export const CauseCreateProjectCard: FC<{
 						)}
 					</TitleRow>
 				</TitleWrapper>
+
 				<ProjectCardUserName
 					name={name}
 					adminUser={adminUser}
 					slug={slug}
 					isForeignOrg={isForeignOrg}
 				/>
-				<Description>{descriptionSummary}</Description>
+				<Description>
+					<Link
+						href={projectLink}
+						target='_blank'
+						rel='noopener noreferrer'
+					>
+						{descriptionSummary}
+					</Link>
+				</Description>
 				{showOptions && (
 					<PaddedRow $justifyContent='space-between'>
 						{!activeStartedRound && (
@@ -189,22 +195,6 @@ export const CauseCreateProjectCard: FC<{
 					</>
 				)}
 			</CardBody>
-			{isHover && showOptions && (
-				<CardBodyHover $isHover={isHover}>
-					<Link
-						href={projectLink}
-						target='_blank'
-						rel='noopener noreferrer'
-					>
-						<Flex $alignItems='center' gap='8px'>
-							{formatMessage({
-								id: 'label.learn_more',
-							})}
-							<IconExternalLink16 />
-						</Flex>
-					</Link>
-				</CardBodyHover>
-			)}
 		</Wrapper>
 	);
 };
@@ -248,10 +238,13 @@ const CardBody = styled.div<ICardBody>`
 
 	transition: all 0.5s ease;
 
+	cursor: default;
+	pointer-events: auto;
+
 	a {
+		cursor: pointer;
 		pointer-events: none;
 	}
-
 	span {
 		color: ${neutralColors.gray[800]};
 	}
@@ -275,6 +268,11 @@ const Title = styled(H6)`
 	flex: 1;
 	&:hover {
 		color: ${brandColors.pinky[500]};
+	}
+
+	a {
+		cursor: pointer;
+		pointer-events: auto;
 	}
 `;
 
@@ -324,6 +322,11 @@ const Description = styled(P)`
 	overflow: hidden;
 	color: ${neutralColors.gray[800]};
 	margin-bottom: 24px;
+
+	a {
+		cursor: pointer;
+		pointer-events: auto;
+	}
 `;
 
 interface IPaddedRowProps {
@@ -358,46 +361,4 @@ const QFBadge = styled(Subline)`
 	border-radius: 16px;
 	display: flex;
 	align-items: center;
-`;
-interface ICardBodyHoverProps {
-	$isHover?: boolean;
-}
-
-const CardBodyHover = styled.div<ICardBodyHoverProps>`
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	padding: 32px 16px;
-	margin-top: 10px;
-	margin-left: ${SIDE_PADDING};
-	margin-right: ${SIDE_PADDING};
-	border-top: 1px solid ${neutralColors.gray[300]};
-
-	transition: all 0.5s ease;
-
-	animation: slideIn 0.3s ease;
-
-	@keyframes slideIn {
-		from {
-			opacity: 0;
-			transform: translateY(10px);
-		}
-		to {
-			opacity: 1;
-			transform: translateY(0);
-		}
-	}
-
-	a {
-		transition: color 0.3s ease;
-		text-decoration: none;
-		color: ${brandColors.giv[300]};
-		font-size: 12px;
-		font-weight: 700;
-		text-transform: uppercase;
-
-		&:hover {
-			color: ${brandColors.giv[100]};
-		}
-	}
 `;
