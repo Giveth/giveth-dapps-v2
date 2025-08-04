@@ -9,6 +9,7 @@ export const FETCH_LAST_SITEMAP_URL = gql`
 				sitemapProjectsURL
 				sitemapUsersURL
 				sitemapQFRoundsURL
+				sitemapCausesURL
 			}
 		}
 	}
