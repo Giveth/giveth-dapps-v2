@@ -196,6 +196,7 @@ const CreateCause: FC<ICreateCauseProps> = () => {
 
 			router.push(slugToSuccessCauseView(cause.data.createCause.slug));
 		} catch (error) {
+			toast.remove();
 			console.error('Error creating cause:', error);
 			showToastError(
 				formatMessage({ id: 'label.cause.failed_to_create_cause' }),
