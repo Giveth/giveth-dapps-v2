@@ -99,6 +99,8 @@ export interface IProject {
 	activeProjectsCount?: number;
 	totalRaised?: number;
 	totalDistributed?: number;
+	ownerTotalEarned?: number;
+	ownerTotalEarnedUsdValue?: number;
 }
 
 export interface ICauseProject {

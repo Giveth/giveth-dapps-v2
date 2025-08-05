@@ -286,6 +286,8 @@ export const FETCH_USER_CAUSES = gql`
 				}
 				totalRaised
 				totalDistributed
+				ownerTotalEarned
+				ownerTotalEarnedUsdValue
 				addresses {
 					address
 					memo
