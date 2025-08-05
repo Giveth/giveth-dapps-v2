@@ -806,7 +806,7 @@ const config: EnvConfig = {
 				coingeckoId: 'giveth',
 				decimals: 18,
 				destinationAddress:
-					'0x4D9339dd97db55e3B9bCBE65dE39fF9c04d1C2cd',
+					'0xd10BAC02a02747cB293972f99981F4Faf78E1626',
 			},
 			{
 				network: POLYGON_NETWORK_NUMBER,
@@ -817,7 +817,7 @@ const config: EnvConfig = {
 				coingeckoId: 'giveth',
 				decimals: 18,
 				destinationAddress:
-					'0x4D9339dd97db55e3B9bCBE65dE39fF9c04d1C2cd',
+					'0xd10BAC02a02747cB293972f99981F4Faf78E1626',
 			},
 			{
 				network: OPTIMISM_NETWORK_NUMBER,
@@ -828,7 +828,7 @@ const config: EnvConfig = {
 				coingeckoId: 'giveth',
 				decimals: 18,
 				destinationAddress:
-					'0x4D9339dd97db55e3B9bCBE65dE39fF9c04d1C2cd',
+					'0xd10BAC02a02747cB293972f99981F4Faf78E1626',
 			},
 		],
 		acceptedNetworks: [
