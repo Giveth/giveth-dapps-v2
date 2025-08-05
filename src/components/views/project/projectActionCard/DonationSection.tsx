@@ -16,11 +16,12 @@ import styled from 'styled-components';
 import { type FC } from 'react';
 import useMediaQuery from '@/hooks/useMediaQuery';
 import { device } from '@/lib/constants/constants';
-import { formatDonation } from '@/helpers/number';
+import { formatDonation, limitFraction } from '@/helpers/number';
 import { IProject } from '@/apollo/types/types';
 import { useDonateData } from '@/context/donate.context';
 import { ORGANIZATION } from '@/lib/constants/organizations';
 import links from '@/lib/constants/links';
+import { EProjectType } from '@/apollo/types/gqlEnums';
 
 interface IDonateSectionProps {
 	projectData?: IProject;
@@ -28,7 +29,8 @@ interface IDonateSectionProps {
 
 export const DonateSection: FC<IDonateSectionProps> = ({ projectData }) => {
 	const { formatMessage, locale } = useIntl();
-	const { totalDonations } = projectData || {};
+	const { totalDonations, totalDistributed, activeProjectsCount } =
+		projectData || {};
 	const isMobile = !useMediaQuery(device.tablet);
 	const { project } = useDonateData();
 
@@ -69,35 +71,70 @@ export const DonateSection: FC<IDonateSectionProps> = ({ projectData }) => {
 					</NoFund>
 				</DonateInfo>
 			)}
-			{project?.organization?.label === ORGANIZATION.endaoment ? null : (
-				<DonateDescription $flexDirection='column' gap='8px'>
-					<B>
-						{formatMessage({
-							id: 'component.donation_section.100_to_the_project',
-						})}
-					</B>
-					<P>
-						{formatMessage({
-							id: 'component.donation_section.desc',
-						})}
-					</P>
-					<a
-						href={links.ZERO_FEES}
-						target='_blank'
-						referrerPolicy='no-referrer'
-						rel='noreferrer'
-					>
-						<LearnLink $alignItems='center' gap='2px'>
-							<Subline>
-								{formatMessage({
-									id: 'component.donation_section.learn_zero_fee',
-								})}
-							</Subline>
-							<IconChevronRight16 />
-						</LearnLink>
-					</a>
-				</DonateDescription>
-			)}
+			{totalDistributed !== undefined &&
+				totalDonations !== 0 &&
+				projectData?.projectType === EProjectType.CAUSE && (
+					<DonateInfoContributed>
+						{isMobile && <br />}
+						<Title>
+							{formatMessage({
+								id: 'label.cause.total_distributed',
+							})}
+						</Title>
+						<Amount weight={700}>
+							{limitFraction(
+								totalDistributed?.toString() || '0',
+								2,
+							)}{' '}
+							GIV
+						</Amount>
+						<Description>
+							{formatMessage(
+								{
+									id: 'label.cause.total_distributed_projects',
+								},
+								{
+									count: (
+										<Caption $medium>
+											{activeProjectsCount || 0}
+										</Caption>
+									),
+								},
+							)}
+						</Description>
+					</DonateInfoContributed>
+				)}
+			{projectData?.projectType !== EProjectType.CAUSE &&
+				(project?.organization?.label ===
+				ORGANIZATION.endaoment ? null : (
+					<DonateDescription $flexDirection='column' gap='8px'>
+						<B>
+							{formatMessage({
+								id: 'component.donation_section.100_to_the_project',
+							})}
+						</B>
+						<P>
+							{formatMessage({
+								id: 'component.donation_section.desc',
+							})}
+						</P>
+						<a
+							href={links.ZERO_FEES}
+							target='_blank'
+							referrerPolicy='no-referrer'
+							rel='noreferrer'
+						>
+							<LearnLink $alignItems='center' gap='2px'>
+								<Subline>
+									{formatMessage({
+										id: 'component.donation_section.learn_zero_fee',
+									})}
+								</Subline>
+								<IconChevronRight16 />
+							</LearnLink>
+						</a>
+					</DonateDescription>
+				))}
 		</DonationSectionWrapper>
 	);
 };
@@ -137,6 +174,10 @@ const DonationSectionWrapper = styled(Flex)`
 
 const DonateInfo = styled.div`
 	height: 130px;
+`;
+
+const DonateInfoContributed = styled(DonateInfo)`
+	height: auto;
 `;
 
 const NoFund = styled(H4)`

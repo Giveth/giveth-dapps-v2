@@ -238,6 +238,28 @@ export interface EnvConfig {
 	RARIBLE_ADDRESS: string;
 	SOLANA_CONFIG: NonEVMNetworkConfig;
 	STELLAR_CONFIG: NonEVMNetworkConfig;
+	CAUSES_CONFIG: {
+		acceptedNetworks: number[];
+		minSelectedProjects: number;
+		maxSelectedProjects: number;
+		launchFee: number;
+		launchNetworks: {
+			network: number;
+			name: string;
+			token: string;
+			tokenAddress: Address;
+			symbol: string;
+			coingeckoId?: string;
+			decimals: number;
+			destinationAddress: Address;
+		}[];
+		recipientToken: {
+			network: number;
+			address: Address;
+			symbol: string;
+			decimals: number;
+		};
+	};
 }
 
 export interface GlobalConfig extends EnvConfig {

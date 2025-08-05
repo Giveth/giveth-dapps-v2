@@ -31,6 +31,9 @@ export const GET_USER_BY_ADDRESS = gql`
 			passportScore
 			passportStamps
 			activeQFMBDScore
+			ownedCausesCount
+			totalCausesDistributed
+			totalCausesRaised
 		}
 	}
 `;
@@ -43,12 +46,14 @@ export const FETCH_USER_PROJECTS = gql`
 		$userId: Int!
 		$orderBy: OrderField!
 		$direction: OrderDirection!
+		$projectType: String!
 	) {
 		projectsByUserId(
 			take: $take
 			skip: $skip
 			userId: $userId
 			orderBy: { field: $orderBy, direction: $direction }
+			projectType: $projectType
 		) {
 			projects {
 				...ProjectCardFields
@@ -58,6 +63,8 @@ export const FETCH_USER_PROJECTS = gql`
 					id
 					name
 				}
+				totalRaised
+				totalDistributed
 				addresses {
 					address
 					memo

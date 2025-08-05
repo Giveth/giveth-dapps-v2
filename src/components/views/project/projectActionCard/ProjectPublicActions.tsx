@@ -15,10 +15,11 @@ import { captureException } from '@sentry/nextjs';
 import { useIntl } from 'react-intl';
 import Link from 'next/link';
 import { useWeb3Modal } from '@web3modal/wagmi/react';
+import { EProjectType } from '@/apollo/types/gqlEnums';
 import useDetectDevice from '@/hooks/useDetectDevice';
 import ShareModal from '@/components/modals/ShareModal';
 import ShareLikeBadge from '@/components/badges/ShareLikeBadge';
-import { EContentType } from '@/lib/constants/shareContent';
+import { EContentType, EContentTypeCause } from '@/lib/constants/shareContent';
 import { useProjectContext } from '@/context/project.context';
 import { useAppSelector } from '@/features/hooks';
 import { isSSRMode, showToastError } from '@/lib/helpers';
@@ -28,6 +29,7 @@ import { bookmarkProject, unBookmarkProject } from '@/lib/reaction';
 import { FETCH_PROJECT_REACTION_BY_ID } from '@/apollo/gql/gqlProjects';
 import { client } from '@/apollo/apolloClient';
 import {
+	slugToCauseDonate,
 	slugToProjectDonate,
 	slugToProjectDonateStellar,
 } from '@/lib/routeCreators';
@@ -38,7 +40,7 @@ import { getActiveRound } from '@/helpers/qf';
 
 export const ProjectPublicActions = () => {
 	const [showModal, setShowShareModal] = useState<boolean>(false);
-	const { projectData, isActive } = useProjectContext();
+	const { projectData, isActive, isCause } = useProjectContext();
 	const project = projectData!;
 	const { slug, id: projectId } = project;
 	const [reaction, setReaction] = useState(project.reaction);
@@ -53,6 +55,11 @@ export const ProjectPublicActions = () => {
 	const { open: openConnectModal } = useWeb3Modal();
 	const { activeStartedRound } = getActiveRound(projectData?.qfRounds);
 	const alreadyDonated = useAlreadyDonatedToProject(projectData);
+
+	// Check if the project has only one address and it is a Stellar address
+	const isOnlyStellar =
+		project?.addresses?.length === 1 &&
+		project?.addresses[0]?.chainType === 'STELLAR';
 
 	const isStellarOnlyRound =
 		activeStartedRound?.eligibleNetworks?.length === 1 &&
@@ -147,7 +154,11 @@ export const ProjectPublicActions = () => {
 					isActive
 						? isStellarOnlyRound
 							? slugToProjectDonateStellar(slug || '')
-							: slugToProjectDonate(slug || '')
+							: isCause
+								? slugToCauseDonate(slug || '')
+								: isOnlyStellar
+									? slugToProjectDonateStellar(slug || '')
+									: slugToProjectDonate(slug || '')
 						: '#'
 				}
 				onClick={e => !isActive && e.preventDefault()}
@@ -177,7 +188,13 @@ export const ProjectPublicActions = () => {
 			</BadgeWrapper>
 			{showModal && slug && (
 				<ShareModal
-					contentType={EContentType.thisProject}
+					contentType={
+						project.projectType === EProjectType.CAUSE
+							? EContentTypeCause.detailsPage
+							: EContentType.thisProject
+					}
+					isCause={project.projectType === EProjectType.CAUSE}
+					numberOfProjects={project.causeProjects?.length || 0}
 					setShowModal={setShowShareModal}
 					projectHref={slug}
 				/>

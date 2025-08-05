@@ -31,7 +31,7 @@ import SortIcon from '@/components/SortIcon';
 import { IPowerBoosting } from '@/apollo/types/types';
 import { InputSuffix } from '@/components/styled-components/Input';
 import { DeletePowerBoostModal } from '@/components/modals/Boost/DeletePowerBoostModal';
-import { slugToProjectView } from '@/lib/routeCreators';
+import { slugToCauseView, slugToProjectView } from '@/lib/routeCreators';
 import { ApprovePowerBoostModal } from '@/components/modals/Boost/ApprovePowerBoostModal';
 import { IconWithTooltip } from '@/components/IconWithToolTip';
 import { mediaQueries } from '@/lib/constants/constants';
@@ -39,6 +39,7 @@ import {
 	IBoostedOrder,
 	EPowerBoostingOrder,
 } from './useFetchPowerBoostingInfo';
+import { EProjectType } from '@/apollo/types/gqlEnums';
 
 interface IBoostsTable {
 	boosts: IPowerBoosting[];
@@ -276,7 +277,16 @@ const BoostsTable: FC<IBoostsTable> = ({
 						>
 							<BoostsTableCell $bold>
 								<Link
-									href={slugToProjectView(boost.project.slug)}
+									href={
+										boost.project.projectType ===
+										EProjectType.CAUSE
+											? slugToCauseView(
+													boost.project.slug,
+												)
+											: slugToProjectView(
+													boost.project.slug,
+												)
+									}
 								>
 									{boost.project.title}
 								</Link>

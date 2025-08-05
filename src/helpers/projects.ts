@@ -21,6 +21,10 @@ export const sortMap = {
 	[EProjectsSortBy.EstimatedMatching.toLowerCase()]:
 		EProjectsSortBy.EstimatedMatching,
 	[EProjectsSortBy.BestMatch.toLowerCase()]: EProjectsSortBy.BestMatch,
+	[EProjectsSortBy.MOST_NUMBER_OF_PROJECTS.toLowerCase()]:
+		EProjectsSortBy.MOST_NUMBER_OF_PROJECTS,
+	[EProjectsSortBy.LEAST_NUMBER_OF_PROJECTS.toLowerCase()]:
+		EProjectsSortBy.LEAST_NUMBER_OF_PROJECTS,
 };
 
 /**

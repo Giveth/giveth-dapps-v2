@@ -10,22 +10,32 @@ import VerificationBadge from '@/components/VerificationBadge';
 
 export const ProjectStats = () => {
 	const { formatMessage } = useIntl();
-	const { projectData } = useProjectContext();
+	const { projectData, isCause } = useProjectContext();
 
 	return (
 		<div>
 			<Flex $flexDirection='column' gap='24px'>
 				<StatRow $justifyContent='space-between'>
 					<Flex $alignItems='center' gap='4px'>
-						<P>{formatMessage({ id: 'label.project_status' })}</P>
+						<P>
+							{isCause
+								? formatMessage({
+										id: 'label.cause.cause_status',
+									})
+								: formatMessage({ id: 'label.project_status' })}
+						</P>
 						<IconWithTooltip
 							icon={<IconHelpFilled16 />}
 							direction='bottom'
 						>
 							<StatTooltip>
-								{formatMessage({
-									id: 'component.project-stats.status.tooltip',
-								})}
+								{isCause
+									? formatMessage({
+											id: 'label.cause.cause_status.tooltip',
+										})
+									: formatMessage({
+											id: 'component.project-stats.status.tooltip',
+										})}
 							</StatTooltip>
 						</IconWithTooltip>
 					</Flex>
@@ -39,41 +49,49 @@ export const ProjectStats = () => {
 							direction='bottom'
 						>
 							<StatTooltip>
-								{formatMessage({
-									id: 'component.project-stats.listing.tooltip',
-								})}
+								{isCause
+									? formatMessage({
+											id: 'label.cause.cause_listing.tooltip',
+										})
+									: formatMessage({
+											id: 'component.project-stats.listing.tooltip',
+										})}
 							</StatTooltip>
 						</IconWithTooltip>
 					</Flex>
 					<ListingBadge listed={projectData?.listed} />
 				</StatRow>
-				<StatRow
-					gap='5px'
-					$justifyContent='space-between'
-					$alignItems='center'
-				>
-					<Flex $alignItems='center' gap='4px'>
-						<P>
-							{formatMessage({
-								id: 'label.verification_status_backs',
-							})}
-						</P>
-						<IconWithTooltip
-							icon={<IconHelpFilled16 />}
-							direction='bottom'
-						>
-							<StatTooltip>
+				{!isCause && (
+					<StatRow
+						gap='5px'
+						$justifyContent='space-between'
+						$alignItems='center'
+					>
+						<Flex $alignItems='center' gap='4px'>
+							<P>
 								{formatMessage({
-									id: 'component.project-stats.verification.tooltip',
+									id: 'label.verification_status_backs',
 								})}
-							</StatTooltip>
-						</IconWithTooltip>
-					</Flex>
-					<VerificationBadge
-						isGivbackEligible={projectData?.isGivbackEligible}
-						verificationStatus={projectData?.verificationFormStatus}
-					/>
-				</StatRow>
+							</P>
+							<IconWithTooltip
+								icon={<IconHelpFilled16 />}
+								direction='bottom'
+							>
+								<StatTooltip>
+									{formatMessage({
+										id: 'component.project-stats.verification.tooltip',
+									})}
+								</StatTooltip>
+							</IconWithTooltip>
+						</Flex>
+						<VerificationBadge
+							isGivbackEligible={projectData?.isGivbackEligible}
+							verificationStatus={
+								projectData?.verificationFormStatus
+							}
+						/>
+					</StatRow>
+				)}
 			</Flex>
 		</div>
 	);

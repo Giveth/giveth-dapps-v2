@@ -21,6 +21,7 @@ import {
 	UPDATE_RECURRING_DONATION_STATUS,
 } from '@/apollo/gql/gqlSuperfluid';
 import { ERecurringDonationStatus } from '@/apollo/types/types';
+import { SwapTransactionInput } from '@/apollo/types/gqlTypes';
 
 const SAVE_DONATION_ITERATIONS = 5;
 
@@ -29,6 +30,7 @@ export interface IOnTxHash extends ICreateDonation {
 	nonce?: number | null;
 	chainId: number;
 	safeTransactionId?: string | null;
+	swapData?: SwapTransactionInput;
 }
 
 export const updateDonation = (donationId: number, status: EDonationStatus) => {
@@ -74,6 +76,7 @@ const createDonation = async (props: IOnTxHash) => {
 		draftDonationId,
 		useDonationBox,
 		relevantDonationTxHash,
+		swapData,
 	} = props;
 	const { address, symbol } = token;
 	let donationId = 0;
@@ -95,6 +98,7 @@ const createDonation = async (props: IOnTxHash) => {
 				draftDonationId,
 				useDonationBox,
 				relevantDonationTxHash,
+				swapData,
 			},
 		});
 		donationId = data.createDonation;

@@ -28,7 +28,7 @@ const projectsFeatures = [
 	},
 ];
 
-const fundsFilter = [
+const fundsFilterProjects = [
 	{
 		label: 'Mainnet',
 		value: EProjectsFilter.ACCEPT_FUND_ON_MAINNET,
@@ -69,21 +69,29 @@ const fundsFilter = [
 		label: 'Stellar',
 		value: EProjectsFilter.ACCEPT_FUND_ON_STELLAR,
 	},
+	{
+		label: 'Solana',
+		value: EProjectsFilter.ACCEPT_FUND_ON_SOLANA,
+	},
 ];
 
-fundsFilter.push({
-	label: 'Solana',
-	value: EProjectsFilter.ACCEPT_FUND_ON_SOLANA,
-});
+const fundsFilterCauses = [
+	{
+		label: 'Polygon',
+		value: EProjectsFilter.ACCEPT_FUND_ON_POLYGON,
+	},
+];
 
 export const FilterMenu = forwardRef<HTMLDivElement, IFilterMenuProps>(
 	({ handleClose, isOpen }, ref) => {
 		const { formatMessage } = useIntl();
-		const { variables, isQF, setIsQF } = useProjectsContext();
+		const { variables, isQF, setIsQF, isCauses } = useProjectsContext();
 		const filtersCount = variables?.filters?.length ?? 0;
 		const campaignCount = variables?.campaignSlug ? 1 : 0;
 		const count = filtersCount + campaignCount;
 		const router = useRouter();
+
+		const fundsFilter = isCauses ? fundsFilterCauses : fundsFilterProjects;
 
 		const handleSelectFilter = (e: boolean, filter: EProjectsFilter) => {
 			let updatedQuery;
@@ -145,28 +153,34 @@ export const FilterMenu = forwardRef<HTMLDivElement, IFilterMenuProps>(
 				<Section>
 					<B>
 						{formatMessage({
-							id: 'label.project_features',
+							id: isCauses
+								? 'label.cause.cause_features'
+								: 'label.project_features',
 						})}
 					</B>
-					{projectsFeatures.map((projectFeature, idx) => (
-						<FeatureItem key={idx}>
-							<CheckBox
-								label={formatMessage(
-									{ id: projectFeature.label.id },
-									projectFeature.label,
-								)}
-								onChange={e => {
-									handleSelectFilter(e, projectFeature.value);
-								}}
-								checked={
-									variables?.filters?.includes(
-										projectFeature.value,
-									) ?? false
-								}
-								size={14}
-							/>
-						</FeatureItem>
-					))}
+					{!isCauses &&
+						projectsFeatures.map((projectFeature, idx) => (
+							<FeatureItem key={idx}>
+								<CheckBox
+									label={formatMessage(
+										{ id: projectFeature.label.id },
+										projectFeature.label,
+									)}
+									onChange={e => {
+										handleSelectFilter(
+											e,
+											projectFeature.value,
+										);
+									}}
+									checked={
+										variables?.filters?.includes(
+											projectFeature.value,
+										) ?? false
+									}
+									size={14}
+								/>
+							</FeatureItem>
+						))}
 					<FeatureItem>
 						<CheckBox
 							label={formatMessage({

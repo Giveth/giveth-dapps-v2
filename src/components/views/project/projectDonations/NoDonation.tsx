@@ -3,7 +3,7 @@ import Link from 'next/link';
 import { FC, useState } from 'react';
 import styled from 'styled-components';
 import { useIntl } from 'react-intl';
-import { slugToProjectDonate } from '@/lib/routeCreators';
+import { slugToCauseDonate, slugToProjectDonate } from '@/lib/routeCreators';
 import { useProjectContext } from '@/context/project.context';
 import { IQFRound } from '@/apollo/types/types';
 import { getNowUnixMS } from '@/helpers/time';
@@ -18,14 +18,16 @@ export const NoDonation: FC<INoDonation> = ({ selectedQF, recurring }) => {
 	const [showHintModal, setShowHintModal] = useState(false);
 
 	const { formatMessage } = useIntl();
-	const { projectData, isActive } = useProjectContext();
+	const { projectData, isActive, isCause } = useProjectContext();
 	const { slug } = projectData || {};
 	const _startDate = selectedQF
 		? new Date(selectedQF.beginDate).getTime()
 		: 0;
 	const now = getNowUnixMS();
 	const isRoundStarted = now > _startDate;
-	const destination = slugToProjectDonate(slug || '', recurring);
+	const destination = isCause
+		? slugToCauseDonate(slug || '')
+		: slugToProjectDonate(slug || '', recurring);
 
 	// Show hint modal if the user clicks on the card and the round is not started
 	const handleClick = (e: any) => {

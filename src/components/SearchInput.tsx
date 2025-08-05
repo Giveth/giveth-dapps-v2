@@ -63,7 +63,7 @@ export const SearchInput: FC<ISearchInputProps> = ({ setTerm, className }) => {
 						onChange={handleOnChange}
 						as='input'
 						placeholder={formatMessage({
-							id: 'label.search_for_project',
+							id: 'label.search_for_project_or_cause',
 						})}
 						$baseTheme={theme}
 						value={value}

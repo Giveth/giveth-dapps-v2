@@ -8,11 +8,15 @@ export const ProjectCardTotalRaisedQF = ({
 	totalDonations,
 	sumDonationValueUsdForActiveQfRound,
 	countUniqueDonors,
+	isCause,
+	projectsCount,
 }: {
 	activeStartedRound: boolean;
 	totalDonations: number;
 	sumDonationValueUsdForActiveQfRound: number;
 	countUniqueDonors: number;
+	isCause: boolean;
+	projectsCount?: number;
 }) => {
 	const { formatMessage, locale } = useIntl();
 	return (
@@ -64,6 +68,14 @@ export const ProjectCardTotalRaisedQF = ({
 					}) + ' '}
 				</AmountRaisedText>
 			</div>
+			{isCause && (
+				<div>
+					<ProjectsText>
+						{projectsCount}
+						<span>{formatMessage({ id: 'label.projects' })}</span>
+					</ProjectsText>
+				</div>
+			)}
 		</FlexWrap>
 	);
 };
@@ -95,4 +107,17 @@ const AmountRaisedText = styled(Subline)`
 const LightSubline = styled(Subline)`
 	display: inline-block;
 	color: ${neutralColors.gray[700]};
+`;
+
+const ProjectsText = styled(H5)`
+	display: inline;
+	color: ${neutralColors.gray[900]};
+	font-weight: 500;
+	text-align: right;
+
+	span {
+		display: block;
+		font-weight: 400;
+		font-size: 12px;
+	}
 `;

@@ -18,6 +18,7 @@ import { useGeneralWallet } from '@/providers/generalWalletProvider';
 import { formatTxLink } from '@/lib/helpers';
 import { ChainType } from '@/types/config';
 import config from '@/configuration';
+import { EProjectType } from '@/apollo/types/gqlEnums';
 
 const TxRow = ({
 	txHash,
@@ -58,6 +59,7 @@ export const DonationInfo = () => {
 	const { txHash = [] } = successDonation || {};
 	const hasMultipleTxs = txHash.length > 1;
 	const isStellar = txHash[0]?.chainType === ChainType.STELLAR;
+	const isCauseDonation = project.projectType === EProjectType.CAUSE;
 
 	return (
 		<Options>
@@ -100,8 +102,17 @@ export const DonationInfo = () => {
 					chainType={txHash[1]?.chainType}
 				/>
 			)}
-			<Link href={Routes.AllProjects}>
-				<ProjectsButton size='small' label='SEE MORE PROJECTS' />
+			<Link
+				href={isCauseDonation ? Routes.AllCauses : Routes.AllProjects}
+			>
+				<ProjectsButton
+					size='small'
+					label={
+						isCauseDonation
+							? 'SEE MORE CAUSES'
+							: 'SEE MORE PROJECTS'
+					}
+				/>
 			</Link>
 		</Options>
 	);

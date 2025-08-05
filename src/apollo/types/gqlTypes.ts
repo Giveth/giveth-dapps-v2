@@ -8,6 +8,7 @@ import {
 	IWalletAddress,
 	IWalletDonation,
 	IWalletRecurringDonation,
+	ICause,
 } from './types';
 
 export interface IFetchAllProjects {
@@ -60,6 +61,12 @@ export interface IUserLikedProjects {
 export interface IProjectAcceptedTokensGQL {
 	data: {
 		getProjectAcceptTokens: IProjectAcceptedToken[];
+	};
+}
+
+export interface ICauseAcceptedTokensGQL {
+	data: {
+		getCauseAcceptTokens: IProjectAcceptedToken[];
 	};
 }
 
@@ -138,3 +145,21 @@ export interface IDraftDonation {
 export interface GetDraftDonation {
 	getDraftDonation: IDraftDonation;
 }
+
+export interface ICauseBySlug {
+	cause?: ICause;
+}
+
+export type SwapTransactionInput = {
+	squidRequestId?: string;
+	firstTxHash: string;
+	fromChainId: number;
+	toChainId: number;
+	fromTokenAddress: string;
+	toTokenAddress: string;
+	fromAmount: number;
+	toAmount: number;
+	fromTokenSymbol: string;
+	toTokenSymbol: string;
+	metadata?: Record<string, any>;
+};

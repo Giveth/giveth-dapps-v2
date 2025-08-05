@@ -33,6 +33,7 @@ export interface IToast {
 	dismissCB?: any;
 	position?: ToastPosition;
 	duration?: number;
+	returnID?: boolean;
 }
 
 const toastIcon = (type: ToastType) => {
@@ -63,9 +64,13 @@ export const gToast = (message: string, options: IToast) => {
 		dismissCB,
 		position = 'bottom-center',
 		duration,
+		returnID = false,
 	} = options;
-	const toastID = toast.custom(
-		<ToastContainer $type={options.type}>
+
+	const toastID = `toast-${Date.now()}`;
+
+	toast.custom(
+		<ToastContainer $type={options.type} id={toastID}>
 			{direction === ToastDirection.LEFT && (
 				<LeftIconContainer>{toastIcon(type)}</LeftIconContainer>
 			)}
@@ -94,8 +99,13 @@ export const gToast = (message: string, options: IToast) => {
 		{
 			duration,
 			position,
+			id: toastID,
 		},
 	);
+
+	if (returnID) {
+		return toastID;
+	}
 };
 
 const ToastContainer = styled(Flex)<{ $type?: ToastType }>`

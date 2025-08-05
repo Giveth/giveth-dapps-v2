@@ -23,22 +23,26 @@ import FacebookIcon from '../../../public/images/social-fb.svg';
 import LinkedinIcon from '../../../public/images/social-linkedin.svg';
 import ShareIcon from '../../../public/images/icons/share_dots.svg';
 import Warpcast from '../../../public/images/icons/social-warpcast.svg';
-import { slugToProjectView } from '@/lib/routeCreators';
+import { slugToProjectView, slugToCauseView } from '@/lib/routeCreators';
 import { IModal } from '@/types/common';
 import CopyLink from '@/components/CopyLink';
 import { fullPath } from '@/lib/helpers';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
 import {
 	EContentType,
+	EContentTypeCause,
 	ESocialType,
 	shareContentCreator,
+	shareContentCreatorCause,
 } from '@/lib/constants/shareContent';
 
 interface IShareModal extends IModal {
 	projectHref: string;
-	contentType: EContentType;
+	contentType: EContentType | EContentTypeCause;
 	shareTitle?: string | undefined;
 	shareDescription?: string | undefined;
+	isCause?: boolean;
+	numberOfProjects?: number;
 }
 
 const ShareModal: FC<IShareModal> = props => {
@@ -48,19 +52,33 @@ const ShareModal: FC<IShareModal> = props => {
 		contentType,
 		shareTitle,
 		shareDescription,
+		isCause = false,
+		numberOfProjects = 0,
 	} = props;
-	const url = fullPath(slugToProjectView(projectHref));
+	const url = isCause
+		? fullPath(slugToCauseView(projectHref))
+		: fullPath(slugToProjectView(projectHref));
 	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
 	const { formatMessage } = useIntl();
 
-	const shareTitleTwitter = shareContentCreator(
-		contentType,
-		ESocialType.twitter,
-	);
-	const shareTitleFacebookAndLinkedin = shareContentCreator(
-		contentType,
-		ESocialType.facebook,
-	);
+	const shareTitleTwitter = isCause
+		? shareContentCreatorCause(
+				contentType,
+				ESocialType.twitter,
+				numberOfProjects,
+			)
+		: shareContentCreator(contentType as EContentType, ESocialType.twitter);
+
+	const shareTitleFacebookAndLinkedin = isCause
+		? shareContentCreatorCause(
+				contentType,
+				ESocialType.facebook,
+				numberOfProjects,
+			)
+		: shareContentCreator(
+				contentType as EContentType,
+				ESocialType.facebook,
+			);
 
 	const shareModalTitle = formatMessage({
 		id: shareTitle || 'label.share_this',
@@ -107,7 +125,11 @@ const ShareModal: FC<IShareModal> = props => {
 						</LinkedinShareButton>
 					</SocialButtonContainer>
 					<SocialButtonContainer>
-						<FacebookShareButton hashtag='#giveth' url={url}>
+						<FacebookShareButton
+							hashtag='#giveth'
+							url={url}
+							title={shareTitleFacebookAndLinkedin}
+						>
 							<Image
 								src={FacebookIcon}
 								alt='facebook icon'
@@ -118,7 +140,9 @@ const ShareModal: FC<IShareModal> = props => {
 					</SocialButtonContainer>
 					<SocialButtonContainer>
 						<Link
-							href={`https://warpcast.com/~/compose?embeds[]=${url}&text=${shareTitleTwitter}`}
+							href={`https://warpcast.com/~/compose?embeds[]=${url}&text=${encodeURIComponent(
+								shareTitleTwitter,
+							)}`}
 							target='_blank'
 							className='warpcast-share-button'
 						>

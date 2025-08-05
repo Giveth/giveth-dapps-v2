@@ -29,6 +29,7 @@ interface IProjectsContext {
 	isQF: boolean;
 	isArchivedQF?: boolean;
 	setIsQF: Dispatch<SetStateAction<boolean>>;
+	isCauses?: boolean;
 }
 
 const variablesDefaultValue = {
@@ -42,6 +43,7 @@ const ProjectsContext = createContext<IProjectsContext>({
 	isQF: false,
 	isArchivedQF: false,
 	setIsQF: () => console.log('setIsQF not initialed yet!'),
+	isCauses: false,
 });
 
 ProjectsContext.displayName = 'ProjectsContext';
@@ -60,8 +62,9 @@ export const ProjectsProvider = (props: {
 	archivedQFRound?: IQFRound;
 	isQF?: boolean;
 	isArchivedQF?: boolean;
+	isCauses?: boolean;
 }) => {
-	const { children, isQF, isArchivedQF, archivedQFRound } = props;
+	const { children, isQF, isArchivedQF, archivedQFRound, isCauses } = props;
 	const mainCategories = useAppSelector(
 		state => state.general.mainCategories,
 	);
@@ -113,6 +116,7 @@ export const ProjectsProvider = (props: {
 				isArchivedQF: isArchivedQF || false,
 				archivedQFRound,
 				setIsQF,
+				isCauses: isCauses || false,
 			}}
 		>
 			{children}

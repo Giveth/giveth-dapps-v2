@@ -23,6 +23,7 @@ import {
 	EDirection,
 	EDonationStatus,
 	EProjectStatus,
+	EProjectType,
 	ESortby,
 } from '@/apollo/types/gqlEnums';
 import { useAppDispatch, useAppSelector } from '@/features/hooks';
@@ -61,6 +62,7 @@ interface IProjectContext {
 	totalDonationsCount: number;
 	isCancelled: boolean;
 	isLoading: boolean;
+	isCause: boolean;
 }
 
 const ProjectContext = createContext<IProjectContext>({
@@ -79,6 +81,7 @@ const ProjectContext = createContext<IProjectContext>({
 	totalDonationsCount: 0,
 	isCancelled: false,
 	isLoading: true,
+	isCause: false,
 });
 ProjectContext.displayName = 'ProjectContext';
 
@@ -122,6 +125,7 @@ export const ProjectProvider = ({
 			.query({
 				query: FETCH_PROJECT_BY_SLUG_SINGLE_PROJECT,
 				variables: { slug, connectedWalletUserId: Number(user?.id) },
+				fetchPolicy: 'network-only',
 			})
 			.then((res: { data: { projectBySlug: IProject } }) => {
 				const _project = res.data.projectBySlug;
@@ -327,6 +331,7 @@ export const ProjectProvider = ({
 				totalDonationsCount,
 				isCancelled,
 				isLoading,
+				isCause: projectData?.projectType === EProjectType.CAUSE,
 			}}
 		>
 			{children}

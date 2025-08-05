@@ -10,6 +10,13 @@ export const PROJECT_CORE_FIELDS = gql`
 		verified
 		isGivbackEligible
 		totalDonations
+		projectType
+		causeProjects {
+			id
+			project {
+				id
+			}
+		}
 		qfRounds {
 			id
 			name
@@ -58,6 +65,7 @@ export const PROJECT_CARD_FIELDS = gql`
 			isActive
 			networkId
 		}
+		activeProjectsCount
 	}
 `;
 
@@ -74,6 +82,7 @@ export const FETCH_ALL_PROJECTS = gql`
 		$campaignSlug: String
 		$connectedWalletUserId: Int
 		$qfRoundSlug: String
+		$projectType: String
 	) {
 		allProjects(
 			limit: $limit
@@ -86,9 +95,16 @@ export const FETCH_ALL_PROJECTS = gql`
 			campaignSlug: $campaignSlug
 			connectedWalletUserId: $connectedWalletUserId
 			qfRoundSlug: $qfRoundSlug
+			projectType: $projectType
 		) {
 			projects {
 				...ProjectCardFields
+				addresses {
+					address
+					isRecipient
+					networkId
+					chainType
+				}
 			}
 			totalCount
 		}
@@ -105,6 +121,7 @@ export const FETCH_PROJECT_BY_SLUG_VERIFICATION = gql`
 			status {
 				name
 			}
+			projectType
 			adminUser {
 				walletAddress
 			}
@@ -122,7 +139,11 @@ export const FETCH_PROJECT_BY_SLUG_SUCCESS = gql`
 			title
 			image
 			slug
+			description
+			chainId
 			descriptionSummary
+			activeProjectsCount
+			projectType
 			adminUser {
 				id
 				name
@@ -149,6 +170,7 @@ export const FETCH_PROJECT_BY_SLUG_DONATION = gql`
 			totalDonations
 			sumDonationValueUsdForActiveQfRound
 			countUniqueDonorsForActiveQfRound
+			projectType
 			categories {
 				name
 				value
@@ -219,6 +241,10 @@ export const FETCH_PROJECT_BY_SLUG_SINGLE_PROJECT = gql`
 			isGivbackEligible
 			totalDonations
 			description
+			projectType
+			totalRaised
+			totalDistributed
+			activeProjectsCount
 			addresses {
 				address
 				isRecipient
@@ -310,6 +336,33 @@ export const FETCH_PROJECT_BY_ID = gql`
 			title
 			image
 			description
+			causeProjects {
+				id
+				projectId
+				isIncluded
+				project {
+					id
+					title
+					image
+					slug
+					description
+					verified
+					categories {
+						name
+						value
+						mainCategory {
+							title
+						}
+					}
+					addresses {
+						id
+						networkId
+					}
+					status {
+						name
+					}
+				}
+			}
 			addresses {
 				address
 				memo
@@ -325,6 +378,9 @@ export const FETCH_PROJECT_BY_ID = gql`
 			categories {
 				name
 				value
+				mainCategory {
+					title
+				}
 			}
 			adminUser {
 				walletAddress
@@ -653,8 +709,8 @@ export const UNLIKE_PROJECT_MUTATION = gql`
 `;
 
 export const GET_STATUS_REASONS = gql`
-	query {
-		getStatusReasons(statusId: 6) {
+	query GetStatusReasons($statusId: Int!) {
+		getStatusReasons(statusId: $statusId) {
 			id
 			description
 			status {
@@ -686,6 +742,26 @@ export const TITLE_IS_VALID = `
 export const PROJECT_ACCEPTED_TOKENS = gql`
 	query GetProjectAcceptTokens($projectId: Float!) {
 		getProjectAcceptTokens(projectId: $projectId) {
+			id
+			symbol
+			networkId
+			chainType
+			address
+			name
+			decimals
+			mainnetAddress
+			isGivbackEligible
+			order
+			isStableCoin
+			coingeckoId
+			isQR
+		}
+	}
+`;
+
+export const CAUSE_ACCEPTED_TOKENS = gql`
+	query GetCauseAcceptTokens($causeId: Float!, $networkId: Float!) {
+		getCauseAcceptTokens(causeId: $causeId, networkId: $networkId) {
 			id
 			symbol
 			networkId

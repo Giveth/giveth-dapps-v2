@@ -183,7 +183,7 @@ const InfoStep: FC<IStep> = ({ setStep }) => {
 					}),
 				});
 			}
-			console.log(error);
+			console.error(error);
 		}
 	};
 

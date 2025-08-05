@@ -3,6 +3,7 @@ import {
 	EDonationStatus,
 	EDonationType,
 	EProjectStatus,
+	EProjectType,
 	EProjectVerificationStatus,
 	EProjectsSortBy,
 } from '@/apollo/types/gqlEnums';
@@ -93,6 +94,23 @@ export interface IProject {
 	campaigns?: ICampaign[];
 	anchorContracts: IAnchorContractData[];
 	socialMedia: IProjectSocialMedia[];
+	projectType: EProjectType;
+	causeProjects?: ICauseProject[];
+	activeProjectsCount?: number;
+	totalRaised?: number;
+	totalDistributed?: number;
+	ownerTotalEarned?: number;
+	ownerTotalEarnedUsdValue?: number;
+}
+
+export interface ICauseProject {
+	id: string;
+	projectId?: string;
+	project: IProject;
+	isIncluded?: boolean;
+	userRemoved?: boolean;
+	amountReceived?: number;
+	amountReceivedUsdValue?: number;
 }
 
 export enum EProjectsFilter {
@@ -192,6 +210,15 @@ export interface IProjectEdition {
 	socialMedia: IProjectSocialMedia[];
 }
 
+export interface ICauseEdition {
+	id?: string;
+	title?: string;
+	image?: string;
+	description?: string;
+	categories: ICategory[];
+	selectedProjects: IProject[];
+}
+
 export enum EProjectSocialMediaType {
 	FACEBOOK = 'FACEBOOK',
 	X = 'X',
@@ -247,6 +274,11 @@ export interface IUser {
 	isReferrer?: boolean;
 	chainvineId?: string;
 	isEmailVerified?: boolean;
+	ownedCausesCount?: number;
+	totalCausesDistributed?: number;
+	totalCausesRaised?: number;
+	causesTotalEarned?: number;
+	causesTotalEarnedUsdValue?: number;
 }
 
 export interface IPassportInfo {
@@ -534,4 +566,32 @@ export enum ERecurringDonationStatus {
 	ENDED = 'ended',
 	FAILED = 'failed',
 	ACTIVE = 'active',
+}
+
+export interface ICauseCreation {
+	title: string;
+	description: string;
+	chainId: number;
+	projectIds: number[];
+	subCategories: string[];
+	bannerImage: string;
+	depositTxHash: string;
+	depositTxChainId: number;
+}
+
+export interface ICauseUpdate {
+	title: string;
+	description: string;
+	projectIds: number[];
+	categories: string[];
+	bannerImage: string;
+}
+
+export interface ICause extends IProject {
+	projects: IProject[];
+	causeProjects: ICauseProject[];
+	chainId?: number;
+	depositTxHash?: string;
+	depositTxStatus?: string;
+	depositTxChainId?: number;
 }

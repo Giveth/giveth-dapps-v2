@@ -13,9 +13,10 @@ import {
 
 interface IImprovementBanner {
 	onClose?: () => void;
+	isCauseDonation?: boolean;
 }
 
-const ImprovementBanner: FC<IImprovementBanner> = () => {
+const ImprovementBanner: FC<IImprovementBanner> = ({ isCauseDonation }) => {
 	const { formatMessage } = useIntl();
 	const [isExpanded, setIsExpanded] = useState(false);
 	const [shouldShow, setShouldShow] = useState(false);
@@ -23,7 +24,9 @@ const ImprovementBanner: FC<IImprovementBanner> = () => {
 	// Check if user has already completed the form
 	// If yes, show the form after 60 days
 	useEffect(() => {
-		const savedDate = localStorage.getItem('improvement_survey_date');
+		const savedDate = isCauseDonation
+			? localStorage.getItem('improvement_survey_date_cause')
+			: localStorage.getItem('improvement_survey_date');
 		if (!savedDate) {
 			setShouldShow(true);
 			return;
@@ -46,7 +49,12 @@ const ImprovementBanner: FC<IImprovementBanner> = () => {
 
 	const handleFormSubmit = () => {
 		const today = new Date().toISOString();
-		localStorage.setItem('improvement_survey_date', today);
+		localStorage.setItem(
+			isCauseDonation
+				? 'improvement_survey_date_cause'
+				: 'improvement_survey_date',
+			today,
+		);
 		setShouldShow(false);
 		setIsExpanded(false);
 	};
@@ -54,7 +62,6 @@ const ImprovementBanner: FC<IImprovementBanner> = () => {
 	const handleFormClose = () => {
 		setIsExpanded(false);
 	};
-
 	if (!shouldShow) return null;
 
 	return (
@@ -103,13 +110,23 @@ const ImprovementBanner: FC<IImprovementBanner> = () => {
 				</BannerHeader>
 
 				<ExpandableContent isExpanded={isExpanded}>
-					<Widget
-						id='pujGt0tC'
-						style={{ width: '100%', height: '750px' }}
-						className='my-form'
-						onSubmit={handleFormSubmit}
-						onClose={handleFormClose}
-					/>
+					{isCauseDonation ? (
+						<Widget
+							id='e68DoSqk'
+							style={{ width: '100%', height: '750px' }}
+							className='my-form'
+							onSubmit={handleFormSubmit}
+							onClose={handleFormClose}
+						/>
+					) : (
+						<Widget
+							id='pujGt0tC'
+							style={{ width: '100%', height: '750px' }}
+							className='my-form'
+							onSubmit={handleFormSubmit}
+							onClose={handleFormClose}
+						/>
+					)}
 				</ExpandableContent>
 			</BannerWrapper>
 			<Overlay isExpanded={isExpanded} onClick={toggleExpand} />
@@ -128,7 +145,7 @@ const BannerWrapper = styled.div<{ isExpanded: boolean }>`
 	border-bottom-right-radius: ${props => (props.isExpanded ? '0' : '16px')};
 	box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
 	transition: all 0.3s ease-in-out;
-	z-index: 10;
+	z-index: 20;
 `;
 
 const BannerHeader = styled(Flex)`
@@ -201,7 +218,7 @@ const ExpandableContent = styled.div<{ isExpanded: boolean }>`
 		left: 0;
 		right: 0;
 		bottom: 0;
-		z-index: 10030;
+		z-index: 10;
 	}
 `;
 
@@ -212,7 +229,7 @@ const Overlay = styled.div<{ isExpanded: boolean }>`
 	width: 100%;
 	height: 100%;
 	background: rgba(255, 255, 255, 0.4);
-	z-index: 10;
+	z-index: 9;
 	display: flex;
 	justify-content: center;
 	align-items: center;

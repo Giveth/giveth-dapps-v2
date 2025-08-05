@@ -1,8 +1,6 @@
 module.exports = function (fileInfo, api) {
 	const j = api.jscodeshift;
 
-	console.log('Processing file: ' + fileInfo.path);
-
 	return j(fileInfo.source)
 		.find(j.TaggedTemplateExpression)
 		.forEach(path => {
@@ -26,10 +24,6 @@ module.exports = function (fileInfo, api) {
 						) {
 							testExpression.property.name =
 								'$' + testExpression.property.name;
-							console.log(
-								'Updated property in test: ',
-								testExpression.property.name,
-							);
 						}
 					}
 				});

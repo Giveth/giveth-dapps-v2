@@ -18,15 +18,16 @@ import { useRouter } from 'next/router';
 import { formatDonation } from '@/helpers/number';
 import { IProject } from '@/apollo/types/types';
 import { VerifiedBadge } from '@/components/badges/VerifiedBadge';
-import { slugToProjectView } from '@/lib/routeCreators';
+import { slugToCauseView, slugToProjectView } from '@/lib/routeCreators';
 import { ProjectCardUserName } from '@/components/project-card/ProjectCardUserName';
 import { ORGANIZATION } from '@/lib/constants/organizations';
 import { useDonateData } from '@/context/donate.context';
 import { ChainType } from '@/types/config';
 import config from '@/configuration';
-import { calculateTotalEstimatedMatching, getActiveRound } from '@/helpers/qf';
+import { getActiveRound } from '@/helpers/qf';
 import { GivBackBadge } from '@/components/badges/GivBackBadge';
 import links from '@/lib/constants/links';
+import { EProjectType } from '@/apollo/types/gqlEnums';
 
 interface IDonatePageProjectDescriptionProps {
 	projectData?: IProject;
@@ -48,6 +49,7 @@ export const DonatePageProjectDescription: FC<
 		adminUser,
 		organization,
 		estimatedMatching,
+		projectType,
 	} = projectData || {};
 
 	const { allProjectsSum, matchingPool, projectDonationsSqrtRootSum } =
@@ -57,9 +59,11 @@ export const DonatePageProjectDescription: FC<
 	const isForeignOrg =
 		orgLabel !== ORGANIZATION.trace && orgLabel !== ORGANIZATION.giveth;
 
-	const projectLink = slugToProjectView(slug!);
+	const projectLink =
+		projectType === EProjectType.CAUSE
+			? slugToCauseView(slug!)
+			: slugToProjectView(slug!);
 	const { project } = useDonateData();
-
 	const { activeStartedRound, activeQFRound } = getActiveRound(
 		project.qfRounds,
 	);
@@ -138,25 +142,6 @@ export const DonatePageProjectDescription: FC<
 									)}
 								</LightSubline>
 							</div>
-							<EstimatedMatchingPrice>
-								+&nbsp;
-								{formatDonation(
-									calculateTotalEstimatedMatching(
-										projectDonationsSqrtRootSum,
-										allProjectsSum,
-										allocatedFundUSDPreferred
-											? allocatedFundUSD
-											: matchingPool,
-										activeStartedRound?.maximumReward,
-									),
-									allocatedFundUSDPreferred ? '$' : '',
-									locale,
-									true,
-								)}
-								{allocatedFundUSDPreferred
-									? ''
-									: ` ${allocatedTokenSymbol}`}
-							</EstimatedMatchingPrice>
 						</>
 					) : (
 						<DonateInfo>
@@ -179,8 +164,8 @@ export const DonatePageProjectDescription: FC<
 					<DescriptionSummary>
 						{descriptionSummary}
 					</DescriptionSummary>
-					{project?.organization?.label ===
-					ORGANIZATION.endaoment ? null : (
+					{project?.organization?.label === ORGANIZATION.endaoment ||
+					projectType === EProjectType.CAUSE ? null : (
 						<DonateDescription $flexDirection='column' gap='8px'>
 							<B>
 								{formatMessage({
@@ -278,4 +263,16 @@ const DonateInfo = styled.div`
 const NoFund = styled(H4)`
 	color: ${neutralColors.gray[800]};
 	margin-top: 16px;
+`;
+const ProjectsCount = styled.div`
+	font-size: 14px;
+	font-weight: 400;
+	color: ${neutralColors.gray[500]};
+	margin-top: -8px;
+	margin-bottom: 16px;
+
+	strong {
+		font-weight: 700;
+		color: ${neutralColors.gray[800]};
+	}
 `;

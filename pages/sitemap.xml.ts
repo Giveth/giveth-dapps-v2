@@ -46,6 +46,10 @@ async function generateSiteMap() {
 				<loc>${latestSitemap.sitemapQFRoundsURL}</loc>
 				<lastmod>${new Date().toISOString()}</lastmod>
 			</url>
+			<url>
+				<loc>${latestSitemap.sitemapCausesURL}</loc>
+				<lastmod>${new Date().toISOString()}</lastmod>
+			</url>
 		`;
 	}
 

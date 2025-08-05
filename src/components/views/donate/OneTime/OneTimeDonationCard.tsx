@@ -382,9 +382,8 @@ const CryptoDonation: FC<{
 			{shouldRenderModal(DonateModalPriorityValues.ShowNetworkModal) && (
 				<DonateWrongNetwork
 					setShowModal={setShowChangeNetworkModal}
-					acceptedChains={acceptedChains.filter(
-						chain => chain.chainType !== ChainType.STELLAR,
-					)}
+					acceptedChains={acceptedChains}
+					isCause={false}
 				/>
 			)}
 			{showInsufficientModal && (

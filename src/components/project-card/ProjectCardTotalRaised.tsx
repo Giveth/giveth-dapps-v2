@@ -8,11 +8,15 @@ export const ProjectCardTotalRaised = ({
 	totalDonations,
 	sumDonationValueUsdForActiveQfRound,
 	countUniqueDonors,
+	isCause,
+	projectsCount,
 }: {
 	activeStartedRound: boolean;
 	totalDonations: number;
 	sumDonationValueUsdForActiveQfRound: number;
 	countUniqueDonors: number;
+	isCause: boolean;
+	projectsCount?: number;
 }) => {
 	const { formatMessage, locale } = useIntl();
 	return (
@@ -22,6 +26,17 @@ export const ProjectCardTotalRaised = ({
 			$justifyContent='space-between'
 		>
 			<div>
+				{isCause && (
+					<PriceText>
+						{formatDonation(
+							(activeStartedRound
+								? sumDonationValueUsdForActiveQfRound
+								: totalDonations) || 0,
+							'$',
+							locale,
+						)}
+					</PriceText>
+				)}
 				<AmountRaisedText>
 					{formatMessage({
 						id: 'label.total_amount_raised',
@@ -50,15 +65,23 @@ export const ProjectCardTotalRaised = ({
 					</LightSubline>
 				</div>
 			</div>
-			<PriceText>
-				{formatDonation(
-					(activeStartedRound
-						? sumDonationValueUsdForActiveQfRound // TODO: add recurring donation amount
-						: totalDonations) || 0,
-					'$',
-					locale,
-				)}
-			</PriceText>
+			{!isCause && (
+				<PriceText>
+					{formatDonation(
+						(activeStartedRound
+							? sumDonationValueUsdForActiveQfRound // TODO: add recurring donation amount
+							: totalDonations) || 0,
+						'$',
+						locale,
+					)}
+				</PriceText>
+			)}
+			{isCause && (
+				<ProjectsText>
+					{projectsCount}
+					<span>{formatMessage({ id: 'label.projects' })}</span>
+				</ProjectsText>
+			)}
 		</FlexWrap>
 	);
 };
@@ -71,6 +94,19 @@ const PriceText = styled(H5)`
 	display: inline;
 	color: ${neutralColors.gray[900]};
 	font-weight: 700;
+`;
+
+const ProjectsText = styled(H5)`
+	display: inline;
+	color: ${neutralColors.gray[900]};
+	font-weight: 500;
+	text-align: right;
+
+	span {
+		display: block;
+		font-weight: 400;
+		font-size: 12px;
+	}
 `;
 
 const AmountRaisedText = styled(Subline)`

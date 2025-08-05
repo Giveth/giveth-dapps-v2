@@ -16,14 +16,20 @@ import { htmlToText } from '@/lib/helpers';
 import { Shadow } from '@/components/styled-components/Shadow';
 import { mediaQueries } from '@/lib/constants/constants';
 import InternalLink from '@/components/InternalLink';
-import { addressToUserView, slugToProjectView } from '@/lib/routeCreators';
+import {
+	addressToUserView,
+	slugToCauseView,
+	slugToProjectView,
+} from '@/lib/routeCreators';
 import { VerifiedBadge } from '@/components/badges/VerifiedBadge';
 import { useGiverPFPToken } from '@/hooks/useGiverPFPToken';
 import { PFP } from '../PFP';
+import { EProjectType } from '@/apollo/types/gqlEnums';
 
 interface IProjectCard {
 	project: IProject;
 	isNew?: boolean;
+	projectsCount?: number;
 }
 
 const ProjectCard = (props: IProjectCard) => {
@@ -37,6 +43,7 @@ const ProjectCard = (props: IProjectCard) => {
 		adminUser,
 		slug,
 		organization,
+		projectType,
 	} = project;
 
 	const { name, walletAddress } = adminUser || {};
@@ -46,10 +53,15 @@ const ProjectCard = (props: IProjectCard) => {
 		adminUser?.avatar,
 	);
 	const showVerifiedBadge = verified || isGivbackEligible;
+
+	const projectLink =
+		projectType === EProjectType.CAUSE
+			? slugToCauseView(slug!)
+			: slugToProjectView(slug!);
 	return (
 		<Wrapper $isNew={isNew}>
 			<ImagePlaceholder>
-				<Link href={slugToProjectView(slug)}>
+				<Link href={projectLink}>
 					<ProjectCardImage image={image} />
 				</Link>
 			</ImagePlaceholder>
@@ -64,7 +76,7 @@ const ProjectCard = (props: IProjectCard) => {
 				</BadgeContainer>
 			)}
 			<CardBody $isNew={isNew}>
-				<InternalLink href={slugToProjectView(slug)}>
+				<InternalLink href={projectLink}>
 					<Title>{title}</Title>
 				</InternalLink>
 				{name && (
@@ -83,9 +95,17 @@ const ProjectCard = (props: IProjectCard) => {
 								<Author>{name || '\u200C'}</Author>
 							)}
 						</InternalLink>
+						<Description>{htmlToText(description)}</Description>
+						{props.projectsCount !== undefined && (
+							<ProjectsCount>
+								<strong>{props.projectsCount}</strong>{' '}
+								{props.projectsCount === 1
+									? 'Project'
+									: 'Projects'}
+							</ProjectsCount>
+						)}
 					</div>
 				)}
-				<Description>{htmlToText(description)}</Description>
 			</CardBody>
 		</Wrapper>
 	);
@@ -95,6 +115,18 @@ const BadgeContainer = styled.div`
 	display: flex;
 	position: absolute;
 	padding: 16px;
+`;
+const ProjectsCount = styled.div`
+	margin-top: 10px;
+	font-size: 14px;
+	font-weight: 400;
+	color: ${neutralColors.gray[500]};
+	text-align: left;
+
+	strong {
+		font-weight: 700;
+		color: ${neutralColors.gray[800]};
+	}
 `;
 
 const BodyCaption = styled(Caption)`
@@ -106,15 +138,15 @@ const Description = styled(P)`
 	height: 76px;
 	overflow: hidden;
 	color: ${neutralColors.gray[900]};
-	margin-bottom: 20px;
+	margin-bottom: 8px;
 	margin-top: 8px;
 `;
 
 const CardBody = styled.div<{ $isNew?: boolean }>`
-	margin: ${props => (props.$isNew ? '50px 24px 0' : '50px 0 0')};
+	margin-top: ${props => (props.$isNew ? '50px' : '50px')};
 	text-align: left;
+	padding: 0 24px 34px 24px; // Bottom padding set here
 `;
-
 const Author = styled(P)`
 	color: ${brandColors.pinky[500]};
 	margin-bottom: 10px;
@@ -138,7 +170,8 @@ const ImagePlaceholder = styled.div`
 
 const Wrapper = styled.div<{ $isNew?: boolean }>`
 	position: relative;
-	height: 430px;
+	height: ${props =>
+		props.$isNew ? '450px' : '440px'}; // add 10px if it's new
 	max-width: 440px;
 	min-width: 300px;
 	border-radius: 12px;

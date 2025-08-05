@@ -15,13 +15,14 @@ import styled from 'styled-components';
 import { Dispatch, type FC, SetStateAction, useState } from 'react';
 import { useIntl } from 'react-intl';
 import router from 'next/router';
-import { useAccount, useSwitchChain } from 'wagmi';
 import { captureException } from '@sentry/nextjs';
 import { EVerificationStatus, IProject } from '@/apollo/types/types';
-import { EProjectStatus } from '@/apollo/types/gqlEnums';
+import { EProjectStatus, EProjectType } from '@/apollo/types/gqlEnums';
 import { Dropdown, IOption, EOptionType } from '@/components/Dropdown';
 import {
+	idToCauseEdit,
 	idToProjectEdit,
+	slugToCauseView,
 	slugToProjectView,
 	slugToVerification,
 } from '@/lib/routeCreators';
@@ -53,8 +54,6 @@ const ProjectActions: FC<IProjectActions> = ({
 	const [isHover, setIsHover] = useState(false);
 	const [deactivateModal, setDeactivateModal] = useState(false);
 	const { formatMessage } = useIntl();
-	const { chain } = useAccount();
-	const { switchChain } = useSwitchChain();
 
 	const status = project.status.name;
 	const isCancelled = status === EProjectStatus.CANCEL;
@@ -63,6 +62,7 @@ const ProjectActions: FC<IProjectActions> = ({
 	const hasAnchorContract = project.anchorContracts?.length > 0;
 
 	const projectId = project?.id;
+	const isCause = project.projectType === EProjectType.CAUSE;
 	const isActive = project?.status.name === EProjectStatus.ACTIVE;
 	const verificationStatus = project?.projectVerificationForm?.status;
 
@@ -101,22 +101,52 @@ const ProjectActions: FC<IProjectActions> = ({
 
 	const options: IOption[] = [
 		{
-			label: formatMessage({ id: 'label.view_project' }),
+			label: isCause
+				? formatMessage({ id: 'label.cause.view_cause' })
+				: formatMessage({ id: 'label.view_project' }),
 			icon: <IconEye16 />,
-			cb: () => router.push(slugToProjectView(project.slug)),
+			cb: () =>
+				isCause
+					? router.push(slugToCauseView(project.slug))
+					: router.push(slugToProjectView(project.slug)),
 		},
 		{
+			label: isCause
+				? formatMessage({ id: 'label.cause.edit_cause' })
+				: formatMessage({ id: 'label.edit_project' }),
+			icon: <IconEdit16 />,
+			cb: () =>
+				isCause
+					? router.push(idToCauseEdit(projectId))
+					: router.push(idToProjectEdit(projectId)),
+		},
+		{
+			label: capitalizeAllWords(
+				formatMessage({
+					id: isActive
+						? isCause
+							? 'label.cause.deactivate_cause'
+							: 'label.deactivate_project'
+						: isCause
+							? 'label.cause.activate_cause'
+							: 'label.activate_project',
+				}),
+			),
+			icon: <IconArchiving />,
+			cb: () =>
+				isActive ? handleDeactivateProject() : handleActivateProject(),
+		},
+	];
+
+	if (!isCause) {
+		options.splice(1, 0, {
 			label: formatMessage({ id: 'label.add_update' }),
 			icon: <IconUpdate16 />,
 			cb: () =>
 				router.push(slugToProjectView(project.slug) + '?tab=updates'),
-		},
-		{
-			label: formatMessage({ id: 'label.edit_project' }),
-			icon: <IconEdit16 />,
-			cb: () => router.push(idToProjectEdit(projectId)),
-		},
-		{
+		});
+
+		options.splice(3, 0, {
 			label: capitalizeAllWords(
 				formatMessage({ id: 'label.manage_addresses' }),
 			),
@@ -125,20 +155,8 @@ const ProjectActions: FC<IProjectActions> = ({
 				setSelectedProject(project);
 				setShowAddressModal(true);
 			},
-		},
-		{
-			label: capitalizeAllWords(
-				formatMessage({
-					id: isActive
-						? 'label.deactivate_project'
-						: 'label.activate_project',
-				}),
-			),
-			icon: <IconArchiving />,
-			cb: () =>
-				isActive ? handleDeactivateProject() : handleActivateProject(),
-		},
-	];
+		});
+	}
 
 	if (hasAnchorContract) {
 		const recurringDonationOption: IOption = {
@@ -158,7 +176,8 @@ const ProjectActions: FC<IProjectActions> = ({
 	if (
 		(verificationStatus === EVerificationStatus.DRAFT ||
 			!verificationStatus) &&
-		!project.isGivbackEligible
+		!project.isGivbackEligible &&
+		project.projectType === EProjectType.PROJECT
 	) {
 		options.push({
 			label: formatMessage({
@@ -215,7 +234,7 @@ const ProjectActions: FC<IProjectActions> = ({
 				<>
 					<Dropdown
 						style={dropdownStyle}
-						label='Actions'
+						label={formatMessage({ id: 'label.actions' })}
 						options={options}
 						stickToRight
 					/>
@@ -224,6 +243,7 @@ const ProjectActions: FC<IProjectActions> = ({
 							setShowModal={setDeactivateModal}
 							projectId={projectId}
 							onSuccess={onDeactivateProject}
+							isCause={isCause}
 						/>
 					)}
 				</>

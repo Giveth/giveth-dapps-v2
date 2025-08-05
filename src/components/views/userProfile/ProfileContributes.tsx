@@ -15,6 +15,7 @@ import ProfileDonationsTab from './donationsTab/ProfileDonationsTab';
 import ProfileLikedTab from './ProfileLikedTab';
 import ProfileProjectsTab from './projectsTab/ProfileProjectsTab';
 import ProfileOverviewTab from './ProfileOverviewTab';
+import ProfileCausesTab from './causesTab/ProfileCausesTab';
 import { IUserProfileView } from './UserProfile.view';
 import { ProfileBoostedTab } from './boostedTab/ProfileBoostedTab';
 import { PublicProfileBoostedTab } from './boostedTab/PublicProfileBoostedTab';
@@ -24,6 +25,7 @@ enum EProfile {
 	OVERVIEW,
 	GIVPOWER,
 	PROJECTS,
+	CAUSES,
 	DONATIONS,
 	LIKED,
 }
@@ -49,6 +51,9 @@ const ProfileContributes: FC<IUserProfileView> = () => {
 				break;
 			case 'projects':
 				setTab(EProfile.PROJECTS);
+				break;
+			case 'causes':
+				setTab(EProfile.CAUSES);
 				break;
 			case 'donations':
 			case 'recurring-donations':
@@ -119,6 +124,24 @@ const ProfileContributes: FC<IUserProfileView> = () => {
 				</Link>
 				<Link
 					href={{
+						query: { tab: 'causes', ...baseQuery },
+					}}
+				>
+					<ProfileTab $active={tab === EProfile.CAUSES}>
+						{`${
+							myAccount
+								? formatMessage({ id: 'label.cause.my_causes' })
+								: formatMessage({ id: 'label.causes' })
+						}`}
+						{myAccount && user?.ownedCausesCount != 0 && (
+							<Count $active={tab === EProfile.CAUSES}>
+								{user?.ownedCausesCount}
+							</Count>
+						)}
+					</ProfileTab>
+				</Link>
+				<Link
+					href={{
 						query: { tab: 'donations', ...baseQuery },
 					}}
 				>
@@ -146,7 +169,7 @@ const ProfileContributes: FC<IUserProfileView> = () => {
 						$active={tab === EProfile.LIKED}
 						onClick={() => setTab(EProfile.LIKED)}
 					>
-						{formatMessage({ id: 'label.bookmarked_projects' })}
+						{formatMessage({ id: 'label.bookmarked' })}
 						{myAccount && !!user?.likedProjectsCount && (
 							<Count $active={tab === EProfile.LIKED}>
 								{user?.likedProjectsCount}
@@ -163,6 +186,7 @@ const ProfileContributes: FC<IUserProfileView> = () => {
 					<PublicProfileBoostedTab />
 				))}
 			{tab === EProfile.PROJECTS && <ProfileProjectsTab />}
+			{tab === EProfile.CAUSES && <ProfileCausesTab />}
 			{tab === EProfile.DONATIONS && <ProfileDonationsTab />}
 			{tab === EProfile.LIKED && <ProfileLikedTab />}
 		</Container>

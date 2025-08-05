@@ -9,7 +9,6 @@ import {
 	Subline,
 	semanticColors,
 	IconVerifiedBadge16,
-	H5,
 	Flex,
 	IconGIVBack16,
 } from '@giveth/ui-design-system';
@@ -23,6 +22,8 @@ import { IAdminUser, IProject } from '@/apollo/types/types';
 import { timeFromNow } from '@/lib/helpers';
 import ProjectCardImage from './ProjectCardImage';
 import {
+	slugToCauseDonate,
+	slugToCauseView,
 	slugToProjectDonate,
 	slugToProjectDonateStellar,
 	slugToProjectView,
@@ -37,6 +38,8 @@ import { client } from '@/apollo/apolloClient';
 import { ProjectCardTotalRaised } from './ProjectCardTotalRaised';
 import { ProjectCardTotalRaisedQF } from './ProjectCardTotalRaisedQF';
 import config from '@/configuration';
+import { EProjectType } from '@/apollo/types/gqlEnums';
+import { ProjectCardCauseTotalRaised } from './ProjectCardCauseTotalRaised';
 
 const cardRadius = '12px';
 const imgHeight = '226px';
@@ -46,6 +49,8 @@ interface IProjectCard {
 	project: IProject;
 	className?: string;
 	order?: number;
+	amountReceived?: number;
+	amountReceivedUsdValue?: number;
 }
 interface IRecurringDonation {
 	id: string;
@@ -62,7 +67,8 @@ interface IRecurringDonation {
 	finished: boolean;
 }
 const ProjectCard = (props: IProjectCard) => {
-	const { project, className } = props;
+	const { project, className, amountReceived, amountReceivedUsdValue } =
+		props;
 
 	const {
 		id,
@@ -80,6 +86,8 @@ const ProjectCard = (props: IProjectCard) => {
 		countUniqueDonors,
 		qfRounds,
 		countUniqueDonorsForActiveQfRound,
+		projectType,
+		addresses,
 	} = project;
 	const [recurringDonationSumInQF, setRecurringDonationSumInQF] = useState(0);
 	const [isHover, setIsHover] = useState(false);
@@ -92,19 +100,37 @@ const ProjectCard = (props: IProjectCard) => {
 	const { formatMessage, formatRelativeTime } = useIntl();
 	const router = useRouter();
 
+	// Check if the project is listing inside the cause project tabs
+	// This will be used to show the amount received and amount received usd value only for cause projects
+	const isListingInsideCauseProjectTabs =
+		router.pathname === '/cause/[causeIdSlug]' &&
+		router.query?.tab === 'projects';
+
 	const { activeStartedRound, activeQFRound } = getActiveRound(qfRounds);
 	const hasFooter = activeStartedRound || verified || isGivbackEligible;
 	const showVerifiedBadge = verified || isGivbackEligible;
+
+	// Check if the project has only one address and it is a Stellar address
+	const isOnlyStellar =
+		addresses?.length === 1 && addresses[0]?.chainType === 'STELLAR';
 
 	const isStellarOnlyRound =
 		activeStartedRound?.eligibleNetworks?.length === 1 &&
 		activeStartedRound?.eligibleNetworks[0] ===
 			config.STELLAR_NETWORK_NUMBER;
 
-	const projectLink = slugToProjectView(slug);
+	const projectLink =
+		projectType === EProjectType.CAUSE
+			? slugToCauseView(slug)
+			: slugToProjectView(slug);
+
 	const donateLink = isStellarOnlyRound
 		? slugToProjectDonateStellar(slug)
-		: slugToProjectDonate(slug);
+		: projectType === EProjectType.CAUSE
+			? slugToCauseDonate(slug)
+			: isOnlyStellar
+				? slugToProjectDonateStellar(slug)
+				: slugToProjectDonate(slug);
 
 	// Show hint modal if the user clicks on the card and the round is not started
 	const handleClick = (e: any) => {
@@ -161,6 +187,7 @@ const ProjectCard = (props: IProjectCard) => {
 			className={className}
 			$order={props.order}
 			$activeStartedRound={!!activeStartedRound}
+			$projectType={projectType}
 		>
 			<ImagePlaceholder>
 				<ProjectCardBadges project={project} />
@@ -181,7 +208,7 @@ const ProjectCard = (props: IProjectCard) => {
 			<CardBody
 				id={`project-card-body-${slug}`}
 				$isHover={
-					isHover
+					isHover && !isListingInsideCauseProjectTabs
 						? hasFooter
 							? ECardBodyHover.FULL
 							: ECardBodyHover.HALF
@@ -225,28 +252,46 @@ const ProjectCard = (props: IProjectCard) => {
 				>
 					<Description>{descriptionSummary}</Description>
 					<PaddedRow $justifyContent='space-between'>
-						{!activeStartedRound && (
-							<ProjectCardTotalRaised
-								activeStartedRound={!!activeStartedRound}
-								totalDonations={totalDonations || 0}
-								sumDonationValueUsdForActiveQfRound={
-									sumDonationValueUsdForActiveQfRound || 0
-								}
-								countUniqueDonors={countUniqueDonors || 0}
-							/>
-						)}
-						{activeStartedRound && (
-							<ProjectCardTotalRaisedQF
-								activeStartedRound={!!activeStartedRound}
-								totalDonations={totalDonations || 0}
-								sumDonationValueUsdForActiveQfRound={
-									sumDonationValueUsdForActiveQfRound || 0
-								}
-								countUniqueDonors={
-									countUniqueDonorsForActiveQfRound || 0
+						{isListingInsideCauseProjectTabs && (
+							<ProjectCardCauseTotalRaised
+								amountReceived={amountReceived ?? 0}
+								amountReceivedUsdValue={
+									amountReceivedUsdValue ?? 0
 								}
 							/>
 						)}
+						{!activeStartedRound &&
+							!isListingInsideCauseProjectTabs && (
+								<ProjectCardTotalRaised
+									activeStartedRound={!!activeStartedRound}
+									totalDonations={totalDonations || 0}
+									sumDonationValueUsdForActiveQfRound={
+										sumDonationValueUsdForActiveQfRound || 0
+									}
+									countUniqueDonors={countUniqueDonors || 0}
+									projectsCount={
+										project.activeProjectsCount || 0
+									}
+									isCause={projectType === EProjectType.CAUSE}
+								/>
+							)}
+						{activeStartedRound &&
+							!isListingInsideCauseProjectTabs && (
+								<ProjectCardTotalRaisedQF
+									activeStartedRound={!!activeStartedRound}
+									totalDonations={totalDonations || 0}
+									sumDonationValueUsdForActiveQfRound={
+										sumDonationValueUsdForActiveQfRound || 0
+									}
+									countUniqueDonors={
+										countUniqueDonorsForActiveQfRound || 0
+									}
+									isCause={projectType === EProjectType.CAUSE}
+									projectsCount={
+										project.causeProjects?.length || 0
+									}
+								/>
+							)}
 					</PaddedRow>
 				</Link>
 				{hasFooter && (
@@ -259,7 +304,7 @@ const ProjectCard = (props: IProjectCard) => {
 					>
 						<Hr />
 						<PaddedRow $justifyContent='space-between'>
-							<Flex gap='16px'>
+							<Flex gap='16px' $flexWrap={true}>
 								{showVerifiedBadge && (
 									<Flex $alignItems='center' gap='4px'>
 										<IconVerifiedBadge16
@@ -287,27 +332,36 @@ const ProjectCard = (props: IProjectCard) => {
 										{activeStartedRound?.name}
 									</QFBadge>
 								)}
+								{projectType === EProjectType.CAUSE && (
+									<CauseBadge>
+										{formatMessage({
+											id: 'label.cause',
+										})}
+									</CauseBadge>
+								)}
 							</Flex>
 						</PaddedRow>
 					</Link>
 				)}
-				<ActionButtons>
-					<Link
-						id='Donate_Card'
-						href={donateLink}
-						onClick={e => {
-							setDestination(donateLink);
-							handleClick(e);
-						}}
-					>
-						<CustomizedDonateButton
-							linkType='primary'
-							size='small'
-							label={formatMessage({ id: 'label.donate' })}
-							$isHover={isHover}
-						/>
-					</Link>
-				</ActionButtons>
+				{!isListingInsideCauseProjectTabs && (
+					<ActionButtons>
+						<Link
+							id='Donate_Card'
+							href={donateLink}
+							onClick={e => {
+								setDestination(donateLink);
+								handleClick(e);
+							}}
+						>
+							<CustomizedDonateButton
+								linkType='primary'
+								size='small'
+								label={formatMessage({ id: 'label.donate' })}
+								$isHover={isHover}
+							/>
+						</Link>
+					</ActionButtons>
+				)}
 			</CardBody>
 			{showHintModal && activeQFRound && (
 				<RoundNotStartedModal
@@ -329,17 +383,6 @@ const CustomizedDonateButton = styled(DonateButton)<{ $isHover: boolean }>`
 		opacity: ${props => (props.$isHover ? '1' : '0')};
 		transition: opacity 0.3s ease-in-out;
 	}
-`;
-
-const PriceText = styled(H5)`
-	display: inline;
-	color: ${neutralColors.gray[900]};
-	font-weight: 700;
-`;
-
-const LightSubline = styled(Subline)`
-	display: inline-block;
-	color: ${neutralColors.gray[700]};
 `;
 
 const VerifiedText = styled(Subline)`
@@ -392,6 +435,7 @@ interface ICardBody {
 interface IWrapperProps {
 	$order?: number;
 	$activeStartedRound?: boolean;
+	$projectType?: EProjectType;
 }
 
 const CardBody = styled.div<ICardBody>`
@@ -450,9 +494,16 @@ const Wrapper = styled.div<IWrapperProps>`
 	${mediaQueries.mobileL} {
 		height: ${props => (props.$activeStartedRound ? '562px' : '536px')};
 	}
-	${mediaQueries.laptopS} {
-		height: 472px;
-	}
+	 ${mediaQueries.laptopS} {
+        height: ${props =>
+			props.$projectType === EProjectType.CAUSE
+				? props.$activeStartedRound
+					? '460px' // Cause with active round
+					: '468px' // Cause without active round
+				: props.$activeStartedRound
+					? '460px' // Not a cause but in active round
+					: '448px'};  // Not a cause or active round
+    }
 `;
 
 interface IPaddedRowProps {
@@ -487,6 +538,11 @@ const QFBadge = styled(Subline)`
 	border-radius: 16px;
 	display: flex;
 	align-items: center;
+`;
+
+const CauseBadge = styled(QFBadge)`
+	background-color: ${neutralColors.gray[800]};
+	color: ${neutralColors.gray[200]};
 `;
 
 export default ProjectCard;

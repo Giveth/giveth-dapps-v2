@@ -34,7 +34,7 @@ interface IProjectTotalFundCardProps {
 
 const ProjectTotalFundCard = ({ selectedQF }: IProjectTotalFundCardProps) => {
 	const [qfRoundHistory, setQfRoundHistory] = useState<IGetQfRoundHistory>();
-	const { projectData, isAdmin } = useProjectContext();
+	const { projectData, isAdmin, isCause } = useProjectContext();
 	const {
 		id,
 		totalDonations,
@@ -267,17 +267,19 @@ const ProjectTotalFundCard = ({ selectedQF }: IProjectTotalFundCardProps) => {
 				</div>
 			)}
 
-			<BottomSection>
-				<CustomP>Project recipient address</CustomP>
-				{recipientAddresses?.map(addObj => (
-					<ProjectWalletAddress
-						key={addObj.networkId}
-						address={addObj.address!}
-						networkId={addObj.networkId!}
-						chainType={addObj.chainType}
-					/>
-				))}
-			</BottomSection>
+			{!isCause && (
+				<BottomSection>
+					<CustomP>Project recipient address</CustomP>
+					{recipientAddresses?.map(addObj => (
+						<ProjectWalletAddress
+							key={addObj.networkId}
+							address={addObj.address!}
+							networkId={addObj.networkId!}
+							chainType={addObj.chainType}
+						/>
+					))}
+				</BottomSection>
+			)}
 		</Wrapper>
 	);
 };

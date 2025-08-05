@@ -10,12 +10,15 @@ import {
 import { useIntl } from 'react-intl';
 import styled from 'styled-components';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 import { Box, BigArc, Title, Caption } from './common.sc';
 import links from '@/lib/constants/links';
 import Routes from '@/lib/constants/Routes';
 
 export const QFNoResultBanner = () => {
 	const { formatMessage } = useIntl();
+	const router = useRouter();
+	const isCauses = router.pathname.includes('/causes');
 	return (
 		<StyledBox $flexDirection='column' gap='24px'>
 			<BigArc color={semanticColors.jade[200]} />
@@ -40,10 +43,14 @@ export const QFNoResultBanner = () => {
 					/>
 				</Link>
 				<Lead color={neutralColors.gray[800]}>or</Lead>
-				<Link href={Routes.Projects}>
+				<Link
+					href={isCauses ? Routes.Causes + '/all' : Routes.Projects}
+				>
 					<ExploreButton
 						label={formatMessage({
-							id: 'label.explore_projects',
+							id: isCauses
+								? 'label.cause.explore_causes'
+								: 'label.explore_projects',
 						})}
 						size='large'
 						linkType='primary'

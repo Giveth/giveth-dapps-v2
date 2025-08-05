@@ -35,6 +35,7 @@ import IconStellar from '@/components/Icons/Stellar';
 const GNOSIS_GIV_TOKEN_ADDRESS = '0x4f4F9b8D5B4d0Dc10506e5551B0513B61fD59e75';
 const OPTIMISM_GIV_TOKEN_ADDRESS = '0x528CDc92eAB044E1E39FE43B9514bfdAB4412B98';
 const ZKEVM_GIV_TOKEN_ADDRESS = '0xddAFB91475bBf6210a151FA911AC8fdA7dE46Ec2';
+const POLYGON_GIV_TOKEN_ADDRESS = '0xc4df120d75604307dcB604fde2AD3b8a8B7c6FAA';
 
 const SEPT_8TH_2022 = 1662595200000;
 const MAINNET_NETWORK_NUMBER = 1; // Mainnet
@@ -445,6 +446,7 @@ const config: EnvConfig = {
 		subgraphAddress: '',
 		coingeckoChainName: 'polygon-pos',
 		chainLogo: (logoSize = 24) => <IconPolygon size={logoSize} />,
+		GIV_TOKEN_ADDRESS: POLYGON_GIV_TOKEN_ADDRESS,
 	},
 
 	OPTIMISM_CONFIG: {
@@ -787,6 +789,63 @@ const config: EnvConfig = {
 		...STELLAR_NETWORK,
 		coingeckoChainName: 'stellar',
 		chainLogo: (logoSize?: number) => <IconStellar size={logoSize} />,
+	},
+
+	// Causes config
+	CAUSES_CONFIG: {
+		minSelectedProjects: 5,
+		maxSelectedProjects: 50,
+		launchFee: 1000,
+		launchNetworks: [
+			{
+				network: GNOSIS_NETWORK_NUMBER,
+				name: 'Gnosis',
+				token: 'GIV',
+				tokenAddress: GNOSIS_GIV_TOKEN_ADDRESS,
+				symbol: 'GIV',
+				coingeckoId: 'giveth',
+				decimals: 18,
+				destinationAddress:
+					'0xd10BAC02a02747cB293972f99981F4Faf78E1626',
+			},
+			{
+				network: POLYGON_NETWORK_NUMBER,
+				name: 'Polygon',
+				token: 'GIV',
+				tokenAddress: POLYGON_GIV_TOKEN_ADDRESS,
+				symbol: 'GIV',
+				coingeckoId: 'giveth',
+				decimals: 18,
+				destinationAddress:
+					'0xd10BAC02a02747cB293972f99981F4Faf78E1626',
+			},
+			{
+				network: OPTIMISM_NETWORK_NUMBER,
+				name: 'Optimism',
+				token: 'GIV',
+				tokenAddress: OPTIMISM_GIV_TOKEN_ADDRESS,
+				symbol: 'GIV',
+				coingeckoId: 'giveth',
+				decimals: 18,
+				destinationAddress:
+					'0xd10BAC02a02747cB293972f99981F4Faf78E1626',
+			},
+		],
+		acceptedNetworks: [
+			MAINNET_NETWORK_NUMBER,
+			GNOSIS_NETWORK_NUMBER,
+			POLYGON_NETWORK_NUMBER,
+			OPTIMISM_NETWORK_NUMBER,
+			ARBITRUM_NETWORK_NUMBER,
+			BASE_NETWORK_NUMBER,
+			CELO_NETWORK_NUMBER,
+		],
+		recipientToken: {
+			network: POLYGON_NETWORK_NUMBER,
+			address: '0xc7B1807822160a8C5b6c9EaF5C584aAD0972deeC',
+			symbol: 'GIV',
+			decimals: 18,
+		},
 	},
 };
 

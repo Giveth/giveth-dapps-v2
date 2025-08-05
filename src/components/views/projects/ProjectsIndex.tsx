@@ -35,12 +35,12 @@ import { ArchivedQFProjectsBanner } from './qfBanner/ArchivedQFProjectsBanner';
 import { ActiveQFRoundStats } from './ActiveQFRoundStats';
 import useMediaQuery from '@/hooks/useMediaQuery';
 import { DefaultQFBanner } from '@/components/DefaultQFBanner';
-import NotAvailable from '@/components/NotAvailable';
 import { fetchProjects, IQueries } from './services';
 import { IProject } from '@/apollo/types/types';
 import { LAST_PROJECT_CLICKED } from './constants';
 import { hasRoundStarted } from '@/helpers/qf';
 import config from '@/configuration';
+import { EProjectType } from '@/apollo/types/gqlEnums';
 
 export interface IProjectsView {
 	projects: IProject[];
@@ -71,9 +71,18 @@ const ProjectsIndex = (props: IProjectsView) => {
 
 	// Define the fetch function for React Query
 	const fetchProjectsPage = async ({ pageParam = 0 }) => {
+		// Fetch all projects and causes if qf round page or search page
+		const projectType =
+			router.pathname === '/qf/[slug]' ||
+			(typeof router.query.searchTerm === 'string' &&
+				router.query.searchTerm.trim() !== '')
+				? EProjectType.ALL
+				: EProjectType.PROJECT;
+
 		const variables: IQueries = {
 			limit: 20, // Adjust the limit as needed
 			skip: 20 * pageParam,
+			projectType,
 		};
 
 		if (user?.id) {
@@ -212,16 +221,7 @@ const ProjectsIndex = (props: IProjectsView) => {
 		}
 	}, [isError, error]);
 
-	// Determine if no results should be shown
-	const isNotFound =
-		(mainCategories.length > 0 && !selectedMainCategory && !isArchivedQF) ||
-		(!isQF && data?.pages?.[0]?.data.length === 0);
-
-	if (isNotFound)
-		return <NotAvailable description='Oops! Page Not Found...' />;
-
 	const totalCount = data?.pages[data.pages.length - 1].totalCount || 0;
-	console.log('data', totalCount, data);
 
 	return (
 		<>

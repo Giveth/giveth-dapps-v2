@@ -10,7 +10,7 @@ import { projectsMetatags } from '@/content/metatags';
 import { ProjectsProvider } from '@/context/projects.context';
 import { IProjectsRouteProps } from 'pages/projects/[slug]';
 import { getMainCategorySlug } from '@/helpers/projects';
-import { EProjectsSortBy } from '@/apollo/types/gqlEnums';
+import { EProjectsSortBy, EProjectType } from '@/apollo/types/gqlEnums';
 
 const QFProjectsCategoriesRoute = (props: IProjectsRouteProps) => {
 	const { projects, totalCount } = props;
@@ -51,6 +51,7 @@ export const getServerSideProps: GetServerSideProps = async context => {
 				category: query.category,
 				mainCategory: getMainCategorySlug({ slug }),
 				notifyOnNetworkStatusChange,
+				projectType: EProjectType.ALL,
 			},
 			fetchPolicy: 'no-cache',
 		});
