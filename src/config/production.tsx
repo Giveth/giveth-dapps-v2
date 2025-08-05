@@ -794,7 +794,7 @@ const config: EnvConfig = {
 	// Causes config
 	CAUSES_CONFIG: {
 		minSelectedProjects: 5,
-		maxSelectedProjects: 10,
+		maxSelectedProjects: 50,
 		launchFee: 1000,
 		launchNetworks: [
 			{
