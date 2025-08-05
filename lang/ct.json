@@ -1354,11 +1354,11 @@
 	"label.you_get_givpower_when_you_stake": "Obtens GIVpower quan fas staking i bloquejes GIV. Utilitza el teu GIVpower per impulsar projectes a Giveth i influir en el seu rang. Els donants dels projectes millor classificats reben més GIVbacks.",
 	"label.you_get_what_you_put_in": "Obtens el que inverteixes. Dedicar temps a crear un bon projecte a Giveth t'ajudarà a atraure l'atenció dels donants.",
 	"label.you_have": "Tens",
-"label.you_havent_boosted_any_projects_yet": "Encara no has boostejat cap projecte o Causa!",
+	"label.you_havent_boosted_any_projects_yet": "Encara no has boostejat cap projecte o Causa!",
 	"label.you_havent_created_any_projects_yet": "Encara no has creat cap projecte!",
 	"label.you_havent_created_any_causes_yet": "Encara no has creat cap causa!",
 	"label.you_havent_donated_to_any_projects_yet": "Encara no has donat a cap projecte!",
-"label.you_havent_liked_any_projects_yet": "Encara no has guardat cap projecte o Causa!",
+	"label.you_havent_liked_any_projects_yet": "Encara no has guardat cap projecte o Causa!",
 	"label.you_have_already_boosted_20_projects": "Ja has impulsat el màxim de 20 projectes!",
 	"label.you_have_no_notifications": "No tens notificacions",
 	"label.you_have_successfuly_claimed": "Has reclamat amb èxit",
@@ -1981,6 +1981,9 @@
 	"label.cause.go_to_cause_details": "Anar a la pàgina de la causa",
 	"label.cause.insufficient_giv_for_launch_fee": "No tens suficients GIV per a la quota de llançament, prova una xarxa diferent o compra GIV utilitzant l'enllaç superior",
 	"label.cause.launch_cause_failed": "Llançament de causa fallit",
+	"label.cause.owner_total_earned": "Total guanyat",
+	"label.cause.owner_total_earned_tooltip": "La quantitat total que has guanyat en comissions de distribució d’aquesta Causa",
+	"label.cause.total_distributed_tooltip": "La quantitat total distribuïda per l’Agent de Donacions als projectes de la Causa",
 	"label.transaction_submitted_processing": "Transacció enviada. Processant...",
 	"label.transaction_successful": "Transacció realitzada!"
 }

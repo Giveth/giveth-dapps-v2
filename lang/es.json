@@ -1354,11 +1354,11 @@
 	"label.you_get_givpower_when_you_stake": "Obtienes GIVpower al hacer staking y bloquear GIV. Utiliza tu GIVpower para boostear proyectos en Giveth e influir en su ranking. Los donantes de los proyectos mejor rankeados reciben más GIVbacks.",
 	"label.you_get_what_you_put_in": "Obtienes lo que inviertes. Dedicar tiempo a crear un buen proyecto en Giveth te ayudará a atraer la atención de los donantes.",
 	"label.you_have": "Tienes",
-"label.you_havent_boosted_any_projects_yet": "¡No has boosteado ningún proyecto o Causa todavía!",
+	"label.you_havent_boosted_any_projects_yet": "¡No has boosteado ningún proyecto o Causa todavía!",
 	"label.you_havent_created_any_projects_yet": "¡No has creado ningún proyecto todavía!",
 	"label.you_havent_created_any_causes_yet": "¡No has creado ninguna Causa todavía!",
 	"label.you_havent_donated_to_any_projects_yet": "¡Todavía no has donado a ningún proyecto!",
-"label.you_havent_liked_any_projects_yet": "¡No has guardado ningún proyecto o Causa todavía!",
+	"label.you_havent_liked_any_projects_yet": "¡No has guardado ningún proyecto o Causa todavía!",
 	"label.you_have_already_boosted_20_projects": "Ya has boosteado el máximo de 20 proyectos!",
 	"label.you_have_no_notifications": "No tienes notificaciones",
 	"label.you_have_successfuly_claimed": "Has reclamado con éxito",
@@ -1981,6 +1981,9 @@
 	"label.cause.go_to_cause_details": "Ir a la página de la causa",
 	"label.cause.insufficient_giv_for_launch_fee": "No tienes suficientes GIV para la tarifa de lanzamiento, prueba una red diferente o compra GIV usando el enlace superior",
 	"label.cause.launch_cause_failed": "Lanzamiento de causa fallido",
+	"label.cause.owner_total_earned": "Total ganado",
+	"label.cause.owner_total_earned_tooltip": "La cantidad total que has ganado en comisiones de distribución de esta Causa",
+	"label.cause.total_distributed_tooltip": "La cantidad total distribuida por el Agente de Donaciones a los proyectos de la Causa",
 	"label.transaction_submitted_processing": "Transacción enviada. Procesando...",
 	"label.transaction_successful": "Transacción realizada!"
 }

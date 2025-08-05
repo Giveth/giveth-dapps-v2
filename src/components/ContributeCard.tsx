@@ -2,7 +2,11 @@ import { H3, H5 } from '@giveth/ui-design-system';
 import { FC } from 'react';
 import { useIntl } from 'react-intl';
 import { formatUSD } from '@/lib/helpers';
-import { ContributeCardBox, ContributeCardTitles } from './ContributeCard.sc';
+import {
+	ContributeCardBox,
+	ContributeCardTitles,
+	Data3H5,
+} from './ContributeCard.sc';
 import { IUserProfileView } from './views/userProfile/UserProfile.view';
 import { useProfileContext } from '@/context/profile.context';
 import { formatWeiHelper, limitFraction } from '@/helpers/number';
@@ -10,7 +14,7 @@ import { formatWeiHelper, limitFraction } from '@/helpers/number';
 interface IContributeCard {
 	data1: { label: string; value: string | number };
 	data2: { label: string; value: string | number };
-	data3?: { label: string; value: string | number };
+	data3?: { label: string; value: string | number; subValue?: string };
 }
 
 export const ContributeCard: FC<IContributeCard> = ({
@@ -20,7 +24,7 @@ export const ContributeCard: FC<IContributeCard> = ({
 }) => {
 	return (
 		<ContributeCardBox
-			$gridTemplateColumns={data3 ? '1fr 1fr 1fr' : '1fr 1fr'}
+			$gridTemplateColumns={data3 ? '1fr 1fr 1.5fr' : '1fr 1fr'}
 		>
 			<ContributeCardTitles>{data1.label}</ContributeCardTitles>
 			<ContributeCardTitles>{data2.label}</ContributeCardTitles>
@@ -29,7 +33,12 @@ export const ContributeCard: FC<IContributeCard> = ({
 			)}
 			<H3 weight={700}>{data1.value}</H3>
 			<H5>{data2.value}</H5>
-			{data3 && <H5>{data3.value}</H5>}
+			{data3 && (
+				<Data3H5>
+					{data3.value}
+					{data3.subValue && <span>{data3.subValue}</span>}
+				</Data3H5>
+			)}
 		</ContributeCardBox>
 	);
 };
@@ -94,6 +103,8 @@ export const CausesContributeCard: FC<IUserProfileView> = () => {
 	const { user } = useProfileContext();
 	const { formatMessage } = useIntl();
 
+	console.log(user);
+
 	return (
 		<ContributeCard
 			data1={{
@@ -105,8 +116,9 @@ export const CausesContributeCard: FC<IUserProfileView> = () => {
 				value: `$${formatUSD(user.totalCausesRaised || 0)}`,
 			}}
 			data3={{
-				label: formatMessage({ id: 'label.cause.total_distributed' }),
-				value: `${limitFraction(user.totalCausesDistributed?.toString() || '0', 2)} GIV`,
+				label: formatMessage({ id: 'label.cause.owner_total_earned' }),
+				value: `${limitFraction(user.causesTotalEarned?.toString() || '0', 2)} GIV`,
+				subValue: `~$${formatUSD(user.causesTotalEarnedUsdValue || 0)} USD`,
 			}}
 		/>
 	);

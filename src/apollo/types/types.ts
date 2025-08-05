@@ -99,6 +99,8 @@ export interface IProject {
 	activeProjectsCount?: number;
 	totalRaised?: number;
 	totalDistributed?: number;
+	ownerTotalEarned?: number;
+	ownerTotalEarnedUsdValue?: number;
 }
 
 export interface ICauseProject {
@@ -275,6 +277,8 @@ export interface IUser {
 	ownedCausesCount?: number;
 	totalCausesDistributed?: number;
 	totalCausesRaised?: number;
+	causesTotalEarned?: number;
+	causesTotalEarnedUsdValue?: number;
 }
 
 export interface IPassportInfo {

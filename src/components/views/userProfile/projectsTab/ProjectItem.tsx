@@ -9,11 +9,16 @@ import {
 	Flex,
 	mediaQueries,
 	IconUpdate24,
+	IconHelpFilled16,
+	brandColors,
+	IconSpark24,
+	semanticColors,
 } from '@giveth/ui-design-system';
 import { type FC, useState } from 'react';
 import styled from 'styled-components';
 import { useIntl } from 'react-intl';
 import Link from 'next/link';
+import { TooltipContent } from '@/components/modals/HarvestAll.sc';
 import { IProject } from '@/apollo/types/types';
 import { smallFormatDate } from '@/lib/helpers';
 import { ManageProjectAddressesModal } from '@/components/modals/ManageProjectAddresses/ManageProjectAddressesModal';
@@ -29,6 +34,7 @@ import ProjectVerificationStatus from './ProjectVerificationStatus';
 import { EProjectStatus, EProjectType } from '@/apollo/types/gqlEnums';
 import InlineToast, { EToastType } from '@/components/toasts/InlineToast';
 import { idToCauseEdit } from '@/lib/routeCreators';
+import { IconWithTooltip } from '@/components/IconWithToolTip';
 
 interface IProjectItem {
 	project: IProject;
@@ -185,7 +191,7 @@ const ProjectItem: FC<IProjectItem> = props => {
 				</ProjectStatusesContainer>
 				<ProjectStatusesContainer $flexDirection='column' gap='16px'>
 					{project.projectType === EProjectType.CAUSE && (
-						<Flex $justifyContent='space-between'>
+						<FlexOrdinary $justifyContent='space-between'>
 							<P>
 								<Flex $alignItems='center' gap='6px'>
 									<IconUpdate24 />
@@ -195,9 +201,9 @@ const ProjectItem: FC<IProjectItem> = props => {
 								</Flex>
 							</P>
 							{project.activeProjectsCount || 0}
-						</Flex>
+						</FlexOrdinary>
 					)}
-					<Flex $justifyContent='space-between'>
+					<FlexOrdinary $justifyContent='space-between'>
 						<P>
 							<Flex $alignItems='center' gap='6px'>
 								<IconFund24 />
@@ -205,15 +211,29 @@ const ProjectItem: FC<IProjectItem> = props => {
 							</Flex>
 						</P>
 						{formatDonation(project.totalRaised || 0, '$', locale)}
-					</Flex>
+					</FlexOrdinary>
 					{project.projectType === EProjectType.CAUSE && (
-						<Flex $justifyContent='space-between'>
+						<FlexOrdinary $justifyContent='space-between'>
 							<P>
 								<Flex $alignItems='center' gap='6px'>
 									<IconDonation24 />
 									{formatMessage({
 										id: 'label.cause.total_distributed',
 									})}
+									<IconWithTooltip
+										icon={
+											<IconHelpFilled16
+												color={brandColors.deep[900]}
+											/>
+										}
+										direction={'top'}
+									>
+										<TooltipContent>
+											{formatMessage({
+												id: 'label.cause.total_distributed_tooltip',
+											})}
+										</TooltipContent>
+									</IconWithTooltip>
 								</Flex>
 							</P>
 							{limitFraction(
@@ -221,7 +241,49 @@ const ProjectItem: FC<IProjectItem> = props => {
 								2,
 							)}{' '}
 							GIV
-						</Flex>
+						</FlexOrdinary>
+					)}
+					{project.projectType === EProjectType.CAUSE && (
+						<FlexEarned $justifyContent='space-between'>
+							<P>
+								<Flex $alignItems='center' gap='6px'>
+									<IconSpark24 />
+									{formatMessage({
+										id: 'label.cause.owner_total_earned',
+									})}
+									<IconWithTooltip
+										icon={
+											<IconHelpFilled16
+												color={brandColors.deep[900]}
+											/>
+										}
+										direction={'top'}
+									>
+										<TooltipContent>
+											{formatMessage({
+												id: 'label.cause.owner_total_earned_tooltip',
+											})}
+										</TooltipContent>
+									</IconWithTooltip>
+								</Flex>
+							</P>
+							<TotalEarned>
+								{limitFraction(
+									project.ownerTotalEarned?.toString() || '0',
+									2,
+								)}{' '}
+								GIV
+								<span>
+									~
+									{formatDonation(
+										project.ownerTotalEarnedUsdValue || 0,
+										'',
+										locale,
+									)}
+									USD
+								</span>
+							</TotalEarned>
+						</FlexEarned>
 					)}
 				</ProjectStatusesContainer>
 			</ProjectInfoContainer>
@@ -286,12 +348,39 @@ const ProjectInfoContainer = styled(Flex)`
 
 const ProjectStatusesContainer = styled(Flex)`
 	${mediaQueries.tablet} {
-		width: 330px;
+		width: 370px;
 	}
 `;
 
 const InlineToastWrapper = styled(InlineToast)`
 	width: 100%;
+`;
+
+const FlexOrdinary = styled(Flex)`
+	padding: 0 12px;
+`;
+
+const FlexEarned = styled(Flex)`
+	gap: 6px;
+	background-color: ${brandColors.giv[50]};
+	padding: 12px;
+	border-radius: 8px;
+`;
+
+const TotalEarned = styled.div`
+	display: flex;
+	align-items: center;
+	gap: 4px;
+	font-size: 16px;
+	font-weight: 500;
+	color: ${semanticColors.jade[500]};
+	span {
+		display: inline-block;
+		padding-left: 7px;
+		font-size: 12px;
+		font-weight: 400;
+		color: ${brandColors.deep[900]};
+	}
 `;
 
 export default ProjectItem;

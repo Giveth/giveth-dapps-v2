@@ -24,6 +24,9 @@ export const GET_USER_BY_ADDRESS = `query UserByAddress($address: String!) {
         activeQFMBDScore
         isEmailVerified
         ownedCausesCount
+        totalCausesRaised
+        causesTotalEarned
+        causesTotalEarnedUsdValue
     }
 }`;
 
