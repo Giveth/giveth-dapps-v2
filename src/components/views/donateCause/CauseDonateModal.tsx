@@ -9,7 +9,8 @@ import {
 	FlexCenter,
 } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
-import { Chain, parseUnits, Address, zeroAddress } from 'viem';
+import { Chain, parseUnits, Address, zeroAddress, formatUnits } from 'viem';
+import { ethers } from 'ethers';
 import { Modal } from '@/components/modals/Modal';
 import {
 	compareAddresses,
@@ -51,12 +52,12 @@ import { calcDonationShare } from '@/components/views/donate/common/helpers';
 import SanctionModal from '@/components/modals/SanctionedModal';
 import {
 	approveSpending,
-	checkAllowance,
 	executeSquidTransaction,
 	getSquidRoute,
+	saveCauseDonation,
 } from './helpers';
 import config from '@/configuration';
-import { IOnTxHash, saveDonation } from '@/services/donation';
+import { IOnTxHash } from '@/services/donation';
 
 interface IDonateModalProps extends IModal {
 	token: IProjectAcceptedToken;
@@ -169,34 +170,55 @@ const CauseDonateModal: FC<IDonateModalProps> = props => {
 	const approveToken = async () => {
 		await validateTokenThenDonate();
 
-		const allowance = await checkAllowance(
-			address || '',
-			projectWalletAddress || '',
-			token.address,
-		);
-
 		setApproving(true);
+
+		let approveTx: ethers.providers.TransactionResponse | null = null;
+		let spenderAddress = '';
+		// If the token is the same as the recipient token, use the project wallet address
+		if (
+			token.networkId === chainId &&
+			token.address.toLowerCase() ===
+				config.CAUSES_CONFIG.recipientToken.address.toLowerCase()
+		) {
+			spenderAddress = projectWalletAddress || '';
+		} else {
+			// If the token is different, use the recipient token address
+			const squidParams = {
+				fromAddress: address || '',
+				fromChain: chainId.toString(),
+				fromToken: token.address,
+				fromAmount: amount.toString(),
+				toChain: config.CAUSES_CONFIG.recipientToken.network.toString(),
+				toToken: config.CAUSES_CONFIG.recipientToken.address,
+				toAddress: projectWalletAddress || '',
+				quoteOnly: false,
+			};
+
+			const squidRoute = await getSquidRoute(squidParams);
+
+			if (squidRoute?.route) {
+				spenderAddress = squidRoute.route.transactionRequest.target;
+			}
+		}
 
 		const donationInWei = parseUnits(
 			projectDonation.toString(),
 			token.decimals || 18,
 		);
 
-		if (allowance < donationInWei) {
-			const approveTx = await approveSpending(
-				projectWalletAddress || '',
-				token.address,
-				donationInWei.toString(),
-			);
-			if (approveTx) {
-				setStep('donate');
-			} else {
-				setFailedModalType(EDonationFailedType.CANCELLED);
-				showToastError('Failed to approve token');
-			}
-		} else {
+		approveTx = await approveSpending(
+			spenderAddress,
+			token.address,
+			donationInWei.toString(),
+		);
+
+		if (approveTx) {
 			setStep('donate');
+		} else {
+			setFailedModalType(EDonationFailedType.CANCELLED);
+			showToastError('Failed to approve token');
 		}
+
 		setApproving(false);
 	};
 
@@ -207,6 +229,8 @@ const CauseDonateModal: FC<IDonateModalProps> = props => {
 				"Project wallet address for the destination network doesn't exist",
 			);
 		}
+
+		let donationAmount = projectDonation;
 
 		try {
 			setDonating(true);
@@ -254,10 +278,21 @@ const CauseDonateModal: FC<IDonateModalProps> = props => {
 				if (squidRoute?.route) {
 					tx = await executeSquidTransaction(squidRoute.route);
 
-					if (tx.error) {
+					if (tx.error || !tx?.hash) {
+						console.error(
+							'Error making transaction via Squid:',
+							tx.error || tx,
+						);
 						setFailedModalType(EDonationFailedType.REJECTED);
 						return;
 					}
+
+					donationAmount = parseFloat(
+						formatUnits(
+							squidRoute.route.estimate.toAmount,
+							config.CAUSES_CONFIG.recipientToken.decimals || 18,
+						),
+					);
 
 					swapData = {
 						squidRequestId: squidRoute.quoteId,
@@ -294,23 +329,31 @@ const CauseDonateModal: FC<IDonateModalProps> = props => {
 			// Save donation
 			if (tx) {
 				const donationProps: IOnTxHash = {
-					chainId,
-					txHash: tx.hash,
-					amount: projectDonation,
-					token,
+					chainId: config.CAUSES_CONFIG.recipientToken.network,
+					amount: donationAmount,
+					token: {
+						name: config.CAUSES_CONFIG.recipientToken.symbol,
+						symbol: config.CAUSES_CONFIG.recipientToken.symbol,
+						address: config.CAUSES_CONFIG.recipientToken.address,
+						decimals: config.CAUSES_CONFIG.recipientToken.decimals,
+						networkId: config.CAUSES_CONFIG.recipientToken.network,
+						chainType: ChainType.EVM,
+						order: 0,
+					},
 					projectId: Number(project.id),
 					anonymous,
 					useDonationBox: false,
 					walletAddress: address || '',
 					symbol: token.symbol,
 					setFailedModalType,
+					fromTokenAmount: parseFloat(projectDonation.toString()),
 				};
 
 				if (swapData) {
 					donationProps.swapData = swapData;
 				}
 
-				await saveDonation(donationProps);
+				await saveCauseDonation(donationProps);
 
 				console.log('Transaction saved', tx);
 

@@ -1,7 +1,12 @@
 import { Contract, ethers } from 'ethers';
 import { getConnectorClient } from 'wagmi/actions';
+import { captureException } from '@sentry/nextjs';
 import { wagmiConfig } from '@/wagmiConfigs';
 import { EDonationFailedType } from '@/components/modals/FailedDonation';
+import { IOnTxHash } from '@/services/donation';
+import { client } from '@/apollo/apolloClient';
+import { CREATE_CAUSE_DONATION } from '@/apollo/gql/gqlDonations';
+import { SENTRY_URGENT } from '@/configuration';
 
 const NATIVE_TOKEN_ADDRESS = '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee';
 const ZERO_ADDRESS = '0x0000000000000000000000000000000000000000';
@@ -219,4 +224,72 @@ const getEthersSigner = async (): Promise<ethers.Signer> => {
 	// ethers v5 compatible
 	const provider = new ethers.providers.Web3Provider(client as any); // cast needed if type mismatch
 	return provider.getSigner();
+};
+
+const SAVE_CAUSE_DONATION_ITERATIONS = 5;
+let saveCauseDonationIteration = 0;
+
+export async function saveCauseDonation(props: IOnTxHash) {
+	try {
+		return await createCauseDonation(props);
+	} catch (error) {
+		saveCauseDonationIteration++;
+		if (saveCauseDonationIteration >= SAVE_CAUSE_DONATION_ITERATIONS) {
+			saveCauseDonationIteration = 0;
+			throw error;
+		} else return saveCauseDonation(props);
+	}
+}
+
+const createCauseDonation = async (props: IOnTxHash) => {
+	const {
+		chainId,
+		amount,
+		token,
+		projectId,
+		anonymous,
+		nonce,
+		chainvineReferred,
+		safeTransactionId,
+		draftDonationId,
+		useDonationBox,
+		relevantDonationTxHash,
+		swapData,
+		fromTokenAmount,
+	} = props;
+	const { address, symbol } = token;
+	let donationId = 0;
+
+	try {
+		const { data } = await client.mutate({
+			mutation: CREATE_CAUSE_DONATION,
+			variables: {
+				transactionNetworkId: chainId,
+				nonce,
+				amount,
+				token: symbol,
+				projectId,
+				tokenAddress: address,
+				anonymous,
+				referrerId: chainvineReferred,
+				safeTransactionId,
+				draftDonationId,
+				useDonationBox,
+				relevantDonationTxHash,
+				swapData,
+				fromTokenAmount,
+			},
+		});
+		donationId = data.createDonation;
+	} catch (error) {
+		captureException(error, {
+			tags: {
+				section: SENTRY_URGENT,
+			},
+		});
+		console.error('createDonation error: ', error);
+		throw error;
+	}
+
+	return donationId;
 };
