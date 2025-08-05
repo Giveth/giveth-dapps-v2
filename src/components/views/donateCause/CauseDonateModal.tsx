@@ -52,7 +52,6 @@ import { calcDonationShare } from '@/components/views/donate/common/helpers';
 import SanctionModal from '@/components/modals/SanctionedModal';
 import {
 	approveSpending,
-	approveSpendingSquid,
 	executeSquidTransaction,
 	getSquidRoute,
 	saveCauseDonation,
@@ -174,23 +173,14 @@ const CauseDonateModal: FC<IDonateModalProps> = props => {
 		setApproving(true);
 
 		let approveTx: ethers.providers.TransactionResponse | null = null;
-
-		const donationInWei = parseUnits(
-			projectDonation.toString(),
-			token.decimals || 18,
-		);
-
+		let spenderAddress = '';
 		// If the token is the same as the recipient token, use the project wallet address
 		if (
 			token.networkId === chainId &&
 			token.address.toLowerCase() ===
 				config.CAUSES_CONFIG.recipientToken.address.toLowerCase()
 		) {
-			approveTx = await approveSpending(
-				projectWalletAddress || '',
-				token.address,
-				donationInWei.toString(),
-			);
+			spenderAddress = projectWalletAddress || '';
 		} else {
 			// If the token is different, use the recipient token address
 			const squidParams = {
@@ -207,13 +197,20 @@ const CauseDonateModal: FC<IDonateModalProps> = props => {
 			const squidRoute = await getSquidRoute(squidParams);
 
 			if (squidRoute?.route) {
-				approveTx = await approveSpendingSquid(
-					squidRoute.route.transactionRequest.target,
-					token.address,
-					donationInWei.toString(),
-				);
+				spenderAddress = squidRoute.route.transactionRequest.target;
 			}
 		}
+
+		const donationInWei = parseUnits(
+			projectDonation.toString(),
+			token.decimals || 18,
+		);
+
+		approveTx = await approveSpending(
+			spenderAddress,
+			token.address,
+			donationInWei.toString(),
+		);
 
 		if (approveTx) {
 			setStep('donate');

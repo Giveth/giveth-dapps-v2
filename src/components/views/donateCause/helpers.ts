@@ -117,34 +117,6 @@ export const approveSpending = async (
 	}
 };
 
-export const approveSpendingSquid = async (
-	transactionRequestTarget: string,
-	fromToken: string,
-	fromAmount: string,
-) => {
-	const erc20Abi = [
-		'function approve(address spender, uint256 amount) public returns (bool)',
-	];
-
-	const signer = await getEthersSigner();
-	const tokenContract = new ethers.Contract(fromToken, erc20Abi, signer);
-
-	try {
-		const tx = await tokenContract.approve(
-			transactionRequestTarget,
-			fromAmount,
-		);
-		await tx.wait();
-		console.log(
-			`Approved ${fromAmount} tokens for ${transactionRequestTarget}`,
-		);
-		return tx;
-	} catch (error) {
-		console.error('Approval failed:', error);
-		throw error;
-	}
-};
-
 /**
  * Fetch a route from the Squid API
  *
