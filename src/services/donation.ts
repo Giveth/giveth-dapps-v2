@@ -31,6 +31,7 @@ export interface IOnTxHash extends ICreateDonation {
 	chainId: number;
 	safeTransactionId?: string | null;
 	swapData?: SwapTransactionInput;
+	fromTokenAmount?: number;
 }
 
 export const updateDonation = (donationId: number, status: EDonationStatus) => {

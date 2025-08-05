@@ -346,6 +346,7 @@ const CauseDonateModal: FC<IDonateModalProps> = props => {
 					walletAddress: address || '',
 					symbol: token.symbol,
 					setFailedModalType,
+					fromTokenAmount: parseFloat(projectDonation.toString()),
 				};
 
 				if (swapData) {
