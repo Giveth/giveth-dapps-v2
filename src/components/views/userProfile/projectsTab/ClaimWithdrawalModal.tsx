@@ -101,14 +101,14 @@ const ClaimWithdrawalModal = ({
 				? encodeFunctionData({
 						abi: ISETH.abi,
 						functionName: 'downgradeToETH',
-						args: [+selectedStream.balance.toString()],
+						args: [selectedStream.balance.toString()],
 					})
 				: encodeFunctionData({
 						abi: superTokenABI.abi,
 						functionName: 'downgradeTo',
 						args: [
 							projectAddress,
-							+selectedStream.balance.toString(),
+							selectedStream.balance.toString(),
 						],
 					});
 
