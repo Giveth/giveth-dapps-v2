@@ -277,6 +277,8 @@ export interface IUser {
 	ownedCausesCount?: number;
 	totalCausesDistributed?: number;
 	totalCausesRaised?: number;
+	causesTotalEarned?: number;
+	causesTotalEarnedUsdValue?: number;
 }
 
 export interface IPassportInfo {
