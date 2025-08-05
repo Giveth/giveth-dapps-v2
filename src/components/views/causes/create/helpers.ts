@@ -1,5 +1,6 @@
-import { readContract, writeContract } from '@wagmi/core';
+import { getConnectorClient, readContract, writeContract } from '@wagmi/core';
 import { Address, erc20Abi } from 'viem';
+import { ethers } from 'ethers';
 import { CAUSE_TITLE_IS_VALID } from '@/apollo/gql/gqlCauses';
 import { backendGQLRequest } from '@/helpers/requests';
 import { wagmiConfig } from '@/wagmiConfigs';
@@ -131,3 +132,12 @@ export async function transferToken({
 		return null;
 	}
 }
+
+export const getEthersSigner = async (): Promise<ethers.Signer> => {
+	const client = await getConnectorClient(wagmiConfig);
+
+	if (!client) throw new Error('No connector client found');
+
+	const provider = new ethers.providers.Web3Provider(client as any);
+	return provider.getSigner();
+};
