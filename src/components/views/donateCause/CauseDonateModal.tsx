@@ -169,9 +169,38 @@ const CauseDonateModal: FC<IDonateModalProps> = props => {
 	const approveToken = async () => {
 		await validateTokenThenDonate();
 
+		let spenderAddress = projectWalletAddress;
+
+		// If the token is the same as the recipient token, use the project wallet address
+		if (
+			token.networkId === chainId &&
+			token.address.toLowerCase() ===
+				config.CAUSES_CONFIG.recipientToken.address.toLowerCase()
+		) {
+			spenderAddress = projectWalletAddress || '';
+		} else {
+			// If the token is different, use the recipient token address
+			const squidParams = {
+				fromAddress: address || '',
+				fromChain: chainId.toString(),
+				fromToken: token.address,
+				fromAmount: amount.toString(),
+				toChain: config.CAUSES_CONFIG.recipientToken.network.toString(),
+				toToken: config.CAUSES_CONFIG.recipientToken.address,
+				toAddress: projectWalletAddress || '',
+				quoteOnly: false,
+			};
+
+			const squidRoute = await getSquidRoute(squidParams);
+
+			if (squidRoute?.route) {
+				spenderAddress = squidRoute.route.transactionRequest.target;
+			}
+		}
+
 		const allowance = await checkAllowance(
 			address || '',
-			projectWalletAddress || '',
+			spenderAddress || '',
 			token.address,
 		);
 
@@ -184,7 +213,7 @@ const CauseDonateModal: FC<IDonateModalProps> = props => {
 
 		if (allowance < donationInWei) {
 			const approveTx = await approveSpending(
-				projectWalletAddress || '',
+				spenderAddress || '',
 				token.address,
 				donationInWei.toString(),
 			);
@@ -254,7 +283,11 @@ const CauseDonateModal: FC<IDonateModalProps> = props => {
 				if (squidRoute?.route) {
 					tx = await executeSquidTransaction(squidRoute.route);
 
-					if (tx.error) {
+					if (tx.error || !tx?.hash) {
+						console.error(
+							'Error making transaction via Squid:',
+							tx.error || tx,
+						);
 						setFailedModalType(EDonationFailedType.REJECTED);
 						return;
 					}
@@ -294,7 +327,7 @@ const CauseDonateModal: FC<IDonateModalProps> = props => {
 			// Save donation
 			if (tx) {
 				const donationProps: IOnTxHash = {
-					chainId,
+					chainId: config.CAUSES_CONFIG.recipientToken.network,
 					txHash: tx.hash,
 					amount: projectDonation,
 					token,
