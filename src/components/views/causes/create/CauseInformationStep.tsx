@@ -38,7 +38,6 @@ export const CauseInformationStep = ({
 
 	const titleValue = watch('title');
 	const descriptionValue = watch('description');
-	const imageValue = watch('image');
 
 	// Check if description meets minimum length requirement
 	const isDescriptionValid =
@@ -93,14 +92,6 @@ export const CauseInformationStep = ({
 							})}
 						/>
 					)}
-					{!imageValue && (
-						<InlineToast
-							type={EToastType.Warning}
-							message={formatMessage({
-								id: 'label.cause.image_required',
-							})}
-						/>
-					)}
 					<NextDescription>
 						<H4>
 							{formatMessage({
@@ -122,7 +113,6 @@ export const CauseInformationStep = ({
 								!titleValue?.trim() ||
 								!isValid ||
 								!isDescriptionValid ||
-								!imageValue ||
 								isLoading
 							}
 							label={formatMessage({ id: 'label.continue' })}
