@@ -15,6 +15,12 @@ export const DONATION_CORE_FIELDS = gql`
 		donationType
 		status
 		onramperId
+		fromTokenAmount
+		swapTransaction {
+			fromChainId
+			fromAmount
+			fromTokenSymbol
+		}
 	}
 `;
 

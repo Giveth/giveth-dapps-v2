@@ -294,6 +294,12 @@ export interface IReaction {
 	userId: string;
 }
 
+export interface ISwapTransaction {
+	fromChainId: number;
+	fromAmount: number;
+	fromTokenSymbol: string;
+}
+
 export interface IDonation {
 	id: string;
 	user: {
@@ -317,6 +323,8 @@ export interface IDonation {
 	qfRound?: IQFRound;
 	isTokenEligibleForGivback?: boolean;
 	fromWalletAddress?: string;
+	swapTransaction?: ISwapTransaction;
+	fromTokenAmount?: number;
 }
 
 export interface IWalletDonation extends IDonation {
