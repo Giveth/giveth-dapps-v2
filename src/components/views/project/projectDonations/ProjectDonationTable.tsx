@@ -206,19 +206,31 @@ const ProjectDonationTable = ({ selectedQF }: IProjectDonationTable) => {
 							<DonationTableCell>
 								<NetworkLogo
 									logoSize={24}
-									chainId={donation.transactionNetworkId}
+									chainId={
+										donation.swapTransaction?.fromChainId ||
+										donation.transactionNetworkId
+									}
 									chainType={donation.chainType}
 								/>
 								<NetworkName>
 									{getChainName(
-										donation.transactionNetworkId,
+										donation.swapTransaction?.fromChainId ||
+											donation.transactionNetworkId,
 										donation.chainType,
 									)}
 								</NetworkName>
 							</DonationTableCell>
 							<DonationTableCell>
-								<B>{formatDonation(donation.amount)}</B>
-								<Currency>{donation.currency}</Currency>
+								<B>
+									{donation.swapTransaction?.fromAmount &&
+									donation.fromTokenAmount
+										? donation.fromTokenAmount
+										: formatDonation(donation.amount)}
+								</B>
+								<Currency>
+									{donation.swapTransaction
+										?.fromTokenSymbol || donation.currency}
+								</Currency>
 								{!donation.anonymous && (
 									<ExternalLink
 										href={formatTxLink({
