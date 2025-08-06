@@ -93,14 +93,6 @@ export const EditCauseInformationStep = ({
 							})}
 						/>
 					)}
-					{!imageValue && (
-						<InlineToast
-							type={EToastType.Warning}
-							message={formatMessage({
-								id: 'label.cause.image_required',
-							})}
-						/>
-					)}
 					<NextDescription>
 						<H4>
 							{formatMessage({
@@ -122,7 +114,6 @@ export const EditCauseInformationStep = ({
 								!titleValue?.trim() ||
 								!isValid ||
 								!isDescriptionValid ||
-								!imageValue ||
 								isLoading
 							}
 							label={formatMessage({ id: 'label.continue' })}
