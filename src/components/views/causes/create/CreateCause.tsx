@@ -28,7 +28,6 @@ const CreateCause: FC<ICreateCauseProps> = () => {
 	const router = useRouter();
 	const [currentStep, setCurrentStep] = useState(1);
 	const [isSubmitting, setIsSubmitting] = useState(false);
-	const [createdSlug, setCreatedSlug] = useState('');
 	const [addCauseMutation] = useMutation(CREATE_CAUSE);
 
 	// Load storage data

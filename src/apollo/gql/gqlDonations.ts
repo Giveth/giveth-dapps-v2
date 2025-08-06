@@ -281,3 +281,41 @@ export const RENEW_DRAFT_DONATION_EXPIRATION = gql`
 		}
 	}
 `;
+
+export const CREATE_CAUSE_DONATION = gql`
+	mutation (
+		$transactionNetworkId: Float!
+		$nonce: Float
+		$amount: Float!
+		$token: String!
+		$projectId: Float!
+		$transakId: String
+		$tokenAddress: String
+		$anonymous: Boolean
+		$referrerId: String
+		$safeTransactionId: String
+		$draftDonationId: Float
+		$useDonationBox: Boolean
+		$relevantDonationTxHash: String
+		$swapData: SwapTransactionInput
+		$fromTokenAmount: Float!
+	) {
+		createDonation(
+			transactionNetworkId: $transactionNetworkId
+			nonce: $nonce
+			amount: $amount
+			token: $token
+			projectId: $projectId
+			transakId: $transakId
+			tokenAddress: $tokenAddress
+			anonymous: $anonymous
+			referrerId: $referrerId
+			safeTransactionId: $safeTransactionId
+			draftDonationId: $draftDonationId
+			useDonationBox: $useDonationBox
+			relevantDonationTxHash: $relevantDonationTxHash
+			swapData: $swapData
+			fromTokenAmount: $fromTokenAmount
+		)
+	}
+`;
