@@ -109,7 +109,16 @@ export const CauseReviewStep = ({
 
 	useEffect(() => {
 		const timeout = setTimeout(() => {
-			setHaveTokenBalance(Boolean(balance && balance.value > 0n));
+			const formatted = formatUnits(
+				balance?.value || 0n,
+				balance?.decimals || 18,
+			);
+			setHaveTokenBalance(
+				Boolean(
+					balance &&
+						Number(formatted) > config.CAUSES_CONFIG.launchFee,
+				),
+			);
 		}, 1000); // 1 second delay
 
 		return () => clearTimeout(timeout);
@@ -487,12 +496,12 @@ export const CauseReviewStep = ({
 							)}
 						</Col>
 						<Col lg={6} md={12}>
-							<InfoText>
+							<InfoTextRight>
 								{formatMessage({
 									id: 'label.cause.one_time_fee',
 								})}
-							</InfoText>
-							<InfoText>
+							</InfoTextRight>
+							<InfoTextRight>
 								{formatMessage({
 									id: 'label.cause.dont_have_giv_tokens',
 								})}{' '}
@@ -504,7 +513,7 @@ export const CauseReviewStep = ({
 										id: 'label.cause.swap_link',
 									})}
 								</SwapLink>
-							</InfoText>
+							</InfoTextRight>
 						</Col>
 					</Row>
 				</LaunchInfo>
@@ -693,6 +702,16 @@ const InfoValue = styled.div`
 
 const InfoText = styled.div`
 	display: inline-block;
+	font-weight: 400;
+	font-size: 14px;
+	line-height: 150%;
+	color: ${neutralColors.gray[700]};
+	margin-bottom: 8px;
+`;
+
+const InfoTextRight = styled.div`
+	display: block;
+	width: 100%;
 	font-weight: 400;
 	font-size: 14px;
 	line-height: 150%;

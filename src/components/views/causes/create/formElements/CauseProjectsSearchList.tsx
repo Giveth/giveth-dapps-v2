@@ -85,6 +85,11 @@ export const CauseProjectsSearchList = ({
 		}
 	}, [data]);
 
+	// Reset page when search filters change
+	useEffect(() => {
+		setPage(0);
+	}, [searchFilters]);
+
 	const itemPerPage = 16;
 
 	return (
