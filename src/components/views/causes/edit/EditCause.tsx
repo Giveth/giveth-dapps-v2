@@ -95,11 +95,6 @@ const EditCause: FC<ICreateCauseProps> = ({ project }) => {
 				id: 'error.cause_description_required',
 			});
 		}
-		if (!formDataWatch.image?.trim()) {
-			formErrors.image = formatMessage({
-				id: 'label.cause.image_required',
-			});
-		}
 		if (!formDataWatch.categories?.length) {
 			formErrors.categories = formatMessage({
 				id: 'label.cause.categories_required',
@@ -146,7 +141,7 @@ const EditCause: FC<ICreateCauseProps> = ({ project }) => {
 			const causeData: ICauseUpdate = {
 				title: formValues.title,
 				description: formValues.description,
-				bannerImage: formValues.image,
+				bannerImage: formValues.image || '',
 				categories:
 					formValues.categories?.map(category => category.name) || [],
 				projectIds:

@@ -47,21 +47,14 @@ export const EditCauseSelectProjectsStep = ({
 	const title = getValues('title');
 	const description = getValues('description');
 	const categories = getValues('categories');
-	const image = getValues('image');
 	const selectedProjects = getValues('selectedProjects');
 
 	// If someone skipped first step return to first step
 	useEffect(() => {
-		if (
-			!title ||
-			!description ||
-			!categories ||
-			categories.length === 0 ||
-			!image
-		) {
+		if (!title || !description || !categories || categories.length === 0) {
 			onPrevious();
 		}
-	}, [title, description, categories, image, onPrevious]);
+	}, [title, description, categories, onPrevious]);
 
 	// Handle filters change in the search component
 	const handleFiltersChange = (filters: {
@@ -142,7 +135,6 @@ export const EditCauseSelectProjectsStep = ({
 								!description?.trim() ||
 								!categories ||
 								categories.length === 0 ||
-								!image ||
 								selectedProjects?.length <
 									config.CAUSES_CONFIG.minSelectedProjects ||
 								selectedProjects?.length >
