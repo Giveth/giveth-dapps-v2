@@ -89,7 +89,7 @@ export const CausesItems: FC<ICausesItems> = ({ inSidebar = false }) => {
 							</ExploreItem>
 						</Link>
 					)}
-					<Link href={Routes.CreateCause}>
+					{/* <Link href={Routes.CreateCause}>
 						<ExploreItemCreate
 							className='qf-item'
 							baseTheme={theme}
@@ -101,7 +101,7 @@ export const CausesItems: FC<ICausesItems> = ({ inSidebar = false }) => {
 								})}
 							</B>
 						</ExploreItemCreate>
-					</Link>
+					</Link> */}
 				</ExploreByRow>
 			</HighlightSection>
 			<NormalSection $inSidebar={inSidebar}>
