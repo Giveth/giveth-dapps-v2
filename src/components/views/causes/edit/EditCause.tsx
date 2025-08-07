@@ -213,6 +213,7 @@ const EditCause: FC<ICreateCauseProps> = ({ project }) => {
 					{currentStep === 1 && (
 						<EditCauseInformationStep
 							onNext={() => setCurrentStep(2)}
+							causeId={Number(project?.id || 0)}
 						/>
 					)}
 					{currentStep === 2 && (
