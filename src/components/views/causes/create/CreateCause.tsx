@@ -106,11 +106,6 @@ const CreateCause: FC<ICreateCauseProps> = () => {
 				id: 'error.cause_description_required',
 			});
 		}
-		if (!formDataWatch.image?.trim()) {
-			formErrors.image = formatMessage({
-				id: 'label.cause.image_required',
-			});
-		}
 		if (!formDataWatch.categories?.length) {
 			formErrors.categories = formatMessage({
 				id: 'label.cause.categories_required',
@@ -171,7 +166,7 @@ const CreateCause: FC<ICreateCauseProps> = () => {
 				title: formValues.title,
 				description: formValues.description,
 				chainId: 137,
-				bannerImage: formValues.image,
+				bannerImage: formValues.image || '',
 				subCategories:
 					formValues.categories?.map(category => category.name) || [],
 				projectIds:

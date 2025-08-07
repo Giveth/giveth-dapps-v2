@@ -26,6 +26,7 @@ import { AddressZero } from './constants/constants';
 import { ChainType, NonEVMChain } from '@/types/config';
 import { wagmiConfig } from '@/wagmiConfigs';
 import usdtMainnetABI from '@/artifacts/usdtMainnetABI.json';
+import { isGnosisSafeAddress } from './safe';
 
 declare let window: any;
 interface TransactionParams {
@@ -456,10 +457,14 @@ async function handleEthTransfer(params: TransactionParams): Promise<Address> {
 		providers: ['0x0423189886d7966f0dd7e7d256898daeee625dca'],
 	});
 
+	// Check if to address is a safe address if it is, we don't need to add the referral data
+	const isSafeAddress = await isGnosisSafeAddress(params.to);
+	const data = isSafeAddress ? '0x' : (('0x' + dataSuffix) as `0x${string}`);
+
 	const hash = await wagmiSendTransaction(wagmiConfig, {
 		to: params.to,
 		value: value,
-		data: ('0x' + dataSuffix) as `0x${string}`,
+		data,
 	});
 
 	// Step 5: Report to Divvi

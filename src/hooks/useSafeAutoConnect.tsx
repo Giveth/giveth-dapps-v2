@@ -18,6 +18,7 @@ const checkGnosisSafe = () => {
 		return false;
 	}
 };
+
 function useSafeAutoConnect() {
 	const { address } = useAccount();
 	const { connect, connectors } = useConnect();

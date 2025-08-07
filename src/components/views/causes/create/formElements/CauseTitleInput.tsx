@@ -5,9 +5,12 @@ import { useState } from 'react';
 import { useRouter } from 'next/router';
 import Input, { InputSize } from '@/components/Input';
 import { requiredOptions } from '@/lib/constants/regex';
-import { gqlCauseTitleValidation } from '@/components/views/causes/create/helpers';
+import {
+	gqlCauseTitleValidation,
+	gqlCauseTitleValidationEdit,
+} from '@/components/views/causes/create/helpers';
 
-export default function CauseTitleInput() {
+export default function CauseTitleInput({ causeId }: { causeId?: number }) {
 	const router = useRouter();
 	const locale = router.locale || 'en';
 
@@ -35,7 +38,10 @@ export default function CauseTitleInput() {
 				id: 'label.cause.title_invalid',
 			});
 		setIsTitleValidating(true);
-		const result = await gqlCauseTitleValidation(title, locale);
+		const result =
+			causeId && causeId > 0
+				? await gqlCauseTitleValidationEdit(title, locale, causeId)
+				: await gqlCauseTitleValidation(title, locale);
 		setIsTitleValidating(false);
 		return result;
 	};

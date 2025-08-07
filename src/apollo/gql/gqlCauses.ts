@@ -1,8 +1,14 @@
 import { gql } from '@apollo/client';
 
 export const CAUSE_TITLE_IS_VALID = `
-	query IsValidCauseTitle($title: String!) {
-		isValidCauseTitle(title: $title)
+		query IsValidCauseTitle($title: String!) {
+			isValidCauseTitle(title: $title)
+		}
+	`;
+
+export const CAUSE_TITLE_IS_VALID_EDIT = `
+	query IsValidCauseTitleForEdit($title: String!, $causeId: Float!) {
+		isValidCauseTitleForEdit(title: $title, causeId: $causeId)
 	}
 `;
 

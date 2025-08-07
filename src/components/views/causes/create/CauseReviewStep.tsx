@@ -64,7 +64,6 @@ export const CauseReviewStep = ({
 		!getValues('title') ||
 		!getValues('description') ||
 		!getValues('categories') ||
-		!getValues('image') ||
 		!getValues('selectedProjects')
 	) {
 		onPrevious();
@@ -140,8 +139,8 @@ export const CauseReviewStep = ({
 	// Get value from previous step
 	const title = getValues('title');
 	const description = getValues('description');
-	const categories = getValues('categories');
 	const image = getValues('image');
+	const categories = getValues('categories');
 	const selectedProjects = getValues('selectedProjects');
 
 	// Get transaction status
@@ -173,7 +172,6 @@ export const CauseReviewStep = ({
 			!description ||
 			!categories ||
 			categories.length === 0 ||
-			!image ||
 			!selectedProjects ||
 			selectedProjects.length <
 				config.CAUSES_CONFIG.minSelectedProjects ||
@@ -181,7 +179,7 @@ export const CauseReviewStep = ({
 		) {
 			onPrevious();
 		}
-	}, [title, description, categories, image, selectedProjects, onPrevious]);
+	}, [title, description, categories, selectedProjects, onPrevious]);
 
 	const changeUserWalletNetwork = (networkId: number) => {
 		switchChain({ chainId: networkId });
@@ -194,7 +192,6 @@ export const CauseReviewStep = ({
 			!description ||
 			!categories ||
 			categories.length === 0 ||
-			!image ||
 			!selectedProjects ||
 			selectedProjects.length <
 				config.CAUSES_CONFIG.minSelectedProjects ||
@@ -242,7 +239,7 @@ export const CauseReviewStep = ({
 				chainId: currentChainId,
 			});
 
-			const toastID = gToast(
+			gToast(
 				formatMessage({
 					id: 'label.transaction_submitted_processing',
 				}),
@@ -261,7 +258,7 @@ export const CauseReviewStep = ({
 				setLunchStatus('transfer_failed');
 				setIsLaunching(false);
 				setFailedModalType(EDonationFailedType.FAILED);
-				toast.dismiss(toastID);
+				toast.remove();
 				throw new Error('Token transfer transaction failed');
 			}
 
@@ -274,8 +271,7 @@ export const CauseReviewStep = ({
 
 			// Show toast success
 			if (txHash) {
-				console.log('dismissing toast', toastID);
-				toast.dismiss(toastID);
+				toast.remove();
 
 				gToast(
 					formatMessage({
@@ -307,6 +303,7 @@ export const CauseReviewStep = ({
 	const handleLaunch = () => {
 		// First try to transfer the token
 		if (lunchStatus === 'transfer_failed' || lunchStatus === 'transfer') {
+			toast.remove();
 			handleTransfer?.();
 		}
 
@@ -355,16 +352,18 @@ export const CauseReviewStep = ({
 							}}
 						/>
 					</Col>
-					<Col lg={4} md={12}>
-						<CauseImage>
-							<Image
-								src={image}
-								alt='cause image'
-								width={380}
-								height={220}
-							/>
-						</CauseImage>
-					</Col>
+					{image && (
+						<Col lg={4} md={12}>
+							<CauseImage>
+								<Image
+									src={image}
+									alt='cause image'
+									width={380}
+									height={220}
+								/>
+							</CauseImage>
+						</Col>
+					)}
 				</Row>
 			</CauseInfo>
 			<CauseProjects>
@@ -546,7 +545,6 @@ export const CauseReviewStep = ({
 						!description?.trim() ||
 						!categories ||
 						categories.length === 0 ||
-						!image ||
 						selectedProjects?.length <
 							config.CAUSES_CONFIG.minSelectedProjects ||
 						selectedProjects?.length >

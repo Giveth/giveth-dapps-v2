@@ -21,10 +21,12 @@ import InlineToast, { EToastType } from '@/components/toasts/InlineToast';
 
 interface ICauseInformationStepProps {
 	onNext: () => void;
+	causeId: number;
 }
 
 export const EditCauseInformationStep = ({
 	onNext,
+	causeId,
 }: ICauseInformationStepProps) => {
 	const { formatMessage } = useIntl();
 	const [activeCauseSection, setActiveCauseSection] =
@@ -38,7 +40,6 @@ export const EditCauseInformationStep = ({
 
 	const titleValue = watch('title');
 	const descriptionValue = watch('description');
-	const imageValue = watch('image');
 
 	// Check if description meets minimum length requirement
 	const isDescriptionValid =
@@ -66,7 +67,7 @@ export const EditCauseInformationStep = ({
 					<Desc>
 						{formatMessage({ id: 'label.cause.info_desc' })}
 					</Desc>
-					<CauseTitleInput />
+					<CauseTitleInput causeId={causeId} />
 					<CauseDescriptionInput
 						setActiveCauseSection={setActiveCauseSection}
 					/>
@@ -93,14 +94,6 @@ export const EditCauseInformationStep = ({
 							})}
 						/>
 					)}
-					{!imageValue && (
-						<InlineToast
-							type={EToastType.Warning}
-							message={formatMessage({
-								id: 'label.cause.image_required',
-							})}
-						/>
-					)}
 					<NextDescription>
 						<H4>
 							{formatMessage({
@@ -122,7 +115,6 @@ export const EditCauseInformationStep = ({
 								!titleValue?.trim() ||
 								!isValid ||
 								!isDescriptionValid ||
-								!imageValue ||
 								isLoading
 							}
 							label={formatMessage({ id: 'label.continue' })}
