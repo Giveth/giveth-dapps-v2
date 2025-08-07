@@ -1,4 +1,7 @@
 import SafeApiKit from '@safe-global/api-kit';
+import { ethers } from 'ethers';
+import { wagmiConfig } from '@/wagmiConfigs';
+import { getEthersProvider } from '@/helpers/ethers';
 
 export const getTxFromSafeTxId = async (
 	safeTxHash: string,
@@ -18,3 +21,25 @@ export const getTxFromSafeTxId = async (
 		return null;
 	}
 };
+
+export async function isGnosisSafeAddress(address: string): Promise<boolean> {
+	try {
+		const provider = await getEthersProvider(wagmiConfig);
+
+		if (!provider) {
+			return false;
+		}
+
+		const result = await provider.call({
+			to: address,
+			data: '0xa619486e',
+		});
+
+		// Parse returned address from bytes
+		const masterCopy = ethers.utils.getAddress('0x' + result.slice(-40));
+		return ethers.utils.isAddress(masterCopy);
+	} catch (e) {
+		console.error('Error checking if address is Gnosis Safe', e);
+		return false;
+	}
+}
