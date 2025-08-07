@@ -105,13 +105,24 @@ const OneTimeDonationTable: FC<OneTimeDonationTable> = ({
 					<DonationTableCell>
 						<NetworkLogo
 							logoSize={24}
-							chainId={donation.transactionNetworkId}
+							chainId={
+								donation.swapTransaction?.fromChainId ||
+								donation.transactionNetworkId
+							}
 							chainType={donation.chainType}
 						/>
 					</DonationTableCell>
 					<DonationTableCell>
-						<B>{formatDonation(donation.amount)}</B>
-						<Currency>{donation.currency}</Currency>
+						<B>
+							{donation.swapTransaction?.fromAmount &&
+							donation.fromTokenAmount
+								? donation.fromTokenAmount
+								: formatDonation(donation.amount)}
+						</B>
+						<Currency>
+							{donation.swapTransaction?.fromTokenSymbol ||
+								donation.currency}
+						</Currency>
 						<ExternalLink
 							href={formatTxLink({
 								networkId: donation.transactionNetworkId,

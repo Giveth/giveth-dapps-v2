@@ -1,7 +1,10 @@
 import { getConnectorClient, readContract, writeContract } from '@wagmi/core';
 import { Address, erc20Abi } from 'viem';
 import { ethers } from 'ethers';
-import { CAUSE_TITLE_IS_VALID } from '@/apollo/gql/gqlCauses';
+import {
+	CAUSE_TITLE_IS_VALID,
+	CAUSE_TITLE_IS_VALID_EDIT,
+} from '@/apollo/gql/gqlCauses';
 import { backendGQLRequest } from '@/helpers/requests';
 import { wagmiConfig } from '@/wagmiConfigs';
 
@@ -17,6 +20,24 @@ export const gqlCauseTitleValidation = async (
 		);
 		if (errors) throw new Error(errors[0].message);
 		return data.isValidTitleForCause;
+	} catch (error: any) {
+		return error.message;
+	}
+};
+
+export const gqlCauseTitleValidationEdit = async (
+	title: string,
+	locale: string,
+	causeId: number,
+) => {
+	try {
+		const { data, errors } = await backendGQLRequest(
+			CAUSE_TITLE_IS_VALID_EDIT,
+			{ title, causeId },
+			{ 'accept-language': locale },
+		);
+		if (errors) throw new Error(errors[0].message);
+		return data.isValidCauseTitleForEdit;
 	} catch (error: any) {
 		return error.message;
 	}
