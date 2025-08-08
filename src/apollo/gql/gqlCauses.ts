@@ -265,7 +265,6 @@ export const FETCH_CAUSE_BY_ID_EDIT = gql`
 `;
 
 export const FETCH_USER_CAUSES = gql`
-	${PROJECT_CARD_FIELDS_CAUSES}
 	query FetchUserProjects(
 		$take: Float
 		$skip: Float
@@ -282,7 +281,54 @@ export const FETCH_USER_CAUSES = gql`
 			projectType: $projectType
 		) {
 			projects {
-				...ProjectCardFields
+				id
+				title
+				slug
+				verified
+				isGivbackEligible
+				totalDonations
+				projectType
+				qfRounds {
+					id
+					name
+					isActive
+					beginDate
+					endDate
+				}
+				descriptionSummary
+				categories {
+					name
+					value
+					mainCategory {
+						title
+					}
+				}
+				verified
+				adminUser {
+					name
+					walletAddress
+				}
+				organization {
+					label
+				}
+				addresses {
+					address
+					memo
+					isRecipient
+					networkId
+					chainType
+				}
+				status {
+					name
+				}
+				sumDonationValueUsdForActiveQfRound
+				countUniqueDonorsForActiveQfRound
+				countUniqueDonors
+				estimatedMatching {
+					projectDonationsSqrtRootSum
+					allProjectsSum
+					matchingPool
+				}
 				creationDate
 				listed
 				activeProjectsCount
@@ -300,22 +346,6 @@ export const FETCH_USER_CAUSES = gql`
 					isRecipient
 					networkId
 					chainType
-				}
-				causeProjects {
-					id
-					projectId
-					isIncluded
-					project {
-						id
-						verified
-						status {
-							name
-						}
-						addresses {
-							id
-							networkId
-						}
-					}
 				}
 			}
 			totalCount
@@ -435,6 +465,62 @@ export const FETCH_CAUSE_BY_SLUG_SINGLE_CAUSE = gql`
 				allocatedFundUSD
 			}
 			campaigns {
+				id
+				title
+			}
+		}
+	}
+`;
+
+export const FETCH_CAUSES_BY_USER_ID = gql`
+	query FetchUserCauses($userId: Int!, $take: Float = 10, $skip: Float = 0) {
+		causesByUserId(userId: $userId, take: $take, skip: $skip) {
+			projects {
+				id
+				title
+				creationDate
+				listed
+				activeProjectsCount
+				status {
+					id
+					name
+				}
+				totalRaised
+				totalDistributed
+				ownerTotalEarned
+				ownerTotalEarnedUsdValue
+				projectType
+				addresses {
+					address
+					memo
+					isRecipient
+					networkId
+					chainType
+				}
+				causeProjects {
+					id
+					projectId
+					isIncluded
+					project {
+						id
+						verified
+						addresses {
+							id
+							networkId
+						}
+						status {
+							id
+							name
+						}
+					}
+				}
+			}
+			totalCount
+			categories {
+				id
+				name
+			}
+			campaign {
 				id
 				title
 			}
