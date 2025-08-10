@@ -12,7 +12,6 @@ export const CAUSE_TITLE_IS_VALID_EDIT = `
 	}
 `;
 
-// Note: TypeGraphQL uses Float for numbers by default
 export const CREATE_CAUSE = gql`
 	mutation CreateCause(
 		$title: String!
