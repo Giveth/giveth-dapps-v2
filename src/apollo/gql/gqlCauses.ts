@@ -501,6 +501,7 @@ export const FETCH_CAUSES_BY_USER_ID = gql`
 					id
 					projectId
 					isIncluded
+					userRemoved
 					project {
 						id
 						verified
@@ -516,10 +517,6 @@ export const FETCH_CAUSES_BY_USER_ID = gql`
 				}
 			}
 			totalCount
-			categories {
-				id
-				name
-			}
 			campaign {
 				id
 				title
