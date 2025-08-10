@@ -302,7 +302,6 @@ export const FETCH_USER_CAUSES = gql`
 						title
 					}
 				}
-				verified
 				adminUser {
 					name
 					walletAddress
@@ -316,9 +315,6 @@ export const FETCH_USER_CAUSES = gql`
 					isRecipient
 					networkId
 					chainType
-				}
-				status {
-					name
 				}
 				sumDonationValueUsdForActiveQfRound
 				countUniqueDonorsForActiveQfRound
