@@ -49,6 +49,8 @@ const ProjectItem: FC<IProjectItem> = props => {
 	const [showClaimModal, setShowClaimModal] = useState(false);
 	const [showDeleteModal, setShowDeleteModal] = useState(false);
 
+	console.log('project', project);
+
 	// Check does cause have some projects that has been not active
 	// or missing network 137 address
 	let projectStatus = '';

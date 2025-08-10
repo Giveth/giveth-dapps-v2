@@ -477,6 +477,7 @@ export const FETCH_CAUSES_BY_USER_ID = gql`
 			projects {
 				id
 				title
+				slug
 				creationDate
 				listed
 				activeProjectsCount
