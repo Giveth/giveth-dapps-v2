@@ -243,6 +243,11 @@ export const FETCH_CAUSE_BY_ID_EDIT = gql`
 					status {
 						name
 					}
+					adminUser {
+						id
+						name
+						walletAddress
+					}
 				}
 			}
 			categories {
