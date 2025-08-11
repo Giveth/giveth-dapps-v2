@@ -235,8 +235,13 @@ const ProjectDonationTable = ({ selectedQF }: IProjectDonationTable) => {
 									<ExternalLink
 										href={formatTxLink({
 											networkId:
+												donation.swapTransaction
+													?.fromChainId ||
 												donation.transactionNetworkId,
-											txHash: donation.transactionId,
+											txHash:
+												donation.swapTransaction
+													?.firstTxHash ||
+												donation.transactionId,
 											chainType: donation.chainType,
 										})}
 									>

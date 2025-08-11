@@ -64,6 +64,8 @@ const OneTimeDonationTable: FC<OneTimeDonationTable> = ({
 		}
 	}, [donations]);
 
+	console.log(donations);
+
 	return (
 		<DonationTableContainer $myAccount={myAccount} ref={tableContainerRef}>
 			<TableHeader onClick={() => changeOrder(EOrderBy.CreationDate)}>
@@ -125,8 +127,12 @@ const OneTimeDonationTable: FC<OneTimeDonationTable> = ({
 						</Currency>
 						<ExternalLink
 							href={formatTxLink({
-								networkId: donation.transactionNetworkId,
-								txHash: donation.transactionId,
+								networkId:
+									donation.swapTransaction?.fromChainId ||
+									donation.transactionNetworkId,
+								txHash:
+									donation.swapTransaction?.firstTxHash ||
+									donation.transactionId,
 								chainType: donation.chainType,
 							})}
 						>
