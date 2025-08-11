@@ -9,7 +9,11 @@ import {
 } from './ContributeCard.sc';
 import { IUserProfileView } from './views/userProfile/UserProfile.view';
 import { useProfileContext } from '@/context/profile.context';
-import { formatWeiHelper, limitFraction } from '@/helpers/number';
+import {
+	formatDonation,
+	formatWeiHelper,
+	limitFraction,
+} from '@/helpers/number';
 
 interface IContributeCard {
 	data1: { label: string; value: string | number };
@@ -101,9 +105,7 @@ export const PublicGIVpowerContributeCard: FC<IUserProfileView> = () => {
 
 export const CausesContributeCard: FC<IUserProfileView> = () => {
 	const { user } = useProfileContext();
-	const { formatMessage } = useIntl();
-
-	console.log(user);
+	const { formatMessage, locale } = useIntl();
 
 	return (
 		<ContributeCard
@@ -117,7 +119,7 @@ export const CausesContributeCard: FC<IUserProfileView> = () => {
 			}}
 			data3={{
 				label: formatMessage({ id: 'label.cause.owner_total_earned' }),
-				value: `${limitFraction(user.causesTotalEarned?.toString() || '0', 2)} GIV`,
+				value: `${formatDonation(user.causesTotalEarned?.toString() || '0', '', locale)} GIV`,
 				subValue: `~$${formatUSD(user.causesTotalEarnedUsdValue || 0)} USD`,
 			}}
 		/>
