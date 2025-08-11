@@ -34,6 +34,8 @@ export const GET_USER_BY_ADDRESS = gql`
 			ownedCausesCount
 			totalCausesDistributed
 			totalCausesRaised
+			causesTotalEarned
+			causesTotalEarnedUsdValue
 		}
 	}
 `;
@@ -279,19 +281,5 @@ export const SEND_USER_CONFIRMATION_CODE_FLOW = gql`
 		$email: String!
 	) {
 		sendUserConfirmationCodeFlow(verifyCode: $verifyCode, email: $email)
-	}
-`;
-
-export const FETCH_ALL_USERS_BASIC_DATA = gql`
-	query FetchAllUsersBasicData($limit: Int, $skip: Int) {
-		allUsersBasicData(limit: $limit, skip: $skip) {
-			users {
-				firstName
-				lastName
-				name
-				walletAddress
-			}
-			totalCount
-		}
 	}
 `;
