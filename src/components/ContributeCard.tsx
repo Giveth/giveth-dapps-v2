@@ -9,11 +9,7 @@ import {
 } from './ContributeCard.sc';
 import { IUserProfileView } from './views/userProfile/UserProfile.view';
 import { useProfileContext } from '@/context/profile.context';
-import {
-	formatDonation,
-	formatWeiHelper,
-	limitFraction,
-} from '@/helpers/number';
+import { formatDonation, formatWeiHelper } from '@/helpers/number';
 
 interface IContributeCard {
 	data1: { label: string; value: string | number };
