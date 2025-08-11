@@ -16,7 +16,7 @@ import styled from 'styled-components';
 import { type FC } from 'react';
 import useMediaQuery from '@/hooks/useMediaQuery';
 import { device } from '@/lib/constants/constants';
-import { formatDonation, limitFraction } from '@/helpers/number';
+import { formatDonation } from '@/helpers/number';
 import { IProject } from '@/apollo/types/types';
 import { useDonateData } from '@/context/donate.context';
 import { ORGANIZATION } from '@/lib/constants/organizations';
