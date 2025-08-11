@@ -298,6 +298,7 @@ export interface ISwapTransaction {
 	fromChainId: number;
 	fromAmount: number;
 	fromTokenSymbol: string;
+	firstTxHash?: string;
 }
 
 export interface IDonation {
