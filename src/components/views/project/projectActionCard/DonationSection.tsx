@@ -82,10 +82,7 @@ export const DonateSection: FC<IDonateSectionProps> = ({ projectData }) => {
 							})}
 						</Title>
 						<Amount weight={700}>
-							{limitFraction(
-								totalDistributed?.toString() || '0',
-								2,
-							)}{' '}
+							{formatDonation(totalDistributed || 0, '', locale)}{' '}
 							GIV
 						</Amount>
 						<Description>
