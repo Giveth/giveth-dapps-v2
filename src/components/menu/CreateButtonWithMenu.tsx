@@ -99,7 +99,7 @@ export const CreateButtonWithMenu: FC<ICreateButtonWithMenu> = ({
 									{formatMessage({ id: 'label.project' })}
 								</MenuButton>
 							</MenuSection>
-							{/* <MenuSection>
+							<MenuSection>
 								<MenuTitle>
 									{formatMessage({ id: 'label.cause' })}
 								</MenuTitle>
@@ -112,7 +112,7 @@ export const CreateButtonWithMenu: FC<ICreateButtonWithMenu> = ({
 									<IconPlus size={16} />
 									{formatMessage({ id: 'label.cause' })}
 								</MenuButton>
-							</MenuSection> */}
+							</MenuSection>
 						</MenuContent>
 					</CreateMenu>
 				</ItemsProvider>
