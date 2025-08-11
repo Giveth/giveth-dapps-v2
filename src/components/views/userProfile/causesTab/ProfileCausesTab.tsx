@@ -11,7 +11,7 @@ import { UserContributeTitle, UserProfileTab } from '../common.sc';
 import { CausesContributeCard } from '@/components/ContributeCard';
 import { useProfileContext } from '@/context/profile.context';
 import { getUserName } from '@/helpers/user';
-import { fetchUserCauses } from './services';
+import { fetchUserCauses, fetchUserCausesAdmin } from './services';
 import {
 	projectsOrder,
 	userProjectsPerPage,
@@ -26,9 +26,21 @@ const ProfileCausesTab: FC<IUserProfileView> = () => {
 	const isOwner = myAccount; // Determines if the logged-in user is the profile owner
 
 	const { data, isLoading, refetch } = useQuery({
-		queryKey: ['dashboard-causes', user.id, page, projectsOrder],
-		queryFn: () => fetchUserCauses(user.id!, page, projectsOrder),
-		enabled: !!user.id,
+		queryKey: ['dashboard-causes', user.id, page, myAccount, projectsOrder],
+		queryFn: async () => {
+			if (!user?.id) {
+				return { projects: [], totalCount: 0 };
+			}
+
+			// Admin (logged-in user) view
+			if (myAccount) {
+				return fetchUserCausesAdmin(user.id, page);
+			}
+
+			// Public view
+			return fetchUserCauses(user.id, page, projectsOrder);
+		},
+		enabled: !!user?.id,
 	});
 
 	return (

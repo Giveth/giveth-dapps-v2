@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import { useIntl } from 'react-intl';
 import { neutralColors, Subline, H5, Flex } from '@giveth/ui-design-system';
-import { formatDonation, limitFraction } from '@/helpers/number';
+import { formatDonation } from '@/helpers/number';
 
 export const ProjectCardCauseTotalRaised = ({
 	amountReceived,
@@ -19,7 +19,7 @@ export const ProjectCardCauseTotalRaised = ({
 		>
 			<div>
 				<PriceText>
-					{limitFraction(amountReceived.toString(), 2)} GIV
+					{formatDonation(amountReceived.toString(), '', locale)} GIV
 					<span>
 						~ {formatDonation(amountReceivedUsdValue, '$', locale)}{' '}
 						USD

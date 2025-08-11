@@ -20,6 +20,7 @@ export const DONATION_CORE_FIELDS = gql`
 			fromChainId
 			fromAmount
 			fromTokenSymbol
+			firstTxHash
 		}
 	}
 `;
