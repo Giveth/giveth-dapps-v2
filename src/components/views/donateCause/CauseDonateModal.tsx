@@ -198,6 +198,10 @@ const CauseDonateModal: FC<IDonateModalProps> = props => {
 
 			if (squidRoute?.route) {
 				spenderAddress = squidRoute.route.transactionRequest.target;
+			} else {
+				setApproving(false);
+				setFailedModalType(EDonationFailedType.FAILED_LIQUIDITY);
+				return;
 			}
 		}
 
