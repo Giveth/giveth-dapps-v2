@@ -122,12 +122,14 @@ const UserProfileView: FC<IUserProfileView> = () => {
 				<H5>{formatMessage({ id: 'label.please_sign_in' })}</H5>
 			</NoUserContainer>
 		);
+
 	return (
 		<>
 			{user &&
 				myAccount &&
 				(user.projectsCount ?? 0) > 0 &&
-				!user?.isEmailVerified && (
+				!user?.isEmailVerified &&
+				router.pathname === Routes.MyAccount && (
 					<VerifyEmailBanner setShowModal={setShowModal} />
 				)}
 			<ProfileHeader>
