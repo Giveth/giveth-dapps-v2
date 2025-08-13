@@ -4,7 +4,8 @@ import Image from 'next/image';
 import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 
-const cardanoProjectId = process.env.NEXT_PUBLIC_CARDANO_PROJECT_ID || '';
+const cardanoProjectId =
+	process.env.NEXT_PUBLIC_CARDANO_BLOCKFROST_PROJECT_ID || '';
 
 const tokenDBList = [
 	{
@@ -221,6 +222,16 @@ function Inner() {
 		fetchAdaPrice();
 	}, []);
 
+	const handleDonation = (e: React.FormEvent<HTMLFormElement>) => {
+		e.preventDefault();
+		const formData = new FormData(e.target as HTMLFormElement);
+		const fromAddress = formData.get('fromAddress') as string;
+		const toAddress = formData.get('toAddress') as string;
+		const amount = formData.get('amount') as string;
+		const token = formData.get('token') as string;
+		console.log({ fromAddress, toAddress, amount, token });
+	};
+
 	return (
 		<div style={{ textAlign: 'center', marginTop: 50 }}>
 			<h1>TEST CARDANO</h1>
@@ -294,6 +305,41 @@ function Inner() {
 							</TokenItem>
 						))}
 					</div>
+				</div>
+			)}
+			{connected && (
+				<div>
+					<hr />
+					<h2>Make donation with Cardano</h2>
+					<FormHolder onSubmit={handleDonation}>
+						<InputHolder
+							type='text'
+							name='fromAddress'
+							placeholder='Project ID'
+							readOnly
+							value={cardanoProjectId}
+						/>
+						<SelectHolder name='token' id='token'>
+							{tokenList.map(token => (
+								<option key={token.name} value={token}>
+									{token.name} - {token.priceAda} ADA -{' '}
+									{token.quantity}
+								</option>
+							))}
+						</SelectHolder>
+						<InputHolder
+							type='text'
+							name='amount'
+							placeholder='Amount'
+						/>
+						<InputHolder
+							type='text'
+							name='toAddress'
+							placeholder='toAddress'
+							value='addr1q9ute9k2xxkpqfy4pdljet3nh48zm6c3yfjcdkj0htuapsdwjzm36z25ndrmvxr990m76279jq7zeu50k3lgasjds9ts447s0a'
+						/>
+						<DonateButton type='submit'>Donate</DonateButton>
+					</FormHolder>
 				</div>
 			)}
 		</div>
@@ -400,4 +446,34 @@ export const TokenItem = styled.div`
 		width: 30%;
 		text-align: left;
 	}
+`;
+
+export const FormHolder = styled.form`
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	gap: 10px;
+	margin: 10px 15em;
+`;
+
+export const InputHolder = styled.input`
+	width: 100%;
+	padding: 10px;
+	border: 1px solid #000;
+	border-radius: 6px;
+`;
+
+export const SelectHolder = styled.select`
+	width: 100%;
+	padding: 10px;
+	border: 1px solid #000;
+	border-radius: 6px;
+`;
+
+export const DonateButton = styled.button`
+	width: 100%;
+	padding: 10px;
+	border: 1px solid #000;
+	border-radius: 6px;
 `;
