@@ -13,6 +13,7 @@ import { showToastError } from '@/lib/helpers';
 import { CAUSE_ACCEPTED_TOKENS } from '@/apollo/gql/gqlProjects';
 import { client } from '@/apollo/apolloClient';
 import { useCauseDonateData } from '@/context/donate.cause.context';
+import InlineToast, { EToastType } from '@/components/toasts/InlineToast';
 
 export interface IDonationCardProps {
 	chainId: number;
@@ -55,6 +56,16 @@ export const CauseDonationCard: FC<IDonationCardProps> = ({ chainId }) => {
 					id: 'label.cause.donate_to_cause',
 				})}
 			</Title>
+
+			<InlineToast
+				type={EToastType.Hint}
+				title={formatMessage({ id: 'label.cause.distributed_by_ai' })}
+				message={formatMessage({
+					id: 'label.cause.distributed_by_ai_desc',
+				})}
+				noIcon={true}
+			/>
+
 			<TabWrapper>
 				<CauseCryptoDonation acceptedTokens={acceptedTokens} />
 			</TabWrapper>

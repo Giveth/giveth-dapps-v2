@@ -10,6 +10,7 @@ import {
 	SublineBold,
 	Flex,
 	Button,
+	brandColors,
 } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
 import { useAccount } from 'wagmi';
@@ -99,7 +100,8 @@ const CauseDonateIndex: FC = () => {
 	const isOnEligibleNetworks =
 		chainId && activeStartedRound?.eligibleNetworks?.includes(chainId);
 	const showAlreadyDonatedWrapper = alreadyDonated && isOnEligibleNetworks;
-
+	const causeProjectsCount = project.activeProjectsCount || 0;
+	console.log('project', project);
 	return successDonation ? (
 		<>
 			<CauseDonateHeader
@@ -177,6 +179,12 @@ const CauseDonateIndex: FC = () => {
 										)
 									) : null}
 								</>
+								{causeProjectsCount > 0 && (
+									<ProjectsCount>
+										This Cause Supports {causeProjectsCount}{' '}
+										Projects
+									</ProjectsCount>
+								)}
 							</InfoWrapper>
 						</Col>
 					</Row>
@@ -250,6 +258,12 @@ const ImageWrapper = styled.div`
 const ButtonStyled = styled(Button)`
 	width: 100%;
 	text-transform: capitalize;
+`;
+
+const ProjectsCount = styled.div`
+	margin-top: 16px;
+	font-weight: 500;
+	color: ${brandColors.deep[700]};
 `;
 
 export default CauseDonateIndex;
