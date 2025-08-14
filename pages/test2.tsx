@@ -1,4 +1,5 @@
 'use client';
+import { Transaction } from '@meshsdk/core';
 import { MeshProvider, useWallet, useWalletList } from '@meshsdk/react';
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
@@ -6,6 +7,8 @@ import styled from 'styled-components';
 
 const cardanoProjectId =
 	process.env.NEXT_PUBLIC_CARDANO_BLOCKFROST_PROJECT_ID || '';
+
+const MIN_ADA = 1;
 
 const tokenDBList = [
 	{
@@ -111,6 +114,17 @@ function WalletAddress({ wallet }: { wallet: any }) {
 	}, [wallet]);
 
 	return <p>Address: {address}</p>;
+}
+
+function normalizeAmount(input: string): number {
+	// Replace comma with dot, trim spaces
+	const normalized = input.replace(',', '.').trim();
+	const value = Number(normalized);
+
+	if (isNaN(value) || value <= 0) {
+		throw new Error(`Invalid amount: "${input}"`);
+	}
+	return value;
 }
 
 function Inner() {
@@ -222,14 +236,63 @@ function Inner() {
 		fetchAdaPrice();
 	}, []);
 
-	const handleDonation = (e: React.FormEvent<HTMLFormElement>) => {
+	const handleDonation = async (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
 		const formData = new FormData(e.target as HTMLFormElement);
 		const fromAddress = formData.get('fromAddress') as string;
 		const toAddress = formData.get('toAddress') as string;
 		const amount = formData.get('amount') as string;
-		const token = formData.get('token') as string;
-		console.log({ fromAddress, toAddress, amount, token });
+		const tokenUnit = formData.get('token') as string;
+		console.log({ fromAddress, toAddress, amount, tokenUnit });
+
+		if (!wallet) {
+			console.error('Wallet not connected');
+			return;
+		}
+
+		try {
+			// Get sender address (payment address)
+			const address = await wallet.getChangeAddress();
+
+			const amountValue = normalizeAmount(amount);
+
+			if (amountValue < MIN_ADA && tokenUnit === 'lovelace') {
+				alert(
+					`Amount must be at least ${MIN_ADA} ADA due to min-ADA requirement`,
+				);
+				return;
+			}
+
+			// Build transaction
+			const tx = new Transaction({ initiator: wallet });
+
+			if (tokenUnit === 'lovelace') {
+				// ADA transfer: convert ADA → lovelace (1 ADA = 1,000,000 lovelace)
+				tx.sendLovelace(
+					toAddress,
+					String(BigInt(Number(amountValue) * 1_000_000)),
+				);
+			} else {
+				// Token transfer
+				tx.sendAssets(toAddress, [
+					{
+						unit: tokenUnit,
+						quantity: String(amountValue), // must be in token's smallest unit
+					},
+				]);
+			}
+
+			// Submit transaction
+			const unsignedTx = await tx.build();
+			const signedTx = await wallet.signTx(unsignedTx);
+			const txHash = await wallet.submitTx(signedTx);
+
+			console.log('Transaction submitted:', txHash);
+			alert(`✅ Transaction submitted: ${txHash}`);
+		} catch (err) {
+			console.error('Transaction failed', err);
+			alert('❌ Transaction failed: ' + err);
+		}
 	};
 
 	return (
@@ -321,7 +384,7 @@ function Inner() {
 						/>
 						<SelectHolder name='token' id='token'>
 							{tokenList.map(token => (
-								<option key={token.name} value={token}>
+								<option key={token.name} value={token.unit}>
 									{token.name} - {token.priceAda} ADA -{' '}
 									{token.quantity}
 								</option>
