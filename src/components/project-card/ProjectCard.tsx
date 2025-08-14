@@ -504,6 +504,16 @@ const Wrapper = styled.div<IWrapperProps>`
 					? '460px' // Not a cause but in active round
 					: '448px'};  // Not a cause or active round
     }
+	${mediaQueries.mobileS} {
+        height: ${props =>
+			props.$projectType === EProjectType.CAUSE
+				? props.$activeStartedRound
+					? '420px' // Cause with active round
+					: '426px' // Cause without active round
+				: props.$activeStartedRound
+					? '420px' // Not a cause but in active round
+					: '426px'};  // Not a cause or active round
+    }
 `;
 
 interface IPaddedRowProps {

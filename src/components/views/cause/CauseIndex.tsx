@@ -201,12 +201,14 @@ const CauseIndex: FC<ICauseBySlug> = () => {
 					{activeTab === 0 && (
 						<>
 							<RichTextViewer content={description} />
+							{/* Causes do not have social media handles... yet 
+							
 							{projectData?.socialMedia?.length !== 0 && (
 								<>
 									<Separator />
 									<ProjectSocials />
 								</>
-							)}
+							)} */}
 							<Separator />
 							<ProjectCategoriesBadges
 								categories={categories || []}
