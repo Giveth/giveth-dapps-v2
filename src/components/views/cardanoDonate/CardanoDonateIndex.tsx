@@ -9,33 +9,30 @@ import {
 	semanticColors,
 	SublineBold,
 	Flex,
-	Button,
 } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
 import { useAccount } from 'wagmi';
 import SocialBox from '../../DonateSocialBox';
 import useDetectDevice from '@/hooks/useDetectDevice';
-import { useIsSafeEnvironment } from '@/hooks/useSafeAutoConnect';
 import { EContentType } from '@/lib/constants/shareContent';
 import { useAlreadyDonatedToProject } from '@/hooks/useAlreadyDonatedToProject';
 import { Shadow } from '@/components/styled-components/Shadow';
 import { useAppDispatch, useAppSelector } from '@/features/hooks';
 import { setShowHeader } from '@/features/general/general.slice';
-import { CauseDonateHeader } from '@/components/views/donateCause/CauseDonateHeader';
-import { CauseSuccessView } from '@/components/views/donateCause/CauseSuccessView';
+import { SuccessView } from '@/components/views/donate/SuccessView';
 import QFSection from '../project/projectActionCard/QFSection';
 import ProjectCardImage from '@/components/project-card/ProjectCardImage';
 import { useGeneralWallet } from '@/providers/generalWalletProvider';
 import { DonatePageProjectDescription } from '../donate/DonatePageProjectDescription';
 import DonationByProjectOwner from '@/components/modals/DonationByProjectOwner';
 import SanctionModal from '@/components/modals/SanctionedModal';
-import { PassportBanner } from '@/components/PassportBanner';
 import QFEligibleNetworks from '@/components/views/donate/QFEligibleNetworks';
-import { CauseDonationCard } from '@/components/views/donateCause/CauseDonationCard';
+import { DonateHeader } from '@/components/views/donate/DonateHeader';
 import {
-	useCauseDonateData,
 	DonateModalPriorityValues,
-} from '@/context/donate.cause.context';
+	useDonateData,
+} from '@/context/donate.context';
+import { CardanoDonationCard } from '@/components/views/cardanoDonate/CardanoDonationCard';
 
 const CardanoDonateIndex: FC = () => {
 	const { formatMessage } = useIntl();
@@ -43,19 +40,16 @@ const CardanoDonateIndex: FC = () => {
 	const {
 		project,
 		successDonation,
-		hasActiveQFRound,
 		shouldRenderModal,
 		activeStartedRound,
 		setDonateModalByPriority,
 		setIsModalPriorityChecked,
-	} = useCauseDonateData();
+	} = useDonateData();
 
 	const alreadyDonated = useAlreadyDonatedToProject(project);
 	const { userData } = useAppSelector(state => state.user);
 
 	const dispatch = useAppDispatch();
-	const isSafeEnv = useIsSafeEnvironment();
-	const { isOnSolana } = useGeneralWallet();
 	const { chainId } = useAccount();
 
 	const { walletAddress: address } = useGeneralWallet();
@@ -102,16 +96,16 @@ const CardanoDonateIndex: FC = () => {
 
 	return successDonation ? (
 		<>
-			<CauseDonateHeader
+			<DonateHeader
 				isSuccessDonation={Object.keys(successDonation).length > 0}
 			/>
 			<DonateSuccessContainer>
-				<CauseSuccessView isStellar={false} isStellarInQF={false} />
+				<SuccessView isStellar={false} isStellarInQF={false} />
 			</DonateSuccessContainer>
 		</>
 	) : (
 		<>
-			<CauseDonateHeader />
+			<DonateHeader />
 			<Wrapper>
 				<DonateContainer>
 					{shouldRenderModal(
@@ -148,12 +142,9 @@ const CardanoDonateIndex: FC = () => {
 							</SublineBold>
 						</AlreadyDonatedWrapper>
 					)}
-					{!isSafeEnv && hasActiveQFRound && !isOnSolana && (
-						<PassportBanner />
-					)}
 					<Row>
 						<Col xs={12} lg={6}>
-							<CauseDonationCard chainId={chainId || 0} />
+							<CardanoDonationCard chainId={chainId || 0} />
 						</Col>
 						<Col xs={12} lg={6}>
 							<InfoWrapper>
@@ -229,15 +220,6 @@ const InfoWrapper = styled.div`
 	text-align: left;
 `;
 
-const QRRetryWrapper = styled(Flex)`
-	flex-direction: column;
-	padding: 24px;
-	border-radius: 16px;
-	background-color: ${neutralColors.gray[100]};
-	gap: 20px;
-	text-align: left;
-`;
-
 const ImageWrapper = styled.div`
 	position: relative;
 	width: 100%;
@@ -245,11 +227,6 @@ const ImageWrapper = styled.div`
 	margin-bottom: 24px;
 	border-radius: 8px;
 	overflow: hidden;
-`;
-
-const ButtonStyled = styled(Button)`
-	width: 100%;
-	text-transform: capitalize;
 `;
 
 export default CardanoDonateIndex;

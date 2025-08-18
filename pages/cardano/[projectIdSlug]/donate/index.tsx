@@ -2,15 +2,16 @@ import React, { FC, useEffect } from 'react';
 import { GetServerSideProps } from 'next/types';
 import Head from 'next/head';
 import { captureException } from '@sentry/nextjs';
+import { MeshProvider } from '@meshsdk/react';
 import { IProject } from '@/apollo/types/types';
 import { FETCH_PROJECT_BY_SLUG_DONATION } from '@/apollo/gql/gqlProjects';
 import { client } from '@/apollo/apolloClient';
 import { ProjectMeta } from '@/components/Metatag';
 import { transformGraphQLErrorsToStatusCode } from '@/helpers/requests';
-import { CauseProvider } from '@/context/donate.cause.context';
 import { useAppDispatch } from '@/features/hooks';
 import { setShowFooter } from '@/features/general/general.slice';
 import CardanoDonateIndex from '@/components/views/cardanoDonate/CardanoDonateIndex';
+import { DonateProvider } from '@/context/donate.context';
 
 export interface IDonateRouteProps {
 	project: IProject;
@@ -27,13 +28,15 @@ const DonateRoute: FC<IDonateRouteProps> = ({ project }) => {
 	}, []);
 
 	return (
-		<CauseProvider project={project}>
-			<Head>
-				<title>{project.title} | Giveth</title>
-				<ProjectMeta project={project} preTitle='Donate to' />
-			</Head>
-			<CardanoDonateIndex />
-		</CauseProvider>
+		<DonateProvider project={project}>
+			<MeshProvider>
+				<Head>
+					<title>{project.title} | Giveth</title>
+					<ProjectMeta project={project} preTitle='Donate to' />
+				</Head>
+				<CardanoDonateIndex />
+			</MeshProvider>
+		</DonateProvider>
 	);
 };
 
