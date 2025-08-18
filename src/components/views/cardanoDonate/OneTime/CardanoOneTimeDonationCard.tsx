@@ -17,7 +17,7 @@ import {
 // @ts-ignore
 import { Address, Chain, formatUnits, zeroAddress } from 'viem';
 import { useBalance, useEstimateFeesPerGas, useEstimateGas } from 'wagmi';
-import { setShowWelcomeModal } from '@/features/modal/modal.slice';
+import { useWallet } from '@meshsdk/react';
 
 import { InsufficientFundModal } from '@/components/modals/InsufficientFund';
 import config from '@/configuration';
@@ -58,15 +58,35 @@ import { CardanoSelectTokenModal } from '@/components/views/cardanoDonate/OneTim
 import SaveGasFees from '../../donate/OneTime/SaveGasFees';
 import CardanoTotalDonation from '@/components/views/cardanoDonate/OneTime/CardanoTotalDonation';
 import CardanoEligibilityBadges from '@/components/views/cardanoDonate/common/CardanoEligibilityBadges';
+import { CardanoWalletInfo } from '../types';
+import { getCardanoStoredWalet, handleWalletDisconnect } from '../helpers';
+import { CardanoConnectWalletModal } from '../CardanoConnectWalletModal';
 
 const CardanoCryptoDonation: FC<{
 	acceptedTokens: IProjectAcceptedToken[] | undefined;
 }> = ({ acceptedTokens }) => {
+	const [showCardanoConnectWalletModal, setShowCardanoConnectWalletModal] =
+		useState(false);
+	const [selectedCardanoWallet, setSelectedCardanoWallet] =
+		useState<CardanoWalletInfo | null>(null);
+
+	const { connect, connected, disconnect } = useWallet();
+
+	console.log('selectedCardanoWallet', connect);
+
+	// Connect user with selected wallet if it's stored in local storage
+	useEffect(() => {
+		const storedCardanoWallet = getCardanoStoredWalet();
+		if (storedCardanoWallet) {
+			setSelectedCardanoWallet(storedCardanoWallet);
+			connect(storedCardanoWallet.name);
+		}
+	}, [connect]);
+
 	const {
 		chain,
 		walletChainType,
 		walletAddress: address,
-		isConnected,
 	} = useGeneralWallet();
 
 	const { formatMessage } = useIntl();
@@ -278,7 +298,7 @@ const CardanoCryptoDonation: FC<{
 		!!isOnQFEligibleNetworks &&
 		!!selectedTokenBalance &&
 		!!isDonationMatched;
-	const selectTokenDisabled = !isConnected || erc20List?.length === 0;
+	const selectTokenDisabled = !connected || erc20List?.length === 0;
 
 	return (
 		<MainContainer>
@@ -303,7 +323,7 @@ const CardanoCryptoDonation: FC<{
 				/>
 			)}
 			<SaveGasFees acceptedChains={[]} />
-			{!isConnected && (
+			{!connected && (
 				<ConnectWallet>
 					<IconWalletOutline24 color={neutralColors.gray[700]} />
 					{formatMessage({
@@ -376,7 +396,7 @@ const CardanoCryptoDonation: FC<{
 							decimals={selectedOneTimeToken?.decimals}
 						/>
 						<DonationPrice
-							disabled={!selectedOneTimeToken || !isConnected}
+							disabled={!selectedOneTimeToken || !connected}
 						>
 							{'$ ' + donationUsdValue.toFixed(2)}
 						</DonationPrice>
@@ -446,7 +466,7 @@ const CardanoCryptoDonation: FC<{
 						})}
 					/>
 				)}
-				{isConnected &&
+				{connected &&
 					(donationDisabled ? (
 						<OutlineButtonStyled
 							label={formatMessage({ id: 'label.donate' })}
@@ -461,12 +481,12 @@ const CardanoCryptoDonation: FC<{
 							onClick={handleDonate}
 						/>
 					))}
-				{!isConnected && (
+				{!connected && (
 					<MainButton
 						label={formatMessage({
 							id: 'component.button.connect_wallet',
 						})}
-						onClick={() => dispatch(setShowWelcomeModal(true))}
+						onClick={() => setShowCardanoConnectWalletModal(true)}
 					/>
 				)}
 				<DonateAnonymously
@@ -474,6 +494,16 @@ const CardanoCryptoDonation: FC<{
 					setAnonymous={setAnonymous}
 					selectedToken={selectedOneTimeToken}
 				/>
+				{connected && (
+					<DisconnectButton
+						label='Disconnect Cardano Wallet'
+						onClick={() =>
+							handleWalletDisconnect(disconnect, () =>
+								setSelectedCardanoWallet(null),
+							)
+						}
+					/>
+				)}
 				{showSelectTokenModal && (
 					<CardanoSelectTokenModal
 						setShowModal={setShowSelectTokenModal}
@@ -481,6 +511,14 @@ const CardanoCryptoDonation: FC<{
 						acceptCustomToken={
 							project.organization?.supportCustomTokens
 						}
+					/>
+				)}
+				{showCardanoConnectWalletModal && (
+					<CardanoConnectWalletModal
+						setShowCardanoConnectWalletModal={
+							setShowCardanoConnectWalletModal
+						}
+						setSelectedCardanoWallet={setSelectedCardanoWallet}
 					/>
 				)}
 			</ForEstimatedMatchingAnimation>
@@ -545,8 +583,12 @@ const MainButton = styled(Button)`
 	text-transform: uppercase;
 `;
 
-const InlineToastContainer = styled.div`
-	margin-bottom: 36px;
+const DisconnectButton = styled(Button)`
+	width: 100%;
+	margin-top: 12px;
+	background-color: ${brandColors.giv[500]};
+	color: white;
+	text-transform: uppercase;
 `;
 
 export default CardanoCryptoDonation;

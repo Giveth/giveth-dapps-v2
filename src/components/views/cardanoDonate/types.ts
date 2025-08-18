@@ -14,3 +14,9 @@ export interface ICardanoAcceptedTokensGQL {
 		getCauseAcceptTokens: ICardanoAcceptedTokens[];
 	};
 }
+
+export type CardanoWalletInfo = {
+	id: string; // e.g. "yoroi", "nami", "eternl"
+	name: string; // display name
+	icon: string; // icon url
+};

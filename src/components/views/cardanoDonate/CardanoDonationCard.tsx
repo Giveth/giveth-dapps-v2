@@ -31,7 +31,8 @@ export const CardanoDonationCard: FC<IDonationCardProps> = () => {
 			<Title id='donation-visit'>
 				{formatMessage({
 					id: 'label.donate_to_this_project',
-				})}
+				})}{' '}
+				with Cardano
 			</Title>
 			<TabWrapper>
 				<CardanoCryptoDonation acceptedTokens={acceptedTokens} />
