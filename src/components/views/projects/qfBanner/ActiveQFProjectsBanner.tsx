@@ -8,6 +8,7 @@ import { getNowUnixMS } from '@/helpers/time';
 import { durationToString } from '@/lib/helpers';
 import { Desc, Title } from './common';
 import { useAppSelector } from '@/features/hooks';
+import useMediaQuery from '@/hooks/useMediaQuery';
 
 enum ERoundStatus {
 	LOADING,
@@ -67,6 +68,10 @@ export const ActiveQFProjectsBanner = () => {
 			clearInterval(interval);
 		};
 	}, [state, activeQFRound]);
+	// if mobile image
+	const getBannerImage = useMediaQuery('(max-width: 765px)')
+		? '/images/banners/qf-mobile-image.png'
+		: activeQFRound?.bannerBgImage || '/images/banners/qf-round/bg.svg';
 
 	return (
 		<BannerContainer>
@@ -74,8 +79,7 @@ export const ActiveQFProjectsBanner = () => {
 				src={
 					isGIVPalooza
 						? '/images/banners/giv-palooza-bg1.svg'
-						: activeQFRound?.bannerBgImage ||
-							'/images/banners/qf-round/bg.svg'
+						: getBannerImage
 				}
 				fill
 				alt='QF Banner'
@@ -164,7 +168,7 @@ export const ActiveQFProjectsBanner = () => {
 };
 
 export const BannerContainer = styled(Flex)`
-	height: 220px;
+	height: 260px;
 	position: relative;
 	overflow: hidden;
 	margin-bottom: 0;
