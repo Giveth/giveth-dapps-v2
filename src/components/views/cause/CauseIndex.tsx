@@ -33,7 +33,6 @@ import { ProjectStats } from '@/components/views/project/projectActionCard/Proje
 import { AdminActions } from '@/components/views/project/projectActionCard/AdminActions';
 import ProjectOwnerBanner from '@/components/views/project/ProjectOwnerBanner';
 import { useGeneralWallet } from '@/providers/generalWalletProvider';
-import ProjectSocials from '@/components/views/project/ProjectSocials';
 import VerifyEmailBanner from '../userProfile/VerifyEmailBanner';
 import config from '@/configuration';
 import { getActiveRound } from '@/helpers/qf';
