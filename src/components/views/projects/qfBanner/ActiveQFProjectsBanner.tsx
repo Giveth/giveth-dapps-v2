@@ -8,6 +8,7 @@ import { getNowUnixMS } from '@/helpers/time';
 import { durationToString } from '@/lib/helpers';
 import { Desc, Title } from './common';
 import { useAppSelector } from '@/features/hooks';
+import useMediaQuery from '@/hooks/useMediaQuery';
 
 enum ERoundStatus {
 	LOADING,
@@ -67,6 +68,10 @@ export const ActiveQFProjectsBanner = () => {
 			clearInterval(interval);
 		};
 	}, [state, activeQFRound]);
+	// if mobile image
+	const getBannerImage = useMediaQuery('(max-width: 765px)')
+		? '/images/banners/qf-mobile-image.png'
+		: activeQFRound?.bannerBgImage || '/images/banners/qf-round/bg.svg';
 
 	return (
 		<BannerContainer>
@@ -74,14 +79,12 @@ export const ActiveQFProjectsBanner = () => {
 				src={
 					isGIVPalooza
 						? '/images/banners/giv-palooza-bg1.svg'
-						: activeQFRound?.bannerBgImage ||
-							'/images/banners/qf-round/bg.svg'
+						: getBannerImage
 				}
-				style={{ objectFit: 'cover' }}
 				fill
 				alt='QF Banner'
 			/>
-			<Container>
+			<ContainerWrapper>
 				<ActiveStyledRow>
 					<ActiveStyledCol xs={12} md={6}>
 						<TitleWrapper weight={700}>
@@ -159,22 +162,45 @@ export const ActiveQFProjectsBanner = () => {
 						</BottomSponsors> */}
 					</ActiveStyledCol>
 				</ActiveStyledRow>
-			</Container>
+			</ContainerWrapper>
 		</BannerContainer>
 	);
 };
 
 export const BannerContainer = styled(Flex)`
-	height: 0;
+	height: 260px;
 	position: relative;
 	overflow: hidden;
 	margin-bottom: 0;
 	align-items: start !important;
 	border-top-left-radius: 16px;
 	border-top-right-radius: 16px;
+
+	img {
+		object-fit: cover;
+		object-position: left center;
+	}
+
 	${mediaQueries.tablet} {
-		height: 210px;
+		height: 235px;
 		margin-bottom: -50px;
+
+		img {
+			object-fit: cover;
+			object-position: right center;
+		}
+	}
+	${mediaQueries.desktop} {
+		img {
+			object-position: center;
+		}
+	}
+`;
+
+export const ContainerWrapper = styled(Container)`
+	margin-top: 65px;
+	${mediaQueries.tablet} {
+		margin-top: 0;
 	}
 `;
 
@@ -199,7 +225,13 @@ export const ActiveStyledCol = styled(Col)`
 `;
 
 const TitleWrapper = styled(Title)`
-	font-size: 36px;
+	font-size: 22px;
+	${mediaQueries.tablet} {
+		font-size: 24px;
+	}
+	${mediaQueries.desktop} {
+		font-size: 36px;
+	}
 `;
 
 const ImagesWrapper = styled(Flex)`
