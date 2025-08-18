@@ -1,17 +1,20 @@
 import { IProjectAcceptedToken } from '@/apollo/types/gqlTypes';
 
-export interface ICardanoAcceptedTokens extends IProjectAcceptedToken {
+export interface ICardanoAcceptedToken extends IProjectAcceptedToken {
 	cardano?: {
 		unit: string;
 		nameHex: string | null;
 		policyId: string | null;
 		logo: string;
+		quantity: number;
+		rawQuantity: string;
+		priceAda: number;
 	};
 }
 
 export interface ICardanoAcceptedTokensGQL {
 	data: {
-		getCauseAcceptTokens: ICardanoAcceptedTokens[];
+		getCauseAcceptTokens: ICardanoAcceptedToken[];
 	};
 }
 

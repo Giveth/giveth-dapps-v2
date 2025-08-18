@@ -1,65 +1,30 @@
 import styled from 'styled-components';
-import {
-	SublineBold,
-	brandColors,
-	mediaQueries,
-	neutralColors,
-	Flex,
-	IconGIVBack24,
-	IconSearch16,
-} from '@giveth/ui-design-system';
+import { mediaQueries, neutralColors, Flex } from '@giveth/ui-design-system';
 import { useState, type FC, useEffect } from 'react';
-import { useIntl } from 'react-intl';
-import { erc20Abi, isAddress } from 'viem'; // Assuming `isAddress` is a function from the `viem` library to validate Ethereum addresses
-import { useAccount } from 'wagmi';
-import { readContracts } from 'wagmi/actions';
-import { useConnection } from '@solana/wallet-adapter-react';
+import { useWallet } from '@meshsdk/react';
 import { IModal } from '@/types/common';
 import { Modal } from '@/components/modals/Modal';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
 import { TokenInfo } from '@/components/views/donate/OneTime/SelectTokenModal/TokenInfo';
-import { IProjectAcceptedToken } from '@/apollo/types/gqlTypes';
 import CheckBox from '@/components/Checkbox';
-import { shortenAddress, showToastError } from '@/lib/helpers';
-import { useGeneralWallet } from '@/providers/generalWalletProvider';
-import { wagmiConfig } from '@/wagmiConfigs';
-import { ChainType } from '@/types/config';
-import { getBalanceForToken } from '@/components/views/donate/OneTime/SelectTokenModal/services';
-import { fetchEVMTokenBalances } from '@/services/token';
 import { WrappedSpinner } from '@/components/Spinner';
-import { useDonateData } from '@/context/donate.context';
+import { cardanoAcceptedTokens } from '../../data';
+import { formatTokenQuantity, fetchTokenPriceInAdaMuesli } from '../../helpers';
+import { ICardanoAcceptedToken } from '../../types';
 
 export interface ISelectTokenModalProps extends IModal {
-	tokens?: IProjectAcceptedToken[];
+	tokens?: ICardanoAcceptedToken[];
 	acceptCustomToken?: boolean;
-}
-
-interface ITokenBalance {
-	token: IProjectAcceptedToken;
-	balance: bigint | undefined;
 }
 
 export const CardanoSelectTokenModal: FC<ISelectTokenModalProps> = props => {
 	const { isAnimating, closeModal } = useModalAnimation(props.setShowModal);
-	const { formatMessage } = useIntl();
 	return (
 		<Modal
 			closeModal={closeModal}
 			isAnimating={isAnimating}
 			headerTitle='Select a Token'
 			headerTitlePosition='left'
-			footer={
-				<GIVbackWrapper>
-					<Flex gap='8px' $alignItems='center'>
-						<IconGIVBack24 color={brandColors.giv[500]} />
-						<SublineBold>
-							{formatMessage({
-								id: 'label.givbacks_eligible_tokens',
-							})}
-						</SublineBold>
-					</Flex>
-				</GIVbackWrapper>
-			}
 		>
 			<SelectTokenInnerModal {...props} />
 		</Modal>
@@ -67,202 +32,130 @@ export const CardanoSelectTokenModal: FC<ISelectTokenModalProps> = props => {
 };
 
 const SelectTokenInnerModal: FC<ISelectTokenModalProps> = ({
-	tokens,
-	acceptCustomToken,
 	setShowModal,
 }) => {
-	const [hideZeroBalance, setHideZeroBalance] = useState(false);
-	const [searchQuery, setSearchQuery] = useState('');
-	const [filteredTokens, setFilteredTokens] = useState(tokens || []);
-	const { connection } = useConnection();
-	const [tokenBalances, setTokenBalances] = useState<ITokenBalance[]>([]);
-	const [customToken, setCustomToken] = useState<
-		IProjectAcceptedToken | undefined
-	>();
-	const [customTokenBalance, setCustomTokenBalance] = useState<
-		bigint | undefined
-	>(undefined);
-	const { setSelectedOneTimeToken } = useDonateData();
-	const { walletAddress, isOnEVM, isConnected } = useGeneralWallet();
-	const { chain: evmChain } = useAccount();
-	const [balanceIsLoading, setBalanceIsLoading] = useState<boolean>(false);
+	const { connect, disconnect, connecting, connected, wallet } = useWallet();
 
+	const cardanoProjectId =
+		process.env.NEXT_PUBLIC_CARDANO_BLOCKFROST_PROJECT_ID || '';
+
+	const [hideZeroBalance, setHideZeroBalance] = useState<boolean>(false);
+	const [tokenListForSelect, setTokenListForSelect] = useState<
+		ICardanoAcceptedToken[]
+	>([]);
+
+	// Fetch user token list
 	useEffect(() => {
-		if (tokens) {
-			if (isAddress(searchQuery)) {
-				const existingToken = tokens.find(
-					token =>
-						token.address.toLowerCase() ===
-						searchQuery.toLowerCase(),
-				);
-				if (existingToken) {
-					setCustomToken(undefined);
-					setFilteredTokens([existingToken]);
-				} else if (isOnEVM && acceptCustomToken) {
-					const initialToken = {
-						address: searchQuery,
-						decimals: 18,
-						name: shortenAddress(searchQuery),
-						symbol: shortenAddress(searchQuery),
-						networkId: evmChain?.id || 1,
-						chainType: ChainType.EVM,
-						isGivbackEligible: false,
-						order: 1,
-					};
-					setCustomToken(initialToken);
+		if (wallet && connected) {
+			const getWalletBalance = async () => {
+				const balance = await wallet.getBalance();
 
-					// Fetch token data
-					readContracts(wagmiConfig, {
-						allowFailure: false,
-						contracts: [
-							{
-								address: searchQuery,
-								abi: erc20Abi,
-								functionName: 'decimals',
-							},
-							{
-								address: searchQuery,
-								abi: erc20Abi,
-								functionName: 'name',
-							},
-							{
-								address: searchQuery,
-								abi: erc20Abi,
-								functionName: 'symbol',
-							},
-						],
-					})
-						.then(results => {
-							const _customTokenData = {
-								...initialToken,
-								address: searchQuery,
-								decimals: results[0],
-								name: results[1],
-								symbol: results[2],
-							};
-							setCustomToken(_customTokenData);
-						})
-						.catch(() => {
-							showToastError('Failed to fetch token data');
-						});
+				if (balance) {
+					// Check if have token on the list
+					const tokenList = cardanoAcceptedTokens;
+
+					// Update token price and populate token list
+					if (tokenList) {
+						const updatedTokenList: any[] = [];
+						for (const token of tokenList) {
+							// find token in wallet balance array
+							const balEntry = balance.find(
+								b => b.unit === token.cardano?.unit,
+							);
+							const quantity = balEntry ? balEntry.quantity : '0';
+							const formattedQuantity = formatTokenQuantity(
+								quantity,
+								token.decimals,
+							);
+
+							if (token.cardano?.unit === 'lovelace') {
+								updatedTokenList.push({
+									id: token.id,
+									name: token.name,
+									symbol: token.symbol,
+									decimals: token.decimals,
+									networkId: 1,
+									address: token.address,
+									cardano: {
+										quantity: formattedQuantity,
+										rawQuantity: quantity,
+										priceAda: 1,
+									},
+								});
+							} else {
+								const tokenData =
+									await fetchTokenPriceInAdaMuesli(
+										token?.cardano?.policyId || '',
+										token?.cardano?.nameHex || '',
+									);
+								if (tokenData) {
+									updatedTokenList.push({
+										id: token.id,
+										name: token.name,
+										symbol: token.symbol,
+										decimals: token.decimals,
+										networkId: 1,
+										address: token.address,
+										cardano: {
+											quantity: formattedQuantity,
+											rawQuantity: quantity,
+											priceAda: tokenData,
+										},
+									});
+								} else {
+									updatedTokenList.push({
+										id: token.id,
+										name: token.name,
+										symbol: token.symbol,
+										decimals: token.decimals,
+										networkId: 1,
+										address: token.address,
+										cardano: {
+											quantity: formattedQuantity,
+											rawQuantity: quantity,
+											priceAda: 0,
+										},
+									});
+								}
+							}
+						}
+						setTokenListForSelect(updatedTokenList);
+					}
 				}
-			} else {
-				setCustomToken(undefined);
-				const sQuery: string = searchQuery;
-				const filtered = tokens.filter(
-					token =>
-						token.symbol
-							.toLowerCase()
-							.includes(sQuery.toLowerCase()) ||
-						token.name.toLowerCase().includes(sQuery.toLowerCase()),
-				);
-				setFilteredTokens(filtered);
-			}
+			};
+			getWalletBalance();
 		}
-	}, [searchQuery, tokens, walletAddress]);
-
-	useEffect(() => {
-		(async () => {
-			if (customToken) {
-				const balance = await getBalanceForToken(
-					customToken,
-					walletAddress,
-				);
-				setCustomTokenBalance(balance);
-			} else {
-				setCustomTokenBalance(undefined);
-			}
-		})();
-	}, [customToken, walletAddress]);
-
-	useEffect(() => {
-		const fetchBalances = async () => {
-			try {
-				setBalanceIsLoading(true);
-				const balances = isOnEVM
-					? await fetchEVMTokenBalances(filteredTokens, walletAddress)
-					: await Promise.all(
-							filteredTokens.map(async token => {
-								return {
-									token,
-									balance: await getBalanceForToken(
-										token,
-										walletAddress,
-										connection,
-									),
-								};
-							}),
-						);
-				setTokenBalances(balances);
-				setBalanceIsLoading(false);
-			} catch (error) {
-				console.error('error on fetchTokenBalances', { error });
-			}
-		};
-		if (isConnected) {
-			fetchBalances();
-		}
-	}, [
-		tokens,
-		connection,
-		filteredTokens,
-		isConnected,
-		isOnEVM,
-		walletAddress,
-	]);
-
-	// Sort tokens by balance
-	const sortedTokens = tokenBalances.sort(
-		(a: ITokenBalance, b: ITokenBalance) => {
-			if (a.balance === undefined) return 1;
-			if (b.balance === undefined) return -1;
-			return Number(b.balance) - Number(a.balance);
-		},
-	);
+	}, [wallet, connected]);
 
 	return (
 		<>
 			<Wrapper>
-				<InputWrapper>
-					<Input
-						placeholder='Search name or paste an address'
-						value={searchQuery}
-						onChange={e => setSearchQuery(e.target.value)}
-					/>
-					<SearchIconWrapper>
-						<IconSearch16 color={neutralColors.gray[400]} />
-					</SearchIconWrapper>
-				</InputWrapper>
 				<CheckBox
 					label='Hide 0 balance tokens'
 					onChange={() => setHideZeroBalance(!hideZeroBalance)}
 					checked={hideZeroBalance}
 					size={14}
 				/>
-				{customToken ? (
-					<TokenInfo
-						token={customToken}
-						hideZeroBalance={hideZeroBalance}
-						balance={customTokenBalance}
-						onClick={() => {
-							setSelectedOneTimeToken(customToken);
-							setShowModal(false);
-						}}
-					/>
-				) : sortedTokens.length > 0 && isConnected ? (
-					sortedTokens.map(({ token, balance }: ITokenBalance) => (
-						<TokenInfo
-							key={token.address}
-							token={token}
-							hideZeroBalance={hideZeroBalance}
-							balance={balance}
-							onClick={() => {
-								setSelectedOneTimeToken(token);
-								setShowModal(false);
-							}}
-						/>
-					))
-				) : balanceIsLoading ? (
+				{tokenListForSelect.length > 0 && connected ? (
+					tokenListForSelect.map((token: ICardanoAcceptedToken) => {
+						console.log({ token });
+
+						const balance = token.cardano?.rawQuantity || 0;
+
+						return (
+							<TokenInfo
+								key={token.address}
+								token={token}
+								hideZeroBalance={hideZeroBalance}
+								balance={BigInt(balance)}
+								onClick={() => {
+									// setSelectedOneTimeToken(token);
+									setShowModal(false);
+								}}
+							/>
+						);
+					})
+				) : connecting || !connected ? (
 					<WrappedSpinner size={300} />
 				) : (
 					<div>No token supported on this chain</div>

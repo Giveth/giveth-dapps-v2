@@ -72,8 +72,6 @@ const CardanoCryptoDonation: FC<{
 
 	const { connect, connected, disconnect } = useWallet();
 
-	console.log('selectedCardanoWallet', connect);
-
 	// Connect user with selected wallet if it's stored in local storage
 	useEffect(() => {
 		const storedCardanoWallet = getCardanoStoredWalet();
