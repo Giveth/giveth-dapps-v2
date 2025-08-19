@@ -1,4 +1,4 @@
-import React, { FC, useState } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import {
 	brandColors,
@@ -9,14 +9,13 @@ import {
 	FlexCenter,
 } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
-import { Address, formatUnits } from 'viem';
+import { formatUnits } from 'viem';
+import { Transaction } from '@meshsdk/core';
+import { useWallet } from '@meshsdk/react';
 import { Modal } from '@/components/modals/Modal';
-import { formatTxLink, sendEvmTransaction } from '@/lib/helpers';
+import { formatTxLink, truncateToDecimalPlaces } from '@/lib/helpers';
 import { mediaQueries } from '@/lib/constants/constants';
-import {
-	IProjectAcceptedToken,
-	SwapTransactionInput,
-} from '@/apollo/types/gqlTypes';
+import { IProjectAcceptedToken } from '@/apollo/types/gqlTypes';
 import { IModal } from '@/types/common';
 import FailedDonation, {
 	EDonationFailedType,
@@ -31,17 +30,13 @@ import { useGeneralWallet } from '@/providers/generalWalletProvider';
 import { ChainType } from '@/types/config';
 import { IWalletAddress } from '@/apollo/types/types';
 import { useCreateSolanaDonation } from '@/hooks/useCreateSolanaDonation';
-import { useTokenPrice } from '@/hooks/useTokenPrice';
 import { calcDonationShare } from '@/components/views/donate/common/helpers';
 import SanctionModal from '@/components/modals/SanctionedModal';
-import {
-	executeSquidTransaction,
-	getSquidRoute,
-	saveCauseDonation,
-} from '@/components/views/donateCause/helpers';
 import config from '@/configuration';
 import { IOnTxHash } from '@/services/donation';
 import { DONATION_DESTINATION_ADDRESS } from './data';
+import { ICardanoAcceptedToken } from './types';
+import { getCoingeckoADAPrice } from './helpers';
 
 interface IDonateModalProps extends IModal {
 	token: IProjectAcceptedToken;
@@ -53,6 +48,11 @@ interface IDonateModalProps extends IModal {
 
 const CardanoDonateModal: FC<IDonateModalProps> = props => {
 	const { token, amount, setShowModal, anonymous, givBackEligible } = props;
+
+	const { wallet } = useWallet();
+
+	const [tokenPrice, setTokenPrice] = useState(0);
+
 	const createDonationHook =
 		token.chainType === ChainType.SOLANA
 			? useCreateSolanaDonation
@@ -64,7 +64,16 @@ const CardanoDonateModal: FC<IDonateModalProps> = props => {
 	} = createDonationHook();
 	const { walletAddress: address } = useGeneralWallet();
 
-	const cardanoToken = token as IProjectAcceptedToken;
+	const cardanoToken = token as ICardanoAcceptedToken;
+
+	// Fetch token ADA price from coingecko
+	useEffect(() => {
+		const fetchTokenPrice = async () => {
+			const price = await getCoingeckoADAPrice();
+			setTokenPrice(price);
+		};
+		fetchTokenPrice();
+	}, []);
 
 	const chainId = 1;
 	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
@@ -77,14 +86,22 @@ const CardanoDonateModal: FC<IDonateModalProps> = props => {
 		useState<EDonationFailedType>();
 	const [isSanctioned, setIsSanctioned] = useState<boolean>(false);
 
-	const tokenPrice = useTokenPrice(token);
 	const { title } = project || {};
 
 	const projectWalletAddress = DONATION_DESTINATION_ADDRESS;
 
 	const { projectDonation } = calcDonationShare(amount, 0, token.decimals);
 
-	const projectDonationPrice = tokenPrice && tokenPrice * projectDonation;
+	const projectDonationPrice =
+		tokenPrice &&
+		truncateToDecimalPlaces(
+			String(
+				Number(cardanoToken.cardano?.priceAda || 0) *
+					Number(tokenPrice) *
+					Number(formatUnits(amount, cardanoToken.decimals)),
+			),
+			2,
+		);
 
 	const delayedCloseModal = (txHash1: string, txHash2?: string) => {
 		setProcessFinished(true);
@@ -115,100 +132,45 @@ const CardanoDonateModal: FC<IDonateModalProps> = props => {
 
 		let donationAmount = projectDonation;
 
+		console.log('donationAmount', donationAmount);
+
 		try {
-			let tx;
-			let swapData: SwapTransactionInput | undefined;
+			const tokenUnit = cardanoToken.symbol || 'ADA';
 
-			// Same token as recipient token same network
-			if (
-				token.networkId === chainId &&
-				token.address.toLowerCase() ===
-					config.CAUSES_CONFIG.recipientToken.address.toLowerCase()
-			) {
-				const txRequest = {
-					to: projectWalletAddress as Address,
-					value: projectDonation.toString(),
-				};
+			console.log('tokenUnit', cardanoToken);
 
-				tx = await sendEvmTransaction(
-					txRequest,
-					chainId,
-					token.address,
+			// Build transaction
+			const tx = new Transaction({ initiator: wallet });
+
+			if (tokenUnit === 'ADA') {
+				console.log('ADA transfer');
+				// ADA transfer: convert ADA → lovelace (1 ADA = 1,000,000 lovelace)
+				tx.sendLovelace(
+					projectWalletAddress,
+					(BigInt(donationAmount) * 1_000_000n).toString(),
 				);
-
-				if (!tx) {
-					setFailedModalType(EDonationFailedType.FAILED);
-					return;
-				}
 			} else {
-				// different token or different network then recipient token
-				const squidParams = {
-					fromAddress: address || '',
-					fromChain: chainId.toString(),
-					fromToken: token.address,
-					fromAmount: amount.toString(),
-					toChain:
-						config.CAUSES_CONFIG.recipientToken.network.toString(),
-					toToken: config.CAUSES_CONFIG.recipientToken.address,
-					toAddress: projectWalletAddress || '',
-					quoteOnly: false,
-				};
-
-				const squidRoute = await getSquidRoute(squidParams);
-
-				if (squidRoute?.route) {
-					tx = await executeSquidTransaction(squidRoute.route);
-
-					if (tx.error || !tx?.hash) {
-						console.error(
-							'Error making transaction via Squid:',
-							tx.error || tx,
-						);
-						setFailedModalType(EDonationFailedType.REJECTED);
-						return;
-					}
-
-					donationAmount = parseFloat(
-						formatUnits(
-							squidRoute.route.estimate.toAmount,
-							config.CAUSES_CONFIG.recipientToken.decimals || 18,
-						),
-					);
-
-					swapData = {
-						squidRequestId: squidRoute.quoteId,
-						firstTxHash: tx?.hash,
-						fromChainId: parseInt(squidParams.fromChain),
-						toChainId: parseInt(squidParams.toChain),
-						fromTokenAddress: squidParams.fromToken,
-						toTokenAddress: squidParams.toToken,
-						fromAmount: parseFloat(squidParams.fromAmount),
-						toAmount: parseFloat(
-							squidRoute.route.estimate.toAmount,
-						),
-						fromTokenSymbol:
-							squidRoute.route.estimate.fromToken.symbol,
-						toTokenSymbol: squidRoute.route.estimate.toToken.symbol,
-						metadata: squidRoute.route,
-					};
-				} else {
-					console.error(
-						'Error making donation, squidRoute:',
-						squidRoute,
-					);
-					if (squidRoute?.statusCode === 500) {
-						setFailedModalType(
-							EDonationFailedType.FAILED_LIQUIDITY,
-						);
-					} else {
-						setFailedModalType(EDonationFailedType.REJECTED);
-					}
-					return;
-				}
+				// Token transfer
+				tx.sendAssets(projectWalletAddress, [
+					{
+						unit: tokenUnit,
+						quantity: String(donationAmount), // must be in token's smallest unit
+					},
+				]);
 			}
 
+			// Submit transaction
+			const unsignedTx = await tx.build();
+			const signedTx = await wallet.signTx(unsignedTx);
+			const txHash = await wallet.submitTx(signedTx);
+
+			console.log('Transaction submitted:', txHash);
+			alert(`✅ Transaction submitted: ${txHash}`);
+
+			// setFailedModalType(EDonationFailedType.REJECTED);
+
 			// Save donation
-			if (tx) {
+			if (txHash) {
 				const donationProps: IOnTxHash = {
 					chainId: config.CAUSES_CONFIG.recipientToken.network,
 					amount: donationAmount,
@@ -230,15 +192,11 @@ const CardanoDonateModal: FC<IDonateModalProps> = props => {
 					fromTokenAmount: parseFloat(projectDonation.toString()),
 				};
 
-				if (swapData) {
-					donationProps.swapData = swapData;
-				}
+				// await saveCauseDonation(donationProps);
 
-				await saveCauseDonation(donationProps);
+				console.log('Transaction saved', txHash);
 
-				console.log('Transaction saved', tx);
-
-				delayedCloseModal(tx.hash);
+				// delayedCloseModal(txHash);
 			} else {
 				setFailedModalType(EDonationFailedType.FAILED);
 				return;

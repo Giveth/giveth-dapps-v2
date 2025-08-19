@@ -33,6 +33,11 @@ export const CardanoConnectWalletModal = ({
 		>
 			<WalletWrapper>
 				{wallets.map(wallet => {
+					console.log('wallet', wallet);
+					const walletIcon =
+						wallet.name === 'Typhon Wallet'
+							? '/images/typhon.svg'
+							: wallet.icon;
 					return (
 						<WalletItem
 							key={wallet.name}
@@ -46,7 +51,7 @@ export const CardanoConnectWalletModal = ({
 							}}
 						>
 							<Image
-								src={wallet.icon}
+								src={walletIcon}
 								alt={wallet.name}
 								width={24}
 								height={24}
@@ -62,8 +67,9 @@ export const CardanoConnectWalletModal = ({
 
 const WalletWrapper = styled.div`
 	display: flex;
+	flex-direction: column;
 	align-items: center;
-	gap: 10px;
+	gap: 40px;
 	padding: 30px;
 	min-width: 300px;
 `;
@@ -72,10 +78,14 @@ const WalletItem = styled.div`
 	display: flex;
 	align-items: center;
 	gap: 10px;
-	font-size: 16px;
-	font-weight: 500;
+	font-size: 22px;
+	font-weight: 600;
 	color: ${neutralColors.gray[800]};
 	cursor: pointer;
+	text-transform: capitalize;
+	&::first-letter {
+		text-transform: uppercase;
+	}
 	&:first-child {
 		color: ${neutralColors.gray[800]};
 	}

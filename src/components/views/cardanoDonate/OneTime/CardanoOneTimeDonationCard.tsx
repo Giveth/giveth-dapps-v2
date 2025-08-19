@@ -459,7 +459,7 @@ const FlexStyled = styled(Flex)<{ disabled: boolean }>`
 `;
 
 const ConnectWallet = styled(BadgesBase)`
-	margin: 12px 0 24px;
+	margin: 12px 0 54px 0;
 `;
 
 const WarnError = styled.div`
