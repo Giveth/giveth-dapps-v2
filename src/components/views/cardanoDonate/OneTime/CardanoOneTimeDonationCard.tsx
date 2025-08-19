@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import React, { FC, useEffect, useMemo, useState } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
 import {
 	B,
@@ -7,7 +7,6 @@ import {
 	Button,
 	Flex,
 	IconCaretDown16,
-	IconRefresh16,
 	IconWalletOutline24,
 	neutralColors,
 	OutlineButton,
@@ -15,42 +14,27 @@ import {
 	SublineBold,
 } from '@giveth/ui-design-system';
 // @ts-ignore
-import { Address, Chain, formatUnits, zeroAddress } from 'viem';
-import { useBalance, useEstimateFeesPerGas, useEstimateGas } from 'wagmi';
+import { formatUnits } from 'viem';
 import { useWallet } from '@meshsdk/react';
 
 import { InsufficientFundModal } from '@/components/modals/InsufficientFund';
-import config from '@/configuration';
 
 import InlineToast, { EToastType } from '@/components/toasts/InlineToast';
 import { EProjectStatus } from '@/apollo/types/gqlEnums';
 import { truncateToDecimalPlaces } from '@/lib/helpers';
-import { IProjectAcceptedToken } from '@/apollo/types/gqlTypes';
-import {
-	calcDonationShare,
-	prepareTokenList,
-} from '@/components/views/donate/common/helpers';
-import { useAppSelector } from '@/features/hooks';
+import { calcDonationShare } from '@/components/views/donate/common/helpers';
 import { useDonateData } from '@/context/donate.context';
 import { useModalCallback } from '@/hooks/useModalCallback';
-import { getActiveRound } from '@/helpers/qf';
-import { useGeneralWallet } from '@/providers/generalWalletProvider';
-import { ChainType } from '@/types/config';
-import { INetworkIdWithChain } from '@/components/views/donate/common/common.types';
-import EstimatedMatchingToast from '@/components/views/donate/OneTime/EstimatedMatchingToast';
 import {
 	BadgesBase,
 	ForEstimatedMatchingAnimation,
 	GLinkStyled,
-	IconWrapper,
 	Input,
 	InputWrapper,
 	SelectTokenPlaceHolder,
 	SelectTokenWrapper,
 } from '@/components/views/donate/common/common.styled';
 import { TokenIcon } from '@/components/views/donate/TokenIcon/TokenIcon';
-import { Spinner } from '@/components/Spinner';
-import { useTokenPrice } from '@/hooks/useTokenPrice';
 import DonateAnonymously from '@/components/views/donate/common/DonateAnonymously';
 import { GIVBACKS_DONATION_QUALIFICATION_VALUE_USD } from '@/lib/constants/constants';
 import CardanoDonateModal from '@/components/views/cardanoDonate/CardanoDonateModal';
@@ -58,19 +42,26 @@ import { CardanoSelectTokenModal } from '@/components/views/cardanoDonate/OneTim
 import SaveGasFees from '../../donate/OneTime/SaveGasFees';
 import CardanoTotalDonation from '@/components/views/cardanoDonate/OneTime/CardanoTotalDonation';
 import CardanoEligibilityBadges from '@/components/views/cardanoDonate/common/CardanoEligibilityBadges';
-import { CardanoWalletInfo } from '../types';
-import { getCardanoStoredWalet, handleWalletDisconnect } from '../helpers';
+import { CardanoWalletInfo, ICardanoAcceptedToken } from '../types';
+import {
+	getAdaBalance,
+	getCardanoStoredWalet,
+	getCoingeckoADAPrice,
+	handleWalletDisconnect,
+	hasSufficientBalance,
+	toUnits,
+} from '../helpers';
 import { CardanoConnectWalletModal } from '../CardanoConnectWalletModal';
 
 const CardanoCryptoDonation: FC<{
-	acceptedTokens: IProjectAcceptedToken[] | undefined;
+	acceptedTokens: ICardanoAcceptedToken[] | undefined;
 }> = ({ acceptedTokens }) => {
 	const [showCardanoConnectWalletModal, setShowCardanoConnectWalletModal] =
 		useState(false);
 	const [selectedCardanoWallet, setSelectedCardanoWallet] =
 		useState<CardanoWalletInfo | null>(null);
 
-	const { connect, connected, disconnect } = useWallet();
+	const { connect, connected, disconnect, wallet } = useWallet();
 
 	// Connect user with selected wallet if it's stored in local storage
 	useEffect(() => {
@@ -81,200 +72,114 @@ const CardanoCryptoDonation: FC<{
 		}
 	}, [connect]);
 
-	const {
-		chain,
-		walletChainType,
-		walletAddress: address,
-	} = useGeneralWallet();
-
 	const { formatMessage } = useIntl();
-	const { isSignedIn } = useAppSelector(state => state.user);
+	const { project, selectedOneTimeToken } = useDonateData();
 
-	const { project, hasActiveQFRound, selectedOneTimeToken } = useDonateData();
-
-	const {
-		isGivbackEligible,
-		status,
-		addresses,
-		title: projectTitle,
-	} = project;
+	const { isGivbackEligible, status, title: projectTitle } = project;
 
 	const isActive = status?.name === EProjectStatus.ACTIVE;
 	const [amount, setAmount] = useState(0n);
-	const [erc20List, setErc20List] = useState<IProjectAcceptedToken[]>();
+	const [erc20List, setErc20List] = useState<ICardanoAcceptedToken[]>();
 	const [anonymous, setAnonymous] = useState<boolean>(false);
 	const [insufficientGasFee, setInsufficientGasFee] =
+		useState<boolean>(false);
+	const [insufficientAmountFee, setInsufficientAmountFee] =
 		useState<boolean>(false);
 	const [showDonateModal, setShowDonateModal] = useState(false);
 	const [showInsufficientModal, setShowInsufficientModal] = useState(false);
 	const [showSelectTokenModal, setShowSelectTokenModal] = useState(false);
+	const [selectedTokenBalance, setSelectedTokenBalance] = useState(0);
+	const [tokenPrice, setTokenPrice] = useState(0);
+	const [selectedTokenCardano, setSelectedTokenCardano] = useState<
+		ICardanoAcceptedToken | undefined
+	>(undefined);
 
 	const { modalCallback: signInThenDonate } = useModalCallback(() =>
 		setShowDonateModal(true),
 	);
 
-	const {
-		data: evmBalance,
-		refetch: evmRefetch,
-		isRefetching: evmIsRefetching,
-	} = useBalance({
-		token:
-			selectedOneTimeToken?.address === zeroAddress
-				? undefined
-				: selectedOneTimeToken?.address,
-		address:
-			walletChainType === ChainType.EVM && !!selectedOneTimeToken?.address // disable when selected token is undefined
-				? (address as Address)
-				: undefined,
-	});
-
 	const tokenDecimals = selectedOneTimeToken?.decimals || 18;
-	const { activeStartedRound } = getActiveRound(project.qfRounds);
-	const networkId = (chain as Chain)?.id;
 
-	const isOnQFEligibleNetworks =
-		networkId && activeStartedRound?.eligibleNetworks?.includes(networkId);
-
-	const tokenPrice = useTokenPrice(selectedOneTimeToken);
-
+	// Fetch token ADA price from coingecko
 	useEffect(() => {
-		if (
-			(networkId ||
-				(walletChainType && walletChainType !== ChainType.EVM)) &&
-			acceptedTokens
-		) {
-			const acceptedEvmTokensNetworkIds = new Set<Number>();
-			const acceptedNonEvmTokenChainTypes = new Set<ChainType>();
+		const fetchTokenPrice = async () => {
+			const price = await getCoingeckoADAPrice();
+			setTokenPrice(price);
+		};
+		fetchTokenPrice();
+	}, []);
 
-			acceptedTokens.forEach(t => {
-				if (
-					t.chainType === ChainType.EVM ||
-					t.chainType === undefined
-				) {
-					acceptedEvmTokensNetworkIds.add(t.networkId);
-				} else {
-					acceptedNonEvmTokenChainTypes.add(t.chainType);
-				}
-			});
-
-			const addressesChainTypes = new Set(
-				addresses?.map(({ chainType }) => chainType),
-			);
-
-			const filteredTokens = acceptedTokens.filter(token => {
-				switch (walletChainType) {
-					case ChainType.EVM:
-						return token.networkId === networkId;
-					case ChainType.SOLANA:
-						return (
-							addressesChainTypes.has(ChainType.SOLANA) &&
-							token.chainType === walletChainType &&
-							token.networkId === config.SOLANA_CONFIG.networkId
-						);
-					default:
-						return false;
-				}
-			});
-			const acceptedChainsWithChainTypeAndNetworkId: INetworkIdWithChain[] =
-				[];
-			addresses?.forEach(a => {
-				if (
-					a.chainType === undefined ||
-					a.chainType === ChainType.EVM
-				) {
-					if (acceptedEvmTokensNetworkIds.has(a.networkId!)) {
-						acceptedChainsWithChainTypeAndNetworkId.push({
-							networkId: a.networkId!,
-							chainType: ChainType.EVM,
-						});
-					}
-				} else if (acceptedNonEvmTokenChainTypes.has(a.chainType)) {
-					acceptedChainsWithChainTypeAndNetworkId.push({
-						networkId: a.networkId!,
-						chainType: a.chainType!,
-					});
-				}
-			});
-			const tokens = prepareTokenList(filteredTokens);
-			setErc20List(tokens);
+	// Fetch selected token balance
+	useEffect(() => {
+		if (selectedOneTimeToken) {
+			const cardanoToken = selectedOneTimeToken as ICardanoAcceptedToken;
+			setSelectedTokenBalance(cardanoToken.cardano?.quantity || 0);
+			setSelectedTokenCardano(cardanoToken);
 		}
-	}, [networkId, acceptedTokens, walletChainType, addresses]);
+	}, [selectedOneTimeToken]);
 
-	const selectedTokenBalance =
-		(walletChainType == ChainType.EVM ? evmBalance?.value : 0n) || 0n;
-	const refetch = walletChainType === ChainType.EVM ? evmRefetch : () => {};
-	const isRefetching =
-		walletChainType === ChainType.EVM ? evmIsRefetching : false;
+	// Calculate insufficient fee
+	useEffect(() => {
+		const checkInsufficientFee = async () => {
+			if (selectedTokenCardano && wallet) {
+				const userWalletAdaBalance = await getAdaBalance(wallet);
+				const isInsufficientFee = hasSufficientBalance(
+					amount,
+					toUnits(userWalletAdaBalance, 6),
+				);
+				setInsufficientGasFee(!isInsufficientFee);
+			}
+		};
+		checkInsufficientFee();
+	}, [selectedTokenCardano, amount, wallet]);
 
+	// Calculate if user donation is more then 1 ADA
+	useEffect(() => {
+		if (selectedTokenCardano && amount > 0n) {
+			// This is amount of ADA user is donating whateever token he selected
+			const priceInLovelace = toUnits(
+				selectedTokenCardano.cardano?.priceAda || 0,
+				selectedTokenCardano.decimals,
+			);
+			const donatedInLovelace =
+				(amount * priceInLovelace) / 10n ** BigInt(tokenDecimals);
+			if (donatedInLovelace < BigInt(1_000_000)) {
+				setInsufficientAmountFee(true);
+			} else {
+				setInsufficientAmountFee(false);
+			}
+		} else {
+			setInsufficientAmountFee(false);
+		}
+	}, [amount, selectedTokenCardano, tokenDecimals]);
+
+	// Handle donate
 	const handleDonate = () => {
-		if (amount > selectedTokenBalance) {
+		const userWalletBalance = toUnits(selectedTokenBalance, tokenDecimals);
+		if (amount > userWalletBalance) {
 			return setShowInsufficientModal(true);
 		}
-		if (!isSignedIn) {
+		if (!connected) {
 			signInThenDonate();
 		} else {
 			setShowDonateModal(true);
 		}
 	};
 
+	// Donation is disabled if:
+	// - Project is not active
+	// - Amount is not set
+	// - Selected token is not set
+	// - Insufficient gas fee
+	// - Insufficient amount fee
 	const donationDisabled =
-		!isActive || !amount || !selectedOneTimeToken || insufficientGasFee;
+		!isActive ||
+		!amount ||
+		!selectedOneTimeToken ||
+		insufficientGasFee ||
+		insufficientAmountFee;
 
-	const estimatedGasFeeObj = useMemo(() => {
-		const selectedChain = chain as Chain;
-		return {
-			chainId: selectedChain?.id,
-			to: addresses?.find(a => a.chainType === walletChainType)
-				?.address as Address,
-			value: selectedTokenBalance,
-		};
-	}, [chain, addresses, selectedTokenBalance, walletChainType]);
-
-	const { data: estimatedGas } = useEstimateGas(estimatedGasFeeObj);
-	const { data: estimatedGasPrice } =
-		useEstimateFeesPerGas(estimatedGasFeeObj);
-
-	const gasFee = useMemo((): bigint => {
-		if (
-			selectedOneTimeToken?.address !== zeroAddress ||
-			!estimatedGas ||
-			!estimatedGasPrice?.maxFeePerGas
-		) {
-			return 0n;
-		}
-		return estimatedGas * estimatedGasPrice.maxFeePerGas;
-	}, [
-		estimatedGas,
-		estimatedGasPrice?.maxFeePerGas,
-		selectedOneTimeToken?.address,
-	]);
-
-	useEffect(() => {
-		if (
-			amount > selectedTokenBalance - gasFee &&
-			amount < selectedTokenBalance &&
-			selectedOneTimeToken?.address === zeroAddress &&
-			gasFee > 0n
-		) {
-			setInsufficientGasFee(true);
-		} else {
-			setInsufficientGasFee(false);
-		}
-	}, [selectedTokenBalance, amount, selectedOneTimeToken?.address, gasFee]);
-
-	const amountErrorText = useMemo(() => {
-		const totalAmount = Number(formatUnits(gasFee, tokenDecimals)).toFixed(
-			10,
-		);
-		const tokenSymbol = selectedOneTimeToken?.symbol;
-		return formatMessage(
-			{ id: 'label.exceed_wallet_balance' },
-			{
-				totalAmount,
-				tokenSymbol,
-			},
-		);
-	}, [gasFee, tokenDecimals, selectedOneTimeToken?.symbol, formatMessage]);
+	const gasFee = 0n;
 
 	const { projectDonation: projectDonationAmount } = calcDonationShare(
 		amount,
@@ -283,19 +188,19 @@ const CardanoCryptoDonation: FC<{
 	);
 
 	const decimals = selectedOneTimeToken?.decimals || 18;
-	const donationUsdValue =
-		(tokenPrice || 0) *
-		(truncateToDecimalPlaces(formatUnits(amount, decimals), decimals) || 0);
-	const isDonationMatched =
-		!!activeStartedRound &&
-		isOnQFEligibleNetworks &&
-		donationUsdValue >= (activeStartedRound?.minimumValidUsdValue || 0);
-	const showEstimatedMatching =
-		hasActiveQFRound &&
-		!!isOnQFEligibleNetworks &&
-		!!selectedTokenBalance &&
-		!!isDonationMatched;
-	const selectTokenDisabled = !connected || erc20List?.length === 0;
+
+	const donationUsdValue = selectedTokenCardano?.cardano?.priceAda
+		? truncateToDecimalPlaces(
+				String(
+					Number(selectedTokenCardano.cardano.priceAda) *
+						Number(tokenPrice) *
+						Number(formatUnits(amount, decimals)),
+				),
+				2,
+			)
+		: 0;
+
+	const selectTokenDisabled = !connected;
 
 	return (
 		<MainContainer>
@@ -336,16 +241,7 @@ const CardanoCryptoDonation: FC<{
 					style={{ margin: '12px 0 24px' }}
 				/>
 			)}
-			<EstimatedMatchingToast
-				projectData={project}
-				token={selectedOneTimeToken}
-				amount={amount}
-				tokenPrice={tokenPrice}
-				show={showEstimatedMatching}
-			/>
-			<ForEstimatedMatchingAnimation
-				showEstimatedMatching={showEstimatedMatching}
-			>
+			<ForEstimatedMatchingAnimation showEstimatedMatching={false}>
 				<FlexStyled
 					$flexDirection='column'
 					gap='8px'
@@ -407,7 +303,12 @@ const CardanoCryptoDonation: FC<{
 							<GLinkStyled
 								size='Small'
 								onClick={() =>
-									setAmount(selectedTokenBalance - gasFee)
+									setAmount(
+										toUnits(
+											selectedTokenBalance,
+											tokenDecimals,
+										) - gasFee,
+									)
 								}
 							>
 								{formatMessage({
@@ -418,31 +319,40 @@ const CardanoCryptoDonation: FC<{
 									? tokenDecimals === 8
 										? truncateToDecimalPlaces(
 												formatUnits(
-													selectedTokenBalance,
+													toUnits(
+														selectedTokenBalance,
+														tokenDecimals,
+													),
 													tokenDecimals,
 												),
 												18 / 3,
 											)
 										: truncateToDecimalPlaces(
 												formatUnits(
-													selectedTokenBalance,
+													toUnits(
+														selectedTokenBalance,
+														tokenDecimals,
+													),
 													tokenDecimals,
 												),
 												tokenDecimals / 3,
 											)
 									: 0.0}
 							</GLinkStyled>
-							<IconWrapper
-								onClick={() => !isRefetching && refetch()}
-							>
-								{isRefetching ? (
-									<Spinner size={16} />
-								) : (
-									<IconRefresh16 />
-								)}
-							</IconWrapper>
 							{insufficientGasFee && (
-								<WarnError>{amountErrorText}</WarnError>
+								<WarnError>
+									Your wallet balance is insufficient to cover
+									the gas fees. Please add more ADA to your
+									wallet.
+								</WarnError>
+							)}
+							{insufficientAmountFee && (
+								<WarnError>
+									Your donation amount is insufficient. Please
+									donate at least 1 ADA if paying with ADA, or
+									the equivalent of 1 ADA when donating with
+									another token.
+								</WarnError>
 							)}
 						</FlexStyled>
 					) : (

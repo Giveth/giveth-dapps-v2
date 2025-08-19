@@ -1,6 +1,6 @@
-import { ICardanoAcceptedTokens } from './types';
+import { ICardanoAcceptedToken } from './types';
 
-export const cardanoAcceptedTokens: ICardanoAcceptedTokens[] = [
+export const cardanoAcceptedTokens: ICardanoAcceptedToken[] = [
 	{
 		name: 'ADA',
 		symbol: 'ADA',
@@ -12,6 +12,9 @@ export const cardanoAcceptedTokens: ICardanoAcceptedTokens[] = [
 			nameHex: null,
 			policyId: null,
 			logo: 'https://cryptologos.cc/logos/cardano-ada-logo.png?v=040',
+			quantity: 0,
+			rawQuantity: '',
+			priceAda: 0,
 		},
 		order: 0,
 	},
@@ -28,6 +31,9 @@ export const cardanoAcceptedTokens: ICardanoAcceptedTokens[] = [
 			policyId:
 				'8db269c3ec630e06ae29f74bc39edd1f87c819f1056206e879a1cd61',
 			logo: 'https://cryptologos.cc/logos/cardano-ada-logo.png?v=040',
+			quantity: 0,
+			rawQuantity: '',
+			priceAda: 0,
 		},
 		order: 1,
 	},

@@ -1,5 +1,9 @@
 import { CardanoWalletInfo } from './types';
 
+export const MIN_ADA = 1;
+export const DONATIN_DESTINATION_ADDRESS =
+	'addr1q9ute9k2xxkpqfy4pdljet3nh48zm6c3yfjcdkj0htuapsdwjzm36z25ndrmvxr990m76279jq7zeu50k3lgasjds9ts447s0a';
+
 // Connect user with selected wallet
 export const handleWalletSelection = (
 	wallet: CardanoWalletInfo,
@@ -77,3 +81,49 @@ export const normalizeAmount = (input: string): number => {
 	}
 	return value;
 };
+
+export function toUnits(value: string | number, decimals: number): bigint {
+	const s = String(value).trim().replace(',', '.');
+	if (!s.includes('.')) return BigInt(s) * 10n ** BigInt(decimals);
+	const [i, fRaw] = s.split('.');
+	const f = (fRaw || '').slice(0, decimals).padEnd(decimals, '0');
+	return BigInt(i || '0') * 10n ** BigInt(decimals) + BigInt(f || '0');
+}
+
+// Helper function to extract ADA balance
+export async function getAdaBalance(wallet: any): Promise<number> {
+	console.log({ wallet });
+	if (!wallet) return 0;
+
+	try {
+		const balance = await wallet.getBalance(); // returns array of assets
+		const adaAsset = balance.find(
+			(asset: any) => asset.unit === 'lovelace',
+		);
+
+		if (!adaAsset) return 0;
+
+		// Convert from lovelace (1 ADA = 1e6 lovelace)
+		return Number(adaAsset.quantity) / 1_000_000;
+	} catch (e) {
+		console.error('Error getting ADA balance:', e);
+		return 0;
+	}
+}
+
+/**
+ * Estimate if the user has enough balance to cover donation + fees
+ *
+ * @param amount - donation amount in lovelace (BigInt)
+ * @param balance - user token balance in lovelace (BigInt)
+ * @param buffer - safety buffer for tx fee + min-ADA (default 2 ADA)
+ * @returns boolean
+ */
+export function hasSufficientBalance(
+	amount: bigint,
+	balance: bigint,
+	buffer: bigint = 2_000_000n, // ~2 ADA
+): boolean {
+	// donation + buffer must be <= balance
+	return amount + buffer <= balance;
+}
