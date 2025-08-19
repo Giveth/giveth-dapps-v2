@@ -43,5 +43,6 @@ export const MIN_ADA = 1;
 // export const DONATION_DESTINATION_ADDRESS =
 // 	'addr1q9ute9k2xxkpqfy4pdljet3nh48zm6c3yfjcdkj0htuapsdwjzm36z25ndrmvxr990m76279jq7zeu50k3lgasjds9ts447s0a';
 
+// testnet address
 export const DONATION_DESTINATION_ADDRESS =
 	'addr_test1qzlje64ph0lunpungum5zama0kqlszf4tkweg9pr207pdd9vlmpek0694emds28t43rdavurv8ffdf28kra479evk9fq7x2tj0';
