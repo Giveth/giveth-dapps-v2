@@ -217,6 +217,7 @@ const ProjectCard = (props: IProjectCard) => {
 				$isOtherOrganization={
 					orgLabel && orgLabel !== ORGANIZATION.giveth
 				}
+				$isCause={projectType === EProjectType.CAUSE}
 			>
 				<TitleWrapper>
 					<LastUpdatedContainer $isHover={isHover}>
@@ -430,6 +431,7 @@ enum ECardBodyHover {
 interface ICardBody {
 	$isOtherOrganization?: boolean | '';
 	$isHover: ECardBodyHover;
+	$isCause?: boolean;
 }
 
 interface IWrapperProps {
@@ -450,10 +452,14 @@ const CardBody = styled.div<ICardBody>`
 	${mediaQueries.laptopS} {
 		top: ${props =>
 			props.$isHover == ECardBodyHover.FULL
-				? '59px'
+				? props.$isCause
+					? '35px'
+					: '55px'
 				: props.$isHover == ECardBodyHover.HALF
 					? '104px'
-					: '137px'};
+					: props.$isCause
+						? '121px'
+						: '161px'};
 	}
 `;
 
@@ -508,11 +514,11 @@ const Wrapper = styled.div<IWrapperProps>`
         height: ${props =>
 			props.$projectType === EProjectType.CAUSE
 				? props.$activeStartedRound
-					? '420px' // Cause with active round
-					: '426px' // Cause without active round
+					? '470px' // Cause with active round
+					: '456px' // Cause without active round
 				: props.$activeStartedRound
-					? '420px' // Not a cause but in active round
-					: '426px'};  // Not a cause or active round
+					? '470px' // Not a cause but in active round
+					: '446px'};  // Not a cause or active round
     }
 `;
 
