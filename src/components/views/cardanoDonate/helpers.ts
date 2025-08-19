@@ -1,9 +1,5 @@
 import { CardanoWalletInfo } from './types';
 
-export const MIN_ADA = 1;
-export const DONATIN_DESTINATION_ADDRESS =
-	'addr1q9ute9k2xxkpqfy4pdljet3nh48zm6c3yfjcdkj0htuapsdwjzm36z25ndrmvxr990m76279jq7zeu50k3lgasjds9ts447s0a';
-
 // Connect user with selected wallet
 export const handleWalletSelection = (
 	wallet: CardanoWalletInfo,
@@ -92,7 +88,6 @@ export function toUnits(value: string | number, decimals: number): bigint {
 
 // Helper function to extract ADA balance
 export async function getAdaBalance(wallet: any): Promise<number> {
-	console.log({ wallet });
 	if (!wallet) return 0;
 
 	try {

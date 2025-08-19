@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useState } from 'react';
+import React, { FC, useState } from 'react';
 import styled from 'styled-components';
 import {
 	brandColors,
@@ -9,18 +9,11 @@ import {
 	FlexCenter,
 } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
-import { Chain, parseUnits, Address, zeroAddress, formatUnits } from 'viem';
-import { ethers } from 'ethers';
+import { Address, formatUnits } from 'viem';
 import { Modal } from '@/components/modals/Modal';
-import {
-	compareAddresses,
-	formatTxLink,
-	sendEvmTransaction,
-	showToastError,
-} from '@/lib/helpers';
+import { formatTxLink, sendEvmTransaction } from '@/lib/helpers';
 import { mediaQueries } from '@/lib/constants/constants';
 import {
-	IMeGQL,
 	IProjectAcceptedToken,
 	SwapTransactionInput,
 } from '@/apollo/types/gqlTypes';
@@ -28,11 +21,6 @@ import { IModal } from '@/types/common';
 import FailedDonation, {
 	EDonationFailedType,
 } from '@/components/modals/FailedDonation';
-import { client } from '@/apollo/apolloClient';
-import { VALIDATE_TOKEN } from '@/apollo/gql/gqlUser';
-import { useAppDispatch } from '@/features/hooks';
-import { signOut } from '@/features/user/user.thunks';
-import { setShowSignWithWallet } from '@/features/modal/modal.slice';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
 import DonateSummary from '@/components/views/donate/DonateSummary';
 import ExternalLink from '@/components/ExternalLink';
@@ -45,16 +33,15 @@ import { IWalletAddress } from '@/apollo/types/types';
 import { useCreateSolanaDonation } from '@/hooks/useCreateSolanaDonation';
 import { useTokenPrice } from '@/hooks/useTokenPrice';
 import { calcDonationShare } from '@/components/views/donate/common/helpers';
-// import createGoogleTagEventPurchase from '@/helpers/googleAnalytics';
 import SanctionModal from '@/components/modals/SanctionedModal';
 import {
-	approveSpending,
 	executeSquidTransaction,
 	getSquidRoute,
 	saveCauseDonation,
 } from '@/components/views/donateCause/helpers';
 import config from '@/configuration';
 import { IOnTxHash } from '@/services/donation';
+import { DONATION_DESTINATION_ADDRESS } from './data';
 
 interface IDonateModalProps extends IModal {
 	token: IProjectAcceptedToken;
@@ -75,69 +62,29 @@ const CardanoDonateModal: FC<IDonateModalProps> = props => {
 		donationSaved: firstDonationSaved,
 		donationMinted: firstDonationMinted,
 	} = createDonationHook();
-	const {
-		chain,
-		walletChainType,
-		walletAddress: address,
-	} = useGeneralWallet();
+	const { walletAddress: address } = useGeneralWallet();
 
-	const chainId = (chain as Chain)?.id;
-	const dispatch = useAppDispatch();
+	const cardanoToken = token as IProjectAcceptedToken;
+
+	const chainId = 1;
 	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
 	const { formatMessage } = useIntl();
-	const { setSuccessDonation, project, activeStartedRound } = useDonateData();
+	const { setSuccessDonation, project } = useDonateData();
 
-	const [step, setStep] = useState('approve');
 	const [donating, setDonating] = useState(false);
-	const [approving, setApproving] = useState(false);
 	const [processFinished, setProcessFinished] = useState(false);
 	const [failedModalType, setFailedModalType] =
 		useState<EDonationFailedType>();
 	const [isSanctioned, setIsSanctioned] = useState<boolean>(false);
 
 	const tokenPrice = useTokenPrice(token);
+	const { title } = project || {};
 
-	const isOnEligibleNetworks = activeStartedRound?.eligibleNetworks?.includes(
-		(chain as Chain).id,
-	);
-
-	const includeInQF = activeStartedRound && isOnEligibleNetworks;
-	const { title, addresses } = project || {};
-
-	const projectWalletAddress = findMatchingWalletAddress(
-		addresses,
-		137, // for now we are using polygon as the default chain
-		walletChainType,
-	);
+	const projectWalletAddress = DONATION_DESTINATION_ADDRESS;
 
 	const { projectDonation } = calcDonationShare(amount, 0, token.decimals);
 
 	const projectDonationPrice = tokenPrice && tokenPrice * projectDonation;
-
-	// this function is used to validate the token and check if the wallet is sanctioned
-	const validateTokenThenDonate = async () => {
-		client
-			.query({
-				query: VALIDATE_TOKEN,
-				fetchPolicy: 'no-cache',
-			})
-			.then((res: IMeGQL) => {
-				const _address = res.data?.me?.walletAddress;
-				if (compareAddresses(_address, address)) {
-					return true;
-				} else {
-					handleFailedValidation();
-					return false;
-				}
-			})
-			.catch(handleFailedValidation);
-	};
-
-	const handleFailedValidation = () => {
-		dispatch(signOut(null));
-		dispatch(setShowSignWithWallet(true));
-		closeModal();
-	};
 
 	const delayedCloseModal = (txHash1: string, txHash2?: string) => {
 		setProcessFinished(true);
@@ -156,81 +103,19 @@ const CardanoDonateModal: FC<IDonateModalProps> = props => {
 			closeModal();
 			setSuccessDonation({
 				txHash: txHashArray,
-				excludeFromQF: !includeInQF,
+				excludeFromQF: true,
 				givBackEligible,
 				chainId,
 			});
 		}, 4000);
 	};
 
-	const approveToken = async () => {
-		await validateTokenThenDonate();
-
-		setApproving(true);
-
-		let approveTx: ethers.providers.TransactionResponse | null = null;
-		let spenderAddress = '';
-		// If the token is the same as the recipient token, use the project wallet address
-		if (
-			token.networkId === chainId &&
-			token.address.toLowerCase() ===
-				config.CAUSES_CONFIG.recipientToken.address.toLowerCase()
-		) {
-			spenderAddress = projectWalletAddress || '';
-		} else {
-			// If the token is different, use the recipient token address
-			const squidParams = {
-				fromAddress: address || '',
-				fromChain: chainId.toString(),
-				fromToken: token.address,
-				fromAmount: amount.toString(),
-				toChain: config.CAUSES_CONFIG.recipientToken.network.toString(),
-				toToken: config.CAUSES_CONFIG.recipientToken.address,
-				toAddress: projectWalletAddress || '',
-				quoteOnly: false,
-			};
-
-			const squidRoute = await getSquidRoute(squidParams);
-
-			if (squidRoute?.route) {
-				spenderAddress = squidRoute.route.transactionRequest.target;
-			}
-		}
-
-		const donationInWei = parseUnits(
-			projectDonation.toString(),
-			token.decimals || 18,
-		);
-
-		approveTx = await approveSpending(
-			spenderAddress,
-			token.address,
-			donationInWei.toString(),
-		);
-
-		if (approveTx) {
-			setStep('donate');
-		} else {
-			setFailedModalType(EDonationFailedType.CANCELLED);
-			showToastError('Failed to approve token');
-		}
-
-		setApproving(false);
-	};
-
 	const handleDonate = async () => {
-		if (!projectWalletAddress) {
-			setDonating(false);
-			return showToastError(
-				"Project wallet address for the destination network doesn't exist",
-			);
-		}
+		setDonating(true);
 
 		let donationAmount = projectDonation;
 
 		try {
-			setDonating(true);
-
 			let tx;
 			let swapData: SwapTransactionInput | undefined;
 
@@ -374,16 +259,6 @@ const CardanoDonateModal: FC<IDonateModalProps> = props => {
 		});
 	};
 
-	// Check if selected token is native token of the network
-	useEffect(() => {
-		if (
-			token.chainType === ChainType.EVM &&
-			token.address === zeroAddress
-		) {
-			setStep('donate');
-		}
-	}, [token]);
-
 	return isSanctioned ? (
 		<SanctionModal
 			closeModal={() => {
@@ -401,9 +276,7 @@ const CardanoDonateModal: FC<IDonateModalProps> = props => {
 				headerTitle={
 					firstDonationSaved
 						? formatMessage({ id: 'label.donation_submitted' })
-						: step === 'approve'
-							? formatMessage({ id: 'label.approving' })
-							: formatMessage({ id: 'label.donating' })
+						: formatMessage({ id: 'label.donating' })
 				}
 			>
 				<DonateContainer>
@@ -461,21 +334,17 @@ const CardanoDonateModal: FC<IDonateModalProps> = props => {
 							/>
 						)}
 						<DonateButton
-							loading={donating || approving}
+							loading={donating}
 							buttonType='secondary'
-							disabled={donating || processFinished || approving}
+							disabled={donating || processFinished}
 							label={
 								donating
 									? formatMessage({
 											id: 'label.donating',
 										})
-									: step === 'approve'
-										? formatMessage({ id: 'label.approve' })
-										: formatMessage({ id: 'label.donate' })
+									: formatMessage({ id: 'label.donate' })
 							}
-							onClick={
-								step === 'approve' ? approveToken : handleDonate
-							}
+							onClick={handleDonate}
 						/>
 					</Buttons>
 				</DonateContainer>
