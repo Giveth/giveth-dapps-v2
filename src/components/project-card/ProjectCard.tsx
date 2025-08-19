@@ -514,7 +514,7 @@ const Wrapper = styled.div<IWrapperProps>`
         height: ${props =>
 			props.$projectType === EProjectType.CAUSE
 				? props.$activeStartedRound
-					? '420px' // Cause with active round
+					? '470px' // Cause with active round
 					: '456px' // Cause without active round
 				: props.$activeStartedRound
 					? '470px' // Not a cause but in active round
