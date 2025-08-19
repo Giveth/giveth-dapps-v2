@@ -30,7 +30,7 @@ import {
 	calcDonationShare,
 	prepareTokenList,
 } from '@/components/views/donate/common/helpers';
-import { useAppDispatch, useAppSelector } from '@/features/hooks';
+import { useAppSelector } from '@/features/hooks';
 import { useDonateData } from '@/context/donate.context';
 import { useModalCallback } from '@/hooks/useModalCallback';
 import { getActiveRound } from '@/helpers/qf';
@@ -91,7 +91,6 @@ const CardanoCryptoDonation: FC<{
 	const { isSignedIn } = useAppSelector(state => state.user);
 
 	const { project, hasActiveQFRound, selectedOneTimeToken } = useDonateData();
-	const dispatch = useAppDispatch();
 
 	const {
 		isGivbackEligible,
@@ -481,9 +480,7 @@ const CardanoCryptoDonation: FC<{
 					))}
 				{!connected && (
 					<MainButton
-						label={formatMessage({
-							id: 'component.button.connect_wallet',
-						})}
+						label='Connect Cardano Wallet'
 						onClick={() => setShowCardanoConnectWalletModal(true)}
 					/>
 				)}

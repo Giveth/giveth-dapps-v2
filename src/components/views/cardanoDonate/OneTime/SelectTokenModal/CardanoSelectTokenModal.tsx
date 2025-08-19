@@ -11,6 +11,7 @@ import { WrappedSpinner } from '@/components/Spinner';
 import { cardanoAcceptedTokens } from '../../data';
 import { formatTokenQuantity, fetchTokenPriceInAdaMuesli } from '../../helpers';
 import { ICardanoAcceptedToken } from '../../types';
+import { useDonateData } from '@/context/donate.context';
 
 export interface ISelectTokenModalProps extends IModal {
 	tokens?: ICardanoAcceptedToken[];
@@ -34,10 +35,8 @@ export const CardanoSelectTokenModal: FC<ISelectTokenModalProps> = props => {
 const SelectTokenInnerModal: FC<ISelectTokenModalProps> = ({
 	setShowModal,
 }) => {
-	const { connect, disconnect, connecting, connected, wallet } = useWallet();
-
-	const cardanoProjectId =
-		process.env.NEXT_PUBLIC_CARDANO_BLOCKFROST_PROJECT_ID || '';
+	const { connected, wallet } = useWallet();
+	const { setSelectedOneTimeToken } = useDonateData();
 
 	const [hideZeroBalance, setHideZeroBalance] = useState<boolean>(false);
 	const [tokenListForSelect, setTokenListForSelect] = useState<
@@ -138,8 +137,6 @@ const SelectTokenInnerModal: FC<ISelectTokenModalProps> = ({
 				/>
 				{tokenListForSelect.length > 0 && connected ? (
 					tokenListForSelect.map((token: ICardanoAcceptedToken) => {
-						console.log({ token });
-
 						const balance = token.cardano?.rawQuantity || 0;
 
 						return (
@@ -149,13 +146,13 @@ const SelectTokenInnerModal: FC<ISelectTokenModalProps> = ({
 								hideZeroBalance={hideZeroBalance}
 								balance={BigInt(balance)}
 								onClick={() => {
-									// setSelectedOneTimeToken(token);
+									setSelectedOneTimeToken(token);
 									setShowModal(false);
 								}}
 							/>
 						);
 					})
-				) : connecting || !connected ? (
+				) : connected ? (
 					<WrappedSpinner size={300} />
 				) : (
 					<div>No token supported on this chain</div>
