@@ -186,8 +186,10 @@ const CardanoDonateModal: FC<IDonateModalProps> = props => {
 				// Token transfer
 				tx.sendAssets(projectWalletAddress, [
 					{
-						unit: tokenUnit,
-						quantity: String(normalizedValue),
+						unit: cardanoToken.cardano?.unit || '',
+						quantity: String(
+							BigInt(Number(normalizedValue) * 1_000_000),
+						),
 					},
 				]);
 			}
@@ -200,12 +202,15 @@ const CardanoDonateModal: FC<IDonateModalProps> = props => {
 			console.log('Transaction submitted:', txHash);
 			// setFailedModalType(EDonationFailedType.REJECTED);
 
+			const cardanoNetworkId = await wallet.getNetworkId();
+			console.log({ cardanoNetworkId }); // 1 = Mainnet, 0 = Testnet (preprod, preview)
+
 			// Save donation
 			if (txHash) {
 				const tokenSymbol = cardanoToken.symbol || '';
 				const donationProps: ICardanoDonationProps = {
 					projectId: Number(project.id),
-					transactionNetworkId: 3001,
+					transactionNetworkId: cardanoNetworkId === 1 ? 3000 : 3001,
 					amount: donationAmount,
 					transactionId: txHash,
 					fromWalletAddress: fromWalletAddress || '',

@@ -83,6 +83,7 @@ const SelectTokenInnerModal: FC<ISelectTokenModalProps> = ({
 										priceAda: 1,
 										tokenAddress:
 											token.cardano?.tokenAddress || '',
+										unit: token.cardano?.unit || '',
 									},
 								});
 							} else {
@@ -106,6 +107,7 @@ const SelectTokenInnerModal: FC<ISelectTokenModalProps> = ({
 											tokenAddress:
 												token.cardano?.tokenAddress ||
 												'',
+											unit: token.cardano?.unit || '',
 										},
 									});
 								} else {
@@ -123,6 +125,7 @@ const SelectTokenInnerModal: FC<ISelectTokenModalProps> = ({
 											tokenAddress:
 												token.cardano?.tokenAddress ||
 												'',
+											unit: token.cardano?.unit || '',
 										},
 									});
 								}
