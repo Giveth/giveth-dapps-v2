@@ -1,7 +1,6 @@
 'use client';
 import { Transaction } from '@meshsdk/core';
 import { MeshProvider, useWallet, useWalletList } from '@meshsdk/react';
-import Image from 'next/image';
 import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 
@@ -256,6 +255,8 @@ function Inner() {
 
 			const amountValue = normalizeAmount(amount);
 
+			console.log({ amountValue });
+
 			if (amountValue < MIN_ADA && tokenUnit === 'lovelace') {
 				alert(
 					`Amount must be at least ${MIN_ADA} ADA due to min-ADA requirement`,
@@ -267,6 +268,7 @@ function Inner() {
 			const tx = new Transaction({ initiator: wallet });
 
 			if (tokenUnit === 'lovelace') {
+				console.log('ADA transfer');
 				// ADA transfer: convert ADA → lovelace (1 ADA = 1,000,000 lovelace)
 				tx.sendLovelace(
 					toAddress,
@@ -303,12 +305,6 @@ function Inner() {
 				{selectedWallet ? (
 					<div>
 						<span>{selectedWallet.name}</span>
-						<Image
-							src={selectedWallet.icon}
-							alt={selectedWallet.name}
-							width='30'
-							height='30'
-						/>
 					</div>
 				) : (
 					<h2>Select a wallet</h2>
@@ -323,12 +319,6 @@ function Inner() {
 								onClick={() => handleWalletSelection(wallet)}
 							>
 								<span>{wallet.name}</span>
-								<Image
-									src={wallet.icon}
-									alt={wallet.name}
-									width='30'
-									height='30'
-								/>
 							</li>
 						))}
 					</ul>

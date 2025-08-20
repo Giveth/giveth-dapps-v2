@@ -32,11 +32,16 @@ import { IWalletAddress } from '@/apollo/types/types';
 import { useCreateSolanaDonation } from '@/hooks/useCreateSolanaDonation';
 import { calcDonationShare } from '@/components/views/donate/common/helpers';
 import SanctionModal from '@/components/modals/SanctionedModal';
-import config from '@/configuration';
-import { IOnTxHash } from '@/services/donation';
 import { DONATION_DESTINATION_ADDRESS } from './data';
 import { ICardanoAcceptedToken } from './types';
-import { getCoingeckoADAPrice } from './helpers';
+import {
+	getCoingeckoADAPrice,
+	ICardanoDonationProps,
+	normalizeAmount,
+	saveCardanoDonation,
+} from './helpers';
+import { useAppDispatch } from '@/features/hooks';
+import { fetchUserByAddress } from '@/features/user/user.thunks';
 
 interface IDonateModalProps extends IModal {
 	token: IProjectAcceptedToken;
@@ -47,11 +52,16 @@ interface IDonateModalProps extends IModal {
 }
 
 const CardanoDonateModal: FC<IDonateModalProps> = props => {
-	const { token, amount, setShowModal, anonymous, givBackEligible } = props;
+	const { token, amount, setShowModal, givBackEligible } = props;
 
 	const { wallet } = useWallet();
 
 	const [tokenPrice, setTokenPrice] = useState(0);
+	const [fromWalletAddress, setFromWalletAddress] = useState<string | null>(
+		null,
+	);
+	const [userId, setUserId] = useState<number | null>(null);
+	const dispatch = useAppDispatch();
 
 	const createDonationHook =
 		token.chainType === ChainType.SOLANA
@@ -62,7 +72,22 @@ const CardanoDonateModal: FC<IDonateModalProps> = props => {
 		donationSaved: firstDonationSaved,
 		donationMinted: firstDonationMinted,
 	} = createDonationHook();
-	const { walletAddress: address } = useGeneralWallet();
+	const { walletAddress: userWalletAddress } = useGeneralWallet();
+
+	// Get user data by wallet address
+	useEffect(() => {
+		const getUserData = async () => {
+			if (userWalletAddress) {
+				const result = await dispatch(
+					fetchUserByAddress(userWalletAddress),
+				);
+				if (result.payload?.data?.userByAddress?.id) {
+					setUserId(result.payload.data.userByAddress.id);
+				}
+			}
+		};
+		getUserData();
+	}, [userWalletAddress, dispatch]);
 
 	const cardanoToken = token as ICardanoAcceptedToken;
 
@@ -103,6 +128,15 @@ const CardanoDonateModal: FC<IDonateModalProps> = props => {
 			2,
 		);
 
+	// Set up user cardano wallet address
+	useEffect(() => {
+		const getWalletAddress = async () => {
+			const addr = await wallet.getChangeAddress();
+			setFromWalletAddress(addr);
+		};
+		getWalletAddress();
+	}, [wallet]);
+
 	const delayedCloseModal = (txHash1: string, txHash2?: string) => {
 		setProcessFinished(true);
 		setDonating(false);
@@ -132,29 +166,28 @@ const CardanoDonateModal: FC<IDonateModalProps> = props => {
 
 		let donationAmount = projectDonation;
 
-		console.log('donationAmount', donationAmount);
+		console.log({ cardanoToken });
+		console.log({ donationAmount });
 
 		try {
 			const tokenUnit = cardanoToken.symbol || 'ADA';
 
-			console.log('tokenUnit', cardanoToken);
-
 			// Build transaction
 			const tx = new Transaction({ initiator: wallet });
 
+			const normalizedValue = normalizeAmount(String(donationAmount));
+
 			if (tokenUnit === 'ADA') {
-				console.log('ADA transfer');
-				// ADA transfer: convert ADA → lovelace (1 ADA = 1,000,000 lovelace)
 				tx.sendLovelace(
 					projectWalletAddress,
-					(BigInt(donationAmount) * 1_000_000n).toString(),
+					String(BigInt(Number(normalizedValue) * 1_000_000)),
 				);
 			} else {
 				// Token transfer
 				tx.sendAssets(projectWalletAddress, [
 					{
 						unit: tokenUnit,
-						quantity: String(donationAmount), // must be in token's smallest unit
+						quantity: String(normalizedValue),
 					},
 				]);
 			}
@@ -165,38 +198,31 @@ const CardanoDonateModal: FC<IDonateModalProps> = props => {
 			const txHash = await wallet.submitTx(signedTx);
 
 			console.log('Transaction submitted:', txHash);
-			alert(`✅ Transaction submitted: ${txHash}`);
-
 			// setFailedModalType(EDonationFailedType.REJECTED);
 
 			// Save donation
 			if (txHash) {
-				const donationProps: IOnTxHash = {
-					chainId: config.CAUSES_CONFIG.recipientToken.network,
-					amount: donationAmount,
-					token: {
-						name: config.CAUSES_CONFIG.recipientToken.symbol,
-						symbol: config.CAUSES_CONFIG.recipientToken.symbol,
-						address: config.CAUSES_CONFIG.recipientToken.address,
-						decimals: config.CAUSES_CONFIG.recipientToken.decimals,
-						networkId: config.CAUSES_CONFIG.recipientToken.network,
-						chainType: ChainType.EVM,
-						order: 0,
-					},
+				const tokenSymbol = cardanoToken.symbol || '';
+				const donationProps: ICardanoDonationProps = {
 					projectId: Number(project.id),
-					anonymous,
-					useDonationBox: false,
-					walletAddress: address || '',
-					symbol: token.symbol,
-					setFailedModalType,
-					fromTokenAmount: parseFloat(projectDonation.toString()),
+					transactionNetworkId: 3001,
+					amount: donationAmount,
+					transactionId: txHash,
+					fromWalletAddress: fromWalletAddress || '',
+					toWalletAddress: projectWalletAddress,
+					tokenAddress: cardanoToken.cardano?.tokenAddress || '',
+					anonymous: false,
+					token: tokenSymbol,
+					priceUsd: tokenPrice,
+					valueUsd: projectDonationPrice,
+					userId: userId || 0,
 				};
 
-				// await saveCauseDonation(donationProps);
+				await saveCardanoDonation(donationProps);
 
-				console.log('Transaction saved', txHash);
+				console.log('Cardano transaction saved', txHash);
 
-				// delayedCloseModal(txHash);
+				delayedCloseModal(txHash);
 			} else {
 				setFailedModalType(EDonationFailedType.FAILED);
 				return;

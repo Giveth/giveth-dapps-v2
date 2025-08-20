@@ -5,7 +5,7 @@ export const cardanoAcceptedTokens: ICardanoAcceptedToken[] = [
 		name: 'ADA',
 		symbol: 'ADA',
 		decimals: 6, // 1 ADA = 1,000,000 lovelace
-		networkId: 1,
+		networkId: 3001,
 		address: 'lovelace',
 		cardano: {
 			unit: 'lovelace',
@@ -24,7 +24,7 @@ export const cardanoAcceptedTokens: ICardanoAcceptedToken[] = [
 		name: 'SHEN',
 		symbol: 'SHEN',
 		decimals: 6,
-		networkId: 1,
+		networkId: 3000,
 		address:
 			'8db269c3ec630e06ae29f74bc39edd1f87c819f1056206e879a1cd615368656e4d6963726f555344',
 		cardano: {

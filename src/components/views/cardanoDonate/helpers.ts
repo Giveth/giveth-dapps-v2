@@ -1,4 +1,8 @@
+import { gql } from '@apollo/client';
+import { captureException } from '@sentry/nextjs';
+import { client } from '@/apollo/apolloClient';
 import { CardanoWalletInfo } from './types';
+import { SENTRY_URGENT } from '@/configuration';
 
 // Connect user with selected wallet
 export const handleWalletSelection = (
@@ -122,3 +126,114 @@ export function hasSufficientBalance(
 	// donation + buffer must be <= balance
 	return amount + buffer <= balance;
 }
+
+const CREATE_CARDANO_DONATION = gql`
+	mutation CreateCardanoDonation(
+		$amount: Float!
+		$transactionId: String!
+		$projectId: Float!
+		$fromWalletAddress: String!
+		$toWalletAddress: String!
+		$token: String
+		$tokenAddress: String
+		$anonymous: Boolean
+		$valueUsd: Float
+		$priceUsd: Float
+		$userId: Float
+		$transactionNetworkId: Float
+	) {
+		createCardanoDonation(
+			amount: $amount
+			transactionId: $transactionId
+			projectId: $projectId
+			fromWalletAddress: $fromWalletAddress
+			toWalletAddress: $toWalletAddress
+			token: $token
+			tokenAddress: $tokenAddress
+			anonymous: $anonymous
+			valueUsd: $valueUsd
+			priceUsd: $priceUsd
+			userId: $userId
+			transactionNetworkId: $transactionNetworkId
+		)
+	}
+`;
+
+const SAVE_CARDANO_DONATION_ITERATIONS = 5;
+let saveCauseDonationIteration = 0;
+
+export interface ICardanoDonationProps {
+	amount: number;
+	token: string;
+	projectId: number;
+	anonymous: boolean;
+	transactionNetworkId: number;
+	transactionId: string;
+	fromWalletAddress: string;
+	toWalletAddress: string;
+	tokenAddress: string;
+	priceUsd: number;
+	valueUsd: number;
+	userId: number;
+}
+
+export async function saveCardanoDonation(props: ICardanoDonationProps) {
+	try {
+		return await createCardanoDonation(props);
+	} catch (error) {
+		saveCauseDonationIteration++;
+		if (saveCauseDonationIteration >= SAVE_CARDANO_DONATION_ITERATIONS) {
+			saveCauseDonationIteration = 0;
+			throw error;
+		} else return saveCardanoDonation(props);
+	}
+}
+
+const createCardanoDonation = async (props: ICardanoDonationProps) => {
+	const {
+		projectId,
+		transactionNetworkId,
+		amount,
+		transactionId,
+		fromWalletAddress,
+		toWalletAddress,
+		tokenAddress,
+		anonymous,
+		token,
+		priceUsd,
+		valueUsd,
+		userId,
+	} = props;
+	let donationId = 0;
+
+	try {
+		const { data } = await client.mutate({
+			mutation: CREATE_CARDANO_DONATION,
+			variables: {
+				transactionNetworkId,
+				amount,
+				token,
+				projectId,
+				tokenAddress,
+				anonymous,
+				valueUsd,
+				priceUsd,
+				fromWalletAddress,
+				toWalletAddress,
+				transactionId,
+				userId: parseFloat(userId.toString()),
+			},
+		});
+		donationId = data.createDonation;
+	} catch (error) {
+		captureException(error, {
+			tags: {
+				section: SENTRY_URGENT,
+			},
+		});
+		console.error('createDonation error: ', error);
+		throw error;
+	}
+
+	return donationId;
+};

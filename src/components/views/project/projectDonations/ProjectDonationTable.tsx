@@ -9,6 +9,7 @@ import {
 	FlexCenter,
 } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
+import Image from 'next/image';
 import { client } from '@/apollo/apolloClient';
 import { FETCH_PROJECT_DONATIONS } from '@/apollo/gql/gqlDonations';
 import { IDonation, IQFRound } from '@/apollo/types/types';
@@ -35,6 +36,7 @@ import { getChainName } from '@/lib/network';
 import { formatDonation } from '@/helpers/number';
 import { Spinner } from '@/components/Spinner';
 import { NoDonation } from './NoDonation';
+import { ChainType } from '@/types/config';
 
 const itemPerPage = 10;
 
@@ -133,6 +135,8 @@ const ProjectDonationTable = ({ selectedQF }: IProjectDonationTable) => {
 	if (pageDonations?.totalCount === 0)
 		return <NoDonation selectedQF={selectedQF} />;
 
+	console.log({ pageDonations });
+
 	return (
 		<Wrapper>
 			<DonationTableWrapper>
@@ -204,20 +208,34 @@ const ProjectDonationTable = ({ selectedQF }: IProjectDonationTable) => {
 								</DonationTableCell>
 							)}
 							<DonationTableCell>
-								<NetworkLogo
-									logoSize={24}
-									chainId={
-										donation.swapTransaction?.fromChainId ||
-										donation.transactionNetworkId
-									}
-									chainType={donation.chainType}
-								/>
+								{donation.chainType === ChainType.CARDANO ? (
+									<Image
+										src={'/images/tokens/ada.svg'}
+										alt='Cardano'
+										width={24}
+										height={24}
+									/>
+								) : (
+									<NetworkLogo
+										logoSize={24}
+										chainId={
+											donation.swapTransaction
+												?.fromChainId ||
+											donation.transactionNetworkId
+										}
+										chainType={donation.chainType}
+									/>
+								)}
+
 								<NetworkName>
-									{getChainName(
-										donation.swapTransaction?.fromChainId ||
-											donation.transactionNetworkId,
-										donation.chainType,
-									)}
+									{donation.chainType === ChainType.CARDANO
+										? 'Cardano'
+										: getChainName(
+												donation.swapTransaction
+													?.fromChainId ||
+													donation.transactionNetworkId,
+												donation.chainType,
+											)}
 								</NetworkName>
 							</DonationTableCell>
 							<DonationTableCell>

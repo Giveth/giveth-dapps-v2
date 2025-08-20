@@ -49,6 +49,8 @@ const SelectTokenInnerModal: FC<ISelectTokenModalProps> = ({
 			const getWalletBalance = async () => {
 				const balance = await wallet.getBalance();
 
+				console.log({ balance });
+
 				if (balance) {
 					// Check if have token on the list
 					const tokenList = cardanoAcceptedTokens;
@@ -79,6 +81,8 @@ const SelectTokenInnerModal: FC<ISelectTokenModalProps> = ({
 										quantity: formattedQuantity,
 										rawQuantity: quantity,
 										priceAda: 1,
+										tokenAddress:
+											token.cardano?.tokenAddress || '',
 									},
 								});
 							} else {
@@ -99,6 +103,9 @@ const SelectTokenInnerModal: FC<ISelectTokenModalProps> = ({
 											quantity: formattedQuantity,
 											rawQuantity: quantity,
 											priceAda: tokenData,
+											tokenAddress:
+												token.cardano?.tokenAddress ||
+												'',
 										},
 									});
 								} else {
@@ -113,6 +120,9 @@ const SelectTokenInnerModal: FC<ISelectTokenModalProps> = ({
 											quantity: formattedQuantity,
 											rawQuantity: quantity,
 											priceAda: 0,
+											tokenAddress:
+												token.cardano?.tokenAddress ||
+												'',
 										},
 									});
 								}
