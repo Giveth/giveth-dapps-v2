@@ -15,6 +15,8 @@ export const cardanoAcceptedTokens: ICardanoAcceptedToken[] = [
 			quantity: 0,
 			rawQuantity: '',
 			priceAda: 0,
+			tokenAddress:
+				'1234567890abcdef1234567890abcdef1234567890abcdef1234567890ab',
 		},
 		order: 0,
 	},
@@ -34,6 +36,8 @@ export const cardanoAcceptedTokens: ICardanoAcceptedToken[] = [
 			quantity: 0,
 			rawQuantity: '',
 			priceAda: 0,
+			tokenAddress:
+				'1234567890abcdef1234567890abcdef1234567890abcdef1234567890ab',
 		},
 		order: 1,
 	},

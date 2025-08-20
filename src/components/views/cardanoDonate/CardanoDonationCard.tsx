@@ -53,6 +53,8 @@ export const DonationCardWrapper = styled(Flex)`
 `;
 
 const Title = styled(B)`
+	display: block;
+	margin-bottom: 50px;
 	color: ${neutralColors.gray[800]} !important;
 	text-align: left;
 `;

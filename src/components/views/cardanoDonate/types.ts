@@ -9,6 +9,7 @@ export interface ICardanoAcceptedToken extends IProjectAcceptedToken {
 		quantity: number;
 		rawQuantity: string;
 		priceAda: number;
+		tokenAddress: string;
 	};
 }
 

@@ -41,7 +41,6 @@ import CardanoDonateModal from '@/components/views/cardanoDonate/CardanoDonateMo
 import { CardanoSelectTokenModal } from '@/components/views/cardanoDonate/OneTime/SelectTokenModal/CardanoSelectTokenModal';
 import SaveGasFees from '../../donate/OneTime/SaveGasFees';
 import CardanoTotalDonation from '@/components/views/cardanoDonate/OneTime/CardanoTotalDonation';
-import CardanoEligibilityBadges from '@/components/views/cardanoDonate/common/CardanoEligibilityBadges';
 import { CardanoWalletInfo, ICardanoAcceptedToken } from '../types';
 import {
 	getAdaBalance,
@@ -232,14 +231,6 @@ const CardanoCryptoDonation: FC<{
 						id: 'label.please_connect_your_wallet',
 					})}
 				</ConnectWallet>
-			)}
-			{!selectTokenDisabled && (
-				<CardanoEligibilityBadges
-					token={selectedOneTimeToken}
-					amount={amount}
-					tokenPrice={tokenPrice}
-					style={{ margin: '12px 0 24px' }}
-				/>
 			)}
 			<ForEstimatedMatchingAnimation showEstimatedMatching={false}>
 				<FlexStyled
