@@ -1,4 +1,5 @@
 import React, { FC, useRef, useState } from 'react';
+import Image from 'next/image';
 import {
 	neutralColors,
 	IconPointerLeft,
@@ -25,8 +26,6 @@ import {
 import 'swiper/css';
 
 import { BigArc } from '@/components/styled-components/Arc';
-import useDetectDevice from '@/hooks/useDetectDevice';
-import { useDonateData } from '@/context/donate.context';
 import Routes from '@/lib/constants/Routes';
 import { MtPelerinTutorialSteps } from '@/lib/constants/MtPelerinTutorial';
 
@@ -35,15 +34,13 @@ const BuyXDAI: FC = () => {
 	const { query } = router;
 	const slug = query?.slug;
 
-	const { isMobile } = useDetectDevice();
-	const { project } = useDonateData();
 	const { formatMessage } = useIntl();
 
 	const pagElRef = useRef<HTMLDivElement>(null);
 	const nextElRef = useRef<HTMLDivElement>(null);
 	const prevElRef = useRef<HTMLDivElement>(null);
 
-	const [swiperInstance, setSwiperInstance] = useState<SwiperClass>();
+	const [, setSwiperInstance] = useState<SwiperClass>();
 	const [currentSlide, setCurrentSlide] = useState(0);
 	const items = MtPelerinTutorialSteps;
 
@@ -67,7 +64,13 @@ const BuyXDAI: FC = () => {
 						</Info>
 
 						<PwdMtPelerin>
-							Powered By <img src='/images/mtpelerin.svg' />
+							Powered By{' '}
+							<Image
+								width={81}
+								height={29}
+								src='/images/mtpelerin.svg'
+								alt='Powered By Mt Pelerin'
+							/>
 						</PwdMtPelerin>
 					</Content>
 					<Right>
