@@ -87,6 +87,7 @@ const ArchiveStreamInnerModal: FC<IArchiveStreamInnerModalProps> = ({
 					isArchived: true,
 				},
 			});
+			console.log('data', data);
 			setStep(EArchiveStreamSteps.SUCCESS);
 		} catch (error) {
 			setStep(EArchiveStreamSteps.CONFIRM);

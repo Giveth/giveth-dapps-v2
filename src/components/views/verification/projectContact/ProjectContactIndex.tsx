@@ -279,8 +279,3 @@ const FormContainer = styled.form`
 const SocialLinkInfo = styled(P)`
 	max-width: fit-content;
 `;
-
-const socialLinkHeader = styled(H6)`
-	font-weight: 700;
-	margin-bottom: 8px;
-`;

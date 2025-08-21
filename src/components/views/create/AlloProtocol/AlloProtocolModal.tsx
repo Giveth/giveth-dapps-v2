@@ -245,11 +245,6 @@ const Container = styled.div`
 	max-width: 500px;
 `;
 
-const ItemContainer = styled.div`
-	position: relative;
-	padding-left: 8px;
-`;
-
 const Ellipse = styled.div`
 	position: absolute;
 	top: 8px;
