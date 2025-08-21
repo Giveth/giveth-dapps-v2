@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import Image from 'next/image';
 import { Button, H4, Lead } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import useDetectDevice from '@/hooks/useDetectDevice';
@@ -18,9 +19,11 @@ const GitcoinGrants = () => {
 					target='_blank'
 					rel='noopener noreferrer'
 				>
-					<img
+					<Image
 						alt='gitcoin alpha is here'
 						style={{ objectFit: 'cover' }}
+						width={327}
+						height={661}
 						src={
 							isTablet
 								? '/images/banners/gitcoin-alpha-banner-md.png'
@@ -32,7 +35,7 @@ const GitcoinGrants = () => {
 				</Link>
 			</GitcoinContainer>
 			<FirstSection>
-				<H4>We’d love your support in Gitcoin Grants</H4>
+				<H4>We&apos;d love your support in Gitcoin Grants</H4>
 				<Lead>
 					We are participating in the Gitcoin Program Alpha Round - a
 					set of 3 Quadratic Funding grants rounds that will allocate
@@ -70,9 +73,11 @@ const GitcoinGrants = () => {
 						/>
 					</Link>
 				</Description>
-				<img
+				<Image
 					alt='gitcoin alpha is here'
 					src='/images/banners/giveth-gitcoin-alpha.png'
+					width={460}
+					height={305}
 				/>
 			</Section>
 			<Section>
@@ -99,9 +104,11 @@ const GitcoinGrants = () => {
 						/>
 					</Link>
 				</Description>
-				<img
+				<Image
 					alt='gitcoin alpha is here'
 					src='/images/banners/refi-gitcoin-alpha.png'
+					width={460}
+					height={352}
 				/>
 			</Section>
 		</Container>
