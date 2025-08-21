@@ -32,7 +32,7 @@ const PersonalInfo = () => {
 		handleSubmit,
 		setValue,
 		// getValues,
-		formState: { errors },
+		// formState: { errors },
 	} = useForm<IFormInfo>();
 	const { formatMessage } = useIntl();
 
