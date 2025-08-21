@@ -7,7 +7,6 @@ import {
 	brandColors,
 	Flex,
 	H5,
-	semanticColors,
 	H4,
 } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
@@ -48,12 +47,9 @@ export const DonatePageProjectDescription: FC<
 		descriptionSummary,
 		adminUser,
 		organization,
-		estimatedMatching,
 		projectType,
 	} = projectData || {};
 
-	const { allProjectsSum, matchingPool, projectDonationsSqrtRootSum } =
-		estimatedMatching || {};
 	const isQRDonation = router.query.chain === ChainType.STELLAR.toLowerCase();
 	const orgLabel = organization?.label;
 	const isForeignOrg =
@@ -64,20 +60,12 @@ export const DonatePageProjectDescription: FC<
 			? slugToCauseView(slug!)
 			: slugToProjectView(slug!);
 	const { project } = useDonateData();
-	const { activeStartedRound, activeQFRound } = getActiveRound(
-		project.qfRounds,
-	);
+	const { activeStartedRound } = getActiveRound(project.qfRounds);
 
 	const isStellarIncludedInQF =
 		activeStartedRound?.eligibleNetworks?.includes(
 			config.STELLAR_NETWORK_NUMBER,
 		);
-
-	const {
-		allocatedFundUSDPreferred,
-		allocatedFundUSD,
-		allocatedTokenSymbol,
-	} = activeQFRound || {};
 
 	return (
 		<DonationSectionWrapper gap='16px'>
@@ -252,10 +240,6 @@ const LightSubline = styled(Subline)`
 	color: ${neutralColors.gray[700]};
 `;
 
-const EstimatedMatchingPrice = styled(H5)`
-	color: ${semanticColors.jade[500]};
-`;
-
 const DonateInfo = styled.div`
 	height: 130px;
 `;
@@ -263,16 +247,4 @@ const DonateInfo = styled.div`
 const NoFund = styled(H4)`
 	color: ${neutralColors.gray[800]};
 	margin-top: 16px;
-`;
-const ProjectsCount = styled.div`
-	font-size: 14px;
-	font-weight: 400;
-	color: ${neutralColors.gray[500]};
-	margin-top: -8px;
-	margin-bottom: 16px;
-
-	strong {
-		font-weight: 700;
-		color: ${neutralColors.gray[800]};
-	}
 `;
