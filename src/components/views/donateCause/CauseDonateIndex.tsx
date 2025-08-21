@@ -9,7 +9,6 @@ import {
 	semanticColors,
 	SublineBold,
 	Flex,
-	Button,
 } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
 import { useAccount } from 'wagmi';
@@ -229,15 +228,6 @@ const InfoWrapper = styled.div`
 	text-align: left;
 `;
 
-const QRRetryWrapper = styled(Flex)`
-	flex-direction: column;
-	padding: 24px;
-	border-radius: 16px;
-	background-color: ${neutralColors.gray[100]};
-	gap: 20px;
-	text-align: left;
-`;
-
 const ImageWrapper = styled.div`
 	position: relative;
 	width: 100%;
@@ -245,11 +235,6 @@ const ImageWrapper = styled.div`
 	margin-bottom: 24px;
 	border-radius: 8px;
 	overflow: hidden;
-`;
-
-const ButtonStyled = styled(Button)`
-	width: 100%;
-	text-transform: capitalize;
 `;
 
 export default CauseDonateIndex;
