@@ -126,7 +126,7 @@ function MyApp({ Component, pageProps }: AppProps) {
 		!isBypassingMaintenance;
 
 	useEffect(() => {
-		const handleStart = (url: string) => {
+		const handleStart = () => {
 			NProgress.start();
 		};
 		const handleChangeComplete = (url: string) => {
