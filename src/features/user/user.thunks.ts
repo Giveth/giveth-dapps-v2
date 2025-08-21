@@ -177,13 +177,6 @@ export const signToGetToken = createAsyncThunk(
 						console.error({ error });
 					}
 					// calls the backend to create gnosis safe token
-					console.log({
-						safeMessageTimestamp,
-						safeAddress,
-						network: chainId,
-						jwt: currentUserToken,
-						approvalExpirationDays: expiration || 8,
-					});
 					const safeToken = await postRequest(
 						`${config.MICROSERVICES.authentication}/multisigAuthentication`,
 						false,

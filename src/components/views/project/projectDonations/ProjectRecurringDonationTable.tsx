@@ -119,10 +119,7 @@ const ProjectRecurringDonationTable = () => {
 					includeArchived: true,
 				},
 			});
-			console.log(
-				'projectRecurringDonations',
-				projectRecurringDonations.recurringDonationsByProjectId,
-			);
+
 			setLoading(false);
 			const { recurringDonationsByProjectId } = projectRecurringDonations;
 			if (!!recurringDonationsByProjectId) {
