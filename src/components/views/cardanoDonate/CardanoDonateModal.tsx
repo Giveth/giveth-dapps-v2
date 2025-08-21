@@ -32,7 +32,10 @@ import { IWalletAddress } from '@/apollo/types/types';
 import { useCreateSolanaDonation } from '@/hooks/useCreateSolanaDonation';
 import { calcDonationShare } from '@/components/views/donate/common/helpers';
 import SanctionModal from '@/components/modals/SanctionedModal';
-import { DONATION_DESTINATION_ADDRESS } from './data';
+import {
+	DONATION_DESTINATION_ADDRESS,
+	DONATION_DESTINATION_ADDRESS_TEST,
+} from './data';
 import { ICardanoAcceptedToken } from './types';
 import {
 	getCoingeckoADAPrice,
@@ -110,10 +113,11 @@ const CardanoDonateModal: FC<IDonateModalProps> = props => {
 	const [failedModalType, setFailedModalType] =
 		useState<EDonationFailedType>();
 	const [isSanctioned, setIsSanctioned] = useState<boolean>(false);
+	const [projectWalletAddress, setProjectWalletAddress] = useState<string>(
+		DONATION_DESTINATION_ADDRESS,
+	);
 
 	const { title } = project || {};
-
-	const projectWalletAddress = DONATION_DESTINATION_ADDRESS;
 
 	const { projectDonation } = calcDonationShare(amount, 0, token.decimals);
 
@@ -127,6 +131,19 @@ const CardanoDonateModal: FC<IDonateModalProps> = props => {
 			),
 			2,
 		);
+
+	// Set project wallet address based on network id
+	useEffect(() => {
+		const setProjectAddress = async () => {
+			const networkId = await wallet.getNetworkId();
+			if (networkId === 0) {
+				setProjectWalletAddress(DONATION_DESTINATION_ADDRESS_TEST);
+			} else {
+				setProjectWalletAddress(DONATION_DESTINATION_ADDRESS);
+			}
+		};
+		setProjectAddress();
+	}, []);
 
 	// Set up user cardano wallet address
 	useEffect(() => {
