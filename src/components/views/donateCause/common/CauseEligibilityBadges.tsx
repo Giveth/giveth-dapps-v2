@@ -19,7 +19,6 @@ import { useGeneralWallet } from '@/providers/generalWalletProvider';
 import { IProjectAcceptedToken } from '@/apollo/types/gqlTypes';
 import config from '@/configuration';
 import { ChainType } from '@/types/config';
-import { useAppSelector } from '@/features/hooks';
 import { truncateToDecimalPlaces } from '@/lib/helpers';
 import { useCauseDonateData } from '@/context/donate.cause.context';
 
@@ -32,7 +31,6 @@ interface IEligibilityBadges {
 
 const CauseEligibilityBadges: FC<IEligibilityBadges> = props => {
 	const { tokenPrice, amount, token, style } = props;
-	const { activeQFRound } = useAppSelector(state => state.general);
 	const { isConnected, chain } = useGeneralWallet();
 	const { activeStartedRound, project } = useCauseDonateData();
 	const { formatMessage } = useIntl();

@@ -13,16 +13,16 @@ const WhatMakesGIVbacks = () => {
 						<br />
 						Our mission at Giveth is to recognize and incentivize
 						those who selflessly give. Through GIVbacks, every
-						donation made to our GIVbacks eligible projects doesn’t
-						just create societal value, but also earns you GIV
-						tokens. When you donate to GIVbacks eligible projects
-						you qualify to receive GIV tokens. Through GIVbacks, GIV
-						empowers donors with governance rights.
+						donation made to our GIVbacks eligible projects
+						doesn&apos;t just create societal value, but also earns
+						you GIV tokens. When you donate to GIVbacks eligible
+						projects you qualify to receive GIV tokens. Through
+						GIVbacks, GIV empowers donors with governance rights.
 					</li>
 					<li>
 						<b>A groundbreaking approach to donations</b>
 						<br />
-						GIVbacks isn’t just another initiative. It's a
+						GIVbacks isn&apos;t just another initiative. It&apos;s a
 						groundbreaking shift in the donation space, offering
 						donors an economic advantage like never before.
 					</li>

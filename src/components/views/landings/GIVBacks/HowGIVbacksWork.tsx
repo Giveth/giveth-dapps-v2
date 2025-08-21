@@ -22,30 +22,31 @@ const HowGIVbacksWork = () => {
 				<li>
 					<b>Select a GIVbacks Eligible Project:</b> Browse through
 					our list of impactful and vetted projects. Project
-					Verification​. 'Verified' is a seal of approval for
-					legitimate projects on Giveth. If you are a project owner,
-					when you get your project verified, your donors become
-					eligible to receive GIVbacks. On Giveth GIVbacks eligible
-					projects receive more donations.
+					Verification​. &apos;Verified&apos; is a seal of approval
+					for legitimate projects on Giveth. If you are a project
+					owner, when you get your project verified, your donors
+					become eligible to receive GIVbacks. On Giveth GIVbacks
+					eligible projects receive more donations.
 				</li>
 				<li>
-					<b>Donate Directly:</b> Once you've chosen a project that
-					resonates with you, make your donation. The beauty of
+					<b>Donate Directly:</b> Once you&apos;ve chosen a project
+					that resonates with you, make your donation. The beauty of
 					GIVbacks is that 100% of your donation directly benefits the
 					project, ensuring maximum impact.
 				</li>
 				<li>
 					<b>Earn GIV Tokens:</b> After your donation, Giveth rewards
 					you with GIV tokens as a thank you for your generosity.
-					These tokens aren’t just rewards; they're your voice in the
+					These tokens aren&apos;t just rewards; they&apos;re your
+					voice in the
 					<ExternalLink
 						href={links.GIVERNANCE_VOTING}
 						color={brandColors.pinky[500]}
 						title='GIVernance Voting'
 					/>
 					, allowing you to influence which proposals get funded,
-					thereby shaping the GIVeconomy's future. Through GIVbacks,
-					GIV empowers donors with governance rights.
+					thereby shaping the GIVeconomy&apos;s future. Through
+					GIVbacks, GIV empowers donors with governance rights.
 				</li>
 				<li>
 					<b>When Do Your Receive Your GIVbacks?:</b> Every two weeks,

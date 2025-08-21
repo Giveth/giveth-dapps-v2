@@ -9,15 +9,10 @@ import {
 	FlexCenter,
 } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
-import { Chain, formatUnits } from 'viem';
+import { Chain } from 'viem';
 import StorageLabel, { getWithExpiry } from '@/lib/localStorage';
 import { Modal } from '@/components/modals/Modal';
-import {
-	compareAddresses,
-	formatTxLink,
-	showToastError,
-	truncateToDecimalPlaces,
-} from '@/lib/helpers';
+import { compareAddresses, formatTxLink, showToastError } from '@/lib/helpers';
 import { mediaQueries } from '@/lib/constants/constants';
 import { IMeGQL, IProjectAcceptedToken } from '@/apollo/types/gqlTypes';
 import { IModal } from '@/types/common';
@@ -135,12 +130,6 @@ const DonateModal: FC<IDonateModalProps> = props => {
 	const isOnEligibleNetworks = activeStartedRound?.eligibleNetworks?.includes(
 		(chain as Chain).id,
 	);
-	const donationUsdValue =
-		(tokenPrice || 0) *
-		(truncateToDecimalPlaces(
-			formatUnits(amount, token.decimals),
-			token.decimals,
-		) || 0);
 	const includeInQF = activeStartedRound && isOnEligibleNetworks;
 	const chainvineReferred = getWithExpiry(StorageLabel.CHAINVINEREFERRED);
 	const { title, addresses } = project || {};

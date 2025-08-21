@@ -11,7 +11,7 @@ import {
 import { useIntl } from 'react-intl';
 import { formatUnits } from 'viem';
 import { client } from '@/apollo/apolloClient';
-import { IAdminUser, IDonation } from '@/apollo/types/types';
+import { IAdminUser } from '@/apollo/types/types';
 import Pagination from '@/components/Pagination';
 import { formatTxLink, smallFormatDate } from '@/lib/helpers';
 import { EDirection } from '@/apollo/types/gqlEnums';
@@ -43,11 +43,6 @@ export enum RecurringDonationSortField {
 interface IOrder {
 	by: RecurringDonationSortField;
 	direction: EDirection;
-}
-
-interface IPageRecurringDonations {
-	donations: IDonation[];
-	totalCount?: number;
 }
 
 interface IRecurringDonationsResponse {
@@ -128,7 +123,7 @@ const ProjectRecurringDonationTable = () => {
 		};
 		fetchProjectRecurringDonations();
 	}, [page, order.by, order.direction, id]);
-	console.log('pageRecurringDonations', pageRecurringDonations);
+
 	if (loading)
 		return (
 			<LoadingWrapper>

@@ -26,13 +26,13 @@ const WhatAreGIVbacks = () => {
 					given GIV tokens directly to your wallet!
 					<br />
 					<br />
-					Let’s give an example of how this works. Let’s say you
-					donate $100 to a GIVbacks eligible project on Giveth. Based
-					on a project's real-time ranking, you could receive up to
-					$70 back in GIV token rewards just for donating! Some of
-					this amount would be given to you right away (within a 2
-					week period), and some of it would be streamed to you over
-					the next few years.
+					Let&apos;s give an example of how this works. Let&apos;s say
+					you donate $100 to a GIVbacks eligible project on Giveth.
+					Based on a project&apos;s real-time ranking, you could
+					receive up to $70 back in GIV token rewards just for
+					donating! Some of this amount would be given to you right
+					away (within a 2 week period), and some of it would be
+					streamed to you over the next few years.
 					<br />
 					<br />
 					You can then use those GIV rewards to either take part in

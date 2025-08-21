@@ -15,19 +15,19 @@ const YouKnowHow = () => {
 			<Wrapper>
 				<H4>
 					You know how charities usually have these amazing projects,
-					but they're always struggling to get funds? And donors,
-					well, they mostly just get a pat on the back. Doesn't that
-					feel a bit off to you? We think it's high time we shake
-					things up a bit!
+					but they&apos;re always struggling to get funds? And donors,
+					well, they mostly just get a pat on the back. Doesn&apos;t
+					that feel a bit off to you? We think it&apos;s high time we
+					shake things up a bit!
 					<br />
 					<br />
 					In a world where acts of kindness often go unnoticed, Giveth
-					introduces GIVbacks - where your generosity doesn’t just
-					create impact, but rewards you in return. The Giveth mission
-					is to reward & empower those who give — to projects, to
-					society, and to the world. With GIVbacks, we’re rewarding
-					givers by giving GIV to donors to GIVbacks eligible projects
-					on Giveth.
+					introduces GIVbacks - where your generosity doesn&apos;t
+					just create impact, but rewards you in return. The Giveth
+					mission is to reward & empower those who give — to projects,
+					to society, and to the world. With GIVbacks, we&apos;re
+					rewarding givers by giving GIV to donors to GIVbacks
+					eligible projects on Giveth.
 				</H4>
 			</Wrapper>
 			<WaveWrapper>

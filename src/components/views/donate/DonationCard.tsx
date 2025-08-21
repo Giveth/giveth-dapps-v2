@@ -70,7 +70,6 @@ export const DonationCard: FC<IDonationCardProps> = ({
 				address.chainType === ChainType.EVM &&
 				address.networkId === config.BASE_NETWORK_NUMBER,
 		);
-	const isEndaomentProject = project?.organization?.label === 'endaoment';
 	const isOwnerOnEVM =
 		project?.adminUser?.walletAddress &&
 		isAddress(project.adminUser?.walletAddress);

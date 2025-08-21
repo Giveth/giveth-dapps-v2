@@ -11,15 +11,15 @@ const OfTheDonors = () => {
 				Giveth places donors at the heart of its mission. With GIVbacks,
 				your generosity is reciprocated.{' '}
 				<b>The more you donate, the more GIV tokens you earn.</b> These
-				tokens aren’t just rewards; they're your voice in the
+				tokens aren&apos;t just rewards; they&apos;re your voice in the
 				<ExternalLink
 					href={links.GIVERNANCE_VOTING}
 					color={brandColors.pinky[500]}
 					title='GIVernance Voting'
 				/>
 				, allowing you to influence which proposals get funded, thereby
-				shaping the GIVeconomy's future. Through GIVbacks, GIV empowers
-				donors with governance rights.
+				shaping the GIVeconomy&apos;s future. Through GIVbacks, GIV
+				empowers donors with governance rights.
 			</H4>
 		</Wrapper>
 	);

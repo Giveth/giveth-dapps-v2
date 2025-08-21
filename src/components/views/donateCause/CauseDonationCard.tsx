@@ -1,6 +1,6 @@
-import { B, P, neutralColors, Flex } from '@giveth/ui-design-system';
+import { B, neutralColors, Flex } from '@giveth/ui-design-system';
 import React, { FC, useEffect, useState } from 'react';
-import styled, { css } from 'styled-components';
+import styled from 'styled-components';
 import { useIntl } from 'react-intl';
 import { captureException } from '@sentry/nextjs';
 import { Shadow } from '@/components/styled-components/Shadow';
@@ -76,38 +76,6 @@ export const DonationCardWrapper = styled(Flex)`
 const Title = styled(B)`
 	color: ${neutralColors.gray[800]} !important;
 	text-align: left;
-`;
-
-const BaseTab = styled(P)`
-	padding: 8px 12px;
-	border-bottom: 1px solid;
-	font-weight: 400;
-	color: ${neutralColors.gray[700]};
-	border-bottom-color: ${neutralColors.gray[300]};
-	user-select: none;
-`;
-
-interface ITab {
-	$selected?: boolean;
-}
-
-const Tab = styled(BaseTab)<ITab>`
-	font-weight: 500 !important;
-	display: flex;
-	align-items: center;
-	cursor: pointer;
-	${props =>
-		props.$selected &&
-		css`
-			font-weight: 500;
-			color: ${neutralColors.gray[900]};
-			border-bottom-color: ${neutralColors.gray[900]};
-		`}
-`;
-
-const EmptyTab = styled.div`
-	flex: 1;
-	border-bottom: 1px solid ${neutralColors.gray[300]};
 `;
 
 const TabWrapper = styled(Flex)`
