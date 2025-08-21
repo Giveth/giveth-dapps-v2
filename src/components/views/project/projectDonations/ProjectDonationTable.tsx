@@ -37,6 +37,7 @@ import { formatDonation } from '@/helpers/number';
 import { Spinner } from '@/components/Spinner';
 import { NoDonation } from './NoDonation';
 import { ChainType } from '@/types/config';
+import Link from 'next/link';
 
 const itemPerPage = 10;
 
@@ -249,25 +250,42 @@ const ProjectDonationTable = ({ selectedQF }: IProjectDonationTable) => {
 									{donation.swapTransaction
 										?.fromTokenSymbol || donation.currency}
 								</Currency>
-								{!donation.anonymous && (
-									<ExternalLink
-										href={formatTxLink({
-											networkId:
-												donation.swapTransaction
-													?.fromChainId ||
-												donation.transactionNetworkId,
-											txHash:
-												donation.swapTransaction
-													?.firstTxHash ||
-												donation.transactionId,
-											chainType: donation.chainType,
-										})}
+								{donation.chainType === ChainType.CARDANO ? (
+									<Link
+										href={
+											donation.transactionNetworkId ===
+											3000
+												? `https://cardanoscan.io/transaction/${donation.transactionId}`
+												: `https://preprod.cardanoscan.io/transaction/${donation.transactionId}`
+										}
+										target='_blank'
 									>
 										<IconExternalLink
 											size={16}
 											color={brandColors.pinky[500]}
 										/>
-									</ExternalLink>
+									</Link>
+								) : (
+									!donation.anonymous && (
+										<ExternalLink
+											href={formatTxLink({
+												networkId:
+													donation.swapTransaction
+														?.fromChainId ||
+													donation.transactionNetworkId,
+												txHash:
+													donation.swapTransaction
+														?.firstTxHash ||
+													donation.transactionId,
+												chainType: donation.chainType,
+											})}
+										>
+											<IconExternalLink
+												size={16}
+												color={brandColors.pinky[500]}
+											/>
+										</ExternalLink>
+									)
 								)}
 							</DonationTableCell>
 							<DonationTableCell>
