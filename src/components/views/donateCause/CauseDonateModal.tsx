@@ -241,6 +241,7 @@ const CauseDonateModal: FC<IDonateModalProps> = props => {
 
 			let tx;
 			let swapData: SwapTransactionInput | undefined;
+			let transactionId: string | undefined;
 
 			// Same token as recipient token same network
 			if (
@@ -263,6 +264,8 @@ const CauseDonateModal: FC<IDonateModalProps> = props => {
 					setFailedModalType(EDonationFailedType.FAILED);
 					return;
 				}
+
+				transactionId = tx;
 			} else {
 				// different token or different network then recipient token
 				const squidParams = {
@@ -352,6 +355,11 @@ const CauseDonateModal: FC<IDonateModalProps> = props => {
 					setFailedModalType,
 					fromTokenAmount: parseFloat(projectDonation.toString()),
 				};
+
+				// Set up this for Polygon GIV donation, same token same network
+				if (transactionId) {
+					donationProps.txHash = transactionId;
+				}
 
 				if (swapData) {
 					donationProps.swapData = swapData;
