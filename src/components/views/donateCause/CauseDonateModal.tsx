@@ -9,7 +9,7 @@ import {
 	FlexCenter,
 } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
-import { Chain, parseUnits, Address, zeroAddress, formatUnits } from 'viem';
+import { Chain, Address, zeroAddress, formatUnits } from 'viem';
 import { ethers } from 'ethers';
 import { Modal } from '@/components/modals/Modal';
 import {
@@ -205,15 +205,10 @@ const CauseDonateModal: FC<IDonateModalProps> = props => {
 			}
 		}
 
-		const donationInWei = parseUnits(
-			projectDonation.toString(),
-			token.decimals || 18,
-		);
-
 		approveTx = await approveSpending(
 			spenderAddress,
 			token.address,
-			donationInWei.toString(),
+			amount.toString(),
 		);
 
 		if (approveTx) {
