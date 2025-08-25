@@ -306,6 +306,7 @@ export const CREATE_CAUSE_DONATION = gql`
 		$relevantDonationTxHash: String
 		$swapData: SwapTransactionInput
 		$fromTokenAmount: Float!
+		$transactionId: String
 	) {
 		createDonation(
 			transactionNetworkId: $transactionNetworkId
@@ -323,6 +324,7 @@ export const CREATE_CAUSE_DONATION = gql`
 			relevantDonationTxHash: $relevantDonationTxHash
 			swapData: $swapData
 			fromTokenAmount: $fromTokenAmount
+			transactionId: $transactionId
 		)
 	}
 `;
