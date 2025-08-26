@@ -109,7 +109,7 @@ const OneTimeDonationTable: FC<OneTimeDonationTable> = ({
 					<DonationTableCell>
 						{donation.chainType === ChainType.CARDANO ? (
 							<Image
-								src={'/images/tokens/ada.svg'}
+								src={'/images/tokens/ADA.svg'}
 								alt='Cardano'
 								width={24}
 								height={24}
