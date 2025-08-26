@@ -219,7 +219,10 @@ const ProjectCard = (props: IProjectCard) => {
 				}
 			>
 				<TitleWrapper>
-					<LastUpdatedContainer $isHover={isHover}>
+					<LastUpdatedContainer
+						$isHover={isHover}
+						className='last-updated-container'
+					>
 						{formatMessage({ id: 'label.last_updated' })}:
 						{timeFromNow(
 							latestUpdateCreationDate || '',
@@ -344,7 +347,7 @@ const ProjectCard = (props: IProjectCard) => {
 					</Link>
 				)}
 				{!isListingInsideCauseProjectTabs && (
-					<ActionButtons>
+					<ActionButtons className='action-buttons'>
 						<Link
 							id='Donate_Card'
 							href={donateLink}
@@ -358,6 +361,7 @@ const ProjectCard = (props: IProjectCard) => {
 								size='small'
 								label={formatMessage({ id: 'label.donate' })}
 								$isHover={isHover}
+								className='donate-button'
 							/>
 						</Link>
 					</ActionButtons>
@@ -373,6 +377,40 @@ const ProjectCard = (props: IProjectCard) => {
 		</Wrapper>
 	);
 };
+
+interface IWrapperProps {
+	$order?: number;
+	$activeStartedRound?: boolean;
+	$projectType?: EProjectType;
+}
+
+const Wrapper = styled.div<IWrapperProps>`
+	display: flex;
+	flex-direction: column;
+	width: 100%;
+	border-radius: ${cardRadius};
+	margin: 0 auto;
+	background: #fff;
+	overflow: hidden;
+	box-shadow: ${Shadow.Neutral[400]};
+	/* Let the parent grid set equal heights via align-stretch; the card will fill. */
+	height: 100%;
+	order: ${p => p.$order};
+
+	/* Hover helpers that other children can react to */
+	&:hover .last-updated-container {
+		opacity: 1;
+	}
+	&:hover .donate-button {
+		opacity: 1;
+	}
+	&:hover .action-buttons {
+		max-height: 56px; /* button height */
+		margin-top: 16px;
+		opacity: 1;
+		pointer-events: auto;
+	}
+`;
 
 const DonateButton = styled(ButtonLink)`
 	flex: 1;
@@ -432,28 +470,32 @@ interface ICardBody {
 	$isHover: ECardBodyHover;
 }
 
-interface IWrapperProps {
-	$order?: number;
-	$activeStartedRound?: boolean;
-	$projectType?: EProjectType;
-}
-
 const CardBody = styled.div<ICardBody>`
-	position: absolute;
-	left: 0;
-	right: 0;
-	top: 112px;
+	position: static;
+	display: flex;
+	flex-direction: column;
 	background-color: ${neutralColors.gray[100]};
-	transition: top 0.3s ease;
-	border-radius: ${props =>
-		props.$isOtherOrganization ? '0 12px 12px 12px' : '12px'};
-	${mediaQueries.laptopS} {
-		top: ${props =>
-			props.$isHover == ECardBodyHover.FULL
-				? '59px'
-				: props.$isHover == ECardBodyHover.HALF
-					? '104px'
-					: '137px'};
+	border-radius: ${p =>
+		p.$isOtherOrganization ? '0 12px 12px 12px' : '12px'};
+
+	// transition: margin-top 0.3s ease;
+	// margin-top: -35px;
+	// margin-bottom: 20px;
+
+	// z-index: 10;
+	// ${Wrapper}:hover & {
+	// 	margin-top: -114px;
+	// }
+	/* keep layout size constant */
+	margin-top: -35px; /* static overlap amount only */
+	transition: transform 0.3s ease;
+	transform: translateY(0); /* paint-only */
+
+	will-change: transform; /* smoother */
+	z-index: 1;
+
+	${Wrapper}:hover & {
+		transform: translateY(-79px); /* visual slide up, no layout change */
 	}
 `;
 
@@ -473,37 +515,10 @@ const Title = styled(H6)`
 `;
 
 const ImagePlaceholder = styled.div`
+	position: relative;
+	width: 100%;
 	height: ${imgHeight};
-	width: 100%;
-	position: relative;
 	overflow: hidden;
-`;
-
-const Wrapper = styled.div<IWrapperProps>`
-	position: relative;
-	width: 100%;
-	border-radius: ${cardRadius};
-	margin: 0 auto;
-	background: white;
-	overflow: hidden;
-	box-shadow: ${Shadow.Neutral[400]};
-	height: ${props => (props.$activeStartedRound ? '638px' : '536px')};
-	order: ${props => props.$order};
-	${mediaQueries.mobileM} {
-		height: ${props => (props.$activeStartedRound ? '603px' : '536px')};
-	${mediaQueries.mobileL} {
-		height: ${props => (props.$activeStartedRound ? '562px' : '536px')};
-	}
-	 ${mediaQueries.laptopS} {
-        height: ${props =>
-			props.$projectType === EProjectType.CAUSE
-				? props.$activeStartedRound
-					? '460px' // Cause with active round
-					: '468px' // Cause without active round
-				: props.$activeStartedRound
-					? '460px' // Not a cause but in active round
-					: '448px'};  // Not a cause or active round
-    }
 `;
 
 interface IPaddedRowProps {
@@ -529,6 +544,10 @@ const ActionButtons = styled(PaddedRow)`
 	margin: 25px 0;
 	gap: 16px;
 	flex-direction: column;
+	display: none;
+	${Wrapper}:hover & {
+		display: flex;
+	}
 `;
 
 const QFBadge = styled(Subline)`
