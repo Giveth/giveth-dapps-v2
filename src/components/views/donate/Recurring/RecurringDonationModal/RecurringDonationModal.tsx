@@ -9,7 +9,6 @@ import styled from 'styled-components';
 import { Framework, type Operation } from '@superfluid-finance/sdk-core';
 import { useAccount } from 'wagmi';
 import { useIntl } from 'react-intl';
-import { formatUnits } from 'viem';
 import { ethers } from 'ethers';
 import { Modal } from '@/components/modals/Modal';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
@@ -153,13 +152,6 @@ const RecurringDonationInnerModal: FC<IRecurringDonationInnerModalProps> = ({
 	const onApprove = async () => {
 		try {
 			await ensureCorrectNetwork(recurringNetworkID);
-			console.log(
-				'amount',
-				formatUnits(
-					amount,
-					selectedRecurringToken?.token.decimals || 18,
-				),
-			);
 			setStep(EDonationSteps.APPROVING);
 			if (!address || !selectedRecurringToken) return;
 			const superToken = findSuperTokenByTokenAddress(
@@ -313,12 +305,6 @@ const RecurringDonationInnerModal: FC<IRecurringDonationInnerModalProps> = ({
 
 			operations.push(projectFlowOp);
 			const isDonatingToGiveth = !willUpdateFlow && donationToGiveth > 0;
-			console.log(
-				'isDonatingToGiveth',
-				isDonatingToGiveth,
-				willUpdateFlow,
-				donationToGiveth > 0,
-			);
 			let givethOldStream;
 			let givethFlowRate = 0n;
 			if (isDonatingToGiveth) {
@@ -434,21 +420,11 @@ const RecurringDonationInnerModal: FC<IRecurringDonationInnerModalProps> = ({
 					draftDonationId: projectDraftDonationId,
 				};
 				if (willUpdateFlow) {
-					console.log('Start Update Project Donation Info');
 					projectDonationId =
 						await updateRecurringDonation(projectDonationInfo);
-					console.log(
-						'Project Donation Update Info',
-						projectDonationId,
-					);
 				} else {
-					console.log('Start Creating Project Donation Info');
 					projectDonationId =
 						await createRecurringDonation(projectDonationInfo);
-					console.log(
-						'Project Donation Create Info',
-						projectDonationId,
-					);
 				}
 			} catch (error) {
 				showToastError(error);
@@ -464,21 +440,11 @@ const RecurringDonationInnerModal: FC<IRecurringDonationInnerModalProps> = ({
 				};
 				try {
 					if (givethOldStream) {
-						console.log('Start Update Giveth Donation Info');
 						givethDonationId =
 							await updateRecurringDonation(givethDonationInfo);
-						console.log(
-							'Giveth Donation Update Info',
-							givethDonationId,
-						);
 					} else {
-						console.log('Start Creating Giveth Donation Info');
 						givethDonationId =
 							await createRecurringDonation(givethDonationInfo);
-						console.log(
-							'Giveth Donation Create Info',
-							givethDonationId,
-						);
 					}
 				} catch (error) {
 					showToastError(error);

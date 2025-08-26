@@ -9,10 +9,11 @@ const Introducing = () => {
 			<InnerWrapper>
 				<Lead size='large'>
 					We want to try something a little bit different. Frankly,
-					we're getting a little tired of the work Giveth is doing in
-					Building the Future of Giving and changing the world for the
-					better. Who needs that? That's why we're hard forking Giveth
-					into a new project. Introducing: Taketh.
+					we&apos;re getting a little tired of the work Giveth is
+					doing in Building the Future of Giving and changing the
+					world for the better. Who needs that? That&apos;s why
+					we&apos;re hard forking Giveth into a new project.
+					Introducing: Taketh.
 				</Lead>
 				<Arc>
 					<ArcWithDot />

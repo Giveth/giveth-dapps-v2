@@ -85,13 +85,14 @@ const PublicGoodsAre = () => {
 						the late 20th Century and early 21st by political
 						scientist and economist Elinor Ostrom, who won the Nobel
 						Prize in 2009 for her analysis of economic governance,
-						particularly of the commons. Ostrom’s research dispelled
-						the myth of the “tragedy of the commons”, a concept
-						popularized by Garrett Hardin in 1968 that received
-						widespread use while not necessarily being grounded in
-						actual data. Indeed, Garrett Hardin revised his concept
-						in 1991 to “the tragedy of the (unmanaged) commons” in
-						light of such research developments.
+						particularly of the commons. Ostrom&apos;s research
+						dispelled the myth of the &quot;tragedy of the
+						commons&quot;, a concept popularized by Garrett Hardin
+						in 1968 that received widespread use while not
+						necessarily being grounded in actual data. Indeed,
+						Garrett Hardin revised his concept in 1991 to “the
+						tragedy of the (unmanaged) commons” in light of such
+						research developments.
 					</Lead>
 					<DividerWrapper>
 						<Divider color={neutralColors.gray[400]} height='1px' />
@@ -100,9 +101,9 @@ const PublicGoodsAre = () => {
 						* See for example the case of grasslands in Russia,
 						China and Mongolia.
 						<br />
-						Sneath, David (1998). "State Policy and Pasture
-						Degradation in Inner Asia". Science Magazine. 281
-						(5380): 1147–1148. Bibcode:1998Sci...281.1147S.
+						Sneath, David (1998). &quot;State Policy and Pasture
+						Degradation in Inner Asia&quot;. Science Magazine. 281
+						(5380): 1147-1148. Bibcode:1998Sci...281.1147S.
 						doi:10.1126/science.281.5380.1147. S2CID 128377756.
 						<br />
 						<br />

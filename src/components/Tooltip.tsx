@@ -182,11 +182,6 @@ const TriangleBase = styled.div`
 	border-style: solid;
 `;
 
-const Triangle = styled(TriangleBase)`
-	border-width: 0 ${ARROW_SIZE}px ${ARROW_SIZE}px ${ARROW_SIZE}px;
-	border-color: transparent transparent red transparent;
-`;
-
 const TooltipContainer = styled.div<ITooltipDirection>`
 	position: fixed;
 	background-color: black;

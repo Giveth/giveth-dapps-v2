@@ -125,7 +125,3 @@ const StepNumber = styled(SublineBold)<IStepState>`
 	border-radius: 18px;
 	width: 24px;
 `;
-
-const StepsPlaceholder = styled.div`
-	padding: 13px;
-`;

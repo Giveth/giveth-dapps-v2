@@ -286,9 +286,9 @@ export const SignWithWalletModal: FC<IProps> = ({
 					multisigState.currentSession && (
 						<Flex $flexDirection='column'>
 							<Description>
-								You'll need to execute the pending Multisig tx
-								to complete your log-in to Giveth & proceed to
-								this area.
+								You&apos;ll need to execute the pending Multisig
+								tx to complete your log-in to Giveth & proceed
+								to this area.
 							</Description>
 						</Flex>
 					)

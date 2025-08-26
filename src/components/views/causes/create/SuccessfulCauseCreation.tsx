@@ -219,15 +219,6 @@ const CardWrapper = styled.div`
 	flex-direction: column;
 	align-items: center;
 `;
-const ProjectCountLabel = styled.span`
-	font-size: 14px;
-	font-weight: 500;
-	color: #8c8c8c;
-	width: 100%;
-	text-align: left;
-	padding: 10px 12px 10px 12px; // top & bottom: 10px, left & right: 12px
-	box-sizing: border-box;
-`;
 
 const StyledDocLink = styled.a`
 	color: ${brandColors.pinky[500]};

@@ -416,13 +416,6 @@ const TabletEstimatedMatchingContainer = styled.div`
 	}
 `;
 
-const DefaultEstimatedMatchingContainer = styled.div`
-	display: inline-block;
-	@media (min-width: ${deviceSize.tablet}px) and (max-width: ${deviceSize.laptopS}px) {
-		display: none;
-	}
-`;
-
 const DonateInfoContributed = styled(DonateInfo)`
 	height: auto;
 	margin-top: 16px;

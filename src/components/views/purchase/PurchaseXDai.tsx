@@ -1,4 +1,5 @@
 import React, { FC } from 'react';
+import Image from 'next/image';
 import { H3, P, neutralColors, brandColors } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import { useIntl } from 'react-intl';
@@ -46,7 +47,13 @@ const PurchaseXDai: FC = () => {
 							</P>
 						</Info>
 						<PwdMtPelerin>
-							Powered By <img src='/images/mtpelerin.svg' />
+							Powered By{' '}
+							<Image
+								width={81}
+								height={29}
+								src='/images/mtpelerin.svg'
+								alt='Powered By Mt Pelerin'
+							/>
 						</PwdMtPelerin>
 					</Left>
 					<Right>

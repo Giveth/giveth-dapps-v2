@@ -64,8 +64,6 @@ const OneTimeDonationTable: FC<OneTimeDonationTable> = ({
 		}
 	}, [donations]);
 
-	console.log(donations);
-
 	return (
 		<DonationTableContainer $myAccount={myAccount} ref={tableContainerRef}>
 			<TableHeader onClick={() => changeOrder(EOrderBy.CreationDate)}>

@@ -26,7 +26,7 @@ const ImpactQuests = () => {
 						Take part in our Impact Quests to collect POAPs and
 						redeem special prizes at our booth, all while making a
 						positive difference on the ground! You can even
-						participate virtually if you can't make it to the
+						participate virtually if you can&apos;t make it to the
 						conference.
 					</LeadStyled>
 					<ExternalLink href='https://giveth.notion.site/Giveth-s-Galactic-Impact-Quests-f8ef267e16d14acfaba41b43183c17de'>

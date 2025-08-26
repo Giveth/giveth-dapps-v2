@@ -108,7 +108,7 @@ const Control: ComponentType<ControlProps<ISelected>> = ({
 };
 
 const selectStyles: StylesConfig = {
-	container: (baseStyles, props) =>
+	container: baseStyles =>
 		({
 			...baseStyles,
 			backgroundColor: brandColors.giv[600],
@@ -122,7 +122,7 @@ const selectStyles: StylesConfig = {
 				borderColor: 'transparent',
 			},
 		}) as CSSObjectWithLabel,
-	control: (baseStyles, props) =>
+	control: baseStyles =>
 		({
 			...baseStyles,
 			backgroundColor: brandColors.giv[600],
@@ -134,7 +134,7 @@ const selectStyles: StylesConfig = {
 			borderRadius: '0 24px 24px 0 ',
 			cursor: 'pointer',
 		}) as CSSObjectWithLabel,
-	indicatorSeparator: (baseStyles, props) =>
+	indicatorSeparator: baseStyles =>
 		({
 			...baseStyles,
 			display: 'none',
@@ -143,12 +143,12 @@ const selectStyles: StylesConfig = {
 		({
 			...baseStyles,
 		}) as CSSObjectWithLabel,
-	singleValue: (baseStyles, props) =>
+	singleValue: baseStyles =>
 		({
 			...baseStyles,
 			color: neutralColors.gray[100],
 		}) as CSSObjectWithLabel,
-	menu: (baseStyles, props) =>
+	menu: baseStyles =>
 		({
 			...baseStyles,
 			marginTop: '8px',

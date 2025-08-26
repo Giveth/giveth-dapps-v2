@@ -84,7 +84,6 @@ export const useCreateSolanaDonation = () => {
 				};
 			} else return;
 
-			console.log({ donationData });
 			setCreateDonationProps(donationData);
 
 			try {
@@ -206,7 +205,6 @@ export const useCreateSolanaDonation = () => {
 				const bigAmount = BigInt(amount * 10 ** token.decimals);
 				hash = await sendSolanaSPLToken(toAddress!, bigAmount, address);
 			}
-			console.log('HERE IS THE hash', hash);
 			if (!hash) {
 				updateDonation(donationId, EDonationStatus.FAILED);
 				return { isSaved: false, txHash: '', isMinted: false };

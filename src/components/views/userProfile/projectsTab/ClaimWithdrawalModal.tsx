@@ -138,6 +138,8 @@ const ClaimWithdrawalModal = ({
 					},
 				);
 
+				console.log('withdrawRes', withdrawRes);
+
 				setTransactionState(
 					isETHx
 						? ClaimTransactionState.TRANSFERRING_ETH
@@ -197,8 +199,8 @@ const ClaimWithdrawalModal = ({
 			<ModalContainer>
 				{isETHx && (
 					<TransactionWarning>
-						You'll need to sign two transactions to withdraw ETH to
-						your recipient address.{' '}
+						You&apos;ll need to sign two transactions to withdraw
+						ETH to your recipient address.{' '}
 						<b>
 							DO NOT CLOSE THIS WINDOW UNTIL BOTH TRANSACTIONS
 							FINISH.

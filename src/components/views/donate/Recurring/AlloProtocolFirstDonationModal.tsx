@@ -6,7 +6,7 @@ import {
 	P,
 	brandColors,
 } from '@giveth/ui-design-system';
-import { useAccount, useSwitchChain } from 'wagmi';
+import { useAccount } from 'wagmi';
 import { useIntl } from 'react-intl';
 import { writeContract, waitForTransactionReceipt } from '@wagmi/core';
 import { Address, isAddress } from 'viem';
@@ -47,7 +47,6 @@ const AlloProtocolFirstDonationModal: FC<IAlloProtocolModal> = ({
 	const [isLoading, setIsLoading] = useState(false);
 	const [txResult, setTxResult] = useState<Address>();
 
-	const { switchChain } = useSwitchChain();
 	const { project, fetchProject } = useDonateData();
 	const { formatMessage } = useIntl();
 	const updatedCloseModal = () => {
@@ -173,11 +172,6 @@ const Container = styled.div`
 	padding: 24px;
 	text-align: left;
 	max-width: 500px;
-`;
-
-const ItemContainer = styled.div`
-	position: relative;
-	padding-left: 8px;
 `;
 
 const Ellipse = styled.div`

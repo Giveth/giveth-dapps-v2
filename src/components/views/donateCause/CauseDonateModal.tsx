@@ -6,7 +6,6 @@ import {
 	Lead,
 	neutralColors,
 	Button,
-	FlexCenter,
 } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
 import { Chain, Address, zeroAddress, formatUnits } from 'viem';
@@ -501,18 +500,6 @@ const CauseDonateModal: FC<IDonateModalProps> = props => {
 		</>
 	);
 };
-
-const Loading = styled(FlexCenter)`
-	position: fixed;
-	top: 0;
-	left: 0;
-	z-index: 1000;
-	height: 100%;
-	width: 100%;
-	background-color: gray;
-	transition: opacity 0.3s ease-in-out;
-	opacity: 0.9;
-`;
 
 const findMatchingWalletAddress = (
 	addresses: IWalletAddress[] = [],
