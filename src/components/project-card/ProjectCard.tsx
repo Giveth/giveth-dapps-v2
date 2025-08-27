@@ -346,27 +346,27 @@ const ProjectCard = (props: IProjectCard) => {
 						</PaddedRow>
 					</Link>
 				)}
-				{!isListingInsideCauseProjectTabs && (
-					<ActionButtons className='action-buttons'>
-						<Link
-							id='Donate_Card'
-							href={donateLink}
-							onClick={e => {
-								setDestination(donateLink);
-								handleClick(e);
-							}}
-						>
-							<CustomizedDonateButton
-								linkType='primary'
-								size='small'
-								label={formatMessage({ id: 'label.donate' })}
-								$isHover={isHover}
-								className='donate-button'
-							/>
-						</Link>
-					</ActionButtons>
-				)}
 			</CardBody>
+			{!isListingInsideCauseProjectTabs && (
+				<ActionButtons className='action-buttons'>
+					<Link
+						id='Donate_Card'
+						href={donateLink}
+						onClick={e => {
+							setDestination(donateLink);
+							handleClick(e);
+						}}
+					>
+						<CustomizedDonateButton
+							linkType='primary'
+							size='small'
+							label={formatMessage({ id: 'label.donate' })}
+							$isHover={isHover}
+							className='donate-button'
+						/>
+					</Link>
+				</ActionButtons>
+			)}
 			{showHintModal && activeQFRound && (
 				<RoundNotStartedModal
 					setShowModal={setShowHintModal}
@@ -385,6 +385,7 @@ interface IWrapperProps {
 }
 
 const Wrapper = styled.div<IWrapperProps>`
+	position: relative;
 	display: flex;
 	flex-direction: column;
 	width: 100%;
@@ -474,29 +475,24 @@ const CardBody = styled.div<ICardBody>`
 	position: static;
 	display: flex;
 	flex-direction: column;
+	overflow: hidden;
 	background-color: ${neutralColors.gray[100]};
 	border-radius: ${p =>
 		p.$isOtherOrganization ? '0 12px 12px 12px' : '12px'};
 
-	// transition: margin-top 0.3s ease;
-	// margin-top: -35px;
-	// margin-bottom: 20px;
+	/* static slight overlap if you want */
+	margin-top: -25px;
+	margin-bottom: 20px;
 
-	// z-index: 10;
-	// ${Wrapper}:hover & {
-	// 	margin-top: -114px;
-	// }
-	/* keep layout size constant */
-	margin-top: -35px; /* static overlap amount only */
+	/* visual slide up on hover, no reflow */
+	transform: translateY(0);
 	transition: transform 0.3s ease;
-	transform: translateY(0); /* paint-only */
-
-	will-change: transform; /* smoother */
-	z-index: 1;
+	will-change: transform;
 
 	${Wrapper}:hover & {
-		transform: translateY(-79px); /* visual slide up, no layout change */
+		transform: translateY(-75px); /* visual slide up, no layout change */
 	}
+	z-index: 1;
 `;
 
 const TitleWrapper = styled.div`
@@ -526,6 +522,7 @@ interface IPaddedRowProps {
 }
 
 export const PaddedRow = styled(Flex)<IPaddedRowProps>`
+	margin-top: 16px;
 	padding: 0 ${props => props.$sidePadding || SIDE_PADDING};
 `;
 
@@ -541,12 +538,21 @@ export const StyledPaddedRow = styled(PaddedRow)`
 `;
 
 const ActionButtons = styled(PaddedRow)`
-	margin: 25px 0;
+	position: static;
+	margin: 5px 0 20px 0;
 	gap: 16px;
 	flex-direction: column;
-	display: none;
-	${Wrapper}:hover & {
-		display: flex;
+	pointer-events: none;
+
+	display: block;
+	z-index: 2;
+
+	${mediaQueries.laptopS} {
+		position: absolute;
+		margin-bottom: 0;
+		bottom: 20px;
+		left: 0;
+		right: 0;
 	}
 `;
 
