@@ -8,41 +8,16 @@
 
 @import 'https://fonts.googleapis.com/css?family=Reenie+Beanie';
 
-body {
+.editorWrapper {
   margin: 0;
   font-family: system-ui, -apple-system, BlinkMacSystemFont, '.SFNSText-Regular',
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background: #eee;
-  padding: 0 20px;
-}
-
-header {
-  max-width: 580px;
-  margin: auto;
+  border-width: 2px;
+  border-color: #ebecf2;
+  border-style: solid;
   position: relative;
-  display: flex;
-  justify-content: center;
-}
-
-header a {
-  max-width: 220px;
-  margin: 20px 0 0 0;
-  display: block;
-}
-
-header img {
-  display: block;
-  height: 100%;
-  width: 100%;
-}
-
-header h1 {
-  text-align: left;
-  color: #333;
-  display: inline-block;
-  margin: 20px 0 0 0;
 }
 
 .editor-shell {
@@ -96,7 +71,7 @@ header h1 {
   width: 100%;
 }
 
-pre {
+.pre {
   line-height: 1.1;
   background: #222;
   color: #fff;
@@ -120,12 +95,12 @@ pre {
   border-bottom-right-radius: 10px;
 }
 
-pre::-webkit-scrollbar {
+.pre::-webkit-scrollbar {
   background: transparent;
   width: 10px;
 }
 
-pre::-webkit-scrollbar-thumb {
+.pre::-webkit-scrollbar-thumb {
   background: #999;
 }
 
@@ -1505,6 +1480,7 @@ button.action-button:disabled {
   overflow-y: hidden; /* disable vertical scroll*/
 }
 
+.toolbarItem,
 button.toolbar-item {
   border: 0;
   display: flex;
@@ -1518,14 +1494,17 @@ button.toolbar-item {
   justify-content: space-between;
 }
 
+.toolbarItem:disabled,
 button.toolbar-item:disabled {
   cursor: not-allowed;
 }
 
+.toolbarItem.spaced,
 button.toolbar-item.spaced {
   margin-right: 2px;
 }
 
+.toolbarItem i.format,
 button.toolbar-item i.format {
   background-size: contain;
   display: inline-block;
@@ -1536,6 +1515,10 @@ button.toolbar-item i.format {
   opacity: 0.6;
 }
 
+.toolbarItem:disabled .icon,
+.toolbarItem:disabled .text,
+.toolbarItem:disabled i.format,
+.toolbarItem:disabled .chevron-down,
 button.toolbar-item:disabled .icon,
 button.toolbar-item:disabled .text,
 button.toolbar-item:disabled i.format,
@@ -1543,18 +1526,22 @@ button.toolbar-item:disabled .chevron-down {
   opacity: 0.2;
 }
 
+.toolbarItem.active,
 button.toolbar-item.active {
   background-color: rgba(223, 232, 250, 0.3);
 }
 
+.toolbarItem.active i,
 button.toolbar-item.active i {
   opacity: 1;
 }
 
+.toolbarItem:hover:not([disabled]),
 .toolbar-item:hover:not([disabled]) {
   background-color: #eee;
 }
 
+.toolbarItem.font-family .text,
 .toolbar-item.font-family .text {
   display: block;
   max-width: 40px;

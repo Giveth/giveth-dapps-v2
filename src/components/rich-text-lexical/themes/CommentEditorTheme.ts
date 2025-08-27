@@ -6,15 +6,15 @@
  *
  */
 
-import type {EditorThemeClasses} from 'lexical';
-
-import './CommentEditorTheme.css';
-
 import baseTheme from './PlaygroundEditorTheme';
 
+import type { EditorThemeClasses } from 'lexical';
+
+import './CommentEditorTheme.module.css';
+
 const theme: EditorThemeClasses = {
-  ...baseTheme,
-  paragraph: 'CommentEditorTheme__paragraph',
+	...baseTheme,
+	paragraph: 'CommentEditorTheme__paragraph',
 };
 
 export default theme;

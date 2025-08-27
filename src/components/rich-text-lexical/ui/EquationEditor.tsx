@@ -6,51 +6,53 @@
  *
  */
 
-import type {JSX, Ref, RefObject} from 'react';
-
-import './EquationEditor.css';
-
-import {isHTMLElement} from 'lexical';
-import {ChangeEvent, forwardRef} from 'react';
+import { isHTMLElement } from 'lexical';
+import { ChangeEvent, forwardRef } from 'react';
+import styles from './EquationEditor.module.css';
+import type { JSX, Ref, RefObject } from 'react';
 
 type BaseEquationEditorProps = {
-  equation: string;
-  inline: boolean;
-  setEquation: (equation: string) => void;
+	equation: string;
+	inline: boolean;
+	setEquation: (equation: string) => void;
 };
 
 function EquationEditor(
-  {equation, setEquation, inline}: BaseEquationEditorProps,
-  forwardedRef: Ref<HTMLInputElement | HTMLTextAreaElement>,
+	{ equation, setEquation, inline }: BaseEquationEditorProps,
+	forwardedRef: Ref<HTMLInputElement | HTMLTextAreaElement>,
 ): JSX.Element {
-  const onChange = (event: ChangeEvent) => {
-    setEquation((event.target as HTMLInputElement).value);
-  };
+	const onChange = (event: ChangeEvent) => {
+		setEquation((event.target as HTMLInputElement).value);
+	};
 
-  return inline && isHTMLElement(forwardedRef) ? (
-    <span className="EquationEditor_inputBackground">
-      <span className="EquationEditor_dollarSign">$</span>
-      <input
-        className="EquationEditor_inlineEditor"
-        value={equation}
-        onChange={onChange}
-        autoFocus={true}
-        ref={forwardedRef as RefObject<HTMLInputElement>}
-      />
-      <span className="EquationEditor_dollarSign">$</span>
-    </span>
-  ) : (
-    <div className="EquationEditor_inputBackground">
-      <span className="EquationEditor_dollarSign">{'$$\n'}</span>
-      <textarea
-        className="EquationEditor_blockEditor"
-        value={equation}
-        onChange={onChange}
-        ref={forwardedRef as RefObject<HTMLTextAreaElement>}
-      />
-      <span className="EquationEditor_dollarSign">{'\n$$'}</span>
-    </div>
-  );
+	return inline && isHTMLElement(forwardedRef) ? (
+		<span className={styles['EquationEditor_inputBackground']}>
+			<span className={styles['EquationEditor_dollarSign']}>$</span>
+			<input
+				className={styles['EquationEditor_inlineEditor']}
+				value={equation}
+				onChange={onChange}
+				autoFocus={true}
+				ref={forwardedRef as RefObject<HTMLInputElement>}
+			/>
+			<span className={styles['EquationEditor_dollarSign']}>$</span>
+		</span>
+	) : (
+		<div className={styles['EquationEditor_inputBackground']}>
+			<span className={styles['EquationEditor_dollarSign']}>
+				{'$$\n'}
+			</span>
+			<textarea
+				className={styles['EquationEditor_blockEditor']}
+				value={equation}
+				onChange={onChange}
+				ref={forwardedRef as RefObject<HTMLTextAreaElement>}
+			/>
+			<span className={styles['EquationEditor_dollarSign']}>
+				{'\n$$'}
+			</span>
+		</div>
+	);
 }
 
 export default forwardRef(EquationEditor);

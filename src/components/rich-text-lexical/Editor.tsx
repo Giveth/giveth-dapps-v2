@@ -31,7 +31,6 @@ import { useEffect, useState } from 'react';
 import { createWebsocketProvider } from './collaboration';
 import { useSettings } from './context/SettingsContext';
 import { useSharedHistoryContext } from './context/SharedHistoryContext';
-import ActionsPlugin from './plugins/ActionsPlugin';
 import AutocompletePlugin from './plugins/AutocompletePlugin';
 import AutoEmbedPlugin from './plugins/AutoEmbedPlugin';
 import AutoLinkPlugin from './plugins/AutoLinkPlugin';
@@ -39,7 +38,6 @@ import CodeActionMenuPlugin from './plugins/CodeActionMenuPlugin';
 import CodeHighlightPrismPlugin from './plugins/CodeHighlightPrismPlugin';
 import CodeHighlightShikiPlugin from './plugins/CodeHighlightShikiPlugin';
 import CollapsiblePlugin from './plugins/CollapsiblePlugin';
-import CommentPlugin from './plugins/CommentPlugin';
 import ComponentPickerPlugin from './plugins/ComponentPickerPlugin';
 import ContextMenuPlugin from './plugins/ContextMenuPlugin';
 import DateTimePlugin from './plugins/DateTimePlugin';
@@ -75,10 +73,10 @@ import TreeViewPlugin from './plugins/TreeViewPlugin';
 import TwitterPlugin from './plugins/TwitterPlugin';
 import YouTubePlugin from './plugins/YouTubePlugin';
 import ContentEditable from './ui/ContentEditable';
+import styles from './index.module.css';
 import type { JSX } from 'react';
 
 const skipCollaborationInit =
-	// @ts-expect-error
 	window.parent != null && window.parent.frames.right === window;
 
 export default function Editor(): JSX.Element {
@@ -144,7 +142,7 @@ export default function Editor(): JSX.Element {
 	}, [isSmallWidthViewport]);
 
 	return (
-		<>
+		<div className={`${styles.editorWrapper}`}>
 			{isRichText && (
 				<ToolbarPlugin
 					editor={editor}
@@ -160,9 +158,9 @@ export default function Editor(): JSX.Element {
 				/>
 			)}
 			<div
-				className={`editor-container ${showTreeView ? 'tree-view' : ''} ${
-					!isRichText ? 'plain-text' : ''
-				}`}
+				className={`${styles['editor-container']} ${
+					showTreeView ? styles['tree-view'] : ''
+				} ${!isRichText ? styles['plain-text'] : ''}`}
 			>
 				{isMaxLength && <MaxLengthPlugin maxLength={30} />}
 				<DragDropPaste />
@@ -179,11 +177,6 @@ export default function Editor(): JSX.Element {
 				<SpeechToTextPlugin />
 				<AutoLinkPlugin />
 				<DateTimePlugin />
-				<CommentPlugin
-					providerFactory={
-						isCollab ? createWebsocketProvider : undefined
-					}
-				/>
 				{isRichText ? (
 					<>
 						{isCollab ? (
@@ -199,8 +192,11 @@ export default function Editor(): JSX.Element {
 						)}
 						<RichTextPlugin
 							contentEditable={
-								<div className='editor-scroller'>
-									<div className='editor' ref={onRef}>
+								<div className={`${styles['editor-scroller']}`}>
+									<div
+										className={`${styles.editor}`}
+										ref={onRef}
+									>
 										<ContentEditable
 											placeholder={placeholder}
 										/>
@@ -292,14 +288,8 @@ export default function Editor(): JSX.Element {
 				<div>{showTableOfContents && <TableOfContentsPlugin />}</div>
 				{shouldUseLexicalContextMenu && <ContextMenuPlugin />}
 				{shouldAllowHighlightingWithBrackets && <SpecialTextPlugin />}
-				<ActionsPlugin
-					isRichText={isRichText}
-					shouldPreserveNewLinesInMarkdown={
-						shouldPreserveNewLinesInMarkdown
-					}
-				/>
 			</div>
 			{showTreeView && <TreeViewPlugin />}
-		</>
+		</div>
 	);
 }

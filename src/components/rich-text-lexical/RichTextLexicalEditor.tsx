@@ -15,16 +15,11 @@ import Editor from './Editor';
 import { SharedHistoryContext } from './context/SharedHistoryContext';
 import { TableContext } from './plugins/TablePlugin';
 import { ToolbarContext } from './context/ToolbarContext';
-import Settings from './Settings';
+import { FlashMessageContext } from './context/FlashMessageContext';
 import PlaygroundNodes from './nodes/PlaygroundNodes';
 import PlaygroundEditorTheme from './themes/PlaygroundEditorTheme';
-import logo from './images/logo.svg';
 import { parseAllowedColor } from './ui/ColorPicker';
 import { parseAllowedFontSize } from './plugins/ToolbarPlugin/fontSize';
-import { isDevPlayground } from './appSettings';
-import DocsPlugin from './plugins/DocsPlugin';
-import PasteLogPlugin from './plugins/PasteLogPlugin';
-import TestRecorderPlugin from './plugins/TestRecorderPlugin';
 import TypingPerfPlugin from './plugins/TypingPerfPlugin';
 
 function $prepopulatedRichText() {
@@ -197,31 +192,19 @@ export default function RichTextLexicalEditor() {
 	};
 
 	return (
-		<LexicalComposer initialConfig={initialConfig}>
-			<SharedHistoryContext>
-				<TableContext>
-					<ToolbarContext>
-						<header>
-							<a
-								href='https://lexical.dev'
-								target='_blank'
-								rel='noreferrer'
-							>
-								<img src={logo} alt='Lexical Logo' />
-							</a>
-						</header>
-						<div className='editor-shell'>
-							<Editor />
-						</div>
-						<Settings />
-						{isDevPlayground ? <DocsPlugin /> : null}
-						{isDevPlayground ? <PasteLogPlugin /> : null}
-						{isDevPlayground ? <TestRecorderPlugin /> : null}
-
-						{measureTypingPerf ? <TypingPerfPlugin /> : null}
-					</ToolbarContext>
-				</TableContext>
-			</SharedHistoryContext>
-		</LexicalComposer>
+		<FlashMessageContext>
+			<LexicalComposer initialConfig={initialConfig}>
+				<SharedHistoryContext>
+					<TableContext>
+						<ToolbarContext>
+							<div className='editor-shell'>
+								<Editor />
+							</div>
+							{measureTypingPerf ? <TypingPerfPlugin /> : null}
+						</ToolbarContext>
+					</TableContext>
+				</SharedHistoryContext>
+			</LexicalComposer>
+		</FlashMessageContext>
 	);
 }

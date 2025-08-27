@@ -6,15 +6,15 @@
  *
  */
 
-import type {EditorThemeClasses} from 'lexical';
-
-import './StickyEditorTheme.css';
-
 import baseTheme from './PlaygroundEditorTheme';
 
+import type { EditorThemeClasses } from 'lexical';
+
+import './StickyEditorTheme.module.css';
+
 const theme: EditorThemeClasses = {
-  ...baseTheme,
-  paragraph: 'StickyEditorTheme__paragraph',
+	...baseTheme,
+	paragraph: 'StickyEditorTheme__paragraph',
 };
 
 export default theme;

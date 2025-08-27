@@ -6,7 +6,7 @@
  *
  */
 
-select {
+.select-main {
   appearance: none;
   -webkit-appearance: none;
   -moz-appearance: none;
@@ -23,10 +23,9 @@ select {
   outline: none;
 }
 
-:root {
+.selectWrapper {
   --select-border: #393939;
   --select-focus: #101484;
-  --select-arrow: var(--select-border);
 }
 
 .select {
