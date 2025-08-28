@@ -162,7 +162,7 @@
   box-shadow: 1px 2px 4px rgba(0, 0, 0, 0.4);
 }
 
-.test-recorder-button + .test-recorder-button {
+.test-recorder-button+.test-recorder-button {
   margin-left: 4px;
 }
 
@@ -834,7 +834,7 @@ i.page-break,
     display: none !important;
   }
 
-  .dialog-dropdown > .dropdown-button-text {
+  .dialog-dropdown>.dropdown-button-text {
     display: flex !important;
   }
 
@@ -851,49 +851,61 @@ i.page-break,
   background-image: url(images/icons/text-paragraph.svg);
 }
 
+.toolbar-toolbar-item-icon.h1,
 .icon.h1 {
   background-image: url(images/icons/type-h1.svg);
 }
 
+.toolbar-toolbar-item-icon.h2,
 .icon.h2 {
   background-image: url(images/icons/type-h2.svg);
 }
 
+.toolbar-toolbar-item-icon.h3,
 .icon.h3 {
   background-image: url(images/icons/type-h3.svg);
 }
 
+.toolbar-toolbar-item-icon.h4,
 .icon.h4 {
   background-image: url(images/icons/type-h4.svg);
 }
 
+.toolbar-toolbar-item-icon.h5,
 .icon.h5 {
   background-image: url(images/icons/type-h5.svg);
 }
 
+.toolbar-toolbar-item-icon.h6,
 .icon.h6 {
   background-image: url(images/icons/type-h6.svg);
 }
 
+.toolbar-toolbar-item-icon.bullet-list,
 .icon.bullet-list,
 .icon.bullet {
   background-image: url(images/icons/list-ul.svg);
 }
 
+.toolbar-toolbar-item-icon.check-list,
 .icon.check-list,
 .icon.check {
   background-image: url(images/icons/square-check.svg);
 }
 
+.toolbar-toolbar-item-icon.numbered-list,
 .icon.numbered-list,
 .icon.number {
   background-image: url(images/icons/list-ol.svg);
 }
 
+
+.toolbar-toolbar-item-icon.quote,
 .icon.quote {
   background-image: url(images/icons/chat-square-quote.svg);
 }
 
+.toolbar-toolbar-item-icon.quote,
 .icon.code {
   background-image: url(images/icons/code.svg);
 }
@@ -1322,10 +1334,12 @@ i.page-break,
   left: 0;
   will-change: transform;
 }
+
 .table-cell-action-button-container.table-cell-action-button-container--active {
   pointer-events: auto;
   opacity: 1;
 }
+
 .table-cell-action-button-container.table-cell-action-button-container--inactive {
   pointer-events: none;
   opacity: 0;
@@ -1466,6 +1480,7 @@ button.action-button:disabled {
 
 .toolbar {
   display: flex;
+  flex-wrap: wrap;
   margin-bottom: 1px;
   background: #fff;
   padding: 4px;
@@ -1473,14 +1488,14 @@ button.action-button:disabled {
   border-top-right-radius: 10px;
   vertical-align: middle;
   overflow: auto;
-  height: 36px;
+  /* height: 36px; */
   position: sticky;
   top: 0;
   z-index: 2;
-  overflow-y: hidden; /* disable vertical scroll*/
+  overflow-y: hidden;
+  /* disable vertical scroll*/
 }
 
-.toolbarItem,
 button.toolbar-item {
   border: 0;
   display: flex;
@@ -1494,17 +1509,14 @@ button.toolbar-item {
   justify-content: space-between;
 }
 
-.toolbarItem:disabled,
 button.toolbar-item:disabled {
   cursor: not-allowed;
 }
 
-.toolbarItem.spaced,
 button.toolbar-item.spaced {
   margin-right: 2px;
 }
 
-.toolbarItem i.format,
 button.toolbar-item i.format {
   background-size: contain;
   display: inline-block;
@@ -1515,10 +1527,6 @@ button.toolbar-item i.format {
   opacity: 0.6;
 }
 
-.toolbarItem:disabled .icon,
-.toolbarItem:disabled .text,
-.toolbarItem:disabled i.format,
-.toolbarItem:disabled .chevron-down,
 button.toolbar-item:disabled .icon,
 button.toolbar-item:disabled .text,
 button.toolbar-item:disabled i.format,
@@ -1526,22 +1534,18 @@ button.toolbar-item:disabled .chevron-down {
   opacity: 0.2;
 }
 
-.toolbarItem.active,
 button.toolbar-item.active {
   background-color: rgba(223, 232, 250, 0.3);
 }
 
-.toolbarItem.active i,
 button.toolbar-item.active i {
   opacity: 1;
 }
 
-.toolbarItem:hover:not([disabled]),
 .toolbar-item:hover:not([disabled]) {
   background-color: #eee;
 }
 
-.toolbarItem.font-family .text,
 .toolbar-item.font-family .text {
   display: block;
   max-width: 40px;
@@ -1636,24 +1640,20 @@ button.toolbar-item.active i {
 
 .sticky-note.yellow {
   border-top: 1px solid #fdfd86;
-  background: linear-gradient(
-    135deg,
-    #ffff88 81%,
-    #ffff88 82%,
-    #ffff88 82%,
-    #ffffc6 100%
-  );
+  background: linear-gradient(135deg,
+      #ffff88 81%,
+      #ffff88 82%,
+      #ffff88 82%,
+      #ffffc6 100%);
 }
 
 .sticky-note.pink {
   border-top: 1px solid #e7d1e4;
-  background: linear-gradient(
-    135deg,
-    #f7cbe8 81%,
-    #f7cbe8 82%,
-    #f7cbe8 82%,
-    #e7bfe1 100%
-  );
+  background: linear-gradient(135deg,
+      #f7cbe8 81%,
+      #f7cbe8 82%,
+      #f7cbe8 82%,
+      #e7bfe1 100%);
 }
 
 .sticky-note-container.dragging {
@@ -1718,6 +1718,7 @@ button.toolbar-item.active i {
 }
 
 @keyframes octocat-wave {
+
   0%,
   100% {
     transform: rotate(0);

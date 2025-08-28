@@ -17,7 +17,7 @@ import {
 	useState,
 } from 'react';
 import { createPortal } from 'react-dom';
-import styles from '../index.module.css';
+import { DropdownUI } from '@/components/rich-text-lexical/mainStyles';
 import type { JSX } from 'react';
 
 type DropDownContextType = {
@@ -138,13 +138,13 @@ function DropDownItems({
 
 	return (
 		<DropDownContext.Provider value={contextValue}>
-			<div
-				className={`${styles['dropdown']}`}
+			<DropdownUI
+				className='dropdown'
 				ref={dropDownRef}
 				onKeyDown={handleKeyDown}
 			>
 				{children}
-			</div>
+			</DropdownUI>
 		</DropDownContext.Provider>
 	);
 }
@@ -257,13 +257,11 @@ export default function DropDown({
 					<span className={buttonIconClassName} />
 				)}
 				{buttonLabel && (
-					<span
-						className={`${styles['text']} ${styles['dropdown-button-text']}`}
-					>
+					<span className='text dropdown-button-text'>
 						{buttonLabel}
 					</span>
 				)}
-				<i className={`${styles['chevron-down']}`} />
+				<i className='chevron-down' />
 			</button>
 
 			{showDropDown &&
