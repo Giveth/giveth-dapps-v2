@@ -505,11 +505,11 @@ export const CauseReviewStep = ({
 									id: 'label.cause.dont_have_giv_tokens',
 								})}{' '}
 								<SwapLink
-									href='https://jumper.exchange/?fromChain=1&fromToken=0x0000000000000000000000000000000000000000&toChain=10&toToken=0x528CDc92eAB044E1E39FE43B9514bfdAB4412B98'
+									href='https://app.squidrouter.com/?chains=1%2C137&tokens=0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee%2C0xc7b1807822160a8c5b6c9eaf5c584aad0972deec'
 									target='_blank'
 								>
 									{formatMessage({
-										id: 'label.cause.swap_link',
+										id: 'label.buy_giv_token',
 									})}
 								</SwapLink>
 							</InfoTextRight>
@@ -721,6 +721,7 @@ const SwapLink = styled.a`
 	color: ${brandColors.pinky[500]};
 	text-decoration: none;
 	font-weight: 500;
+	font-size: 16px;
 
 	&:hover {
 		color: ${brandColors.pinky[700]};
