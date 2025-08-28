@@ -65,6 +65,7 @@ export default function DraggableBlockPlugin({
 						title='Click to add below'
 						className={`${styles.icon} ${styles['icon-plus']}`}
 						onClick={insertBlock}
+						type='button'
 					/>
 					<div className={styles.icon} />
 				</div>

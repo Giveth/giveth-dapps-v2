@@ -8,7 +8,6 @@
 
 import { LexicalEditor } from 'lexical';
 import * as React from 'react';
-import styles from './fontSize.module.css';
 
 import {
 	MAX_ALLOWED_FONT_SIZE,
@@ -132,11 +131,11 @@ export default function FontSize({
 						inputValue,
 					)
 				}
-				className={`${styles['toolbar-item']} ${styles['font-decrement']}`}
+				className='toolbar-item font-decrement'
 				aria-label='Decrease font size'
 				title={`Decrease font size (${SHORTCUTS.DECREASE_FONT_SIZE})`}
 			>
-				<i className={`${styles['format']} ${styles['minus-icon']}`} />
+				<i className='format minus-icon' />
 			</button>
 
 			<input
@@ -144,7 +143,7 @@ export default function FontSize({
 				title='Font size'
 				value={inputValue}
 				disabled={disabled}
-				className={`${styles['toolbar-item']} ${styles['font-size-input']} ${styles.fontSizeInput}`}
+				className='toolbar-item font-size-input'
 				min={MIN_ALLOWED_FONT_SIZE}
 				max={MAX_ALLOWED_FONT_SIZE}
 				onChange={e => setInputValue(e.target.value)}
@@ -166,11 +165,11 @@ export default function FontSize({
 						inputValue,
 					)
 				}
-				className={`${styles.toolbarItem} ${styles['toolbar-item']} ${styles.fontIncrement}`}
+				className='toolbar-item font-increment'
 				aria-label='Increase font size'
 				title={`Increase font size (${SHORTCUTS.INCREASE_FONT_SIZE})`}
 			>
-				<i className={`${styles['format']} ${styles['add-icon']}`} />
+				<i className='format add-icon' />
 			</button>
 		</>
 	);

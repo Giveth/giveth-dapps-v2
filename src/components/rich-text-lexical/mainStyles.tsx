@@ -368,6 +368,18 @@ export const ToolBarHolder = styled.div`
 	i.indent {
 		background-image: url(/images/rich-text-lexical/icons/indent.svg);
 	}
+
+	.add-icon {
+		background-image: url(/images/rich-text-lexical/icons/add-sign.svg);
+		background-repeat: no-repeat;
+		background-position: center;
+	}
+
+	.minus-icon {
+		background-image: url(/images/rich-text-lexical/icons/minus-sign.svg);
+		background-repeat: no-repeat;
+		background-position: center;
+	}
 `;
 
 export const DropdownUI = styled.div`
