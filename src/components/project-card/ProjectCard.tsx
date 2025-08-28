@@ -531,7 +531,6 @@ const ActionButtons = styled(PaddedRow)`
 	margin: 5px 0 20px 0;
 	gap: 16px;
 	flex-direction: column;
-	pointer-events: none;
 
 	display: block;
 	z-index: 2;
@@ -542,6 +541,7 @@ const ActionButtons = styled(PaddedRow)`
 		bottom: 20px;
 		left: 0;
 		right: 0;
+		pointer-events: none;
 	}
 `;
 
