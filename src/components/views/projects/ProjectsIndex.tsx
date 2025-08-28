@@ -355,13 +355,17 @@ export const ProjectsContainer = styled.div`
 	gap: 25px;
 	padding: 0 23px;
 
+	justify-content: stretch;
+	align-items: stretch;
+	justify-items: stretch;
+
 	${mediaQueries.tablet} {
 		padding: 0;
-		grid-template-columns: repeat(2, 1fr);
+		grid-template-columns: repeat(2, minmax(340px, 1fr));
 	}
 
 	${mediaQueries.laptopL} {
-		grid-template-columns: repeat(3, 1fr);
+		grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
 	}
 `;
 
