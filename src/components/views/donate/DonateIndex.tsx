@@ -9,8 +9,6 @@ import {
 	semanticColors,
 	SublineBold,
 	Flex,
-	B,
-	Button,
 } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
 import { useRouter } from 'next/router';
@@ -30,26 +28,19 @@ import { setShowHeader } from '@/features/general/general.slice';
 import { DonateHeader } from './DonateHeader';
 import { DonationCard, ETabs } from './DonationCard';
 import { SuccessView } from './SuccessView';
-import QFSection from '../project/projectActionCard/QFSection';
-import ProjectCardImage from '@/components/project-card/ProjectCardImage';
 import { useGeneralWallet } from '@/providers/generalWalletProvider';
-import { DonatePageProjectDescription } from './DonatePageProjectDescription';
-import QRDonationDetails from '@/components/views/donate/OneTime/SelectTokenModal/QRCodeDonation/QRDonationDetails';
-import InlineToast, { EToastType } from '@/components/toasts/InlineToast';
 import { client } from '@/apollo/apolloClient';
 import { FETCH_DONATION_BY_ID } from '@/apollo/gql/gqlDonations';
 import { IDonation, IWalletAddress } from '@/apollo/types/types';
 import config from '@/configuration';
 import { ChainType } from '@/types/config';
 import { useQRCodeDonation } from '@/hooks/useQRCodeDonation';
-import EndaomentProjectsInfo from '@/components/views/project/EndaomentProjectsInfo';
 import { IDraftDonation } from '@/apollo/types/gqlTypes';
 import StorageLabel from '@/lib/localStorage';
 import DonationByProjectOwner from '@/components/modals/DonationByProjectOwner';
 import { isWalletSanctioned } from '@/services/donation';
 import SanctionModal from '@/components/modals/SanctionedModal';
 import { PassportBanner } from '@/components/PassportBanner';
-import QFEligibleNetworks from '@/components/views/donate/QFEligibleNetworks';
 import { GIVBACKS_DONATION_QUALIFICATION_VALUE_USD } from '@/lib/constants/constants';
 
 const DonateIndex: FC = () => {
@@ -319,75 +310,14 @@ const DonateIndex: FC = () => {
 						hasActiveQFRound &&
 						!isOnSolana &&
 						!isStellarOnlyQF && <PassportBanner />}
-					<Row>
+					<DonateRow>
 						<Col xs={12} lg={6}>
 							<DonationCard
 								setShowQRCode={setShowQRCode}
 								showQRCode={showQRCode}
 							/>
 						</Col>
-						<Col xs={12} lg={6}>
-							<InfoWrapper
-								style={{
-									marginBottom: isFailedOperation ? 24 : 0,
-								}}
-							>
-								{showQRCode ? (
-									<QRDonationDetails />
-								) : (
-									<>
-										<EndaomentProjectsInfo
-											orgLabel={
-												project?.organization?.label
-											}
-										/>
-										{activeStartedRound && (
-											<QFEligibleNetworks />
-										)}
-										<ImageWrapper>
-											<ProjectCardImage
-												image={project.image}
-											/>
-										</ImageWrapper>
-
-										{!isMobile ? (
-											isRecurringTab &&
-											isOnEligibleNetworks ? (
-												<QFSection
-													projectData={project}
-												/>
-											) : (
-												<DonatePageProjectDescription
-													projectData={project}
-												/>
-											)
-										) : null}
-									</>
-								)}
-							</InfoWrapper>
-							{isFailedOperation && (
-								<QRRetryWrapper style={{ gap: 20 }}>
-									<B>
-										{formatMessage({
-											id: 'label.need_a_new_qr_code',
-										})}
-									</B>
-									<InlineToast
-										type={EToastType.Warning}
-										message={formatMessage({
-											id: 'label.new_qr_code_needed',
-										})}
-									/>
-									<ButtonStyled
-										label={formatMessage({
-											id: 'label.update_qr_code',
-										})}
-										onClick={updateQRCode}
-									/>
-								</QRRetryWrapper>
-							)}
-						</Col>
-					</Row>
+					</DonateRow>
 					{!isMobile && (
 						<SocialBox
 							contentType={EContentType.thisProject}
@@ -403,6 +333,10 @@ const DonateIndex: FC = () => {
 
 const Wrapper = styled.div`
 	margin-top: 91px;
+`;
+
+const DonateRow = styled(Row)`
+	justify-content: center;
 `;
 
 const AlreadyDonatedWrapper = styled(Flex)`
@@ -428,36 +362,6 @@ const DonateContainer = styled(Container)`
 	padding-top: 10px;
 	padding-bottom: 64px;
 	position: relative;
-`;
-
-const InfoWrapper = styled.div`
-	background-color: ${neutralColors.gray[100]};
-	padding: 24px;
-	border-radius: 16px;
-	text-align: left;
-`;
-
-const QRRetryWrapper = styled(Flex)`
-	flex-direction: column;
-	padding: 24px;
-	border-radius: 16px;
-	background-color: ${neutralColors.gray[100]};
-	gap: 20px;
-	text-align: left;
-`;
-
-const ImageWrapper = styled.div`
-	position: relative;
-	width: 100%;
-	height: 231px;
-	margin-bottom: 24px;
-	border-radius: 8px;
-	overflow: hidden;
-`;
-
-const ButtonStyled = styled(Button)`
-	width: 100%;
-	text-transform: capitalize;
 `;
 
 export default DonateIndex;
