@@ -219,10 +219,7 @@ const ProjectCard = (props: IProjectCard) => {
 				}
 			>
 				<TitleWrapper>
-					<LastUpdatedContainer
-						$isHover={isHover}
-						className='last-updated-container'
-					>
+					<LastUpdatedContainer $isHover={isHover}>
 						{formatMessage({ id: 'label.last_updated' })}:
 						{timeFromNow(
 							latestUpdateCreationDate || '',
@@ -362,7 +359,6 @@ const ProjectCard = (props: IProjectCard) => {
 							size='small'
 							label={formatMessage({ id: 'label.donate' })}
 							$isHover={isHover}
-							className='donate-button'
 						/>
 					</Link>
 				</ActionButtons>
@@ -398,15 +394,8 @@ const Wrapper = styled.div<IWrapperProps>`
 	height: 100%;
 	order: ${p => p.$order};
 
-	/* Hover helpers that other children can react to */
-	&:hover .last-updated-container {
-		opacity: 1;
-	}
-	&:hover .donate-button {
-		opacity: 1;
-	}
 	&:hover .action-buttons {
-		max-height: 56px; /* button height */
+		max-height: 56px;
 		margin-top: 16px;
 		opacity: 1;
 		pointer-events: auto;
