@@ -201,7 +201,7 @@ export const ToolBarHolder = styled.div`
 	}
 
 	.icon.image {
-		background-image: url(/images/rich-text-lexical/icons/image.svg);
+		background-image: url(/images/rich-text-lexical/icons/file-image.svg);
 	}
 
 	.icon.left-align {
@@ -248,6 +248,7 @@ export const ToolBarHolder = styled.div`
 		background-image: url(/images/rich-text-lexical/icons/unlock.svg);
 	}
 
+	.icon.number,
 	.icon.numbered-list {
 		background-image: url(/images/rich-text-lexical/icons/list-ol.svg);
 	}
@@ -255,6 +256,117 @@ export const ToolBarHolder = styled.div`
 	.icon.bullet,
 	.icon.bullet-list {
 		background-image: url(/images/rich-text-lexical/icons/list-ul.svg);
+	}
+
+	.icon.check-list,
+	.icon.check {
+		background-image: url(/images/rich-text-lexical/icons/square-check.svg);
+	}
+
+	.icon.quote {
+		background-image: url(/images/rich-text-lexical/icons/chat-square-quote.svg);
+	}
+
+	.icon.font-family {
+		background-image: url(/images/rich-text-lexical/icons/font-family.svg);
+	}
+
+	i.underline {
+		background-image: url(/images/rich-text-lexical/icons/type-underline.svg);
+	}
+
+	i.code {
+		background-image: url(/images/rich-text-lexical/icons/code.svg);
+	}
+
+	i.link {
+		background-image: url(/images/rich-text-lexical/icons/link.svg);
+	}
+
+	.icon.font-color {
+		background-image: url(/images/rich-text-lexical/icons/font-color.svg);
+	}
+
+	i.chevron-down {
+		background-color: transparent;
+		background-size: contain;
+		display: inline-block;
+		height: 8px;
+		width: 8px;
+		background-image: url(/images/rich-text-lexical/icons/chevron-down.svg);
+	}
+
+	.icon.bg-color {
+		background-image: url(/images/rich-text-lexical/icons/bg-color.svg);
+	}
+
+	.icon.dropdown-more {
+		background-image: url(/images/rich-text-lexical/icons/dropdown-more.svg);
+	}
+
+	.icon.plus {
+		background-image: url(/images/rich-text-lexical/icons/plus.svg);
+	}
+
+	i.poll {
+		background-image: url(/images/rich-text-lexical/icons/card-checklist.svg);
+	}
+
+	.icon.columns {
+		background-image: url(/images/rich-text-lexical/icons/3-columns.svg);
+	}
+
+	.icon.x {
+		background-image: url(/images/rich-text-lexical/icons/x.svg);
+	}
+
+	.icon.youtube {
+		background-image: url(/images/rich-text-lexical/icons/youtube.svg);
+	}
+
+	.icon.figma {
+		background-image: url(/images/rich-text-lexical/icons/figma.svg);
+	}
+
+	.icon.close {
+		background-image: url(/images/rich-text-lexical/icons/close.svg);
+	}
+
+	i.horizontal-rule {
+		background-image: url(/images/rich-text-lexical/icons/horizontal-rule.svg);
+	}
+
+	i.page-break,
+	.icon.page-break {
+		background-image: url(/images/rich-text-lexical/icons/scissors.svg);
+	}
+
+	.icon.left-align,
+	i.left-align {
+		background-image: url(/images/rich-text-lexical/icons/text-left.svg);
+	}
+
+	.icon.center-align,
+	i.center-align {
+		background-image: url(/images/rich-text-lexical/icons/text-center.svg);
+	}
+
+	.icon.right-align,
+	i.right-align {
+		background-image: url(/images/rich-text-lexical/icons/text-right.svg);
+	}
+
+	.icon.justify-align,
+	i.justify-align {
+		background-image: url(/images/rich-text-lexical/icons/justify.svg);
+	}
+
+	i.outdent {
+		background-image: url(/images/rich-text-lexical/icons/outdent.svg);
+	}
+
+	i.indent {
+		background-image: url(/images/rich-text-lexical/icons/indent.svg);
 	}
 `;
 
@@ -405,12 +517,107 @@ export const DropdownUI = styled.div`
 		background-image: url(/images/rich-text-lexical/icons/table.svg);
 	}
 
-	.icon.image {
-		background-image: url(/images/rich-text-lexical/icons/image.svg);
-	}
-
 	.icon.bullet,
 	.icon.bullet-list {
 		background-image: url(/images/rich-text-lexical/icons/list-ul.svg);
+	}
+
+	.icon.check-list,
+	.icon.check {
+		background-image: url(/images/rich-text-lexical/icons/square-check.svg);
+	}
+
+	.icon.quote {
+		background-image: url(/images/rich-text-lexical/icons/chat-square-quote.svg);
+	}
+
+	i.poll {
+		background-image: url(/images/rich-text-lexical/icons/card-checklist.svg);
+	}
+
+	.icon.columns {
+		background-image: url(/images/rich-text-lexical/icons/3-columns.svg);
+	}
+
+	.icon.x {
+		background-image: url(/images/rich-text-lexical/icons/x.svg);
+	}
+
+	.icon.youtube {
+		background-image: url(/images/rich-text-lexical/icons/youtube.svg);
+	}
+
+	.icon.figma {
+		background-image: url(/images/rich-text-lexical/icons/figma.svg);
+	}
+
+	.icon.close {
+		background-image: url(/images/rich-text-lexical/icons/close.svg);
+	}
+
+	i.horizontal-rule {
+		background-image: url(/images/rich-text-lexical/icons/horizontal-rule.svg);
+	}
+
+	i.page-break,
+	.icon.page-break {
+		background-image: url(/images/rich-text-lexical/icons/scissors.svg);
+	}
+
+	.icon.image,
+	i.image {
+		background-image: url(/images/rich-text-lexical/icons/file-image.svg);
+	}
+
+	i.gif {
+		background-image: url(/images/rich-text-lexical/icons/filetype-gif.svg);
+	}
+
+	i.diagram-2 {
+		background-image: url(/images/rich-text-lexical/icons/diagram-2.svg);
+	}
+
+	i.equation {
+		background-image: url(/images/rich-text-lexical/icons/plus-slash-minus.svg);
+	}
+
+	i.sticky {
+		background-image: url(/images/rich-text-lexical/icons/sticky.svg);
+	}
+
+	.icon.caret-right {
+		background-image: url(/images/rich-text-lexical/icons/caret-right-fill.svg);
+	}
+
+	i.calendar {
+		background-image: url(/images/rich-text-lexical/icons/calendar.svg);
+	}
+
+	.icon.left-align,
+	i.left-align {
+		background-image: url(/images/rich-text-lexical/icons/text-left.svg);
+	}
+
+	.icon.center-align,
+	i.center-align {
+		background-image: url(/images/rich-text-lexical//icons/text-center.svg);
+	}
+
+	.icon.right-align,
+	i.right-align {
+		background-image: url(/images/rich-text-lexical//icons/text-right.svg);
+	}
+
+	.icon.justify-align,
+	i.justify-align {
+		background-image: url(/images/rich-text-lexical//icons/justify.svg);
+	}
+
+	i.outdent {
+		background-image: url(/images/rich-text-lexical/icons/outdent.svg);
+	}
+
+	i.indent {
+		background-image: url(/images/rich-text-lexical/icons/indent.svg);
 	}
 `;
