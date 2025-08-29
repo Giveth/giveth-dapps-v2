@@ -12,7 +12,7 @@ export const handleWalletSelection = (
 ) => {
 	localStorage.setItem('selectedCardanoWallet', JSON.stringify(wallet));
 	setSelectedWallet(wallet);
-	connect(wallet.name);
+	connect(wallet.id);
 };
 
 export const handleWalletDisconnect = (
