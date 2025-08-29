@@ -1986,5 +1986,7 @@
 	"label.cause.total_distributed_tooltip": "The total amount distributed by the Donation Agent to the Cause's projects",
 	"label.transaction_submitted_processing": "Transaction Submitted. Processing...",
 	"label.transaction_successful": "Transaction Successful!",
-	"label.qf.select_qf_round": "Select QF Round"
+	"label.qf.select_qf_round": "Select QF Round",
+	"label.qf.smart_select": "Smart Select",
+	"label.qf.select_a_round": "Select a round"
 }

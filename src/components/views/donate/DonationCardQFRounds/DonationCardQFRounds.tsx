@@ -36,20 +36,18 @@ export const DonationCardQFRounds = ({
 }) => {
 	const { formatMessage } = useIntl();
 	console.log('project', project.qfRounds?.[0]);
-	const [selectedRound, setSelectedRound] = useState<IQFRound>(
-		project.qfRounds?.[0] || {
-			id: '',
-			name: '',
-			isActive: false,
-			beginDate: '',
-			endDate: '',
-			maximumReward: 0,
-			allocatedTokenSymbol: '',
-			allocatedFundUSDPreferred: false,
-			allocatedFundUSD: 0,
-			eligibleNetworks: [],
-		},
-	);
+	const [selectedRound, setSelectedRound] = useState<IQFRound>({
+		id: '',
+		name: '',
+		isActive: false,
+		beginDate: '',
+		endDate: '',
+		maximumReward: 0,
+		allocatedTokenSymbol: '',
+		allocatedFundUSDPreferred: false,
+		allocatedFundUSD: 0,
+		eligibleNetworks: [],
+	});
 
 	// Set up default QF round
 	useEffect(() => {
@@ -86,11 +84,19 @@ export const DonationCardQFRounds = ({
 					<DropdownButton onClick={() => setShowQFRoundModal(true)}>
 						<FlexWrapper>
 							<RoundName>
-								{selectedRound
+								{selectedRound && selectedRound.name
 									? selectedRound.name
-									: 'No QF round found'}
+									: formatMessage({
+											id: 'label.qf.select_a_round',
+										})}
 							</RoundName>
-							<SmartSelectBadge>Smart Select</SmartSelectBadge>
+							{selectedRound && selectedRound.name && (
+								<SmartSelectBadge>
+									{formatMessage({
+										id: 'label.qf.smart_select',
+									})}
+								</SmartSelectBadge>
+							)}
 						</FlexWrapper>
 						<IconWrapper>
 							<IconChevronDown24 />
@@ -102,6 +108,7 @@ export const DonationCardQFRounds = ({
 				<QFRoundsModal
 					QFRounds={project.qfRounds}
 					setShowModal={setShowQFRoundModal}
+					project={project}
 				/>
 			)}
 		</>
