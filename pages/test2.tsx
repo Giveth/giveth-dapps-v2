@@ -1,480 +1,532 @@
-import React, { useEffect, useState } from 'react';
-import { ethers } from 'ethers';
-import { Framework, Operation } from '@superfluid-finance/sdk-core';
+'use client';
+import { Transaction } from '@meshsdk/core';
+import { MeshProvider, useWallet, useWalletList } from '@meshsdk/react';
+import { useEffect, useState } from 'react';
+import styled from 'styled-components';
 
-const GIVETH_HOUSE_ADDRESS = '0x567c4B141ED61923967cA25Ef4906C8781069a10';
+const cardanoProjectId =
+	process.env.NEXT_PUBLIC_CARDANO_BLOCKFROST_PROJECT_ID || '';
 
-const TOKEN_ADDRESSES = [
+const MIN_ADA = 1;
+
+const tokenDBList = [
 	{
-		name: 'USDCx',
-		address: '0xD04383398dD2426297da660F9CCA3d439AF9ce1b',
-		decimals: 18,
-	},
-	{
-		name: 'USDC Coin',
-		address: '0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913',
-		decimals: 6,
-		superToken: {
-			address: '0xD04383398dD2426297da660F9CCA3d439AF9ce1b',
-		},
+		projectId: cardanoProjectId,
+		tokenList: [
+			{
+				name: 'ADA',
+				unit: 'lovelace',
+				nameHex: null,
+				policyId: null,
+				decimals: 6, // 1 ADA = 1,000,000 lovelace
+				logo: 'https://cryptologos.cc/logos/cardano-ada-logo.png?v=040',
+			},
+			{
+				name: 'SHEN',
+				nameHex: '5368656e4d6963726f555344',
+				unit: '8db269c3ec630e06ae29f74bc39edd1f87c819f1056206e879a1cd615368656e4d6963726f555344',
+				policyId:
+					'8db269c3ec630e06ae29f74bc39edd1f87c819f1056206e879a1cd61',
+				decimals: 6,
+				logo: 'https://cryptologos.cc/logos/cardano-ada-logo.png?v=040',
+			},
+		],
 	},
 ];
 
-const BASE_CHAIN_ID = 8453;
+const getCoingeckoADAPrice = async () => {
+	try {
+		const response = await fetch(
+			'https://api.coingecko.com/api/v3/simple/price?ids=cardano&vs_currencies=usd',
+		);
+		const data = await response.json();
+		return data.cardano.usd;
+	} catch (error) {
+		console.error('Error getting ADA price:', error);
+		return null;
+	}
+};
 
-const YourApp = () => {
-	const [tokens, setTokens] = useState<
-		{ name: string; address: string; balance: string }[]
-	>([]);
-	const [selectedToken, setSelectedToken] = useState('');
-	const [destinationAddress, setDestinationAddress] =
-		useState(GIVETH_HOUSE_ADDRESS);
-	const [loading, setLoading] = useState(true);
-	const [amount, setAmount] = useState('0.001'); // Initial amount
-	const [notification, setNotification] = useState('');
+const getTokenDataFromBlockfrost = async (unit: string) => {
+	try {
+		const response = await fetch(
+			` https://cardano-mainnet.blockfrost.io/api/v0/assets/${unit}`,
+			{
+				headers: {
+					project_id: cardanoProjectId || '',
+				},
+			},
+		);
+		const data = await response.json();
+		return data;
+	} catch (error) {
+		console.error('Error getting token data:', error);
+		return null;
+	}
+};
 
-	const determineTokenType = async (
-		sf: {
-			loadNativeAssetSuperToken: (arg0: any) => any;
-			loadWrapperSuperToken: (arg0: any) => any;
-		},
-		tokenAddress: any,
-	) => {
-		let superToken;
+export async function fetchTokenPriceInAdaMuesli(
+	policyId: string,
+	assetNameHex: string,
+) {
+	try {
+		const url = `https://api.muesliswap.com/price?base-policy-id=${policyId}&base-tokenname=${assetNameHex}`;
+		const r = await fetch(url, { cache: 'no-store' });
+		if (!r.ok) return undefined;
+		const j = await r.json();
+		const p = Number(j?.price);
+		return p > 0 ? p : 0;
+	} catch (error) {
+		console.error('Error getting token price:', error);
+		return 0;
+	}
+}
 
-		// Check if it's a native super token
-		try {
-			superToken = await sf.loadNativeAssetSuperToken(tokenAddress);
-			console.log('Native Super Token detected.');
-			return { type: 'native', superToken };
-		} catch (error) {
-			console.log('Not a Native Super Token.');
-		}
+// Helper function to convert raw quantity to real token amount
+const formatTokenQuantity = (quantity: string, decimals: number): number => {
+	const rawAmount = Number(quantity);
+	return rawAmount / Math.pow(10, decimals);
+};
 
-		// Check if it's a wrapper super token
-		try {
-			superToken = await sf.loadWrapperSuperToken(tokenAddress);
-			console.log('Wrapper Super Token detected.');
-			return { type: 'wrapper', superToken };
-		} catch (error) {
-			console.log('Not a Wrapper Super Token.');
-		}
+type WalletInfo = {
+	id: string; // e.g. "yoroi", "nami", "eternl"
+	name: string; // display name
+	icon: string; // icon url
+};
 
-		// If both checks fail, it's a regular ERC-20 token
-		console.log('Regular ERC-20 token detected.');
-		return { type: 'erc20', superToken: null };
-	};
-
-	// Function to check if a flow exists
-	const checkIfFlowExists = async (
-		sf: {
-			cfaV1: {
-				getFlow: (arg0: {
-					superToken: any;
-					sender: any;
-					receiver: any;
-					providerOrSigner: any;
-				}) => any;
-			};
-		},
-		superTokenAddress: any,
-		senderAddress: any,
-		receiverAddress: any,
-		signer: any,
-	) => {
-		try {
-			const flowInfo = await sf.cfaV1.getFlow({
-				superToken: superTokenAddress,
-				sender: senderAddress,
-				receiver: receiverAddress,
-				providerOrSigner: signer,
-			});
-			console.log(
-				`Existing flow found. Current flow rate: ${flowInfo.flowRate}`,
-			);
-			console.log({ flowInfo });
-			return { exists: true, flowRate: flowInfo.flowRate };
-		} catch (error) {
-			console.log('No existing flow found.');
-			return { exists: false, flowRate: '0' };
-		}
-	};
-
-	const handleApproveAndExecute = async () => {
-		try {
-			// Connect to MetaMask
-			if (!window.ethereum) {
-				alert('MetaMask not detected');
-				return;
-			}
-
-			const provider = new ethers.providers.Web3Provider(window.ethereum);
-			await provider.send('eth_requestAccounts', []);
-			const signer = provider.getSigner();
-			const sf = await Framework.create({
-				chainId: BASE_CHAIN_ID,
-				provider,
-			});
-
-			console.log({ sf });
-
-			const address = await signer.getAddress();
-
-			// Get token details (decimals, etc.)
-			const token = TOKEN_ADDRESSES.find(
-				t => t.address === selectedToken,
-			);
-			if (!token) {
-				alert('Invalid token selected.');
-				return;
-			}
-			const tokenDecimals = token.decimals;
-
-			// Define the amount to approve (X.XX USDCx)
-			const amountToApprove = ethers.utils.parseUnits(
-				amount,
-				tokenDecimals,
-			);
-
-			const flowRatePerSecond = amountToApprove.div(30 * 24 * 60 * 60); // Convert monthly to per-second rate
-			console.log({ flowRatePerSecond });
-
-			// Determine the token type
-			const { type, superToken } = await determineTokenType(
-				sf,
-				selectedToken,
-			);
-
-			console.log('Selected token:', selectedToken);
-			console.log('Super type:', type);
-			console.log('Super Token:', superToken);
-
-			if (type === 'native' || type === 'wrapper') {
-				console.log(
-					`${type.charAt(0).toUpperCase() + type.slice(1)} Super Token detected`,
-				);
-
-				// Attempt to check allowance (skip if it fails)
-				let allowance;
-				try {
-					allowance = await superToken.allowance({
-						owner: await signer.getAddress(),
-						spender: destinationAddress,
-						providerOrSigner: signer,
-					});
-					await allowance.wait();
-					console.log(`Current allowance: ${allowance.toString()}`);
-				} catch (error) {
-					console.log(
-						'Allowance does not exist or cannot be fetched. Proceeding to approve...',
-					);
-				}
-
-				// Approve if needed
-				if (ethers.BigNumber.from(allowance).lt(amountToApprove)) {
-					const approveOperation = superToken.approve({
-						receiver: destinationAddress,
-						amount: amountToApprove.toString(),
-					});
-
-					const approveTxResponse = await signer.sendTransaction(
-						await approveOperation.getPopulatedTransactionRequest(
-							signer,
-						),
-					);
-					await approveTxResponse.wait();
-					console.log(`Approved ${amount} ${type} super tokens.`);
-				}
-
-				// Check for existing flow
-				const flowStatus = await checkIfFlowExists(
-					sf,
-					superToken.address,
-					address,
-					destinationAddress,
-					signer,
-				);
-
-				if (flowStatus.exists && flowStatus.flowRate !== '0') {
-					// Add new flow rate to existing flow rate
-					const newFlowRate = ethers.BigNumber.from(
-						flowStatus.flowRate,
-					).add(flowRatePerSecond);
-
-					// Update the flow
-					const updateFlowOperation = superToken.updateFlow({
-						sender: address,
-						receiver: destinationAddress,
-						flowRate: newFlowRate.toString(), // New total flow rate
-					});
-
-					console.log('Updating existing flow...');
-					const updateFlowTxResponse = await updateFlowOperation.exec(
-						signer,
-						// 70,
-					);
-					await updateFlowTxResponse.wait();
-					console.log('Flow updated successfully.');
-					setNotification('Flow updated successfully!');
-				} else {
-					// Create a new flow if none exists
-					const createFlowOperation = superToken.createFlow({
-						sender: address,
-						receiver: destinationAddress,
-						flowRate: flowRatePerSecond.toString(), // New flow rate
-					});
-
-					console.log('Creating new flow...');
-					const createFlowTxResponse = await createFlowOperation.exec(
-						signer,
-						// 2,
-					);
-					await createFlowTxResponse.wait();
-					console.log('Flow created successfully.');
-					setNotification('Flow created successfully!');
-				}
-			} else if (type === 'erc20') {
-				/**
-				 *
-				 *
-				 * USDC native tokens
-				 *
-				 *
-				 *
-				 */
-				console.log('Approving underlying ERC-20 token for upgrade...');
-
-				const operations: Operation[] = [];
-
-				const underlyingToken = await sf.loadSuperToken(selectedToken);
-				const newSuperToken = await sf.loadWrapperSuperToken(
-					token.superToken?.address || '',
-				);
-
-				console.log({ underlyingToken });
-
-				const erc20Contract = new ethers.Contract(
-					selectedToken, // Underlying ERC-20 token address
-					[
-						'function approve(address spender, uint256 amount) public returns (bool)',
-					],
-					signer,
-				);
-
-				// Approve the Super Token contract to spend the ERC-20 token
-				const approveTx = await underlyingToken.approve({
-					receiver: newSuperToken.address, // Address of the Super Token
-					amount: amountToApprove.toString(),
-				});
-				const approveTRANS = await approveTx.exec(signer);
-				await approveTRANS.wait(); // Wait for the transaction to be mined
-				console.log(
-					'Underlying ERC-20 token approved for upgrade.',
-					approveTx,
-				);
-
-				console.log(
-					'Upgrading ERC-20 token to Super Token...',
-					approveTRANS,
-				);
-
-				const amountToApproveNew = ethers.utils.parseUnits(amount, 18);
-				const flowRatePerSecondNew = amountToApproveNew.div(
-					30 * 24 * 60 * 60,
-				); // Convert monthly to per-second rate
-
-				console.log('Upgrading......'); // THIS FAILING FIRST TIME
-				const upgradeTx = await newSuperToken.upgrade({
-					amount: amountToApproveNew.toString(),
-				});
-				const approveUPGRD = await upgradeTx.exec(signer);
-				await approveUPGRD.wait(); // Wait for the transaction to be mined
-				// operations.push(upgradeTx);
-				console.log('Upgrade to Super Token complete.', upgradeTx);
-
-				// Create or update the stream
-				const flowStatus = await checkIfFlowExists(
-					sf,
-					newSuperToken.address,
-					address,
-					destinationAddress,
-					signer,
-				);
-
-				if (flowStatus.exists && flowStatus.flowRate !== '0') {
-					console.log('Updating existing flow...');
-					const updateFlowOperation = newSuperToken.updateFlow({
-						sender: address,
-						receiver: destinationAddress,
-						flowRate: flowRatePerSecondNew.toString(), // New flow rate
-					});
-					// const flowTxResponse =
-					// 	await updateFlowOperation.exec(signer);
-					// await flowTxResponse.wait();
-
-					operations.push(updateFlowOperation);
-
-					const batchOp = sf.batchCall(operations);
-					const txUpdate = await batchOp.exec(signer, 2);
-
-					console.log('Flow updated successfully.', txUpdate);
-					setNotification('Flow updated successfully!');
-				} else {
-					console.log('Creating new flow...');
-					const createFlowOperation = newSuperToken.createFlow({
-						sender: address,
-						receiver: destinationAddress,
-						flowRate: flowRatePerSecondNew.toString(), // New flow rate
-					});
-					const flowTxResponse = await createFlowOperation.exec(
-						signer,
-						2,
-					);
-					await flowTxResponse.wait();
-					// operations.push(createFlowOperation);
-
-					// const batchOp = sf.batchCall(operations);
-					// const txCreate = await batchOp.exec(signer, 700);
-
-					console.log('Flow created successfully.', flowTxResponse);
-					setNotification('Flow created successfully!');
-				}
-			}
-		} catch (error) {
-			console.error('Error during approval or execution:', error);
-			setNotification(
-				'Transaction failed! Please check the console for details.',
-			);
-		}
-	};
+function WalletAddress({ wallet }: { wallet: any }) {
+	const [address, setAddress] = useState<string>('');
 
 	useEffect(() => {
-		const fetchTokens = async () => {
+		const getAddress = async () => {
 			try {
-				if (!window.ethereum) {
-					alert('MetaMask not detected');
-					return;
-				}
-
-				const provider = new ethers.providers.Web3Provider(
-					window.ethereum,
-				);
-				await provider.send('eth_requestAccounts', []);
-				const signer = provider.getSigner();
-				const address = await signer.getAddress();
-
-				const balances = await Promise.all(
-					TOKEN_ADDRESSES.map(async token => {
-						const contract = new ethers.Contract(
-							token.address,
-							[
-								// ERC20 ABI for balanceOf and decimals
-								'function balanceOf(address owner) view returns (uint256)',
-								'function decimals() view returns (uint8)',
-							],
-							provider,
-						);
-
-						const balance = await contract.balanceOf(address);
-						const decimals = await contract.decimals();
-
-						return {
-							name: token.name,
-							address: token.address,
-							balance: ethers.utils.formatUnits(
-								balance,
-								decimals,
-							),
-						};
-					}),
-				);
-
-				setTokens(balances);
-				setSelectedToken(balances[0]?.address || '');
-				setLoading(false);
+				const addr = await wallet.getChangeAddress();
+				setAddress(addr);
 			} catch (error) {
-				console.error('Error fetching tokens:', error);
-				alert('An error occurred while fetching tokens.');
+				console.error('Error getting address:', error);
 			}
 		};
 
-		fetchTokens();
+		if (wallet) {
+			getAddress();
+		}
+	}, [wallet]);
+
+	return <p>Address: {address}</p>;
+}
+
+function normalizeAmount(input: string): number {
+	// Replace comma with dot, trim spaces
+	const normalized = input.replace(',', '.').trim();
+	const value = Number(normalized);
+
+	if (isNaN(value) || value <= 0) {
+		throw new Error(`Invalid amount: "${input}"`);
+	}
+	return value;
+}
+
+function Inner() {
+	const [selectedWallet, setSelectedWallet] = useState<WalletInfo | null>(
+		null,
+	);
+
+	const [adaPrice, setAdaPrice] = useState<number | null>(null);
+	const [tokenList, setTokenList] = useState<any[]>([]);
+
+	const { connect, disconnect, connecting, connected, wallet } = useWallet();
+	const wallets = useWalletList();
+
+	// Connect user with selected wallet if it's stored in local storage
+	useEffect(() => {
+		const storedWallet = localStorage.getItem('selectedWallet');
+		if (storedWallet) {
+			setSelectedWallet(JSON.parse(storedWallet));
+			connect(JSON.parse(storedWallet).name);
+		}
+	}, [connect]);
+
+	// Connect user with selected wallet
+	const handleWalletSelection = (wallet: WalletInfo) => {
+		localStorage.setItem('selectedWallet', JSON.stringify(wallet));
+		setSelectedWallet(wallet);
+		connect(wallet.name);
+	};
+
+	// Disconnect wallet
+	const handleDisconnect = () => {
+		localStorage.removeItem('selectedWallet');
+		disconnect();
+		setSelectedWallet(null);
+	};
+
+	// Fetch user token list
+	useEffect(() => {
+		if (wallet && connected) {
+			const getWalletBalance = async () => {
+				const balance = await wallet.getBalance();
+
+				console.log({ balance });
+
+				if (balance) {
+					// Check if have token on the list
+					const tokenList = tokenDBList.find(
+						project => project.projectId === cardanoProjectId,
+					)?.tokenList;
+
+					// Update token price and populate token list
+					if (tokenList) {
+						const updatedTokenList: any[] = [];
+						for (const token of tokenList) {
+							// find token in wallet balance array
+							const balEntry = balance.find(
+								b => b.unit === token.unit,
+							);
+							const quantity = balEntry ? balEntry.quantity : '0';
+							const formattedQuantity = formatTokenQuantity(
+								quantity,
+								token.decimals,
+							);
+
+							if (token.unit === 'lovelace') {
+								updatedTokenList.push({
+									...token,
+									priceAda: 1,
+									quantity: formattedQuantity,
+									rawQuantity: quantity,
+								});
+							} else {
+								const tokenData =
+									await fetchTokenPriceInAdaMuesli(
+										token?.policyId || '',
+										token?.nameHex || '',
+									);
+								if (tokenData) {
+									updatedTokenList.push({
+										...token,
+										priceAda: tokenData,
+										quantity: formattedQuantity,
+										rawQuantity: quantity,
+									});
+								} else {
+									updatedTokenList.push({
+										...token,
+										priceAda: 0,
+										quantity: formattedQuantity,
+										rawQuantity: quantity,
+									});
+								}
+							}
+						}
+						setTokenList(updatedTokenList);
+					}
+				}
+			};
+			getWalletBalance();
+		}
+	}, [wallet, connected]);
+
+	// Fetch ada price only once
+	useEffect(() => {
+		const fetchAdaPrice = async () => {
+			const price = await getCoingeckoADAPrice();
+			setAdaPrice(price);
+		};
+		fetchAdaPrice();
 	}, []);
 
+	const handleDonation = async (e: React.FormEvent<HTMLFormElement>) => {
+		e.preventDefault();
+		const formData = new FormData(e.target as HTMLFormElement);
+		const fromAddress = formData.get('fromAddress') as string;
+		const toAddress = formData.get('toAddress') as string;
+		const amount = formData.get('amount') as string;
+		const tokenUnit = formData.get('token') as string;
+		console.log({ fromAddress, toAddress, amount, tokenUnit });
+
+		if (!wallet) {
+			console.error('Wallet not connected');
+			return;
+		}
+
+		try {
+			// Get sender address (payment address)
+			const address = await wallet.getChangeAddress();
+
+			const amountValue = normalizeAmount(amount);
+
+			console.log({ amountValue });
+
+			if (amountValue < MIN_ADA && tokenUnit === 'lovelace') {
+				alert(
+					`Amount must be at least ${MIN_ADA} ADA due to min-ADA requirement`,
+				);
+				return;
+			}
+
+			// Build transaction
+			const tx = new Transaction({ initiator: wallet });
+
+			if (tokenUnit === 'lovelace') {
+				console.log('ADA transfer');
+				// ADA transfer: convert ADA → lovelace (1 ADA = 1,000,000 lovelace)
+				tx.sendLovelace(
+					toAddress,
+					String(BigInt(Number(amountValue) * 1_000_000)),
+				);
+			} else {
+				// Token transfer
+				tx.sendAssets(toAddress, [
+					{
+						unit: tokenUnit,
+						quantity: String(amountValue), // must be in token's smallest unit
+					},
+				]);
+			}
+
+			// Submit transaction
+			const unsignedTx = await tx.build();
+			const signedTx = await wallet.signTx(unsignedTx);
+			const txHash = await wallet.submitTx(signedTx);
+
+			console.log('Transaction submitted:', txHash);
+			alert(`✅ Transaction submitted: ${txHash}`);
+		} catch (err) {
+			console.error('Transaction failed', err);
+			alert('❌ Transaction failed: ' + err);
+		}
+	};
+
 	return (
-		<div style={{ textAlign: 'center', marginTop: '50px' }}>
-			<h1>Approve and Execute {amount} USDC</h1>
-			<h3>
-				Network ID: {BASE_CHAIN_ID} <em>Optimism Network</em>
-			</h3>
-			<h3>
-				Transaction to wallet: {destinationAddress}
-				<em>Giveth House</em>
-			</h3>
-			<div>
-				<h3>Select a Token</h3>
-				{loading ? (
-					<p>Loading tokens...</p>
+		<div style={{ textAlign: 'center', marginTop: 50 }}>
+			<h1>TEST CARDANO</h1>
+			<hr />
+			<SelectedWallet>
+				{selectedWallet ? (
+					<div>
+						<span>{selectedWallet.name}</span>
+					</div>
 				) : (
-					<select
-						value={selectedToken}
-						onChange={e => setSelectedToken(e.target.value)}
-						style={{ padding: '10px 20px' }}
-					>
-						{tokens.map(token => (
-							<option key={token.address} value={token.address}>
-								{token.name} - ${token.balance} -{' '}
-								{token.address}
-							</option>
+					<h2>Select a wallet</h2>
+				)}
+			</SelectedWallet>
+			<SelectWallets>
+				{!selectedWallet && !connecting && (
+					<ul>
+						{wallets.map(wallet => (
+							<li
+								key={wallet.name}
+								onClick={() => handleWalletSelection(wallet)}
+							>
+								<span>{wallet.name}</span>
+							</li>
 						))}
-					</select>
+					</ul>
+				)}
+			</SelectWallets>
+			<div>
+				{!connected && <p>Not connected</p>}
+				{connected && <p>Connected</p>}
+				{connected && wallet && <WalletAddress wallet={wallet} />}
+				{connected && (
+					<BlueButton onClick={() => handleDisconnect()}>
+						Disconnect
+					</BlueButton>
 				)}
 			</div>
-			<br />
-			<div>
-				<h3>Enter Amount</h3>
-				<input
-					type='text'
-					value={amount}
-					onChange={e => setAmount(e.target.value)}
-					style={{ padding: '10px', width: '200px' }}
-				/>
-			</div>
-			<br />
-			<div>
-				<h3>Destination Address</h3>
-				<input
-					type='text'
-					value={destinationAddress}
-					onChange={e => setDestinationAddress(e.target.value)}
-					style={{ padding: '10px', width: '500px' }}
-				/>
-			</div>
-			<br />
-			<button
-				onClick={handleApproveAndExecute}
-				style={{ padding: '10px 20px' }}
-			>
-				Approve & Execute
-			</button>
-			{notification && (
-				<div
-					style={{
-						position: 'fixed',
-						bottom: '10px',
-						right: '10px',
-						backgroundColor: '#4caf50',
-						color: 'white',
-						padding: '15px',
-						borderRadius: '5px',
-						boxShadow: '0 0 10px rgba(0,0,0,0.2)',
-					}}
-				>
-					{notification}
+			{connected && (
+				<div>
+					<hr />
+					<h2>Wallet Balance and token list</h2>
+					<div>
+						{tokenList.map((token: any) => (
+							<TokenItem key={token.name}>
+								<p>Token Name: {token.name}</p>
+								<p>Token Price: {token.priceAda} ADA</p>
+								<p>Token Quantity: {token.quantity}</p>
+								<p>Token Raw Quantity: {token.rawQuantity}</p>
+								<p>Token Decimals: {token.decimals}</p>
+								<p>
+									Token USD Value:{' '}
+									{(
+										token.priceAda *
+										token.quantity *
+										(adaPrice || 0)
+									).toFixed(2)}{' '}
+									USD
+								</p>
+							</TokenItem>
+						))}
+					</div>
+				</div>
+			)}
+			{connected && (
+				<div>
+					<hr />
+					<h2>Make donation with Cardano</h2>
+					<FormHolder onSubmit={handleDonation}>
+						<InputHolder
+							type='text'
+							name='fromAddress'
+							placeholder='Project ID'
+							readOnly
+							value={cardanoProjectId}
+						/>
+						<SelectHolder name='token' id='token'>
+							{tokenList.map(token => (
+								<option key={token.name} value={token.unit}>
+									{token.name} - {token.priceAda} ADA -{' '}
+									{token.quantity}
+								</option>
+							))}
+						</SelectHolder>
+						<InputHolder
+							type='text'
+							name='amount'
+							placeholder='Amount'
+						/>
+						<InputHolder
+							type='text'
+							name='toAddress'
+							placeholder='toAddress'
+							value='addr1q9ute9k2xxkpqfy4pdljet3nh48zm6c3yfjcdkj0htuapsdwjzm36z25ndrmvxr990m76279jq7zeu50k3lgasjds9ts447s0a'
+						/>
+						<DonateButton type='submit'>Donate</DonateButton>
+					</FormHolder>
 				</div>
 			)}
 		</div>
 	);
-};
+}
 
-export default YourApp;
+export default function YourApp() {
+	return (
+		<MeshProvider>
+			<Inner />
+		</MeshProvider>
+	);
+}
+
+export const SelectWallets = styled.div`
+	margin: 10px;
+	border: none;
+	padding: 10px 20px;
+	font-size: 1rem;
+	border-radius: 6px;
+	cursor: pointer;
+	transition: background-color 0.2s ease;
+
+	ul {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
+		gap: 10px;
+		list-style: none;
+		padding: 0;
+		margin: 0;
+		li {
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			gap: 10px;
+			flex-direction: column;
+			font-size: 1.8rem;
+			border: 1px solid #000;
+			padding: 10px;
+			border-radius: 6px;
+			cursor: pointer;
+			transition: background-color 0.2s ease;
+			&:hover {
+				color: white;
+				background-color: #005bb5;
+			}
+		}
+	}
+`;
+
+export const SelectedWallet = styled.div`
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: 10px;
+
+	div {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		gap: 10px;
+		border: 1px solid #000;
+		padding: 10px;
+		border-radius: 6px;
+	}
+`;
+
+export const BlueButton = styled.button`
+	display: inline-block;
+	margin: 10px;
+	background-color: #0070f3; /* blue */
+	color: white;
+	border: none;
+	padding: 10px 20px;
+	font-size: 1rem;
+	border-radius: 6px;
+	cursor: pointer;
+	transition: background-color 0.2s ease;
+
+	&:hover {
+		background-color: #005bb5; /* darker blue on hover */
+	}
+
+	&:disabled {
+		background-color: #a0c4ff;
+		cursor: not-allowed;
+	}
+`;
+
+export const TokenItem = styled.div`
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	justify-content: center;
+	gap: 10px;
+	margin: 10px;
+	border: 1px solid #000;
+	padding: 10px;
+	border-radius: 6px;
+
+	p {
+		width: 30%;
+		text-align: left;
+	}
+`;
+
+export const FormHolder = styled.form`
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	gap: 10px;
+	margin: 10px 15em;
+`;
+
+export const InputHolder = styled.input`
+	width: 100%;
+	padding: 10px;
+	border: 1px solid #000;
+	border-radius: 6px;
+`;
+
+export const SelectHolder = styled.select`
+	width: 100%;
+	padding: 10px;
+	border: 1px solid #000;
+	border-radius: 6px;
+`;
+
+export const DonateButton = styled.button`
+	width: 100%;
+	padding: 10px;
+	border: 1px solid #000;
+	border-radius: 6px;
+`;

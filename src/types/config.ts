@@ -293,6 +293,7 @@ export enum ChainType {
 	SOLANA = 'SOLANA',
 	EVM = 'EVM',
 	STELLAR = 'STELLAR',
+	CARDANO = 'CARDANO',
 }
 
 export interface IChainType {
