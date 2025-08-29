@@ -7,6 +7,7 @@ import { IOnTxHash } from '@/services/donation';
 import { client } from '@/apollo/apolloClient';
 import { CREATE_CAUSE_DONATION } from '@/apollo/gql/gqlDonations';
 import { SENTRY_URGENT } from '@/configuration';
+import { IQFRound } from '@/apollo/types/types';
 
 const NATIVE_TOKEN_ADDRESS = '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee';
 const ZERO_ADDRESS = '0x0000000000000000000000000000000000000000';
@@ -294,4 +295,47 @@ const createCauseDonation = async (props: IOnTxHash) => {
 	}
 
 	return donationId;
+};
+
+/**
+ * Smart QF round selection
+ *
+ * Smart Select: highest matching pool → earliest end date → lowest priority
+ *
+ * 1. Highest matching pool
+ * 2. Earliest end date
+ * 3. Lowest priority
+ *
+ * @param QFRounds - The QF rounds
+ * @param chainId - The chain ID
+ *
+ * @returns the smart QF round or null if no round is found
+ */
+export const smartQFRoundSelection = (
+	QFRounds: IQFRound[],
+	chainId: number,
+) => {
+	const activeRounds = QFRounds.filter(
+		round => round.isActive && round.eligibleNetworks.includes(chainId),
+	);
+
+	// Get the highest matching pool
+	activeRounds.reduce((max, round) => {
+		return round.eligibleNetworks.length > max.eligibleNetworks.length
+			? round
+			: max;
+	}, activeRounds[0]);
+
+	// Get the earliest end date
+	activeRounds.reduce((min, round) => {
+		return new Date(round.endDate) < new Date(min.endDate) ? round : min;
+	}, activeRounds[0]);
+
+	// Get the lowest priority
+	// MISSSING PRIORITY
+	// activeRounds.reduce((min, round) => {
+	// 	return round.priority < min.priority ? round : min;
+	// }, activeRounds[0]);
+
+	return null;
 };

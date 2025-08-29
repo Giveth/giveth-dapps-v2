@@ -1,17 +1,18 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import {
 	B,
 	P,
 	neutralColors,
+	semanticColors,
 	Flex,
 	IconChevronDown24,
-	IconChevronUp24,
 	brandColors,
 } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
 import { IProject } from '@/apollo/types/types';
 import { QFRoundsModal } from '@/components/views/donate/DonationCardQFRounds/QFRoundsModal';
+import { smartQFRoundSelection } from '../../donateCause/helpers';
 
 export interface IQFRound {
 	id: string;
@@ -26,7 +27,13 @@ export interface IQFRound {
 	eligibleNetworks: number[];
 }
 
-export const DonationCardQFRounds = ({ project }: { project: IProject }) => {
+export const DonationCardQFRounds = ({
+	project,
+	chainId,
+}: {
+	project: IProject;
+	chainId: number;
+}) => {
 	const { formatMessage } = useIntl();
 	console.log('project', project.qfRounds?.[0]);
 	const [selectedRound, setSelectedRound] = useState<IQFRound>(
@@ -43,7 +50,18 @@ export const DonationCardQFRounds = ({ project }: { project: IProject }) => {
 			eligibleNetworks: [],
 		},
 	);
-	const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+
+	// Set up default QF round
+	useEffect(() => {
+		const smartRound = smartQFRoundSelection(
+			project.qfRounds || [],
+			chainId,
+		);
+		if (smartRound) {
+			setSelectedRound(smartRound);
+		}
+	}, [project.qfRounds, chainId]);
+
 	const [showQFRoundModal, setShowQFRoundModal] = useState(false);
 
 	const handleRoundSelect = (round: IQFRound) => {
@@ -64,10 +82,10 @@ export const DonationCardQFRounds = ({ project }: { project: IProject }) => {
 				</Title>
 				<DropdownContainer>
 					<DropdownButton onClick={() => setShowQFRoundModal(true)}>
-						<Flex $alignItems='center' $gap='8px'>
+						<FlexWrapper>
 							<RoundName>{selectedRound.name}</RoundName>
 							<SmartSelectBadge>Smart Select</SmartSelectBadge>
-						</Flex>
+						</FlexWrapper>
 						<IconWrapper>
 							<IconChevronDown24 />
 						</IconWrapper>
@@ -115,14 +133,19 @@ const DropdownButton = styled.div`
 	}
 `;
 
+const FlexWrapper = styled(Flex)`
+	align-items: center;
+	gap: 8px;
+`;
+
 const RoundName = styled(P)`
 	font-weight: 600;
 	color: ${neutralColors.gray[900]};
 `;
 
 const SmartSelectBadge = styled.span`
-	background: ${brandColors.cyan[500]};
-	color: white;
+	background: ${semanticColors.jade[200]};
+	color: ${semanticColors.jade[700]};
 	padding: 4px 8px;
 	border-radius: 6px;
 	font-size: 12px;

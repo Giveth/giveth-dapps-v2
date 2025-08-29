@@ -16,6 +16,7 @@ import { isAddress } from 'viem';
 import { captureException } from '@sentry/nextjs';
 import Image from 'next/image';
 
+import { useAccount } from 'wagmi';
 import { Shadow } from '@/components/styled-components/Shadow';
 import { RecurringDonationCard } from './Recurring/RecurringDonationCard';
 import OneTimeDonationCard from '@/components/views/donate/OneTime/OneTimeDonationCard';
@@ -49,6 +50,7 @@ export const DonationCard: FC<IDonationCardProps> = ({
 	setShowQRCode,
 }) => {
 	const router = useRouter();
+	const { chainId } = useAccount();
 	const [tab, setTab] = useState(
 		router.query.tab === ETabs.RECURRING ? ETabs.RECURRING : ETabs.ONE_TIME,
 	);
@@ -152,7 +154,10 @@ export const DonationCard: FC<IDonationCardProps> = ({
 				)}
 			/>
 			<DonationCardWrapper>
-				<DonationCardQFRounds project={project} />
+				<DonationCardQFRounds
+					project={project}
+					chainId={chainId || 0}
+				/>
 				{!isQRDonation ? (
 					<>
 						{hasStellarAddress && (
