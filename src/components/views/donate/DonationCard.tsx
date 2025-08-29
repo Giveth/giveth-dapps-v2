@@ -15,6 +15,7 @@ import { useRouter } from 'next/router';
 import { isAddress } from 'viem';
 import { captureException } from '@sentry/nextjs';
 import Image from 'next/image';
+
 import { Shadow } from '@/components/styled-components/Shadow';
 import { RecurringDonationCard } from './Recurring/RecurringDonationCard';
 import OneTimeDonationCard from '@/components/views/donate/OneTime/OneTimeDonationCard';
@@ -31,6 +32,7 @@ import {
 	IProjectAcceptedTokensGQL,
 } from '@/apollo/types/gqlTypes';
 import { DonationCardTabs } from '@/components/views/donate/DonationCardTabs';
+import { DonationCardQFRounds } from '@/components/views/donate/DonationCardQFRounds/DonationCardQFRounds';
 
 export enum ETabs {
 	ONE_TIME = 'one-time',
@@ -55,6 +57,8 @@ export const DonationCard: FC<IDonationCardProps> = ({
 	);
 	const { project } = useDonateData();
 	const { formatMessage } = useIntl();
+
+	console.log('project', project);
 
 	const { addresses, organization, id: projectId } = project;
 	const hasOpAddress =
@@ -148,6 +152,7 @@ export const DonationCard: FC<IDonationCardProps> = ({
 				)}
 			/>
 			<DonationCardWrapper>
+				<DonationCardQFRounds project={project} />
 				{!isQRDonation ? (
 					<>
 						{hasStellarAddress && (
