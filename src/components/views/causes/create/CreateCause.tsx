@@ -106,11 +106,6 @@ const CreateCause: FC<ICreateCauseProps> = () => {
 				id: 'error.cause_description_required',
 			});
 		}
-		if (!formDataWatch.categories?.length) {
-			formErrors.categories = formatMessage({
-				id: 'label.cause.categories_required',
-			});
-		}
 
 		// Step 2 validation (Select Projects)
 		if (
