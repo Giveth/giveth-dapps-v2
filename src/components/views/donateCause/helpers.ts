@@ -315,9 +315,12 @@ export const smartQFRoundSelection = (
 	QFRounds: IQFRound[],
 	chainId: number,
 ) => {
+	console.log('QFRounds', QFRounds);
 	const activeRounds = QFRounds.filter(
 		round => round.isActive && round.eligibleNetworks.includes(chainId),
 	);
+
+	console.log('activeRounds', activeRounds);
 
 	// Get the highest matching pool
 	activeRounds.reduce((max, round) => {

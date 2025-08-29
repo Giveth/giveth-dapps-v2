@@ -74,6 +74,8 @@ export const DonationCardQFRounds = ({
 		return null;
 	}
 
+	console.log('selectedRound', selectedRound);
+
 	return (
 		<>
 			<Container>
@@ -83,7 +85,11 @@ export const DonationCardQFRounds = ({
 				<DropdownContainer>
 					<DropdownButton onClick={() => setShowQFRoundModal(true)}>
 						<FlexWrapper>
-							<RoundName>{selectedRound.name}</RoundName>
+							<RoundName>
+								{selectedRound
+									? selectedRound.name
+									: 'No QF round found'}
+							</RoundName>
 							<SmartSelectBadge>Smart Select</SmartSelectBadge>
 						</FlexWrapper>
 						<IconWrapper>
