@@ -298,6 +298,16 @@ const createCauseDonation = async (props: IOnTxHash) => {
 };
 
 /**
+ * Get the active QF rounds
+ *
+ * @param QFRounds - The QF rounds
+ * @returns the active QF rounds
+ */
+export const getActiveQFRounds = (QFRounds: IQFRound[]) => {
+	return QFRounds.filter(round => round.isActive);
+};
+
+/**
  * Smart QF round selection
  *
  * Smart Select: highest matching pool → earliest end date → lowest priority

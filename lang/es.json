@@ -1988,5 +1988,7 @@
 	"label.transaction_successful": "Transacción realizada!",
 	"label.qf.select_qf_round": "Selecciona la ronda de QF",
 	"label.qf.smart_select": "Selecciona automáticamente",
-	"label.qf.select_a_round": "Selecciona una ronda"
+	"label.qf.select_a_round": "Selecciona una ronda",
+	"label.qf.project_in_round": "<project>Nombre del proyecto</project> está en <number>1</number> ronda(s) de QF.",
+	"label.qf.matching_pool": "Pool de Matching"
 }

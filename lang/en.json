@@ -1988,5 +1988,7 @@
 	"label.transaction_successful": "Transaction Successful!",
 	"label.qf.select_qf_round": "Select QF Round",
 	"label.qf.smart_select": "Smart Select",
-	"label.qf.select_a_round": "Select a round"
+	"label.qf.select_a_round": "Select a round to get your donation matched",
+	"label.qf.project_in_round": "<project>Project name</project> is in <number>1</number> QF round(s).",
+	"label.qf.matching_pool": "Matching Pool"
 }

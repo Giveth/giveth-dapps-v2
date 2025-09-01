@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import { useIntl } from 'react-intl';
+import { FormattedMessage, useIntl } from 'react-intl';
 import {
 	B,
 	P,
@@ -14,6 +14,9 @@ import { useModalAnimation } from '@/hooks/useModalAnimation';
 import { Modal } from '@/components/modals/Modal';
 import { IQFRound } from '@/components/views/donate/DonationCardQFRounds/DonationCardQFRounds';
 import { IProject } from '@/apollo/types/types';
+import { IconWithTooltip } from '@/components/IconWithToolTip';
+import config from '@/configuration';
+import { formatDonation } from '@/helpers/number';
 
 interface IQFRoundModalProps extends IModal {
 	QFRounds: IQFRound[];
@@ -30,8 +33,8 @@ export const QFRoundsModal = ({
 	onRoundSelect,
 	selectedRound,
 }: IQFRoundModalProps) => {
+	const { formatMessage, locale } = useIntl();
 	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
-	const { formatMessage } = useIntl();
 	const [currentSelected, setCurrentSelected] = useState<IQFRound | null>(
 		selectedRound || null,
 	);
@@ -42,30 +45,24 @@ export const QFRoundsModal = ({
 		closeModal();
 	};
 
-	const formatCurrency = (amount: number) => {
-		return new Intl.NumberFormat('en-US', {
-			style: 'currency',
-			currency: 'USD',
-			minimumFractionDigits: 0,
-			maximumFractionDigits: 0,
-		}).format(amount);
-	};
-
 	const getNetworkIcons = (eligibleNetworks: number[]) => {
-		// Mock network icons - replace with actual network icon mapping
-		const networkIconMap: { [key: number]: string } = {
-			1: '🔷', // Ethereum
-			10: '🔴', // Optimism
-			42161: '🔵', // Arbitrum
-			8453: '🟦', // Base
-			100: '🟢', // Gnosis
-			137: '🟣', // Polygon
-		};
-
 		return eligibleNetworks.map(networkId => (
-			<NetworkIcon key={networkId}>
-				{networkIconMap[networkId] || '🌐'}
-			</NetworkIcon>
+			<IconWithTooltip
+				icon={
+					<TooltipIconWrapper>
+						{config.NETWORKS_CONFIG_WITH_ID[networkId]?.chainLogo(
+							24,
+						)}
+					</TooltipIconWrapper>
+				}
+				direction='top'
+				align='top'
+				key={networkId}
+			>
+				<SublineBold>
+					{config.NETWORKS_CONFIG_WITH_ID[networkId]?.name}
+				</SublineBold>
+			</IconWithTooltip>
 		));
 	};
 
@@ -79,9 +76,17 @@ export const QFRoundsModal = ({
 			>
 				<ModalContent>
 					<Description>
-						<ProjectName>&lt;{project.title}&gt;</ProjectName> is in{' '}
-						<RoundCount>&lt; x &gt;</RoundCount> QF round(s). Select
-						the round you want to donate in.
+						<FormattedMessage
+							id='label.qf.project_in_round'
+							values={{
+								project: () => (
+									<ProjectName>{project.title}</ProjectName>
+								),
+								number: () => (
+									<RoundCount>{QFRounds.length}</RoundCount>
+								),
+							}}
+						/>
 					</Description>
 
 					<RoundsGrid>
@@ -94,22 +99,36 @@ export const QFRoundsModal = ({
 								<RoundHeader>
 									<RoundTitle>{round.name}</RoundTitle>
 									{currentSelected?.id === round.id && (
-										<SelectedBadge>Selected</SelectedBadge>
+										<SelectedBadge>
+											{formatMessage({
+												id: 'label.selected',
+											})}
+										</SelectedBadge>
 									)}
 								</RoundHeader>
 
 								<RoundInfo>
 									<InfoRow>
-										<InfoLabel>Matching Pool</InfoLabel>
+										<InfoLabel>
+											{formatMessage({
+												id: 'label.matching_pool',
+											})}
+										</InfoLabel>
 										<InfoValue>
-											{formatCurrency(
+											{formatDonation(
 												round.allocatedFundUSD,
+												'$',
+												locale,
 											)}
 										</InfoValue>
 									</InfoRow>
 
 									<InfoRow>
-										<InfoLabel>Eligible Networks</InfoLabel>
+										<InfoLabel>
+											{formatMessage({
+												id: 'label.qf.eligible_networks',
+											})}
+										</InfoLabel>
 										<NetworkIcons>
 											{getNetworkIcons(
 												round.eligibleNetworks,
@@ -133,9 +152,12 @@ const ModalContent = styled.div`
 `;
 
 const Description = styled(P)`
+	margin-top: 4px;
+	padding: 30px 0 15px 0;
+	border-top: 1px solid ${neutralColors.gray[300]};
 	color: ${neutralColors.gray[700]};
 	margin-bottom: 24px;
-	text-align: center;
+	text-align: left;
 `;
 
 const ProjectName = styled.span`
@@ -150,13 +172,13 @@ const RoundCount = styled.span`
 
 const RoundsGrid = styled.div`
 	display: grid;
-	grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+	grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
 	gap: 16px;
-	max-width: 100%;
+	max-width: calc(380px * 3 + 32px); /* 3 cols + gaps */
 `;
 
 const RoundCard = styled.div<{ $isSelected: boolean }>`
-	padding: 20px;
+	padding: 12px;
 	border: 1px solid
 		${props =>
 			props.$isSelected ? brandColors.giv[500] : neutralColors.gray[300]};
@@ -172,10 +194,13 @@ const RoundCard = styled.div<{ $isSelected: boolean }>`
 `;
 
 const RoundHeader = styled.div`
+	padding: 0 0 6px 0;
 	margin-bottom: 16px;
 	display: flex;
 	justify-content: space-between;
 	align-items: flex-start;
+	text-align: left;
+	border-bottom: 1px solid ${neutralColors.gray[300]};
 `;
 
 const RoundTitle = styled(B)`
@@ -200,30 +225,36 @@ const RoundInfo = styled.div`
 `;
 
 const InfoRow = styled(Flex)`
+	flex-wrap: wrap;
 	justify-content: space-between;
 	align-items: center;
 `;
 
 const InfoLabel = styled(SublineBold)`
 	color: ${neutralColors.gray[600]};
+	font-size: 16px;
+	font-weight: 400;
 `;
 
-const InfoValue = styled(SublineBold)`
+const InfoValue = styled(B)`
 	color: ${neutralColors.gray[900]};
+	font-size: 16px;
 `;
 
 const NetworkIcons = styled(Flex)`
-	gap: 4px;
-	align-items: center;
+	width: 100%;
+	margin-top: 4px;
+	display: flex;
+	flex-wrap: wrap;
+	max-width: 100%;
+	max-height: 100%;
 `;
 
-const NetworkIcon = styled.span`
-	width: 20px;
-	height: 20px;
-	border-radius: 50%;
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	font-size: 12px;
-	background: ${neutralColors.gray[100]};
+const TooltipIconWrapper = styled.div`
+	margin-right: 4px;
+	filter: grayscale(100%);
+
+	&:hover {
+		filter: grayscale(0%);
+	}
 `;

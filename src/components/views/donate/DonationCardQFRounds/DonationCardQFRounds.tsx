@@ -12,7 +12,10 @@ import {
 import { useIntl } from 'react-intl';
 import { IProject } from '@/apollo/types/types';
 import { QFRoundsModal } from '@/components/views/donate/DonationCardQFRounds/QFRoundsModal';
-import { smartQFRoundSelection } from '../../donateCause/helpers';
+import {
+	getActiveQFRounds,
+	smartQFRoundSelection,
+} from '../../donateCause/helpers';
 
 export interface IQFRound {
 	id: string;
@@ -35,7 +38,7 @@ export const DonationCardQFRounds = ({
 	chainId: number;
 }) => {
 	const { formatMessage } = useIntl();
-	console.log('project', project.qfRounds?.[0]);
+	const activeQFRounds = getActiveQFRounds(project.qfRounds || []);
 	const [selectedRound, setSelectedRound] = useState<IQFRound>({
 		id: '',
 		name: '',
@@ -51,14 +54,11 @@ export const DonationCardQFRounds = ({
 
 	// Set up default QF round
 	useEffect(() => {
-		const smartRound = smartQFRoundSelection(
-			project.qfRounds || [],
-			chainId,
-		);
+		const smartRound = smartQFRoundSelection(activeQFRounds || [], chainId);
 		if (smartRound) {
 			setSelectedRound(smartRound);
 		}
-	}, [project.qfRounds, chainId]);
+	}, [activeQFRounds, chainId]);
 
 	const [showQFRoundModal, setShowQFRoundModal] = useState(false);
 
@@ -68,7 +68,7 @@ export const DonationCardQFRounds = ({
 	};
 
 	// Return nothing if there are no QF rounds
-	if (!project.qfRounds || project.qfRounds.length === 0) {
+	if (!activeQFRounds || activeQFRounds.length === 0) {
 		return null;
 	}
 
