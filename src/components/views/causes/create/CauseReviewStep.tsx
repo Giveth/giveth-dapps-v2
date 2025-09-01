@@ -63,7 +63,6 @@ export const CauseReviewStep = ({
 	if (
 		!getValues('title') ||
 		!getValues('description') ||
-		!getValues('categories') ||
 		!getValues('selectedProjects')
 	) {
 		onPrevious();
@@ -140,7 +139,6 @@ export const CauseReviewStep = ({
 	const title = getValues('title');
 	const description = getValues('description');
 	const image = getValues('image');
-	const categories = getValues('categories');
 	const selectedProjects = getValues('selectedProjects');
 
 	// Get transaction status
@@ -170,8 +168,6 @@ export const CauseReviewStep = ({
 		if (
 			!title ||
 			!description ||
-			!categories ||
-			categories.length === 0 ||
 			!selectedProjects ||
 			selectedProjects.length <
 				config.CAUSES_CONFIG.minSelectedProjects ||
@@ -179,7 +175,7 @@ export const CauseReviewStep = ({
 		) {
 			onPrevious();
 		}
-	}, [title, description, categories, selectedProjects, onPrevious]);
+	}, [title, description, selectedProjects, onPrevious]);
 
 	const changeUserWalletNetwork = (networkId: number) => {
 		switchChain({ chainId: networkId });
@@ -190,8 +186,6 @@ export const CauseReviewStep = ({
 		if (
 			!title ||
 			!description ||
-			!categories ||
-			categories.length === 0 ||
 			!selectedProjects ||
 			selectedProjects.length <
 				config.CAUSES_CONFIG.minSelectedProjects ||
@@ -543,8 +537,6 @@ export const CauseReviewStep = ({
 						!title?.trim() ||
 						!isValid ||
 						!description?.trim() ||
-						!categories ||
-						categories.length === 0 ||
 						selectedProjects?.length <
 							config.CAUSES_CONFIG.minSelectedProjects ||
 						selectedProjects?.length >
