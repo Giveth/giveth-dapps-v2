@@ -30,6 +30,19 @@ export interface IQFRound {
 	eligibleNetworks: number[];
 }
 
+const EmptyRound: IQFRound = {
+	id: '',
+	name: '',
+	isActive: false,
+	beginDate: '',
+	endDate: '',
+	maximumReward: 0,
+	allocatedTokenSymbol: '',
+	allocatedFundUSDPreferred: false,
+	allocatedFundUSD: 0,
+	eligibleNetworks: [],
+};
+
 export const DonationCardQFRounds = ({
 	project,
 	chainId,
@@ -39,24 +52,15 @@ export const DonationCardQFRounds = ({
 }) => {
 	const { formatMessage } = useIntl();
 	const activeQFRounds = getActiveQFRounds(project.qfRounds || []);
-	const [selectedRound, setSelectedRound] = useState<IQFRound>({
-		id: '',
-		name: '',
-		isActive: false,
-		beginDate: '',
-		endDate: '',
-		maximumReward: 0,
-		allocatedTokenSymbol: '',
-		allocatedFundUSDPreferred: false,
-		allocatedFundUSD: 0,
-		eligibleNetworks: [],
-	});
+	const [selectedRound, setSelectedRound] = useState<IQFRound>(EmptyRound);
 
 	// Set up default QF round
 	useEffect(() => {
 		const smartRound = smartQFRoundSelection(activeQFRounds || [], chainId);
 		if (smartRound) {
 			setSelectedRound(smartRound);
+		} else {
+			setSelectedRound(EmptyRound);
 		}
 	}, [activeQFRounds, chainId]);
 
@@ -106,9 +110,10 @@ export const DonationCardQFRounds = ({
 			</Container>
 			{showQFRoundModal && (
 				<QFRoundsModal
-					QFRounds={project.qfRounds}
+					QFRounds={activeQFRounds}
 					setShowModal={setShowQFRoundModal}
 					project={project}
+					selectedRound={selectedRound}
 				/>
 			)}
 		</>

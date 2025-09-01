@@ -325,24 +325,25 @@ export const smartQFRoundSelection = (
 	QFRounds: IQFRound[],
 	chainId: number,
 ) => {
-	console.log('QFRounds', QFRounds);
-	const activeRounds = QFRounds.filter(
+	console.log('smartQFRounds', QFRounds);
+	console.log('chainId', chainId);
+	const matchedRounds = QFRounds.filter(
 		round => round.isActive && round.eligibleNetworks.includes(chainId),
 	);
 
-	console.log('activeRounds', activeRounds);
+	console.log('matchedRounds', matchedRounds);
 
 	// Get the highest matching pool
-	activeRounds.reduce((max, round) => {
+	matchedRounds.reduce((max, round) => {
 		return round.eligibleNetworks.length > max.eligibleNetworks.length
 			? round
 			: max;
-	}, activeRounds[0]);
+	}, matchedRounds[0]);
 
 	// Get the earliest end date
-	activeRounds.reduce((min, round) => {
+	matchedRounds.reduce((min, round) => {
 		return new Date(round.endDate) < new Date(min.endDate) ? round : min;
-	}, activeRounds[0]);
+	}, matchedRounds[0]);
 
 	// Get the lowest priority
 	// MISSSING PRIORITY
@@ -350,5 +351,11 @@ export const smartQFRoundSelection = (
 	// 	return round.priority < min.priority ? round : min;
 	// }, activeRounds[0]);
 
+	// Last default option return first one
+	if (matchedRounds.length > 0) {
+		return matchedRounds[0];
+	}
+
+	console.log('no matched rounds');
 	return null;
 };

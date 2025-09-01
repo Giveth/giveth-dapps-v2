@@ -1990,5 +1990,5 @@
 	"label.qf.smart_select": "Selecciona automáticamente",
 	"label.qf.select_a_round": "Selecciona una ronda",
 	"label.qf.project_in_round": "<project>Nombre del proyecto</project> está en <number>1</number> ronda(s) de QF.",
-	"label.qf.matching_pool": "Pool de Matching"
+	"label.qf.eligible_networks": "Redes Eligibles"
 }

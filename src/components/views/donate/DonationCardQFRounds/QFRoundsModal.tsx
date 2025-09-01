@@ -46,6 +46,7 @@ export const QFRoundsModal = ({
 	};
 
 	const getNetworkIcons = (eligibleNetworks: number[]) => {
+		console.log('eligibleNetworks', eligibleNetworks);
 		return eligibleNetworks.map(networkId => (
 			<IconWithTooltip
 				icon={
