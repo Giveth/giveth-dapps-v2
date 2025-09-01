@@ -6,6 +6,7 @@
  *
  */
 
+import styled from 'styled-components';
 import {
 	$createLinkNode,
 	$isAutoLinkNode,
@@ -32,7 +33,6 @@ import {
 import { Dispatch, useCallback, useEffect, useRef, useState } from 'react';
 import * as React from 'react';
 import { createPortal } from 'react-dom';
-import styles from './index.module.css';
 
 import { getSelectedNode } from '../../utils/getSelectedNode';
 import { setFloatingElemPositionForLinkEditor } from '../../utils/setFloatingElemPositionForLinkEditor';
@@ -288,12 +288,12 @@ function FloatingLinkEditor({
 	};
 
 	return (
-		<div ref={editorRef} className={styles['link-editor']}>
+		<LinkEditor ref={editorRef} className='link-editor'>
 			{!isLink ? null : isLinkEditMode ? (
 				<>
 					<input
 						ref={inputRef}
-						className={styles['link-input']}
+						className='link-input'
 						value={editedLinkUrl}
 						onChange={event => {
 							setEditedLinkUrl(event.target.value);
@@ -304,7 +304,7 @@ function FloatingLinkEditor({
 					/>
 					<div>
 						<div
-							className={styles['link-cancel']}
+							className='link-cancel'
 							role='button'
 							tabIndex={0}
 							onMouseDown={preventDefault}
@@ -314,7 +314,7 @@ function FloatingLinkEditor({
 						/>
 
 						<div
-							className={styles['link-confirm']}
+							className='link-confirm'
 							role='button'
 							tabIndex={0}
 							onMouseDown={preventDefault}
@@ -323,7 +323,7 @@ function FloatingLinkEditor({
 					</div>
 				</>
 			) : (
-				<div className={styles['link-view']}>
+				<div className='link-view'>
 					<a
 						href={sanitizeUrl(linkUrl)}
 						target='_blank'
@@ -332,7 +332,7 @@ function FloatingLinkEditor({
 						{linkUrl}
 					</a>
 					<div
-						className={styles['link-edit']}
+						className='link-edit'
 						role='button'
 						tabIndex={0}
 						onMouseDown={preventDefault}
@@ -343,7 +343,7 @@ function FloatingLinkEditor({
 						}}
 					/>
 					<div
-						className={styles['link-trash']}
+						className='link-trash'
 						role='button'
 						tabIndex={0}
 						onMouseDown={preventDefault}
@@ -353,7 +353,7 @@ function FloatingLinkEditor({
 					/>
 				</div>
 			)}
-		</div>
+		</LinkEditor>
 	);
 }
 
@@ -489,3 +489,146 @@ export default function FloatingLinkEditorPlugin({
 		setIsLinkEditMode,
 	);
 }
+
+const LinkEditor = styled.div`
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	position: absolute;
+	top: 0;
+	left: 0;
+	z-index: 10;
+	max-width: 400px;
+	width: 100%;
+	opacity: 0;
+	background-color: #fff;
+	box-shadow: 0 5px 10px rgba(0, 0, 0, 0.3);
+	border-radius: 0 0 8px 8px;
+	transition: opacity 0.5s;
+	will-change: transform;
+
+	.link-input {
+		display: block;
+		width: calc(100% - 75px);
+		box-sizing: border-box;
+		margin: 12px 12px;
+		padding: 8px 12px;
+		border-radius: 15px;
+		background-color: #eee;
+		font-size: 15px;
+		color: rgb(5, 5, 5);
+		border: 0;
+		outline: 0;
+		position: relative;
+		font-family: inherit;
+	}
+
+	.link-input a:hover {
+		text-decoration: underline;
+	}
+
+	.link-view {
+		display: block;
+		width: calc(100% - 24px);
+		margin: 8px 12px;
+		padding: 8px 12px;
+		border-radius: 15px;
+		font-size: 15px;
+		color: rgb(5, 5, 5);
+		border: 0;
+		outline: 0;
+		position: relative;
+		font-family: inherit;
+	}
+
+	.link-view a {
+		display: block;
+		word-break: break-word;
+		width: calc(100% - 33px);
+	}
+
+	.button {
+		width: 20px;
+		height: 20px;
+		display: inline-block;
+		padding: 6px;
+		border-radius: 8px;
+		cursor: pointer;
+		margin: 0 2px;
+		background-color: #eee;
+	}
+
+	.button.hovered {
+		width: 20px;
+		height: 20px;
+		display: inline-block;
+		background-color: #eee;
+	}
+
+	.button i,
+	.actions i {
+		background-size: contain;
+		display: inline-block;
+		height: 20px;
+		width: 20px;
+		vertical-align: -0.25em;
+	}
+
+	div.link-cancel {
+		background-image: url(/images/rich-text-lexical/icons/close.svg);
+		background-size: 16px;
+		background-position: center;
+		background-repeat: no-repeat;
+		width: 35px;
+		vertical-align: -0.25em;
+		margin-right: 28px;
+		position: absolute;
+		right: 0;
+		top: 0;
+		bottom: 0;
+		cursor: pointer;
+	}
+
+	div.link-confirm {
+		background-image: url(/images/rich-text-lexical/icons/success-alt.svg);
+		background-size: 16px;
+		background-position: center;
+		background-repeat: no-repeat;
+		width: 35px;
+		vertical-align: -0.25em;
+		margin-right: 2px;
+		position: absolute;
+		right: 0;
+		top: 0;
+		bottom: 0;
+		cursor: pointer;
+	}
+
+	div.link-edit {
+		background-image: url(/images/rich-text-lexical/icons/pencil-fill.svg);
+		background-size: 16px;
+		background-position: center;
+		background-repeat: no-repeat;
+		width: 35px;
+		vertical-align: -0.25em;
+		position: absolute;
+		right: 30px;
+		top: 0;
+		bottom: 0;
+		cursor: pointer;
+	}
+
+	div.link-trash {
+		background-image: url(/images/rich-text-lexical/icons/trash.svg);
+		background-size: 16px;
+		background-position: center;
+		background-repeat: no-repeat;
+		width: 35px;
+		vertical-align: -0.25em;
+		position: absolute;
+		right: 0;
+		top: 0;
+		bottom: 0;
+		cursor: pointer;
+	}
+`;

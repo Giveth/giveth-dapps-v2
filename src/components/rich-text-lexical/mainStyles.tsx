@@ -632,4 +632,37 @@ export const DropdownUI = styled.div`
 	i.indent {
 		background-image: url(/images/rich-text-lexical/icons/indent.svg);
 	}
+
+	i.lowercase {
+		background-image: url(/images/rich-text-lexical/icons/type-lowercase.svg);
+	}
+
+	i.uppercase {
+		background-image: url(/images/rich-text-lexical/icons/type-uppercase.svg);
+	}
+
+	i.capitalize {
+		background-image: url(/images/rich-text-lexical/icons/type-capitalize.svg);
+	}
+
+	i.strikethrough {
+		background-image: url(/images/rich-text-lexical/icons/type-strikethrough.svg);
+	}
+
+	i.subscript {
+  	background-image: url(/images/rich-text-lexical/icons/type-subscript.svg);
+	}
+
+	i.superscript {
+  	background-image: url(/images/rich-text-lexical/icons/type-superscript.svg);
+	}
+
+	i.highlight {
+		background-image: url(/images/rich-text-lexical/icons/highlighter.svg);
+	}
+
+	i.clear {
+  	background-image: url(/images/rich-text-lexical/icons/trash.svg);
+	}
+}
 `;
