@@ -72,13 +72,13 @@ export const ActiveQFRoundStats = () => {
 						</ItemValue>
 					</ItemContainer>
 				)}
-				<Flex $flexDirection='column' $alignItems='center'>
-					<H5 weight={700}>
+				<ItemContainer>
+					<ItemTitle weight={700}>
 						{activeQFRound?.beginDate && activeQFRound?.endDate
 							? `${formatMonthDay(new Date(activeQFRound.beginDate))} - ${formatMonthDay(new Date(activeQFRound.endDate), { includeYear: true })}`
 							: '--'}
-					</H5>
-				</Flex>
+					</ItemTitle>
+				</ItemContainer>
 			</InfoSection>
 		</Wrapper>
 	);
@@ -113,7 +113,12 @@ const InfoSection = styled(Flex)<{ $started: boolean }>`
 		`}
 `;
 
-const ItemContainer = styled.div``;
+const ItemContainer = styled.div`
+	width: 100%;
+	${mediaQueries.tablet} {
+		width: auto;
+	}
+`;
 
 const ItemTitle = styled(H5)`
 	margin-bottom: 8px;

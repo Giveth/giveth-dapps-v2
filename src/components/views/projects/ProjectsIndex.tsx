@@ -361,9 +361,11 @@ export const ProjectsContainer = styled.div`
 	align-items: stretch;
 	justify-items: stretch;
 
+	grid-template-columns: repeat(1, minmax(310px, 1fr));
+
 	${mediaQueries.tablet} {
 		padding: 0;
-		grid-template-columns: repeat(2, minmax(340px, 1fr));
+		grid-template-columns: repeat(2, minmax(310px, 1fr));
 	}
 
 	${mediaQueries.laptopL} {
