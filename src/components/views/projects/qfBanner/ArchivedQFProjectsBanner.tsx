@@ -71,7 +71,7 @@ export const ArchivedQFProjectsBanner = () => {
 		<BannerContainer>
 			{round?.bannerBgImage && (
 				<Image
-					src={round?.bannerBgImage}
+					src={round?.bannerBgImage.path}
 					style={{ objectFit: 'cover' }}
 					fill
 					alt='QF Banner'
