@@ -24,7 +24,6 @@ export const ActiveQFProjectsBanner = () => {
 	const { activeQFRound } = useAppSelector(state => state.general);
 
 	// Image format is being bad formatted so managing locally instead
-	const isGIVPalooza = activeQFRound?.name === 'GIV-a-Palooza';
 	useEffect(() => {
 		if (!activeQFRound) return setState(ERoundStatus.NO_ACTIVE);
 		const _startDate = new Date(activeQFRound?.beginDate).getTime();
@@ -72,10 +71,8 @@ export const ActiveQFProjectsBanner = () => {
 		<BannerContainer>
 			<Image
 				src={
-					isGIVPalooza
-						? '/images/banners/giv-palooza-bg1.svg'
-						: activeQFRound?.bannerBgImage ||
-							'/images/banners/qf-round/bg.svg'
+					activeQFRound?.bannerBgImage?.path ||
+					'/images/banners/qf-round/bg.svg'
 				}
 				style={{ objectFit: 'cover' }}
 				fill

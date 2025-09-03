@@ -55,7 +55,6 @@ import { useNavigationInfo } from '@/hooks/useNavigationInfo';
 import config from '@/configuration';
 import { useGeneralWallet } from '@/providers/generalWalletProvider';
 import { EScrollDir, useScrollDetection } from '@/hooks/useScrollDetection';
-import { CausesMenu } from '../menu/CausesMenu';
 
 export interface IHeader {
 	theme?: ETheme;
@@ -194,18 +193,11 @@ const Header: FC<IHeader> = ({ showQFBanner }) => {
 			{isDesktop && !showBackBtn && (
 				<HeaderLinks $baseTheme={theme}>
 					<LinkWithMenu
-						title={formatMessage({ id: 'label.projects' })}
+						title={formatMessage({ id: 'label.donate' })}
 						isHeaderShowing={scrollDir !== EScrollDir.Down}
 						href={Routes.AllProjects}
 					>
 						<ProjectsMenu />
-					</LinkWithMenu>
-					<LinkWithMenu
-						title={formatMessage({ id: 'label.causes' })}
-						isHeaderShowing={scrollDir !== EScrollDir.Down}
-						href={Routes.AllCauses}
-					>
-						<CausesMenu />
 					</LinkWithMenu>
 					<LinkWithMenu
 						title='GIVeconomy'

@@ -542,7 +542,9 @@ export interface IQFRound {
 	maximumReward: number;
 	title: string;
 	description: string;
-	bannerBgImage: string;
+	bannerBgImage: {
+		path: string;
+	};
 	sponsorsImgs: string[];
 	allocatedFund: number;
 	allocatedFundUSD: number;
