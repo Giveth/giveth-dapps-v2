@@ -4,7 +4,6 @@ import {
 	Flex,
 	H5,
 	neutralColors,
-	B,
 } from '@giveth/ui-design-system';
 import React from 'react';
 import styled, { css } from 'styled-components';
@@ -115,8 +114,13 @@ const InfoSection = styled(Flex)<{ $started: boolean }>`
 
 const ItemContainer = styled.div`
 	width: 100%;
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	justify-content: space-between;
 	${mediaQueries.tablet} {
 		width: auto;
+		display: block;
 	}
 `;
 
