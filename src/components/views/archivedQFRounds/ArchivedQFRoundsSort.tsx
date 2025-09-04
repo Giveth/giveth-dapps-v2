@@ -11,11 +11,12 @@ import {
 	Option,
 	Control,
 	SortingLabel,
-	selectStyles,
 	DropdownIndicator,
 } from '../projects/sort/ProjectsSortSelect';
 import { EQFRoundsSortBy } from '@/apollo/types/gqlEnums';
 import { useArchivedQFRounds } from './archivedQfRounds.context';
+import selectCustomStyles from '@/lib/constants/selectCustomStyles';
+import type { StylesConfig, CSSObjectWithLabel } from 'react-select';
 
 export interface IArchivedQFRoundsSort {
 	icon: ReactElement;
@@ -71,4 +72,32 @@ export const ArchivedQFRoundsSort = () => {
 			/>
 		</Flex>
 	);
+};
+
+const selectStyles: StylesConfig = {
+	...selectCustomStyles,
+	container: baseStyles =>
+		({
+			...baseStyles,
+			zIndex: 3,
+			border: 'none',
+			borderRadius: '8px',
+			minWidth: '230px',
+
+			'&:hover': {
+				borderColor: 'transparent',
+			},
+		}) as CSSObjectWithLabel,
+	control: baseStyles =>
+		({
+			...baseStyles,
+			padding: '6px 8px',
+			border: 'none',
+			boxShadow: 'none',
+		}) as CSSObjectWithLabel,
+	indicatorSeparator: baseStyles =>
+		({
+			...baseStyles,
+			display: 'none',
+		}) as CSSObjectWithLabel,
 };
