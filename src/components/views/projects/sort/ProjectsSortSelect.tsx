@@ -44,6 +44,11 @@ export interface ISelectedSort {
 export const DropdownIndicator: ComponentType<
 	DropdownIndicatorProps
 > = props => {
+	const { isQF } = useProjectsContext();
+	if (isQF) {
+		return <IconDropdown />;
+	}
+
 	return props.selectProps.menuIsOpen ? <IconCaretUp /> : <IconCaretDown />;
 };
 
@@ -179,10 +184,13 @@ const ProjectsSortSelect = () => {
 			gap='8px'
 			$alignItems={isMobile ? 'stretch' : 'center'}
 			$flexDirection={isMobile ? 'column' : 'row'}
+			style={{ marginLeft: isQF ? 'auto' : '0' }}
 		>
-			<SortingLabel htmlFor='sorting'>
-				{formatMessage({ id: 'label.sort_by' })}
-			</SortingLabel>
+			{!isQF && (
+				<SortingLabel htmlFor='sorting'>
+					{formatMessage({ id: 'label.sort_by' })}
+				</SortingLabel>
+			)}
 			<Select
 				components={{
 					DropdownIndicator,
@@ -299,6 +307,15 @@ const OptionContainer = styled.div`
 	display: flex;
 	align-items: center;
 	justify-content: space-between;
+`;
+
+const IconDropdown = styled.div`
+	width: 16px;
+	height: 16px;
+	background-image: url('/images/icons/dropdown.svg');
+	background-size: contain;
+	background-repeat: no-repeat;
+	background-position: center;
 `;
 
 export const SortingLabel = styled.label`
