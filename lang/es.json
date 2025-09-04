@@ -1985,6 +1985,6 @@
 	"label.cause.owner_total_earned_tooltip": "La cantidad total que has ganado en comisiones de distribución de esta Causa",
 	"label.cause.total_distributed_tooltip": "La cantidad total distribuida por el Agente de Donaciones a los proyectos de la Causa",
 	"label.transaction_submitted_processing": "Transacción enviada. Procesando...",
-	"label.transaction_successful": "Transacción realizada!",
+	"label.transaction_successful": "¡Transacción realizada!",
 	"label.qf.vote": "Votar"
 }
