@@ -10,7 +10,7 @@ import { useArchivedQFRounds } from './archivedQfRounds.context';
 import { EQFRoundsSortBy } from '@/apollo/types/gqlEnums';
 import { showToastError } from '@/lib/helpers';
 import { WrappedSpinner } from '@/components/Spinner';
-import { ArchivedQFRoundsSort } from './ArchivedQFRoundsSort';
+import { ArchivedQFRoundsSort } from '@/components/views/archivedQFRounds/ArchivedQFRoundsSort';
 import { DefaultQFBanner } from '@/components/DefaultQFBanner';
 
 enum EQfArchivedRoundsSort {

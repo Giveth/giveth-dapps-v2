@@ -16,7 +16,7 @@ interface ISortContainerProps {
 
 export const SortContainer: FC<ISortContainerProps> = ({ totalCount }) => {
 	const { formatMessage } = useIntl();
-	const { isCauses } = useProjectsContext();
+	const { isCauses, isQF } = useProjectsContext();
 	return (
 		<Wrapper>
 			<Title>
@@ -36,6 +36,7 @@ export const SortContainer: FC<ISortContainerProps> = ({ totalCount }) => {
 				</span>
 			</Title>
 			<ProjectsSortSelect />
+			{isQF && 'AAAAA'}
 		</Wrapper>
 	);
 };
