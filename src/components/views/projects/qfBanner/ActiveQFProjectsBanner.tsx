@@ -80,7 +80,7 @@ export const ActiveQFProjectsBanner = () => {
 		<BannerContainer>
 			<Image
 				src={
-					activeQFRound?.bannerBgImage?.path ||
+					activeQFRound?.bannerBgImage ||
 					'/images/banners/qf-round/bg.svg'
 				}
 				style={{ objectFit: 'cover' }}
