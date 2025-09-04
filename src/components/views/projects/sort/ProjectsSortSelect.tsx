@@ -118,6 +118,40 @@ const ProjectsSortSelect = () => {
 	const [value, setValue] = useState(sortByOptions[0]);
 	const { isMobile } = useDetectDevice();
 
+	const selectStyles: StylesConfig = {
+		...selectCustomStyles,
+		container: baseStyles =>
+			({
+				...baseStyles,
+				zIndex: 3,
+				border: 'none',
+				borderRadius: '8px',
+				minWidth: '230px',
+
+				'&:hover': {
+					borderColor: 'transparent',
+				},
+			}) as CSSObjectWithLabel,
+		control: baseStyles =>
+			({
+				...baseStyles,
+				padding: '6px 8px',
+				border: 'none',
+				boxShadow: 'none',
+			}) as CSSObjectWithLabel,
+		indicatorSeparator: baseStyles =>
+			({
+				...baseStyles,
+				display: 'none',
+			}) as CSSObjectWithLabel,
+		singleValue: baseStyles =>
+			({
+				...baseStyles,
+				fontWeight: isQF ? 500 : 400,
+				fontSize: isQF ? '16px' : '14px',
+			}) as CSSObjectWithLabel,
+	};
+
 	// Update sortByOptions based on the existence of searchTerm
 	useEffect(() => {
 		const hasSearchTerm = !!router.query.searchTerm;
@@ -255,34 +289,6 @@ export const Control: ComponentType<ControlProps<ISelectedSort>> = ({
 			)}
 		</components.Control>
 	);
-};
-
-export const selectStyles: StylesConfig = {
-	...selectCustomStyles,
-	container: (baseStyles, props) =>
-		({
-			...baseStyles,
-			zIndex: 3,
-			border: 'none',
-			borderRadius: '8px',
-			minWidth: '230px',
-
-			'&:hover': {
-				borderColor: 'transparent',
-			},
-		}) as CSSObjectWithLabel,
-	control: (baseStyles, props) =>
-		({
-			...baseStyles,
-			padding: '6px 8px',
-			border: 'none',
-			boxShadow: 'none',
-		}) as CSSObjectWithLabel,
-	indicatorSeparator: (baseStyles, props) =>
-		({
-			...baseStyles,
-			display: 'none',
-		}) as CSSObjectWithLabel,
 };
 
 interface IRowContainer {

@@ -239,6 +239,10 @@ const Trigger = styled.button`
 	color: ${brandColors.deep[900]};
 	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
 	cursor: pointer;
+	span {
+		font-size: 16px;
+		font-weight: 500;
+	}
 `;
 
 const Badge = styled.span`
@@ -269,7 +273,7 @@ const Menu = styled.div`
 `;
 
 const SectionTitle = styled.div`
-	font-weight: 700;
+	font-weight: 500;
 	color: ${neutralColors.gray[800]};
 	margin-bottom: 8px;
 `;
