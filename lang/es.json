@@ -874,6 +874,7 @@
 	"label.recipient_addresses": "direcciones de los destinatarios",
 	"label.recipient_addresses_cant": "Las direcciones de los destinatarios no pueden estar vacías",
 	"label.recurring_donation": "Donación Recurrente",
+	"label.recurring_donations": "Donaciones Recurrentes",
 	"label.recurring_donations_currently_only_available_on_optimism_base": "Las donaciones recurrentes están disponibles actualmente solo en Optimism o Base.",
 	"label.recurring_donation_card_subheader_1": "Transmite tus donaciones con el tiempo para proporcionar financiamiento continuo.",
 	"label.recurring_donation_card_subheader_2": "Decide la cantidad de tokens a depositar en tu saldo de transmisión, o utiliza tu(s) saldo(s) de transmisión existente(s). Establece el monto de la donación mensual en tokens y comienza a transmitir.",

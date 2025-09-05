@@ -875,6 +875,7 @@
 	"label.recipient_addresses": "recipient addresses",
 	"label.recipient_addresses_cant": "Recipient addresses can't be empty",
 	"label.recurring_donation": "Recurring Donation",
+	"label.recurring_donations": "Recurring Donations",
 	"label.recurring_donations_currently_only_available_on_optimism_base": "Recurring donations are currently only available on Optimism or Base.",
 	"label.recurring_donation_card_subheader_1": "Stream your donations over time to provide continuous funding.",
 	"label.recurring_donation_card_subheader_2": "Decide the number of tokens to deposit in your stream balance, or utilize your existing stream balance(s). Set the monthly donation amount in tokens and begin streaming.",

@@ -13,8 +13,8 @@ import {
 import { useIntl } from 'react-intl';
 import { useMemo } from 'react';
 import { useProjectContext } from '@/context/project.context';
-import { ProjectDonationSwiperState } from './ProjectDonations.index';
 import { IQFRound } from '@/apollo/types/types';
+import type { ProjectDonationSwiperState } from './ProjectDonations.index';
 import type { StylesConfig, GroupBase } from 'react-select';
 
 type Props = {
@@ -56,7 +56,7 @@ export default function ProjectDonationsDropdown({
 		if (!isCause)
 			base.push({
 				type: 'recurring',
-				label: 'Recurring Donations',
+				label: formatMessage({ id: 'label.recurring_donations' }),
 				value: 'recurring',
 			});
 		const rounds = sortedRounds.map<OptionType>(r => ({
