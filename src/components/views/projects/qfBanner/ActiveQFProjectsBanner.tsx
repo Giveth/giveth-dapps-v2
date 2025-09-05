@@ -23,8 +23,9 @@ export const ActiveQFProjectsBanner = () => {
 	const { formatMessage } = useIntl();
 	const { activeQFRound } = useAppSelector(state => state.general);
 
-	// Image format is being bad formatted so managing locally instead
 	const isGIVPalooza = activeQFRound?.name === 'GIV-a-Palooza';
+
+	// Image format is being bad formatted so managing locally instead
 	useEffect(() => {
 		if (!activeQFRound) return setState(ERoundStatus.NO_ACTIVE);
 		const _startDate = new Date(activeQFRound?.beginDate).getTime();

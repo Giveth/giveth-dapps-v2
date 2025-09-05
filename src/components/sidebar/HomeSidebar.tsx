@@ -12,7 +12,6 @@ import { Item } from '../menu/Item';
 import { ItemSpacer } from '../menu/common';
 import { setShowSearchModal } from '@/features/modal/modal.slice';
 import { CommunityItems } from '../menu/CommunityItems';
-import { CausesItems } from '../menu/CausesItems';
 
 export const HomeSidebar = () => {
 	const { theme } = useAppSelector(state => state.general);
@@ -34,15 +33,7 @@ export const HomeSidebar = () => {
 					href: '/projects',
 				}}
 			>
-				<ProjectsItems inSidebar />
-			</SidebarParentItem>
-			<SidebarParentItem
-				item={{
-					title: formatMessage({ id: 'label.causes' }),
-					href: '/causes',
-				}}
-			>
-				<CausesItems inSidebar />
+				<ProjectsItems />
 			</SidebarParentItem>
 			<SidebarParentItem item={{ title: 'GIVeconomy' }}>
 				<GIVeconomyItems />
