@@ -878,6 +878,7 @@
 	"label.recipient_addresses": "direcciones de los destinatarios",
 	"label.recipient_addresses_cant": "Las direcciones de los destinatarios no pueden estar vacías",
 	"label.recurring_donation": "Donación Recurrente",
+	"label.recurring_donations": "Donaciones Recurrentes",
 	"label.recurring_donations_currently_only_available_on_optimism_base": "Las donaciones recurrentes están disponibles actualmente solo en Optimism o Base.",
 	"label.recurring_donation_card_subheader_1": "Transmite tus donaciones con el tiempo para proporcionar financiamiento continuo.",
 	"label.recurring_donation_card_subheader_2": "Decide la cantidad de tokens a depositar en tu saldo de transmisión, o utiliza tu(s) saldo(s) de transmisión existente(s). Establece el monto de la donación mensual en tokens y comienza a transmitir.",
@@ -1989,6 +1990,8 @@
 	"label.cause.owner_total_earned_tooltip": "La cantidad total que has ganado en comisiones de distribución de esta Causa",
 	"label.cause.total_distributed_tooltip": "La cantidad total distribuida por el Agente de Donaciones a los proyectos de la Causa",
 	"label.transaction_submitted_processing": "Transacción enviada. Procesando...",
-	"label.transaction_successful": "Transacción realizada!",
-	"label.qf.vote": "Votar"
+	"label.transaction_successful": "¡Transacción realizada!",
+	"label.qf.vote": "Votar",
+	"label.qf.showing_all_donations": "Mostrando todas las donaciones",
+	"label.qf.open": "Abierto"
 }

@@ -4,9 +4,9 @@ import { useState } from 'react';
 import { useIntl } from 'react-intl';
 import ProjectTotalFundCard from './ProjectTotalFundCard';
 import ProjectDonationTable from './ProjectDonationTable';
-import { QfRoundSelector } from './QfRoundSelector';
 import { IQFRound } from '@/apollo/types/types';
 import ProjectRecurringDonationTable from './ProjectRecurringDonationTable';
+import ProjectDonationsDropdown from '@/components/views/project/projectDonations/ProjectDonationsDropdown';
 
 export interface ProjectDonationSwiperState {
 	selectedQF: IQFRound | null;
@@ -24,15 +24,17 @@ const ProjectDonationsIndex = () => {
 
 	return (
 		<>
-			<QfRoundSelector
-				projectDonationSwiperState={projectDonationSwiperState}
-				setProjectDonationSwiperState={setProjectDonationSwiperState}
-			/>
 			<StyledRow>
 				<Col lg={4}>
 					<ProjectTotalFundCard selectedQF={selectedQF} />
 				</Col>
 				<Col lg={8}>
+					<ProjectDonationsDropdown
+						projectDonationSwiperState={projectDonationSwiperState}
+						setProjectDonationSwiperState={
+							setProjectDonationSwiperState
+						}
+					/>
 					{!isRecurringSelected ? (
 						<ProjectDonationTable selectedQF={selectedQF} />
 					) : (
