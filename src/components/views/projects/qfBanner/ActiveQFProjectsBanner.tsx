@@ -82,6 +82,7 @@ export const ActiveQFProjectsBanner = () => {
 						: getBannerImage
 				}
 				fill
+				unoptimized
 				alt='QF Banner'
 			/>
 			<ContainerWrapper>
@@ -168,29 +169,32 @@ export const ActiveQFProjectsBanner = () => {
 };
 
 export const BannerContainer = styled(Flex)`
-	height: 260px;
 	position: relative;
 	overflow: hidden;
 	margin-bottom: 0;
 	align-items: start !important;
-	border-top-left-radius: 16px;
-	border-top-right-radius: 16px;
+	border-radius: 16px;
+
+	height: 280px;
 
 	img {
-		object-fit: cover;
-		object-position: left center;
+		object-fit: contain;
+		object-position: center center;
 	}
 
 	${mediaQueries.tablet} {
-		height: 235px;
-		margin-bottom: -50px;
-
+		height: 195px;
 		img {
+			width: 100%;
 			object-fit: cover;
-			object-position: right center;
+			object-position: left center;
 		}
 	}
+	${mediaQueries.laptopL} {
+		height: 300px;
+	}
 	${mediaQueries.desktop} {
+		height: 300px;
 		img {
 			object-position: center;
 		}
@@ -198,16 +202,21 @@ export const BannerContainer = styled(Flex)`
 `;
 
 export const ContainerWrapper = styled(Container)`
-	margin-top: 65px;
+	height: 100%;
 	${mediaQueries.tablet} {
 		margin-top: 0;
 	}
 `;
 
 export const ActiveStyledRow = styled(Row)`
+	height: auto;
 	flex-direction: row;
 	@media (max-width: 1350px) {
 		flex-direction: column-reverse;
+	}
+
+	${mediaQueries.tablet} {
+		height: 100%;
 	}
 `;
 
