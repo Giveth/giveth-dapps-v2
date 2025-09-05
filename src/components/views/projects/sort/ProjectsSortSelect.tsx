@@ -138,6 +138,7 @@ const ProjectsSortSelect = () => {
 				padding: '6px 8px',
 				border: 'none',
 				boxShadow: 'none',
+				cursor: 'pointer',
 			}) as CSSObjectWithLabel,
 		indicatorSeparator: baseStyles =>
 			({
