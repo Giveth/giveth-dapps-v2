@@ -27,7 +27,6 @@ import { PassportBanner } from '@/components/PassportBanner';
 import ProjectGIVbackToast from '@/components/views/project/ProjectGIVbackToast';
 import useMediaQuery from '@/hooks/useMediaQuery';
 import { device } from '@/lib/constants/constants';
-import QFSection from '@/components/views/project/projectActionCard/QFSection';
 import { DonateSection } from '@/components/views/project/projectActionCard/DonationSection';
 import { ProjectStats } from '@/components/views/project/projectActionCard/ProjectStats';
 import { AdminActions } from '@/components/views/project/projectActionCard/AdminActions';
@@ -167,11 +166,7 @@ const CauseIndex: FC<ICauseBySlug> = () => {
 						)}
 						{isMobile && (
 							<MobileContainer $hasActiveRound={hasActiveQFRound}>
-								{hasActiveQFRound ? (
-									<QFSection projectData={projectData} />
-								) : (
-									<DonateSection projectData={projectData} />
-								)}
+								<DonateSection projectData={projectData} />
 							</MobileContainer>
 						)}
 						<ProjectGIVbackToast />
