@@ -232,12 +232,11 @@ const Trigger = styled.button`
 	min-width: 180px;
 	gap: 8px;
 	align-items: center;
-	padding: 10px 14px;
+	padding: 9px 14px;
 	border: none;
 	border-radius: 4px;
 	background: #fff;
 	color: ${brandColors.deep[900]};
-	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
 	cursor: pointer;
 	span {
 		font-size: 16px;
