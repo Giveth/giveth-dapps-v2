@@ -1987,7 +1987,7 @@
 	"label.cause.total_distributed_tooltip": "La quantitat total distribuïda per l’Agent de Donacions als projectes de la Causa",
 	"label.transaction_submitted_processing": "Transacció enviada. Processant...",
 	"label.transaction_successful": "Transacció realitzada!",
-	"label.qf.vote": "Vota"
+	"label.qf.vote": "Vota",
 	"label.qf.showing_all_donations": "Mostrant totes les donacions",
 	"label.qf.open": "Obert"
 }
