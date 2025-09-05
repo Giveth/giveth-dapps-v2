@@ -22,7 +22,6 @@ import { useAppDispatch, useAppSelector } from '@/features/hooks';
 import { setShowHeader } from '@/features/general/general.slice';
 import { CauseDonateHeader } from '@/components/views/donateCause/CauseDonateHeader';
 import { CauseSuccessView } from '@/components/views/donateCause/CauseSuccessView';
-import QFSection from '../project/projectActionCard/QFSection';
 import ProjectCardImage from '@/components/project-card/ProjectCardImage';
 import { useGeneralWallet } from '@/providers/generalWalletProvider';
 import { DonatePageProjectDescription } from '../donate/DonatePageProjectDescription';
@@ -166,15 +165,9 @@ const CauseDonateIndex: FC = () => {
 										/>
 									</ImageWrapper>
 
-									{!isMobile ? (
-										isOnEligibleNetworks ? (
-											<QFSection projectData={project} />
-										) : (
-											<DonatePageProjectDescription
-												projectData={project}
-											/>
-										)
-									) : null}
+									<DonatePageProjectDescription
+										projectData={project}
+									/>
 								</>
 							</InfoWrapper>
 						</Col>
