@@ -11,11 +11,12 @@ import {
 	Option,
 	Control,
 	SortingLabel,
-	selectStyles,
 	DropdownIndicator,
 } from '../projects/sort/ProjectsSortSelect';
 import { EQFRoundsSortBy } from '@/apollo/types/gqlEnums';
 import { useArchivedQFRounds } from './archivedQfRounds.context';
+import selectCustomStyles from '@/lib/constants/selectCustomStyles';
+import type { StylesConfig, CSSObjectWithLabel } from 'react-select';
 
 export interface IArchivedQFRoundsSort {
 	icon: ReactElement;
@@ -34,12 +35,6 @@ export const ArchivedQFRoundsSort = () => {
 			value: EQFRoundsSortBy.MATCHING_POOL,
 			icon: <IconDonation16 />,
 		},
-		// we have impact-graph errors, so we are hiding this for now
-		// {
-		// 	label: formatMessage({ id: 'label.number_of_donations' }),
-		// 	value: EQFRoundsSortBy.UNIQUE_DONORS,
-		// 	icon: <IconAdminNotif16 />,
-		// },
 		{
 			label: formatMessage({ id: 'label.newest' }),
 			value: EQFRoundsSortBy.NEWEST,
@@ -77,4 +72,32 @@ export const ArchivedQFRoundsSort = () => {
 			/>
 		</Flex>
 	);
+};
+
+const selectStyles: StylesConfig = {
+	...selectCustomStyles,
+	container: baseStyles =>
+		({
+			...baseStyles,
+			zIndex: 3,
+			border: 'none',
+			borderRadius: '8px',
+			minWidth: '230px',
+
+			'&:hover': {
+				borderColor: 'transparent',
+			},
+		}) as CSSObjectWithLabel,
+	control: baseStyles =>
+		({
+			...baseStyles,
+			padding: '6px 8px',
+			border: 'none',
+			boxShadow: 'none',
+		}) as CSSObjectWithLabel,
+	indicatorSeparator: baseStyles =>
+		({
+			...baseStyles,
+			display: 'none',
+		}) as CSSObjectWithLabel,
 };

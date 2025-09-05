@@ -9,6 +9,7 @@ import { useIntl } from 'react-intl';
 import styled from 'styled-components';
 import ProjectsSortSelect from './ProjectsSortSelect';
 import { useProjectsContext } from '@/context/projects.context';
+import { QFRoundFilterSelect } from '@/components/views/QFRounds/QFRoundFilterSelect';
 
 interface ISortContainerProps {
 	totalCount: number;
@@ -16,7 +17,7 @@ interface ISortContainerProps {
 
 export const SortContainer: FC<ISortContainerProps> = ({ totalCount }) => {
 	const { formatMessage } = useIntl();
-	const { isCauses } = useProjectsContext();
+	const { isCauses, isQF } = useProjectsContext();
 	return (
 		<Wrapper>
 			<Title>
@@ -36,6 +37,7 @@ export const SortContainer: FC<ISortContainerProps> = ({ totalCount }) => {
 				</span>
 			</Title>
 			<ProjectsSortSelect />
+			{isQF && <QFRoundFilterSelect />}
 		</Wrapper>
 	);
 };

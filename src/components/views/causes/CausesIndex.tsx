@@ -14,7 +14,6 @@ import { useIntl } from 'react-intl';
 import { captureException } from '@sentry/nextjs';
 import { useInfiniteQuery } from '@tanstack/react-query';
 import styled from 'styled-components';
-// import ProjectCard from '@/components/project-card/ProjectCard';
 import Routes from '@/lib/constants/Routes';
 import { isUserRegistered, showToastError } from '@/lib/helpers';
 import { useAppDispatch, useAppSelector } from '@/features/hooks';
@@ -242,7 +241,9 @@ const CausesIndex = (props: ICausesView) => {
 				) : (
 					<>
 						{!isQF && <ProjectsBanner />}
-						{onProjectsPageOrActiveQFPage && <FilterContainer />}
+						{!isQF && onProjectsPageOrActiveQFPage && (
+							<FilterContainer />
+						)}
 						{isQF && activeQFRound && <ActiveQFRoundStats />}
 					</>
 				)}
