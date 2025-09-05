@@ -60,22 +60,22 @@ const ProjectsSortSelect = () => {
 	// Default sortByOptions without Best Match
 	const initialSortByOptions: ISelectedSort[] = [
 		{
-			label: formatMessage({ id: 'label.givpower' }),
+			label: formatMessage({ id: 'label.highest_givpower' }),
 			value: EProjectsSortBy.INSTANT_BOOSTING,
 			icon: <IconRocketInSpace16 />,
 		},
 		{
-			label: formatMessage({ id: 'label.rank' }),
+			label: formatMessage({ id: 'label.rank_highest' }),
 			value: EProjectsSortBy.GIVPOWER,
 			icon: <IconGIVBack16 color={neutralColors.gray[900]} />,
 		},
 		{
-			label: formatMessage({ id: 'label.newest' }),
+			label: formatMessage({ id: 'label.newest_first' }),
 			value: EProjectsSortBy.NEWEST,
 			icon: <IconArrowTop size={16} />,
 		},
 		{
-			label: formatMessage({ id: 'label.oldest' }),
+			label: formatMessage({ id: 'label.oldest_first' }),
 			value: EProjectsSortBy.OLDEST,
 			icon: <IconArrowBottom size={16} />,
 		},
