@@ -116,6 +116,7 @@ export const PassportBanner = () => {
 		usePassport();
 	const { currentRound, passportState, passportScore, qfEligibilityState } =
 		info;
+
 	const { formatMessage, locale } = useIntl();
 	const { connector } = useAccount();
 	const { isOnSolana, handleSingOutAndSignInWithEVM } = useGeneralWallet();

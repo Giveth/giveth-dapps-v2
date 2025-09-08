@@ -167,10 +167,9 @@ const ProjectIndex: FC<IProjectBySlug> = () => {
 	return (
 		<Wrapper>
 			{!isAdminEmailVerified && isAdmin && <VerifyEmailBanner />}
-			{hasActiveQFRound &&
-				!isOnSolana &&
-				!isStellarOnlyQF &&
-				isAdminEmailVerified && <PassportBanner />}
+			{hasActiveQFRound && !isOnSolana && !isStellarOnlyQF && (
+				<PassportBanner />
+			)}
 			<Head>
 				<title>{title && `${title} |`} Giveth</title>
 				<ProjectMeta project={projectData} />
