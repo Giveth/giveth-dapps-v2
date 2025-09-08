@@ -44,6 +44,11 @@ export interface ISelectedSort {
 export const DropdownIndicator: ComponentType<
 	DropdownIndicatorProps
 > = props => {
+	const { isQF } = useProjectsContext();
+	if (isQF) {
+		return <IconDropdown />;
+	}
+
 	return props.selectProps.menuIsOpen ? <IconCaretUp /> : <IconCaretDown />;
 };
 
@@ -55,22 +60,22 @@ const ProjectsSortSelect = () => {
 	// Default sortByOptions without Best Match
 	const initialSortByOptions: ISelectedSort[] = [
 		{
-			label: formatMessage({ id: 'label.givpower' }),
+			label: formatMessage({ id: 'label.highest_givpower' }),
 			value: EProjectsSortBy.INSTANT_BOOSTING,
 			icon: <IconRocketInSpace16 />,
 		},
 		{
-			label: formatMessage({ id: 'label.rank' }),
+			label: formatMessage({ id: 'label.rank_highest' }),
 			value: EProjectsSortBy.GIVPOWER,
 			icon: <IconGIVBack16 color={neutralColors.gray[900]} />,
 		},
 		{
-			label: formatMessage({ id: 'label.newest' }),
+			label: formatMessage({ id: 'label.newest_first' }),
 			value: EProjectsSortBy.NEWEST,
 			icon: <IconArrowTop size={16} />,
 		},
 		{
-			label: formatMessage({ id: 'label.oldest' }),
+			label: formatMessage({ id: 'label.oldest_first' }),
 			value: EProjectsSortBy.OLDEST,
 			icon: <IconArrowBottom size={16} />,
 		},
@@ -112,6 +117,41 @@ const ProjectsSortSelect = () => {
 		useState<ISelectedSort[]>(initialSortByOptions);
 	const [value, setValue] = useState(sortByOptions[0]);
 	const { isMobile } = useDetectDevice();
+
+	const selectStyles: StylesConfig = {
+		...selectCustomStyles,
+		container: baseStyles =>
+			({
+				...baseStyles,
+				zIndex: 3,
+				border: 'none',
+				borderRadius: '8px',
+				minWidth: '230px',
+
+				'&:hover': {
+					borderColor: 'transparent',
+				},
+			}) as CSSObjectWithLabel,
+		control: baseStyles =>
+			({
+				...baseStyles,
+				padding: '6px 8px',
+				border: 'none',
+				boxShadow: 'none',
+				cursor: 'pointer',
+			}) as CSSObjectWithLabel,
+		indicatorSeparator: baseStyles =>
+			({
+				...baseStyles,
+				display: 'none',
+			}) as CSSObjectWithLabel,
+		singleValue: baseStyles =>
+			({
+				...baseStyles,
+				fontWeight: isQF ? 500 : 400,
+				fontSize: isQF ? '16px' : '14px',
+			}) as CSSObjectWithLabel,
+	};
 
 	// Update sortByOptions based on the existence of searchTerm
 	useEffect(() => {
@@ -179,10 +219,13 @@ const ProjectsSortSelect = () => {
 			gap='8px'
 			$alignItems={isMobile ? 'stretch' : 'center'}
 			$flexDirection={isMobile ? 'column' : 'row'}
+			style={{ marginLeft: isQF ? 'auto' : '0' }}
 		>
-			<SortingLabel htmlFor='sorting'>
-				{formatMessage({ id: 'label.sort_by' })}
-			</SortingLabel>
+			{!isQF && (
+				<SortingLabel htmlFor='sorting'>
+					{formatMessage({ id: 'label.sort_by' })}
+				</SortingLabel>
+			)}
 			<Select
 				components={{
 					DropdownIndicator,
@@ -249,34 +292,6 @@ export const Control: ComponentType<ControlProps<ISelectedSort>> = ({
 	);
 };
 
-export const selectStyles: StylesConfig = {
-	...selectCustomStyles,
-	container: (baseStyles, props) =>
-		({
-			...baseStyles,
-			zIndex: 3,
-			border: 'none',
-			borderRadius: '8px',
-			minWidth: '230px',
-
-			'&:hover': {
-				borderColor: 'transparent',
-			},
-		}) as CSSObjectWithLabel,
-	control: (baseStyles, props) =>
-		({
-			...baseStyles,
-			padding: '6px 8px',
-			border: 'none',
-			boxShadow: 'none',
-		}) as CSSObjectWithLabel,
-	indicatorSeparator: (baseStyles, props) =>
-		({
-			...baseStyles,
-			display: 'none',
-		}) as CSSObjectWithLabel,
-};
-
 interface IRowContainer {
 	$textColor: string;
 }
@@ -299,6 +314,15 @@ const OptionContainer = styled.div`
 	display: flex;
 	align-items: center;
 	justify-content: space-between;
+`;
+
+const IconDropdown = styled.div`
+	width: 16px;
+	height: 16px;
+	background-image: url('/images/icons/dropdown.svg');
+	background-size: contain;
+	background-repeat: no-repeat;
+	background-position: center;
 `;
 
 export const SortingLabel = styled.label`
