@@ -5,8 +5,7 @@ import styled from 'styled-components';
 import useDetectDevice from '@/hooks/useDetectDevice';
 
 export const QFRoundsBanner = () => {
-	const { isMobile, isTablet, isDesktop, isLaptopS, isLaptopL } =
-		useDetectDevice();
+	const { isMobile, isTablet, isLaptopS, isLaptopL } = useDetectDevice();
 	let imageUrl = '/images/qfround/hub/qf-hub-desktop-1080px.png';
 	if (isMobile) {
 		imageUrl = '/images/qfround/hub/qf-hub-mobile.png';

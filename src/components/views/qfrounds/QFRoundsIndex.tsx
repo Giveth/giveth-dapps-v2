@@ -13,10 +13,12 @@ import { PassportBanner } from '@/components/PassportBanner';
 import { Spinner } from '@/components/Spinner';
 import { QFRoundsBanner } from '@/components/views/qfrounds/QFRoundsBanner';
 import QFRoundCard from '@/components/views/qfrounds/QFRoundCard';
+import useDetectDevice from '@/hooks/useDetectDevice';
 
 const QFRoundsIndex = () => {
 	const { qfRounds, loading } = useQFRoundsContext();
 	const { formatMessage } = useIntl();
+	const { isMobile, isTablet } = useDetectDevice();
 	return (
 		<>
 			{loading && (
@@ -30,7 +32,7 @@ const QFRoundsIndex = () => {
 				<Title>{formatMessage({ id: 'label.qf.active_rounds' })}</Title>
 				<QFRoundsWrapper>
 					<QFRoundCard
-						layout='horizontal'
+						layout={isTablet || isMobile ? 'grid' : 'horizontal'}
 						title='Future of Finance Round'
 						description='Support climate and sustainability projects building a greener future. By funding clean energy, reforestation, and conservation, your donation helps scale real solutions to the climate crisis. Even small contributions unlock big matching funds for lasting environmental impact.'
 						imageUrl='/images/banners/GIVGIVGIV-purple.png'
@@ -40,7 +42,7 @@ const QFRoundsIndex = () => {
 						onExplore={() => console.log('/qf/future-of-finance')}
 					/>
 					<QFRoundCard
-						layout='horizontal'
+						layout={isTablet || isMobile ? 'grid' : 'horizontal'}
 						title='Future of Finance Round'
 						description='Support climate and sustainability projects building a greener future. By funding clean energy, reforestation, and conservation, your donation helps scale real solutions to the climate crisis. Even small contributions unlock big matching funds for lasting environmental impact.'
 						imageUrl='/images/banners/GIVGIVGIV-purple.png'

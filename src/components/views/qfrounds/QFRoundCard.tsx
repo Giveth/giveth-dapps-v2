@@ -5,15 +5,16 @@
 import Image from 'next/image';
 import styled, { css } from 'styled-components';
 import {
-	B,
 	P,
 	SublineBold,
-	Button,
 	neutralColors,
-	semanticColors,
 	brandColors,
 	deviceSize,
+	ButtonLink,
+	IconChevronRight24,
 } from '@giveth/ui-design-system';
+import { useIntl } from 'react-intl';
+import Link from 'next/link';
 
 type Layout = 'horizontal' | 'grid';
 
@@ -40,6 +41,8 @@ export default function QFRoundCard({
 	onExplore,
 	exploreLabel = 'Explore Projects',
 }: QFRoundCardProps) {
+	const { formatMessage } = useIntl();
+
 	return (
 		<Card $layout={layout}>
 			{layout === 'horizontal' ? (
@@ -62,13 +65,17 @@ export default function QFRoundCard({
 						<Desc>{description}</Desc>
 
 						{matchingPoolUsd && (
-							<MetaGrid>
+							<MetaGrid $layout={layout}>
 								{typeof matchingPoolUsd === 'number' && (
-									<Chip>
+									<Chip $layout={layout}>
 										<span>
 											${matchingPoolUsd.toLocaleString()}
 										</span>
-										<ChipNote>Matching Pool</ChipNote>
+										<ChipNote>
+											{formatMessage({
+												id: 'label.matching_pool',
+											})}
+										</ChipNote>
 									</Chip>
 								)}
 							</MetaGrid>
@@ -76,17 +83,19 @@ export default function QFRoundCard({
 
 						<FooterWrapper>
 							{startDate && endDate && (
-								<Dates>
-									<B>
-										{startDate} – {endDate}
-									</B>
+								<Dates $layout={layout}>
+									{startDate} – {endDate}
 								</Dates>
 							)}
-							<Actions>
-								<Button
-									buttonType='primary'
-									label={exploreLabel}
-								/>
+							<Actions $layout={layout}>
+								<Link href='#'>
+									<ButtonLinkWrapper
+										label={formatMessage({
+											id: 'label.qf.explore_projects',
+										})}
+										icon={<IconChevronRight24 />}
+									/>
+								</Link>
 							</Actions>
 						</FooterWrapper>
 					</Content>
@@ -110,34 +119,38 @@ export default function QFRoundCard({
 
 					<Content>
 						<Desc>{description}</Desc>
-
-						{(matchingPoolUsd || (startDate && endDate)) && (
-							<MetaGrid>
-								{startDate && endDate && (
-									<Dates>
-										<B>
-											{startDate} – {endDate}
-										</B>
-									</Dates>
-								)}
+						{startDate && endDate && (
+							<Dates $layout={layout}>
+								{startDate} – {endDate}
+							</Dates>
+						)}
+						{matchingPoolUsd && (
+							<MetaGrid $layout={layout}>
 								{typeof matchingPoolUsd === 'number' && (
-									<Chip>
-										<B>
+									<Chip $layout={layout}>
+										<span>
 											${matchingPoolUsd.toLocaleString()}
-										</B>
-										<ChipNote>Matching Pool</ChipNote>
+										</span>
+										<ChipNote>
+											{formatMessage({
+												id: 'label.matching_pool',
+											})}
+										</ChipNote>
 									</Chip>
 								)}
 							</MetaGrid>
 						)}
 
 						{onExplore && (
-							<Actions>
-								<Button
-									buttonType='primary'
-									label={exploreLabel}
-									onClick={onExplore}
-								/>
+							<Actions $layout={layout}>
+								<Link href='#'>
+									<ButtonLinkWrapper
+										label={formatMessage({
+											id: 'label.qf.explore_projects',
+										})}
+										icon={<IconChevronRight24 />}
+									/>
+								</Link>
 							</Actions>
 						)}
 					</Content>
@@ -149,7 +162,7 @@ export default function QFRoundCard({
 
 const Card = styled.div<{ $layout: Layout }>`
 	display: grid;
-	gap: 42px;
+	gap: ${({ $layout }) => ($layout === 'horizontal' ? '42px' : '24px')};
 	background: ${neutralColors.gray[100]};
 	border-radius: 16px;
 	box-shadow: 0 6px 24px rgba(0, 0, 0, 0.06);
@@ -242,22 +255,30 @@ const Desc = styled(P)`
 	color: ${neutralColors.gray[800]};
 `;
 
-const MetaGrid = styled.div`
-	display: flex;
-	width: 100%;
+const MetaGrid = styled.div<{ $layout: Layout }>`
+	justify-self: start;
+	display: inline-flex;
+	width: ${({ $layout }) => ($layout === 'horizontal' ? '100%' : 'auto')};
 	margin-top: 24px;
+	margin-bottom: ${({ $layout }) =>
+		$layout === 'horizontal' ? '0' : '10px'};
 	flex-direction: row;
-	padding: 10px;
+	padding: ${({ $layout }) =>
+		$layout === 'horizontal' ? '0 10px' : '10px 16px'};
 	gap: 12px;
 	align-items: center;
-	justify-content: center;
+	justify-content: ${({ $layout }) =>
+		$layout === 'horizontal' ? 'center' : 'flex-start'};
 	border: 1.85px solid ${neutralColors.gray[300]};
 	border-radius: 16px;
 `;
 
-const Chip = styled.div`
-	display: inline-flex;
+const Chip = styled.div<{ $layout: Layout }>`
+	display: ${({ $layout }) =>
+		$layout === 'horizontal' ? 'flex' : 'inline-flex'};
 	align-items: center;
+	justify-content: ${({ $layout }) =>
+		$layout === 'horizontal' ? 'center' : 'flex-start'};
 	gap: 8px;
 
 	font-size: 20px;
@@ -273,23 +294,29 @@ const Chip = styled.div`
 
 const ChipNote = styled(SublineBold)`
 	font-size: 20px;
-  font-weight: 400;
+	font-weight: 400;
 	color: ${neutralColors.gray[900]};
 `;
 
-const Dates = styled.div`
+const Dates = styled.div<{ $layout: Layout }>`
+	margin-top: ${({ $layout }) => ($layout === 'horizontal' ? '0' : '16px')};
+	padding-left: ${({ $layout }) => ($layout === 'horizontal' ? '0' : '16px')};
+	font-size: 20px;
+	font-weight: 700;
 	color: ${brandColors.deep[900]};
 `;
 
 const FooterWrapper = styled.div`
 	display: flex;
 	justify-content: space-between;
+	align-items: center;
 `;
 
-const Actions = styled.div`
+const Actions = styled.div<{ $layout: Layout }>`
 	margin-top: 4px;
 	display: flex;
-	justify-content: flex-end;
+	justify-content: ${({ $layout }) =>
+		$layout === 'horizontal' ? 'flex-end' : 'flex-start'};
 
 	@media (max-width: ${deviceSize.mobileS}px) {
 		justify-content: stretch;
@@ -299,9 +326,9 @@ const Actions = styled.div`
 	}
 `;
 
-const OpenBadge = styled(SublineBold)`
-	padding: 4px 10px;
-	background: ${semanticColors.jade[500]};
-	color: ${neutralColors.gray[100]};
-	border-radius: 999px;
+const ButtonLinkWrapper = styled(ButtonLink)`
+	padding: 11px 24px;
+	span {
+		text-transform: none;
+	}
 `;
