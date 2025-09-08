@@ -666,3 +666,223 @@ export const DropdownUI = styled.div`
 	}
 }
 `;
+
+export const EditorShell = styled.div`
+	span.editor-image {
+		cursor: default;
+		display: inline-block;
+		position: relative;
+		user-select: none;
+	}
+
+	.editor-image img {
+		max-width: 100%;
+		cursor: default;
+	}
+
+	.editor-image img.focused {
+		outline: 2px solid rgb(60, 132, 244);
+		user-select: none;
+	}
+
+	.editor-image img.focused.draggable {
+		cursor: grab;
+	}
+
+	.editor-image img.focused.draggable:active {
+		cursor: grabbing;
+	}
+
+	.editor-image .image-caption-container .tree-view-output {
+		margin: 0;
+		border-radius: 0;
+	}
+
+	.editor-image .image-caption-container {
+		display: block;
+		position: absolute;
+		bottom: 4px;
+		left: 0;
+		right: 0;
+		padding: 0;
+		margin: 0;
+		border-top: 1px solid #fff;
+		background-color: rgba(255, 255, 255, 0.9);
+		min-width: 100px;
+		color: #000;
+		overflow: hidden;
+	}
+
+	.editor-image .image-caption-button {
+		display: block;
+		position: absolute;
+		bottom: 20px;
+		left: 0;
+		right: 0;
+		width: 30%;
+		padding: 10px;
+		margin: 0 auto;
+		border: 1px solid rgba(255, 255, 255, 0.3);
+		border-radius: 5px;
+		background-color: rgba(0, 0, 0, 0.5);
+		min-width: 100px;
+		color: #fff;
+		cursor: pointer;
+		user-select: none;
+	}
+
+	.editor-image .image-caption-button:hover {
+		background-color: rgba(60, 132, 244, 0.5);
+	}
+
+	.editor-image .image-edit-button {
+		border: 1px solid rgba(0, 0, 0, 0.3);
+		border-radius: 5px;
+		background-image: url(/src/images/icons/pencil-fill.svg);
+		background-size: 16px;
+		background-position: center;
+		background-repeat: no-repeat;
+		width: 35px;
+		height: 35px;
+		vertical-align: -0.25em;
+		position: absolute;
+		right: 4px;
+		top: 4px;
+		cursor: pointer;
+		user-select: none;
+	}
+
+	.editor-image .image-edit-button:hover {
+		background-color: rgba(60, 132, 244, 0.1);
+	}
+
+	.editor-image .image-resizer {
+		display: block;
+		width: 7px;
+		height: 7px;
+		position: absolute;
+		background-color: rgb(60, 132, 244);
+		border: 1px solid #fff;
+	}
+
+	.editor-image .image-resizer.image-resizer-n {
+		top: -6px;
+		left: 48%;
+		cursor: n-resize;
+	}
+
+	.editor-image .image-resizer.image-resizer-ne {
+		top: -6px;
+		right: -6px;
+		cursor: ne-resize;
+	}
+
+	.editor-image .image-resizer.image-resizer-e {
+		bottom: 48%;
+		right: -6px;
+		cursor: e-resize;
+	}
+
+	.editor-image .image-resizer.image-resizer-se {
+		bottom: -2px;
+		right: -6px;
+		cursor: nwse-resize;
+	}
+
+	.editor-image .image-resizer.image-resizer-s {
+		bottom: -2px;
+		left: 48%;
+		cursor: s-resize;
+	}
+
+	.editor-image .image-resizer.image-resizer-sw {
+		bottom: -2px;
+		left: -6px;
+		cursor: sw-resize;
+	}
+
+	.editor-image .image-resizer.image-resizer-w {
+		bottom: 48%;
+		left: -6px;
+		cursor: w-resize;
+	}
+
+	.editor-image .image-resizer.image-resizer-nw {
+		top: -6px;
+		left: -6px;
+		cursor: nw-resize;
+	}
+
+	span.inline-editor-image {
+		cursor: default;
+		display: inline-block;
+		position: relative;
+		z-index: 1;
+	}
+
+	.inline-editor-image img {
+		max-width: 100%;
+		cursor: default;
+	}
+
+	.inline-editor-image img.focused {
+		outline: 2px solid rgb(60, 132, 244);
+	}
+
+	.inline-editor-image img.focused.draggable {
+		cursor: grab;
+	}
+
+	.inline-editor-image img.focused.draggable:active {
+		cursor: grabbing;
+	}
+
+	.inline-editor-image .image-caption-container .tree-view-output {
+		margin: 0;
+		border-radius: 0;
+	}
+
+	.inline-editor-image.position-full {
+		margin: 1em 0 1em 0;
+	}
+
+	.inline-editor-image.position-left {
+		float: left;
+		width: 50%;
+		margin: 1em 1em 0 0;
+	}
+
+	.inline-editor-image.position-right {
+		float: right;
+		width: 50%;
+		margin: 1em 0 0 1em;
+	}
+
+	.inline-editor-image .image-edit-button {
+		display: block;
+		position: absolute;
+		top: 12px;
+		right: 12px;
+		padding: 6px 8px;
+		margin: 0 auto;
+		border: 1px solid rgba(255, 255, 255, 0.3);
+		border-radius: 5px;
+		background-color: rgba(0, 0, 0, 0.5);
+		min-width: 60px;
+		color: #fff;
+		cursor: pointer;
+		user-select: none;
+	}
+
+	.inline-editor-image .image-edit-button:hover {
+		background-color: rgba(60, 132, 244, 0.5);
+	}
+
+	.inline-editor-image .image-caption-container {
+		display: block;
+		background-color: #f4f4f4;
+		min-width: 100%;
+		color: #000;
+		overflow: hidden;
+	}
+`;

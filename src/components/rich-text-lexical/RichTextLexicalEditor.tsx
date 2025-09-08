@@ -21,6 +21,7 @@ import PlaygroundEditorTheme from './themes/PlaygroundEditorTheme';
 import { parseAllowedColor } from './ui/ColorPicker';
 import { parseAllowedFontSize } from './plugins/ToolbarPlugin/fontSize';
 import TypingPerfPlugin from './plugins/TypingPerfPlugin';
+import { EditorShell } from '@/components/rich-text-lexical/mainStyles';
 
 function $prepopulatedRichText() {
 	const root = $getRoot();
@@ -197,9 +198,9 @@ export default function RichTextLexicalEditor() {
 				<SharedHistoryContext>
 					<TableContext>
 						<ToolbarContext>
-							<div className='editor-shell'>
+							<EditorShell className='editor-shell'>
 								<Editor />
-							</div>
+							</EditorShell>
 							{measureTypingPerf ? <TypingPerfPlugin /> : null}
 						</ToolbarContext>
 					</TableContext>
