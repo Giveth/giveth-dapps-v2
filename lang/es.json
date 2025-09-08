@@ -1989,5 +1989,7 @@
 	"label.transaction_successful": "¡Transacción realizada!",
 	"label.qf.vote": "Votar",
 	"label.qf.showing_all_donations": "Mostrando todas las donaciones",
-	"label.qf.open": "Abierto"
+	"label.qf.open": "Abierto",
+	"label.qf.qf_projects": "Proyecto QF",
+	"label.qf.qf_cause": "Causa QF"
 }
