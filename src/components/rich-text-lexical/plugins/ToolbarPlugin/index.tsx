@@ -36,7 +36,6 @@ import {
 } from '@lexical/utils';
 import {
 	$getNodeByKey,
-	$getRoot,
 	$getSelection,
 	$isElementNode,
 	$isNodeSelection,
@@ -67,14 +66,12 @@ import {
 } from '../../context/ToolbarContext';
 import useModal from '../../hooks/useModal';
 import catTypingGif from '../../images/cat-typing.gif';
-import { $createStickyNode } from '../../nodes/StickyNode';
 import DropDown, { DropDownItem } from '../../ui/DropDown';
 import DropdownColorPicker from '../../ui/DropdownColorPicker';
 import { getSelectedNode } from '../../utils/getSelectedNode';
 import { sanitizeUrl } from '../../utils/url';
 import { EmbedConfigs } from '../AutoEmbedPlugin';
 import { INSERT_COLLAPSIBLE_COMMAND } from '../CollapsiblePlugin';
-import { INSERT_DATETIME_COMMAND } from '../DateTimePlugin';
 import { InsertEquationDialog } from '../EquationsPlugin';
 import { INSERT_EXCALIDRAW_COMMAND } from '../ExcalidrawPlugin';
 import {
@@ -85,7 +82,6 @@ import {
 import { InsertInlineImageDialog } from '../InlineImagePlugin';
 import InsertLayoutDialog from '../LayoutPlugin/InsertLayoutDialog';
 import { INSERT_PAGE_BREAK } from '../PageBreakPlugin';
-import { InsertPollDialog } from '../PollPlugin';
 import { SHORTCUTS } from '../ShortcutsPlugin/shortcuts';
 import { InsertTableDialog } from '../TablePlugin';
 import FontSize, { parseFontSizeForToolbar } from './fontSize';
@@ -1487,20 +1483,6 @@ export default function ToolbarPlugin({
 								</DropDownItem>
 								<DropDownItem
 									onClick={() => {
-										showModal('Insert Poll', onClose => (
-											<InsertPollDialog
-												activeEditor={activeEditor}
-												onClose={onClose}
-											/>
-										));
-									}}
-									className='item'
-								>
-									<i className='icon poll' />
-									<span className='text'>Poll</span>
-								</DropDownItem>
-								<DropDownItem
-									onClick={() => {
 										showModal(
 											'Insert Columns Layout',
 											onClose => (
@@ -1536,20 +1518,6 @@ export default function ToolbarPlugin({
 								</DropDownItem>
 								<DropDownItem
 									onClick={() => {
-										editor.update(() => {
-											const root = $getRoot();
-											const stickyNode =
-												$createStickyNode(0, 0);
-											root.append(stickyNode);
-										});
-									}}
-									className='item'
-								>
-									<i className='icon sticky' />
-									<span className='text'>Sticky Note</span>
-								</DropDownItem>
-								<DropDownItem
-									onClick={() => {
 										editor.dispatchCommand(
 											INSERT_COLLAPSIBLE_COMMAND,
 											undefined,
@@ -1561,22 +1529,6 @@ export default function ToolbarPlugin({
 									<span className='text'>
 										Collapsible container
 									</span>
-								</DropDownItem>
-								<DropDownItem
-									onClick={() => {
-										const dateTime = new Date();
-										dateTime.setHours(0, 0, 0, 0);
-										activeEditor.dispatchCommand(
-											INSERT_DATETIME_COMMAND,
-											{
-												dateTime,
-											},
-										);
-									}}
-									className='item'
-								>
-									<i className='icon calendar' />
-									<span className='text'>Date</span>
 								</DropDownItem>
 								{EmbedConfigs.map(embedConfig => (
 									<DropDownItem

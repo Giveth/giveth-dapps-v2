@@ -7,7 +7,7 @@
  */
 
 import * as React from 'react';
-import styles from './Select.module.css';
+import styled from 'styled-components';
 import type { JSX } from 'react';
 
 type SelectIntrinsicProps = JSX.IntrinsicElements['select'];
@@ -22,23 +22,41 @@ export default function Select({
 	...other
 }: SelectProps): JSX.Element {
 	return (
-		<div
-			className={`${styles['Input__wrapper']} ${styles['selectWrapper']}`}
-		>
-			<label
-				style={{ marginTop: '-1em' }}
-				className={styles['Input__label']}
-			>
+		<SelectWrapper>
+			<label style={{ marginTop: '-1em' }} className='Input__label'>
 				{label}
 			</label>
-			<select
-				{...other}
-				className={
-					className || `${styles['select-main']} ${styles['select']}`
-				}
-			>
+			<select {...other} className={className || `select-main select`}>
 				{children}
 			</select>
-		</div>
+		</SelectWrapper>
 	);
 }
+
+const SelectWrapper = styled.div`
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	margin-bottom: 10px;
+	--select-border: #393939;
+	--select-focus: #101484;
+
+	.Input__label {
+		display: flex;
+		flex: 1;
+		color: #666;
+	}
+
+	.select {
+		padding: 3em 2em;
+		min-width: 160px;
+		max-width: 290px;
+		border: 1px solid #393939;
+		border-radius: 0.25em;
+		padding: 0.25em 0.5em;
+		font-size: 1rem;
+		cursor: pointer;
+		line-height: 1.4;
+		background: linear-gradient(to bottom, #fff, #e5e5e5);
+	}
+`;

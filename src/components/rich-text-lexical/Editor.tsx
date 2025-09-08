@@ -59,7 +59,6 @@ import MarkdownShortcutPlugin from './plugins/MarkdownShortcutPlugin';
 import { MaxLengthPlugin } from './plugins/MaxLengthPlugin';
 import MentionsPlugin from './plugins/MentionsPlugin';
 import PageBreakPlugin from './plugins/PageBreakPlugin';
-import PollPlugin from './plugins/PollPlugin';
 import ShortcutsPlugin from './plugins/ShortcutsPlugin';
 import SpecialTextPlugin from './plugins/SpecialTextPlugin';
 import SpeechToTextPlugin from './plugins/SpeechToTextPlugin';
@@ -223,7 +222,6 @@ export default function Editor(): JSX.Element {
 						<ImagesPlugin />
 						<InlineImagePlugin />
 						<LinkPlugin hasLinkAttributes={hasLinkAttributes} />
-						<PollPlugin />
 						<TwitterPlugin />
 						<YouTubePlugin />
 						<FigmaPlugin />
