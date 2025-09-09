@@ -94,7 +94,6 @@ export default function Editor(): JSX.Element {
 			showTreeView,
 			showTableOfContents,
 			shouldUseLexicalContextMenu,
-			shouldPreserveNewLinesInMarkdown,
 			tableCellMerge,
 			tableCellBackgroundColor,
 			tableHorizontalScroll,
