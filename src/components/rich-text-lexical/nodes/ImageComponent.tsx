@@ -34,7 +34,6 @@ import {
 } from 'lexical';
 import * as React from 'react';
 import { Suspense, useCallback, useEffect, useRef, useState } from 'react';
-import styles from './ImageNode.module.css';
 
 import { createWebsocketProvider } from '../collaboration';
 import { useSettings } from '../context/SettingsContext';
@@ -457,7 +456,7 @@ export default function ImageComponent({
 						<LazyImage
 							className={
 								isFocused
-									? `${styles.focused} ${$isNodeSelection(selection) ? styles.draggable : ''}`
+									? `focused ${$isNodeSelection(selection) ? 'draggable' : ''}`
 									: null
 							}
 							src={src}
@@ -472,7 +471,7 @@ export default function ImageComponent({
 				</div>
 
 				{showCaption && (
-					<div className={styles.imageCaptionContainer}>
+					<div className='image-caption-container'>
 						<LexicalNestedComposer initialEditor={caption}>
 							<AutoFocusPlugin />
 							<MentionsPlugin />
@@ -495,10 +494,8 @@ export default function ImageComponent({
 								contentEditable={
 									<ContentEditable
 										placeholder='Enter a caption...'
-										placeholderClassName={
-											styles.placeholder
-										}
-										className={styles.contentEditable}
+										placeholderClassName='ImageNode__placeholder'
+										className='ImageNode__contentEditable'
 									/>
 								}
 								ErrorBoundary={LexicalErrorBoundary}

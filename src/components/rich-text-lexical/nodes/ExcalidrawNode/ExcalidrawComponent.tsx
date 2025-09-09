@@ -22,11 +22,13 @@ import * as React from 'react';
 import ExcalidrawModal from '../../ui/ExcalidrawModal';
 import ImageResizer from '../../ui/ImageResizer';
 import ExcalidrawImage from './ExcalidrawImage';
-import styles from '../../index.module.css';
 import { $isExcalidrawNode } from '.';
 import type { JSX } from 'react';
 import type { NodeKey } from 'lexical';
-import type { AppState, BinaryFiles } from '@excalidraw/excalidraw/types';
+import type {
+	AppState,
+	BinaryFiles,
+} from '@excalidraw/excalidraw/dist/types/excalidraw/types';
 import type { ExcalidrawInitialElements } from '../../ui/ExcalidrawModal';
 
 export default function ExcalidrawComponent({
@@ -197,7 +199,7 @@ export default function ExcalidrawComponent({
 			{elements.length > 0 && (
 				<button
 					ref={buttonRef}
-					className={`${styles['excalidraw-button']} ${isSelected ? styles['selected'] : ''}`}
+					className={`excalidraw-button ${isSelected ? 'selected' : ''}`}
 					type='button'
 				>
 					<ExcalidrawImage
@@ -211,7 +213,7 @@ export default function ExcalidrawComponent({
 					/>
 					{isSelected && isEditable && (
 						<div
-							className={styles['image-edit-button']}
+							className='image-edit-button'
 							role='button'
 							tabIndex={0}
 							onMouseDown={event => event.preventDefault()}

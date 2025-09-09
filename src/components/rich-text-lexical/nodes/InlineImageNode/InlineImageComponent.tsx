@@ -6,6 +6,8 @@
  *
  */
 
+// import './InlineImageNode.css';
+
 import { AutoFocusPlugin } from '@lexical/react/LexicalAutoFocusPlugin';
 import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext';
 import { LexicalErrorBoundary } from '@lexical/react/LexicalErrorBoundary';
@@ -28,7 +30,6 @@ import {
 } from 'lexical';
 import * as React from 'react';
 import { Suspense, useCallback, useEffect, useRef, useState } from 'react';
-import styles from './InlineImageNode.module.css';
 
 import useModal from '../../hooks/useModal';
 import LinkPlugin from '../../plugins/LinkPlugin';
@@ -38,9 +39,9 @@ import { DialogActions } from '../../ui/Dialog';
 import Select from '../../ui/Select';
 import TextInput from '../../ui/TextInput';
 import { InlineImageNode } from './InlineImageNode';
-import type { JSX } from 'react';
-import type { BaseSelection, LexicalEditor, NodeKey } from 'lexical';
 import type { Position } from './InlineImageNode';
+import type { BaseSelection, LexicalEditor, NodeKey } from 'lexical';
+import type { JSX } from 'react';
 
 const imageCache = new Set();
 
@@ -154,7 +155,7 @@ export function UpdateInlineImageDialog({
 				<option value='full'>Full Width</option>
 			</Select>
 
-			<div className={styles.inputWrapper}>
+			<div className='Input__wrapper'>
 				<input
 					id='caption'
 					type='checkbox'
@@ -335,7 +336,8 @@ export default function InlineImageComponent({
 				<span draggable={draggable}>
 					{isEditable && (
 						<button
-							className={styles.imageEditButton}
+							className='image-edit-button'
+							type='button'
 							ref={buttonRef}
 							onClick={() => {
 								showModal('Update Inline Image', onClose => (
@@ -353,7 +355,7 @@ export default function InlineImageComponent({
 					<LazyImage
 						className={
 							isFocused
-								? `${styles.focused} ${$isNodeSelection(selection) ? styles.draggable : ''}`
+								? `focused ${$isNodeSelection(selection) ? 'draggable' : ''}`
 								: null
 						}
 						src={src}
@@ -365,7 +367,7 @@ export default function InlineImageComponent({
 					/>
 				</span>
 				{showCaption && (
-					<span className={styles.imageCaptionContainer}>
+					<span className='image-caption-container'>
 						<LexicalNestedComposer initialEditor={caption}>
 							<AutoFocusPlugin />
 							<LinkPlugin />
@@ -373,10 +375,8 @@ export default function InlineImageComponent({
 								contentEditable={
 									<ContentEditable
 										placeholder='Enter a caption...'
-										placeholderClassName={
-											styles.placeholder
-										}
-										className={styles.contentEditable}
+										placeholderClassName='InlineImageNode__placeholder'
+										className='InlineImageNode__contentEditable'
 									/>
 								}
 								ErrorBoundary={LexicalErrorBoundary}
