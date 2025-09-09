@@ -738,7 +738,7 @@ export const EditorShell = styled.div`
 	.editor-image .image-edit-button {
 		border: 1px solid rgba(0, 0, 0, 0.3);
 		border-radius: 5px;
-		background-image: url(/src/images/icons/pencil-fill.svg);
+		background-image: url(/images/rich-text-lexical/icons/pencil-fill.svg);
 		background-size: 16px;
 		background-position: center;
 		background-repeat: no-repeat;
@@ -884,5 +884,317 @@ export const EditorShell = styled.div`
 		min-width: 100%;
 		color: #000;
 		overflow: hidden;
+	}
+
+	.PlaygroundEditorTheme__tableScrollableWrapper {
+		overflow-x: auto;
+		margin: 0 25px 30px 0;
+	}
+
+	.PlaygroundEditorTheme__tableScrollableWrapper
+		> .PlaygroundEditorTheme__table {
+		margin-top: 0;
+		margin-bottom: 0;
+	}
+
+	.PlaygroundEditorTheme__tableAlignmentCenter {
+		margin-left: auto;
+		margin-right: auto;
+	}
+
+	.PlaygroundEditorTheme__tableAlignmentRight {
+		margin-left: auto;
+	}
+
+	.PlaygroundEditorTheme__table {
+		border-collapse: collapse;
+		border-spacing: 0;
+		overflow-y: scroll;
+		overflow-x: scroll;
+		table-layout: fixed;
+		width: fit-content;
+		margin-top: 25px;
+		margin-bottom: 30px;
+	}
+
+	.PlaygroundEditorTheme__tableScrollableWrapper.PlaygroundEditorTheme__tableFrozenRow {
+		overflow-x: clip;
+	}
+
+	.PlaygroundEditorTheme__tableFrozenRow tr:nth-of-type(1) > td {
+		overflow: clip;
+		background-color: #fff;
+		position: sticky;
+		z-index: 2;
+		top: 44px;
+	}
+
+	.PlaygroundEditorTheme__tableFrozenRow tr:nth-of-type(1) > th {
+		overflow: clip;
+		background-color: #f2f3f5;
+		position: sticky;
+		z-index: 2;
+		top: 44px;
+	}
+
+	.PlaygroundEditorTheme__tableFrozenRow tr:nth-of-type(1) > th:after,
+	.PlaygroundEditorTheme__tableFrozenRow tr:nth-of-type(1) > td:after {
+		content: '';
+		position: absolute;
+		left: 0;
+		bottom: 0;
+		width: 100%;
+		border-bottom: 1px solid #bbb;
+	}
+
+	.PlaygroundEditorTheme__tableFrozenColumn tr > td:first-child {
+		background-color: #fff;
+		position: sticky;
+		z-index: 2;
+		left: 0;
+	}
+
+	.PlaygroundEditorTheme__tableFrozenColumn tr > th:first-child {
+		background-color: #f2f3f5;
+		position: sticky;
+		z-index: 2;
+		left: 0;
+	}
+
+	.PlaygroundEditorTheme__tableFrozenColumn tr > :first-child:after {
+		content: '';
+		position: absolute;
+		left: 0;
+		top: 0;
+		right: 0;
+		height: 100%;
+		border-right: 1px solid #bbb;
+	}
+
+	.PlaygroundEditorTheme__tableRowStriping tr:nth-child(2n),
+	.PlaygroundEditorTheme__tableFrozenColumn
+		.PlaygroundEditorTheme__table.PlaygroundEditorTheme__tableRowStriping
+		tr:nth-child(2n)
+		> td:first-child {
+		background-color: #f2f5fb;
+	}
+
+	.PlaygroundEditorTheme__tableSelection *::selection {
+		background-color: transparent;
+	}
+
+	.PlaygroundEditorTheme__tableSelected {
+		outline: 2px solid rgb(60, 132, 244);
+	}
+
+	.PlaygroundEditorTheme__tableCell {
+		border: 1px solid #bbb;
+		width: 75px;
+		vertical-align: top;
+		text-align: start;
+		padding: 6px 8px;
+		position: relative;
+		outline: none;
+		overflow: auto;
+	}
+
+	.PlaygroundEditorTheme__tableCell > * {
+		overflow: inherit;
+	}
+
+	.PlaygroundEditorTheme__tableCellResizer {
+		position: absolute;
+		right: -4px;
+		height: 100%;
+		width: 8px;
+		cursor: ew-resize;
+		z-index: 10;
+		top: 0;
+	}
+
+	.PlaygroundEditorTheme__tableCellHeader {
+		background-color: #f2f3f5;
+		text-align: start;
+	}
+
+	.PlaygroundEditorTheme__tableCellSelected {
+		caret-color: transparent;
+	}
+
+	.PlaygroundEditorTheme__tableCellSelected:after {
+		position: absolute;
+		left: 0;
+		right: 0;
+		bottom: 0;
+		top: 0;
+		background-color: highlight;
+		mix-blend-mode: multiply;
+		content: '';
+		pointer-events: none;
+	}
+
+	.PlaygroundEditorTheme__tableAddColumns {
+		position: absolute;
+		background-color: #eee;
+		height: 100%;
+		animation: table-controls 0.2s ease;
+		border: 0;
+		cursor: pointer;
+	}
+
+	.PlaygroundEditorTheme__tableAddColumns:after {
+		background-image: url("data:image/svg+xml,%3csvg%20xmlns='http://www.w3.org/2000/svg'%20width='16'%20height='16'%20fill='currentColor'%20class='bi%20bi-plus'%3e%3cpath%20d='M8%204a.5.5%200%200%201%20.5.5v3h3a.5.5%200%200%201%200%201h-3v3a.5.5%200%200%201-1%200v-3h-3a.5.5%200%200%201%200-1h3v-3A.5.5%200%200%201%208%204z'/%3e%3c/svg%3e");
+		background-size: contain;
+		background-position: center;
+		background-repeat: no-repeat;
+		display: block;
+		content: ' ';
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+		opacity: 0.4;
+	}
+
+	.PlaygroundEditorTheme__tableAddColumns:hover,
+	.PlaygroundEditorTheme__tableAddRows:hover {
+		background-color: #c9dbf0;
+	}
+
+	.PlaygroundEditorTheme__tableAddRows {
+		position: absolute;
+		width: calc(100% - 25px);
+		background-color: #eee;
+		animation: table-controls 0.2s ease;
+		border: 0;
+		cursor: pointer;
+	}
+
+	.PlaygroundEditorTheme__tableAddRows:after {
+		background-image: url("data:image/svg+xml,%3csvg%20xmlns='http://www.w3.org/2000/svg'%20width='16'%20height='16'%20fill='currentColor'%20class='bi%20bi-plus'%3e%3cpath%20d='M8%204a.5.5%200%200%201%20.5.5v3h3a.5.5%200%200%201%200%201h-3v3a.5.5%200%200%201-1%200v-3h-3a.5.5%200%200%201%200-1h3v-3A.5.5%200%200%201%208%204z'/%3e%3c/svg%3e");
+		background-size: contain;
+		background-position: center;
+		background-repeat: no-repeat;
+		display: block;
+		content: ' ';
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+		opacity: 0.4;
+	}
+
+	@keyframes table-controls {
+		0% {
+			opacity: 0;
+		}
+
+		to {
+			opacity: 1;
+		}
+	}
+
+	.PlaygroundEditorTheme__tableCellResizeRuler {
+		display: block;
+		position: absolute;
+		width: 1px;
+		background-color: #3c84f4;
+		height: 100%;
+		top: 0;
+	}
+
+	.PlaygroundEditorTheme__tableCellActionButtonContainer {
+		display: block;
+		right: 5px;
+		top: 6px;
+		position: absolute;
+		z-index: 4;
+		width: 20px;
+		height: 20px;
+	}
+
+	.PlaygroundEditorTheme__tableCellActionButton {
+		background-color: #eee;
+		display: block;
+		border: 0;
+		border-radius: 20px;
+		width: 20px;
+		height: 20px;
+		color: #222;
+		cursor: pointer;
+	}
+
+	.PlaygroundEditorTheme__tableCellActionButton:hover {
+		background-color: #ddd;
+	}
+
+	.table-cell-action-button-container {
+		position: absolute;
+		z-index: 3;
+		top: 0;
+		left: 0;
+		will-change: transform;
+	}
+
+	.table-cell-action-button-container.table-cell-action-button-container--active {
+		pointer-events: auto;
+		opacity: 1;
+	}
+
+	.table-cell-action-button-container.table-cell-action-button-container--inactive {
+		pointer-events: none;
+		opacity: 0;
+	}
+
+	.table-cell-action-button {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		border: 0;
+		position: absolute;
+		top: 10px;
+		right: 10px;
+		border-radius: 15px;
+		color: #222;
+		display: inline-block;
+		cursor: pointer;
+	}
+
+	i.chevron-down {
+		background-color: transparent;
+		background-size: contain;
+		display: inline-block;
+		height: 8px;
+		width: 8px;
+		background-image: url(/images/rich-text-lexical/icons/chevron-down.svg);
+	}
+
+	.action-button {
+		background-color: #eee;
+		border: 0;
+		padding: 8px 12px;
+		position: relative;
+		margin-left: 5px;
+		border-radius: 15px;
+		color: #222;
+		display: inline-block;
+		cursor: pointer;
+	}
+
+	.action-button:hover {
+		background-color: #ddd;
+		color: #000;
+	}
+
+	.action-button-mic.active {
+		animation: mic-pulsate-color 3s infinite;
+	}
+
+	button.action-button:disabled {
+		opacity: 0.6;
+		background: #eee;
+		cursor: not-allowed;
 	}
 `;
