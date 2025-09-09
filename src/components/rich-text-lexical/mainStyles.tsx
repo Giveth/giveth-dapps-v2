@@ -1197,4 +1197,21 @@ export const EditorShell = styled.div`
 		background: #eee;
 		cursor: not-allowed;
 	}
+
+	.PlaygroundEditorTheme__layoutContainer {
+		display: grid;
+		gap: 10px;
+		margin: 10px 0;
+	}
+
+	.PlaygroundEditorTheme__layoutItem {
+		border: 1px dashed #ddd;
+		padding: 8px 16px;
+		min-width: 0;
+		max-width: 100%;
+	}
+
+	.PlaygroundEditorTheme__autocomplete {
+		color: #ccc;
+	}
 `;
