@@ -50,6 +50,9 @@ const DescriptionInput = ({
 		getValues(EInputs.description),
 	);
 
+	// Debug: Log the description value
+	console.log('Description value:', description);
+
 	const handleDescription = (value: string) => {
 		setDescription(value);
 		setValue(EInputs.description, value);
@@ -103,8 +106,11 @@ const DescriptionInput = ({
 			</CaptionContainer>
 			<InputContainer>
 				<Label>{formatMessage({ id: 'label.project_story' })}</Label>
-				<RichTextLexicalEditor />
-				<RichTextInput
+				<RichTextLexicalEditor
+					initialValue={description}
+					onChange={handleDescription}
+				/>
+				{/* <RichTextInput
 					style={TextInputStyle}
 					setValue={handleDescription}
 					value={description}
@@ -112,7 +118,7 @@ const DescriptionInput = ({
 					minLimit={DESCRIPTION_MIN_LIMIT}
 					setHasLimitError={setHasLimitError}
 					error={errors[EInputs.description]?.message}
-				/>
+				/> */}
 			</InputContainer>
 		</div>
 	);

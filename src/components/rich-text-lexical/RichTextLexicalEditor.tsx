@@ -1,4 +1,6 @@
 import { LexicalComposer } from '@lexical/react/LexicalComposer';
+import { OnChangePlugin } from '@lexical/react/LexicalOnChangePlugin';
+import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext';
 import {
 	$createParagraphNode,
 	$createTextNode,
@@ -6,7 +8,10 @@ import {
 	$isTextNode,
 	DOMConversionMap,
 	TextNode,
+	EditorState,
+	// LexicalEditor,
 } from 'lexical';
+import { $generateHtmlFromNodes } from '@lexical/html';
 import { $createListNode, $createListItemNode } from '@lexical/list';
 import { $createLinkNode } from '@lexical/link';
 import { $createHeadingNode, $createQuoteNode } from '@lexical/rich-text';
@@ -172,17 +177,98 @@ function buildImportMap(): DOMConversionMap {
 	return importMap;
 }
 
-export default function RichTextLexicalEditor() {
+// Component to handle onChange events
+function OnChangeHandler({ onChange }: { onChange?: (html: string) => void }) {
+	const [editor] = useLexicalComposerContext();
+
+	const handleChange = (editorState: EditorState) => {
+		if (onChange) {
+			editorState.read(() => {
+				const htmlString = $generateHtmlFromNodes(editor);
+				onChange(htmlString);
+			});
+		}
+	};
+
+	return onChange ? <OnChangePlugin onChange={handleChange} /> : null;
+}
+
+// Function to create initial editor state from HTML or text
+function createInitialEditorState(content?: string) {
+	return () => {
+		const root = $getRoot();
+		if (root.getFirstChild() === null) {
+			if (content && content.trim() !== '') {
+				// Check if content looks like HTML
+				if (content.includes('<') && content.includes('>')) {
+					try {
+						// Split content by paragraph tags and create separate paragraphs
+						const paragraphs = content
+							.split(/<\/p>\s*<p[^>]*>/)
+							.map(p =>
+								p
+									.replace(/<\/?p[^>]*>/g, '')
+									.replace(/<br\s*\/?>/gi, '')
+									.trim(),
+							)
+							.filter(p => p.length > 0);
+
+						if (paragraphs.length > 0) {
+							paragraphs.forEach(paragraphText => {
+								const paragraph = $createParagraphNode();
+								paragraph.append(
+									$createTextNode(paragraphText),
+								);
+								root.append(paragraph);
+							});
+						} else {
+							// Fallback: strip all HTML and create single paragraph
+							const textContent = content
+								.replace(/<[^>]*>/g, '')
+								.trim();
+							if (textContent) {
+								const paragraph = $createParagraphNode();
+								paragraph.append($createTextNode(textContent));
+								root.append(paragraph);
+							}
+						}
+					} catch (error) {
+						// Fallback to plain text if HTML parsing fails
+						const paragraph = $createParagraphNode();
+						paragraph.append($createTextNode(content));
+						root.append(paragraph);
+					}
+				} else {
+					// Plain text content
+					const paragraph = $createParagraphNode();
+					paragraph.append($createTextNode(content));
+					root.append(paragraph);
+				}
+			} else {
+				// Add empty paragraph if no content
+				const paragraph = $createParagraphNode();
+				root.append(paragraph);
+			}
+		}
+	};
+}
+
+export default function RichTextLexicalEditor({
+	initialValue,
+	onChange,
+}: {
+	initialValue?: string;
+	onChange?: (html: string) => void;
+} = {}) {
+	// Debug: Log the initial value
+	console.log('RichTextLexicalEditor initialValue:', initialValue);
+
 	const {
 		settings: { isCollab, emptyEditor, measureTypingPerf },
 	} = useSettings();
 
 	const initialConfig = {
-		editorState: isCollab
-			? null
-			: emptyEditor
-				? undefined
-				: $prepopulatedRichText,
+		editorState: isCollab ? null : createInitialEditorState(initialValue),
 		html: { import: buildImportMap() },
 		namespace: 'Playground',
 		nodes: [...PlaygroundNodes],
@@ -201,6 +287,7 @@ export default function RichTextLexicalEditor() {
 							<EditorShell className='editor-shell'>
 								<Editor />
 							</EditorShell>
+							<OnChangeHandler onChange={onChange} />
 							{measureTypingPerf ? <TypingPerfPlugin /> : null}
 						</ToolbarContext>
 					</TableContext>
