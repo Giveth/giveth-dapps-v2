@@ -179,6 +179,8 @@ const ProjectCard = (props: IProjectCard) => {
 		calculateTotalAmountStreamed();
 	}, [props]);
 
+	console.log(`${project.title}: ${project.activeProjectsCount}`);
+
 	return (
 		// </Link>
 		<Wrapper
@@ -289,7 +291,7 @@ const ProjectCard = (props: IProjectCard) => {
 									}
 									isCause={projectType === EProjectType.CAUSE}
 									projectsCount={
-										project.causeProjects?.length || 0
+										project.activeProjectsCount || 0
 									}
 								/>
 							)}
