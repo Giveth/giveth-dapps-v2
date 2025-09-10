@@ -1,7 +1,6 @@
-import { createContext, ReactNode, useContext, useState } from 'react';
-import { useQuery } from '@apollo/client';
+import { createContext, ReactNode, useContext } from 'react';
 import { IQFRound } from '@/apollo/types/types';
-import { FETCH_QF_ROUNDS_QUERY } from '@/apollo/gql/gqlQF';
+import { useFetchQFRounds } from '@/lib/helpers/qfroundHelpers';
 
 interface IQFRoundsContext {
 	qfRounds: IQFRound[];
@@ -22,21 +21,12 @@ const QFRoundsContext = createContext<IQFRoundsContext>({
 QFRoundsContext.displayName = 'QFRoundsContext';
 
 export const QFRoundsProvider = ({ children }: { children: ReactNode }) => {
-	const [qfRounds, setQfRounds] = useState<IQFRound[]>([]);
-
-	const { data, loading, error, refetch } = useQuery(FETCH_QF_ROUNDS_QUERY, {
-		variables: {
-			activeOnly: false, // Fetch all QF rounds
-		},
-		onCompleted: data => {
-			if (data?.qfRounds) {
-				setQfRounds(data.qfRounds);
-			}
-		},
-		onError: error => {
-			console.error('Error fetching QF rounds:', error);
-		},
-	});
+	const {
+		data: qfRounds = [],
+		isLoading: loading,
+		error,
+		refetch,
+	} = useFetchQFRounds(false);
 
 	// Filter active QF rounds
 	const activeQFRounds = qfRounds.filter(round => round.isActive);

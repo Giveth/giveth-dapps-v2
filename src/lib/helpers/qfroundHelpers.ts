@@ -1,0 +1,75 @@
+import { useQuery } from '@tanstack/react-query';
+import { client } from '@/apollo/apolloClient';
+import {
+	FETCH_ARCHIVED_QF_ROUNDS,
+	FETCH_QF_ROUNDS_QUERY,
+} from '@/apollo/gql/gqlQF';
+import { IArchivedQFRound, IQFRound } from '@/apollo/types/types';
+
+/**
+ * @title useFetchLast3ArchivedQFRounds
+ *
+ * @description Fetch the last 3 archived QF rounds
+ * @returns IArchivedQFRound[]
+ */
+export const useFetchLast3ArchivedQFRounds = () => {
+	return useQuery({
+		queryKey: ['archivedQFRounds', 'last3'],
+		queryFn: async (): Promise<IArchivedQFRound[]> => {
+			try {
+				const { data } = await client.query({
+					query: FETCH_ARCHIVED_QF_ROUNDS,
+					variables: {
+						limit: 3,
+						skip: 0,
+						orderBy: {
+							field: 'beginDate',
+							direction: 'DESC',
+						},
+					},
+					fetchPolicy: 'no-cache',
+				});
+
+				return data?.qfArchivedRounds || [];
+			} catch (error) {
+				console.error('Error fetching archived QF rounds:', error);
+				throw error;
+			}
+		},
+		enabled: true,
+		retry: 1,
+		staleTime: 5 * 60 * 1000, // 5 minutes
+		gcTime: 10 * 60 * 1000, // 10 minutes
+	});
+};
+
+/**
+ * @title useFetchQFRounds
+ *
+ * @description Fetch all QF rounds with optional activeOnly filter
+ * @param activeOnly - If true, fetch only active rounds. If false, fetch all rounds
+ * @returns IQFRound[]
+ */
+export const useFetchQFRounds = (activeOnly: boolean = false) => {
+	return useQuery({
+		queryKey: ['qfRounds', activeOnly],
+		queryFn: async (): Promise<IQFRound[]> => {
+			try {
+				const { data } = await client.query({
+					query: FETCH_QF_ROUNDS_QUERY,
+					variables: {
+						activeOnly,
+					},
+					fetchPolicy: 'no-cache',
+				});
+
+				return data?.qfRounds || [];
+			} catch (error) {
+				console.error('Error fetching QF rounds:', error);
+				throw error;
+			}
+		},
+		staleTime: 5 * 60 * 1000, // 5 minutes
+		gcTime: 10 * 60 * 1000, // 10 minutes
+	});
+};

@@ -1,6 +1,7 @@
 // src/components/views/qfrounds/QFRoundsIndex.tsx
 
 import {
+	brandColors,
 	Container,
 	FlexCenter,
 	mediaQueries,
@@ -8,17 +9,23 @@ import {
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import { useIntl } from 'react-intl';
+import Link from 'next/link';
 import { useQFRoundsContext } from '@/context/qfrounds.context';
 import { PassportBanner } from '@/components/PassportBanner';
 import { Spinner } from '@/components/Spinner';
 import { QFRoundsBanner } from '@/components/views/qfrounds/QFRoundsBanner';
 import QFRoundCard from '@/components/views/qfrounds/QFRoundCard';
 import useDetectDevice from '@/hooks/useDetectDevice';
+import Routes from '@/lib/constants/Routes';
+import { useFetchLast3ArchivedQFRounds } from '@/lib/helpers/qfroundHelpers';
+import { formatReadableDate } from '@/lib/helpers/dateHelpers';
 
 const QFRoundsIndex = () => {
 	const { qfRounds, loading } = useQFRoundsContext();
-	const { formatMessage } = useIntl();
+	const { formatMessage, locale } = useIntl();
 	const { isMobile, isTablet } = useDetectDevice();
+	const { data: last3ArchivedQFRounds } = useFetchLast3ArchivedQFRounds();
+
 	return (
 		<>
 			{loading && (
@@ -31,88 +38,63 @@ const QFRoundsIndex = () => {
 				<QFRoundsBanner />
 				<Title>{formatMessage({ id: 'label.qf.active_rounds' })}</Title>
 				<QFRoundsWrapper>
-					<QFRoundCard
-						layout={isTablet || isMobile ? 'grid' : 'horizontal'}
-						title='Future of Finance Round'
-						description='Support climate and sustainability projects building a greener future. By funding clean energy, reforestation, and conservation, your donation helps scale real solutions to the climate crisis. Even small contributions unlock big matching funds for lasting environmental impact.'
-						imageUrl='/images/banners/GIVGIVGIV-purple.png'
-						matchingPoolUsd={50000}
-						startDate='March 18'
-						endDate='April 1, 2025'
-						onExplore={() => console.log('/qf/future-of-finance')}
-					/>
-					<QFRoundCard
-						layout={isTablet || isMobile ? 'grid' : 'horizontal'}
-						title='Future of Finance Round'
-						description='Support climate and sustainability projects building a greener future. By funding clean energy, reforestation, and conservation, your donation helps scale real solutions to the climate crisis. Even small contributions unlock big matching funds for lasting environmental impact.'
-						imageUrl='/images/banners/GIVGIVGIV-purple.png'
-						matchingPoolUsd={50000}
-						startDate='March 18'
-						endDate='April 1, 2025'
-						onExplore={() => console.log('/qf/future-of-finance')}
-					/>
-
-					<QFRoundCard
-						layout='grid'
-						title='ENS x Octant Round'
-						description='Support climate and sustainability projects building a greener future. By funding clean energy, reforestation, and conservation, your donation helps scale real solutions to the climate crisis. Even small contributions unlock big matching funds for lasting environmental impact.'
-						imageUrl='/images/banners/GIVGIVGIV-purple.png'
-						matchingPoolUsd={50000}
-						startDate='March 18'
-						endDate='April 1, 2025'
-						onExplore={() => console.log('/qf/ens-octant')}
-					/>
-					<QFRoundCard
-						layout='grid'
-						title='ENS x Octant Round'
-						description='Support climate and sustainability projects building a greener future. By funding clean energy, reforestation, and conservation, your donation helps scale real solutions to the climate crisis. Even small contributions unlock big matching funds for lasting environmental impact.'
-						imageUrl='/images/banners/GIVGIVGIV-purple.png'
-						matchingPoolUsd={50000}
-						startDate='March 18'
-						endDate='April 1, 2025'
-						onExplore={() => console.log('/qf/ens-octant')}
-					/>
-					<QFRoundCard
-						layout='grid'
-						title='ENS x Octant Round'
-						description='Support climate and sustainability projects building a greener future. By funding clean energy, reforestation, and conservation, your donation helps scale real solutions to the climate crisis. Even small contributions unlock big matching funds for lasting environmental impact.'
-						imageUrl='/images/banners/GIVGIVGIV-purple.png'
-						matchingPoolUsd={50000}
-						startDate='March 18'
-						endDate='April 1, 2025'
-						onExplore={() => console.log('/qf/ens-octant')}
-					/>
-					<QFRoundCard
-						layout='grid'
-						title='ENS x Octant Round'
-						description='Support climate and sustainability projects building a greener future. By funding clean energy, reforestation, and conservation, your donation helps scale real solutions to the climate crisis. Even small contributions unlock big matching funds for lasting environmental impact.'
-						imageUrl='/images/banners/GIVGIVGIV-purple.png'
-						matchingPoolUsd={50000}
-						startDate='March 18'
-						endDate='April 1, 2025'
-						onExplore={() => console.log('/qf/ens-octant')}
-					/>
-					<QFRoundCard
-						layout='grid'
-						title='ENS x Octant Round'
-						description='Support climate and sustainability projects building a greener future. By funding clean energy, reforestation, and conservation, your donation helps scale real solutions to the climate crisis. Even small contributions unlock big matching funds for lasting environmental impact.'
-						imageUrl='/images/banners/GIVGIVGIV-purple.png'
-						matchingPoolUsd={50000}
-						startDate='March 18'
-						endDate='April 1, 2025'
-						onExplore={() => console.log('/qf/ens-octant')}
-					/>
-					<QFRoundCard
-						layout='grid'
-						title='ENS x Octant Round'
-						description='Support climate and sustainability projects building a greener future. By funding clean energy, reforestation, and conservation, your donation helps scale real solutions to the climate crisis. Even small contributions unlock big matching funds for lasting environmental impact.'
-						imageUrl='/images/banners/GIVGIVGIV-purple.png'
-						matchingPoolUsd={50000}
-						startDate='March 18'
-						endDate='April 1, 2025'
-						onExplore={() => console.log('/qf/ens-octant')}
-					/>
+					{qfRounds &&
+						qfRounds.map(round => (
+							<QFRoundCard
+								key={round.id}
+								layout={
+									isTablet || isMobile ? 'grid' : 'horizontal'
+								}
+								title={round.name}
+								description={round.description}
+								imageUrl={round.bannerBgImage}
+								matchingPoolUsd={round.allocatedFundUSD}
+								startDate={formatReadableDate(
+									round.beginDate,
+									locale,
+									false,
+								)}
+								endDate={formatReadableDate(
+									round.endDate,
+									locale,
+									false,
+								)}
+								linkUrl={`/qf/${round.slug}`}
+							/>
+						))}
 				</QFRoundsWrapper>
+				<ClosedHeader>
+					<Title>
+						{formatMessage({ id: 'label.qf.closed_rounds' })}
+					</Title>
+					<ArchivedRoundsLink href={Routes.QFArchived}>
+						{formatMessage({ id: 'label.archived_rounds' })} →
+					</ArchivedRoundsLink>
+				</ClosedHeader>
+				{last3ArchivedQFRounds && (
+					<QFRoundsWrapper>
+						{last3ArchivedQFRounds.map(round => (
+							<QFRoundCard
+								key={round.id}
+								layout='grid'
+								title={round.name}
+								description='Support climate and sustainability projects building a greener future. By funding clean energy, reforestation, and conservation, your donation helps scale real solutions to the climate crisis. Even small contributions unlock big matching funds for lasting environmental impact.'
+								imageUrl='/images/banners/GIVGIVGIV-purple.png'
+								matchingPoolUsd={round.allocatedFundUSD}
+								startDate={formatReadableDate(
+									round.beginDate,
+									locale,
+									false,
+								)}
+								endDate={formatReadableDate(
+									round.endDate,
+									locale,
+								)}
+								linkUrl={`/qf/${round.slug}`}
+							/>
+						))}
+					</QFRoundsWrapper>
+				)}
 			</Wrapper>
 		</>
 	);
@@ -154,6 +136,33 @@ const QFRoundsWrapper = styled.div`
 	flex-wrap: wrap;
 	gap: 32px;
 	margin-top: 32px;
+`;
+
+const ClosedHeader = styled.div`
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	align-items: center;
+`;
+
+const ArchivedRoundsLink = styled(Link)`
+	background-color: transparent;
+	color: white;
+	padding: 12px 20px;
+	text-decoration: none;
+	font-weight: 700;
+	font-size: 16px;
+	display: inline-flex;
+	align-items: center;
+	gap: 8px;
+	transition: color 0.2s ease;
+	color: ${brandColors.giv[500]};
+
+	&:hover {
+		opacity: 0.85;
+		background-color: transparent;
+		text-decoration: none;
+	}
 `;
 
 export default QFRoundsIndex;

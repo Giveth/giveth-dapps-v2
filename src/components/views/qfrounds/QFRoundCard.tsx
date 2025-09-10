@@ -26,8 +26,7 @@ export interface QFRoundCardProps {
 	matchingPoolUsd?: number;
 	startDate?: string; // ISO or display-ready
 	endDate?: string;
-	onExplore?: () => void;
-	exploreLabel?: string;
+	linkUrl?: string;
 }
 
 export default function QFRoundCard({
@@ -38,8 +37,7 @@ export default function QFRoundCard({
 	matchingPoolUsd,
 	startDate,
 	endDate,
-	onExplore,
-	exploreLabel = 'Explore Projects',
+	linkUrl,
 }: QFRoundCardProps) {
 	const { formatMessage } = useIntl();
 
@@ -47,17 +45,19 @@ export default function QFRoundCard({
 		<Card $layout={layout}>
 			{layout === 'horizontal' ? (
 				<>
-					<Media $layout={layout}>
-						<MediaInner>
-							<Image
-								src={imageUrl}
-								alt={title}
-								fill
-								style={{ objectFit: 'cover' }}
-								unoptimized
-							/>
-						</MediaInner>
-					</Media>
+					{imageUrl && (
+						<Media $layout={layout}>
+							<MediaInner>
+								<Image
+									src={imageUrl}
+									alt={title}
+									fill
+									style={{ objectFit: 'cover' }}
+									unoptimized
+								/>
+							</MediaInner>
+						</Media>
+					)}
 
 					<Content>
 						<Title $layout={layout}>{title}</Title>
@@ -88,7 +88,7 @@ export default function QFRoundCard({
 								</Dates>
 							)}
 							<Actions $layout={layout}>
-								<Link href='#'>
+								<Link href={linkUrl || ''}>
 									<ButtonLinkWrapper
 										label={formatMessage({
 											id: 'label.qf.explore_projects',
@@ -106,15 +106,17 @@ export default function QFRoundCard({
 					<Title $layout={layout}>{title}</Title>
 
 					<Media $layout={layout}>
-						<MediaInner>
-							<Image
-								src={imageUrl}
-								alt={title}
-								fill
-								style={{ objectFit: 'cover' }}
-								unoptimized
-							/>
-						</MediaInner>
+						{imageUrl && (
+							<MediaInner>
+								<Image
+									src={imageUrl}
+									alt={title}
+									fill
+									style={{ objectFit: 'cover' }}
+									unoptimized
+								/>
+							</MediaInner>
+						)}
 					</Media>
 
 					<Content>
@@ -141,9 +143,9 @@ export default function QFRoundCard({
 							</MetaGrid>
 						)}
 
-						{onExplore && (
+						{linkUrl && (
 							<Actions $layout={layout}>
-								<Link href='#'>
+								<Link href={linkUrl || ''}>
 									<ButtonLinkWrapper
 										label={formatMessage({
 											id: 'label.qf.explore_projects',
