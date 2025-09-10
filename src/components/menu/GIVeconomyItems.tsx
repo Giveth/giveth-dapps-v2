@@ -21,8 +21,8 @@ export const giveconomyItems = [
 		href: Routes.GIVfarm,
 	},
 	{
-		label: 'Vote',
-		href: links.FEEDBACK,
+		label: 'GIVbacks',
+		href: Routes.GIVbacks,
 	},
 ];
 
