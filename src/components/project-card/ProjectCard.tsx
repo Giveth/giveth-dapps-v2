@@ -190,6 +190,7 @@ const ProjectCard = (props: IProjectCard) => {
 			$order={props.order}
 			$activeStartedRound={!!activeStartedRound}
 			$projectType={projectType}
+			$isListingInsideCauseProjectTabs={isListingInsideCauseProjectTabs}
 		>
 			<ImagePlaceholder>
 				<ProjectCardBadges project={project} />
@@ -440,6 +441,7 @@ interface IWrapperProps {
 	$order?: number;
 	$activeStartedRound?: boolean;
 	$projectType?: EProjectType;
+	$isListingInsideCauseProjectTabs?: boolean;
 }
 
 const CardBody = styled.div<ICardBody>`
@@ -497,31 +499,50 @@ const Wrapper = styled.div<IWrapperProps>`
 	box-shadow: ${Shadow.Neutral[400]};
 	height: ${props => (props.$activeStartedRound ? '638px' : '536px')};
 	order: ${props => props.$order};
-	${mediaQueries.mobileM} {
-		height: ${props => (props.$activeStartedRound ? '603px' : '536px')};
-	${mediaQueries.mobileL} {
-		height: ${props => (props.$activeStartedRound ? '562px' : '536px')};
-	}
-	 ${mediaQueries.laptopS} {
-        height: ${props =>
-			props.$projectType === EProjectType.CAUSE
-				? props.$activeStartedRound
-					? '460px' // Cause with active round
-					: '468px' // Cause without active round
-				: props.$activeStartedRound
-					? '460px' // Not a cause but in active round
-					: '448px'};  // Not a cause or active round
-    }
 	${mediaQueries.mobileS} {
-        height: ${props =>
-			props.$projectType === EProjectType.CAUSE
-				? props.$activeStartedRound
-					? '470px' // Cause with active round
-					: '456px' // Cause without active round
+		height: ${
+			props =>
+				props.$isListingInsideCauseProjectTabs
+					? '448px' // Inside cause project tabs
+					: props.$projectType === EProjectType.CAUSE
+						? props.$activeStartedRound
+							? '474px' // Cause with active round
+							: '456px' // Cause without active round
+						: props.$activeStartedRound
+							? '470px' // Not a cause but in active round
+							: '446px' // Not a cause or active round
+		};
+	}
+	${mediaQueries.mobileM} {
+		height: ${props =>
+			props.$isListingInsideCauseProjectTabs
+				? '424px' // Inside cause project tabs
 				: props.$activeStartedRound
-					? '470px' // Not a cause but in active round
-					: '446px'};  // Not a cause or active round
-    }
+					? '603px'
+					: '536px'};
+	}
+	${mediaQueries.mobileL} {
+		height: ${props =>
+			props.$isListingInsideCauseProjectTabs
+				? '424px' // Inside cause project tabs
+				: props.$activeStartedRound
+					? '562px'
+					: '536px'};
+	}
+	${mediaQueries.laptopS} {
+		height: ${
+			props =>
+				props.$isListingInsideCauseProjectTabs
+					? '470px' // Inside cause project tabs
+					: props.$projectType === EProjectType.CAUSE
+						? props.$activeStartedRound
+							? '460px' // Cause with active round
+							: '468px' // Cause without active round
+						: props.$activeStartedRound
+							? '460px' // Not a cause but in active round
+							: '448px' // Not a cause or active round
+		};
+	}
 `;
 
 interface IPaddedRowProps {
