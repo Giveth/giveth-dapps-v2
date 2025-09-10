@@ -26,7 +26,7 @@ export const QFRoundsProvider = ({ children }: { children: ReactNode }) => {
 		isLoading: loading,
 		error,
 		refetch,
-	} = useFetchQFRounds(false);
+	} = useFetchQFRounds(true);
 
 	// Filter active QF rounds
 	const activeQFRounds = qfRounds.filter(round => round.isActive);
