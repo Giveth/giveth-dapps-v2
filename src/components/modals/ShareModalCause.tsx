@@ -120,7 +120,7 @@ const ShareModalCause: FC<IShareModal> = props => {
 					</SocialButtonContainer>
 					<SocialButtonContainer>
 						<Link
-							href={`https://warpcast.com/~/compose?embeds[]=${url}&text=${shareTitleTwitter}`}
+							href={`https://warpcast.com/~/compose?embeds[]=${encodeURIComponent(url)}&text=${encodeURIComponent(shareTitleTwitter)}`}
 							target='_blank'
 							className='warpcast-share-button'
 						>
