@@ -10,6 +10,8 @@ import {
 import styled from 'styled-components';
 import { useIntl } from 'react-intl';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
+import { useEffect } from 'react';
 import { useQFRoundsContext } from '@/context/qfrounds.context';
 import { PassportBanner } from '@/components/PassportBanner';
 import { Spinner } from '@/components/Spinner';
@@ -21,10 +23,18 @@ import { useFetchLast3ArchivedQFRounds } from '@/lib/helpers/qfroundHelpers';
 import { formatReadableDate } from '@/lib/helpers/dateHelpers';
 
 const QFRoundsIndex = () => {
+	const router = useRouter();
 	const { qfRounds, loading } = useQFRoundsContext();
 	const { formatMessage, locale } = useIntl();
 	const { isMobile, isTablet } = useDetectDevice();
 	const { data: last3ArchivedQFRounds } = useFetchLast3ArchivedQFRounds();
+
+	// Redirect to the first QF round if there is only one
+	useEffect(() => {
+		if (qfRounds.length === 1) {
+			router.push(`/qf/${qfRounds[0].slug}`);
+		}
+	}, [qfRounds, router]);
 
 	return (
 		<>
