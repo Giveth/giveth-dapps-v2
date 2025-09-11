@@ -146,11 +146,11 @@ const CauseDonateIndex: FC = () => {
 					{!isSafeEnv && hasActiveQFRound && !isOnSolana && (
 						<PassportBanner />
 					)}
-					<Row>
+					<DonateRow>
 						<Col xs={12} lg={6}>
 							<CauseDonationCard chainId={chainId || 0} />
 						</Col>
-					</Row>
+					</DonateRow>
 					{!isMobile && (
 						<SocialBox
 							contentType={EContentType.thisProject}

@@ -149,6 +149,7 @@ export const DonationCardQFRounds = ({
 };
 
 const Container = styled.div`
+	width: 100%;
 	margin-bottom: 24px;
 `;
 
