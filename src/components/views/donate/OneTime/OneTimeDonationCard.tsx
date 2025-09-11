@@ -88,7 +88,6 @@ const CryptoDonation: FC<{
 		shouldRenderModal,
 		setDonateModalByPriority,
 		setIsModalPriorityChecked,
-		selectedQFRound,
 	} = useDonateData();
 	const dispatch = useAppDispatch();
 
