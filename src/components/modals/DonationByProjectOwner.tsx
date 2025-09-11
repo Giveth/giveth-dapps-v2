@@ -12,13 +12,16 @@ import { useRouter } from 'next/router';
 import { Modal } from '@/components/modals/Modal';
 import Routes from '@/lib/constants/Routes';
 import { mediaQueries } from '@/lib/constants/constants';
+import { EProjectType } from '@/apollo/types/gqlEnums';
 
 // Define the props interface
 interface DonationByProjectOwnerProps {
+	projectType?: EProjectType;
 	closeModal: () => void;
 }
 
 export const DonationByProjectOwner: React.FC<DonationByProjectOwnerProps> = ({
+	projectType,
 	closeModal,
 }) => {
 	const { formatMessage } = useIntl();
@@ -28,6 +31,11 @@ export const DonationByProjectOwner: React.FC<DonationByProjectOwnerProps> = ({
 	const navigateToAllProjects = () => {
 		setIsRedirecting(true);
 		router.push(Routes.AllProjects);
+	};
+
+	const navigateToAllCauses = () => {
+		setIsRedirecting(true);
+		router.push(Routes.AllCauses);
 	};
 
 	useEffect(() => {
@@ -48,7 +56,10 @@ export const DonationByProjectOwner: React.FC<DonationByProjectOwnerProps> = ({
 			closeModal={closeModal}
 			isAnimating={false}
 			headerTitle={formatMessage({
-				id: 'label.project_owner_address_detected',
+				id:
+					projectType === EProjectType.CAUSE
+						? 'label.cause_owner_address_detected'
+						: 'label.project_owner_address_detected',
 			})}
 			headerTitlePosition='left'
 			hiddenClose={true}
@@ -59,7 +70,10 @@ export const DonationByProjectOwner: React.FC<DonationByProjectOwnerProps> = ({
 				<ModalBox>
 					<Lead>
 						{formatMessage({
-							id: 'label.project_owner_cant_donate_to_own_project',
+							id:
+								projectType === EProjectType.CAUSE
+									? 'label.cause_owner_cant_donate_to_own_project'
+									: 'label.project_owner_cant_donate_to_own_project',
 						})}
 					</Lead>
 				</ModalBox>
@@ -68,9 +82,16 @@ export const DonationByProjectOwner: React.FC<DonationByProjectOwnerProps> = ({
 						buttonType='primary'
 						disabled={false}
 						label={formatMessage({
-							id: 'label.view_all_projects',
+							id:
+								projectType === EProjectType.CAUSE
+									? 'label.view_all_causes'
+									: 'label.view_all_projects',
 						})}
-						onClick={navigateToAllProjects} // Navigate to the All Projects route
+						onClick={
+							projectType === EProjectType.CAUSE
+								? navigateToAllCauses
+								: navigateToAllProjects
+						} // Navigate to the All Projects route or to All Causes route depending on project type
 					/>
 				</Buttons>
 			</ModalContainer>

@@ -60,7 +60,7 @@ const CauseDonateIndex: FC = () => {
 	const { chainId } = useAccount();
 
 	const { walletAddress: address } = useGeneralWallet();
-
+	const projectType = project.projectType;
 	useEffect(() => {
 		dispatch(setShowHeader(false));
 		return () => {
@@ -125,6 +125,7 @@ const CauseDonateIndex: FC = () => {
 									DonateModalPriorityValues.None,
 								);
 							}}
+							projectType={projectType}
 						/>
 					)}
 
