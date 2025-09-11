@@ -1,5 +1,6 @@
 import { FC, useEffect, useRef } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import styled from 'styled-components';
 import {
 	B,
@@ -24,6 +25,7 @@ import { Badge, EBadgeStatus } from '@/components/Badge';
 import { formatDonation } from '@/helpers/number';
 import NetworkLogo from '@/components/NetworkLogo';
 import { EOrderBy, IOrder } from '../../projectsTab/type';
+import { ChainType } from '@/types/config';
 
 interface OneTimeDonationTable {
 	donations: IWalletDonation[];
@@ -103,14 +105,23 @@ const OneTimeDonationTable: FC<OneTimeDonationTable> = ({
 						</DonationTableCell>
 					)}
 					<DonationTableCell>
-						<NetworkLogo
-							logoSize={24}
-							chainId={
-								donation.swapTransaction?.fromChainId ||
-								donation.transactionNetworkId
-							}
-							chainType={donation.chainType}
-						/>
+						{donation.chainType === ChainType.CARDANO ? (
+							<Image
+								src={'/images/tokens/ADA.svg'}
+								alt='Cardano'
+								width={24}
+								height={24}
+							/>
+						) : (
+							<NetworkLogo
+								logoSize={24}
+								chainId={
+									donation.swapTransaction?.fromChainId ||
+									donation.transactionNetworkId
+								}
+								chainType={donation.chainType}
+							/>
+						)}
 					</DonationTableCell>
 					<DonationTableCell>
 						<B>
@@ -123,22 +134,38 @@ const OneTimeDonationTable: FC<OneTimeDonationTable> = ({
 							{donation.swapTransaction?.fromTokenSymbol ||
 								donation.currency}
 						</Currency>
-						<ExternalLink
-							href={formatTxLink({
-								networkId:
-									donation.swapTransaction?.fromChainId ||
-									donation.transactionNetworkId,
-								txHash:
-									donation.swapTransaction?.firstTxHash ||
-									donation.transactionId,
-								chainType: donation.chainType,
-							})}
-						>
-							<IconExternalLink
-								size={16}
-								color={brandColors.pinky[500]}
-							/>
-						</ExternalLink>
+						{donation.chainType === ChainType.CARDANO ? (
+							<Link
+								href={
+									donation.transactionNetworkId === 3000
+										? `https://cardanoscan.io/transaction/${donation.transactionId}`
+										: `https://preprod.cardanoscan.io/transaction/${donation.transactionId}`
+								}
+								target='_blank'
+							>
+								<IconExternalLink
+									size={16}
+									color={brandColors.pinky[500]}
+								/>
+							</Link>
+						) : (
+							<ExternalLink
+								href={formatTxLink({
+									networkId:
+										donation.swapTransaction?.fromChainId ||
+										donation.transactionNetworkId,
+									txHash:
+										donation.swapTransaction?.firstTxHash ||
+										donation.transactionId,
+									chainType: donation.chainType,
+								})}
+							>
+								<IconExternalLink
+									size={16}
+									color={brandColors.pinky[500]}
+								/>
+							</ExternalLink>
+						)}
 					</DonationTableCell>
 					<DonationTableCell>
 						{donation.valueUsd &&
