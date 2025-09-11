@@ -57,10 +57,8 @@ export const DonationCard: FC<IDonationCardProps> = ({
 	const [isQRDonation, setIsQRDonation] = useState(
 		router.query.chain === ChainType.STELLAR.toLowerCase(),
 	);
-	const { project } = useDonateData();
+	const { project, setSelectedQFRound, selectedQFRound } = useDonateData();
 	const { formatMessage } = useIntl();
-
-	console.log('project', project);
 
 	const { addresses, organization, id: projectId } = project;
 	const hasOpAddress =
@@ -157,6 +155,8 @@ export const DonationCard: FC<IDonationCardProps> = ({
 				<DonationCardQFRounds
 					project={project}
 					chainId={chainId || 0}
+					selectedQFRound={selectedQFRound}
+					setSelectedQFRound={setSelectedQFRound}
 				/>
 				{!isQRDonation ? (
 					<>

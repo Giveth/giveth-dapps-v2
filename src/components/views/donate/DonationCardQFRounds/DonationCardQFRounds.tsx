@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import styled from 'styled-components';
 import {
 	B,
@@ -10,73 +10,98 @@ import {
 	brandColors,
 } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
-import { IProject } from '@/apollo/types/types';
+import { IProject, IQFRound } from '@/apollo/types/types';
 import { QFRoundsModal } from '@/components/views/donate/DonationCardQFRounds/QFRoundsModal';
 import {
 	getActiveQFRounds,
-	smartQFRoundSelection,
+	useFetchQFRoundSmartSelect,
 } from '../../donateCause/helpers';
-
-export interface IQFRound {
-	id: string;
-	name: string;
-	isActive: boolean;
-	beginDate: string;
-	endDate: string;
-	maximumReward: number;
-	allocatedTokenSymbol: string;
-	allocatedFundUSDPreferred: boolean;
-	allocatedFundUSD: number;
-	eligibleNetworks: number[];
-}
 
 const EmptyRound: IQFRound = {
 	id: '',
 	name: '',
+	slug: '',
 	isActive: false,
 	beginDate: '',
 	endDate: '',
-	maximumReward: 0,
-	allocatedTokenSymbol: '',
-	allocatedFundUSDPreferred: false,
+	minimumPassportScore: 0,
+	title: '',
+	description: '',
+	bannerBgImage: '',
+	sponsorsImgs: [],
+	allocatedFund: 0,
 	allocatedFundUSD: 0,
+	allocatedFundUSDPreferred: false,
+	allocatedTokenSymbol: '',
+	allocatedTokenChainId: 0,
+	maximumReward: 0,
 	eligibleNetworks: [],
+	minimumValidUsdValue: 0,
+	minMBDScore: 0,
 };
 
 export const DonationCardQFRounds = ({
 	project,
 	chainId,
+	selectedQFRound,
+	setSelectedQFRound,
 }: {
 	project: IProject;
 	chainId: number;
+	selectedQFRound: IQFRound;
+	setSelectedQFRound: (round: IQFRound) => void;
 }) => {
 	const { formatMessage } = useIntl();
-	const activeQFRounds = getActiveQFRounds(project.qfRounds || []);
-	const [selectedRound, setSelectedRound] = useState<IQFRound>(EmptyRound);
+	const activeQFRounds = useMemo(
+		() => getActiveQFRounds(project.qfRounds || []),
+		[project.qfRounds],
+	);
+	const [isSmartSelect, setIsSmartSelect] = useState(false);
+	const [showQFRoundModal, setShowQFRoundModal] = useState(false);
+
+	// Use selectedQFRound from context or fallback to EmptyRound
+	const selectedRound = selectedQFRound || EmptyRound;
+
+	// Fetch QF round smart selection data
+	const { data: smartSelectData } = useFetchQFRoundSmartSelect(
+		project.id ? parseInt(project.id) : 0,
+		chainId,
+		!!project.id && !!chainId && activeQFRounds.length > 0,
+	);
 
 	// Set up default QF round
 	useEffect(() => {
-		const smartRound = smartQFRoundSelection(activeQFRounds || [], chainId);
-		if (smartRound) {
-			setSelectedRound(smartRound);
+		if (smartSelectData && smartSelectData.qfRoundId) {
+			console.log('smartSelectData', smartSelectData);
+			// Find the matching QF round from active rounds
+			const matchingRound = activeQFRounds.find(
+				round => round.id === smartSelectData.qfRoundId.toString(),
+			);
+			if (matchingRound) {
+				setSelectedQFRound(matchingRound);
+			} else {
+				// Fallback to first active round
+				setSelectedQFRound(activeQFRounds[0] || EmptyRound);
+			}
+		} else if (activeQFRounds.length > 0) {
+			// Fallback to first active round if no smart selection
+			setSelectedQFRound(activeQFRounds[0]);
 		} else {
-			setSelectedRound(EmptyRound);
+			setSelectedQFRound(EmptyRound);
 		}
-	}, [activeQFRounds, chainId]);
-
-	const [showQFRoundModal, setShowQFRoundModal] = useState(false);
+		setIsSmartSelect(!!smartSelectData);
+	}, [activeQFRounds, smartSelectData, chainId, setSelectedQFRound]);
 
 	const handleRoundSelect = (round: IQFRound) => {
 		setShowQFRoundModal(true);
-		setSelectedRound(round);
+		setSelectedQFRound(round);
+		setIsSmartSelect(false);
 	};
 
 	// Return nothing if there are no QF rounds
 	if (!activeQFRounds || activeQFRounds.length === 0) {
 		return null;
 	}
-
-	console.log('selectedRound', selectedRound);
 
 	return (
 		<>
@@ -94,13 +119,15 @@ export const DonationCardQFRounds = ({
 											id: 'label.qf.select_a_round',
 										})}
 							</RoundName>
-							{selectedRound && selectedRound.name && (
-								<SmartSelectBadge>
-									{formatMessage({
-										id: 'label.qf.smart_select',
-									})}
-								</SmartSelectBadge>
-							)}
+							{selectedRound &&
+								selectedRound.name &&
+								isSmartSelect && (
+									<SmartSelectBadge>
+										{formatMessage({
+											id: 'label.qf.smart_select',
+										})}
+									</SmartSelectBadge>
+								)}
 						</FlexWrapper>
 						<IconWrapper>
 							<IconChevronDown24 />
@@ -114,6 +141,7 @@ export const DonationCardQFRounds = ({
 					setShowModal={setShowQFRoundModal}
 					project={project}
 					selectedRound={selectedRound}
+					onRoundSelect={handleRoundSelect}
 				/>
 			)}
 		</>

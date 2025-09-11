@@ -1,11 +1,13 @@
 import { Contract, ethers } from 'ethers';
 import { getConnectorClient } from 'wagmi/actions';
 import { captureException } from '@sentry/nextjs';
+import { useQuery } from '@tanstack/react-query';
 import { wagmiConfig } from '@/wagmiConfigs';
 import { EDonationFailedType } from '@/components/modals/FailedDonation';
 import { IOnTxHash } from '@/services/donation';
 import { client } from '@/apollo/apolloClient';
 import { CREATE_CAUSE_DONATION } from '@/apollo/gql/gqlDonations';
+import { FETCH_QF_ROUND_SMART_SELECT } from '@/apollo/gql/gqlQF';
 import { SENTRY_URGENT } from '@/configuration';
 import { IQFRound } from '@/apollo/types/types';
 
@@ -308,54 +310,41 @@ export const getActiveQFRounds = (QFRounds: IQFRound[]) => {
 };
 
 /**
- * Smart QF round selection
+ * @title useFetchQFRoundSmartSelect
  *
- * Smart Select: highest matching pool → earliest end date → lowest priority
- *
- * 1. Highest matching pool
- * 2. Earliest end date
- * 3. Lowest priority
- *
- * @param QFRounds - The QF rounds
- * @param chainId - The chain ID
- *
- * @returns the smart QF round or null if no round is found
+ * @description Fetch QF round smart select data for a specific project and network
+ * @param projectId - The project ID
+ * @param networkId - The network ID
+ * @param enabled - Whether the query should be enabled (optional)
+ * @returns QF round smart select data
  */
-export const smartQFRoundSelection = (
-	QFRounds: IQFRound[],
-	chainId: number,
+export const useFetchQFRoundSmartSelect = (
+	projectId: number,
+	networkId: number,
+	enabled: boolean = true,
 ) => {
-	console.log('smartQFRounds', QFRounds);
-	console.log('chainId', chainId);
-	const matchedRounds = QFRounds.filter(
-		round => round.isActive && round.eligibleNetworks.includes(chainId),
-	);
+	return useQuery({
+		queryKey: ['qfRoundSmartSelect', projectId, networkId],
+		queryFn: async () => {
+			try {
+				const { data } = await client.query({
+					query: FETCH_QF_ROUND_SMART_SELECT,
+					variables: {
+						projectId,
+						networkId,
+					},
+					fetchPolicy: 'no-cache',
+				});
 
-	console.log('matchedRounds', matchedRounds);
-
-	// Get the highest matching pool
-	matchedRounds.reduce((max, round) => {
-		return round.eligibleNetworks.length > max.eligibleNetworks.length
-			? round
-			: max;
-	}, matchedRounds[0]);
-
-	// Get the earliest end date
-	matchedRounds.reduce((min, round) => {
-		return new Date(round.endDate) < new Date(min.endDate) ? round : min;
-	}, matchedRounds[0]);
-
-	// Get the lowest priority
-	// MISSSING PRIORITY
-	// activeRounds.reduce((min, round) => {
-	// 	return round.priority < min.priority ? round : min;
-	// }, activeRounds[0]);
-
-	// Last default option return first one
-	if (matchedRounds.length > 0) {
-		return matchedRounds[0];
-	}
-
-	console.log('no matched rounds');
-	return null;
+				return data?.qfRoundSmartSelect || null;
+			} catch (error) {
+				console.error('Error fetching QF round smart select:', error);
+				throw error;
+			}
+		},
+		enabled: enabled && !!projectId && !!networkId,
+		retry: 1,
+		staleTime: 5 * 60 * 1000, // 5 minutes
+		gcTime: 10 * 60 * 1000, // 10 minutes
+	});
 };

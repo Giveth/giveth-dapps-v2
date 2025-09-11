@@ -92,7 +92,7 @@ const DonateModal: FC<IDonateModalProps> = props => {
 	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
 	const isDonatingToGiveth = donationToGiveth > 0 && givethDonationAmount > 0;
 	const { formatMessage } = useIntl();
-	const { setSuccessDonation, project, activeStartedRound } = useDonateData();
+	const { setSuccessDonation, project, selectedQFRound } = useDonateData();
 
 	const [donating, setDonating] = useState(false);
 	const [secondTxStatus, setSecondTxStatus] = useState<EToastType>();
@@ -127,10 +127,10 @@ const DonateModal: FC<IDonateModalProps> = props => {
 
 	const tokenPrice = useTokenPrice(token);
 
-	const isOnEligibleNetworks = activeStartedRound?.eligibleNetworks?.includes(
+	const isOnEligibleNetworks = selectedQFRound?.eligibleNetworks?.includes(
 		(chain as Chain).id,
 	);
-	const includeInQF = activeStartedRound && isOnEligibleNetworks;
+	const includeInQF = selectedQFRound && isOnEligibleNetworks;
 	const chainvineReferred = getWithExpiry(StorageLabel.CHAINVINEREFERRED);
 	const { title, addresses } = project || {};
 

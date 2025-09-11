@@ -79,3 +79,18 @@ export const FETCH_ARCHIVED_QF_ROUNDS = gql`
 		}
 	}
 `;
+
+export const FETCH_QF_ROUND_SMART_SELECT = gql`
+	query FetchQfRoundSmartSelect($projectId: Int!, $networkId: Int!) {
+		qfRoundSmartSelect(projectId: $projectId, networkId: $networkId) {
+			qfRoundId
+			qfRoundName
+			matchingPoolAmount
+			eligibleNetworks
+			allocatedFundUSD
+			projectUsdAmountRaised
+			uniqueDonors
+			donationsCount
+		}
+	}
+`;

@@ -12,8 +12,7 @@ import {
 import { IModal } from '@/types/common';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
 import { Modal } from '@/components/modals/Modal';
-import { IQFRound } from '@/components/views/donate/DonationCardQFRounds/DonationCardQFRounds';
-import { IProject } from '@/apollo/types/types';
+import { IQFRound, IProject } from '@/apollo/types/types';
 import { IconWithTooltip } from '@/components/IconWithToolTip';
 import config from '@/configuration';
 import { formatDonation } from '@/helpers/number';
@@ -46,7 +45,6 @@ export const QFRoundsModal = ({
 	};
 
 	const getNetworkIcons = (eligibleNetworks: number[]) => {
-		console.log('eligibleNetworks', eligibleNetworks);
 		return eligibleNetworks.map(networkId => (
 			<IconWithTooltip
 				icon={
