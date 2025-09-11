@@ -9,6 +9,7 @@ import {
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import { useIntl } from 'react-intl';
+import Image from 'next/image';
 import { useProjectContext } from '@/context/project.context';
 import ProjectBadge from './ProjectBadge';
 import { hasActiveRound } from '@/helpers/qf';
@@ -63,7 +64,9 @@ const ProjectBadges = () => {
 					icon={
 						<ProjectBadge
 							badgeText={formatMessage({
-								id: 'label.isGivbackEligible',
+								id: isCause
+									? 'label.cause.isGivbackEligible'
+									: 'label.isGivbackEligible',
 							})}
 							textColor={brandColors.giv[500]}
 							wrapperColor={'white'}
@@ -83,9 +86,20 @@ const ProjectBadges = () => {
 			{isQF && (
 				<ProjectBadge
 					badgeText={formatMessage({
-						id: 'label.eligible_for_matching',
+						id: isCause
+							? 'label.qf.qf_cause'
+							: 'label.qf.qf_projects',
 					})}
-					wrapperColor={brandColors.cyan[600]}
+					wrapperColor={neutralColors.gray[100]}
+					textColor={semanticColors.jade[500]}
+					BadgeIcon={
+						<Image
+							src='/images/icons/qf-icon.svg'
+							alt='QF'
+							width={16}
+							height={16}
+						/>
+					}
 				/>
 			)}
 			{campaigns &&
