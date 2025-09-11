@@ -1990,5 +1990,6 @@
 	"label.qf.smart_select": "Smart Select",
 	"label.qf.select_a_round": "Select a round to get your donation matched",
 	"label.qf.project_in_round": "<project>Project name</project> is in <number>1</number> QF round(s).",
-	"label.qf.eligible_networks": "Eligible Networks"
+	"label.qf.eligible_networks": "Eligible Networks",
+	"label.qf.eligible_networks_to_donate_in": "Eligible network(s) to donate in <round>round</round>"
 }

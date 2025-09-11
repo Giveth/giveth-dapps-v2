@@ -48,8 +48,8 @@ export const DonationCardQFRounds = ({
 }: {
 	project: IProject;
 	chainId: number;
-	selectedQFRound: IQFRound;
-	setSelectedQFRound: (round: IQFRound) => void;
+	selectedQFRound: IQFRound | undefined;
+	setSelectedQFRound: (round: IQFRound | undefined) => void;
 }) => {
 	const { formatMessage } = useIntl();
 	const activeQFRounds = useMemo(
@@ -58,9 +58,6 @@ export const DonationCardQFRounds = ({
 	);
 	const [isSmartSelect, setIsSmartSelect] = useState(false);
 	const [showQFRoundModal, setShowQFRoundModal] = useState(false);
-
-	// Use selectedQFRound from context or fallback to EmptyRound
-	const selectedRound = selectedQFRound || EmptyRound;
 
 	// Fetch QF round smart selection data
 	const { data: smartSelectData } = useFetchQFRoundSmartSelect(
@@ -72,7 +69,6 @@ export const DonationCardQFRounds = ({
 	// Set up default QF round
 	useEffect(() => {
 		if (smartSelectData && smartSelectData.qfRoundId) {
-			console.log('smartSelectData', smartSelectData);
 			// Find the matching QF round from active rounds
 			const matchingRound = activeQFRounds.find(
 				round => round.id === smartSelectData.qfRoundId.toString(),
@@ -83,8 +79,11 @@ export const DonationCardQFRounds = ({
 				// Fallback to first active round
 				setSelectedQFRound(activeQFRounds[0] || EmptyRound);
 			}
-		} else if (activeQFRounds.length > 0) {
-			// Fallback to first active round if no smart selection
+		} else if (
+			activeQFRounds.length > 0 &&
+			activeQFRounds[0].eligibleNetworks.includes(chainId)
+		) {
+			// Fallback to first active round if no smart selection and same chain is eligible
 			setSelectedQFRound(activeQFRounds[0]);
 		} else {
 			setSelectedQFRound(EmptyRound);
@@ -113,14 +112,14 @@ export const DonationCardQFRounds = ({
 					<DropdownButton onClick={() => setShowQFRoundModal(true)}>
 						<FlexWrapper>
 							<RoundName>
-								{selectedRound && selectedRound.name
-									? selectedRound.name
+								{selectedQFRound && selectedQFRound.name
+									? selectedQFRound.name
 									: formatMessage({
 											id: 'label.qf.select_a_round',
 										})}
 							</RoundName>
-							{selectedRound &&
-								selectedRound.name &&
+							{selectedQFRound &&
+								selectedQFRound.name &&
 								isSmartSelect && (
 									<SmartSelectBadge>
 										{formatMessage({
@@ -140,8 +139,9 @@ export const DonationCardQFRounds = ({
 					QFRounds={activeQFRounds}
 					setShowModal={setShowQFRoundModal}
 					project={project}
-					selectedRound={selectedRound}
+					selectedRound={selectedQFRound}
 					onRoundSelect={handleRoundSelect}
+					chainId={chainId}
 				/>
 			)}
 		</>

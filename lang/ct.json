@@ -1990,5 +1990,6 @@
 	"label.qf.smart_select": "Selecciona automàticament",
 	"label.qf.select_a_round": "Selecciona una ronda",
 	"label.qf.project_in_round": "<project>Nom del projecte</project> és en <number>1</number> ronda(s) de QF.",
-	"label.qf.eligible_networks": "Xarxes Eligibles"
+	"label.qf.eligible_networks": "Xarxes Eligibles",
+	"label.qf.eligible_networks_to_donate_in": "Xarxes Eligibles per a donar en <round>ronda</round>"
 }

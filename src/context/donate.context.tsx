@@ -142,7 +142,6 @@ export const DonateProvider: FC<IProviderProps> = ({ children, project }) => {
 	useEffect(() => {
 		setSelectedOneTimeToken(undefined);
 		setSelectedRecurringToken(undefined);
-		setSelectedQFRound(undefined);
 	}, [chain]);
 
 	const setIsModalPriorityChecked = useCallback(

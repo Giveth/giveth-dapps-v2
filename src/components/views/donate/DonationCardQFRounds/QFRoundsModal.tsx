@@ -16,6 +16,8 @@ import { IQFRound, IProject } from '@/apollo/types/types';
 import { IconWithTooltip } from '@/components/IconWithToolTip';
 import config from '@/configuration';
 import { formatDonation } from '@/helpers/number';
+import SwitchNetworkQFRound from '@/components/modals/SwitchNetworkQFRound';
+import { ChainType } from '@/types/config';
 
 interface IQFRoundModalProps extends IModal {
 	QFRounds: IQFRound[];
@@ -23,6 +25,7 @@ interface IQFRoundModalProps extends IModal {
 	project: IProject;
 	onRoundSelect?: (round: IQFRound) => void;
 	selectedRound?: IQFRound;
+	chainId: number;
 }
 
 export const QFRoundsModal = ({
@@ -31,17 +34,42 @@ export const QFRoundsModal = ({
 	project,
 	onRoundSelect,
 	selectedRound,
+	chainId,
 }: IQFRoundModalProps) => {
 	const { formatMessage, locale } = useIntl();
+	const [showSwitchModal, setShowSwitchModal] = useState(false);
+	const [roundName, setRoundName] = useState<string | undefined>(
+		selectedRound?.name,
+	);
+
+	// Get the accepted chains for the selected round if it exists
+	const [acceptedChains, setAcceptedChains] = useState<number[]>(
+		selectedRound?.eligibleNetworks || [],
+	);
+
 	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
 	const [currentSelected, setCurrentSelected] = useState<IQFRound | null>(
 		selectedRound || null,
 	);
 
 	const handleRoundSelect = (round: IQFRound) => {
-		setCurrentSelected(round);
-		onRoundSelect?.(round);
-		closeModal();
+		if (round.eligibleNetworks.includes(chainId)) {
+			setCurrentSelected(round);
+			onRoundSelect?.(round);
+			closeModal();
+		} else {
+			setRoundName(round.name);
+			// Setup the networks for the newly selected round and only accepted by project
+			const projectAcceptedChains = project.addresses?.map(
+				address => address.networkId,
+			);
+			setAcceptedChains(
+				round.eligibleNetworks.filter(network =>
+					projectAcceptedChains?.includes(network),
+				),
+			);
+			setShowSwitchModal(true);
+		}
 	};
 
 	const getNetworkIcons = (eligibleNetworks: number[]) => {
@@ -140,6 +168,26 @@ export const QFRoundsModal = ({
 					</RoundsGrid>
 				</ModalContent>
 			</Modal>
+			{showSwitchModal && (
+				<SwitchNetworkQFRound
+					setShowModal={setShowSwitchModal}
+					customNetworks={acceptedChains.map(network => ({
+						networkId: network,
+						chainType: config.EVM_NETWORKS_CONFIG[network]
+							? ChainType.EVM
+							: ChainType.SOLANA,
+					}))}
+					desc={
+						<FormattedMessage
+							id='label.qf.eligible_networks_to_donate_in'
+							values={{
+								round: () => <span>{roundName}</span>,
+							}}
+						/>
+					}
+					closeOtherModal={closeModal}
+				/>
+			)}
 		</>
 	);
 };
