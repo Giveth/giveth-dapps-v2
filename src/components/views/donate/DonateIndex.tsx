@@ -42,6 +42,7 @@ import { isWalletSanctioned } from '@/services/donation';
 import SanctionModal from '@/components/modals/SanctionedModal';
 import { PassportBanner } from '@/components/PassportBanner';
 import { GIVBACKS_DONATION_QUALIFICATION_VALUE_USD } from '@/lib/constants/constants';
+import QRDonationDetails from './OneTime/SelectTokenModal/QRCodeDonation/QRDonationDetails';
 
 const DonateIndex: FC = () => {
 	const { formatMessage } = useIntl();
@@ -316,6 +317,17 @@ const DonateIndex: FC = () => {
 								setShowQRCode={setShowQRCode}
 								showQRCode={showQRCode}
 							/>
+							{showQRCode && (
+								<InfoWrapper
+									style={{
+										marginBottom: isFailedOperation
+											? 24
+											: 0,
+									}}
+								>
+									<QRDonationDetails />
+								</InfoWrapper>
+							)}
 						</Col>
 					</DonateRow>
 					{!isMobile && (
@@ -362,6 +374,14 @@ const DonateContainer = styled(Container)`
 	padding-top: 10px;
 	padding-bottom: 64px;
 	position: relative;
+`;
+
+const InfoWrapper = styled.div`
+	margin-top: 36px;
+	background-color: ${neutralColors.gray[100]};
+	padding: 24px;
+	border-radius: 16px;
+	text-align: left;
 `;
 
 export default DonateIndex;
