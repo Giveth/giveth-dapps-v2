@@ -45,11 +45,15 @@ export const DonationCardQFRounds = ({
 	chainId,
 	selectedQFRound,
 	setSelectedQFRound,
+	choosedModalRound,
+	setChoosedModalRound,
 }: {
 	project: IProject;
 	chainId: number;
 	selectedQFRound: IQFRound | undefined;
 	setSelectedQFRound: (round: IQFRound | undefined) => void;
+	choosedModalRound: IQFRound | undefined;
+	setChoosedModalRound: (round: IQFRound | undefined) => void;
 }) => {
 	const { formatMessage } = useIntl();
 	const activeQFRounds = useMemo(
@@ -68,6 +72,13 @@ export const DonationCardQFRounds = ({
 
 	// Set up default QF round
 	useEffect(() => {
+		// This option is seelcted by user inside modal and after he changed network we should use this option
+		if (choosedModalRound) {
+			setSelectedQFRound(choosedModalRound);
+			return;
+		}
+
+		// This option is fired when user get on the page or change network inside wallet
 		if (smartSelectData && smartSelectData.qfRoundId) {
 			// Find the matching QF round from active rounds
 			const matchingRound = activeQFRounds.find(
@@ -89,7 +100,13 @@ export const DonationCardQFRounds = ({
 			setSelectedQFRound(EmptyRound);
 		}
 		setIsSmartSelect(!!smartSelectData);
-	}, [activeQFRounds, smartSelectData, chainId, setSelectedQFRound]);
+	}, [
+		activeQFRounds,
+		smartSelectData,
+		chainId,
+		setSelectedQFRound,
+		choosedModalRound,
+	]);
 
 	const handleRoundSelect = (round: IQFRound) => {
 		setShowQFRoundModal(true);
@@ -142,6 +159,7 @@ export const DonationCardQFRounds = ({
 					selectedRound={selectedQFRound}
 					onRoundSelect={handleRoundSelect}
 					chainId={chainId}
+					setChoosedModalRound={setChoosedModalRound}
 				/>
 			)}
 		</>

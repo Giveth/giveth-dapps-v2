@@ -20,8 +20,13 @@ export interface IDonationCardProps {
 }
 
 export const CauseDonationCard: FC<IDonationCardProps> = ({ chainId }) => {
-	const { project, setSelectedQFRound, selectedQFRound } =
-		useCauseDonateData();
+	const {
+		project,
+		setSelectedQFRound,
+		selectedQFRound,
+		choosedModalRound,
+		setChoosedModalRound,
+	} = useCauseDonateData();
 	const { formatMessage } = useIntl();
 
 	const [acceptedTokens, setAcceptedTokens] =
@@ -63,6 +68,8 @@ export const CauseDonationCard: FC<IDonationCardProps> = ({ chainId }) => {
 					chainId={chainId || 0}
 					selectedQFRound={selectedQFRound}
 					setSelectedQFRound={setSelectedQFRound}
+					choosedModalRound={choosedModalRound}
+					setChoosedModalRound={setChoosedModalRound}
 				/>
 				<CauseCryptoDonation acceptedTokens={acceptedTokens} />
 			</TabWrapper>

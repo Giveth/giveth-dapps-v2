@@ -57,7 +57,13 @@ export const DonationCard: FC<IDonationCardProps> = ({
 	const [isQRDonation, setIsQRDonation] = useState(
 		router.query.chain === ChainType.STELLAR.toLowerCase(),
 	);
-	const { project, setSelectedQFRound, selectedQFRound } = useDonateData();
+	const {
+		project,
+		setSelectedQFRound,
+		selectedQFRound,
+		choosedModalRound,
+		setChoosedModalRound,
+	} = useDonateData();
 	const { formatMessage } = useIntl();
 
 	const { addresses, organization, id: projectId } = project;
@@ -157,6 +163,8 @@ export const DonationCard: FC<IDonationCardProps> = ({
 					chainId={chainId || 0}
 					selectedQFRound={selectedQFRound}
 					setSelectedQFRound={setSelectedQFRound}
+					choosedModalRound={choosedModalRound}
+					setChoosedModalRound={setChoosedModalRound}
 				/>
 				{!isQRDonation ? (
 					<>

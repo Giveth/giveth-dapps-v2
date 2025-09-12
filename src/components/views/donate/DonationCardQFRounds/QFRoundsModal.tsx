@@ -26,6 +26,7 @@ interface IQFRoundModalProps extends IModal {
 	onRoundSelect?: (round: IQFRound) => void;
 	selectedRound?: IQFRound;
 	chainId: number;
+	setChoosedModalRound: (round: IQFRound | undefined) => void;
 }
 
 export const QFRoundsModal = ({
@@ -35,11 +36,12 @@ export const QFRoundsModal = ({
 	onRoundSelect,
 	selectedRound,
 	chainId,
+	setChoosedModalRound,
 }: IQFRoundModalProps) => {
 	const { formatMessage, locale } = useIntl();
 	const [showSwitchModal, setShowSwitchModal] = useState(false);
-	const [roundName, setRoundName] = useState<string | undefined>(
-		selectedRound?.name,
+	const [clickedRound, setClickedRound] = useState<IQFRound | null>(
+		selectedRound || null,
 	);
 
 	// Get the accepted chains for the selected round if it exists
@@ -58,7 +60,7 @@ export const QFRoundsModal = ({
 			onRoundSelect?.(round);
 			closeModal();
 		} else {
-			setRoundName(round.name);
+			setClickedRound(round);
 			// Setup the networks for the newly selected round and only accepted by project
 			const projectAcceptedChains = project.addresses?.map(
 				address => address.networkId,
@@ -181,11 +183,13 @@ export const QFRoundsModal = ({
 						<FormattedMessage
 							id='label.qf.eligible_networks_to_donate_in'
 							values={{
-								round: () => <span>{roundName}</span>,
+								round: () => <span>{clickedRound?.name}</span>,
 							}}
 						/>
 					}
 					closeOtherModal={closeModal}
+					clickedRound={clickedRound}
+					setChoosedModalRound={setChoosedModalRound}
 				/>
 			)}
 		</>

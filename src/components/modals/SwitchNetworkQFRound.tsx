@@ -22,6 +22,7 @@ import { getChainName } from '@/lib/network';
 import { INetworkIdWithChain } from '../views/donate/common/common.types';
 import { useGeneralWallet } from '@/providers/generalWalletProvider';
 import { ChainType } from '@/types/config';
+import { IQFRound } from '@/apollo/types/types';
 
 const networksConfig = config.EVM_NETWORKS_CONFIG;
 const defaultNetworks = Object.keys(networksConfig).map(key => ({
@@ -32,8 +33,9 @@ const defaultNetworks = Object.keys(networksConfig).map(key => ({
 interface ISwitchNetworkModal extends IModal {
 	desc?: string | React.ReactNode;
 	customNetworks?: INetworkIdWithChain[];
-	roundName?: string;
 	closeOtherModal?: () => void;
+	clickedRound?: IQFRound | null;
+	setChoosedModalRound?: (round: IQFRound | undefined) => void;
 }
 
 const SwitchNetworkQFRound: FC<ISwitchNetworkModal> = ({
@@ -41,6 +43,8 @@ const SwitchNetworkQFRound: FC<ISwitchNetworkModal> = ({
 	customNetworks,
 	setShowModal,
 	closeOtherModal,
+	clickedRound,
+	setChoosedModalRound,
 }) => {
 	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
 	const { switchChain } = useSwitchChain();
@@ -74,6 +78,10 @@ const SwitchNetworkQFRound: FC<ISwitchNetworkModal> = ({
 				handleSignOutAndSignInWithSolana();
 			} else {
 				switchChain?.({ chainId: networkId });
+			}
+			// Set up round that user chose inside modal
+			if (clickedRound) {
+				setChoosedModalRound?.(clickedRound);
 			}
 			closeModal();
 			closeOtherModal?.();

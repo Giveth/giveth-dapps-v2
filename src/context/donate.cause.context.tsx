@@ -39,6 +39,8 @@ interface IDonateContext {
 	setSuccessDonation: (successDonation?: ISuccessDonation) => void;
 	selectedOneTimeToken?: IProjectAcceptedToken;
 	selectedQFRound?: IQFRound;
+	choosedModalRound?: IQFRound;
+	setChoosedModalRound: (round: IQFRound | undefined) => void;
 	setSelectedOneTimeToken: Dispatch<
 		SetStateAction<IProjectAcceptedToken | undefined>
 	>;
@@ -67,6 +69,7 @@ const DonateCauseContext = createContext<IDonateContext>({
 	setSuccessDonation: () => {},
 	setSelectedOneTimeToken: () => {},
 	setSelectedQFRound: () => {},
+	setChoosedModalRound: () => {},
 	project: {} as IProject,
 	fetchProject: async () => {},
 	setDonateModalByPriority: (changeModal: DonateModalPriorityValues) => {},
@@ -86,6 +89,9 @@ export const CauseProvider: FC<IProviderProps> = ({ children, project }) => {
 		IProjectAcceptedToken | undefined
 	>();
 	const [selectedQFRound, setSelectedQFRound] = useState<
+		IQFRound | undefined
+	>();
+	const [choosedModalRound, setChoosedModalRound] = useState<
 		IQFRound | undefined
 	>();
 	const isModalStatusChecked = useRef<
@@ -198,6 +204,8 @@ export const CauseProvider: FC<IProviderProps> = ({ children, project }) => {
 				shouldRenderModal,
 				setIsModalPriorityChecked,
 				fetchProject,
+				choosedModalRound,
+				setChoosedModalRound,
 			}}
 		>
 			{children}
