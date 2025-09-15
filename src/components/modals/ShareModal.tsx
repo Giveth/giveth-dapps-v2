@@ -87,6 +87,9 @@ const ShareModal: FC<IShareModal> = props => {
 	const shareModalDesciption = shareDescription
 		? formatMessage({ id: shareDescription })
 		: null;
+	const farcasterHref = isCause
+		? `https://warpcast.com/~/compose?embeds[]=${encodeURIComponent(url)}&text=${encodeURIComponent(shareTitleTwitter)}`
+		: `https://warpcast.com/~/compose?text=${encodeURIComponent(`${shareTitleTwitter}\n\n${url}`)}`;
 
 	return (
 		<Modal
@@ -140,10 +143,9 @@ const ShareModal: FC<IShareModal> = props => {
 					</SocialButtonContainer>
 					<SocialButtonContainer>
 						<Link
-							href={`https://warpcast.com/~/compose?embeds[]=${url}&text=${encodeURIComponent(
-								shareTitleTwitter,
-							)}`}
+							href={farcasterHref}
 							target='_blank'
+							rel='noopener noreferrer'
 							className='warpcast-share-button'
 						>
 							<Image
