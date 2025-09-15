@@ -1999,5 +1999,9 @@
 	"label.qf.eligible_networks_to_donate_in": "Xarxes Eligibles per a donar en <round>ronda</round>",
 	"label.qf.vote": "Vota",
 	"label.qf.showing_all_donations": "Mostrant totes les donacions",
-	"label.qf.open": "Obert"
+	"label.qf.open": "Obert",
+	"label.qf.qf_rounds": "Rondes QF",
+	"label.qf.active_rounds": "Rondes actives",
+	"label.qf.explore_projects": "Explora Projects",
+	"label.qf.closed_rounds": "Rondes tancades"
 }

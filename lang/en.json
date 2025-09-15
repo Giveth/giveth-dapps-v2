@@ -1999,5 +1999,9 @@
 	"label.qf.eligible_networks_to_donate_in": "Eligible network(s) to donate in <round>round</round>",
 	"label.qf.vote": "Vote",
 	"label.qf.showing_all_donations": "Showing all donations",
-	"label.qf.open": "Open"
+	"label.qf.open": "Open",
+	"label.qf.qf_rounds": "QF Rounds",
+	"label.qf.active_rounds": "Active Rounds",
+	"label.qf.explore_projects": "Explore Projects",
+	"label.qf.closed_rounds": "Closed Rounds"
 }

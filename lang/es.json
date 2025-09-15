@@ -1999,5 +1999,9 @@
 	"label.qf.eligible_networks_to_donate_in": "Redes Eligibles para donar en <round>ronda</round>",
 	"label.qf.vote": "Votar",
 	"label.qf.showing_all_donations": "Mostrando todas las donaciones",
-	"label.qf.open": "Abierto"
+	"label.qf.open": "Abierto",
+	"label.qf.qf_rounds": "Rondas QF",
+	"label.qf.active_rounds": "Rondas activas",
+	"label.qf.explore_projects": "Explorar proyectos",
+	"label.qf.closed_rounds": "Rondas cerradas"
 }

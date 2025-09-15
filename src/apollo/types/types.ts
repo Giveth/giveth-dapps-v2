@@ -551,6 +551,10 @@ export interface IQFRound {
 	allocatedTokenChainId: number;
 	minimumValidUsdValue?: number;
 	minMBDScore: number;
+	displaySize?: number;
+	bannerFull?: string;
+	bannerMobile?: string;
+	priority?: number;
 }
 
 export interface IArchivedQFRound extends IQFRound {
