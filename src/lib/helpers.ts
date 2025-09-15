@@ -220,6 +220,35 @@ export const formatDate = (date: Date, locale?: string) => {
 		.replace(/,/g, '');
 };
 
+/**
+ * Format: "March 18" or, if includeYear: true → "April 1, 2025"
+ *
+ * @param dateInput Date or string or number
+ * @param opts Include year or not, locale and time zone
+ * @returns
+ */
+export function formatMonthDay(
+	dateInput: Date | string | number,
+	opts?: { includeYear?: boolean; locale?: string; timeZone?: string },
+): string {
+	const {
+		includeYear = false,
+		locale = 'en-US',
+		timeZone = 'UTC',
+	} = opts || {};
+	const d = new Date(dateInput);
+	if (Number.isNaN(d.getTime())) return '';
+
+	const options: Intl.DateTimeFormatOptions = {
+		month: 'long',
+		day: 'numeric',
+		timeZone,
+		...(includeYear ? { year: 'numeric' } : {}),
+	};
+
+	return new Intl.DateTimeFormat(locale, options).format(d);
+}
+
 export const smallFormatDate = (date: Date, locale?: string) => {
 	return date.toLocaleString(locale || 'en-US', {
 		day: 'numeric',
