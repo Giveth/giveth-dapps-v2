@@ -18,8 +18,9 @@ import { useProjectContext } from '@/context/project.context';
 import 'swiper/css';
 import 'swiper/css/navigation';
 import { NavigationWrapper } from '@/components/styled-components/SwiperPagination';
-import { ProjectDonationSwiperState } from './ProjectDonations.index';
 import { IQFRound } from '@/apollo/types/types';
+import type { ProjectDonationSwiperState } from './ProjectDonations.index';
+
 interface IQfRoundSelectorProps {
 	projectDonationSwiperState: ProjectDonationSwiperState;
 	setProjectDonationSwiperState: Dispatch<

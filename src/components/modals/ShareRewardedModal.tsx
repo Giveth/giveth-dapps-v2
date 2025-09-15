@@ -109,6 +109,10 @@ const ShareRewardedModal: FC<IShareRewardedModal> = props => {
 			openConnectModal();
 		}
 	};
+	const isProjectLink = Boolean(projectHref) || url.includes('/project/');
+	const farcasterHref = isProjectLink
+		? `https://warpcast.com/~/compose?text=${encodeURIComponent(`${shareTitleTwitter}\n\n${url}`)}`
+		: `https://warpcast.com/~/compose?embeds[]=${encodeURIComponent(url)}&text=${encodeURIComponent(shareTitleTwitter)}`;
 
 	const setReferral = async () => {
 		try {
@@ -272,8 +276,9 @@ const ShareRewardedModal: FC<IShareRewardedModal> = props => {
 									</SocialButtonContainer>
 								</FacebookShareButton>
 								<Link
-									href={`https://warpcast.com/~/compose?embeds[]=${url}&text=${shareTitleTwitter}`}
+									href={farcasterHref}
 									target='_blank'
+									rel='noopener noreferrer'
 								>
 									<Image
 										src={Warpcast}

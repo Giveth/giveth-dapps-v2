@@ -15,5 +15,5 @@ export const ProjectsMenu = () => {
 };
 
 const MenuContainer = styled(BaseMenuContainer)`
-	width: 697px;
+	width: auto;
 `;

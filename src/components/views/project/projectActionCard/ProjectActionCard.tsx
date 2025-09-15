@@ -6,7 +6,6 @@ import { useProjectContext } from '@/context/project.context';
 import useMediaQuery from '@/hooks/useMediaQuery';
 import { device } from '@/lib/constants/constants';
 import MobileDonateFooter from './MobileDonateFooter';
-import QFSection from './QFSection';
 import { DonateSection } from './DonationSection';
 import { ProjectPublicActions } from './ProjectPublicActions';
 
@@ -39,11 +38,7 @@ const ProjectActionInnerCard = () => {
 	return (
 		<>
 			{isAdmin && !isDraft && <AdminActions />}
-			{!isMobile && hasActiveQFRound ? (
-				<QFSection projectData={projectData} />
-			) : (
-				<DonateSection projectData={projectData} />
-			)}
+			<DonateSection projectData={projectData} />
 			{!isMobile && !isAdmin && <ProjectPublicActions />}
 			{isAdmin && <ProjectStats />}
 		</>
