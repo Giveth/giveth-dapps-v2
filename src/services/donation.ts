@@ -78,6 +78,7 @@ const createDonation = async (props: IOnTxHash) => {
 		useDonationBox,
 		relevantDonationTxHash,
 		swapData,
+		qfRoundId,
 	} = props;
 	const { address, symbol } = token;
 	let donationId = 0;
@@ -100,6 +101,7 @@ const createDonation = async (props: IOnTxHash) => {
 				useDonationBox,
 				relevantDonationTxHash,
 				swapData,
+				roundId: qfRoundId,
 			},
 		});
 		donationId = data.createDonation;
