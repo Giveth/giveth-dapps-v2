@@ -63,6 +63,8 @@ export const useFetchQFRounds = (activeOnly: boolean = false) => {
 					fetchPolicy: 'no-cache',
 				});
 
+				console.log('data', data);
+
 				return data?.qfRounds || [];
 			} catch (error) {
 				console.error('Error fetching QF rounds:', error);
@@ -72,4 +74,22 @@ export const useFetchQFRounds = (activeOnly: boolean = false) => {
 		staleTime: 5 * 60 * 1000, // 5 minutes
 		gcTime: 10 * 60 * 1000, // 10 minutes
 	});
+};
+
+/**
+ * @title getQFRoundImage
+ *
+ * @description Get the QF round image
+ * @param qfRound - IQFRound
+ * @param isMobile - boolean
+ * @returns string
+ */
+export const getQFRoundImage = (
+	qfRound: IQFRound,
+	isMobile: boolean,
+): string => {
+	return (
+		(isMobile ? qfRound.bannerMobile : qfRound.bannerFull) ||
+		qfRound.bannerBgImage
+	);
 };

@@ -19,7 +19,10 @@ import { QFRoundsBanner } from '@/components/views/qfrounds/QFRoundsBanner';
 import QFRoundCard from '@/components/views/qfrounds/QFRoundCard';
 import useDetectDevice from '@/hooks/useDetectDevice';
 import Routes from '@/lib/constants/Routes';
-import { useFetchLast3ArchivedQFRounds } from '@/lib/helpers/qfroundHelpers';
+import {
+	getQFRoundImage,
+	useFetchLast3ArchivedQFRounds,
+} from '@/lib/helpers/qfroundHelpers';
 import { formatReadableDate } from '@/lib/helpers/dateHelpers';
 
 const QFRoundsIndex = () => {
@@ -53,11 +56,18 @@ const QFRoundsIndex = () => {
 							<QFRoundCard
 								key={round.id}
 								layout={
-									isTablet || isMobile ? 'grid' : 'horizontal'
+									isTablet || isMobile
+										? 'grid'
+										: round.displaySize === 1
+											? 'horizontal'
+											: 'grid'
 								}
 								title={round.name}
 								description={round.description}
-								imageUrl={round.bannerBgImage}
+								imageUrl={getQFRoundImage(
+									round,
+									isMobile || false,
+								)}
 								matchingPoolUsd={round.allocatedFundUSD}
 								startDate={formatReadableDate(
 									round.beginDate,
@@ -88,8 +98,11 @@ const QFRoundsIndex = () => {
 								key={round.id}
 								layout='grid'
 								title={round.name}
-								description='Support climate and sustainability projects building a greener future. By funding clean energy, reforestation, and conservation, your donation helps scale real solutions to the climate crisis. Even small contributions unlock big matching funds for lasting environmental impact.'
-								imageUrl='/images/banners/GIVGIVGIV-purple.png'
+								description={round.description}
+								imageUrl={getQFRoundImage(
+									round,
+									isMobile || false,
+								)}
 								matchingPoolUsd={round.allocatedFundUSD}
 								startDate={formatReadableDate(
 									round.beginDate,
