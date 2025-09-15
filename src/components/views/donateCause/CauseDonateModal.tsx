@@ -87,7 +87,7 @@ const CauseDonateModal: FC<IDonateModalProps> = props => {
 	const dispatch = useAppDispatch();
 	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
 	const { formatMessage } = useIntl();
-	const { setSuccessDonation, project, activeStartedRound } =
+	const { setSuccessDonation, project, activeStartedRound, selectedQFRound } =
 		useCauseDonateData();
 
 	const [step, setStep] = useState('approve');
@@ -348,6 +348,9 @@ const CauseDonateModal: FC<IDonateModalProps> = props => {
 					symbol: token.symbol,
 					setFailedModalType,
 					fromTokenAmount: parseFloat(projectDonation.toString()),
+					qfRoundId: selectedQFRound?.id
+						? Number(selectedQFRound?.id)
+						: undefined,
 				};
 
 				// Set up this for Polygon GIV donation, same token same network

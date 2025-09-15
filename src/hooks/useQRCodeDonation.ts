@@ -58,6 +58,7 @@ export const useQRCodeDonation = (project: IProject) => {
 				useDonationBox,
 				relevantDonationTxHash,
 				memo,
+				qfRoundId,
 			} = payload;
 
 			// generate QR code from (toWalletAddress, amount, token, memo)
@@ -85,6 +86,7 @@ export const useQRCodeDonation = (project: IProject) => {
 					toWalletMemo: memo,
 					qrCodeDataUrl,
 					isQRDonation: true,
+					roundId: qfRoundId,
 				},
 				fetchPolicy: 'no-cache',
 			});

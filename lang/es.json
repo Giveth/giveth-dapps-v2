@@ -1990,10 +1990,20 @@
 	"label.cause.owner_total_earned_tooltip": "La cantidad total que has ganado en comisiones de distribución de esta Causa",
 	"label.cause.total_distributed_tooltip": "La cantidad total distribuida por el Agente de Donaciones a los proyectos de la Causa",
 	"label.transaction_submitted_processing": "Transacción enviada. Procesando...",
-	"label.transaction_successful": "¡Transacción realizada!",
+	"label.transaction_successful": "Transacción realizada!",
+	"label.qf.select_qf_round": "Selecciona la ronda de QF",
+	"label.qf.smart_select": "Selecciona automáticamente",
+	"label.qf.select_a_round": "Selecciona una ronda",
+	"label.qf.project_in_round": "<project>Nombre del proyecto</project> está en <number>1</number> ronda(s) de QF.",
+	"label.qf.eligible_networks": "Redes Eligibles",
+	"label.qf.eligible_networks_to_donate_in": "Redes Eligibles para donar en <round>ronda</round>",
 	"label.qf.vote": "Votar",
 	"label.qf.showing_all_donations": "Mostrando todas las donaciones",
 	"label.qf.open": "Abierto",
 	"label.qf.qf_projects": "Proyecto QF",
-	"label.qf.qf_cause": "Causa QF"
+	"label.qf.qf_cause": "Causa QF",
+	"label.qf.qf_rounds": "Rondas QF",
+	"label.qf.active_rounds": "Rondas activas",
+	"label.qf.explore_projects": "Explorar proyectos",
+	"label.qf.closed_rounds": "Rondas cerradas"
 }
