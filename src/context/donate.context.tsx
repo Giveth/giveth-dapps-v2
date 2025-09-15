@@ -41,6 +41,9 @@ interface IDonateContext {
 	setSuccessDonation: (successDonation?: ISuccessDonation) => void;
 	selectedOneTimeToken?: IProjectAcceptedToken;
 	selectedRecurringToken?: ISelectTokenWithBalance;
+	selectedQFRound?: IQFRound;
+	choosedModalRound?: IQFRound;
+	chooseRoundId?: (roundId: string) => void;
 	setSelectedOneTimeToken: Dispatch<
 		SetStateAction<IProjectAcceptedToken | undefined>
 	>;
@@ -50,6 +53,8 @@ interface IDonateContext {
 	setSelectedRecurringToken: Dispatch<
 		SetStateAction<ISelectTokenWithBalance | undefined>
 	>;
+	setSelectedQFRound: Dispatch<SetStateAction<IQFRound | undefined>>;
+	setChoosedModalRound: Dispatch<SetStateAction<IQFRound | undefined>>;
 	setIsModalPriorityChecked: (modal: DonateModalPriorityValues) => void;
 	shouldRenderModal: (modalRender: DonateModalPriorityValues) => boolean;
 	fetchProject: () => Promise<void>;
@@ -82,6 +87,8 @@ const DonateContext = createContext<IDonateContext>({
 	setSuccessDonation: () => {},
 	setSelectedOneTimeToken: () => {},
 	setSelectedRecurringToken: () => {},
+	setSelectedQFRound: () => {},
+	setChoosedModalRound: () => {},
 	project: {} as IProject,
 	tokenStreams: {},
 	fetchProject: async () => {},
@@ -118,6 +125,12 @@ export const DonateProvider: FC<IProviderProps> = ({ children, project }) => {
 	>();
 	const [selectedRecurringToken, setSelectedRecurringToken] = useState<
 		ISelectTokenWithBalance | undefined
+	>();
+	const [selectedQFRound, setSelectedQFRound] = useState<
+		IQFRound | undefined
+	>();
+	const [choosedModalRound, setChoosedModalRound] = useState<
+		IQFRound | undefined
 	>();
 	const isModalStatusChecked = useRef<
 		Map<DonateModalPriorityValues, boolean>
@@ -238,10 +251,12 @@ export const DonateProvider: FC<IProviderProps> = ({ children, project }) => {
 				selectedOneTimeToken,
 				pendingDonationExists,
 				selectedRecurringToken,
+				selectedQFRound,
 				setDonateModalByPriority,
 				setSelectedOneTimeToken,
 				shouldRenderModal,
 				setSelectedRecurringToken,
+				setSelectedQFRound,
 				setIsModalPriorityChecked,
 				tokenStreams,
 				fetchProject,
@@ -253,6 +268,8 @@ export const DonateProvider: FC<IProviderProps> = ({ children, project }) => {
 				setQRDonationStatus: setStatus,
 				setPendingDonationExists,
 				draftDonationLoading: loading,
+				choosedModalRound,
+				setChoosedModalRound,
 			}}
 		>
 			{children}

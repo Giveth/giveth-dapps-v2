@@ -15,6 +15,8 @@ import { useRouter } from 'next/router';
 import { isAddress } from 'viem';
 import { captureException } from '@sentry/nextjs';
 import Image from 'next/image';
+
+import { useAccount } from 'wagmi';
 import { Shadow } from '@/components/styled-components/Shadow';
 import { RecurringDonationCard } from './Recurring/RecurringDonationCard';
 import OneTimeDonationCard from '@/components/views/donate/OneTime/OneTimeDonationCard';
@@ -30,6 +32,8 @@ import {
 	IProjectAcceptedToken,
 	IProjectAcceptedTokensGQL,
 } from '@/apollo/types/gqlTypes';
+import { DonationCardTabs } from '@/components/views/donate/DonationCardTabs';
+import { DonationCardQFRounds } from '@/components/views/donate/DonationCardQFRounds/DonationCardQFRounds';
 
 export enum ETabs {
 	ONE_TIME = 'one-time',
@@ -46,13 +50,20 @@ export const DonationCard: FC<IDonationCardProps> = ({
 	setShowQRCode,
 }) => {
 	const router = useRouter();
+	const { chainId } = useAccount();
 	const [tab, setTab] = useState(
 		router.query.tab === ETabs.RECURRING ? ETabs.RECURRING : ETabs.ONE_TIME,
 	);
 	const [isQRDonation, setIsQRDonation] = useState(
 		router.query.chain === ChainType.STELLAR.toLowerCase(),
 	);
-	const { project } = useDonateData();
+	const {
+		project,
+		setSelectedQFRound,
+		selectedQFRound,
+		choosedModalRound,
+		setChoosedModalRound,
+	} = useDonateData();
 	const { formatMessage } = useIntl();
 
 	const { addresses, organization, id: projectId } = project;
@@ -136,60 +147,55 @@ export const DonationCard: FC<IDonationCardProps> = ({
 	// }, [router.query, hasOpAddress, isEndaomentProject]);
 
 	return (
-		<DonationCardWrapper>
-			{!isQRDonation ? (
-				<>
-					{hasStellarAddress && (
-						<QRToastLink onClick={handleQRDonation}>
-							<Image
-								src='/images/logo/stellar.svg'
-								alt='stellar'
-								width={24}
-								height={24}
-							/>
-							{formatMessage({
-								id: 'label.try_donating_with_stellar',
-							})}
-						</QRToastLink>
-					)}
-					<Title id='donation-visit'>
-						{formatMessage({
-							id: 'label.how_do_you_want_to_donate',
-						})}
-					</Title>
-					<Flex>
-						<Tab
-							$selected={tab === ETabs.ONE_TIME}
-							onClick={() => {
-								setTab(ETabs.ONE_TIME);
-								router.push(
-									{
-										query: {
-											...router.query,
-											tab: ETabs.ONE_TIME,
-										},
-									},
-									undefined,
-									{ shallow: true },
-								);
-							}}
-						>
-							{formatMessage({
-								id: 'label.one_time_donation',
-							})}
-						</Tab>
-						{!disableRecurringDonations &&
+		<DonationCardHolder>
+			<DonationCardTabs
+				tab={tab}
+				setTab={setTab}
+				recurringEnabled={Boolean(
+					!disableRecurringDonations &&
 						(hasOpAddress || hasBaseAddress) &&
-						isOwnerOnEVM ? (
+						isOwnerOnEVM,
+				)}
+			/>
+			<DonationCardWrapper>
+				<DonationCardQFRounds
+					project={project}
+					chainId={chainId || 0}
+					selectedQFRound={selectedQFRound}
+					setSelectedQFRound={setSelectedQFRound}
+					choosedModalRound={choosedModalRound}
+					setChoosedModalRound={setChoosedModalRound}
+				/>
+				{!isQRDonation ? (
+					<>
+						{hasStellarAddress && (
+							<QRToastLink onClick={handleQRDonation}>
+								<Image
+									src='/images/logo/stellar.svg'
+									alt='stellar'
+									width={24}
+									height={24}
+								/>
+								{formatMessage({
+									id: 'label.try_donating_with_stellar',
+								})}
+							</QRToastLink>
+						)}
+						<Title id='donation-visit'>
+							{formatMessage({
+								id: 'label.how_do_you_want_to_donate',
+							})}
+						</Title>
+						<Flex>
 							<Tab
-								$selected={tab === ETabs.RECURRING}
+								$selected={tab === ETabs.ONE_TIME}
 								onClick={() => {
-									setTab(ETabs.RECURRING);
+									setTab(ETabs.ONE_TIME);
 									router.push(
 										{
 											query: {
 												...router.query,
-												tab: ETabs.RECURRING,
+												tab: ETabs.ONE_TIME,
 											},
 										},
 										undefined,
@@ -198,62 +204,92 @@ export const DonationCard: FC<IDonationCardProps> = ({
 								}}
 							>
 								{formatMessage({
-									id: 'label.recurring_donation',
+									id: 'label.one_time_donation',
 								})}
-								<IconSpark
-									size={28}
-									color={semanticColors.golden[500]}
-								/>
 							</Tab>
-						) : (
-							!disableRecurringDonations && (
-								<IconWithTooltip
-									icon={
-										<BaseTab>
-											{formatMessage({
-												id: 'label.recurring_donation',
-											})}
-										</BaseTab>
-									}
-									direction='bottom'
+							{!disableRecurringDonations &&
+							(hasOpAddress || hasBaseAddress) &&
+							isOwnerOnEVM ? (
+								<Tab
+									$selected={tab === ETabs.RECURRING}
+									onClick={() => {
+										setTab(ETabs.RECURRING);
+										router.push(
+											{
+												query: {
+													...router.query,
+													tab: ETabs.RECURRING,
+												},
+											},
+											undefined,
+											{ shallow: true },
+										);
+									}}
 								>
-									<>
-										{formatMessage({
-											id: 'label.this_project_is_not_eligible_for_recurring_donations',
-										})}
-									</>
-								</IconWithTooltip>
-							)
-						)}
-						<EmptyTab />
-					</Flex>
-					<TabWrapper>
-						{tab === ETabs.ONE_TIME && (
-							<OneTimeDonationCard
-								acceptedTokens={acceptedTokens}
-							/>
-						)}
-						{tab === ETabs.RECURRING && <RecurringDonationCard />}
-					</TabWrapper>
-				</>
-			) : (
-				<QRDonationCard
-					setIsQRDonation={setIsQRDonation}
-					setShowQRCode={setShowQRCode}
-					qrAcceptedTokens={qrAcceptedTokens || []}
-					showQRCode={showQRCode}
-				/>
-			)}
-		</DonationCardWrapper>
+									{formatMessage({
+										id: 'label.recurring_donation',
+									})}
+									<IconSpark
+										size={28}
+										color={semanticColors.golden[500]}
+									/>
+								</Tab>
+							) : (
+								!disableRecurringDonations && (
+									<IconWithTooltip
+										icon={
+											<BaseTab>
+												{formatMessage({
+													id: 'label.recurring_donation',
+												})}
+											</BaseTab>
+										}
+										direction='bottom'
+									>
+										<>
+											{formatMessage({
+												id: 'label.this_project_is_not_eligible_for_recurring_donations',
+											})}
+										</>
+									</IconWithTooltip>
+								)
+							)}
+							<EmptyTab />
+						</Flex>
+						<TabWrapper>
+							{tab === ETabs.ONE_TIME && (
+								<OneTimeDonationCard
+									acceptedTokens={acceptedTokens}
+								/>
+							)}
+							{tab === ETabs.RECURRING && (
+								<RecurringDonationCard />
+							)}
+						</TabWrapper>
+					</>
+				) : (
+					<QRDonationCard
+						setIsQRDonation={setIsQRDonation}
+						setShowQRCode={setShowQRCode}
+						qrAcceptedTokens={qrAcceptedTokens || []}
+						showQRCode={showQRCode}
+					/>
+				)}
+			</DonationCardWrapper>
+		</DonationCardHolder>
 	);
 };
+
+const DonationCardHolder = styled(Flex)`
+	flex-direction: column;
+	margin-top: 16px;
+`;
 
 const QRToastLink = styled(SublineBold)`
 	cursor: pointer;
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	gap: 12px;
 	padding-block: 8px;
 	padding-left: 16px;
 	margin-block: 16px;

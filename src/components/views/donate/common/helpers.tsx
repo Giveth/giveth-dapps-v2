@@ -31,6 +31,7 @@ export interface ICreateDonation {
 	setFailedModalType: (type: EDonationFailedType) => void;
 	useDonationBox: boolean;
 	relevantDonationTxHash?: string;
+	qfRoundId?: number;
 }
 
 export interface ICreateDraftDonation extends ICreateDonation {

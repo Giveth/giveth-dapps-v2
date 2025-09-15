@@ -38,9 +38,13 @@ interface IDonateContext {
 	successDonation?: ISuccessDonation;
 	setSuccessDonation: (successDonation?: ISuccessDonation) => void;
 	selectedOneTimeToken?: IProjectAcceptedToken;
+	selectedQFRound?: IQFRound;
+	choosedModalRound?: IQFRound;
+	setChoosedModalRound: (round: IQFRound | undefined) => void;
 	setSelectedOneTimeToken: Dispatch<
 		SetStateAction<IProjectAcceptedToken | undefined>
 	>;
+	setSelectedQFRound: Dispatch<SetStateAction<IQFRound | undefined>>;
 	setDonateModalByPriority: (
 		changeCurrentModal: DonateModalPriorityValues,
 	) => void;
@@ -64,6 +68,8 @@ export enum DonateModalPriorityValues {
 const DonateCauseContext = createContext<IDonateContext>({
 	setSuccessDonation: () => {},
 	setSelectedOneTimeToken: () => {},
+	setSelectedQFRound: () => {},
+	setChoosedModalRound: () => {},
 	project: {} as IProject,
 	fetchProject: async () => {},
 	setDonateModalByPriority: (changeModal: DonateModalPriorityValues) => {},
@@ -82,6 +88,12 @@ export const CauseProvider: FC<IProviderProps> = ({ children, project }) => {
 	const [selectedOneTimeToken, setSelectedOneTimeToken] = useState<
 		IProjectAcceptedToken | undefined
 	>();
+	const [selectedQFRound, setSelectedQFRound] = useState<
+		IQFRound | undefined
+	>();
+	const [choosedModalRound, setChoosedModalRound] = useState<
+		IQFRound | undefined
+	>();
 	const isModalStatusChecked = useRef<
 		Map<DonateModalPriorityValues, boolean>
 	>(new Map());
@@ -98,6 +110,7 @@ export const CauseProvider: FC<IProviderProps> = ({ children, project }) => {
 
 	useEffect(() => {
 		setSelectedOneTimeToken(undefined);
+		setSelectedQFRound(undefined);
 	}, [chain]);
 
 	const setIsModalPriorityChecked = useCallback(
@@ -184,11 +197,15 @@ export const CauseProvider: FC<IProviderProps> = ({ children, project }) => {
 				successDonation,
 				setSuccessDonation,
 				selectedOneTimeToken,
+				selectedQFRound,
 				setDonateModalByPriority,
 				setSelectedOneTimeToken,
+				setSelectedQFRound,
 				shouldRenderModal,
 				setIsModalPriorityChecked,
 				fetchProject,
+				choosedModalRound,
+				setChoosedModalRound,
 			}}
 		>
 			{children}
