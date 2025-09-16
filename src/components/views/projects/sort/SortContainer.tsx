@@ -9,7 +9,7 @@ import { useIntl } from 'react-intl';
 import styled from 'styled-components';
 import ProjectsSortSelect from './ProjectsSortSelect';
 import { useProjectsContext } from '@/context/projects.context';
-import { QFRoundFilterSelect } from '@/components/views/qfrounds/QFRoundFilterSelect';
+import { QFRoundFilterSelect } from '@/components/views/QFRounds/QFRoundFilterSelect';
 
 interface ISortContainerProps {
 	totalCount: number;
