@@ -13,6 +13,8 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useEffect } from 'react';
 import { useQFRoundsContext } from '@/context/qfrounds.context';
+import useDetectDevice from '@/hooks/useDetectDevice';
+import Routes from '@/lib/constants/Routes';
 import {
 	getQFRoundImage,
 	useFetchLast3ArchivedQFRounds,
@@ -22,8 +24,6 @@ import { PassportBanner } from '@/components/PassportBanner';
 import { Spinner } from '@/components/Spinner';
 import { QFRoundsBanner } from '@/components/views/QFRounds/QFRoundsBanner';
 import QFRoundCard from '@/components/views/QFRounds/QFRoundCard';
-import useDetectDevice from '@/hooks/useDetectDevice';
-import Routes from '@/lib/constants/Routes';
 
 const QFRoundsIndex = () => {
 	const router = useRouter();
