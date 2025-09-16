@@ -603,7 +603,7 @@ async function handleEthTransfer(params: TransactionParams): Promise<Address> {
 
 // 		return signedMessage;
 // 	} catch (error) {
-// 		console.log('Signing Error!', { error });
+// 		console.log('Signing Error!!', { error });
 // 		captureException(error, {
 // 			tags: {
 // 				section: 'signError',
