@@ -12,7 +12,7 @@ import {
 	Flex,
 } from '@giveth/ui-design-system';
 import { useAccount } from 'wagmi';
-import React, { ReactNode, useState } from 'react';
+import React, { ReactNode, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { useIntl } from 'react-intl';
 import { EQFElegibilityState, usePassport } from '@/hooks/usePassport';
@@ -21,6 +21,8 @@ import { smallFormatDate } from '@/lib/helpers';
 import { Spinner } from '@/components/Spinner';
 import PassportModal from '@/components/modals/PassportModal';
 import { SignWithWalletModal } from '@/components/modals/SignWithWalletModal';
+import { useFetchQFRounds } from '@/lib/helpers/qfroundHelpers';
+import { IQFRound } from '@/apollo/types/types';
 
 enum EPBGState {
 	SUCCESS,
@@ -117,16 +119,28 @@ export const PassportBanner = () => {
 	const { currentRound, passportState, passportScore, qfEligibilityState } =
 		info;
 
+	const { data: roundsData } = useFetchQFRounds(true);
+
 	const { formatMessage, locale } = useIntl();
 	const { connector } = useAccount();
 	const { isOnSolana, handleSingOutAndSignInWithEVM } = useGeneralWallet();
 	const [showModal, setShowModal] = useState<boolean>(false);
 	const [signWithWallet, setSignWithWallet] = useState<boolean>(false);
+	const [roundData, setRoundData] = useState<IQFRound | null>(
+		currentRound || null,
+	);
 
 	const isGSafeConnector = connector?.id === 'safe';
 
 	// Check if the eligibility state or current round is not loaded yet
 	const isLoading = !qfEligibilityState || !currentRound;
+
+	// Get rounds data and set the round data
+	useEffect(() => {
+		if (roundsData && roundsData?.length === 1) {
+			setRoundData(roundsData[0]);
+		}
+	}, [roundsData]);
 
 	// Only render the banner when the data is available
 	if (isLoading) {
@@ -152,22 +166,20 @@ export const PassportBanner = () => {
 								data:
 									qfEligibilityState ===
 										EQFElegibilityState.NOT_STARTED &&
-									currentRound
+									roundData
 										? smallFormatDate(
-												new Date(
-													currentRound?.beginDate,
-												),
+												new Date(roundData?.beginDate),
 											)
 										: undefined,
 							},
 						)}
-						{currentRound &&
+						{roundData &&
 							qfEligibilityState ===
 								EQFElegibilityState.RECHECK_ELIGIBILITY && (
 								<>
 									{' '}
 									<strong>
-										{new Date(currentRound.endDate)
+										{new Date(roundData.endDate)
 											.toLocaleString(locale || 'en-US', {
 												day: 'numeric',
 												month: 'short',
@@ -233,7 +245,7 @@ export const PassportBanner = () => {
 					qfEligibilityState={qfEligibilityState}
 					passportState={passportState}
 					passportScore={passportScore}
-					currentRound={currentRound}
+					currentRound={roundData}
 					setShowModal={setShowModal}
 					updateState={updateState}
 					refreshScore={refreshScore}
