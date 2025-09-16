@@ -1,5 +1,3 @@
-// pages/qf/index.tsx
-
 import React from 'react';
 import { projectsQFRoundMetatags } from '@/content/metatags';
 import { GeneralMetatags } from '@/components/Metatag';
