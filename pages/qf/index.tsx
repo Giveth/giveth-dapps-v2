@@ -4,7 +4,7 @@ import React from 'react';
 import { projectsQFRoundMetatags } from '@/content/metatags';
 import { GeneralMetatags } from '@/components/Metatag';
 import { QFRoundsProvider } from '@/context/qfrounds.context';
-import QFRoundsIndex from '@/components/views/qFRounds/QFRoundsIndex';
+import QFRoundsIndex from '@/components/views/qfrounds/QFRoundsIndex';
 
 export default function QfLanding() {
 	return (
