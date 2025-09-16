@@ -1,5 +1,3 @@
-// src/components/views/qfrounds/QFRoundsIndex.tsx
-
 import {
 	brandColors,
 	Container,
