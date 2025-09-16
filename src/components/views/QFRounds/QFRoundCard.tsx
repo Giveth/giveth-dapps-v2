@@ -1,5 +1,3 @@
-// src/components/views/qfrounds/QFRoundCard.tsx
-
 'use client';
 
 import Image from 'next/image';

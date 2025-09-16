@@ -124,14 +124,17 @@ export const QFRoundsModal = ({
 								key={round.id}
 								onClick={() => handleRoundSelect(round)}
 								$isSelected={currentSelected?.id === round.id}
+								$isSameChain={round.eligibleNetworks.includes(
+									chainId,
+								)}
 							>
 								<RoundHeader>
 									<RoundTitle>{round.name}</RoundTitle>
-									{currentSelected?.id === round.id && (
+									{round.eligibleNetworks.includes(
+										chainId,
+									) && (
 										<SelectedBadge>
-											{formatMessage({
-												id: 'label.selected',
-											})}
+											{getNetworkIcons([chainId])}
 										</SelectedBadge>
 									)}
 								</RoundHeader>
@@ -228,19 +231,22 @@ const RoundsGrid = styled.div`
 	max-width: calc(380px * 3 + 32px); /* 3 cols + gaps */
 `;
 
-const RoundCard = styled.div<{ $isSelected: boolean }>`
+const RoundCard = styled.div<{ $isSelected: boolean; $isSameChain: boolean }>`
 	padding: 12px;
-	border: 1px solid
-		${props =>
-			props.$isSelected ? brandColors.giv[500] : neutralColors.gray[300]};
+	border: ${props =>
+		props.$isSelected
+			? '1px solid' + brandColors.giv[500]
+			: props.$isSameChain
+				? '2px solid' + neutralColors.gray[900]
+				: '1px solid' + neutralColors.gray[300]};
 	border-radius: 12px;
 	cursor: pointer;
 	transition: all 0.2s ease;
 	background: ${props => (props.$isSelected ? brandColors.giv[50] : 'white')};
 
 	&:hover {
+		box-shadow: 0px 3px 20px 0px rgba(83, 38, 236, 0.13);
 		border-color: ${brandColors.giv[500]};
-		background: ${brandColors.giv[100]};
 	}
 `;
 
@@ -260,13 +266,11 @@ const RoundTitle = styled(B)`
 `;
 
 const SelectedBadge = styled.span`
-	background: ${brandColors.giv[500]};
-	color: white;
 	padding: 4px 8px;
-	border-radius: 4px;
-	font-size: 12px;
-	font-weight: 500;
-	margin-left: 8px;
+	div,
+	img {
+		filter: grayscale(0%);
+	}
 `;
 
 const RoundInfo = styled.div`

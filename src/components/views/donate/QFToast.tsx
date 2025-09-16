@@ -13,13 +13,19 @@ import { useIntl } from 'react-intl';
 import { useRouter } from 'next/router';
 import { EQFElegibilityState, usePassport } from '@/hooks/usePassport';
 import PassportModal from '@/components/modals/PassportModal';
+import { IQFRound } from '@/apollo/types/types';
 
 interface IQFToast {
 	isStellarInQF?: boolean;
 	isStellar?: boolean;
+	selectedQFRound?: IQFRound;
 }
 
-const QFToast: FC<IQFToast> = ({ isStellarInQF, isStellar }) => {
+const QFToast: FC<IQFToast> = ({
+	isStellarInQF,
+	isStellar,
+	selectedQFRound,
+}) => {
 	const { formatMessage, locale } = useIntl();
 	const { info, updateState, refreshScore, handleSign, fetchUserMBDScore } =
 		usePassport();
@@ -50,18 +56,20 @@ const QFToast: FC<IQFToast> = ({ isStellarInQF, isStellar }) => {
 		})
 		.replace(/,/g, '');
 
+	let roundData = selectedQFRound || currentRound;
+
 	if (isEligible) {
 		description =
 			formatMessage({
 				id: 'page.donate.passport_toast.description.eligible',
 			}) +
-			currentRound?.minimumValidUsdValue +
+			roundData?.minimumValidUsdValue +
 			' ' +
 			formatMessage({
 				id: 'page.donate.passport_toast.description.eligible_2',
 			}) +
 			' ' +
-			currentRound?.name +
+			roundData?.name +
 			'.';
 	} else {
 		description = (
@@ -71,7 +79,7 @@ const QFToast: FC<IQFToast> = ({ isStellarInQF, isStellar }) => {
 						id: 'page.donate.passport_toast.description.non_eligible',
 					},
 					{
-						usd_value: currentRound?.minimumValidUsdValue,
+						usd_value: roundData?.minimumValidUsdValue,
 					},
 				)}{' '}
 				<span>{endDate}</span>

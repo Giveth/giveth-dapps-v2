@@ -51,7 +51,8 @@ export const CauseSuccessView: FC<ISuccessView> = ({
 	isStellarInQF,
 }) => {
 	const { formatMessage } = useIntl();
-	const { successDonation, hasActiveQFRound, project } = useCauseDonateData();
+	const { successDonation, hasActiveQFRound, project, selectedQFRound } =
+		useCauseDonateData();
 	const {
 		givBackEligible,
 		txHash = [],
@@ -213,6 +214,7 @@ export const CauseSuccessView: FC<ISuccessView> = ({
 							<QFToast
 								isStellar={isStellar}
 								isStellarInQF={isStellarInQF}
+								selectedQFRound={selectedQFRound}
 							/>
 						)}
 						{isRecurring && <ManageRecurringDonation />}
