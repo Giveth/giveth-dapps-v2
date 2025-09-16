@@ -22,8 +22,8 @@ import {
 import { formatReadableDate } from '@/lib/helpers/dateHelpers';
 import { PassportBanner } from '@/components/PassportBanner';
 import { Spinner } from '@/components/Spinner';
-import { QFRoundsBanner } from '@/components/views/QFRounds/QFRoundsBanner';
-import QFRoundCard from '@/components/views/QFRounds/QFRoundCard';
+import { QFRoundsBanner } from '@/components/views/qFRounds/QFRoundsBanner';
+import QFRoundCard from '@/components/views/qFRounds/QFRoundCard';
 
 const QFRoundsIndex = () => {
 	const router = useRouter();
