@@ -17,6 +17,8 @@ import { getNowUnixMS } from '@/helpers/time';
 import { durationToString } from '@/lib/helpers';
 import { Desc, Title } from './common';
 import { useAppSelector } from '@/features/hooks';
+import { getQFRoundImage } from '@/lib/helpers/qfroundHelpers';
+import useDetectDevice from '@/hooks/useDetectDevice';
 
 enum ERoundStatus {
 	LOADING,
@@ -27,12 +29,12 @@ enum ERoundStatus {
 }
 
 export const ActiveQFProjectsBanner = () => {
+	const { isMobile } = useDetectDevice();
+
 	const [state, setState] = useState(ERoundStatus.LOADING);
 	const [timer, setTimer] = useState<number | null>(null);
 	const { formatMessage } = useIntl();
 	const { activeQFRound } = useAppSelector(state => state.general);
-
-	const isGIVPalooza = activeQFRound?.name === 'GIV-a-Palooza';
 
 	// Image format is being bad formatted so managing locally instead
 	useEffect(() => {
@@ -80,17 +82,14 @@ export const ActiveQFProjectsBanner = () => {
 
 	return (
 		<BannerContainer>
-			<Image
-				src={
-					isGIVPalooza
-						? '/images/banners/giv-palooza-bg1.svg'
-						: activeQFRound?.bannerBgImage ||
-							'/images/banners/qf-round/bg.svg'
-				}
-				style={{ objectFit: 'cover' }}
-				fill
-				alt='QF Banner'
-			/>
+			{activeQFRound && (
+				<Image
+					src={getQFRoundImage(activeQFRound, isMobile ?? false)}
+					style={{ objectFit: 'cover' }}
+					fill
+					alt='QF Banner'
+				/>
+			)}
 			<Container>
 				<ActiveStyledRow>
 					<ActiveStyledCol xs={12} md={6}>
