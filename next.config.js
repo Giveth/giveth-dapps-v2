@@ -110,27 +110,6 @@ const moduleExports = withBundleAnalyzer({
 			},
 		];
 
-		// if (isProduction) {
-		// 	redirects.push(
-		// 		{
-		// 			source: '/qf',
-		// 			destination: '/projects/all',
-		// 			permanent: false,
-		// 		},
-		// 		{
-		// 			source: '/qf/all',
-		// 			destination: '/projects/all',
-		// 			permanent: false,
-		// 		},
-		// 	);
-		// } else {
-		// 	redirects.push({
-		// 		source: '/qf',
-		// 		destination: '/qf/all',
-		// 		permanent: false,
-		// 	});
-		// }
-
 		return redirects;
 	},
 	webpack: (config, { isServer, dev }) => {

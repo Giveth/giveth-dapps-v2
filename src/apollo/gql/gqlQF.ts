@@ -24,6 +24,7 @@ export const QF_ROUNDS_QUERY = `
 			displaySize
 			bannerFull
 			bannerMobile
+			hubCardImage
 		}
 `;
 

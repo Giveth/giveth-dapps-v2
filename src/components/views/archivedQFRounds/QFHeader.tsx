@@ -17,7 +17,7 @@ export const QFHeader = () => {
 
 	return (
 		<Flex gap='24px'>
-			<Link href={Routes.AllQFProjects}>
+			<Link href={Routes.QFProjects}>
 				<Item active={!isArchivedPath}>
 					{formatMessage({ id: EQFPageStatus.ACTIVE })}
 				</Item>
