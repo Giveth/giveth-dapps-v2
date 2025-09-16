@@ -36,6 +36,8 @@ const QFRoundsIndex = () => {
 	useEffect(() => {
 		if (qfRounds.length === 1) {
 			router.push(`/qf/${qfRounds[0].slug}`);
+		} else if (qfRounds.length === 0) {
+			router.push(Routes.QFArchived);
 		}
 	}, [qfRounds, router]);
 
