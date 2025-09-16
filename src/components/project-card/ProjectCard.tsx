@@ -179,6 +179,11 @@ const ProjectCard = (props: IProjectCard) => {
 		calculateTotalAmountStreamed();
 	}, [props]);
 
+	// Depend is QF round page or not
+	const isQFRoundPage = router.pathname.includes('/qf');
+	if (isQFRoundPage) {
+	}
+
 	return (
 		// </Link>
 		<Wrapper

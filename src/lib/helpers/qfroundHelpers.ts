@@ -93,3 +93,12 @@ export const getQFRoundImage = (
 		qfRound.bannerBgImage
 	);
 };
+
+export const getQFRoundData = async (slug: string) => {
+	const { data } = await client.query({
+		query: FETCH_QF_ROUNDS_QUERY,
+		variables: { slug },
+		fetchPolicy: 'no-cache',
+	});
+	return data?.qfRounds[0];
+};

@@ -89,6 +89,14 @@ const ProjectsIndex = (props: IProjectsView) => {
 			variables.connectedWalletUserId = Number(user.id);
 		}
 
+		if (isQF && activeQFRound) {
+			variables.qfRoundId = Number(activeQFRound.id);
+		}
+
+		console.log('isQF', isQF);
+		console.log('activeQFRound', activeQFRound);
+		console.log('variables', variables);
+
 		return await fetchProjects(
 			pageParam,
 			variables,
@@ -96,6 +104,7 @@ const ProjectsIndex = (props: IProjectsView) => {
 			isArchivedQF,
 			selectedMainCategory,
 			router.query.slug,
+			Number(activeQFRound?.id) || 0,
 		);
 	};
 
@@ -114,6 +123,8 @@ const ProjectsIndex = (props: IProjectsView) => {
 			contextVariables,
 			isArchivedQF,
 			selectedMainCategory,
+			isQF,
+			activeQFRound?.id,
 		],
 		queryFn: fetchProjectsPage,
 		getNextPageParam: lastPage => lastPage.nextCursor,

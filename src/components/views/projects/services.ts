@@ -2,6 +2,7 @@
 
 import { client } from '@/apollo/apolloClient';
 import { FETCH_ALL_PROJECTS } from '@/apollo/gql/gqlProjects';
+import { FETCH_QF_PROJECTS } from '@/apollo/gql/gqlQF';
 import { EProjectType } from '@/apollo/types/gqlEnums';
 import { IMainCategory, IProject } from '@/apollo/types/types';
 import { getMainCategorySlug } from '@/helpers/projects';
@@ -13,6 +14,7 @@ export interface IQueries {
 	mainCategory?: string;
 	qfRoundSlug?: string | null;
 	projectType?: EProjectType;
+	qfRoundId?: number;
 }
 
 export interface Page {
@@ -29,11 +31,20 @@ export const fetchProjects = async (
 	isArchivedQF?: boolean,
 	selectedMainCategory?: IMainCategory,
 	routerQuerySlug?: string | string[],
+	qfRoundId?: number,
 ): Promise<Page> => {
 	const currentPage = pageParam;
 
+	if (qfRoundId && qfRoundId > 0) {
+		variables.qfRoundId = qfRoundId;
+	}
+
+	console.log('qfRoundId', qfRoundId);
+	console.log('query', qfRoundId && qfRoundId > 0);
+
 	const res = await client.query({
-		query: FETCH_ALL_PROJECTS,
+		query:
+			qfRoundId && qfRoundId > 0 ? FETCH_QF_PROJECTS : FETCH_ALL_PROJECTS,
 		variables: {
 			...variables,
 			...contextVariables,
@@ -44,12 +55,24 @@ export const fetchProjects = async (
 		},
 	});
 
-	const dataProjects: IProject[] = res.data?.allProjects?.projects;
+	let projectsData = [];
+
+	if (qfRoundId && qfRoundId > 0) {
+		projectsData =
+			res.data?.qfProjects?.projects?.map((project: any) => ({
+				...project,
+				id: project.projectId,
+			})) || [];
+	} else {
+		projectsData = res.data?.allProjects?.projects;
+	}
 
 	return {
-		data: dataProjects,
+		data: projectsData,
 		previousCursor: currentPage > 0 ? currentPage - 1 : undefined,
-		nextCursor: dataProjects.length > 0 ? currentPage + 1 : undefined,
-		totalCount: res.data?.allProjects?.totalCount,
+		nextCursor: projectsData.length > 0 ? currentPage + 1 : undefined,
+		totalCount: qfRoundId
+			? res.data?.qfProjects?.totalCount
+			: res.data?.allProjects?.totalCount,
 	};
 };
