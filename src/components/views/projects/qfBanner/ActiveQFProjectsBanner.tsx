@@ -41,7 +41,6 @@ export const ActiveQFProjectsBanner = ({
 
 	// Use prop qfRound if provided, otherwise fall back to activeQFRound from state
 	const currentRound = qfRound || activeQFRound;
-	const isGIVPalooza = currentRound?.name === 'GIV-a-Palooza';
 
 	// Image format is being bad formatted so managing locally instead
 	useEffect(() => {
@@ -89,9 +88,9 @@ export const ActiveQFProjectsBanner = ({
 
 	return (
 		<BannerContainer>
-			{activeQFRound && (
+			{currentRound && (
 				<Image
-					src={getQFRoundImage(activeQFRound, isMobile ?? false)}
+					src={getQFRoundImage(currentRound, isMobile ?? false)}
 					style={{ objectFit: 'cover' }}
 					fill
 					alt='QF Banner'

@@ -128,6 +128,7 @@ export const FETCH_QF_PROJECTS = gql`
 				title
 				descriptionSummary
 				updatedAt
+				slug
 				addresses {
 					address
 					isRecipient
@@ -145,8 +146,18 @@ export const FETCH_QF_PROJECTS = gql`
 					id
 					name
 					priority
+					beginDate
 					endDate
 					isActive
+				}
+				verified
+				admin {
+					name
+					walletAddress
+				}
+				isGivbacksEligible
+				organization {
+					label
 				}
 			}
 			totalCount

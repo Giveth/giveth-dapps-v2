@@ -44,6 +44,12 @@ export interface IAnchorContractBasicData {
 	enabled?: boolean;
 }
 
+export interface IQFRoundStats {
+	roundId?: string;
+	totalRaisedInRound?: number;
+	totalDonorsInRound?: number;
+}
+
 export interface IProject {
 	id: string;
 	title?: string;
@@ -59,11 +65,13 @@ export interface IProject {
 	qualityScore?: number;
 	verified?: boolean;
 	isGivbackEligible?: boolean;
+	isGivbacksEligible?: boolean;
 	verificationStatus?: EProjectVerificationStatus;
 	listed?: boolean | null;
 	categories: ICategory[];
 	reaction?: IReaction;
 	adminUser: IAdminUser;
+	admin?: IAdminUser;
 	donations: {
 		id?: string;
 	}[];
@@ -101,6 +109,8 @@ export interface IProject {
 	totalDistributed?: number;
 	ownerTotalEarned?: number;
 	ownerTotalEarnedUsdValue?: number;
+	totalRaisedUsd?: number;
+	qfRoundStats?: IQFRoundStats;
 }
 
 export interface ICauseProject {

@@ -2006,6 +2006,6 @@
 	"label.qf.active_rounds": "Active Rounds",
 	"label.qf.explore_projects": "Explore Projects",
 	"label.qf.closed_rounds": "Closed Rounds",
-	"label.qf.enter_dontation": "Enter your donation"
-
+	"label.qf.enter_dontation": "Enter your donation",
+	"label.qf.project": "QF Project"
 }
