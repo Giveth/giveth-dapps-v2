@@ -13,7 +13,6 @@ import {
 	Caption,
 	Flex,
 	IconPublish16,
-	IconEstimated16,
 	IconGIVBack16,
 	IconSpark16,
 } from '@giveth/ui-design-system';
@@ -180,22 +179,12 @@ const ProjectsSortSelect = () => {
 
 		// Add QF-specific options if isQF is true
 		if (isQF) {
-			updatedOptions.splice(
-				updatedOptions.length - 1,
-				0,
-				{
-					label: formatMessage({ id: 'label.amount_raised_in_qf' }),
-					value: EProjectsSortBy.ActiveQfRoundRaisedFunds,
-					icon: <IconIncrease16 />,
-					color: semanticColors.jade[500],
-				},
-				{
-					label: formatMessage({ id: 'label.estimated_matching' }),
-					value: EProjectsSortBy.EstimatedMatching,
-					icon: <IconEstimated16 />,
-					color: semanticColors.jade[500],
-				},
-			);
+			updatedOptions.splice(updatedOptions.length - 1, 0, {
+				label: formatMessage({ id: 'label.amount_raised_in_qf' }),
+				value: EProjectsSortBy.ActiveQfRoundRaisedFunds,
+				icon: <IconIncrease16 />,
+				color: semanticColors.jade[500],
+			});
 		}
 
 		setSortByOptions(updatedOptions);
