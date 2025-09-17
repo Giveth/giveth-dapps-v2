@@ -13,12 +13,18 @@ import { EProjectsSortBy, EProjectType } from '@/apollo/types/gqlEnums';
 import { FETCH_QF_PROJECTS } from '@/apollo/gql/gqlQF';
 import { getQFRoundData } from '@/lib/helpers/qfroundHelpers';
 
-const QFProjectsCategoriesRoute = (props: IProjectsRouteProps) => {
-	const { projects, totalCount } = props;
+const QFProjectsCategoriesRoute = (
+	props: IProjectsRouteProps & { roundData?: any },
+) => {
+	const { projects, totalCount, roundData } = props;
 	return (
 		<ProjectsProvider isQF>
 			<GeneralMetatags info={projectsMetatags} />
-			<ProjectsIndex projects={projects} totalCount={totalCount} />
+			<ProjectsIndex
+				projects={projects}
+				totalCount={totalCount}
+				qfRound={roundData}
+			/>
 		</ProjectsProvider>
 	);
 };
@@ -67,6 +73,7 @@ export const getServerSideProps: GetServerSideProps = async context => {
 			props: {
 				projects,
 				totalCount,
+				roundData,
 			},
 		};
 	} catch (error: any) {

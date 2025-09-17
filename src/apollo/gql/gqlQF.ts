@@ -123,7 +123,8 @@ export const FETCH_QF_PROJECTS = gql`
 			qfRoundId: $qfRoundId
 		) {
 			projects {
-				projectId
+				id
+				title
 				descriptionSummary
 				updatedAt
 				addresses {
@@ -138,6 +139,13 @@ export const FETCH_QF_PROJECTS = gql`
 					roundId
 					totalRaisedInRound
 					totalDonorsInRound
+				}
+				qfRounds {
+					id
+					name
+					priority
+					endDate
+					isActive
 				}
 			}
 			totalCount

@@ -58,11 +58,7 @@ export const fetchProjects = async (
 	let projectsData = [];
 
 	if (qfRoundId && qfRoundId > 0) {
-		projectsData =
-			res.data?.qfProjects?.projects?.map((project: any) => ({
-				...project,
-				id: project.projectId,
-			})) || [];
+		projectsData = res.data?.qfProjects?.projects;
 	} else {
 		projectsData = res.data?.allProjects?.projects;
 	}

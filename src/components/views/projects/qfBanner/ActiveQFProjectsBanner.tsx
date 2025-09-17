@@ -17,6 +17,7 @@ import { getNowUnixMS } from '@/helpers/time';
 import { durationToString } from '@/lib/helpers';
 import { Desc, Title } from './common';
 import { useAppSelector } from '@/features/hooks';
+import { IQFRound } from '@/apollo/types/types';
 
 enum ERoundStatus {
 	LOADING,
@@ -26,19 +27,23 @@ enum ERoundStatus {
 	NO_ACTIVE,
 }
 
-export const ActiveQFProjectsBanner = () => {
+export const ActiveQFProjectsBanner = ({
+	qfRound,
+}: { qfRound?: IQFRound } = {}) => {
 	const [state, setState] = useState(ERoundStatus.LOADING);
 	const [timer, setTimer] = useState<number | null>(null);
 	const { formatMessage } = useIntl();
 	const { activeQFRound } = useAppSelector(state => state.general);
 
-	const isGIVPalooza = activeQFRound?.name === 'GIV-a-Palooza';
+	// Use prop qfRound if provided, otherwise fall back to activeQFRound from state
+	const currentRound = qfRound || activeQFRound;
+	const isGIVPalooza = currentRound?.name === 'GIV-a-Palooza';
 
 	// Image format is being bad formatted so managing locally instead
 	useEffect(() => {
-		if (!activeQFRound) return setState(ERoundStatus.NO_ACTIVE);
-		const _startDate = new Date(activeQFRound?.beginDate).getTime();
-		const _endDate = new Date(activeQFRound?.endDate).getTime();
+		if (!currentRound) return setState(ERoundStatus.NO_ACTIVE);
+		const _startDate = new Date(currentRound?.beginDate).getTime();
+		const _endDate = new Date(currentRound?.endDate).getTime();
 		const now = getNowUnixMS();
 		const isRoundStarted = now > _startDate;
 		const isRoundEnded = now > _endDate;
@@ -49,15 +54,15 @@ export const ActiveQFProjectsBanner = () => {
 		} else {
 			setState(ERoundStatus.ENDED);
 		}
-	}, [activeQFRound]);
+	}, [currentRound]);
 
 	useEffect(() => {
 		let _date: number;
-		if (!activeQFRound) return;
+		if (!currentRound) return;
 		if (state === ERoundStatus.NOT_STARTED) {
-			_date = new Date(activeQFRound.beginDate).getTime();
+			_date = new Date(currentRound.beginDate).getTime();
 		} else if (state === ERoundStatus.RUNNING) {
-			_date = new Date(activeQFRound.endDate).getTime();
+			_date = new Date(currentRound.endDate).getTime();
 		} else {
 			return;
 		}
@@ -76,7 +81,7 @@ export const ActiveQFProjectsBanner = () => {
 		return () => {
 			clearInterval(interval);
 		};
-	}, [state, activeQFRound]);
+	}, [state, currentRound]);
 
 	return (
 		<BannerContainer>
@@ -84,7 +89,7 @@ export const ActiveQFProjectsBanner = () => {
 				src={
 					isGIVPalooza
 						? '/images/banners/giv-palooza-bg1.svg'
-						: activeQFRound?.bannerBgImage ||
+						: currentRound?.bannerBgImage ||
 							'/images/banners/qf-round/bg.svg'
 				}
 				style={{ objectFit: 'cover' }}
@@ -95,7 +100,7 @@ export const ActiveQFProjectsBanner = () => {
 				<ActiveStyledRow>
 					<ActiveStyledCol xs={12} md={6}>
 						<TitleWrapper weight={700}>
-							{activeQFRound ? activeQFRound.name : null}
+							{currentRound ? currentRound.name : null}
 						</TitleWrapper>
 						{(state === ERoundStatus.NOT_STARTED ||
 							state === ERoundStatus.RUNNING) && (
@@ -109,7 +114,7 @@ export const ActiveQFProjectsBanner = () => {
 									})}
 								</Lead>
 								<B>
-									{activeQFRound && timer && timer > 0
+									{currentRound && timer && timer > 0
 										? durationToString(timer, 3)
 										: '--'}
 								</B>
