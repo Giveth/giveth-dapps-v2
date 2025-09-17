@@ -3,7 +3,6 @@ import { EProjectsFilter } from '@/apollo/types/types';
 import { transformGraphQLErrorsToStatusCode } from '@/helpers/requests';
 import { initializeApollo } from '@/apollo/apolloClient';
 import { OPTIONS_HOME_PROJECTS } from '@/apollo/gql/gqlOptions';
-import { FETCH_ALL_PROJECTS } from '@/apollo/gql/gqlProjects';
 import { GeneralMetatags } from '@/components/Metatag';
 import ProjectsIndex from '@/components/views/projects/ProjectsIndex';
 import { projectsMetatags } from '@/content/metatags';
@@ -11,13 +10,21 @@ import { ProjectsProvider } from '@/context/projects.context';
 import { IProjectsRouteProps } from 'pages/projects/[slug]';
 import { getMainCategorySlug } from '@/helpers/projects';
 import { EProjectsSortBy, EProjectType } from '@/apollo/types/gqlEnums';
+import { FETCH_QF_PROJECTS } from '@/apollo/gql/gqlQF';
+import { getQFRoundData } from '@/lib/helpers/qfroundHelpers';
 
-const QFProjectsCategoriesRoute = (props: IProjectsRouteProps) => {
-	const { projects, totalCount } = props;
+const QFProjectsCategoriesRoute = (
+	props: IProjectsRouteProps & { roundData?: any },
+) => {
+	const { projects, totalCount, roundData } = props;
 	return (
 		<ProjectsProvider isQF>
 			<GeneralMetatags info={projectsMetatags} />
-			<ProjectsIndex projects={projects} totalCount={totalCount} />
+			<ProjectsIndex
+				projects={projects}
+				totalCount={totalCount}
+				qfRound={roundData}
+			/>
 		</ProjectsProvider>
 	);
 };
@@ -27,6 +34,11 @@ export const getServerSideProps: GetServerSideProps = async context => {
 	try {
 		const { query } = context;
 		const slug = query.slug as string;
+
+		// GEt round data from database
+		const roundData = await getQFRoundData(slug);
+
+		console.log('roundData', roundData);
 
 		const apolloClient = initializeApollo();
 
@@ -41,9 +53,10 @@ export const getServerSideProps: GetServerSideProps = async context => {
 			: (_filters = [EProjectsFilter.ACTIVE_QF_ROUND]);
 
 		const { data } = await apolloClient.query({
-			query: FETCH_ALL_PROJECTS,
+			query: FETCH_QF_PROJECTS,
 			variables: {
 				...variables,
+				qfRoundId: Number(roundData.id),
 				sortingBy: query.sort || EProjectsSortBy.INSTANT_BOOSTING,
 				searchTerm: query.searchTerm,
 				filters: _filters,
@@ -55,11 +68,12 @@ export const getServerSideProps: GetServerSideProps = async context => {
 			},
 			fetchPolicy: 'no-cache',
 		});
-		const { projects, totalCount } = data.allProjects;
+		const { projects, totalCount } = data.qfProjects;
 		return {
 			props: {
 				projects,
 				totalCount,
+				roundData,
 			},
 		};
 	} catch (error: any) {

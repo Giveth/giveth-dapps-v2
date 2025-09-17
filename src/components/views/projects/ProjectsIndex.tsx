@@ -36,7 +36,7 @@ import { ActiveQFRoundStats } from './ActiveQFRoundStats';
 import useMediaQuery from '@/hooks/useMediaQuery';
 import { DefaultQFBanner } from '@/components/DefaultQFBanner';
 import { fetchProjects, IQueries } from './services';
-import { IProject } from '@/apollo/types/types';
+import { IProject, IQFRound } from '@/apollo/types/types';
 import { LAST_PROJECT_CLICKED } from './constants';
 import { hasRoundStarted } from '@/helpers/qf';
 import config from '@/configuration';
@@ -45,11 +45,12 @@ import { EProjectType } from '@/apollo/types/gqlEnums';
 export interface IProjectsView {
 	projects: IProject[];
 	totalCount: number;
+	qfRound?: IQFRound;
 }
 
 const ProjectsIndex = (props: IProjectsView) => {
 	const { formatMessage } = useIntl();
-	const { projects, totalCount: _totalCount } = props;
+	const { projects, totalCount: _totalCount, qfRound } = props;
 	const user = useAppSelector(state => state.user.userData);
 	const { activeQFRound, mainCategories } = useAppSelector(
 		state => state.general,
@@ -89,6 +90,10 @@ const ProjectsIndex = (props: IProjectsView) => {
 			variables.connectedWalletUserId = Number(user.id);
 		}
 
+		if (isQF && qfRound) {
+			variables.qfRoundId = Number(qfRound.id);
+		}
+
 		return await fetchProjects(
 			pageParam,
 			variables,
@@ -96,6 +101,7 @@ const ProjectsIndex = (props: IProjectsView) => {
 			isArchivedQF,
 			selectedMainCategory,
 			router.query.slug,
+			isQF ? Number(qfRound?.id) || 0 : undefined, // if this qf round page fetch different query
 		);
 	};
 
@@ -114,6 +120,8 @@ const ProjectsIndex = (props: IProjectsView) => {
 			contextVariables,
 			isArchivedQF,
 			selectedMainCategory,
+			isQF,
+			qfRound?.id,
 		],
 		queryFn: fetchProjectsPage,
 		getNextPageParam: lastPage => lastPage.nextCursor,
@@ -234,8 +242,8 @@ const ProjectsIndex = (props: IProjectsView) => {
 			<Wrapper>
 				{isQF && !isArchivedQF && (
 					<>
-						{activeQFRound ? (
-							<ActiveQFProjectsBanner />
+						{qfRound || activeQFRound ? (
+							<ActiveQFProjectsBanner qfRound={qfRound} />
 						) : (
 							<DefaultQFBanner />
 						)}

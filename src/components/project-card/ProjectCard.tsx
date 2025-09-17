@@ -40,6 +40,12 @@ import { ProjectCardTotalRaisedQF } from './ProjectCardTotalRaisedQF';
 import config from '@/configuration';
 import { EProjectType } from '@/apollo/types/gqlEnums';
 import { ProjectCardCauseTotalRaised } from './ProjectCardCauseTotalRaised';
+import {
+	getCountUniqueDonorsForActiveQfRound,
+	getProjectTotalRaisedUSD,
+	getSumDonationValueUsdForActiveQfRound,
+	haveProjectRound,
+} from '@/lib/helpers/projectHelpers';
 
 const cardRadius = '12px';
 const imgHeight = '226px';
@@ -77,15 +83,15 @@ const ProjectCard = (props: IProjectCard) => {
 		image,
 		slug,
 		adminUser,
-		totalDonations,
+		admin,
 		sumDonationValueUsdForActiveQfRound,
 		organization,
 		verified,
 		isGivbackEligible,
+		isGivbacksEligible,
 		latestUpdateCreationDate,
 		countUniqueDonors,
 		qfRounds,
-		countUniqueDonorsForActiveQfRound,
 		projectType,
 		addresses,
 	} = project;
@@ -96,7 +102,7 @@ const ProjectCard = (props: IProjectCard) => {
 	const orgLabel = organization?.label;
 	const isForeignOrg =
 		orgLabel !== ORGANIZATION.trace && orgLabel !== ORGANIZATION.giveth;
-	const name = adminUser?.name;
+	const name = adminUser?.name ? adminUser?.name : admin?.name;
 	const { formatMessage, formatRelativeTime } = useIntl();
 	const router = useRouter();
 
@@ -106,18 +112,23 @@ const ProjectCard = (props: IProjectCard) => {
 		router.pathname === '/cause/[causeIdSlug]' &&
 		router.query?.tab === 'projects';
 
-	const { activeStartedRound, activeQFRound } = getActiveRound(qfRounds);
-	const hasFooter = activeStartedRound || verified || isGivbackEligible;
-	const showVerifiedBadge = verified || isGivbackEligible;
+	const isGivbackEligibleCheck = isGivbackEligible || isGivbacksEligible;
+
+	const { activeStartedRound: checkActiveRound, activeQFRound } =
+		getActiveRound(qfRounds);
+
+	const activeStartedRound = checkActiveRound || activeQFRound?.isActive;
+
+	const hasFooter = activeStartedRound || verified || isGivbackEligibleCheck;
+	const showVerifiedBadge = verified || isGivbackEligibleCheck;
 
 	// Check if the project has only one address and it is a Stellar address
 	const isOnlyStellar =
 		addresses?.length === 1 && addresses[0]?.chainType === 'STELLAR';
 
 	const isStellarOnlyRound =
-		activeStartedRound?.eligibleNetworks?.length === 1 &&
-		activeStartedRound?.eligibleNetworks[0] ===
-			config.STELLAR_NETWORK_NUMBER;
+		activeQFRound?.eligibleNetworks?.length === 1 &&
+		activeQFRound?.eligibleNetworks[0] === config.STELLAR_NETWORK_NUMBER;
 
 	const projectLink =
 		projectType === EProjectType.CAUSE
@@ -143,8 +154,8 @@ const ProjectCard = (props: IProjectCard) => {
 	};
 
 	const fetchProjectRecurringDonationsByDate = async () => {
-		const startDate = activeStartedRound?.beginDate;
-		const endDate = activeStartedRound?.endDate;
+		const startDate = activeQFRound?.beginDate;
+		const endDate = activeQFRound?.endDate;
 		if (startDate && endDate) {
 			const { data: projectRecurringDonations } = await client.query({
 				query: FETCH_RECURRING_DONATIONS_BY_DATE,
@@ -160,7 +171,7 @@ const ProjectCard = (props: IProjectCard) => {
 	};
 	useEffect(() => {
 		const calculateTotalAmountStreamed = async () => {
-			if (activeStartedRound?.isActive) {
+			if (activeQFRound?.isActive) {
 				const donations = await fetchProjectRecurringDonationsByDate();
 				let totalAmountStreamed;
 				if (donations.totalCount != 0) {
@@ -178,6 +189,11 @@ const ProjectCard = (props: IProjectCard) => {
 
 		calculateTotalAmountStreamed();
 	}, [props]);
+
+	// Depend is QF round page or not
+	const isQFRoundPage = router.pathname.includes('/qf');
+	if (isQFRoundPage) {
+	}
 
 	return (
 		// </Link>
@@ -239,7 +255,7 @@ const ProjectCard = (props: IProjectCard) => {
 				</TitleWrapper>
 				<ProjectCardUserName
 					name={name}
-					adminUser={adminUser}
+					adminUser={adminUser || admin}
 					slug={slug}
 					isForeignOrg={isForeignOrg}
 				/>
@@ -264,7 +280,9 @@ const ProjectCard = (props: IProjectCard) => {
 							!isListingInsideCauseProjectTabs && (
 								<ProjectCardTotalRaised
 									activeStartedRound={!!activeStartedRound}
-									totalDonations={totalDonations || 0}
+									totalDonations={getProjectTotalRaisedUSD(
+										project,
+									)}
 									sumDonationValueUsdForActiveQfRound={
 										sumDonationValueUsdForActiveQfRound || 0
 									}
@@ -279,13 +297,15 @@ const ProjectCard = (props: IProjectCard) => {
 							!isListingInsideCauseProjectTabs && (
 								<ProjectCardTotalRaisedQF
 									activeStartedRound={!!activeStartedRound}
-									totalDonations={totalDonations || 0}
-									sumDonationValueUsdForActiveQfRound={
-										sumDonationValueUsdForActiveQfRound || 0
-									}
-									countUniqueDonors={
-										countUniqueDonorsForActiveQfRound || 0
-									}
+									totalDonations={getProjectTotalRaisedUSD(
+										project,
+									)}
+									sumDonationValueUsdForActiveQfRound={getSumDonationValueUsdForActiveQfRound(
+										project,
+									)}
+									countUniqueDonors={getCountUniqueDonorsForActiveQfRound(
+										project,
+									)}
 									isCause={projectType === EProjectType.CAUSE}
 									projectsCount={
 										project.causeProjects?.length || 0
@@ -317,7 +337,7 @@ const ProjectCard = (props: IProjectCard) => {
 										</VerifiedText>
 									</Flex>
 								)}
-								{isGivbackEligible && (
+								{isGivbackEligibleCheck && (
 									<Flex $alignItems='center' gap='4px'>
 										<IconGIVBack16
 											color={brandColors.giv[500]}
@@ -327,9 +347,11 @@ const ProjectCard = (props: IProjectCard) => {
 										</GivbackEligibleText>
 									</Flex>
 								)}
-								{activeStartedRound && (
+								{haveProjectRound(project) && (
 									<QFBadge>
-										{activeStartedRound?.name}
+										{formatMessage({
+											id: 'label.qf.project',
+										})}
 									</QFBadge>
 								)}
 								{projectType === EProjectType.CAUSE && (
@@ -552,6 +574,7 @@ const QFBadge = styled(Subline)`
 	border-radius: 16px;
 	display: flex;
 	align-items: center;
+	text-transform: uppercase;
 `;
 
 const CauseBadge = styled(QFBadge)`

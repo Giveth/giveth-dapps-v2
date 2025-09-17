@@ -1,3 +1,5 @@
+// apollo/gql/gqlQF.ts
+
 import { gql } from '@apollo/client';
 
 export const QF_ROUNDS_QUERY = `
@@ -100,6 +102,66 @@ export const FETCH_QF_ROUND_SMART_SELECT = gql`
 			projectUsdAmountRaised
 			uniqueDonors
 			donationsCount
+		}
+	}
+`;
+
+export const FETCH_QF_PROJECTS = gql`
+	query FetchQfProjects(
+		$skip: Int
+		$limit: Int
+		$sortingBy: SortingField
+		$filters: [FilterField!]
+		$searchTerm: String
+		$qfRoundId: Int!
+	) {
+		qfProjects(
+			skip: $skip
+			limit: $limit
+			sortingBy: $sortingBy
+			filters: $filters
+			searchTerm: $searchTerm
+			qfRoundId: $qfRoundId
+		) {
+			projects {
+				id
+				title
+				descriptionSummary
+				updatedAt
+				slug
+				addresses {
+					address
+					isRecipient
+					networkId
+					chainType
+				}
+				image
+				totalRaisedUsd
+				qfRoundStats {
+					roundId
+					totalRaisedInRound
+					totalDonorsInRound
+				}
+				qfRounds {
+					id
+					name
+					priority
+					beginDate
+					endDate
+					isActive
+					eligibleNetworks
+				}
+				verified
+				admin {
+					name
+					walletAddress
+				}
+				isGivbacksEligible
+				organization {
+					label
+				}
+			}
+			totalCount
 		}
 	}
 `;
