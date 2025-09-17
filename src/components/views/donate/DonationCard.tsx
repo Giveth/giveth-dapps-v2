@@ -155,14 +155,16 @@ export const DonationCard: FC<IDonationCardProps> = ({
 				)}
 			/>
 			<DonationCardWrapper>
-				<DonationCardQFRounds
-					project={project}
-					chainId={chainId || 0}
-					selectedQFRound={selectedQFRound}
-					setSelectedQFRound={setSelectedQFRound}
-					choosedModalRound={choosedModalRound}
-					setChoosedModalRound={setChoosedModalRound}
-				/>
+				{tab === ETabs.ONE_TIME && (
+					<DonationCardQFRounds
+						project={project}
+						chainId={chainId || 0}
+						selectedQFRound={selectedQFRound}
+						setSelectedQFRound={setSelectedQFRound}
+						choosedModalRound={choosedModalRound}
+						setChoosedModalRound={setChoosedModalRound}
+					/>
+				)}
 				{!isQRDonation ? (
 					<>
 						{hasStellarAddress && (
