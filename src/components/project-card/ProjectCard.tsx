@@ -84,7 +84,6 @@ const ProjectCard = (props: IProjectCard) => {
 		slug,
 		adminUser,
 		admin,
-		totalDonations,
 		sumDonationValueUsdForActiveQfRound,
 		organization,
 		verified,
@@ -93,7 +92,6 @@ const ProjectCard = (props: IProjectCard) => {
 		latestUpdateCreationDate,
 		countUniqueDonors,
 		qfRounds,
-		countUniqueDonorsForActiveQfRound,
 		projectType,
 		addresses,
 	} = project;
@@ -129,9 +127,8 @@ const ProjectCard = (props: IProjectCard) => {
 		addresses?.length === 1 && addresses[0]?.chainType === 'STELLAR';
 
 	const isStellarOnlyRound =
-		activeStartedRound?.eligibleNetworks?.length === 1 &&
-		activeStartedRound?.eligibleNetworks[0] ===
-			config.STELLAR_NETWORK_NUMBER;
+		activeQFRound?.eligibleNetworks?.length === 1 &&
+		activeQFRound?.eligibleNetworks[0] === config.STELLAR_NETWORK_NUMBER;
 
 	const projectLink =
 		projectType === EProjectType.CAUSE
@@ -157,8 +154,8 @@ const ProjectCard = (props: IProjectCard) => {
 	};
 
 	const fetchProjectRecurringDonationsByDate = async () => {
-		const startDate = activeStartedRound?.beginDate;
-		const endDate = activeStartedRound?.endDate;
+		const startDate = activeQFRound?.beginDate;
+		const endDate = activeQFRound?.endDate;
 		if (startDate && endDate) {
 			const { data: projectRecurringDonations } = await client.query({
 				query: FETCH_RECURRING_DONATIONS_BY_DATE,
@@ -174,7 +171,7 @@ const ProjectCard = (props: IProjectCard) => {
 	};
 	useEffect(() => {
 		const calculateTotalAmountStreamed = async () => {
-			if (activeStartedRound?.isActive) {
+			if (activeQFRound?.isActive) {
 				const donations = await fetchProjectRecurringDonationsByDate();
 				let totalAmountStreamed;
 				if (donations.totalCount != 0) {

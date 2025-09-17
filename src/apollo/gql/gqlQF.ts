@@ -149,6 +149,7 @@ export const FETCH_QF_PROJECTS = gql`
 					beginDate
 					endDate
 					isActive
+					eligibleNetworks
 				}
 				verified
 				admin {
