@@ -1,5 +1,3 @@
-// src/components/views/qfrounds/QFRoundsIndex.tsx
-
 import {
 	brandColors,
 	Container,
@@ -13,17 +11,17 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useEffect } from 'react';
 import { useQFRoundsContext } from '@/context/qfrounds.context';
+import useDetectDevice from '@/hooks/useDetectDevice';
+import Routes from '@/lib/constants/Routes';
+import {
+	getQFRoundHubCardImage,
+	useFetchLast3ArchivedQFRounds,
+} from '@/lib/helpers/qfroundHelpers';
+import { formatReadableDate } from '@/lib/helpers/dateHelpers';
 import { PassportBanner } from '@/components/PassportBanner';
 import { Spinner } from '@/components/Spinner';
 import { QFRoundsBanner } from '@/components/views/QFRounds/QFRoundsBanner';
 import QFRoundCard from '@/components/views/QFRounds/QFRoundCard';
-import useDetectDevice from '@/hooks/useDetectDevice';
-import Routes from '@/lib/constants/Routes';
-import {
-	getQFRoundImage,
-	useFetchLast3ArchivedQFRounds,
-} from '@/lib/helpers/qfroundHelpers';
-import { formatReadableDate } from '@/lib/helpers/dateHelpers';
 
 const QFRoundsIndex = () => {
 	const router = useRouter();
@@ -34,10 +32,12 @@ const QFRoundsIndex = () => {
 
 	// Redirect to the first QF round if there is only one
 	useEffect(() => {
-		if (qfRounds.length === 1) {
+		if (qfRounds.length === 1 && !loading) {
 			router.push(`/qf/${qfRounds[0].slug}`);
+		} else if (qfRounds.length === 0 && !loading) {
+			router.push(Routes.QFArchived);
 		}
-	}, [qfRounds, router]);
+	}, [qfRounds, router, loading]);
 
 	return (
 		<>
@@ -64,10 +64,7 @@ const QFRoundsIndex = () => {
 								}
 								title={round.name}
 								description={round.description}
-								imageUrl={getQFRoundImage(
-									round,
-									isMobile || false,
-								)}
+								imageUrl={getQFRoundHubCardImage(round)}
 								matchingPoolUsd={round.allocatedFundUSD}
 								startDate={formatReadableDate(
 									round.beginDate,
@@ -99,10 +96,7 @@ const QFRoundsIndex = () => {
 								layout='grid'
 								title={round.name}
 								description={round.description}
-								imageUrl={getQFRoundImage(
-									round,
-									isMobile || false,
-								)}
+								imageUrl={getQFRoundHubCardImage(round)}
 								matchingPoolUsd={round.allocatedFundUSD}
 								startDate={formatReadableDate(
 									round.beginDate,

@@ -554,6 +554,7 @@ export interface IQFRound {
 	displaySize?: number;
 	bannerFull?: string;
 	bannerMobile?: string;
+	hubCardImage?: string;
 	priority?: number;
 }
 

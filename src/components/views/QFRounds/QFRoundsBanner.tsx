@@ -1,5 +1,3 @@
-// src/components/views/qfrounds/QFRoundsBanner.tsx
-
 import Image from 'next/image';
 import styled from 'styled-components';
 import useDetectDevice from '@/hooks/useDetectDevice';

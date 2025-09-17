@@ -2005,5 +2005,6 @@
 	"label.qf.qf_rounds": "Rondas QF",
 	"label.qf.active_rounds": "Rondas activas",
 	"label.qf.explore_projects": "Explorar proyectos",
-	"label.qf.closed_rounds": "Rondas cerradas"
+	"label.qf.closed_rounds": "Rondas cerradas",
+	"label.qf.enter_dontation": "Introduce tu donación"
 }

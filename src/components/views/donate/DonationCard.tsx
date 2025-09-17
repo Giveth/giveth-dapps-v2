@@ -5,8 +5,6 @@ import {
 	Flex,
 	SublineBold,
 	brandColors,
-	IconSpark,
-	semanticColors,
 } from '@giveth/ui-design-system';
 import React, { FC, useState, useEffect } from 'react';
 import styled, { css } from 'styled-components';
@@ -23,7 +21,6 @@ import OneTimeDonationCard from '@/components/views/donate/OneTime/OneTimeDonati
 import config from '@/configuration';
 import { useDonateData } from '@/context/donate.context';
 import { ChainType } from '@/types/config';
-import { IconWithTooltip } from '@/components/IconWithToolTip';
 import { QRDonationCard } from '@/components/views/donate/OneTime/SelectTokenModal/QRCodeDonation/QRDonationCard';
 import { client } from '@/apollo/apolloClient';
 import { PROJECT_ACCEPTED_TOKENS } from '@/apollo/gql/gqlProjects';
@@ -181,81 +178,13 @@ export const DonationCard: FC<IDonationCardProps> = ({
 								})}
 							</QRToastLink>
 						)}
-						<Title id='donation-visit'>
-							{formatMessage({
-								id: 'label.how_do_you_want_to_donate',
-							})}
-						</Title>
-						<Flex>
-							<Tab
-								$selected={tab === ETabs.ONE_TIME}
-								onClick={() => {
-									setTab(ETabs.ONE_TIME);
-									router.push(
-										{
-											query: {
-												...router.query,
-												tab: ETabs.ONE_TIME,
-											},
-										},
-										undefined,
-										{ shallow: true },
-									);
-								}}
-							>
+						{tab === ETabs.ONE_TIME && (
+							<Title id='donation-visit'>
 								{formatMessage({
-									id: 'label.one_time_donation',
+									id: 'label.qf.enter_dontation',
 								})}
-							</Tab>
-							{!disableRecurringDonations &&
-							(hasOpAddress || hasBaseAddress) &&
-							isOwnerOnEVM ? (
-								<Tab
-									$selected={tab === ETabs.RECURRING}
-									onClick={() => {
-										setTab(ETabs.RECURRING);
-										router.push(
-											{
-												query: {
-													...router.query,
-													tab: ETabs.RECURRING,
-												},
-											},
-											undefined,
-											{ shallow: true },
-										);
-									}}
-								>
-									{formatMessage({
-										id: 'label.recurring_donation',
-									})}
-									<IconSpark
-										size={28}
-										color={semanticColors.golden[500]}
-									/>
-								</Tab>
-							) : (
-								!disableRecurringDonations && (
-									<IconWithTooltip
-										icon={
-											<BaseTab>
-												{formatMessage({
-													id: 'label.recurring_donation',
-												})}
-											</BaseTab>
-										}
-										direction='bottom'
-									>
-										<>
-											{formatMessage({
-												id: 'label.this_project_is_not_eligible_for_recurring_donations',
-											})}
-										</>
-									</IconWithTooltip>
-								)
-							)}
-							<EmptyTab />
-						</Flex>
+							</Title>
+						)}
 						<TabWrapper>
 							{tab === ETabs.ONE_TIME && (
 								<OneTimeDonationCard

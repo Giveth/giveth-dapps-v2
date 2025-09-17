@@ -63,8 +63,6 @@ export const useFetchQFRounds = (activeOnly: boolean = false) => {
 					fetchPolicy: 'no-cache',
 				});
 
-				console.log('data', data);
-
 				return data?.qfRounds || [];
 			} catch (error) {
 				console.error('Error fetching QF rounds:', error);
@@ -94,11 +92,13 @@ export const getQFRoundImage = (
 	);
 };
 
-export const getQFRoundData = async (slug: string) => {
-	const { data } = await client.query({
-		query: FETCH_QF_ROUNDS_QUERY,
-		variables: { slug },
-		fetchPolicy: 'no-cache',
-	});
-	return data?.qfRounds[0];
+/**
+ * @title getQFRoundHubCardImage
+ *
+ * @description Get the QF round hub card image
+ * @param qfRound - IQFRound
+ * @returns string
+ */
+export const getQFRoundHubCardImage = (qfRound: IQFRound): string => {
+	return qfRound.hubCardImage || qfRound.bannerFull || qfRound.bannerBgImage;
 };

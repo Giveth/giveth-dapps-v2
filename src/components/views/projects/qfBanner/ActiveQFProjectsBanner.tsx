@@ -18,6 +18,8 @@ import { durationToString } from '@/lib/helpers';
 import { Desc, Title } from './common';
 import { useAppSelector } from '@/features/hooks';
 import { IQFRound } from '@/apollo/types/types';
+import { getQFRoundImage } from '@/lib/helpers/qfroundHelpers';
+import useDetectDevice from '@/hooks/useDetectDevice';
 
 enum ERoundStatus {
 	LOADING,
@@ -30,6 +32,9 @@ enum ERoundStatus {
 export const ActiveQFProjectsBanner = ({
 	qfRound,
 }: { qfRound?: IQFRound } = {}) => {
+export const ActiveQFProjectsBanner = () => {
+	const { isMobile } = useDetectDevice();
+
 	const [state, setState] = useState(ERoundStatus.LOADING);
 	const [timer, setTimer] = useState<number | null>(null);
 	const { formatMessage } = useIntl();
@@ -85,17 +90,14 @@ export const ActiveQFProjectsBanner = ({
 
 	return (
 		<BannerContainer>
-			<Image
-				src={
-					isGIVPalooza
-						? '/images/banners/giv-palooza-bg1.svg'
-						: currentRound?.bannerBgImage ||
-							'/images/banners/qf-round/bg.svg'
-				}
-				style={{ objectFit: 'cover' }}
-				fill
-				alt='QF Banner'
-			/>
+			{activeQFRound && (
+				<Image
+					src={getQFRoundImage(activeQFRound, isMobile ?? false)}
+					style={{ objectFit: 'cover' }}
+					fill
+					alt='QF Banner'
+				/>
+			)}
 			<Container>
 				<ActiveStyledRow>
 					<ActiveStyledCol xs={12} md={6}>
