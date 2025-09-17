@@ -2007,5 +2007,6 @@
 	"label.qf.explore_projects": "Explore Projects",
 	"label.qf.closed_rounds": "Closed Rounds",
 	"label.qf.enter_dontation": "Enter your donation",
-	"label.qf.project": "QF Project"
+	"label.qf.project": "QF Project",
+	"label.qf.recurring_auto_matched": "Recurring donations are auto-matched in eligible QF rounds."
 }
