@@ -9,6 +9,7 @@ import {
 	IconChevronRight16,
 	IconHelpFilled16,
 	IconPlus16,
+	IconQFNew,
 	IconRefresh16,
 	neutralColors,
 	P,
@@ -56,6 +57,7 @@ import GIVBackToast from '../GIVBackToast';
 import { useGeneralWallet } from '@/providers/generalWalletProvider';
 
 import {
+	BadgesBase,
 	GLinkStyled,
 	IconWrapper,
 	Input,
@@ -254,6 +256,10 @@ export const RecurringDonationCard = () => {
 
 	return (
 		<>
+			<RecurringBadgesBase warning={false} active={false}>
+				<IconQFNew size={30} />
+				{formatMessage({ id: 'label.qf.recurring_auto_matched' })}
+			</RecurringBadgesBase>
 			<Title weight={700} id='recurring-donation-page'>
 				{formatMessage({ id: 'label.make_a_recurring_donation_with' })}
 				<a href='https://www.superfluid.finance/' target='_blank'>
@@ -831,6 +837,10 @@ export const RecurringDonationCard = () => {
 		</>
 	);
 };
+
+const RecurringBadgesBase = styled(BadgesBase)`
+	width: 100%;
+`;
 
 const Title = styled(H6)`
 	& > a {
