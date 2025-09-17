@@ -74,6 +74,14 @@ export const useFetchQFRounds = (activeOnly: boolean = false) => {
 	});
 };
 
+export const getQFRoundData = async (slug: string) => {
+	const { data } = await client.query({
+		query: FETCH_QF_ROUND_DATA,
+		variables: { slug },
+	});
+	return data?.qfRound;
+};
+
 /**
  * @title getQFRoundImage
  *
