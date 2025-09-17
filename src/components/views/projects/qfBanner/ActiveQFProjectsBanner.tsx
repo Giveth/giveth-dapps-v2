@@ -32,7 +32,6 @@ enum ERoundStatus {
 export const ActiveQFProjectsBanner = ({
 	qfRound,
 }: { qfRound?: IQFRound } = {}) => {
-export const ActiveQFProjectsBanner = () => {
 	const { isMobile } = useDetectDevice();
 
 	const [state, setState] = useState(ERoundStatus.LOADING);

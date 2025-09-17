@@ -74,14 +74,6 @@ export const useFetchQFRounds = (activeOnly: boolean = false) => {
 	});
 };
 
-export const getQFRoundData = async (slug: string) => {
-	const { data } = await client.query({
-		query: FETCH_QF_ROUND_DATA,
-		variables: { slug },
-	});
-	return data?.qfRound;
-};
-
 /**
  * @title getQFRoundImage
  *
@@ -109,4 +101,20 @@ export const getQFRoundImage = (
  */
 export const getQFRoundHubCardImage = (qfRound: IQFRound): string => {
 	return qfRound.hubCardImage || qfRound.bannerFull || qfRound.bannerBgImage;
+};
+
+/**
+ * @title getQFRoundData
+ *
+ * @description Get the QF round data
+ * @param slug - string
+ * @returns IQFRound
+ */
+export const getQFRoundData = async (slug: string) => {
+	const { data } = await client.query({
+		query: FETCH_QF_ROUNDS_QUERY,
+		variables: { slug },
+		fetchPolicy: 'no-cache',
+	});
+	return data?.qfRounds[0];
 };
