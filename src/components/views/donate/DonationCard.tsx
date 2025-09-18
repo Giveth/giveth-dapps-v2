@@ -163,6 +163,7 @@ export const DonationCard: FC<IDonationCardProps> = ({
 						setSelectedQFRound={setSelectedQFRound}
 						choosedModalRound={choosedModalRound}
 						setChoosedModalRound={setChoosedModalRound}
+						isQRDonation={isQRDonation}
 					/>
 				)}
 				{!isQRDonation ? (
