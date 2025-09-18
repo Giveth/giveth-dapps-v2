@@ -77,8 +77,7 @@ export const QRDonationCard: FC<QRDonationCardProps> = ({
 
 	const {
 		project,
-		hasActiveQFRound,
-		activeStartedRound,
+		selectedQFRound,
 		setQRDonationStatus,
 		setDraftDonationData,
 		setPendingDonationExists,
@@ -108,7 +107,7 @@ export const QRDonationCard: FC<QRDonationCardProps> = ({
 		address => address.chainType === ChainType.STELLAR,
 	);
 
-	const isOnEligibleNetworks = activeStartedRound?.eligibleNetworks?.includes(
+	const isOnEligibleNetworks = selectedQFRound?.eligibleNetworks?.includes(
 		config.STELLAR_NETWORK_NUMBER,
 	);
 	const isProjectGivbacksEligible = !!isGivbackEligible;
@@ -117,15 +116,15 @@ export const QRDonationCard: FC<QRDonationCardProps> = ({
 
 	const textToDisplayOnConnect = () => {
 		const onlyInQF =
-			activeStartedRound?.eligibleNetworks?.length === 1 &&
-			activeStartedRound?.eligibleNetworks[0] ===
+			selectedQFRound?.eligibleNetworks?.length === 1 &&
+			selectedQFRound?.eligibleNetworks[0] ===
 				config.STELLAR_NETWORK_NUMBER;
 
 		if (isProjectGivbacksEligible && onlyInQF) {
 			return 'label.sign_into_giveth_for_a_chance_to_win_givbacks';
 		}
 
-		if (isProjectGivbacksEligible && isInQF && !!activeStartedRound) {
+		if (isProjectGivbacksEligible && isInQF && !!selectedQFRound) {
 			return 'label.please_connect_your_wallet_to_win_givbacks_and_match';
 		}
 
@@ -143,9 +142,9 @@ export const QRDonationCard: FC<QRDonationCardProps> = ({
 	const donationUsdValue =
 		(tokenPrice || 0) * Number(ethers.utils.formatEther(amount));
 	const isDonationMatched =
-		!!activeStartedRound &&
+		!!selectedQFRound &&
 		isOnEligibleNetworks &&
-		donationUsdValue >= (activeStartedRound?.minimumValidUsdValue || 0);
+		donationUsdValue >= (selectedQFRound?.minimumValidUsdValue || 0);
 
 	useEffect(() => {
 		const eventSource = new EventSource(
@@ -260,6 +259,7 @@ export const QRDonationCard: FC<QRDonationCardProps> = ({
 						useDonationBox: false,
 						chainId: stellarToken?.networkId,
 						memo: projectAddress.memo,
+						qfRoundId: Number(selectedQFRound?.id) || undefined,
 					};
 
 					draftDonationId = await createDraftDonation(payload);
@@ -314,8 +314,8 @@ export const QRDonationCard: FC<QRDonationCardProps> = ({
 	const showEstimatedMatching =
 		!showQRCode &&
 		!!chain &&
-		hasActiveQFRound &&
-		!!activeStartedRound?.eligibleNetworks?.includes(
+		selectedQFRound &&
+		!!selectedQFRound?.eligibleNetworks?.includes(
 			config.NON_EVM_NETWORKS_CONFIG[ChainType.STELLAR].networkId,
 		) &&
 		isDonationMatched &&

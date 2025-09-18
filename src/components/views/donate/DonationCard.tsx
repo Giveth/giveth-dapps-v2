@@ -167,19 +167,6 @@ export const DonationCard: FC<IDonationCardProps> = ({
 				)}
 				{!isQRDonation ? (
 					<>
-						{hasStellarAddress && (
-							<QRToastLink onClick={handleQRDonation}>
-								<Image
-									src='/images/logo/stellar.svg'
-									alt='stellar'
-									width={24}
-									height={24}
-								/>
-								{formatMessage({
-									id: 'label.try_donating_with_stellar',
-								})}
-							</QRToastLink>
-						)}
 						{tab === ETabs.ONE_TIME && (
 							<Title id='donation-visit'>
 								{formatMessage({
@@ -197,6 +184,19 @@ export const DonationCard: FC<IDonationCardProps> = ({
 								<RecurringDonationCard />
 							)}
 						</TabWrapper>
+						{hasStellarAddress && (
+							<QRToastLink onClick={handleQRDonation}>
+								<Image
+									src='/images/logo/stellar.svg'
+									alt='stellar'
+									width={24}
+									height={24}
+								/>
+								{formatMessage({
+									id: 'label.try_donating_with_stellar',
+								})}
+							</QRToastLink>
+						)}
 					</>
 				) : (
 					<QRDonationCard
