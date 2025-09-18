@@ -29,7 +29,7 @@ export const HomeSidebar = () => {
 			</Link>
 			<SidebarParentItem
 				item={{
-					title: formatMessage({ id: 'label.projects' }),
+					title: formatMessage({ id: 'label.donate' }),
 					href: '/projects',
 				}}
 			>

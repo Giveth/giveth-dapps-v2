@@ -155,8 +155,13 @@ export const FETCH_PROJECT_BY_SLUG_SUCCESS = gql`
 `;
 
 export const FETCH_PROJECT_BY_SLUG_DONATION = gql`
-	query ProjectBySlug($slug: String!, $connectedWalletUserId: Int) {
+	query ProjectBySlug(
+		$slug: String!
+		$connectedWalletUserId: Int
+		$activeOnly: Boolean
+	) {
 		projectBySlug(
+			activeOnly: $activeOnly
 			slug: $slug
 			connectedWalletUserId: $connectedWalletUserId
 		) {
