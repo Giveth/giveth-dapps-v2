@@ -48,8 +48,6 @@ export const getServerSideProps: GetServerSideProps = async props => {
 			fetchPolicy: 'no-cache',
 		});
 
-		console.log('data', data.projectBySlug);
-
 		return {
 			props: {
 				project: data.projectBySlug,
