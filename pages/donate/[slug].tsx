@@ -44,9 +44,12 @@ export const getServerSideProps: GetServerSideProps = async props => {
 		const slug = decodeURI(query.slug as string).replace(/\s/g, '');
 		const { data } = await client.query({
 			query: FETCH_PROJECT_BY_SLUG_DONATION,
-			variables: { slug },
+			variables: { slug, activeOnly: true },
 			fetchPolicy: 'no-cache',
 		});
+
+		console.log('data', data.projectBySlug);
+
 		return {
 			props: {
 				project: data.projectBySlug,
