@@ -16,6 +16,7 @@ import {
 	getActiveQFRounds,
 	useFetchQFRoundSmartSelect,
 } from '../../donateCause/helpers';
+import config from '@/configuration';
 
 const EmptyRound: IQFRound = {
 	id: '',
@@ -47,6 +48,7 @@ export const DonationCardQFRounds = ({
 	setSelectedQFRound,
 	choosedModalRound,
 	setChoosedModalRound,
+	isQRDonation,
 }: {
 	project: IProject;
 	chainId: number;
@@ -54,6 +56,7 @@ export const DonationCardQFRounds = ({
 	setSelectedQFRound: (round: IQFRound | undefined) => void;
 	choosedModalRound: IQFRound | undefined;
 	setChoosedModalRound: (round: IQFRound | undefined) => void;
+	isQRDonation?: boolean;
 }) => {
 	const { formatMessage } = useIntl();
 	const activeQFRounds = useMemo(
@@ -66,7 +69,7 @@ export const DonationCardQFRounds = ({
 	// Fetch QF round smart selection data
 	const { data: smartSelectData } = useFetchQFRoundSmartSelect(
 		project.id ? parseInt(project.id) : 0,
-		chainId,
+		isQRDonation ? config.STELLAR_NETWORK_NUMBER : chainId,
 		!!project.id && !!chainId && activeQFRounds.length > 0,
 	);
 
