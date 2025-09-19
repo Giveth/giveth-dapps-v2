@@ -36,6 +36,7 @@ interface ISwitchNetworkModal extends IModal {
 	closeOtherModal?: () => void;
 	clickedRound?: IQFRound | null;
 	setChoosedModalRound?: (round: IQFRound | undefined) => void;
+	onRoundSelect?: (round: IQFRound) => void;
 }
 
 const SwitchNetworkQFRound: FC<ISwitchNetworkModal> = ({
@@ -45,6 +46,7 @@ const SwitchNetworkQFRound: FC<ISwitchNetworkModal> = ({
 	closeOtherModal,
 	clickedRound,
 	setChoosedModalRound,
+	onRoundSelect,
 }) => {
 	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
 	const { switchChain } = useSwitchChain();
@@ -82,6 +84,7 @@ const SwitchNetworkQFRound: FC<ISwitchNetworkModal> = ({
 			// Set up round that user chose inside modal
 			if (clickedRound) {
 				setChoosedModalRound?.(clickedRound);
+				onRoundSelect?.(clickedRound);
 			}
 			closeModal();
 			closeOtherModal?.();

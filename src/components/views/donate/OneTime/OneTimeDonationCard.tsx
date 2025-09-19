@@ -41,7 +41,6 @@ import {
 	useDonateData,
 } from '@/context/donate.context';
 import { useModalCallback } from '@/hooks/useModalCallback';
-import { getActiveRound } from '@/helpers/qf';
 import { useGeneralWallet } from '@/providers/generalWalletProvider';
 import { ChainType } from '@/types/config';
 import { INetworkIdWithChain } from '../common/common.types';
@@ -84,6 +83,7 @@ const CryptoDonation: FC<{
 	const {
 		project,
 		hasActiveQFRound,
+		selectedQFRound,
 		selectedOneTimeToken,
 		shouldRenderModal,
 		setDonateModalByPriority,
@@ -150,11 +150,10 @@ const CryptoDonation: FC<{
 	});
 
 	const tokenDecimals = selectedOneTimeToken?.decimals || 18;
-	const { activeStartedRound } = getActiveRound(project.qfRounds);
 	const networkId = (chain as Chain)?.id;
 
 	const isOnQFEligibleNetworks =
-		networkId && activeStartedRound?.eligibleNetworks?.includes(networkId);
+		networkId && selectedQFRound?.eligibleNetworks?.includes(networkId);
 
 	const tokenPrice = useTokenPrice(selectedOneTimeToken);
 
@@ -252,6 +251,12 @@ const CryptoDonation: FC<{
 		if (amount > selectedTokenBalance) {
 			return setShowInsufficientModal(true);
 		}
+		console.log('hasActiveQFRound', hasActiveQFRound);
+		console.log('isOnQFEligibleNetworks', isOnQFEligibleNetworks);
+		console.log(
+			'selectedOneTimeToken?.chainType',
+			selectedOneTimeToken?.chainType,
+		);
 		if (
 			hasActiveQFRound &&
 			!isOnQFEligibleNetworks &&
@@ -361,9 +366,9 @@ const CryptoDonation: FC<{
 		(tokenPrice || 0) *
 		(truncateToDecimalPlaces(formatUnits(amount, decimals), decimals) || 0);
 	const isDonationMatched =
-		!!activeStartedRound &&
+		!!selectedQFRound &&
 		isOnQFEligibleNetworks &&
-		donationUsdValue >= (activeStartedRound?.minimumValidUsdValue || 0);
+		donationUsdValue >= (selectedQFRound?.minimumValidUsdValue || 0);
 	const showEstimatedMatching =
 		hasActiveQFRound &&
 		!!isOnQFEligibleNetworks &&

@@ -193,6 +193,7 @@ export const QFRoundsModal = ({
 					closeOtherModal={closeModal}
 					clickedRound={clickedRound}
 					setChoosedModalRound={setChoosedModalRound}
+					onRoundSelect={onRoundSelect}
 				/>
 			)}
 		</>
