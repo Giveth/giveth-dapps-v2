@@ -64,9 +64,7 @@ const ProjectBadges = () => {
 					icon={
 						<ProjectBadge
 							badgeText={formatMessage({
-								id: isCause
-									? 'label.cause.isGivbackEligible'
-									: 'label.isGivbackEligible',
+								id: 'label.isGivbackEligible',
 							})}
 							textColor={brandColors.giv[500]}
 							wrapperColor={'white'}
