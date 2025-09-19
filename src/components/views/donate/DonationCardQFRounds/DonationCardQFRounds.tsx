@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import styled from 'styled-components';
 import {
 	B,
@@ -10,6 +10,8 @@ import {
 	brandColors,
 } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
+import { useSwitchChain } from 'wagmi';
+import { useWeb3ModalEvents } from '@web3modal/wagmi/react';
 import { IProject, IQFRound } from '@/apollo/types/types';
 import { QFRoundsModal } from '@/components/views/donate/DonationCardQFRounds/QFRoundsModal';
 import {
@@ -58,6 +60,7 @@ export const DonationCardQFRounds = ({
 	setChoosedModalRound: (round: IQFRound | undefined) => void;
 	isQRDonation?: boolean;
 }) => {
+	const { status } = useSwitchChain();
 	const { formatMessage } = useIntl();
 	const activeQFRounds = useMemo(
 		() => getActiveQFRounds(project.qfRounds || []),
@@ -72,6 +75,35 @@ export const DonationCardQFRounds = ({
 		isQRDonation ? config.STELLAR_NETWORK_NUMBER : chainId,
 		!!project.id && !!chainId && activeQFRounds.length > 0,
 	);
+
+	const handleRoundSelect = (round: IQFRound) => {
+		setSelectedQFRound(round);
+		setIsSmartSelect(false);
+		setShowQFRoundModal(false);
+	};
+
+	// Track state between open and close - user changed network using wagmi modal
+	const { data: web3ModalData } = useWeb3ModalEvents();
+	const modalOpen = useRef(false);
+	const initialChainId = useRef<number | null>(null);
+
+	useEffect(() => {
+		if (web3ModalData?.event === 'MODAL_OPEN' && !modalOpen.current) {
+			modalOpen.current = true;
+			initialChainId.current = chainId;
+		}
+
+		if (web3ModalData?.event === 'MODAL_CLOSE') {
+			modalOpen.current = false;
+			if (
+				initialChainId.current !== null &&
+				initialChainId.current !== chainId
+			) {
+				setChoosedModalRound(undefined);
+			}
+			initialChainId.current = null;
+		}
+	}, [web3ModalData, chainId]);
 
 	// Set up default QF round
 	useEffect(() => {
@@ -110,12 +142,6 @@ export const DonationCardQFRounds = ({
 		setSelectedQFRound,
 		choosedModalRound,
 	]);
-
-	const handleRoundSelect = (round: IQFRound) => {
-		setShowQFRoundModal(true);
-		setSelectedQFRound(round);
-		setIsSmartSelect(false);
-	};
 
 	// Return nothing if there are no QF rounds
 	if (!activeQFRounds || activeQFRounds.length === 0) {
