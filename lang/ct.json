@@ -2008,5 +2008,6 @@
 	"label.qf.closed_rounds": "Rondes tancades",
 	"label.qf.enter_dontation": "Entra la teva donació",
 	"label.qf.project": "Projecte QF",
-	"label.qf.recurring_auto_matched": "Les donacions recurrents s'igualen automàticament en rondes QF elegibles."
+	"label.qf.recurring_auto_matched": "Les donacions recurrents s'igualen automàticament en rondes QF elegibles.",
+	"label.qf.quadratic_funding_is_live": "El Quadratic Funding està en funcionament! Dona i amplifica les teves donacions amb un pool de match!"
 }
