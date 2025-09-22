@@ -13,20 +13,23 @@ import { FETCH_QF_ROUND_STATS } from '@/apollo/gql/gqlQF';
 import { formatMonthDay, formatUSD, thousandsSeparator } from '@/lib/helpers';
 import { useAppSelector } from '@/features/hooks';
 import { hasRoundStarted } from '@/helpers/qf';
+import { IQFRound } from '@/apollo/types/types';
 
-export const ActiveQFRoundStats = () => {
+export const ActiveQFRoundStats = ({ qfRound }: { qfRound?: IQFRound }) => {
 	const { formatMessage } = useIntl();
 	const { activeQFRound } = useAppSelector(state => state.general);
 
-	const isRoundStarted = hasRoundStarted(activeQFRound);
+	const currentRound = qfRound || activeQFRound;
+
+	const isRoundStarted = hasRoundStarted(currentRound);
 	const {
 		allocatedFundUSD,
 		allocatedFundUSDPreferred,
 		allocatedTokenSymbol,
 		allocatedFund,
-	} = activeQFRound || {};
+	} = currentRound || {};
 	const { data } = useQuery(FETCH_QF_ROUND_STATS, {
-		variables: { slug: activeQFRound?.slug },
+		variables: { slug: currentRound?.slug },
 	});
 
 	return (
@@ -73,8 +76,8 @@ export const ActiveQFRoundStats = () => {
 				)}
 				<ItemContainer>
 					<ItemTitle weight={700}>
-						{activeQFRound?.beginDate && activeQFRound?.endDate
-							? `${formatMonthDay(new Date(activeQFRound.beginDate))} - ${formatMonthDay(new Date(activeQFRound.endDate), { includeYear: true })}`
+						{currentRound?.beginDate && currentRound?.endDate
+							? `${formatMonthDay(new Date(currentRound.beginDate))} - ${formatMonthDay(new Date(currentRound.endDate), { includeYear: true })}`
 							: '--'}
 					</ItemTitle>
 				</ItemContainer>
