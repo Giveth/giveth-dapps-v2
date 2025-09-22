@@ -180,6 +180,10 @@ const Card = styled.div<{ $layout: Layout }>`
 					}
 				`
 			: css`
+					display: flex; /* 👈 instead of grid */
+					flex-direction: column;
+					gap: 24px;
+
 					padding: 16px;
 					/* 3 per row on desktop (gap = 32px -> two gaps per row) */
 					flex: 1 1 calc((100% - 2 * 32px) / 3);
