@@ -39,9 +39,6 @@ export const fetchProjects = async (
 		variables.qfRoundId = qfRoundId;
 	}
 
-	console.log('qfRoundId', qfRoundId);
-	console.log('query', qfRoundId && qfRoundId > 0);
-
 	const res = await client.query({
 		query:
 			qfRoundId && qfRoundId > 0 ? FETCH_QF_PROJECTS : FETCH_ALL_PROJECTS,
