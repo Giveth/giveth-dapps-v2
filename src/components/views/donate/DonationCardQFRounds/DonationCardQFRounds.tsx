@@ -148,6 +148,16 @@ export const DonationCardQFRounds = ({
 		return null;
 	}
 
+	// If it is stellar donation and there is no active round with stellar, return null
+	if (isQRDonation && activeQFRounds.length > 0) {
+		const stellarRound = activeQFRounds.find(round =>
+			round.eligibleNetworks.includes(config.STELLAR_NETWORK_NUMBER),
+		);
+		if (!stellarRound) {
+			return null;
+		}
+	}
+
 	return (
 		<>
 			<Container>

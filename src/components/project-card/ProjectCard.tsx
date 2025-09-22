@@ -342,7 +342,7 @@ const ProjectCard = (props: IProjectCard) => {
 										</GivbackEligibleText>
 									</Flex>
 								)}
-								{haveProjectRound(project) && (
+								{haveProjectRound(project) === true && (
 									<QFBadge>
 										{formatMessage({
 											id:

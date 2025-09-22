@@ -261,7 +261,9 @@ const ProjectsIndex = (props: IProjectsView) => {
 						{onProjectsPageOrActiveQFPage && !activeQFRound && (
 							<FilterContainer />
 						)}
-						{isQF && activeQFRound && <ActiveQFRoundStats />}
+						{isQF && activeQFRound && (
+							<ActiveQFRoundStats qfRound={qfRound} />
+						)}
 					</>
 				)}
 				{onProjectsPageOrActiveQFPage && (

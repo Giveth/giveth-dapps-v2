@@ -38,8 +38,6 @@ export const getServerSideProps: GetServerSideProps = async context => {
 		// GEt round data from database
 		const roundData = await getQFRoundData(slug);
 
-		console.log('roundData', roundData);
-
 		const apolloClient = initializeApollo();
 
 		let _filters = query.filter
