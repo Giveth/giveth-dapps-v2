@@ -135,6 +135,7 @@ export const FETCH_QF_PROJECTS = gql`
 					networkId
 					chainType
 				}
+				projectType
 				image
 				totalRaisedUsd
 				qfRoundStats {

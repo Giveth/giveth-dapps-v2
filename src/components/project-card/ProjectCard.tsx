@@ -190,11 +190,6 @@ const ProjectCard = (props: IProjectCard) => {
 		calculateTotalAmountStreamed();
 	}, [props]);
 
-	// Depend is QF round page or not
-	const isQFRoundPage = router.pathname.includes('/qf');
-	if (isQFRoundPage) {
-	}
-
 	return (
 		// </Link>
 		<Wrapper
@@ -350,7 +345,11 @@ const ProjectCard = (props: IProjectCard) => {
 								{haveProjectRound(project) && (
 									<QFBadge>
 										{formatMessage({
-											id: 'label.qf.project',
+											id:
+												projectType ===
+												EProjectType.CAUSE
+													? 'label.qf.qf_cause'
+													: 'label.qf.project',
 										})}
 									</QFBadge>
 								)}
