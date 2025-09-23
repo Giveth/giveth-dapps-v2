@@ -11,12 +11,15 @@ export const formatReadableDate = (
 	showYear: boolean = true,
 ): string => {
 	try {
+		// Parse using Date but only for extracting UTC values
 		const date = new Date(isoDate);
-
-		// Check if the date is valid
 		if (isNaN(date.getTime())) {
-			return isoDate; // Return original string if invalid
+			return isoDate;
 		}
+
+		const year = date.getUTCFullYear();
+		const month = date.getUTCMonth(); // 0–11
+		const day = date.getUTCDate();
 
 		const options: Intl.DateTimeFormatOptions = {
 			month: 'long',
@@ -24,10 +27,13 @@ export const formatReadableDate = (
 			...(showYear && { year: 'numeric' }),
 		};
 
-		return new Intl.DateTimeFormat(locale, options).format(date);
+		// Format using UTC parts instead of local conversion
+		return new Intl.DateTimeFormat(locale, options).format(
+			new Date(Date.UTC(year, month, day)),
+		);
 	} catch (error) {
 		console.error('Error formatting date:', error);
-		return isoDate; // Return original string on error
+		return isoDate;
 	}
 };
 
