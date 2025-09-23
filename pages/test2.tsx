@@ -45,7 +45,7 @@ const YourApp = () => {
 		// Check if it's a native super token
 		try {
 			superToken = await sf.loadNativeAssetSuperToken(tokenAddress);
-			console.log('Native Super Token detected.');
+			console.log('Native Super Token detected. ', superToken);
 			return { type: 'native', superToken };
 		} catch (error) {
 			console.log('Not a Native Super Token.');
