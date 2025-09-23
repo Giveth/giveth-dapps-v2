@@ -16,7 +16,6 @@ const QFAnnouncementBanner = ({ onShow }: IQFAnnouncementBannerProps) => {
 	const { formatMessage } = useIntl();
 	const router = useRouter();
 
-	console.log('router.pathname', router.pathname);
 	const shouldShowBanner =
 		router.pathname === Routes.Home ||
 		router.pathname === Routes.AllProjects ||
