@@ -13,6 +13,7 @@ import {
 } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
 import Link from 'next/link';
+import { truncateText } from '@/lib/helpers';
 
 type Layout = 'horizontal' | 'grid';
 
@@ -60,7 +61,7 @@ export default function QFRoundCard({
 					<Content>
 						<Title $layout={layout}>{title}</Title>
 
-						<Desc>{description}</Desc>
+						<Desc>{truncateText(description, 220)}</Desc>
 
 						{matchingPoolUsd && (
 							<MetaGrid $layout={layout}>
@@ -118,7 +119,7 @@ export default function QFRoundCard({
 					</Media>
 
 					<Content>
-						<Desc>{description}</Desc>
+						<Desc>{truncateText(description, 100)}</Desc>
 						{startDate && endDate && (
 							<Dates $layout={layout}>
 								{startDate} – {endDate}
