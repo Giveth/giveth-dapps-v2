@@ -20,6 +20,12 @@ import {
 } from '../../donateCause/helpers';
 import config from '@/configuration';
 
+// Add text truncation utility function
+const truncateText = (text: string, maxLength: number = 50) => {
+	if (!text) return '';
+	return text.length > maxLength ? `${text.slice(0, maxLength)}...` : text;
+};
+
 const EmptyRound: IQFRound = {
 	id: '',
 	name: '',
@@ -62,10 +68,23 @@ export const DonationCardQFRounds = ({
 }) => {
 	const { status } = useSwitchChain();
 	const { formatMessage } = useIntl();
-	const activeQFRounds = useMemo(
-		() => getActiveQFRounds(project.qfRounds || []),
-		[project.qfRounds],
-	);
+	const activeQFRounds = useMemo(() => {
+		let rounds = getActiveQFRounds(project.qfRounds || []);
+
+		// Filter for Stellar network if it's QR donation
+		if (isQRDonation) {
+			rounds = rounds.filter(round =>
+				round.eligibleNetworks.includes(config.STELLAR_NETWORK_NUMBER),
+			);
+		}
+
+		// Truncate round names
+		return rounds.map(round => ({
+			...round,
+			name: truncateText(round.name, 20),
+		}));
+	}, [project.qfRounds, isQRDonation]);
+
 	const [isSmartSelect, setIsSmartSelect] = useState(false);
 	const [showQFRoundModal, setShowQFRoundModal] = useState(false);
 
