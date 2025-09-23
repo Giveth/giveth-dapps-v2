@@ -15,6 +15,8 @@ interface IQFAnnouncementBannerProps {
 const QFAnnouncementBanner = ({ onShow }: IQFAnnouncementBannerProps) => {
 	const { formatMessage } = useIntl();
 	const router = useRouter();
+
+	console.log('router.pathname', router.pathname);
 	const shouldShowBanner =
 		router.pathname === Routes.Home ||
 		router.pathname === Routes.AllProjects ||
@@ -23,7 +25,8 @@ const QFAnnouncementBanner = ({ onShow }: IQFAnnouncementBannerProps) => {
 		router.pathname === Routes.Project ||
 		router.pathname === '/project/[projectIdSlug]' ||
 		router.pathname === Routes.MyAccount ||
-		router.pathname === Routes.QFArchived;
+		router.pathname === '/causes/[slug]' ||
+		router.pathname === '/cause/[causeIdSlug]';
 
 	const { activeQFRound } = useAppSelector((state: any) => state.general);
 
