@@ -55,6 +55,9 @@ const ProjectsIndex = (props: IProjectsView) => {
 	const { activeQFRound, mainCategories } = useAppSelector(
 		state => state.general,
 	);
+
+	console.log('projects', projects);
+
 	const isMobile = useMediaQuery(`(max-width: ${deviceSize.tablet - 1}px)`);
 	const dispatch = useAppDispatch();
 	const {
