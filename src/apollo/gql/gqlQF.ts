@@ -138,10 +138,9 @@ export const FETCH_QF_PROJECTS = gql`
 				projectType
 				image
 				totalRaisedUsd
-				qfRoundStats {
-					roundId
-					totalRaisedInRound
-					totalDonorsInRound
+				projectQfRoundRelations {
+					sumDonationValueUsd
+					countUniqueDonors
 				}
 				qfRounds {
 					id
