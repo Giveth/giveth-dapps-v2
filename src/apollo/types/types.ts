@@ -44,11 +44,6 @@ export interface IAnchorContractBasicData {
 	enabled?: boolean;
 }
 
-export interface IProjectQfRoundRelation {
-	sumDonationValueUsd?: number;
-	countUniqueDonors?: number;
-}
-
 export interface IProject {
 	id: string;
 	title?: string;
