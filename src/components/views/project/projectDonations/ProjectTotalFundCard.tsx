@@ -89,7 +89,7 @@ const ProjectTotalFundCard = ({ selectedQF }: IProjectTotalFundCardProps) => {
 		if (selectedQF === null) {
 			fetchAllDonationsInfo();
 		} else if (selectedQF.isActive) {
-			fetchFinishedQfDonationsInfo();
+			fetchCurrentQfDonationsInfo();
 		} else {
 			fetchFinishedQfDonationsInfo();
 		}
