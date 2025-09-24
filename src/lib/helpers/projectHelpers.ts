@@ -36,7 +36,7 @@ export const getProjectTotalRaisedUSD = (project: IProject) => {
 export const getSumDonationValueUsdForActiveQfRound = (project: IProject) => {
 	return (
 		project.sumDonationValueUsdForActiveQfRound ||
-		project.qfRoundStats?.totalRaisedInRound ||
+		project.projectQfRoundRelations?.sumDonationValueUsd ||
 		0
 	);
 };
@@ -50,7 +50,7 @@ export const getSumDonationValueUsdForActiveQfRound = (project: IProject) => {
  */
 export const getCountUniqueDonorsForActiveQfRound = (project: IProject) => {
 	return (
-		project.qfRoundStats?.totalDonorsInRound ||
+		project.projectQfRoundRelations?.countUniqueDonors ||
 		project.countUniqueDonorsForActiveQfRound ||
 		0
 	);

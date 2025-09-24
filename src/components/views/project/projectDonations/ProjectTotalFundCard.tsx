@@ -35,14 +35,7 @@ interface IProjectTotalFundCardProps {
 const ProjectTotalFundCard = ({ selectedQF }: IProjectTotalFundCardProps) => {
 	const [qfRoundHistory, setQfRoundHistory] = useState<IGetQfRoundHistory>();
 	const { projectData, isAdmin, isCause } = useProjectContext();
-	const {
-		id,
-		totalDonations,
-		addresses,
-		qfRounds,
-		estimatedMatching,
-		countUniqueDonors,
-	} = projectData || {};
+	const { id, addresses, qfRounds, estimatedMatching } = projectData || {};
 	const { formatMessage, locale } = useIntl();
 	const recipientAddresses = addresses?.filter(a => a.isRecipient);
 	const { allProjectsSum, matchingPool, projectDonationsSqrtRootSum } =
@@ -96,7 +89,7 @@ const ProjectTotalFundCard = ({ selectedQF }: IProjectTotalFundCardProps) => {
 		if (selectedQF === null) {
 			fetchAllDonationsInfo();
 		} else if (selectedQF.isActive) {
-			fetchCurrentQfDonationsInfo();
+			fetchFinishedQfDonationsInfo();
 		} else {
 			fetchFinishedQfDonationsInfo();
 		}
@@ -132,6 +125,15 @@ const ProjectTotalFundCard = ({ selectedQF }: IProjectTotalFundCardProps) => {
 						)
 				: 0
 		: 0;
+
+	const totalDonations =
+		projectData?.qfRounds?.find(round => round.id === selectedQF?.id)
+			?.projectQfRoundRelations?.sumDonationValueUsd || 0;
+
+	const countUniqueDonors =
+		projectData?.qfRounds?.find(round => round.id === selectedQF?.id)
+			?.projectQfRoundRelations?.countUniqueDonors || 0;
+
 	return (
 		<Wrapper>
 			{selectedQF === null ? (

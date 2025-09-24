@@ -44,10 +44,9 @@ export interface IAnchorContractBasicData {
 	enabled?: boolean;
 }
 
-export interface IQFRoundStats {
-	roundId?: string;
-	totalRaisedInRound?: number;
-	totalDonorsInRound?: number;
+export interface IProjectQfRoundRelation {
+	sumDonationValueUsd?: number;
+	countUniqueDonors?: number;
 }
 
 export interface IProject {
@@ -110,7 +109,7 @@ export interface IProject {
 	ownerTotalEarned?: number;
 	ownerTotalEarnedUsdValue?: number;
 	totalRaisedUsd?: number;
-	qfRoundStats?: IQFRoundStats;
+	projectQfRoundRelations?: IProjectQfRoundRelation;
 }
 
 export interface ICauseProject {
@@ -540,6 +539,11 @@ export interface IUsersPFPTokens {
 	[key: string]: IGiverPFPToken[];
 }
 
+export interface IProjectQfRoundRelation {
+	sumDonationValueUsd?: number;
+	countUniqueDonors?: number;
+}
+
 export interface IQFRound {
 	slug: string;
 	id: string;
@@ -566,6 +570,7 @@ export interface IQFRound {
 	bannerMobile?: string;
 	hubCardImage?: string;
 	priority?: number;
+	projectQfRoundRelations?: IProjectQfRoundRelation;
 }
 
 export interface IArchivedQFRound extends IQFRound {
