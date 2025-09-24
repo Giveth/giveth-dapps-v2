@@ -28,11 +28,18 @@ const AddressesTip = () => {
 					})}
 				</P>
 			</TipListItem>
-			<TipLine />
 			<TipListItem>
 				<P>
 					{formatMessage({
 						id: 'component.pro_guide.tips.address.item4',
+					})}
+				</P>
+			</TipListItem>
+			<TipLine />
+			<TipListItem>
+				<P>
+					{formatMessage({
+						id: 'component.pro_guide.tips.address.item5',
 					})}
 				</P>
 			</TipListItem>
