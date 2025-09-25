@@ -23,7 +23,6 @@ import { useProjectContext } from '@/context/project.context';
 import { ProjectActionCard } from '@/components/views/project/projectActionCard/ProjectActionCard';
 import ProjectBadges from '@/components/views/project/ProjectBadges';
 import ProjectCategoriesBadges from '@/components/views/project/ProjectCategoriesBadges';
-import { PassportBanner } from '@/components/PassportBanner';
 import ProjectGIVbackToast from '@/components/views/project/ProjectGIVbackToast';
 import useMediaQuery from '@/hooks/useMediaQuery';
 import { device } from '@/lib/constants/constants';
@@ -141,9 +140,6 @@ const CauseIndex: FC<ICauseBySlug> = () => {
 	return (
 		<Wrapper>
 			{!isAdminEmailVerified && isAdmin && <VerifyEmailBanner />}
-			{hasActiveQFRound && !isOnSolana && !isStellarOnlyQF && (
-				<PassportBanner />
-			)}
 			<Head>
 				<title>{title && `${title} |`} Giveth</title>
 				<ProjectMeta project={projectData} />

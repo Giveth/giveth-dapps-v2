@@ -25,7 +25,6 @@ import { CauseSuccessView } from '@/components/views/donateCause/CauseSuccessVie
 import { useGeneralWallet } from '@/providers/generalWalletProvider';
 import DonationByProjectOwner from '@/components/modals/DonationByProjectOwner';
 import SanctionModal from '@/components/modals/SanctionedModal';
-import { PassportBanner } from '@/components/PassportBanner';
 import { CauseDonationCard } from './CauseDonationCard';
 import {
 	useCauseDonateData,
@@ -142,9 +141,6 @@ const CauseDonateIndex: FC = () => {
 								})}
 							</SublineBold>
 						</AlreadyDonatedWrapper>
-					)}
-					{!isSafeEnv && hasActiveQFRound && !isOnSolana && (
-						<PassportBanner />
 					)}
 					<DonateRow>
 						<Col xs={12} lg={6}>

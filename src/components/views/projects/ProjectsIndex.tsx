@@ -56,8 +56,6 @@ const ProjectsIndex = (props: IProjectsView) => {
 		state => state.general,
 	);
 
-	console.log('projects', projects);
-
 	const isMobile = useMediaQuery(`(max-width: ${deviceSize.tablet - 1}px)`);
 	const dispatch = useAppDispatch();
 	const {
@@ -241,7 +239,7 @@ const ProjectsIndex = (props: IProjectsView) => {
 					<Spinner />
 				</Loading>
 			)}
-			{isQF && !isStellarOnlyQF && <PassportBanner />}
+			{isQF && qfRound && !isStellarOnlyQF && <PassportBanner />}
 			<Wrapper>
 				{isQF && !isArchivedQF && (
 					<>

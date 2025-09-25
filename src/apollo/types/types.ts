@@ -619,3 +619,8 @@ export interface ICause extends IProject {
 	depositTxStatus?: string;
 	depositTxChainId?: number;
 }
+
+export interface IGlobalScoreSettings {
+	globalMinimumPassportScore: number;
+	globalMinimumMBDScore: number;
+}

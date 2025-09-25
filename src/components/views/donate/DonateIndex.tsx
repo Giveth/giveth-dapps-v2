@@ -40,7 +40,6 @@ import StorageLabel from '@/lib/localStorage';
 import DonationByProjectOwner from '@/components/modals/DonationByProjectOwner';
 import { isWalletSanctioned } from '@/services/donation';
 import SanctionModal from '@/components/modals/SanctionedModal';
-import { PassportBanner } from '@/components/PassportBanner';
 import { GIVBACKS_DONATION_QUALIFICATION_VALUE_USD } from '@/lib/constants/constants';
 import QRDonationDetails from './OneTime/SelectTokenModal/QRCodeDonation/QRDonationDetails';
 
@@ -307,10 +306,6 @@ const DonateIndex: FC = () => {
 							</SublineBold>
 						</AlreadyDonatedWrapper>
 					)}
-					{!isSafeEnv &&
-						hasActiveQFRound &&
-						!isOnSolana &&
-						!isStellarOnlyQF && <PassportBanner />}
 					<DonateRow>
 						<Col xs={12} lg={6}>
 							<DonationCard

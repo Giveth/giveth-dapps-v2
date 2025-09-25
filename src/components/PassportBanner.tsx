@@ -137,7 +137,22 @@ export const PassportBanner = () => {
 
 	// Get rounds data and set the round data
 	useEffect(() => {
-		if (roundsData && roundsData?.length === 1) {
+		// If there is more than one round, match one that is active
+		if (roundsData && roundsData?.length > 1) {
+			const activeRound = roundsData.find(round => {
+				const now = Date.now();
+				return (
+					round.isActive &&
+					now > new Date(round.beginDate).getTime() &&
+					now < new Date(round.endDate).getTime()
+				);
+			});
+			if (activeRound) {
+				setRoundData(activeRound);
+			}
+		}
+		// If there is only one round, set the round data to the first round
+		else if (roundsData && roundsData?.length === 1) {
 			setRoundData(roundsData[0]);
 		}
 	}, [roundsData]);

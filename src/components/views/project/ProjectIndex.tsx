@@ -33,7 +33,6 @@ import { useProjectContext } from '@/context/project.context';
 import { ProjectActionCard } from './projectActionCard/ProjectActionCard';
 import ProjectBadges from './ProjectBadges';
 import ProjectCategoriesBadges from './ProjectCategoriesBadges';
-import { PassportBanner } from '@/components/PassportBanner';
 import ProjectGIVbackToast from '@/components/views/project/ProjectGIVbackToast';
 import useMediaQuery from '@/hooks/useMediaQuery';
 import { device, mediaQueries } from '@/lib/constants/constants';
@@ -167,9 +166,6 @@ const ProjectIndex: FC<IProjectBySlug> = () => {
 	return (
 		<Wrapper>
 			{!isAdminEmailVerified && isAdmin && <VerifyEmailBanner />}
-			{hasActiveQFRound && !isOnSolana && !isStellarOnlyQF && (
-				<PassportBanner />
-			)}
 			<Head>
 				<title>{title && `${title} |`} Giveth</title>
 				<ProjectMeta project={projectData} />
