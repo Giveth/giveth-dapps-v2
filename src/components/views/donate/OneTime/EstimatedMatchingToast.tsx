@@ -13,13 +13,13 @@ import { formatUnits } from 'viem';
 import { TooltipContent } from '@/components/modals/HarvestAll.sc';
 import { IconWithTooltip } from '@/components/IconWithToolTip';
 import { IProject } from '@/apollo/types/types';
-import {
-	calculateEstimatedMatchingWithDonationAmount,
-	getActiveRound,
-} from '@/helpers/qf';
+import { calculateEstimatedMatchingWithDonationAmount } from '@/helpers/qf';
 import { IProjectAcceptedToken } from '@/apollo/types/gqlTypes';
 import { formatDonation } from '@/helpers/number';
 import { truncateToDecimalPlaces } from '@/lib/helpers';
+import { useCauseDonateData } from '@/context/donate.cause.context';
+import { useDonateData } from '@/context/donate.context';
+import { EProjectType } from '../../../../apollo/types/gqlEnums';
 
 interface IEstimatedMatchingToast {
 	projectData: IProject;
@@ -39,17 +39,24 @@ const EstimatedMatchingToast: FC<IEstimatedMatchingToast> = ({
 	show,
 }) => {
 	const { formatMessage, locale } = useIntl();
-	const { estimatedMatching, qfRounds } = projectData || {};
+	const { estimatedMatching } = projectData || {};
 	const { allProjectsSum, matchingPool, projectDonationsSqrtRootSum } =
 		estimatedMatching || {};
 
-	const { activeStartedRound } = getActiveRound(qfRounds);
+	const causeDonateData = useCauseDonateData();
+	const donateData = useDonateData();
+
+	const { selectedQFRound } =
+		projectData.projectType === EProjectType.CAUSE
+			? causeDonateData
+			: donateData;
+
 	const {
 		allocatedFundUSDPreferred,
 		allocatedFundUSD,
 		allocatedTokenSymbol,
 		maximumReward,
-	} = activeStartedRound || {};
+	} = selectedQFRound || {};
 
 	const decimals = isStellar ? 18 : token?.decimals || 18;
 	const amountInUsd =

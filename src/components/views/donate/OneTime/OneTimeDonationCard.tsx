@@ -251,12 +251,6 @@ const CryptoDonation: FC<{
 		if (amount > selectedTokenBalance) {
 			return setShowInsufficientModal(true);
 		}
-		console.log('hasActiveQFRound', hasActiveQFRound);
-		console.log('isOnQFEligibleNetworks', isOnQFEligibleNetworks);
-		console.log(
-			'selectedOneTimeToken?.chainType',
-			selectedOneTimeToken?.chainType,
-		);
 		if (
 			hasActiveQFRound &&
 			!isOnQFEligibleNetworks &&

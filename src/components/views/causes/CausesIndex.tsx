@@ -18,7 +18,6 @@ import Routes from '@/lib/constants/Routes';
 import { isUserRegistered, showToastError } from '@/lib/helpers';
 import { useAppDispatch, useAppSelector } from '@/features/hooks';
 import { setShowCompleteProfile } from '@/features/modal/modal.slice';
-import { PassportBanner } from '@/components/PassportBanner';
 import { QFNoResultBanner } from '@/components/views/projects/MiddleBanners/QFNoResultBanner';
 import { Spinner } from '@/components/Spinner';
 import { SortContainer } from '@/components/views/projects/sort/SortContainer';
@@ -224,7 +223,6 @@ const CausesIndex = (props: ICausesView) => {
 					<Spinner />
 				</Loading>
 			)}
-			{isQF && !isStellarOnlyQF && <PassportBanner />}
 			<Wrapper>
 				{isQF && !isArchivedQF && (
 					<>
