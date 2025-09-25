@@ -25,7 +25,6 @@ import { ManageProjectAddressesModal } from '@/components/modals/ManageProjectAd
 import ProjectActions from './ProjectActions';
 import ClaimRecurringDonationModal from './ClaimRecurringDonationModal';
 import ProjectStatusBadge from './ProjectStatusBadge';
-import ProjectQFStatus from './ProjectQFStatus';
 import ProjectListedStatus from './ProjectListedStatus';
 import { formatDonation, limitFraction } from '@/helpers/number';
 import VerificationBadge from '@/components/VerificationBadge';
@@ -179,6 +178,7 @@ const ProjectItem: FC<IProjectItem> = props => {
 						</Flex>
 					)}
 					<Flex $justifyContent='space-between'>
+						{/*
 						<div>
 							{formatMessage({
 								id: 'label.qf_eligibility',
@@ -187,6 +187,7 @@ const ProjectItem: FC<IProjectItem> = props => {
 						<div>
 							<ProjectQFStatus project={project} showRoundName />
 						</div>
+						*/}
 					</Flex>
 				</ProjectStatusesContainer>
 				<ProjectStatusesContainer $flexDirection='column' gap='16px'>
