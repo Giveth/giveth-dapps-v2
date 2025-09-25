@@ -237,6 +237,7 @@ const CauseDonateModal: FC<IDonateModalProps> = props => {
 
 			let tx;
 			let swapData: SwapTransactionInput | undefined;
+			let transactionId: string | undefined;
 
 			// Same token as recipient token same network
 			if (
@@ -259,6 +260,8 @@ const CauseDonateModal: FC<IDonateModalProps> = props => {
 					setFailedModalType(EDonationFailedType.FAILED);
 					return;
 				}
+
+				transactionId = tx;
 			} else {
 				// different token or different network then recipient token
 				const squidParams = {
@@ -349,6 +352,11 @@ const CauseDonateModal: FC<IDonateModalProps> = props => {
 					fromTokenAmount: parseFloat(projectDonation.toString()),
 				};
 
+				// Set up this for Polygon GIV donation, same token same network
+				if (transactionId) {
+					donationProps.txHash = transactionId;
+				}
+
 				if (swapData) {
 					donationProps.swapData = swapData;
 				}
@@ -379,14 +387,24 @@ const CauseDonateModal: FC<IDonateModalProps> = props => {
 	};
 
 	// Check if selected token is native token of the network
+	// or same token as recipient token same network, skip approval
 	useEffect(() => {
+		// Native network token skip approval
 		if (
 			token.chainType === ChainType.EVM &&
 			token.address === zeroAddress
 		) {
 			setStep('donate');
 		}
-	}, [token]);
+		// Same token as recipient token same network, skip approval
+		else if (
+			token.networkId === chainId &&
+			token.address.toLowerCase() ===
+				config.CAUSES_CONFIG.recipientToken.address.toLowerCase()
+		) {
+			setStep('donate');
+		}
+	}, [chainId, token]);
 
 	return isSanctioned ? (
 		<SanctionModal
