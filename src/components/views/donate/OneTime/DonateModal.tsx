@@ -256,9 +256,7 @@ const DonateModal: FC<IDonateModalProps> = props => {
 						symbol: token.symbol,
 						useDonationBox: true,
 						relevantDonationTxHash: firstHash,
-						qfRoundId: selectedQFRound?.id
-							? Number(selectedQFRound?.id)
-							: undefined,
+						qfRoundId: undefined, // we don't include Giveth in QF
 					})
 						.then(({ txHash: secondHash }) => {
 							if (!secondHash) {
