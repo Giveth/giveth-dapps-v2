@@ -114,8 +114,14 @@ export const PassportBannerData: IData = {
 	},
 };
 export const PassportBanner = () => {
-	const { info, updateState, fetchUserMBDScore, handleSign, refreshScore } =
-		usePassport();
+	const {
+		info,
+		updateState,
+		fetchUserMBDScore,
+		handleSign,
+		refreshScore,
+		globalScoreSettings,
+	} = usePassport();
 	const { currentRound, passportState, passportScore, qfEligibilityState } =
 		info;
 
@@ -157,8 +163,13 @@ export const PassportBanner = () => {
 		}
 	}, [roundsData]);
 
-	// Only render the banner when the data is available
-	if (isLoading) {
+	// Only render the banner when the data is available and
+	// if MBD and passport score are 0 (not set)
+	if (
+		isLoading ||
+		(globalScoreSettings?.globalMinimumMBDScore === 0 &&
+			globalScoreSettings?.globalMinimumPassportScore === 0)
+	) {
 		return null; // Or return a spinner or loading message if you'd like
 	}
 
