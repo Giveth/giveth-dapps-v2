@@ -112,6 +112,10 @@ const ProjectCard = (props: IProjectCard) => {
 		router.pathname === '/cause/[causeIdSlug]' &&
 		router.query?.tab === 'projects';
 
+	const isListingInsideProjectsCausesAllPage =
+		router.pathname === '/projects/[slug]' ||
+		router.pathname === '/causes/[slug]';
+
 	const isGivbackEligibleCheck = isGivbackEligible || isGivbacksEligible;
 
 	const { activeStartedRound: checkActiveRound, activeQFRound } =
@@ -271,7 +275,22 @@ const ProjectCard = (props: IProjectCard) => {
 								}
 							/>
 						)}
+						{isListingInsideProjectsCausesAllPage && (
+							<ProjectCardTotalRaised
+								activeStartedRound={!!activeStartedRound}
+								totalDonations={getProjectTotalRaisedUSD(
+									project,
+								)}
+								sumDonationValueUsdForActiveQfRound={
+									project.totalDonations || 0
+								}
+								countUniqueDonors={countUniqueDonors || 0}
+								projectsCount={project.activeProjectsCount || 0}
+								isCause={projectType === EProjectType.CAUSE}
+							/>
+						)}
 						{!activeStartedRound &&
+							!isListingInsideProjectsCausesAllPage &&
 							!isListingInsideCauseProjectTabs && (
 								<ProjectCardTotalRaised
 									activeStartedRound={!!activeStartedRound}
@@ -289,7 +308,8 @@ const ProjectCard = (props: IProjectCard) => {
 								/>
 							)}
 						{activeStartedRound &&
-							!isListingInsideCauseProjectTabs && (
+							!isListingInsideCauseProjectTabs &&
+							!isListingInsideProjectsCausesAllPage && (
 								<ProjectCardTotalRaisedQF
 									activeStartedRound={!!activeStartedRound}
 									totalDonations={getProjectTotalRaisedUSD(
