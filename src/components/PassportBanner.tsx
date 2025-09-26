@@ -199,21 +199,6 @@ export const PassportBanner = () => {
 										: undefined,
 							},
 						)}
-						{roundData &&
-							qfEligibilityState ===
-								EQFElegibilityState.RECHECK_ELIGIBILITY && (
-								<>
-									{' '}
-									<strong>
-										{new Date(roundData.endDate)
-											.toLocaleString(locale || 'en-US', {
-												day: 'numeric',
-												month: 'short',
-											})
-											.replace(/,/g, '')}
-									</strong>
-								</>
-							)}
 					</P>
 				</Flex>
 				{qfEligibilityState ===
