@@ -852,7 +852,7 @@
 	"label.purchase_with_credit_debit": "Purchase with Credit, Debit, Visa, or Mastercard",
 	"label.qf_donor_eligibility.banner.check_eligibility": "Get your donations matched! Verify your uniqueness with one click.",
 	"label.qf_donor_eligibility.banner.more_info_needed": "We need a bit more information to verify your QF Eligibility!",
-	"label.qf_donor_eligibility.banner.recheck_eligibility": "Get your donations matched! Increase your Gitcoin Passport score before",
+	"label.qf_donor_eligibility.banner.recheck_eligibility": "Get your donations matched! Increase your Gitcoin Passport score.",
 	"label.qf_eligibility": "Currently in QF round",
 	"label.qf_no_donations": "There were no donations in this round.",
 	"label.qf_round_projects": "QF round's projects",

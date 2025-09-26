@@ -48,15 +48,15 @@ const QFToast: FC<IQFToast> = ({
 		}`,
 	});
 
+	let roundData = selectedQFRound || currentRound;
+
 	let description;
-	const endDate = new Date(currentRound?.endDate || '')
+	const endDate = new Date(roundData?.endDate || '')
 		.toLocaleString(locale || 'en-US', {
 			day: 'numeric',
 			month: 'short',
 		})
 		.replace(/,/g, '');
-
-	let roundData = selectedQFRound || currentRound;
 
 	if (isEligible) {
 		description =

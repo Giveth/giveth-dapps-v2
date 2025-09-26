@@ -72,7 +72,6 @@ export const usePassport = () => {
 		state => state.general,
 	);
 
-	console.log('******globalScoreSettings', globalScoreSettings);
 	const [activeQFRound, setActiveQFRound] = useState<IQFRound | null>(null);
 
 	// Get rounds data and set the round data
@@ -456,5 +455,6 @@ export const usePassport = () => {
 		handleSignWallet,
 		refreshScore,
 		fetchUserMBDScore,
+		globalScoreSettings,
 	};
 };

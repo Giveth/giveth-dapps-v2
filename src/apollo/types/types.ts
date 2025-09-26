@@ -25,6 +25,7 @@ export interface IAdminUser {
 }
 
 export interface IEstimatedMatching {
+	qfRoundId: string;
 	allProjectsSum: number;
 	matchingPool: number;
 	projectDonationsSqrtRootSum: number;
@@ -90,7 +91,7 @@ export interface IProject {
 	givbackFactor?: number;
 	countUniqueDonors?: number;
 	countUniqueDonorsForActiveQfRound?: number;
-	estimatedMatching: IEstimatedMatching;
+	estimatedMatching: IEstimatedMatching[];
 	sumDonationValueUsdForActiveQfRound?: number;
 	qfRounds?: IQFRound[];
 	campaigns?: ICampaign[];
