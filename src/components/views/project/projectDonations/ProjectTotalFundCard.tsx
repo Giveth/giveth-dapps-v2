@@ -38,8 +38,6 @@ const ProjectTotalFundCard = ({ selectedQF }: IProjectTotalFundCardProps) => {
 	const { id, addresses, qfRounds, estimatedMatching } = projectData || {};
 	const { formatMessage, locale } = useIntl();
 	const recipientAddresses = addresses?.filter(a => a.isRecipient);
-	const { allProjectsSum, matchingPool, projectDonationsSqrtRootSum } =
-		estimatedMatching || {};
 
 	const {
 		allocatedFundUSDPreferred,
@@ -48,6 +46,34 @@ const ProjectTotalFundCard = ({ selectedQF }: IProjectTotalFundCardProps) => {
 	} = selectedQF || {};
 
 	const selectedQFData = qfRounds?.find(round => round.id === selectedQF?.id);
+
+	// Find round that matches the selectedQFRound
+	const [matchingData, setMatchingData] = useState({
+		allProjectsSum: 0,
+		matchingPool: 0,
+		projectDonationsSqrtRootSum: 0,
+	});
+
+	useEffect(() => {
+		if (estimatedMatching) {
+			const estimatedMatched = estimatedMatching.find(
+				estimatedMatching =>
+					String(estimatedMatching.qfRoundId) ===
+					(selectedQFData?.id ?? ''),
+			);
+			if (estimatedMatched) {
+				setMatchingData({
+					allProjectsSum: estimatedMatched.allProjectsSum,
+					matchingPool: estimatedMatched.matchingPool,
+					projectDonationsSqrtRootSum:
+						estimatedMatched.projectDonationsSqrtRootSum,
+				});
+			}
+		}
+	}, [estimatedMatching, selectedQFData]);
+
+	const { allProjectsSum, matchingPool, projectDonationsSqrtRootSum } =
+		matchingData;
 
 	const notDistributedFund =
 		!qfRoundHistory?.matchingFund &&
