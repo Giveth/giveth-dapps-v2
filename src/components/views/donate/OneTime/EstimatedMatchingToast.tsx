@@ -7,7 +7,7 @@ import {
 	neutralColors,
 	semanticColors,
 } from '@giveth/ui-design-system';
-import React, { FC } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
 import { formatUnits } from 'viem';
 import { TooltipContent } from '@/components/modals/HarvestAll.sc';
@@ -40,8 +40,6 @@ const EstimatedMatchingToast: FC<IEstimatedMatchingToast> = ({
 }) => {
 	const { formatMessage, locale } = useIntl();
 	const { estimatedMatching } = projectData || {};
-	const { allProjectsSum, matchingPool, projectDonationsSqrtRootSum } =
-		estimatedMatching || {};
 
 	const causeDonateData = useCauseDonateData();
 	const donateData = useDonateData();
@@ -57,6 +55,34 @@ const EstimatedMatchingToast: FC<IEstimatedMatchingToast> = ({
 		allocatedTokenSymbol,
 		maximumReward,
 	} = selectedQFRound || {};
+
+	// Find round that matches the selectedQFRound
+	const [matchingData, setMatchingData] = useState({
+		allProjectsSum: 0,
+		matchingPool: 0,
+		projectDonationsSqrtRootSum: 0,
+	});
+
+	useEffect(() => {
+		if (estimatedMatching) {
+			const estimatedMatched = estimatedMatching.find(
+				estimatedMatching =>
+					String(estimatedMatching.qfRoundId) ===
+					(selectedQFRound?.id ?? ''),
+			);
+			if (estimatedMatched) {
+				setMatchingData({
+					allProjectsSum: estimatedMatched.allProjectsSum,
+					matchingPool: estimatedMatched.matchingPool,
+					projectDonationsSqrtRootSum:
+						estimatedMatched.projectDonationsSqrtRootSum,
+				});
+			}
+		}
+	}, [estimatedMatching, selectedQFRound]);
+
+	const { allProjectsSum, matchingPool, projectDonationsSqrtRootSum } =
+		matchingData;
 
 	const decimals = isStellar ? 18 : token?.decimals || 18;
 	const amountInUsd =

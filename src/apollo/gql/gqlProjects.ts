@@ -205,6 +205,7 @@ export const FETCH_PROJECT_BY_SLUG_DONATION = gql`
 				name
 			}
 			estimatedMatching {
+				qfRoundId
 				projectDonationsSqrtRootSum
 				allProjectsSum
 				matchingPool
