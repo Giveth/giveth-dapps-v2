@@ -128,11 +128,20 @@ const ProjectsIndex = (props: IProjectsView) => {
 		getNextPageParam: lastPage => lastPage.nextCursor,
 		getPreviousPageParam: firstPage => firstPage.previousCursor,
 		initialPageParam: 0,
-		// placeholderData: keepPreviousData,
-		placeholderData: {
-			pageParams: [0],
-			pages: [{ data: projects, totalCount: _totalCount }],
-		},
+		initialData:
+			projects && projects.length > 0
+				? {
+						pageParams: [0],
+						pages: [
+							{
+								data: projects,
+								totalCount: _totalCount,
+								nextCursor: projects.length > 0 ? 1 : undefined,
+								previousCursor: undefined,
+							},
+						],
+					}
+				: undefined,
 	});
 
 	// Function to load more data when scrolling

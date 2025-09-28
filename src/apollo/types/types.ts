@@ -106,6 +106,7 @@ export interface IProject {
 	ownerTotalEarnedUsdValue?: number;
 	totalRaisedUsd?: number;
 	projectQfRoundRelations?: IProjectQfRoundRelation;
+	isQfActive?: boolean;
 }
 
 export interface ICauseProject {

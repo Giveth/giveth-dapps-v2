@@ -112,11 +112,20 @@ const CausesIndex = (props: ICausesView) => {
 		getNextPageParam: lastPage => lastPage.nextCursor,
 		getPreviousPageParam: firstPage => firstPage.previousCursor,
 		initialPageParam: 0,
-		// placeholderData: keepPreviousData,
-		placeholderData: {
-			pageParams: [0],
-			pages: [{ data: causes, totalCount: _totalCount }],
-		},
+		initialData:
+			causes && causes.length > 0
+				? {
+						pageParams: [0],
+						pages: [
+							{
+								data: causes,
+								totalCount: _totalCount,
+								nextCursor: causes.length > 0 ? 1 : undefined,
+								previousCursor: undefined,
+							},
+						],
+					}
+				: undefined,
 	});
 
 	// Function to load more data when scrolling
