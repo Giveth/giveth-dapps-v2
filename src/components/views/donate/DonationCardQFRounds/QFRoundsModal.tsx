@@ -27,6 +27,7 @@ interface IQFRoundModalProps extends IModal {
 	selectedRound?: IQFRound;
 	chainId: number;
 	setChoosedModalRound: (round: IQFRound | undefined) => void;
+	isQRDonation?: boolean;
 }
 
 export const QFRoundsModal = ({
@@ -37,6 +38,7 @@ export const QFRoundsModal = ({
 	selectedRound,
 	chainId,
 	setChoosedModalRound,
+	isQRDonation,
 }: IQFRoundModalProps) => {
 	const { formatMessage, locale } = useIntl();
 	const [showSwitchModal, setShowSwitchModal] = useState(false);
@@ -55,7 +57,11 @@ export const QFRoundsModal = ({
 	);
 
 	const handleRoundSelect = (round: IQFRound) => {
-		if (round.eligibleNetworks.includes(chainId)) {
+		if (
+			round.eligibleNetworks.includes(chainId) ||
+			(isQRDonation &&
+				round.eligibleNetworks.includes(config.STELLAR_NETWORK_NUMBER))
+		) {
 			setCurrentSelected(round);
 			onRoundSelect?.(round);
 			closeModal();

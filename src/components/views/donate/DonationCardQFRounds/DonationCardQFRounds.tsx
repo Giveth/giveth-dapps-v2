@@ -218,6 +218,7 @@ export const DonationCardQFRounds = ({
 					onRoundSelect={handleRoundSelect}
 					chainId={chainId}
 					setChoosedModalRound={setChoosedModalRound}
+					isQRDonation={isQRDonation}
 				/>
 			)}
 		</>
