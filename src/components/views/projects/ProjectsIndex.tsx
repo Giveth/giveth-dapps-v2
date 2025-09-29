@@ -1,6 +1,6 @@
 // components/ProjectsIndex.tsx
 
-import { Fragment, useCallback, useEffect, useRef } from 'react';
+import { Fragment, useCallback, useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/router';
 import {
 	brandColors,
@@ -52,9 +52,25 @@ const ProjectsIndex = (props: IProjectsView) => {
 	const { formatMessage } = useIntl();
 	const { projects, totalCount: _totalCount, qfRound } = props;
 	const user = useAppSelector(state => state.user.userData);
-	const { activeQFRound, mainCategories } = useAppSelector(
-		state => state.general,
+	const { mainCategories } = useAppSelector(state => state.general);
+
+	// Check if the round is started
+	const [activeQFRound, setActiveQFRound] = useState<IQFRound | undefined>(
+		qfRound,
 	);
+	const [activeRoundStarted, setActiveRoundStarted] = useState(
+		qfRound ? hasRoundStarted(qfRound) && qfRound.isActive : false,
+	);
+
+	useEffect(() => {
+		if (qfRound) {
+			setActiveQFRound(qfRound);
+			setActiveRoundStarted(hasRoundStarted(qfRound) && qfRound.isActive);
+		} else {
+			setActiveQFRound(undefined);
+			setActiveRoundStarted(false);
+		}
+	}, [qfRound]);
 
 	const isMobile = useMediaQuery(`(max-width: ${deviceSize.tablet - 1}px)`);
 	const dispatch = useAppDispatch();
@@ -64,8 +80,6 @@ const ProjectsIndex = (props: IProjectsView) => {
 		isQF,
 		isArchivedQF,
 	} = useProjectsContext();
-
-	const activeRoundStarted = hasRoundStarted(activeQFRound);
 
 	const router = useRouter();
 	const lastElementRef = useRef<HTMLDivElement>(null);
@@ -241,7 +255,7 @@ const ProjectsIndex = (props: IProjectsView) => {
 			)}
 			{isQF && qfRound && !isStellarOnlyQF && <PassportBanner />}
 			<Wrapper>
-				{isQF && !isArchivedQF && (
+				{isQF && !isArchivedQF && activeRoundStarted && (
 					<>
 						{qfRound || activeQFRound ? (
 							<ActiveQFProjectsBanner qfRound={qfRound} />
@@ -249,6 +263,9 @@ const ProjectsIndex = (props: IProjectsView) => {
 							<DefaultQFBanner />
 						)}
 					</>
+				)}
+				{!activeRoundStarted && !isMobile && (
+					<ArchivedQFProjectsBanner />
 				)}
 				{isArchivedQF && !isMobile && <ArchivedQFProjectsBanner />}
 				{isArchivedQF ? (
