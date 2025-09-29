@@ -20,7 +20,6 @@ import { isUserRegistered, showToastError } from '@/lib/helpers';
 import ProjectsNoResults from '@/components/views/projects/ProjectsNoResults';
 import { useAppDispatch, useAppSelector } from '@/features/hooks';
 import { setShowCompleteProfile } from '@/features/modal/modal.slice';
-import { ProjectsBanner } from './ProjectsBanner';
 import { useProjectsContext } from '@/context/projects.context';
 import { ProjectsMiddleGivethVaultBanner } from './MiddleBanners/ProjectsMiddleGivethVaultBanner';
 import { ActiveQFProjectsBanner } from './qfBanner/ActiveQFProjectsBanner';
@@ -34,13 +33,13 @@ import { ArchivedQFRoundStats } from './ArchivedQFRoundStats';
 import { ArchivedQFProjectsBanner } from './qfBanner/ArchivedQFProjectsBanner';
 import { ActiveQFRoundStats } from './ActiveQFRoundStats';
 import useMediaQuery from '@/hooks/useMediaQuery';
-import { DefaultQFBanner } from '@/components/DefaultQFBanner';
 import { fetchProjects, IQueries } from './services';
 import { IProject, IQFRound } from '@/apollo/types/types';
 import { LAST_PROJECT_CLICKED } from './constants';
 import { hasRoundStarted } from '@/helpers/qf';
 import config from '@/configuration';
 import { EProjectType } from '@/apollo/types/gqlEnums';
+import { ProjectsBanner } from '@/components/views/projects/ProjectsBanner';
 
 export interface IProjectsView {
 	projects: IProject[];
@@ -173,7 +172,7 @@ const ProjectsIndex = (props: IProjectsView) => {
 		}
 	};
 
-	const onProjectsPageOrActiveQFPage = !isQF || (isQF && activeQFRound);
+	const onProjectsPageOrActiveQFPage = !isQF || (isQF && qfRound);
 
 	// Intersection Observer for infinite scrolling
 	useEffect(() => {
@@ -269,32 +268,22 @@ const ProjectsIndex = (props: IProjectsView) => {
 				!isArchivedQF &&
 				!activeRoundStarted && <PassportBanner />}
 			<Wrapper>
-				{isQF && !isArchivedQF && activeRoundStarted && (
+				{qfRound && qfRound.isActive && !isArchivedQF && (
 					<>
-						{qfRound || activeQFRound ? (
-							<ActiveQFProjectsBanner qfRound={qfRound} />
-						) : (
-							<DefaultQFBanner />
-						)}
+						<ActiveQFProjectsBanner qfRound={qfRound} />
+						<ActiveQFRoundStats qfRound={qfRound} />
 					</>
 				)}
-				{(isArchivedQF || !activeRoundStarted) &&
-					!isMobile &&
-					qfRound && <ArchivedQFProjectsBanner />}
-				{isArchivedQF || !activeRoundStarted ? (
-					<ArchivedQFRoundStats />
-				) : (
+				{!qfRound && !isArchivedQF && (
 					<>
-						{!isQF && <ProjectsBanner />}
-						{!isQF && onProjectsPageOrActiveQFPage && (
-							<FilterContainer />
-						)}
-						{onProjectsPageOrActiveQFPage &&
-							!activeQFRound &&
-							qfRound && <FilterContainer />}
-						{isQF && activeQFRound && (
-							<ActiveQFRoundStats qfRound={qfRound} />
-						)}
+						<ProjectsBanner />
+						<FilterContainer />
+					</>
+				)}
+				{qfRound && (!qfRound.isActive || isArchivedQF) && (
+					<>
+						<ArchivedQFProjectsBanner />
+						<ArchivedQFRoundStats />
 					</>
 				)}
 				{onProjectsPageOrActiveQFPage && (
