@@ -56,7 +56,7 @@ export const CauseDonateHeader: FC<IHeader> = props => {
 
 		const isActiveQF = activeQFRound?.isActive;
 
-		routePath = isActiveQF ? Routes.AllQFProjects : Routes.AllCauses;
+		routePath = isActiveQF ? Routes.QFProjects : Routes.AllCauses;
 	}
 
 	return (
