@@ -54,6 +54,7 @@ const ProjectsIndex = (props: IProjectsView) => {
 	const user = useAppSelector(state => state.user.userData);
 	const { mainCategories } = useAppSelector(state => state.general);
 
+	// Check if the round is started
 	const [activeQFRound, setActiveQFRound] = useState<IQFRound | undefined>(
 		qfRound,
 	);
@@ -65,6 +66,9 @@ const ProjectsIndex = (props: IProjectsView) => {
 		if (qfRound) {
 			setActiveQFRound(qfRound);
 			setActiveRoundStarted(hasRoundStarted(qfRound) && qfRound.isActive);
+		} else {
+			setActiveQFRound(undefined);
+			setActiveRoundStarted(false);
 		}
 	}, [qfRound]);
 
