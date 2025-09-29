@@ -20,7 +20,6 @@ import { isUserRegistered, showToastError } from '@/lib/helpers';
 import ProjectsNoResults from '@/components/views/projects/ProjectsNoResults';
 import { useAppDispatch, useAppSelector } from '@/features/hooks';
 import { setShowCompleteProfile } from '@/features/modal/modal.slice';
-import { ProjectsBanner } from './ProjectsBanner';
 import { useProjectsContext } from '@/context/projects.context';
 import { ProjectsMiddleGivethVaultBanner } from './MiddleBanners/ProjectsMiddleGivethVaultBanner';
 import { ActiveQFProjectsBanner } from './qfBanner/ActiveQFProjectsBanner';
@@ -34,13 +33,13 @@ import { ArchivedQFRoundStats } from './ArchivedQFRoundStats';
 import { ArchivedQFProjectsBanner } from './qfBanner/ArchivedQFProjectsBanner';
 import { ActiveQFRoundStats } from './ActiveQFRoundStats';
 import useMediaQuery from '@/hooks/useMediaQuery';
-import { DefaultQFBanner } from '@/components/DefaultQFBanner';
 import { fetchProjects, IQueries } from './services';
 import { IProject, IQFRound } from '@/apollo/types/types';
 import { LAST_PROJECT_CLICKED } from './constants';
 import { hasRoundStarted } from '@/helpers/qf';
 import config from '@/configuration';
 import { EProjectType } from '@/apollo/types/gqlEnums';
+import { ProjectsBanner } from '@/components/views/projects/ProjectsBanner';
 
 export interface IProjectsView {
 	projects: IProject[];
@@ -173,8 +172,6 @@ const ProjectsIndex = (props: IProjectsView) => {
 		}
 	};
 
-	const onProjectsPageOrActiveQFPage = !isQF || (isQF && activeQFRound);
-
 	// Intersection Observer for infinite scrolling
 	useEffect(() => {
 		const handleObserver = (entries: IntersectionObserverEntry[]) => {
@@ -262,48 +259,40 @@ const ProjectsIndex = (props: IProjectsView) => {
 					<Spinner />
 				</Loading>
 			)}
-			{isQF && qfRound && !isStellarOnlyQF && <PassportBanner />}
+			{isQF &&
+				qfRound &&
+				qfRound.isActive &&
+				!isStellarOnlyQF &&
+				!isArchivedQF &&
+				!activeRoundStarted && <PassportBanner />}
 			<Wrapper>
-				{isQF && !isArchivedQF && activeRoundStarted && (
+				{qfRound && qfRound.isActive && !isArchivedQF && (
 					<>
-						{qfRound || activeQFRound ? (
-							<ActiveQFProjectsBanner qfRound={qfRound} />
-						) : (
-							<DefaultQFBanner />
-						)}
+						<ActiveQFProjectsBanner qfRound={qfRound} />
+						<ActiveQFRoundStats qfRound={qfRound} />
 					</>
 				)}
-				{!activeRoundStarted && !isMobile && (
-					<ArchivedQFProjectsBanner />
-				)}
-				{isArchivedQF && !isMobile && <ArchivedQFProjectsBanner />}
-				{isArchivedQF ? (
-					<ArchivedQFRoundStats />
-				) : (
+				{!qfRound && !isArchivedQF && (
 					<>
-						{!isQF && <ProjectsBanner />}
-						{!isQF && onProjectsPageOrActiveQFPage && (
-							<FilterContainer />
-						)}
-						{onProjectsPageOrActiveQFPage && !activeQFRound && (
-							<FilterContainer />
-						)}
-						{isQF && activeQFRound && (
-							<ActiveQFRoundStats qfRound={qfRound} />
-						)}
+						<ProjectsBanner />
+						<FilterContainer />
 					</>
 				)}
-				{onProjectsPageOrActiveQFPage && (
-					<SortingContainer>
-						<SortContainer totalCount={totalCount} />
-					</SortingContainer>
+				{qfRound && (!qfRound.isActive || isArchivedQF) && (
+					<>
+						<ArchivedQFProjectsBanner />
+						<ArchivedQFRoundStats />
+					</>
 				)}
+				<SortingContainer>
+					<SortContainer totalCount={totalCount} />
+				</SortingContainer>
 				{isFetchingNextPage && <Loader className='dot-flashing' />}
 				{data?.pages.some(page => page.data.length > 0) ? (
 					<ProjectsWrapper>
 						<ProjectsContainer>
-							{isQF ? (
-								<QFProjectsMiddleBanner />
+							{isQF && qfRound ? (
+								<QFProjectsMiddleBanner qfRound={qfRound} />
 							) : (
 								<ProjectsMiddleGivethVaultBanner />
 							)}

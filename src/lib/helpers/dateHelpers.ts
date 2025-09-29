@@ -9,6 +9,7 @@ export const formatReadableDate = (
 	isoDate: string,
 	locale: string = 'en-US',
 	showYear: boolean = true,
+	timeZone: string = 'UTC',
 ): string => {
 	try {
 		// Parse using Date but only for extracting UTC values
@@ -24,6 +25,7 @@ export const formatReadableDate = (
 		const options: Intl.DateTimeFormatOptions = {
 			month: 'long',
 			day: 'numeric',
+			timeZone,
 			...(showYear && { year: 'numeric' }),
 		};
 

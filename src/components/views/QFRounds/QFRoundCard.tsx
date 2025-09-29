@@ -252,6 +252,7 @@ const Title = styled.h3<{ $layout: Layout }>`
 `;
 
 const Desc = styled(P)`
+	min-height: 72px;
 	margin: 0;
 	color: ${neutralColors.gray[800]};
 `;

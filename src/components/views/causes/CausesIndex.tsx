@@ -264,7 +264,9 @@ const CausesIndex = (props: ICausesView) => {
 					<ProjectsWrapper>
 						<ProjectsContainer>
 							{isQF ? (
-								<QFProjectsMiddleBanner />
+								<QFProjectsMiddleBanner
+									qfRound={activeQFRound}
+								/>
 							) : (
 								<ProjectsMiddleGivethVaultBanner />
 							)}

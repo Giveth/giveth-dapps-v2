@@ -1,14 +1,21 @@
 import { semanticColors } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
 import { Box, BigArc, Title, Caption } from './common.sc';
-import { useAppSelector } from '@/features/hooks';
 import { useProjectsContext } from '@/context/projects.context';
+import { IQFRound } from '@/apollo/types/types';
 
-export const QFProjectsMiddleBanner = () => {
+interface IQFProjectsMiddleBannerProps {
+	qfRound?: IQFRound | null;
+}
+
+export const QFProjectsMiddleBanner = ({
+	qfRound,
+}: IQFProjectsMiddleBannerProps) => {
 	const { formatMessage } = useIntl();
-	const { activeQFRound } = useAppSelector(state => state.general);
 	const { archivedQFRound } = useProjectsContext();
-	const round = archivedQFRound || activeQFRound;
+	const round = archivedQFRound || qfRound;
+
+	if (!round) return null;
 
 	return (
 		<Box $flexDirection='column' gap='23px'>
