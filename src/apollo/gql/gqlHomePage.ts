@@ -26,6 +26,15 @@ export const FETCH_CAMPAIGNS_AND_FEATURED_PROJECTS = gql`
 	}
 `;
 
+export const FETCH_CAMPAIGNS = gql`
+	${CAMPAIGN_CORE_FIELDS}
+	query ($connectedWalletUserId: Int) {
+		campaigns(connectedWalletUserId: $connectedWalletUserId) {
+			...CampaignCoreFields
+		}
+	}
+`;
+
 export const FETCH_HOMEPAGE_DATA = gql`
 	${PROJECT_CARD_FIELDS}
 	${CAMPAIGN_CORE_FIELDS}
@@ -69,6 +78,43 @@ export const FETCH_HOMEPAGE_DATA = gql`
 				...ProjectCardFields
 			}
 			totalCount
+		}
+		projectUpdates(take: $takeLatestUpdates, skip: $skipLatestUpdates) {
+			projectUpdates {
+				id
+				title
+				contentSummary
+				createdAt
+				project {
+					slug
+					image
+				}
+			}
+		}
+		campaigns(connectedWalletUserId: $connectedWalletUserId) {
+			...CampaignCoreFields
+		}
+	}
+`;
+
+export const FETCH_HOMEPAGE_DATA_REDUCED = gql`
+	${PROJECT_CARD_FIELDS}
+	${CAMPAIGN_CORE_FIELDS}
+	query (
+		$takeLatestUpdates: Int
+		$skipLatestUpdates: Int
+		$fromDate: String
+		$toDate: String
+		$connectedWalletUserId: Int
+	) {
+		projectsPerDate(fromDate: $fromDate, toDate: $toDate) {
+			total
+		}
+		totalDonorsCountPerDate(fromDate: $fromDate, toDate: $toDate) {
+			total
+		}
+		donationsTotalUsdPerDate(fromDate: $fromDate, toDate: $toDate) {
+			total
 		}
 		projectUpdates(take: $takeLatestUpdates, skip: $skipLatestUpdates) {
 			projectUpdates {
