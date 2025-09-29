@@ -57,6 +57,7 @@ interface IProjectCard {
 	order?: number;
 	amountReceived?: number;
 	amountReceivedUsdValue?: number;
+	providedQFROundId?: number;
 }
 interface IRecurringDonation {
 	id: string;
@@ -73,8 +74,13 @@ interface IRecurringDonation {
 	finished: boolean;
 }
 const ProjectCard = (props: IProjectCard) => {
-	const { project, className, amountReceived, amountReceivedUsdValue } =
-		props;
+	const {
+		project,
+		className,
+		amountReceived,
+		amountReceivedUsdValue,
+		providedQFROundId,
+	} = props;
 
 	const {
 		id,
@@ -142,10 +148,13 @@ const ProjectCard = (props: IProjectCard) => {
 	const donateLink = isStellarOnlyRound
 		? slugToProjectDonateStellar(slug)
 		: projectType === EProjectType.CAUSE
-			? slugToCauseDonate(slug)
+			? slugToCauseDonate(slug) +
+				(providedQFROundId ? `?roundId=${providedQFROundId}` : '')
 			: isOnlyStellar
-				? slugToProjectDonateStellar(slug)
-				: slugToProjectDonate(slug);
+				? slugToProjectDonateStellar(slug) +
+					(providedQFROundId ? `?roundId=${providedQFROundId}` : '')
+				: slugToProjectDonate(slug) +
+					(providedQFROundId ? `?roundId=${providedQFROundId}` : '');
 
 	// Show hint modal if the user clicks on the card and the round is not started
 	const handleClick = (e: any) => {
