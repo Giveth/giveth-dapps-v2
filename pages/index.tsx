@@ -2,11 +2,10 @@ import { GetStaticProps } from 'next/types';
 
 import HomeIndex from '@/components/views/homepage/HomeIndex';
 import { client } from '@/apollo/apolloClient';
-import { EProjectsSortBy } from '@/apollo/types/gqlEnums';
 import { ICampaign, IProjectUpdateWithProject } from '@/apollo/types/types';
 import { homeMetatags } from '@/content/metatags';
 import { GeneralMetatags } from '@/components/Metatag';
-import { FETCH_HOMEPAGE_DATA } from '@/apollo/gql/gqlHomePage';
+import { FETCH_HOMEPAGE_DATA_REDUCED } from '@/apollo/gql/gqlHomePage';
 
 export interface IHomeRoute {
 	projectsPerDate: { total: number };
@@ -21,8 +20,8 @@ export const HOME_QUERY_VARIABLES = {
 	takeLatestUpdates: 10,
 	skipLatestUpdates: 0,
 	fromDate: '2021-01-01',
-	limit: 12,
-	sortingBy: EProjectsSortBy.INSTANT_BOOSTING,
+	toDate: new Date().toISOString().split('T')[0], // Today's date
+	connectedWalletUserId: null,
 };
 
 const HomeRoute = (props: IHomeRoute) => {
@@ -36,7 +35,7 @@ const HomeRoute = (props: IHomeRoute) => {
 
 export const getStaticProps: GetStaticProps = async () => {
 	const { data } = await client.query({
-		query: FETCH_HOMEPAGE_DATA,
+		query: FETCH_HOMEPAGE_DATA_REDUCED,
 		variables: HOME_QUERY_VARIABLES,
 		fetchPolicy: 'no-cache',
 	});
