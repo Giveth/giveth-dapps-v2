@@ -13,9 +13,10 @@ import { client } from '@/apollo/apolloClient';
 import { LatestUpdatesBlock } from '@/components/views/homepage/latestUpdates/LatestUpdatesBlock';
 import { IHomeRoute } from '../../../../pages';
 import { FETCH_CAMPAIGNS } from '@/apollo/gql/gqlHomePage';
+import WhyGiveth from '@/components/views/homepage/whyGiveth';
 
 const HomeIndex: FC<IHomeRoute> = props => {
-	const { campaigns: campaignsFromServer, latestUpdates } = props;
+	const { campaigns: campaignsFromServer, latestUpdates, ...rest } = props;
 	const [campaigns, setCampaigns] = useState(campaignsFromServer);
 	const featuredProjectsCampaigns = campaigns.filter(
 		campaign => campaign.isFeatured && campaign.relatedProjects?.length > 0,
@@ -56,6 +57,7 @@ const HomeIndex: FC<IHomeRoute> = props => {
 			{newCampaigns && newCampaigns.length > 0 ? (
 				<CampaignsBlock campaigns={newCampaigns} />
 			) : null}
+			<WhyGiveth {...rest} />
 			<Separator />
 			<VideoBlock />
 			<Separator />
