@@ -6,7 +6,6 @@ import WhyGiveth from '@/components/views/homepage/whyGiveth';
 import ProjectsCampaignBlock from '@/components/views/homepage/ProjectsCampaignBlock';
 import IntroBlock from '@/components/views/homepage/introBlock';
 import VideoBlock from '@/components/views/homepage/videoBlock';
-import InformationBlock from '@/components/views/homepage/InformationBlock';
 import { CampaignsBlock } from '@/components/views/homepage/campaignsBlock/CampaignsBlock';
 import HomePartners from '@/components/views/homepage/partners';
 import GetUpdates from '@/components/GetUpdates';
@@ -58,7 +57,6 @@ const HomeIndex: FC<IHomeRoute> = props => {
 			{newCampaigns && newCampaigns.length > 0 ? (
 				<CampaignsBlock campaigns={newCampaigns} />
 			) : null}
-			<InformationBlock />
 			<Separator />
 			<WhyGiveth {...rest} />
 			<Separator />
