@@ -3,17 +3,12 @@ import { GetStaticProps } from 'next/types';
 import HomeIndex from '@/components/views/homepage/HomeIndex';
 import { client } from '@/apollo/apolloClient';
 import { EProjectsSortBy } from '@/apollo/types/gqlEnums';
-import {
-	ICampaign,
-	IProjectUpdateWithProject,
-	IRecentDonation,
-} from '@/apollo/types/types';
+import { ICampaign, IProjectUpdateWithProject } from '@/apollo/types/types';
 import { homeMetatags } from '@/content/metatags';
 import { GeneralMetatags } from '@/components/Metatag';
 import { FETCH_HOMEPAGE_DATA } from '@/apollo/gql/gqlHomePage';
 
 export interface IHomeRoute {
-	recentDonations: IRecentDonation[];
 	projectsPerDate: { total: number };
 	totalDonorsCountPerDate: { total: number };
 	donationsTotalUsdPerDate: { total: number };
@@ -47,13 +42,11 @@ export const getStaticProps: GetStaticProps = async () => {
 	});
 	return {
 		props: {
-			recentDonations: data.recentDonations,
 			projectsPerDate: data.projectsPerDate,
 			totalDonorsCountPerDate: data.totalDonorsCountPerDate,
 			donationsTotalUsdPerDate: data.donationsTotalUsdPerDate,
 			latestUpdates: data.projectUpdates.projectUpdates,
 			campaigns: data.campaigns,
-			featuredProjects: data.featuredProjects.projects,
 		},
 		revalidate: 600,
 	};

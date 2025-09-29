@@ -2,7 +2,6 @@ import { FC, Fragment, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { neutralColors } from '@giveth/ui-design-system';
 import HomeFromBlog from '@/components/views/homepage/HomeFromBlog';
-import WhyGiveth from '@/components/views/homepage/whyGiveth';
 import ProjectsCampaignBlock from '@/components/views/homepage/ProjectsCampaignBlock';
 import IntroBlock from '@/components/views/homepage/introBlock';
 import VideoBlock from '@/components/views/homepage/videoBlock';
@@ -16,7 +15,7 @@ import { IHomeRoute } from '../../../../pages';
 import { FETCH_CAMPAIGNS } from '@/apollo/gql/gqlHomePage';
 
 const HomeIndex: FC<IHomeRoute> = props => {
-	const { campaigns: campaignsFromServer, latestUpdates, ...rest } = props;
+	const { campaigns: campaignsFromServer, latestUpdates } = props;
 	const [campaigns, setCampaigns] = useState(campaignsFromServer);
 	const featuredProjectsCampaigns = campaigns.filter(
 		campaign => campaign.isFeatured && campaign.relatedProjects?.length > 0,
@@ -58,10 +57,7 @@ const HomeIndex: FC<IHomeRoute> = props => {
 				<CampaignsBlock campaigns={newCampaigns} />
 			) : null}
 			<Separator />
-			<WhyGiveth {...rest} />
-			<Separator />
 			<VideoBlock />
-			<Separator />
 			<Separator />
 			<HomePartners />
 			<Separator />

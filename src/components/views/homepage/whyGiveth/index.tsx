@@ -15,11 +15,11 @@ import { thousandsSeparator } from '@/lib/helpers';
 import { Relative } from '@/components/styled-components/Position';
 import CominhoPlusIcon from 'public/images/cominho-plus.svg';
 import { IHomeRoute } from 'pages';
+import { IRecentDonation } from '@/apollo/types/types';
 
-type IWhyGivethProps = Omit<
-	IHomeRoute,
-	'campaigns' | 'latestUpdates' | 'featuredProjects'
->;
+type IWhyGivethProps = Omit<IHomeRoute, 'campaigns' | 'latestUpdates'> & {
+	recentDonations: IRecentDonation[];
+};
 
 const WhyGiveth: FC<IWhyGivethProps> = props => {
 	const {

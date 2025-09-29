@@ -48,18 +48,6 @@ export const FETCH_HOMEPAGE_DATA = gql`
 		$featuredProjectsSkip: Int
 		$connectedWalletUserId: Int
 	) {
-		recentDonations(take: $take) {
-			createdAt
-			id
-			user {
-				walletAddress
-			}
-			project {
-				title
-				slug
-			}
-			valueUsd
-		}
 		projectsPerDate(fromDate: $fromDate, toDate: $toDate) {
 			total
 		}
@@ -68,16 +56,6 @@ export const FETCH_HOMEPAGE_DATA = gql`
 		}
 		donationsTotalUsdPerDate(fromDate: $fromDate, toDate: $toDate) {
 			total
-		}
-		featuredProjects(
-			limit: $featuredProjectsLimit
-			skip: $featuredProjectsSkip
-			connectedWalletUserId: $connectedWalletUserId
-		) {
-			projects {
-				...ProjectCardFields
-			}
-			totalCount
 		}
 		projectUpdates(take: $takeLatestUpdates, skip: $skipLatestUpdates) {
 			projectUpdates {
