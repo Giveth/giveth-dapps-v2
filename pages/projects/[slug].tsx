@@ -3,7 +3,7 @@ import { IMainCategory, IProject } from '@/apollo/types/types';
 import { transformGraphQLErrorsToStatusCode } from '@/helpers/requests';
 import { initializeApollo } from '@/apollo/apolloClient';
 import { OPTIONS_HOME_PROJECTS } from '@/apollo/gql/gqlOptions';
-import { FETCH_ALL_PROJECTS } from '@/apollo/gql/gqlProjects';
+import { FETCH_ALL_PROJECTS_NEW } from '@/apollo/gql/gqlProjects';
 import { GeneralMetatags } from '@/components/Metatag';
 import ProjectsIndex from '@/components/views/projects/ProjectsIndex';
 import { useReferral } from '@/hooks/useReferral';
@@ -38,7 +38,7 @@ export const getServerSideProps: GetServerSideProps = async context => {
 		const slug = query.slug as string;
 		const apolloClient = initializeApollo();
 		const { data } = await apolloClient.query({
-			query: FETCH_ALL_PROJECTS,
+			query: FETCH_ALL_PROJECTS_NEW,
 			variables: {
 				...variables,
 				sortingBy: query.sort || EProjectsSortBy.INSTANT_BOOSTING,
@@ -55,7 +55,7 @@ export const getServerSideProps: GetServerSideProps = async context => {
 			},
 			fetchPolicy: 'no-cache',
 		});
-		const { projects, totalCount } = data.allProjects;
+		const { projects, totalCount } = data.newAllProjects;
 		return {
 			props: {
 				projects,

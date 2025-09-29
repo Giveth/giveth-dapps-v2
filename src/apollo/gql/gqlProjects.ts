@@ -901,3 +901,116 @@ export const DELETE_DRAFT_PROJECT = gql`
 		deleteDraftProject(projectId: $projectId)
 	}
 `;
+
+export const PROJECT_CARD_FIELDS_NEW = gql`
+	fragment ProjectCardFieldsNew on Project {
+		id
+		title
+		projectType
+		balance
+		image
+		slug
+		description
+		descriptionSummary
+		creationDate
+		updatedAt
+		adminUserId
+		walletAddress
+		activeProjectsCount
+		impactLocation
+		verified
+		isGivbackEligible
+		isQfActive
+		traceCampaignId
+		listed
+		reviewStatus
+		givingBlocksId
+		status {
+			id
+			symbol
+			name
+			description
+		}
+		categories {
+			name
+			mainCategory {
+				title
+				slug
+				banner
+				description
+			}
+		}
+		reaction {
+			id
+		}
+		adminUser {
+			id
+			email
+			firstName
+			walletAddress
+		}
+		organization {
+			name
+			label
+			supportCustomTokens
+		}
+		addresses {
+			address
+			isRecipient
+			networkId
+			chainType
+		}
+		projectPower {
+			totalPower
+			powerRank
+			round
+		}
+		projectInstantPower {
+			totalPower
+			powerRank
+		}
+		totalDonations
+		totalTraceDonations
+		countUniqueDonors
+		causeProjects {
+			id
+			project {
+				id
+			}
+		}
+	}
+`;
+
+export const FETCH_ALL_PROJECTS_NEW = gql`
+	${PROJECT_CARD_FIELDS_NEW}
+	query FetchAllProjects(
+		$limit: Int
+		$skip: Int
+		$sortingBy: SortingField
+		$filters: [FilterField!]
+		$searchTerm: String
+		$category: String
+		$mainCategory: String
+		$campaignSlug: String
+		$connectedWalletUserId: Int
+		$projectType: String
+	) {
+		newAllProjects(
+			limit: $limit
+			skip: $skip
+			sortingBy: $sortingBy
+			filters: $filters
+			searchTerm: $searchTerm
+			category: $category
+			mainCategory: $mainCategory
+			campaignSlug: $campaignSlug
+			connectedWalletUserId: $connectedWalletUserId
+			projectType: $projectType
+		) {
+			projects {
+				...ProjectCardFieldsNew
+			}
+			totalCount
+		}
+	}
+`;
