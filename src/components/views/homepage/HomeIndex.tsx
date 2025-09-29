@@ -6,7 +6,6 @@ import WhyGiveth from '@/components/views/homepage/whyGiveth';
 import ProjectsCampaignBlock from '@/components/views/homepage/ProjectsCampaignBlock';
 import IntroBlock from '@/components/views/homepage/introBlock';
 import VideoBlock from '@/components/views/homepage/videoBlock';
-import AboutGiveconomy from '@/components/views/homepage/aboutGiveconomy';
 import InformationBlock from '@/components/views/homepage/InformationBlock';
 import { CampaignsBlock } from '@/components/views/homepage/campaignsBlock/CampaignsBlock';
 import HomePartners from '@/components/views/homepage/partners';
@@ -65,7 +64,6 @@ const HomeIndex: FC<IHomeRoute> = props => {
 			<Separator />
 			<VideoBlock />
 			<Separator />
-			<AboutGiveconomy />
 			<Separator />
 			<HomePartners />
 			<Separator />
