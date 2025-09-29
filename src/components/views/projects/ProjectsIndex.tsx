@@ -262,7 +262,12 @@ const ProjectsIndex = (props: IProjectsView) => {
 					<Spinner />
 				</Loading>
 			)}
-			{isQF && qfRound && !isStellarOnlyQF && <PassportBanner />}
+			{isQF &&
+				qfRound &&
+				qfRound.isActive &&
+				!isStellarOnlyQF &&
+				!isArchivedQF &&
+				!activeRoundStarted && <PassportBanner />}
 			<Wrapper>
 				{isQF && !isArchivedQF && activeRoundStarted && (
 					<>
@@ -273,11 +278,10 @@ const ProjectsIndex = (props: IProjectsView) => {
 						)}
 					</>
 				)}
-				{!activeRoundStarted && !isMobile && (
-					<ArchivedQFProjectsBanner />
-				)}
-				{isArchivedQF && !isMobile && <ArchivedQFProjectsBanner />}
-				{isArchivedQF ? (
+				{(isArchivedQF || !activeRoundStarted) &&
+					!isMobile &&
+					qfRound && <ArchivedQFProjectsBanner />}
+				{isArchivedQF || !activeRoundStarted ? (
 					<ArchivedQFRoundStats />
 				) : (
 					<>
@@ -285,9 +289,9 @@ const ProjectsIndex = (props: IProjectsView) => {
 						{!isQF && onProjectsPageOrActiveQFPage && (
 							<FilterContainer />
 						)}
-						{onProjectsPageOrActiveQFPage && !activeQFRound && (
-							<FilterContainer />
-						)}
+						{onProjectsPageOrActiveQFPage &&
+							!activeQFRound &&
+							qfRound && <FilterContainer />}
 						{isQF && activeQFRound && (
 							<ActiveQFRoundStats qfRound={qfRound} />
 						)}
@@ -302,8 +306,8 @@ const ProjectsIndex = (props: IProjectsView) => {
 				{data?.pages.some(page => page.data.length > 0) ? (
 					<ProjectsWrapper>
 						<ProjectsContainer>
-							{isQF ? (
-								<QFProjectsMiddleBanner />
+							{isQF && qfRound ? (
+								<QFProjectsMiddleBanner qfRound={qfRound} />
 							) : (
 								<ProjectsMiddleGivethVaultBanner />
 							)}
