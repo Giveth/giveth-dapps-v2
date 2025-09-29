@@ -57,7 +57,9 @@ const ProjectsIndex = (props: IProjectsView) => {
 	const [activeQFRound, setActiveQFRound] = useState<IQFRound | undefined>(
 		qfRound,
 	);
-	const [activeRoundStarted, setActiveRoundStarted] = useState(false);
+	const [activeRoundStarted, setActiveRoundStarted] = useState(
+		qfRound ? hasRoundStarted(qfRound) && qfRound.isActive : false,
+	);
 
 	useEffect(() => {
 		if (qfRound) {
@@ -239,9 +241,6 @@ const ProjectsIndex = (props: IProjectsView) => {
 	}, [isError, error]);
 
 	const totalCount = data?.pages[data.pages.length - 1].totalCount || 0;
-
-	console.log('activeQFRound', activeQFRound);
-	console.log('activeRoundStarted', activeRoundStarted);
 
 	return (
 		<>
