@@ -26,6 +26,15 @@ export const FETCH_CAMPAIGNS_AND_FEATURED_PROJECTS = gql`
 	}
 `;
 
+export const FETCH_CAMPAIGNS = gql`
+	${CAMPAIGN_CORE_FIELDS}
+	query ($connectedWalletUserId: Int) {
+		campaigns(connectedWalletUserId: $connectedWalletUserId) {
+			...CampaignCoreFields
+		}
+	}
+`;
+
 export const FETCH_HOMEPAGE_DATA = gql`
 	${PROJECT_CARD_FIELDS}
 	${CAMPAIGN_CORE_FIELDS}

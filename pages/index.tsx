@@ -5,7 +5,6 @@ import { client } from '@/apollo/apolloClient';
 import { EProjectsSortBy } from '@/apollo/types/gqlEnums';
 import {
 	ICampaign,
-	IProject,
 	IProjectUpdateWithProject,
 	IRecentDonation,
 } from '@/apollo/types/types';
@@ -20,7 +19,6 @@ export interface IHomeRoute {
 	donationsTotalUsdPerDate: { total: number };
 	latestUpdates: IProjectUpdateWithProject[];
 	campaigns: ICampaign[];
-	featuredProjects: IProject[];
 }
 
 export const HOME_QUERY_VARIABLES = {

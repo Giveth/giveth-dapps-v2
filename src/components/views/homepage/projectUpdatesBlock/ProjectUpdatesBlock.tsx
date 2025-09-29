@@ -36,6 +36,7 @@ export const ProjectUpdatesBlock: FC<IProjectUpdatesBlockProps> = ({
 	return (
 		<ProjectUpdatesBlockWrapper>
 			<Container>
+				AAAAAA
 				<BlockHeader>
 					<BlockTitle>
 						{formatMessage({ id: 'label.awesome_project_updates' })}
