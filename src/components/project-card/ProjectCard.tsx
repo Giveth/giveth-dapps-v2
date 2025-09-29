@@ -123,7 +123,11 @@ const ProjectCard = (props: IProjectCard) => {
 
 	const activeStartedRound = checkActiveRound || activeQFRound?.isActive;
 
-	const hasFooter = activeStartedRound || verified || isGivbackEligibleCheck;
+	const hasFooter =
+		activeStartedRound ||
+		verified ||
+		isGivbackEligibleCheck ||
+		project.isQfActive;
 	const showVerifiedBadge = verified || isGivbackEligibleCheck;
 
 	// Check if the project has only one address and it is a Stellar address
@@ -193,6 +197,8 @@ const ProjectCard = (props: IProjectCard) => {
 
 		calculateTotalAmountStreamed();
 	}, [props]);
+
+	console.log('project', project);
 
 	return (
 		// </Link>

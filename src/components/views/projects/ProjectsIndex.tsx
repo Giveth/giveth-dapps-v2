@@ -172,8 +172,6 @@ const ProjectsIndex = (props: IProjectsView) => {
 		}
 	};
 
-	const onProjectsPageOrActiveQFPage = !isQF || (isQF && qfRound);
-
 	// Intersection Observer for infinite scrolling
 	useEffect(() => {
 		const handleObserver = (entries: IntersectionObserverEntry[]) => {
@@ -286,11 +284,9 @@ const ProjectsIndex = (props: IProjectsView) => {
 						<ArchivedQFRoundStats />
 					</>
 				)}
-				{onProjectsPageOrActiveQFPage && (
-					<SortingContainer>
-						<SortContainer totalCount={totalCount} />
-					</SortingContainer>
-				)}
+				<SortingContainer>
+					<SortContainer totalCount={totalCount} />
+				</SortingContainer>
 				{isFetchingNextPage && <Loader className='dot-flashing' />}
 				{data?.pages.some(page => page.data.length > 0) ? (
 					<ProjectsWrapper>
