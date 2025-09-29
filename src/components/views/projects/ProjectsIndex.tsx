@@ -309,6 +309,9 @@ const ProjectsIndex = (props: IProjectsView) => {
 											<ProjectCard
 												project={project}
 												order={idx}
+												providedQFRoundId={Number(
+													qfRound?.id,
+												)}
 											/>
 										</div>
 									))}

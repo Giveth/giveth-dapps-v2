@@ -10,8 +10,8 @@ import {
 	brandColors,
 } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
-import { useSwitchChain } from 'wagmi';
 import { useWeb3ModalEvents } from '@web3modal/wagmi/react';
+import router from 'next/router';
 import { IProject, IQFRound } from '@/apollo/types/types';
 import { QFRoundsModal } from '@/components/views/donate/DonationCardQFRounds/QFRoundsModal';
 import {
@@ -66,7 +66,7 @@ export const DonationCardQFRounds = ({
 	setChoosedModalRound: (round: IQFRound | undefined) => void;
 	isQRDonation?: boolean;
 }) => {
-	const { status } = useSwitchChain();
+	const didRunRef = useRef(false);
 	const { formatMessage } = useIntl();
 	const activeQFRounds = useMemo(() => {
 		let rounds = getActiveQFRounds(project.qfRounds || []);
@@ -89,11 +89,12 @@ export const DonationCardQFRounds = ({
 	const [showQFRoundModal, setShowQFRoundModal] = useState(false);
 
 	// Fetch QF round smart selection data
-	const { data: smartSelectData } = useFetchQFRoundSmartSelect(
-		project.id ? parseInt(project.id) : 0,
-		isQRDonation ? config.STELLAR_NETWORK_NUMBER : chainId,
-		!!project.id && !!chainId && activeQFRounds.length > 0,
-	);
+	const { data: smartSelectData, isFetching: isFetchingSmartSelect } =
+		useFetchQFRoundSmartSelect(
+			project.id ? parseInt(project.id) : 0,
+			isQRDonation ? config.STELLAR_NETWORK_NUMBER : chainId,
+			!!project.id && !!chainId && activeQFRounds.length > 0,
+		);
 
 	const handleRoundSelect = (round: IQFRound) => {
 		setSelectedQFRound(round);
@@ -154,6 +155,25 @@ export const DonationCardQFRounds = ({
 			setSelectedQFRound(EmptyRound);
 		}
 		setIsSmartSelect(!!smartSelectData);
+
+		// Run only once to set selected round from URL
+		if (
+			!didRunRef.current &&
+			router.query.roundId &&
+			chainId !== 0 &&
+			activeQFRounds.length > 1 &&
+			!isFetchingSmartSelect
+		) {
+			const matchedRound = activeQFRounds.find(
+				round => round.id === router.query.roundId,
+			);
+			if (matchedRound?.eligibleNetworks.includes(chainId)) {
+				setSelectedQFRound(matchedRound);
+				setIsSmartSelect(false);
+			}
+
+			didRunRef.current = true;
+		}
 	}, [
 		activeQFRounds,
 		smartSelectData,
