@@ -4,8 +4,6 @@ import {
 	ButtonLink,
 	mediaQueries,
 	semanticColors,
-	IconDonation16,
-	SublineBold,
 	Flex,
 	IconBookmarkFilled16,
 	IconBookmark16,
@@ -33,7 +31,6 @@ import {
 	slugToProjectDonate,
 	slugToProjectDonateStellar,
 } from '@/lib/routeCreators';
-import { useAlreadyDonatedToProject } from '@/hooks/useAlreadyDonatedToProject';
 import { BadgeButton } from '@/components/project-card/ProjectCardBadgeButtons';
 import config from '@/configuration';
 import { getActiveRound } from '@/helpers/qf';
@@ -54,10 +51,6 @@ export const ProjectPublicActions = () => {
 	const { formatMessage } = useIntl();
 	const { open: openConnectModal } = useWeb3Modal();
 	const { activeStartedRound } = getActiveRound(projectData?.qfRounds);
-	const alreadyDonated = useAlreadyDonatedToProject(
-		projectData,
-		activeStartedRound,
-	);
 
 	// Check if the project has only one address and it is a Stellar address
 	const isOnlyStellar =
@@ -141,16 +134,6 @@ export const ProjectPublicActions = () => {
 
 	return (
 		<ProjectPublicActionsWrapper gap='16px'>
-			{alreadyDonated && (
-				<AlreadyDonatedWrapper>
-					<IconDonation16 />
-					<SublineBold>
-						{formatMessage({
-							id: 'component.already_donated.once_more',
-						})}
-					</SublineBold>
-				</AlreadyDonatedWrapper>
-			)}
 			<Link
 				id='Donate_Project'
 				href={
