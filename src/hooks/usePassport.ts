@@ -186,9 +186,9 @@ export const usePassport = () => {
 				}
 
 				if (
-					activeQFRound.minMBDScore != null &&
+					globalScoreSettings.globalMinimumMBDScore != null &&
 					refreshUserScores.activeQFMBDScore >=
-						activeQFRound.minMBDScore
+						globalScoreSettings.globalMinimumMBDScore
 				) {
 					return setInfo({
 						qfEligibilityState: EQFElegibilityState.ELIGIBLE,
@@ -212,7 +212,7 @@ export const usePassport = () => {
 
 				if (
 					refreshUserScores.passportScore <
-					activeQFRound.minimumPassportScore
+					globalScoreSettings.globalMinimumPassportScore
 				) {
 					return setInfo({
 						qfEligibilityState:
@@ -247,6 +247,7 @@ export const usePassport = () => {
 			isSafeEnv,
 			setEndedState,
 			setNotAvailableForGSafe,
+			globalScoreSettings,
 		],
 	);
 
