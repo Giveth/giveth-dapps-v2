@@ -26,6 +26,8 @@ const ProfileProjectsTab: FC<IUserProfileView> = () => {
 		queryKey: ['dashboard-projects', user.id, page, projectsOrder],
 		queryFn: () => fetchUserProjects(user.id!, page, projectsOrder),
 		enabled: !!user.id,
+		refetchOnWindowFocus: false,
+		staleTime: 5 * 60 * 1000, // Consider data fresh for 5 minutes
 	});
 
 	return (

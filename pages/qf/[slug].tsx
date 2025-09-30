@@ -64,7 +64,6 @@ export const getServerSideProps: GetServerSideProps = async context => {
 				notifyOnNetworkStatusChange,
 				projectType: EProjectType.ALL,
 			},
-			fetchPolicy: 'no-cache',
 		});
 		const { projects, totalCount } = data.qfProjects;
 		return {

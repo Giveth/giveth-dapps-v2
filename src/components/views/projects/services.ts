@@ -52,7 +52,6 @@ export const fetchProjects = async (
 				: getMainCategorySlug(selectedMainCategory),
 			qfRoundSlug: isArchivedQF ? routerQuerySlug : null,
 		},
-		fetchPolicy: 'no-cache',
 	});
 
 	let projectsData = [];
