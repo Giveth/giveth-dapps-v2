@@ -266,7 +266,7 @@ const ProjectsIndex = (props: IProjectsView) => {
 				qfRound.isActive &&
 				!isStellarOnlyQF &&
 				!isArchivedQF &&
-				!activeRoundStarted && <PassportBanner />}
+				activeRoundStarted && <PassportBanner />}
 			<Wrapper>
 				{qfRound && qfRound.isActive && !isArchivedQF && (
 					<>
