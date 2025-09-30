@@ -27,8 +27,14 @@ const QFToast: FC<IQFToast> = ({
 	selectedQFRound,
 }) => {
 	const { formatMessage, locale } = useIntl();
-	const { info, updateState, refreshScore, handleSign, fetchUserMBDScore } =
-		usePassport();
+	const {
+		info,
+		updateState,
+		refreshScore,
+		handleSign,
+		fetchUserMBDScore,
+		globalScoreSettings,
+	} = usePassport();
 	const { qfEligibilityState, passportState, passportScore, currentRound } =
 		info;
 	const router = useRouter();
@@ -125,7 +131,7 @@ const QFToast: FC<IQFToast> = ({
 					qfEligibilityState={qfEligibilityState}
 					passportState={passportState}
 					passportScore={passportScore}
-					currentRound={currentRound}
+					globalScoreSettings={globalScoreSettings}
 					setShowModal={setShowModal}
 					updateState={updateState}
 					refreshScore={refreshScore}
