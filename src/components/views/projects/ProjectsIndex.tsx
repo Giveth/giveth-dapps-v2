@@ -254,6 +254,12 @@ const ProjectsIndex = (props: IProjectsView) => {
 
 	const totalCount = data?.pages[data.pages.length - 1].totalCount || 0;
 
+	console.log('dataisQF', isQF);
+	console.log('dataisQFqfRound', qfRound);
+	console.log('dataisQFqf!isStellarOnlyQF', !isStellarOnlyQF);
+	console.log('dataisQFqf!isArchivedQF', !isArchivedQF);
+	console.log('dataisQFqf!activeRoundStarted', !activeRoundStarted);
+
 	return (
 		<>
 			{(isFetching || isFetchingNextPage) && (
@@ -266,7 +272,7 @@ const ProjectsIndex = (props: IProjectsView) => {
 				qfRound.isActive &&
 				!isStellarOnlyQF &&
 				!isArchivedQF &&
-				!activeRoundStarted && <PassportBanner />}
+				activeRoundStarted && <PassportBanner />}
 			<Wrapper>
 				{qfRound && qfRound.isActive && !isArchivedQF && (
 					<>
