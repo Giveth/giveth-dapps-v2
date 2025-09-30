@@ -66,6 +66,14 @@ const QFRoundsIndex = () => {
 								description={round.description}
 								imageUrl={getQFRoundHubCardImage(round)}
 								matchingPoolUsd={round.allocatedFundUSD}
+								allocatedFundUSD={round.allocatedFundUSD}
+								allocatedFundUSDPreferred={
+									round.allocatedFundUSDPreferred
+								}
+								allocatedTokenSymbol={
+									round.allocatedTokenSymbol
+								}
+								allocatedFund={round.allocatedFund}
 								startDate={formatReadableDate(
 									round.beginDate,
 									locale,
@@ -98,6 +106,14 @@ const QFRoundsIndex = () => {
 								description={round.description}
 								imageUrl={getQFRoundHubCardImage(round)}
 								matchingPoolUsd={round.allocatedFundUSD}
+								allocatedFundUSD={round.allocatedFundUSD}
+								allocatedFundUSDPreferred={
+									round.allocatedFundUSDPreferred
+								}
+								allocatedTokenSymbol={
+									round.allocatedTokenSymbol
+								}
+								allocatedFund={round.allocatedFund}
 								startDate={formatReadableDate(
 									round.beginDate,
 									locale,

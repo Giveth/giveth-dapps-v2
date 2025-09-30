@@ -189,6 +189,17 @@ export const FilterMenu = forwardRef<HTMLDivElement, IFilterMenuProps>(
 							onChange={e => {
 								handleClose(e);
 								setIsQF(isQF => !isQF);
+								// Update URL to reflect QF state
+								const updatedQuery = { ...router.query };
+								if (e) {
+									updatedQuery.qf = 'true';
+								} else {
+									delete updatedQuery.qf;
+								}
+								router.push({
+									pathname: router.pathname,
+									query: updatedQuery,
+								});
 							}}
 							disabled={router.pathname === '/qf'}
 							checked={isQF}

@@ -946,7 +946,7 @@ export const PROJECT_CARD_FIELDS_NEW = gql`
 		adminUser {
 			id
 			email
-			firstName
+			name
 			walletAddress
 		}
 		organization {

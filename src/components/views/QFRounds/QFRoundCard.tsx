@@ -13,7 +13,7 @@ import {
 } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
 import Link from 'next/link';
-import { truncateText } from '@/lib/helpers';
+import { thousandsSeparator, truncateText } from '@/lib/helpers';
 
 type Layout = 'horizontal' | 'grid';
 
@@ -23,6 +23,10 @@ export interface QFRoundCardProps {
 	description: string;
 	imageUrl: string;
 	matchingPoolUsd?: number;
+	allocatedFundUSD?: number;
+	allocatedFundUSDPreferred?: boolean;
+	allocatedTokenSymbol?: string;
+	allocatedFund?: number;
 	startDate?: string; // ISO or display-ready
 	endDate?: string;
 	linkUrl?: string;
@@ -34,6 +38,10 @@ export default function QFRoundCard({
 	description,
 	imageUrl,
 	matchingPoolUsd,
+	allocatedFundUSD,
+	allocatedFundUSDPreferred,
+	allocatedTokenSymbol,
+	allocatedFund,
 	startDate,
 	endDate,
 	linkUrl,
@@ -68,7 +76,14 @@ export default function QFRoundCard({
 								{typeof matchingPoolUsd === 'number' && (
 									<Chip $layout={layout}>
 										<span>
-											${matchingPoolUsd.toLocaleString()}
+											{allocatedFundUSDPreferred && '$'}
+											{thousandsSeparator(
+												allocatedFundUSDPreferred
+													? allocatedFundUSD
+													: allocatedFund,
+											) || ' --'}{' '}
+											{!allocatedFundUSDPreferred &&
+												allocatedTokenSymbol}
 										</span>
 										<ChipNote>
 											{formatMessage({
@@ -130,7 +145,14 @@ export default function QFRoundCard({
 								{typeof matchingPoolUsd === 'number' && (
 									<Chip $layout={layout}>
 										<span>
-											${matchingPoolUsd.toLocaleString()}
+											{allocatedFundUSDPreferred && '$'}
+											{thousandsSeparator(
+												allocatedFundUSDPreferred
+													? allocatedFundUSD
+													: allocatedFund,
+											) || ' --'}{' '}
+											{!allocatedFundUSDPreferred &&
+												allocatedTokenSymbol}
 										</span>
 										<ChipNote>
 											{formatMessage({
