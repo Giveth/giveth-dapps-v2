@@ -256,7 +256,7 @@ export const PassportBanner = () => {
 					qfEligibilityState={qfEligibilityState}
 					passportState={passportState}
 					passportScore={passportScore}
-					currentRound={roundData}
+					globalScoreSettings={globalScoreSettings}
 					setShowModal={setShowModal}
 					updateState={updateState}
 					refreshScore={refreshScore}

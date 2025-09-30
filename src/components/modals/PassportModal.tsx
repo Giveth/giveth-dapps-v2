@@ -34,12 +34,13 @@ import links from '@/lib/constants/links';
 import { useAppSelector } from '@/features/hooks';
 import { mediaQueries } from '@/lib/constants/constants';
 import ExternalLink from '@/components/ExternalLink';
+import { IGlobalScoreSettings } from '@/apollo/types/types';
 
 interface PassportModalProps extends IModal {
 	qfEligibilityState: EQFElegibilityState;
 	passportState: EPassportState | null;
 	passportScore: number | null;
-	currentRound: any;
+	globalScoreSettings: IGlobalScoreSettings;
 	updateState?: (user: any) => void;
 	refreshScore: () => void;
 	fetchUserMBDScore?: () => void;
@@ -79,7 +80,7 @@ const PassportModal: FC<PassportModalProps> = props => {
 		qfEligibilityState,
 		passportState,
 		passportScore,
-		currentRound,
+		globalScoreSettings,
 		updateState,
 		setShowModal,
 		refreshScore,
@@ -108,8 +109,8 @@ const PassportModal: FC<PassportModalProps> = props => {
 
 	const increaseScore =
 		passportScore != null &&
-		currentRound?.minimumPassportScore != null &&
-		passportScore < currentRound.minimumPassportScore;
+		globalScoreSettings?.globalMinimumPassportScore != null &&
+		passportScore < globalScoreSettings?.globalMinimumPassportScore;
 
 	const showPassportScoreSection =
 		passportState !== EPassportState.NOT_SIGNED &&
@@ -282,7 +283,7 @@ const PassportModal: FC<PassportModalProps> = props => {
 							{formatMessage({
 								id: 'profile.qf_donor_eligibility.required_score',
 							})}
-							<QFMinScore>{`>  ${currentRound?.minimumPassportScore ?? '--'}`}</QFMinScore>
+							<QFMinScore>{`> ${globalScoreSettings?.globalMinimumPassportScore ?? '--'}`}</QFMinScore>
 						</StyledNote>
 						<ScoreCard>
 							{formatMessage({
