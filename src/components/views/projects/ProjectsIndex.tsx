@@ -141,6 +141,8 @@ const ProjectsIndex = (props: IProjectsView) => {
 		getNextPageParam: lastPage => lastPage.nextCursor,
 		getPreviousPageParam: firstPage => firstPage.previousCursor,
 		initialPageParam: 0,
+		refetchOnWindowFocus: false,
+		staleTime: 5 * 60 * 1000, // Consider data fresh for 5 minutes
 		initialData:
 			projects && projects.length > 0
 				? {

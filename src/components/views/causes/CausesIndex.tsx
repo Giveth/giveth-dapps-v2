@@ -112,6 +112,8 @@ const CausesIndex = (props: ICausesView) => {
 		getNextPageParam: lastPage => lastPage.nextCursor,
 		getPreviousPageParam: firstPage => firstPage.previousCursor,
 		initialPageParam: 0,
+		refetchOnWindowFocus: false,
+		staleTime: 5 * 60 * 1000, // Consider data fresh for 5 minutes
 		initialData:
 			causes && causes.length > 0
 				? {
