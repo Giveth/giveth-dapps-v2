@@ -41,9 +41,14 @@ import ExternalLink from '@/components/ExternalLink';
 
 export const QFDonorEligibilityCard = () => {
 	const { formatMessage } = useIntl();
-	const { info, handleSign, refreshScore, fetchUserMBDScore } = usePassport();
-	const { passportState, passportScore, qfEligibilityState, currentRound } =
-		info;
+	const {
+		info,
+		handleSign,
+		refreshScore,
+		fetchUserMBDScore,
+		globalScoreSettings,
+	} = usePassport();
+	const { passportState, passportScore, qfEligibilityState } = info;
 
 	const MBDEligible =
 		qfEligibilityState === EQFElegibilityState.ELIGIBLE &&
@@ -87,8 +92,8 @@ export const QFDonorEligibilityCard = () => {
 
 	const increaseScore =
 		passportScore != null &&
-		currentRound?.minimumPassportScore != null &&
-		passportScore < currentRound.minimumPassportScore;
+		globalScoreSettings?.globalMinimumPassportScore != null &&
+		passportScore < globalScoreSettings?.globalMinimumPassportScore;
 
 	const renderQFEligibilityState = () => {
 		switch (qfEligibilityState) {
@@ -185,7 +190,7 @@ export const QFDonorEligibilityCard = () => {
 						{formatMessage({
 							id: 'profile.qf_donor_eligibility.required_score',
 						})}
-						<QFMinScore>{`>  ${currentRound?.minimumPassportScore ?? '--'}`}</QFMinScore>
+						<QFMinScore>{`>  ${globalScoreSettings?.globalMinimumPassportScore ?? '--'}`}</QFMinScore>
 					</StyledNote>
 					<ScoreCard>
 						{formatMessage({
