@@ -191,7 +191,6 @@ export const FilterMenu = forwardRef<HTMLDivElement, IFilterMenuProps>(
 									e,
 									EProjectsFilter.ACTIVE_QF_ROUND,
 								);
-								handleClose(e);
 							}}
 							disabled={router.pathname === '/qf'}
 							checked={
