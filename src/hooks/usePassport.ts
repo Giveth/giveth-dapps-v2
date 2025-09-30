@@ -185,6 +185,9 @@ export const usePassport = () => {
 					});
 				}
 
+				console.log('globalScoreSettings', globalScoreSettings);
+				console.log('refreshUserScores', refreshUserScores);
+
 				if (
 					globalScoreSettings.globalMinimumMBDScore != null &&
 					refreshUserScores.activeQFMBDScore >=
