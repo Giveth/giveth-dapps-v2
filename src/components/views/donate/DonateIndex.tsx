@@ -51,13 +51,13 @@ const DonateIndex: FC = () => {
 		successDonation,
 		qrDonationStatus,
 		draftDonationData,
-		hasActiveQFRound,
 		shouldRenderModal,
 		setSuccessDonation,
 		setQRDonationStatus,
 		setDraftDonationData,
 		setPendingDonationExists,
 		activeStartedRound,
+		selectedQFRound,
 		startTimer,
 		setDonateModalByPriority,
 		setIsModalPriorityChecked,
@@ -66,7 +66,7 @@ const DonateIndex: FC = () => {
 		useQRCodeDonation(project);
 	const { isSignedIn, isEnabled } = useAppSelector(state => state.user);
 
-	const alreadyDonated = useAlreadyDonatedToProject(project);
+	const alreadyDonated = useAlreadyDonatedToProject(project, selectedQFRound);
 	const { userData } = useAppSelector(state => state.user);
 
 	const dispatch = useAppDispatch();
