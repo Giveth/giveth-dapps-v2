@@ -79,10 +79,7 @@ export const DonationCardQFRounds = ({
 		}
 
 		// Truncate round names
-		return rounds.map(round => ({
-			...round,
-			name: truncateText(round.name, 20),
-		}));
+		return rounds;
 	}, [project.qfRounds, isQRDonation]);
 
 	const [isSmartSelect, setIsSmartSelect] = useState(false);
