@@ -54,7 +54,10 @@ export const ProjectPublicActions = () => {
 	const { formatMessage } = useIntl();
 	const { open: openConnectModal } = useWeb3Modal();
 	const { activeStartedRound } = getActiveRound(projectData?.qfRounds);
-	const alreadyDonated = useAlreadyDonatedToProject(projectData);
+	const alreadyDonated = useAlreadyDonatedToProject(
+		projectData,
+		activeStartedRound,
+	);
 
 	// Check if the project has only one address and it is a Stellar address
 	const isOnlyStellar =

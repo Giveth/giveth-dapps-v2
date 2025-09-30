@@ -37,14 +37,14 @@ const CauseDonateIndex: FC = () => {
 	const {
 		project,
 		successDonation,
-		hasActiveQFRound,
+		selectedQFRound,
 		shouldRenderModal,
 		activeStartedRound,
 		setDonateModalByPriority,
 		setIsModalPriorityChecked,
 	} = useCauseDonateData();
 
-	const alreadyDonated = useAlreadyDonatedToProject(project);
+	const alreadyDonated = useAlreadyDonatedToProject(project, selectedQFRound);
 	const { userData } = useAppSelector(state => state.user);
 
 	const dispatch = useAppDispatch();
