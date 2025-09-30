@@ -119,7 +119,7 @@ export default function QFRoundCard({
 					</Media>
 
 					<Content>
-						<Desc>{truncateText(description, 120)}</Desc>
+						<Desc>{truncateText(description, 155)}</Desc>
 						{startDate && endDate && (
 							<Dates $layout={layout}>
 								{startDate} – {endDate}
