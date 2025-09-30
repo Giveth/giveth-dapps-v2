@@ -34,7 +34,6 @@ export async function getServerSideProps(props: {
 		const { data } = await client.query({
 			query: FETCH_PROJECT_BY_SLUG_SINGLE_PROJECT,
 			variables: { slug },
-			fetchPolicy: 'no-cache',
 		});
 
 		// Perform redirect on server side for causes

@@ -76,6 +76,8 @@ export const CauseProjectsSearchList = ({
 	const { data, isLoading } = useQuery({
 		queryKey: ['projects', searchFilters, page],
 		queryFn: () => fetchProjectsPage(searchFilters, page),
+		refetchOnWindowFocus: false,
+		staleTime: 5 * 60 * 1000, // Consider data fresh for 5 minutes
 	});
 
 	// Update projects when data changes
