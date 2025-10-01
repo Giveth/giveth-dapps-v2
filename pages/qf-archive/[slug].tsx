@@ -3,15 +3,15 @@ import { IQFRound } from '@/apollo/types/types';
 import { transformGraphQLErrorsToStatusCode } from '@/helpers/requests';
 import { initializeApollo } from '@/apollo/apolloClient';
 import { OPTIONS_HOME_PROJECTS } from '@/apollo/gql/gqlOptions';
-import { FETCH_ALL_PROJECTS } from '@/apollo/gql/gqlProjects';
 import { GeneralMetatags } from '@/components/Metatag';
-import ProjectsIndex from '@/components/views/projects/ProjectsIndex';
 import { projectsMetatags } from '@/content/metatags';
 import { ProjectsProvider } from '@/context/projects.context';
 import { useReferral } from '@/hooks/useReferral';
 import { IProjectsRouteProps } from 'pages/projects/[slug]';
 import { EProjectsSortBy } from '@/apollo/types/gqlEnums';
-import { FETCH_QF_ROUNDS_QUERY } from '@/apollo/gql/gqlQF';
+import { FETCH_QF_PROJECTS, FETCH_QF_ROUNDS_QUERY } from '@/apollo/gql/gqlQF';
+import { getQFRoundData } from '@/lib/helpers/qfroundHelpers';
+import ProjectsIndex from '@/components/views/projects/ProjectsIndex';
 
 interface IProjectsCategoriesRouteProps extends IProjectsRouteProps {
 	archivedQFRound: IQFRound;
@@ -25,7 +25,11 @@ const QFProjectsCategoriesRoute = (props: IProjectsCategoriesRouteProps) => {
 	return (
 		<ProjectsProvider isQF isArchivedQF archivedQFRound={archivedQFRound}>
 			<GeneralMetatags info={projectsMetatags} />
-			<ProjectsIndex projects={projects} totalCount={totalCount} />
+			<ProjectsIndex
+				projects={projects}
+				totalCount={totalCount}
+				qfRound={archivedQFRound}
+			/>
 		</ProjectsProvider>
 	);
 };
@@ -45,10 +49,14 @@ export const getServerSideProps: GetServerSideProps = async context => {
 				},
 			};
 
+		// Get round data from database
+		const roundData = await getQFRoundData(slug.toString());
+
 		const { data } = await apolloClient.query({
-			query: FETCH_ALL_PROJECTS,
+			query: FETCH_QF_PROJECTS,
 			variables: {
 				...variables,
+				qfRoundId: Number(roundData.id),
 				sortingBy: query.sort || EProjectsSortBy.INSTANT_BOOSTING,
 				campaignSlug: query.campaignSlug,
 				qfRoundSlug: slug,
@@ -57,7 +65,7 @@ export const getServerSideProps: GetServerSideProps = async context => {
 			fetchPolicy: 'no-cache',
 		});
 
-		const { projects, totalCount } = data.allProjects;
+		const { projects, totalCount } = data.qfProjects;
 		const {
 			data: { qfRounds },
 		} = await apolloClient.query({
@@ -67,12 +75,6 @@ export const getServerSideProps: GetServerSideProps = async context => {
 		});
 
 		const archivedQFRound = qfRounds ? qfRounds[0] : undefined;
-
-		if (!archivedQFRound) {
-			return {
-				notFound: true,
-			};
-		}
 
 		return {
 			props: {

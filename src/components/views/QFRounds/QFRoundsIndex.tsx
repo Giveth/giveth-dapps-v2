@@ -123,7 +123,7 @@ const QFRoundsIndex = () => {
 									round.endDate,
 									locale,
 								)}
-								linkUrl={`/qf/${round.slug}`}
+								linkUrl={`/qf-archive/${round.slug}`}
 							/>
 						))}
 					</QFRoundsWrapper>
