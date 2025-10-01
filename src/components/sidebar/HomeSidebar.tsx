@@ -38,7 +38,6 @@ export const HomeSidebar = () => {
 			<SidebarParentItem item={{ title: 'GIVeconomy' }}>
 				<GIVeconomyItems />
 			</SidebarParentItem>
-			<ItemSpacer />
 			<SidebarParentItem
 				item={{ title: formatMessage({ id: 'label.community' }) }}
 			>
