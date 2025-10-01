@@ -130,6 +130,7 @@ export const PROJECT_CORE_FIELDS_CAUSES_ALL = gql`
 		projectType
 		qfRounds {
 			id
+			slug
 			name
 			isActive
 			beginDate
@@ -454,6 +455,7 @@ export const FETCH_CAUSE_BY_SLUG_SINGLE_CAUSE = gql`
 			}
 			qfRounds {
 				id
+				slug
 				name
 				isActive
 				beginDate

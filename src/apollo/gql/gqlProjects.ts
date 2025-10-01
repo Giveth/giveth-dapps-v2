@@ -19,6 +19,7 @@ export const PROJECT_CORE_FIELDS = gql`
 		}
 		qfRounds {
 			id
+			slug
 			name
 			isActive
 			beginDate
@@ -212,6 +213,7 @@ export const FETCH_PROJECT_BY_SLUG_DONATION = gql`
 			}
 			qfRounds {
 				id
+				slug
 				name
 				isActive
 				beginDate
@@ -312,6 +314,7 @@ export const FETCH_PROJECT_BY_SLUG_SINGLE_PROJECT = gql`
 			}
 			qfRounds {
 				id
+				slug
 				name
 				isActive
 				beginDate

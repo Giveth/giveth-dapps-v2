@@ -206,6 +206,7 @@ const ProjectCard = (props: IProjectCard) => {
 
 		calculateTotalAmountStreamed();
 	}, [props]);
+	console.log('project', project);
 
 	return (
 		// </Link>

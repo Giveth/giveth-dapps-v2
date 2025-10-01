@@ -136,6 +136,7 @@ const ProjectsIndex = (props: IProjectsView) => {
 			selectedMainCategory,
 			isQF,
 			qfRound?.id,
+			router.query.slug,
 		],
 		queryFn: fetchProjectsPage,
 		getNextPageParam: lastPage => lastPage.nextCursor,
