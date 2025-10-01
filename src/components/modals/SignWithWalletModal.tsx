@@ -186,7 +186,14 @@ export const SignWithWalletModal: FC<IProps> = ({
 		}
 		setLoading(true);
 		try {
-			if (walletChainType === ChainType.EVM && isContractWallet) {
+			console.log('walletChainType', walletChainType);
+			console.log('isContractWallet', isContractWallet);
+			console.log('isGSafeConnector', isGSafeConnector);
+			if (
+				walletChainType === ChainType.EVM &&
+				isContractWallet &&
+				!isGSafeConnector
+			) {
 				console.log('Switching chain to Polygon');
 				await switchChain(wagmiConfig, {
 					chainId: 137,
