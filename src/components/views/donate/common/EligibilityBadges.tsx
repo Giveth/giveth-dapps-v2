@@ -75,11 +75,11 @@ const EligibilityBadges: FC<IEligibilityBadges> = props => {
 		? 'page.donate.donations_will_be_matched'
 		: !isOnQFEligibleNetworks &&
 			  selectedQFRound &&
-			  selectedQFRound.eligibleNetworks.length > 0
+			  selectedQFRound.eligibleNetworks?.length > 0
 			? 'page.donate.network_not_eligible_for_qf'
 			: isOnQFEligibleNetworks &&
 				  selectedQFRound &&
-				  selectedQFRound.eligibleNetworks.length > 0
+				  selectedQFRound.eligibleNetworks?.length > 0
 				? 'page.donate.unlocks_matching_funds'
 				: null; // Prevents invalid id values
 
@@ -89,7 +89,8 @@ const EligibilityBadges: FC<IEligibilityBadges> = props => {
 			{/* Prevents QF Badge from rendering when !isOnQFEligibleNetworks && !activeStartedRound */}
 			{!(
 				isOnQFEligibleNetworks ||
-				(selectedQFRound && selectedQFRound.eligibleNetworks.length > 0)
+				(selectedQFRound &&
+					selectedQFRound.eligibleNetworks?.length > 0)
 			) ? null : (
 				<BadgesBase
 					warning={qfEligibleWarning}
