@@ -164,7 +164,6 @@ const ProjectCard = (props: IProjectCard) => {
 				const donations = await fetchProjectRecurringDonationsByDate();
 				let totalAmountStreamed;
 				if (donations.totalCount != 0) {
-					console.log(id, donations.recurringDonations);
 					totalAmountStreamed = donations.recurringDonations.reduce(
 						(sum: number, donation: IRecurringDonation) => {
 							return sum + donation.totalUsdStreamed;
@@ -178,8 +177,6 @@ const ProjectCard = (props: IProjectCard) => {
 
 		calculateTotalAmountStreamed();
 	}, [props]);
-
-	console.log(`${project.title}: ${project.activeProjectsCount}`);
 
 	return (
 		// </Link>

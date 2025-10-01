@@ -186,9 +186,6 @@ export const SignWithWalletModal: FC<IProps> = ({
 		}
 		setLoading(true);
 		try {
-			console.log('walletChainType', walletChainType);
-			console.log('isContractWallet', isContractWallet);
-			console.log('isGSafeConnector', isGSafeConnector);
 			if (
 				walletChainType === ChainType.EVM &&
 				isContractWallet &&
