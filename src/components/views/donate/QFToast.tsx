@@ -109,7 +109,11 @@ const QFToast: FC<IQFToast> = ({
 							buttonType='primary'
 							size='small'
 							icon={<IconExternalLink16 />}
-							onClick={() => router.push('/qf')}
+							onClick={() =>
+								selectedQFRound
+									? router.push(`/qf/${selectedQFRound.slug}`)
+									: router.push('/qf')
+							}
 						/>
 					</FlexCenter>
 				) : (
