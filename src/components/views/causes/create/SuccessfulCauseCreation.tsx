@@ -27,6 +27,7 @@ import LottieControl from '@/components/LottieControl';
 import { EContentTypeCause } from '@/lib/constants/shareContent';
 import NotAvailableHandler from '@/components/NotAvailableHandler';
 import ProjectCard from '@/components/project-card/ProjectCardAlt';
+import links from '@/lib/constants/links';
 
 interface IProps {
 	cause?: ICause;
@@ -139,7 +140,7 @@ const SuccessfulCauseCreation = ({ cause, isLoading }: IProps) => {
 						<P style={{ marginTop: 16, fontSize: 14 }}>
 							Want to learn more about Causes?{' '}
 							<Link
-								href='https://docs.giveth.io/donation-agents'
+								href={links.CAUSES_DOC}
 								target='_blank'
 								rel='noopener noreferrer'
 								passHref

@@ -1,16 +1,26 @@
 import styled from 'styled-components';
+import { useIntl } from 'react-intl';
 import { ICauseProject } from '@/apollo/types/types';
 import ProjectCard from '@/components/project-card/ProjectCard';
 import { mediaQueries } from '@/lib/constants/constants';
+import InlineToast, { EToastType } from '@/components/toasts/InlineToast';
 
 export const CauseProjectsTab = ({
 	causeProjects,
 }: {
 	causeProjects: ICauseProject[];
 }) => {
+	const { formatMessage } = useIntl();
 	// List project cards
 	return (
 		<Wrapper>
+			<CauseInlineToast
+				type={EToastType.Hint}
+				title={formatMessage({ id: 'label.cause.distributed_by_ai' })}
+				message={formatMessage({
+					id: 'label.cause.distributed_by_ai_desc_2',
+				})}
+			></CauseInlineToast>
 			<ProjectsWrapper>
 				<ProjectsContainer>
 					{causeProjects.map(causeProject => (
@@ -35,7 +45,7 @@ const Wrapper = styled.div`
 		padding-bottom: 33px;
 	}
 	${mediaQueries.laptopS} {
-		padding-top: 40px;
+		padding-top: 5px;
 		padding-bottom: 40px;
 	}
 `;
@@ -57,4 +67,8 @@ export const ProjectsContainer = styled.div`
 	${mediaQueries.laptopL} {
 		grid-template-columns: repeat(3, 1fr);
 	}
+`;
+
+export const CauseInlineToast = styled(InlineToast)`
+	margin-bottom: 30px;
 `;

@@ -6,13 +6,26 @@ import { getActiveRound } from '@/helpers/qf';
 import { useProjectContext } from '@/context/project.context';
 import { IconWithTooltip } from '@/components/IconWithToolTip';
 import config from '@/configuration';
+import { EProjectType } from '@/apollo/types/gqlEnums';
 
 const ProjectEligibleQFChains = () => {
 	const { projectData } = useProjectContext();
 	const { formatMessage } = useIntl();
 
 	const { activeStartedRound } = getActiveRound(projectData?.qfRounds);
+	const projectType = projectData?.projectType;
+	const causesAcceptedNetworks = config.CAUSES_CONFIG.acceptedNetworks;
 
+	// conditional check if project or cause has an address for this network
+	function checkEligibleAddresses(network: number) {
+		if (projectType === EProjectType.CAUSE) {
+			return causesAcceptedNetworks?.includes(network);
+		} else {
+			return projectData?.addresses?.some(
+				address => address.networkId === network && address.isRecipient,
+			);
+		}
+	}
 	return (
 		<Container>
 			<Wrapper>
@@ -23,15 +36,11 @@ const ProjectEligibleQFChains = () => {
 				</Caption>
 				<IconsWrapper>
 					{activeStartedRound?.eligibleNetworks?.map(network => {
-						// Check if project has an address for this network
-						const hasProjectAddress = projectData?.addresses?.some(
-							address =>
-								address.networkId === network &&
-								address.isRecipient,
-						);
+						// Check if project or cause has an address for this network
+						const hasAddresses = checkEligibleAddresses(network);
 
-						// Only render if project has an address for this network
-						return hasProjectAddress ? (
+						// Only render if project or cause has an address for this network
+						return hasAddresses ? (
 							<IconWithTooltip
 								icon={
 									<TooltipIconWrapper>

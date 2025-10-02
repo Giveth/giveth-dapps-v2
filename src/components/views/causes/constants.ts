@@ -1,1 +1,4 @@
 export const LAST_CAUSE_CLICKED = 'lastCauseClicked';
+export const GIVGARDEN_FEE_PERCENTAGE = 0.05;
+export const CAUSE_OWNER_FEE_PERCENTAGE = 0.03;
+export const DISTRIBUTION_PROJECTS_PERCENTAGE = 0.92;

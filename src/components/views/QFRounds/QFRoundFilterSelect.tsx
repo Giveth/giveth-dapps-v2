@@ -242,6 +242,10 @@ const Trigger = styled.button`
 		font-size: 16px;
 		font-weight: 500;
 	}
+
+	@media only screen and (max-width: 768px) {
+		width: 100%;
+	}
 `;
 
 const Badge = styled.span`
