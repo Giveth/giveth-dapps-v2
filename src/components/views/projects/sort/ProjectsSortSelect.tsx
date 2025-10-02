@@ -208,7 +208,7 @@ const ProjectsSortSelect = () => {
 			gap='8px'
 			$alignItems={isMobile ? 'stretch' : 'center'}
 			$flexDirection={isMobile ? 'column' : 'row'}
-			style={{ marginLeft: isQF ? 'auto' : '0' }}
+			style={{ marginLeft: isQF ? (isMobile ? '0' : 'auto') : '0' }}
 		>
 			{!isQF && (
 				<SortingLabel htmlFor='sorting'>
