@@ -122,7 +122,7 @@ export const ActiveQFProjectsBanner = ({
 						)}
 					</ActiveStyledCol>
 				</ActiveStyledRow>
-			</ContainerWrapper>
+			</Container>
 		</BannerContainer>
 	);
 };
