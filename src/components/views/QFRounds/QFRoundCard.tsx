@@ -184,7 +184,6 @@ export default function QFRoundCard({
 }
 
 const Card = styled.div<{ $layout: Layout }>`
-	display: grid;
 	gap: ${({ $layout }) => ($layout === 'horizontal' ? '42px' : '24px')};
 	background: ${neutralColors.gray[100]};
 	border-radius: 16px;
@@ -193,6 +192,7 @@ const Card = styled.div<{ $layout: Layout }>`
 	${({ $layout }) =>
 		$layout === 'horizontal'
 			? css`
+					display: grid;
 					padding: 24px;
 					flex: 1 0 100%;
 					grid-template-columns: 1fr 1fr;
@@ -203,10 +203,14 @@ const Card = styled.div<{ $layout: Layout }>`
 					}
 				`
 			: css`
+					display: flex;
+					flex-direction: column;
 					padding: 16px;
 					/* 3 per row on desktop (gap = 32px -> two gaps per row) */
 					flex: 1 1 calc((100% - 2 * 32px) / 3);
 					max-width: calc((100% - 2 * 32px) / 3);
+
+					align-items: start;
 
 					/* 2 per row on tablet */
 					@media (max-width: ${deviceSize.laptopS}px) {
@@ -219,15 +223,12 @@ const Card = styled.div<{ $layout: Layout }>`
 						flex-basis: 100%;
 						max-width: 100%;
 					}
-
-					grid-template-columns: 1fr;
 				`}
 `;
 
 const Media = styled.div<{ $layout: Layout }>`
 	position: relative;
 	width: 100%;
-	overflow: hidden;
 	border-radius: 14px;
 
 	${({ $layout }) =>
@@ -242,7 +243,7 @@ const Media = styled.div<{ $layout: Layout }>`
 				`
 			: css`
 					/* banner-ish for grid cards */
-					aspect-ratio: 7 / 3;
+					aspect-ratio: 16 / 9;
 				`}
 `;
 
@@ -251,6 +252,11 @@ const MediaInner = styled.div`
 	inset: 0;
 	width: 100%;
 	height: 100%;
+	border-radius: 16px;
+
+	img {
+		border-radius: 16px;
+	}
 `;
 
 const Content = styled.div`
