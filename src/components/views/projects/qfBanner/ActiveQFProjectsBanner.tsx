@@ -143,10 +143,6 @@ export const ActiveStyledRow = styled(Row)`
 	@media (max-width: 1350px) {
 		flex-direction: column-reverse;
 	}
-
-	${mediaQueries.tablet} {
-		height: 100%;
-	}
 `;
 
 export const ActiveStyledCol = styled(Col)`
