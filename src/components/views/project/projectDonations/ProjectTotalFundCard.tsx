@@ -152,13 +152,20 @@ const ProjectTotalFundCard = ({ selectedQF }: IProjectTotalFundCardProps) => {
 				: 0
 		: 0;
 
+	console.log('selectedQF', selectedQF);
+	console.log('selectedQFprojectData', projectData?.qfRounds);
+
 	const totalDonations =
 		projectData?.qfRounds?.find(round => round.id === selectedQF?.id)
-			?.projectQfRoundRelations?.sumDonationValueUsd || 0;
+			?.projectQfRoundRelations?.sumDonationValueUsd ||
+		projectData?.totalDonations ||
+		0;
 
 	const countUniqueDonors =
 		projectData?.qfRounds?.find(round => round.id === selectedQF?.id)
-			?.projectQfRoundRelations?.countUniqueDonors || 0;
+			?.projectQfRoundRelations?.countUniqueDonors ||
+		projectData?.countUniqueDonors ||
+		0;
 
 	return (
 		<Wrapper>
