@@ -192,6 +192,7 @@ const ProjectCard = (props: IProjectCard) => {
 				const donations = await fetchProjectRecurringDonationsByDate();
 				let totalAmountStreamed;
 				if (donations.totalCount != 0) {
+					console.log(id, donations.recurringDonations);
 					totalAmountStreamed = donations.recurringDonations.reduce(
 						(sum: number, donation: IRecurringDonation) => {
 							return sum + donation.totalUsdStreamed;
@@ -244,7 +245,6 @@ const ProjectCard = (props: IProjectCard) => {
 				$isOtherOrganization={
 					orgLabel && orgLabel !== ORGANIZATION.giveth
 				}
-				$isCause={projectType === EProjectType.CAUSE}
 			>
 				<TitleWrapper>
 					<LastUpdatedContainer $isHover={isHover}>
@@ -336,7 +336,7 @@ const ProjectCard = (props: IProjectCard) => {
 									)}
 									isCause={projectType === EProjectType.CAUSE}
 									projectsCount={
-										project.activeProjectsCount || 0
+										project.causeProjects?.length || 0
 									}
 								/>
 							)}
@@ -513,7 +513,6 @@ enum ECardBodyHover {
 interface ICardBody {
 	$isOtherOrganization?: boolean | '';
 	$isHover: ECardBodyHover;
-	$isCause?: boolean;
 }
 
 const CardBody = styled.div<ICardBody>`
