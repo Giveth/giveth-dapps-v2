@@ -9,7 +9,6 @@ import { SidebarParentItem } from './SidebarItem';
 import { ProjectsItems } from '../menu/ProjectsItems';
 import { GIVeconomyItems } from '../menu/GIVeconomyItems';
 import { Item } from '../menu/Item';
-import { ItemSpacer } from '../menu/common';
 import { setShowSearchModal } from '@/features/modal/modal.slice';
 import { CommunityItems } from '../menu/CommunityItems';
 
@@ -38,7 +37,6 @@ export const HomeSidebar = () => {
 			<SidebarParentItem item={{ title: 'GIVeconomy' }}>
 				<GIVeconomyItems />
 			</SidebarParentItem>
-			<ItemSpacer />
 			<SidebarParentItem
 				item={{ title: formatMessage({ id: 'label.community' }) }}
 			>

@@ -28,7 +28,6 @@ export const CreateButtonWithMenu: FC<ICreateButtonWithMenu> = ({
 	const isMobile = useMediaQuery(device.mobileL);
 	const router = useRouter();
 	const { formatMessage } = useIntl();
-
 	useEffect(() => {
 		if (!isHeaderShowing) {
 			closeMenu();
@@ -70,7 +69,11 @@ export const CreateButtonWithMenu: FC<ICreateButtonWithMenu> = ({
 			>
 				<ButtonContent>
 					<IconPlus size={16} />
-					<span>{formatMessage({ id: 'label.button.create' })}</span>
+					{isMobile && (
+						<span>
+							{formatMessage({ id: 'label.button.create' })}
+						</span>
+					)}
 				</ButtonContent>
 			</StyledCreateButton>
 			{(menuCondition || clickOpen) && (
@@ -134,7 +137,10 @@ const StyledCreateButton = styled.button<{
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	padding: 15px 24px;
+	${mediaQueries.laptopS} {
+		padding: 15px 24px;
+	}
+	padding: 15px 16px;
 	background-color: ${props =>
 		props.$isOpen ? 'white' : '#e1458d'} !important;
 	border-color: ${props =>
@@ -221,11 +227,20 @@ const MenuContainer = styled.div<{ $isAnimating: boolean }>`
 	width: 234px;
 	top: 0;
 	right: 0;
+	left: auto;
 
-	${mediaQueries.mobileL} {
+	${mediaQueries.mobileS} {
+		left: 6%;
+		right: auto;
+		transform: ${props =>
+			props.$isAnimating ? 'translateY(0)' : 'translateY(-10px)'};
+	}
+
+	${mediaQueries.tablet} {
 		min-width: 280px;
 		width: 280px;
 		right: 12% !important;
+		left: auto;
 		transform: ${props =>
 			props.$isAnimating
 				? 'translateX(-50%) translateY(0)'

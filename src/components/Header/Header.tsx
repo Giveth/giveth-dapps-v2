@@ -15,9 +15,7 @@ import {
 	ConnectButton,
 	HeaderLinks,
 	StyledHeader,
-	SmallCreateProject,
 	Logo,
-	SmallCreateProjectParent,
 	HomeButton,
 	GLinkNoWrap,
 	SearchButton,
@@ -149,7 +147,6 @@ const Header: FC<IHeader> = ({ showQFBanner }) => {
 			dispatch(setShowCompleteProfile(true));
 		}
 	};
-
 	return (
 		<StyledHeader
 			$alignItems='center'
@@ -234,19 +231,14 @@ const Header: FC<IHeader> = ({ showQFBanner }) => {
 					size='small'
 					isProjectPage={isProjectPage}
 				/>
-				<SmallCreateProjectParent>
-					<SmallCreateProject
-						onClick={handleCreateButton}
-						buttonType='primary'
-						label='+'
-					/>
-				</SmallCreateProjectParent>
 				{walletAddress ? (
 					<>
-						<NotificationButtonWithMenu
-							isHeaderShowing={scrollDir !== EScrollDir.Down}
-							theme={theme}
-						/>
+						{isDesktop && (
+							<NotificationButtonWithMenu
+								isHeaderShowing={scrollDir !== EScrollDir.Down}
+								theme={theme}
+							/>
+						)}
 						{networkHasGIV && (
 							<RewardButtonWithMenu
 								isHeaderShowing={scrollDir !== EScrollDir.Down}
