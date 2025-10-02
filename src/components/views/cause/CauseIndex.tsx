@@ -31,7 +31,6 @@ import { ProjectStats } from '@/components/views/project/projectActionCard/Proje
 import { AdminActions } from '@/components/views/project/projectActionCard/AdminActions';
 import ProjectOwnerBanner from '@/components/views/project/ProjectOwnerBanner';
 import { useGeneralWallet } from '@/providers/generalWalletProvider';
-import ProjectSocials from '@/components/views/project/ProjectSocials';
 import VerifyEmailBanner from '../userProfile/VerifyEmailBanner';
 import config from '@/configuration';
 import { getActiveRound } from '@/helpers/qf';
@@ -191,12 +190,14 @@ const CauseIndex: FC<ICauseBySlug> = () => {
 					{activeTab === 0 && (
 						<>
 							<RichTextViewer content={description} />
+							{/* Causes do not have social media handles... yet 
+							
 							{projectData?.socialMedia?.length !== 0 && (
 								<>
 									<Separator />
 									<ProjectSocials />
 								</>
-							)}
+							)} */}
 							<Separator />
 							<ProjectCategoriesBadges
 								categories={categories || []}

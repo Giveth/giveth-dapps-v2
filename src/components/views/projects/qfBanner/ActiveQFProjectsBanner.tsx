@@ -122,7 +122,7 @@ export const ActiveQFProjectsBanner = ({
 						)}
 					</ActiveStyledCol>
 				</ActiveStyledRow>
-			</Container>
+			</ContainerWrapper>
 		</BannerContainer>
 	);
 };
@@ -142,6 +142,10 @@ export const ActiveStyledRow = styled(Row)`
 	flex-direction: row;
 	@media (max-width: 1350px) {
 		flex-direction: column-reverse;
+	}
+
+	${mediaQueries.tablet} {
+		height: 100%;
 	}
 `;
 

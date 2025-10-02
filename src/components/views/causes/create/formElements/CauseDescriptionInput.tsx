@@ -80,7 +80,7 @@ const CauseDescriptionInput = ({
 			</Label>
 			<InlineToast
 				type={EToastType.Info}
-				title={formatMessage({ id: 'label.cause.please_note' })}
+				title={formatMessage({ id: 'label.cause.ai_powered' })}
 				message={formatMessage({ id: 'label.cause.please_note_desc' })}
 			/>
 			<InputContainer>

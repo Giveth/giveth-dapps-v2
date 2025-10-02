@@ -53,7 +53,7 @@ const CauseDonateIndex: FC = () => {
 	const { chainId } = useAccount();
 
 	const { walletAddress: address } = useGeneralWallet();
-
+	const projectType = project.projectType;
 	useEffect(() => {
 		dispatch(setShowHeader(false));
 		return () => {
@@ -93,7 +93,8 @@ const CauseDonateIndex: FC = () => {
 	const isOnEligibleNetworks =
 		chainId && activeStartedRound?.eligibleNetworks?.includes(chainId);
 	const showAlreadyDonatedWrapper = alreadyDonated && isOnEligibleNetworks;
-
+	const causeProjectsCount = project.activeProjectsCount || 0;
+	console.log('project', project);
 	return successDonation ? (
 		<>
 			<CauseDonateHeader
@@ -117,6 +118,7 @@ const CauseDonateIndex: FC = () => {
 									DonateModalPriorityValues.None,
 								);
 							}}
+							projectType={projectType}
 						/>
 					)}
 
