@@ -187,11 +187,17 @@ export const FilterMenu = forwardRef<HTMLDivElement, IFilterMenuProps>(
 								id: 'label.eligible_for_matching',
 							})}
 							onChange={e => {
-								handleClose(e);
-								setIsQF(isQF => !isQF);
+								handleSelectFilter(
+									e,
+									EProjectsFilter.ACTIVE_QF_ROUND,
+								);
 							}}
 							disabled={router.pathname === '/qf'}
-							checked={isQF}
+							checked={
+								variables?.filters?.includes(
+									EProjectsFilter.ACTIVE_QF_ROUND,
+								) ?? false
+							}
 							size={14}
 						/>
 					</FeatureItem>

@@ -6,10 +6,9 @@ import {
 	Lead,
 	neutralColors,
 	Button,
-	FlexCenter,
 } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
-import { Chain, parseUnits, Address, zeroAddress, formatUnits } from 'viem';
+import { Chain, Address, zeroAddress, formatUnits } from 'viem';
 import { ethers } from 'ethers';
 import { Modal } from '@/components/modals/Modal';
 import {
@@ -88,7 +87,7 @@ const CauseDonateModal: FC<IDonateModalProps> = props => {
 	const dispatch = useAppDispatch();
 	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
 	const { formatMessage } = useIntl();
-	const { setSuccessDonation, project, activeStartedRound } =
+	const { setSuccessDonation, project, activeStartedRound, selectedQFRound } =
 		useCauseDonateData();
 
 	const [step, setStep] = useState('approve');
@@ -198,18 +197,17 @@ const CauseDonateModal: FC<IDonateModalProps> = props => {
 
 			if (squidRoute?.route) {
 				spenderAddress = squidRoute.route.transactionRequest.target;
+			} else {
+				setApproving(false);
+				setFailedModalType(EDonationFailedType.FAILED_LIQUIDITY);
+				return;
 			}
 		}
-
-		const donationInWei = parseUnits(
-			projectDonation.toString(),
-			token.decimals || 18,
-		);
 
 		approveTx = await approveSpending(
 			spenderAddress,
 			token.address,
-			donationInWei.toString(),
+			amount.toString(),
 		);
 
 		if (approveTx) {
@@ -350,6 +348,9 @@ const CauseDonateModal: FC<IDonateModalProps> = props => {
 					symbol: token.symbol,
 					setFailedModalType,
 					fromTokenAmount: parseFloat(projectDonation.toString()),
+					qfRoundId: selectedQFRound?.id
+						? Number(selectedQFRound?.id)
+						: undefined,
 				};
 
 				// Set up this for Polygon GIV donation, same token same network
@@ -512,18 +513,6 @@ const CauseDonateModal: FC<IDonateModalProps> = props => {
 		</>
 	);
 };
-
-const Loading = styled(FlexCenter)`
-	position: fixed;
-	top: 0;
-	left: 0;
-	z-index: 1000;
-	height: 100%;
-	width: 100%;
-	background-color: gray;
-	transition: opacity 0.3s ease-in-out;
-	opacity: 0.9;
-`;
 
 const findMatchingWalletAddress = (
 	addresses: IWalletAddress[] = [],

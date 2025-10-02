@@ -3,7 +3,6 @@ import styled from 'styled-components';
 import { useIntl } from 'react-intl';
 import {
 	brandColors,
-	ButtonLink,
 	FlexCenter,
 	H3,
 	H4,
@@ -89,15 +88,6 @@ const SliderTextSection = styled.div<{ $active: boolean }>`
 	flex-direction: column;
 	place-items: center;
 	min-height: 390px;
-`;
-
-const ReadMoreButton = styled(ButtonLink)`
-	background-color: ${brandColors.pinky[500]};
-	margin-top: 32px;
-
-	&:hover {
-		background-color: ${brandColors.pinky[500]}80;
-	}
 `;
 
 const Title = styled(H3)`

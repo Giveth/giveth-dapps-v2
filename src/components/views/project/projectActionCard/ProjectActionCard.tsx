@@ -1,18 +1,11 @@
-import {
-	mediaQueries,
-	neutralColors,
-	Flex,
-	brandColors,
-} from '@giveth/ui-design-system';
+import { mediaQueries, neutralColors, Flex } from '@giveth/ui-design-system';
 import styled from 'styled-components';
-import { useIntl } from 'react-intl';
 import { ProjectStats } from './ProjectStats';
 import { AdminActions } from './AdminActions';
 import { useProjectContext } from '@/context/project.context';
 import useMediaQuery from '@/hooks/useMediaQuery';
 import { device } from '@/lib/constants/constants';
 import MobileDonateFooter from './MobileDonateFooter';
-import QFSection from './QFSection';
 import { DonateSection } from './DonationSection';
 import { ProjectPublicActions } from './ProjectPublicActions';
 
@@ -41,16 +34,11 @@ const ProjectActionInnerCard = () => {
 	const { isAdmin, hasActiveQFRound, isDraft, projectData } =
 		useProjectContext();
 	const isMobile = !useMediaQuery(device.tablet);
-	const { formatMessage } = useIntl();
 
 	return (
 		<>
 			{isAdmin && !isDraft && <AdminActions />}
-			{!isMobile && hasActiveQFRound ? (
-				<QFSection projectData={projectData} />
-			) : (
-				<DonateSection projectData={projectData} />
-			)}
+			<DonateSection projectData={projectData} />
 			{!isMobile && !isAdmin && <ProjectPublicActions />}
 			{isAdmin && <ProjectStats />}
 		</>
@@ -64,12 +52,5 @@ const ProjectActionCardWrapper = styled(Flex)`
 	padding-top: 12px;
 	${mediaQueries.tablet} {
 		padding: 24px 24px;
-	}
-`;
-
-const LearnLink = styled(Flex)`
-	color: ${brandColors.pinky[500]};
-	&:hover {
-		color: ${brandColors.pinky[700]};
 	}
 `;

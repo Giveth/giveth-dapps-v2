@@ -7,7 +7,6 @@ import { useIntl } from 'react-intl';
 import Routes from '@/lib/constants/Routes';
 import { useAppSelector } from '@/features/hooks';
 import { getNowUnixMS } from '@/helpers/time';
-import { thousandsSeparator } from '@/lib/helpers';
 
 interface IQFAnnouncementBannerProps {
 	onShow?: (isShowing: boolean) => void;
@@ -16,6 +15,7 @@ interface IQFAnnouncementBannerProps {
 const QFAnnouncementBanner = ({ onShow }: IQFAnnouncementBannerProps) => {
 	const { formatMessage } = useIntl();
 	const router = useRouter();
+
 	const shouldShowBanner =
 		router.pathname === Routes.Home ||
 		router.pathname === Routes.AllProjects ||
@@ -24,7 +24,8 @@ const QFAnnouncementBanner = ({ onShow }: IQFAnnouncementBannerProps) => {
 		router.pathname === Routes.Project ||
 		router.pathname === '/project/[projectIdSlug]' ||
 		router.pathname === Routes.MyAccount ||
-		router.pathname === Routes.QFArchived;
+		router.pathname === '/causes/[slug]' ||
+		router.pathname === '/cause/[causeIdSlug]';
 
 	const { activeQFRound } = useAppSelector((state: any) => state.general);
 
@@ -43,28 +44,14 @@ const QFAnnouncementBanner = ({ onShow }: IQFAnnouncementBannerProps) => {
 
 	if (!shouldShowBanner || !isRoundActive) return null;
 
-	const {
-		allocatedFundUSD,
-		allocatedFundUSDPreferred,
-		allocatedTokenSymbol,
-		allocatedFund,
-	} = activeQFRound || {};
-
 	return (
 		<Wrapper>
-			<LinkWrapper href={Routes.AllQFProjects}>
+			<LinkWrapper href={Routes.QFProjects}>
 				<PStyled>
-					💜 <span>{activeQFRound.name}</span>{' '}
-					{formatMessage(
-						{ id: 'label.donations_amplified' },
-						{
-							amount: allocatedFundUSDPreferred
-								? '$' + thousandsSeparator(allocatedFundUSD)
-								: thousandsSeparator(allocatedFund) +
-										' ' +
-										allocatedTokenSymbol || ' --',
-						},
-					)}{' '}
+					💜{' '}
+					{formatMessage({
+						id: 'label.qf.quadratic_funding_is_live',
+					})}{' '}
 					<IconArrowRight16 size={20} color='#FF96C6' />
 				</PStyled>
 			</LinkWrapper>
@@ -75,6 +62,7 @@ const QFAnnouncementBanner = ({ onShow }: IQFAnnouncementBannerProps) => {
 const PStyled = styled.div`
 	display: flex;
 	align-items: center;
+	justify-content: center;
 	gap: 4px;
 	font-weight: 600;
 	font-size: 14px;
@@ -90,6 +78,10 @@ const PStyled = styled.div`
 		-webkit-text-fill-color: transparent;
 		background-clip: text;
 		text-fill-color: transparent;
+	}
+
+	& svg {
+		margin-top: 5px;
 	}
 	@media (max-width: 768px) {
 		flex-direction: column;

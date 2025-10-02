@@ -99,7 +99,8 @@ const PublicGoodsFunding = () => {
 						directly as well.
 						<br />
 						<br />
-						See our co-founder Griff Green’s in-depth explanation in{' '}
+						See our co-founder Griff Green&apos;s in-depth
+						explanation in{' '}
 						<ExternalLink
 							href='https://blog.giveth.io/evolving-nonprofits-into-regen-economies-f8282f97f8d3?gi=07e16c50cfb9'
 							title='Evolving Nonprofits into Regen Economies'
@@ -108,9 +109,9 @@ const PublicGoodsFunding = () => {
 						.
 						<br />
 						<br />
-						At Giveth, we believe that giving shouldn’t be about
-						sacrifice but rather rewarded participation in value
-						creation. One way we actualize that is through the{' '}
+						At Giveth, we believe that giving shouldn&apos;t be
+						about sacrifice but rather rewarded participation in
+						value creation. One way we actualize that is through the{' '}
 						<ExternalLink
 							href={Routes.GIVbacks}
 							title='GIVbacks Program'
@@ -127,21 +128,22 @@ const PublicGoodsFunding = () => {
 						.
 						<br />
 						<br />
-						Giveth isn't just about donating and earning rewards.
-						It's also about fostering decentralized, democratic,
-						global communities passionate about creating positive
-						change in the world through regeneration and public
-						goods.
+						Giveth isn&apos;t just about donating and earning
+						rewards. It&apos;s also about fostering decentralized,
+						democratic, global communities passionate about creating
+						positive change in the world through regeneration and
+						public goods.
 						<br />
 						<br />
-						When you create a project or donate on Giveth, you'll
-						open the door to connecting with other like-minded
-						donors, projects, and the community at large. As part of
-						the Giveth Galaxy of DAOs (decentralized autonomous
-						organizations), you'll be supporting Giveth’s own long
-						term goal of developing regenerative economies out of
-						value-creating projects to include the circulation of
-						their own currencies.
+						When you create a project or donate on Giveth,
+						you&apos;ll open the door to connecting with other
+						like-minded donors, projects, and the community at
+						large. As part of the Giveth Galaxy of DAOs
+						(decentralized autonomous organizations), you&apos;ll be
+						supporting Giveth&apos;s own long term goal of
+						developing regenerative economies out of value-creating
+						projects to include the circulation of their own
+						currencies.
 						<br />
 						<br />
 						Giveth wants to enact real change and be part of a

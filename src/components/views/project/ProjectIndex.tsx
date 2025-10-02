@@ -33,11 +33,9 @@ import { useProjectContext } from '@/context/project.context';
 import { ProjectActionCard } from './projectActionCard/ProjectActionCard';
 import ProjectBadges from './ProjectBadges';
 import ProjectCategoriesBadges from './ProjectCategoriesBadges';
-import { PassportBanner } from '@/components/PassportBanner';
 import ProjectGIVbackToast from '@/components/views/project/ProjectGIVbackToast';
 import useMediaQuery from '@/hooks/useMediaQuery';
 import { device, mediaQueries } from '@/lib/constants/constants';
-import QFSection from './projectActionCard/QFSection';
 import { DonateSection } from './projectActionCard/DonationSection';
 import { ProjectStats } from './projectActionCard/ProjectStats';
 import { AdminActions } from './projectActionCard/AdminActions';
@@ -168,10 +166,6 @@ const ProjectIndex: FC<IProjectBySlug> = () => {
 	return (
 		<Wrapper>
 			{!isAdminEmailVerified && isAdmin && <VerifyEmailBanner />}
-			{hasActiveQFRound &&
-				!isOnSolana &&
-				!isStellarOnlyQF &&
-				isAdminEmailVerified && <PassportBanner />}
 			<Head>
 				<title>{title && `${title} |`} Giveth</title>
 				<ProjectMeta project={projectData} />
@@ -230,11 +224,7 @@ const ProjectIndex: FC<IProjectBySlug> = () => {
 						)}
 						{isMobile && (
 							<MobileContainer $hasActiveRound={hasActiveQFRound}>
-								{hasActiveQFRound ? (
-									<QFSection projectData={projectData} />
-								) : (
-									<DonateSection projectData={projectData} />
-								)}
+								<DonateSection projectData={projectData} />
 							</MobileContainer>
 						)}
 						<ProjectGIVbackToast />

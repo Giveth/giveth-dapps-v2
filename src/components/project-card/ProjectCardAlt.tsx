@@ -1,6 +1,5 @@
 import React from 'react';
 import {
-	Caption,
 	P,
 	neutralColors,
 	brandColors,
@@ -127,11 +126,6 @@ const ProjectsCount = styled.div`
 		font-weight: 700;
 		color: ${neutralColors.gray[800]};
 	}
-`;
-
-const BodyCaption = styled(Caption)`
-	margin-top: 14px;
-	color: ${neutralColors.gray[700]};
 `;
 
 const Description = styled(P)`

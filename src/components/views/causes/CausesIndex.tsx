@@ -14,12 +14,10 @@ import { useIntl } from 'react-intl';
 import { captureException } from '@sentry/nextjs';
 import { useInfiniteQuery } from '@tanstack/react-query';
 import styled from 'styled-components';
-// import ProjectCard from '@/components/project-card/ProjectCard';
 import Routes from '@/lib/constants/Routes';
 import { isUserRegistered, showToastError } from '@/lib/helpers';
 import { useAppDispatch, useAppSelector } from '@/features/hooks';
 import { setShowCompleteProfile } from '@/features/modal/modal.slice';
-import { PassportBanner } from '@/components/PassportBanner';
 import { QFNoResultBanner } from '@/components/views/projects/MiddleBanners/QFNoResultBanner';
 import { Spinner } from '@/components/Spinner';
 import { SortContainer } from '@/components/views/projects/sort/SortContainer';
@@ -114,11 +112,22 @@ const CausesIndex = (props: ICausesView) => {
 		getNextPageParam: lastPage => lastPage.nextCursor,
 		getPreviousPageParam: firstPage => firstPage.previousCursor,
 		initialPageParam: 0,
-		// placeholderData: keepPreviousData,
-		placeholderData: {
-			pageParams: [0],
-			pages: [{ data: causes, totalCount: _totalCount }],
-		},
+		refetchOnWindowFocus: false,
+		staleTime: 5 * 60 * 1000, // Consider data fresh for 5 minutes
+		initialData:
+			causes && causes.length > 0
+				? {
+						pageParams: [0],
+						pages: [
+							{
+								data: causes,
+								totalCount: _totalCount,
+								nextCursor: causes.length > 0 ? 1 : undefined,
+								previousCursor: undefined,
+							},
+						],
+					}
+				: undefined,
 	});
 
 	// Function to load more data when scrolling
@@ -225,7 +234,6 @@ const CausesIndex = (props: ICausesView) => {
 					<Spinner />
 				</Loading>
 			)}
-			{isQF && !isStellarOnlyQF && <PassportBanner />}
 			<Wrapper>
 				{isQF && !isArchivedQF && (
 					<>
@@ -242,7 +250,9 @@ const CausesIndex = (props: ICausesView) => {
 				) : (
 					<>
 						{!isQF && <ProjectsBanner />}
-						{onProjectsPageOrActiveQFPage && <FilterContainer />}
+						{!isQF && onProjectsPageOrActiveQFPage && (
+							<FilterContainer />
+						)}
 						{isQF && activeQFRound && <ActiveQFRoundStats />}
 					</>
 				)}
@@ -256,7 +266,9 @@ const CausesIndex = (props: ICausesView) => {
 					<ProjectsWrapper>
 						<ProjectsContainer>
 							{isQF ? (
-								<QFProjectsMiddleBanner />
+								<QFProjectsMiddleBanner
+									qfRound={activeQFRound}
+								/>
 							) : (
 								<ProjectsMiddleGivethVaultBanner />
 							)}
@@ -354,11 +366,11 @@ export const ProjectsContainer = styled.div`
 
 	${mediaQueries.tablet} {
 		padding: 0;
-		grid-template-columns: repeat(2, 1fr);
+		grid-template-columns: repeat(2, minmax(340px, 1fr));
 	}
 
 	${mediaQueries.laptopL} {
-		grid-template-columns: repeat(3, 1fr);
+		grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
 	}
 `;
 

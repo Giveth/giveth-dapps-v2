@@ -146,28 +146,6 @@ const ChainIconContainer = styled(IconsContainer)`
 	color: ${brandColors.deep[800]};
 `;
 
-const SocialContentContainer = styled.div`
-	display: flex;
-	flex-wrap: wrap;
-	gap: 10px;
-	justify-content: space-between;
-	margin-bottom: 24px;
-`;
-
-const BreakPoint = styled.div`
-	display: flex;
-	align-items: center;
-	justify-content: space-between;
-	margin: 48px 0;
-	color: ${brandColors.deep[800]};
-`;
-
-const BreakLine = styled.hr`
-	width: 45%;
-	margin: auto 0;
-	border-top: 1px solid ${neutralColors.gray[300]};
-`;
-
 const SignInTitle = styled(H3)`
 	color: ${brandColors.deep[800]};
 	font-weight: 700;

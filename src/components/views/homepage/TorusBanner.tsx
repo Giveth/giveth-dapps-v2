@@ -38,10 +38,6 @@ const TorusBanner = () => {
 	);
 };
 
-const Underline = styled.span`
-	text-decoration: underline;
-`;
-
 const Right = styled(Flex)`
 	cursor: pointer;
 `;

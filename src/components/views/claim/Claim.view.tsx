@@ -66,10 +66,6 @@ const Step: FC<IStepProps> = ({ title, isActive, onClick, disabled }) => {
 	);
 };
 
-interface ISwitchNetwork {
-	hidden: boolean;
-}
-
 interface IClaimViewContainer {
 	switchNetwork: boolean;
 }

@@ -135,6 +135,7 @@ export const CREATE_DONATION = gql`
 		$useDonationBox: Boolean
 		$relevantDonationTxHash: String
 		$swapData: SwapTransactionInput
+		$roundId: Float
 	) {
 		createDonation(
 			transactionId: $transactionId
@@ -152,6 +153,7 @@ export const CREATE_DONATION = gql`
 			useDonationBox: $useDonationBox
 			relevantDonationTxHash: $relevantDonationTxHash
 			swapData: $swapData
+			roundId: $roundId
 		)
 	}
 `;
@@ -200,6 +202,7 @@ export const CREATE_DRAFT_DONATION = gql`
 		$toWalletMemo: String
 		$qrCodeDataUrl: String
 		$isQRDonation: Boolean
+		$roundId: Float
 	) {
 		createDraftDonation(
 			networkId: $networkId
@@ -216,6 +219,7 @@ export const CREATE_DRAFT_DONATION = gql`
 			toWalletMemo: $toWalletMemo
 			qrCodeDataUrl: $qrCodeDataUrl
 			isQRDonation: $isQRDonation
+			roundId: $roundId
 		)
 	}
 `;
@@ -307,6 +311,7 @@ export const CREATE_CAUSE_DONATION = gql`
 		$swapData: SwapTransactionInput
 		$fromTokenAmount: Float!
 		$transactionId: String
+		$roundId: Float
 	) {
 		createDonation(
 			transactionNetworkId: $transactionNetworkId
@@ -325,6 +330,7 @@ export const CREATE_CAUSE_DONATION = gql`
 			swapData: $swapData
 			fromTokenAmount: $fromTokenAmount
 			transactionId: $transactionId
+			roundId: $roundId
 		)
 	}
 `;

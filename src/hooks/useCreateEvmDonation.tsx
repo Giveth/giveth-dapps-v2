@@ -209,6 +209,7 @@ export const useCreateEvmDonation = () => {
 					referrerId: props.chainvineReferred,
 					usingDonationBox: props.useDonationBox,
 					relevantDonationTxHash: props.relevantDonationTxHash,
+					roundId: props.qfRoundId,
 					// safeTransactionId: safeTransactionId, // Not supported yet
 				},
 			});

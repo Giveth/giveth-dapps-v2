@@ -39,10 +39,12 @@ const AboutIndex = () => {
 		<>
 			<Upper>
 				<TeamImageWrapper>
-					<img
+					<Image
 						src={'/images/giveth-team-new.webp'}
 						alt='giveth team'
-						style={{ width: '100%' }}
+						width={1920}
+						height={1080}
+						style={{ width: '100%', height: 'auto' }}
 					/>
 				</TeamImageWrapper>
 				<Container>

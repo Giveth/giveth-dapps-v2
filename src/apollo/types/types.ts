@@ -25,6 +25,7 @@ export interface IAdminUser {
 }
 
 export interface IEstimatedMatching {
+	qfRoundId: string;
 	allProjectsSum: number;
 	matchingPool: number;
 	projectDonationsSqrtRootSum: number;
@@ -59,11 +60,13 @@ export interface IProject {
 	qualityScore?: number;
 	verified?: boolean;
 	isGivbackEligible?: boolean;
+	isGivbacksEligible?: boolean;
 	verificationStatus?: EProjectVerificationStatus;
 	listed?: boolean | null;
 	categories: ICategory[];
 	reaction?: IReaction;
 	adminUser: IAdminUser;
+	admin?: IAdminUser;
 	donations: {
 		id?: string;
 	}[];
@@ -88,7 +91,7 @@ export interface IProject {
 	givbackFactor?: number;
 	countUniqueDonors?: number;
 	countUniqueDonorsForActiveQfRound?: number;
-	estimatedMatching: IEstimatedMatching;
+	estimatedMatching: IEstimatedMatching[];
 	sumDonationValueUsdForActiveQfRound?: number;
 	qfRounds?: IQFRound[];
 	campaigns?: ICampaign[];
@@ -101,6 +104,9 @@ export interface IProject {
 	totalDistributed?: number;
 	ownerTotalEarned?: number;
 	ownerTotalEarnedUsdValue?: number;
+	totalRaisedUsd?: number;
+	projectQfRoundRelations?: IProjectQfRoundRelation;
+	isQfActive?: boolean;
 }
 
 export interface ICauseProject {
@@ -530,6 +536,11 @@ export interface IUsersPFPTokens {
 	[key: string]: IGiverPFPToken[];
 }
 
+export interface IProjectQfRoundRelation {
+	sumDonationValueUsd?: number;
+	countUniqueDonors?: number;
+}
+
 export interface IQFRound {
 	slug: string;
 	id: string;
@@ -551,6 +562,12 @@ export interface IQFRound {
 	allocatedTokenChainId: number;
 	minimumValidUsdValue?: number;
 	minMBDScore: number;
+	displaySize?: number;
+	bannerFull?: string;
+	bannerMobile?: string;
+	hubCardImage?: string;
+	priority?: number;
+	projectQfRoundRelations?: IProjectQfRoundRelation;
 }
 
 export interface IArchivedQFRound extends IQFRound {
@@ -603,4 +620,9 @@ export interface ICause extends IProject {
 	depositTxHash?: string;
 	depositTxStatus?: string;
 	depositTxChainId?: number;
+}
+
+export interface IGlobalScoreSettings {
+	globalMinimumPassportScore: number;
+	globalMinimumMBDScore: number;
 }

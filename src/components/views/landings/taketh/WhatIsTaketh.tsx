@@ -15,7 +15,7 @@ const WhatIsTaketh = () => {
 					Taketh is Building the Future of Taking. Our mission is to
 					transform the way we extract funds from private goods by
 					milking users within our C.A.O: Centralized Acquisitive
-					Organization. 🐄 Our CAO's vision is to promote degen
+					Organization. 🐄 Our CAO&apos;s vision is to promote degen
 					economics through centralized authority and opaqueness.
 				</Lead>
 				<Arc>

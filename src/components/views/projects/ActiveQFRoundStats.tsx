@@ -4,42 +4,36 @@ import {
 	Flex,
 	H5,
 	neutralColors,
-	Caption,
-	B,
 } from '@giveth/ui-design-system';
 import React from 'react';
 import styled, { css } from 'styled-components';
 import { useIntl } from 'react-intl';
 import { useQuery } from '@apollo/client';
 import { FETCH_QF_ROUND_STATS } from '@/apollo/gql/gqlQF';
-import { formatDate, formatUSD, thousandsSeparator } from '@/lib/helpers';
+import { formatMonthDay, formatUSD, thousandsSeparator } from '@/lib/helpers';
 import { useAppSelector } from '@/features/hooks';
 import { hasRoundStarted } from '@/helpers/qf';
-import { QFHeader } from '@/components/views/archivedQFRounds/QFHeader';
+import { IQFRound } from '@/apollo/types/types';
 
-export const ActiveQFRoundStats = () => {
+export const ActiveQFRoundStats = ({ qfRound }: { qfRound?: IQFRound }) => {
 	const { formatMessage } = useIntl();
 	const { activeQFRound } = useAppSelector(state => state.general);
 
-	const isRoundStarted = hasRoundStarted(activeQFRound);
+	const currentRound = qfRound || activeQFRound;
+
+	const isRoundStarted = hasRoundStarted(currentRound);
 	const {
 		allocatedFundUSD,
 		allocatedFundUSDPreferred,
 		allocatedTokenSymbol,
 		allocatedFund,
-	} = activeQFRound || {};
+	} = currentRound || {};
 	const { data } = useQuery(FETCH_QF_ROUND_STATS, {
-		variables: { slug: activeQFRound?.slug },
+		variables: { slug: currentRound?.slug },
 	});
 
 	return (
 		<Wrapper>
-			<TitleWrapper>
-				<Title weight={700}>
-					{activeQFRound?.name} <span>Metrics</span>
-				</Title>
-				<QFHeader />
-			</TitleWrapper>
 			<InfoSection $started={isRoundStarted}>
 				<ItemContainer>
 					<ItemTitle weight={700}>
@@ -80,22 +74,13 @@ export const ActiveQFRoundStats = () => {
 						</ItemValue>
 					</ItemContainer>
 				)}
-				<Flex $flexDirection='column'>
-					<Caption color={neutralColors.gray[700]}>
-						Round start
-					</Caption>
-					<B>
-						{activeQFRound?.endDate
-							? formatDate(new Date(activeQFRound.beginDate))
+				<ItemContainer>
+					<ItemTitle weight={700}>
+						{currentRound?.beginDate && currentRound?.endDate
+							? `${formatMonthDay(new Date(currentRound.beginDate))} - ${formatMonthDay(new Date(currentRound.endDate), { includeYear: true })}`
 							: '--'}
-					</B>
-					<Caption color={neutralColors.gray[700]}>Round end</Caption>
-					<B>
-						{activeQFRound?.endDate
-							? formatDate(new Date(activeQFRound.endDate))
-							: '--'}
-					</B>
-				</Flex>
+					</ItemTitle>
+				</ItemContainer>
 			</InfoSection>
 		</Wrapper>
 	);
@@ -110,18 +95,6 @@ const Wrapper = styled.div`
 	overflow: hidden;
 `;
 
-const TitleWrapper = styled(Flex)`
-	justify-content: space-between;
-
-	span {
-		color: ${neutralColors.gray[700]};
-	}
-`;
-
-const Title = styled(H5)`
-	margin-bottom: 40px;
-`;
-
 const InfoSection = styled(Flex)<{ $started: boolean }>`
 	flex-direction: column;
 	padding: 24px;
@@ -129,6 +102,7 @@ const InfoSection = styled(Flex)<{ $started: boolean }>`
 	border-radius: 16px;
 	gap: 16px;
 	justify-content: space-between;
+	align-items: center;
 	${mediaQueries.tablet} {
 		flex-direction: row;
 	}
@@ -141,7 +115,17 @@ const InfoSection = styled(Flex)<{ $started: boolean }>`
 		`}
 `;
 
-const ItemContainer = styled.div``;
+const ItemContainer = styled.div`
+	width: 100%;
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	justify-content: space-between;
+	${mediaQueries.tablet} {
+		width: auto;
+		display: block;
+	}
+`;
 
 const ItemTitle = styled(H5)`
 	margin-bottom: 8px;

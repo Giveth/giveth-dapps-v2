@@ -7,19 +7,19 @@ import {
 	neutralColors,
 	semanticColors,
 } from '@giveth/ui-design-system';
-import React, { FC } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
 import { formatUnits } from 'viem';
 import { TooltipContent } from '@/components/modals/HarvestAll.sc';
 import { IconWithTooltip } from '@/components/IconWithToolTip';
 import { IProject } from '@/apollo/types/types';
-import {
-	calculateEstimatedMatchingWithDonationAmount,
-	getActiveRound,
-} from '@/helpers/qf';
+import { calculateEstimatedMatchingWithDonationAmount } from '@/helpers/qf';
 import { IProjectAcceptedToken } from '@/apollo/types/gqlTypes';
 import { formatDonation } from '@/helpers/number';
 import { truncateToDecimalPlaces } from '@/lib/helpers';
+import { useCauseDonateData } from '@/context/donate.cause.context';
+import { useDonateData } from '@/context/donate.context';
+import { EProjectType } from '../../../../apollo/types/gqlEnums';
 
 interface IEstimatedMatchingToast {
 	projectData: IProject;
@@ -39,17 +39,50 @@ const EstimatedMatchingToast: FC<IEstimatedMatchingToast> = ({
 	show,
 }) => {
 	const { formatMessage, locale } = useIntl();
-	const { estimatedMatching, qfRounds } = projectData || {};
-	const { allProjectsSum, matchingPool, projectDonationsSqrtRootSum } =
-		estimatedMatching || {};
+	const { estimatedMatching } = projectData || {};
 
-	const { activeStartedRound } = getActiveRound(qfRounds);
+	const causeDonateData = useCauseDonateData();
+	const donateData = useDonateData();
+
+	const { selectedQFRound } =
+		projectData.projectType === EProjectType.CAUSE
+			? causeDonateData
+			: donateData;
+
 	const {
 		allocatedFundUSDPreferred,
 		allocatedFundUSD,
 		allocatedTokenSymbol,
 		maximumReward,
-	} = activeStartedRound || {};
+	} = selectedQFRound || {};
+
+	// Find round that matches the selectedQFRound
+	const [matchingData, setMatchingData] = useState({
+		allProjectsSum: 0,
+		matchingPool: 0,
+		projectDonationsSqrtRootSum: 0,
+	});
+
+	useEffect(() => {
+		if (estimatedMatching) {
+			const estimatedMatched = estimatedMatching.find(
+				estimatedMatching =>
+					String(estimatedMatching.qfRoundId) ===
+					(selectedQFRound?.id ?? ''),
+			);
+			if (estimatedMatched) {
+				setMatchingData({
+					allProjectsSum: estimatedMatched.allProjectsSum,
+					matchingPool: estimatedMatched.matchingPool,
+					projectDonationsSqrtRootSum:
+						estimatedMatched.projectDonationsSqrtRootSum,
+				});
+			}
+		}
+	}, [estimatedMatching, selectedQFRound]);
+
+	const { allProjectsSum, matchingPool, projectDonationsSqrtRootSum } =
+		matchingData;
 
 	const decimals = isStellar ? 18 : token?.decimals || 18;
 	const amountInUsd =

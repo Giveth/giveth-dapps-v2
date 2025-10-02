@@ -129,7 +129,7 @@ export const UpdateStreamInnerModal: FC<IModifyStreamInnerModalProps> = ({
 					txHash: tx.hash,
 					draftDonationId: projectDraftDonationId,
 				};
-				console.log('Start Update Project Donation Info');
+
 				projectDonationId =
 					await updateRecurringDonation(projectDonationInfo);
 				console.log('Project Donation Update Info', projectDonationId);

@@ -1,6 +1,6 @@
-import { B, P, neutralColors, Flex } from '@giveth/ui-design-system';
+import { B, neutralColors, Flex } from '@giveth/ui-design-system';
 import React, { FC, useEffect, useState } from 'react';
-import styled, { css } from 'styled-components';
+import styled from 'styled-components';
 import { useIntl } from 'react-intl';
 import { captureException } from '@sentry/nextjs';
 import { Shadow } from '@/components/styled-components/Shadow';
@@ -13,6 +13,7 @@ import { showToastError } from '@/lib/helpers';
 import { CAUSE_ACCEPTED_TOKENS } from '@/apollo/gql/gqlProjects';
 import { client } from '@/apollo/apolloClient';
 import { useCauseDonateData } from '@/context/donate.cause.context';
+import { DonationCardQFRounds } from '@/components/views/donate/DonationCardQFRounds/DonationCardQFRounds';
 import InlineToast, { EToastType } from '@/components/toasts/InlineToast';
 
 export interface IDonationCardProps {
@@ -20,7 +21,13 @@ export interface IDonationCardProps {
 }
 
 export const CauseDonationCard: FC<IDonationCardProps> = ({ chainId }) => {
-	const { project } = useCauseDonateData();
+	const {
+		project,
+		setSelectedQFRound,
+		selectedQFRound,
+		choosedModalRound,
+		setChoosedModalRound,
+	} = useCauseDonateData();
 	const { formatMessage } = useIntl();
 
 	const [acceptedTokens, setAcceptedTokens] =
@@ -67,6 +74,14 @@ export const CauseDonationCard: FC<IDonationCardProps> = ({ chainId }) => {
 			/>
 
 			<TabWrapper>
+				<DonationCardQFRounds
+					project={project}
+					chainId={chainId || 0}
+					selectedQFRound={selectedQFRound}
+					setSelectedQFRound={setSelectedQFRound}
+					choosedModalRound={choosedModalRound}
+					setChoosedModalRound={setChoosedModalRound}
+				/>
 				<CauseCryptoDonation acceptedTokens={acceptedTokens} />
 			</TabWrapper>
 		</DonationCardWrapper>
@@ -87,38 +102,6 @@ export const DonationCardWrapper = styled(Flex)`
 const Title = styled(B)`
 	color: ${neutralColors.gray[800]} !important;
 	text-align: left;
-`;
-
-const BaseTab = styled(P)`
-	padding: 8px 12px;
-	border-bottom: 1px solid;
-	font-weight: 400;
-	color: ${neutralColors.gray[700]};
-	border-bottom-color: ${neutralColors.gray[300]};
-	user-select: none;
-`;
-
-interface ITab {
-	$selected?: boolean;
-}
-
-const Tab = styled(BaseTab)<ITab>`
-	font-weight: 500 !important;
-	display: flex;
-	align-items: center;
-	cursor: pointer;
-	${props =>
-		props.$selected &&
-		css`
-			font-weight: 500;
-			color: ${neutralColors.gray[900]};
-			border-bottom-color: ${neutralColors.gray[900]};
-		`}
-`;
-
-const EmptyTab = styled.div`
-	flex: 1;
-	border-bottom: 1px solid ${neutralColors.gray[300]};
 `;
 
 const TabWrapper = styled(Flex)`

@@ -9,15 +9,10 @@ import {
 	FlexCenter,
 } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
-import { Chain, formatUnits } from 'viem';
+import { Chain } from 'viem';
 import StorageLabel, { getWithExpiry } from '@/lib/localStorage';
 import { Modal } from '@/components/modals/Modal';
-import {
-	compareAddresses,
-	formatTxLink,
-	showToastError,
-	truncateToDecimalPlaces,
-} from '@/lib/helpers';
+import { compareAddresses, formatTxLink, showToastError } from '@/lib/helpers';
 import { mediaQueries } from '@/lib/constants/constants';
 import { IMeGQL, IProjectAcceptedToken } from '@/apollo/types/gqlTypes';
 import { IModal } from '@/types/common';
@@ -97,7 +92,7 @@ const DonateModal: FC<IDonateModalProps> = props => {
 	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
 	const isDonatingToGiveth = donationToGiveth > 0 && givethDonationAmount > 0;
 	const { formatMessage } = useIntl();
-	const { setSuccessDonation, project, activeStartedRound } = useDonateData();
+	const { setSuccessDonation, project, selectedQFRound } = useDonateData();
 
 	const [donating, setDonating] = useState(false);
 	const [secondTxStatus, setSecondTxStatus] = useState<EToastType>();
@@ -132,16 +127,10 @@ const DonateModal: FC<IDonateModalProps> = props => {
 
 	const tokenPrice = useTokenPrice(token);
 
-	const isOnEligibleNetworks = activeStartedRound?.eligibleNetworks?.includes(
+	const isOnEligibleNetworks = selectedQFRound?.eligibleNetworks?.includes(
 		(chain as Chain).id,
 	);
-	const donationUsdValue =
-		(tokenPrice || 0) *
-		(truncateToDecimalPlaces(
-			formatUnits(amount, token.decimals),
-			token.decimals,
-		) || 0);
-	const includeInQF = activeStartedRound && isOnEligibleNetworks;
+	const includeInQF = selectedQFRound && isOnEligibleNetworks;
 	const chainvineReferred = getWithExpiry(StorageLabel.CHAINVINEREFERRED);
 	const { title, addresses } = project || {};
 
@@ -237,6 +226,9 @@ const DonateModal: FC<IDonateModalProps> = props => {
 			setFailedModalType,
 			symbol: token.symbol,
 			useDonationBox: isDonatingToGiveth,
+			qfRoundId: selectedQFRound?.id
+				? Number(selectedQFRound?.id)
+				: undefined,
 		})
 			.then(({ isSaved, txHash: firstHash }) => {
 				if (!firstHash) {
@@ -264,6 +256,7 @@ const DonateModal: FC<IDonateModalProps> = props => {
 						symbol: token.symbol,
 						useDonationBox: true,
 						relevantDonationTxHash: firstHash,
+						qfRoundId: undefined, // we don't include Giveth in QF
 					})
 						.then(({ txHash: secondHash }) => {
 							if (!secondHash) {

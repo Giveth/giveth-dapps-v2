@@ -13,16 +13,28 @@ import { useIntl } from 'react-intl';
 import { useRouter } from 'next/router';
 import { EQFElegibilityState, usePassport } from '@/hooks/usePassport';
 import PassportModal from '@/components/modals/PassportModal';
+import { IQFRound } from '@/apollo/types/types';
 
 interface IQFToast {
 	isStellarInQF?: boolean;
 	isStellar?: boolean;
+	selectedQFRound?: IQFRound;
 }
 
-const QFToast: FC<IQFToast> = ({ isStellarInQF, isStellar }) => {
+const QFToast: FC<IQFToast> = ({
+	isStellarInQF,
+	isStellar,
+	selectedQFRound,
+}) => {
 	const { formatMessage, locale } = useIntl();
-	const { info, updateState, refreshScore, handleSign, fetchUserMBDScore } =
-		usePassport();
+	const {
+		info,
+		updateState,
+		refreshScore,
+		handleSign,
+		fetchUserMBDScore,
+		globalScoreSettings,
+	} = usePassport();
 	const { qfEligibilityState, passportState, passportScore, currentRound } =
 		info;
 	const router = useRouter();
@@ -42,8 +54,10 @@ const QFToast: FC<IQFToast> = ({ isStellarInQF, isStellar }) => {
 		}`,
 	});
 
+	let roundData = selectedQFRound || currentRound;
+
 	let description;
-	const endDate = new Date(currentRound?.endDate || '')
+	const endDate = new Date(roundData?.endDate || '')
 		.toLocaleString(locale || 'en-US', {
 			day: 'numeric',
 			month: 'short',
@@ -55,13 +69,13 @@ const QFToast: FC<IQFToast> = ({ isStellarInQF, isStellar }) => {
 			formatMessage({
 				id: 'page.donate.passport_toast.description.eligible',
 			}) +
-			currentRound?.minimumValidUsdValue +
+			roundData?.minimumValidUsdValue +
 			' ' +
 			formatMessage({
 				id: 'page.donate.passport_toast.description.eligible_2',
 			}) +
 			' ' +
-			currentRound?.name +
+			roundData?.name +
 			'.';
 	} else {
 		description = (
@@ -71,7 +85,7 @@ const QFToast: FC<IQFToast> = ({ isStellarInQF, isStellar }) => {
 						id: 'page.donate.passport_toast.description.non_eligible',
 					},
 					{
-						usd_value: currentRound?.minimumValidUsdValue,
+						usd_value: roundData?.minimumValidUsdValue,
 					},
 				)}{' '}
 				<span>{endDate}</span>
@@ -95,7 +109,11 @@ const QFToast: FC<IQFToast> = ({ isStellarInQF, isStellar }) => {
 							buttonType='primary'
 							size='small'
 							icon={<IconExternalLink16 />}
-							onClick={() => router.push('/qf')}
+							onClick={() =>
+								selectedQFRound
+									? router.push(`/qf/${selectedQFRound.slug}`)
+									: router.push('/qf')
+							}
 						/>
 					</FlexCenter>
 				) : (
@@ -117,7 +135,7 @@ const QFToast: FC<IQFToast> = ({ isStellarInQF, isStellar }) => {
 					qfEligibilityState={qfEligibilityState}
 					passportState={passportState}
 					passportScore={passportScore}
-					currentRound={currentRound}
+					globalScoreSettings={globalScoreSettings}
 					setShowModal={setShowModal}
 					updateState={updateState}
 					refreshScore={refreshScore}

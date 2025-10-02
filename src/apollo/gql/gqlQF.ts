@@ -1,7 +1,9 @@
+// apollo/gql/gqlQF.ts
+
 import { gql } from '@apollo/client';
 
 export const QF_ROUNDS_QUERY = `
-		qfRounds(slug: $slug, activeOnly: $activeOnly) {
+		qfRounds(slug: $slug, activeOnly: $activeOnly, sortBy: $sortBy) {
 			id
 			slug
 			name
@@ -20,11 +22,16 @@ export const QF_ROUNDS_QUERY = `
 			minMBDScore
 			minimumValidUsdValue
 			eligibleNetworks
+			priority
+			displaySize
+			bannerFull
+			bannerMobile
+			hubCardImage
 		}
 `;
 
 export const FETCH_QF_ROUNDS_QUERY = gql`
-	query FetchQFRounds($slug: String, $activeOnly: Boolean) {
+	query FetchQFRounds($slug: String, $activeOnly: Boolean, $sortBy: QfRoundsSortType) {
 		${QF_ROUNDS_QUERY}
 	}
 `;
@@ -66,6 +73,7 @@ export const FETCH_ARCHIVED_QF_ROUNDS = gql`
 			id
 			name
 			slug
+			description
 			isActive
 			allocatedFund
 			allocatedFundUSD
@@ -76,6 +84,84 @@ export const FETCH_ARCHIVED_QF_ROUNDS = gql`
 			totalDonations
 			uniqueDonors
 			isDataAnalysisDone
+			bannerBgImage
+			bannerFull
+			bannerMobile
+		}
+	}
+`;
+
+export const FETCH_QF_ROUND_SMART_SELECT = gql`
+	query FetchQfRoundSmartSelect($projectId: Int!, $networkId: Int!) {
+		qfRoundSmartSelect(projectId: $projectId, networkId: $networkId) {
+			qfRoundId
+			qfRoundName
+			matchingPoolAmount
+			eligibleNetworks
+			allocatedFundUSD
+			projectUsdAmountRaised
+			uniqueDonors
+			donationsCount
+		}
+	}
+`;
+
+export const FETCH_QF_PROJECTS = gql`
+	query FetchQfProjects(
+		$skip: Int
+		$limit: Int
+		$sortingBy: SortingField
+		$filters: [FilterField!]
+		$searchTerm: String
+		$qfRoundId: Int!
+	) {
+		qfProjects(
+			skip: $skip
+			limit: $limit
+			sortingBy: $sortingBy
+			filters: $filters
+			searchTerm: $searchTerm
+			qfRoundId: $qfRoundId
+		) {
+			projects {
+				id
+				title
+				descriptionSummary
+				updatedAt
+				slug
+				addresses {
+					address
+					isRecipient
+					networkId
+					chainType
+				}
+				projectType
+				image
+				totalRaisedUsd
+				projectQfRoundRelations {
+					sumDonationValueUsd
+					countUniqueDonors
+				}
+				qfRounds {
+					id
+					name
+					priority
+					beginDate
+					endDate
+					isActive
+					eligibleNetworks
+				}
+				verified
+				admin {
+					name
+					walletAddress
+				}
+				isGivbacksEligible
+				organization {
+					label
+				}
+			}
+			totalCount
 		}
 	}
 `;
