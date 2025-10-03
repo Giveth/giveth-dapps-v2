@@ -49,7 +49,7 @@ export const DonateHeader: FC<IHeader> = props => {
 	let routePath = Routes.Project + '/' + project.slug;
 
 	// Change route if donation done successfully
-	if (isSuccessDonation) {
+	if (isSuccessDonation && selectedQFRound?.isActive) {
 		routePath = selectedQFRound
 			? Routes.QFProjects + '/' + selectedQFRound.slug
 			: Routes.AllProjects;

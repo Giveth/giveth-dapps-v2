@@ -53,6 +53,9 @@ export const fetchProjects = async (
 			qfRoundSlug: isArchivedQF ? routerQuerySlug : null,
 		},
 		fetchPolicy: 'no-cache',
+		context: {
+			skipAuth: true,
+		},
 	});
 
 	let projectsData = [];
