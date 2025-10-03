@@ -6,7 +6,6 @@ import {
 	NormalizedCacheObject,
 } from '@apollo/client';
 import { RetryLink } from '@apollo/client/link/retry';
-import { setContext } from '@apollo/client/link/context';
 import { onError } from '@apollo/client/link/error';
 import gql from 'graphql-tag';
 import createUploadLink from 'apollo-upload-client/createUploadLink.mjs';
@@ -110,25 +109,32 @@ function createApolloClient(): ApolloClient<NormalizedCacheObject> {
 	});
 
 	// Auth link to add Authorization and locale headers
-	const authLink = setContext((_, { headers }) => {
+	const authLink = new ApolloLink((operation, forward) => {
 		let locale: string | null = !ssrMode
 			? localStorage.getItem(StorageLabel.LOCALE)
 			: 'en';
 		const currentToken: string | null = !ssrMode
 			? localStorage.getItem(StorageLabel.TOKEN)
 			: null;
-		const mutation: any = {
-			Authorization: currentToken ? `Bearer ${currentToken}` : '',
-			authVersion: '2',
-			'Accept-Language': locale,
-		};
-		if (userWalletAddress) mutation['wallet-address'] = userWalletAddress;
-		return {
-			headers: {
-				...headers,
-				...mutation,
-			},
-		};
+
+		// Check if auth should be skipped via context
+		const skipAuth = operation.getContext().skipAuth;
+
+		if (!skipAuth) {
+			const mutation: any = {
+				Authorization: currentToken ? `Bearer ${currentToken}` : '',
+				authVersion: '2',
+				'Accept-Language': locale,
+			};
+			if (userWalletAddress)
+				mutation['wallet-address'] = userWalletAddress;
+
+			operation.setContext({
+				headers: { ...operation.getContext().headers, ...mutation },
+			});
+		}
+
+		return forward(operation);
 	});
 
 	// Error handling link

@@ -1018,3 +1018,56 @@ export const FETCH_ALL_PROJECTS_NEW = gql`
 		}
 	}
 `;
+
+export const SIMILAR_PROJECTS_NEW = gql`
+	query SimilarProjectsBySlug($slug: String!, $take: Int, $skip: Int) {
+		similarProjectsBySlug(slug: $slug, take: $take, skip: $skip) {
+			projects {
+				id
+				title
+				image
+				slug
+				verified
+				isGivbackEligible
+				totalDonations
+				projectType
+				causeProjects {
+					id
+					project {
+						id
+					}
+				}
+				descriptionSummary
+				adminUser {
+					name
+					walletAddress
+					avatar
+				}
+				updatedAt
+				latestUpdateCreationDate
+				organization {
+					label
+				}
+				projectPower {
+					powerRank
+					totalPower
+					round
+				}
+				sumDonationValueUsdForActiveQfRound
+				countUniqueDonorsForActiveQfRound
+				countUniqueDonors
+				estimatedMatching {
+					projectDonationsSqrtRootSum
+					allProjectsSum
+					matchingPool
+				}
+				anchorContracts {
+					address
+					isActive
+					networkId
+				}
+				activeProjectsCount
+			}
+		}
+	}
+`;
