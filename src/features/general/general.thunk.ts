@@ -21,6 +21,9 @@ export const fetchMainCategoriesAndActiveQFRound = createAsyncThunk(
 			query: MAIN_CATEGORIES_AND_ACTIVE_QF_ROUND_QUERY,
 			variables: { activeOnly: true },
 			fetchPolicy: 'no-cache',
+			context: {
+				skipAuth: true,
+			},
 		});
 		return { mainCategories, qfRounds };
 	},
@@ -34,6 +37,9 @@ export const fetchGlobalScoreSettings = createAsyncThunk(
 		} = await client.query({
 			query: FETCH_GLOBAL_SCORE_SETTINGS,
 			fetchPolicy: 'no-cache',
+			context: {
+				skipAuth: true,
+			},
 		});
 		return globalScoreSettings;
 	},

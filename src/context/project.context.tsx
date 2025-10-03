@@ -184,6 +184,9 @@ export const ProjectProvider = ({
 						direction: EDirection.DESC,
 					},
 				},
+				context: {
+					skipAuth: isAdmin ? false : true,
+				},
 			})
 			.then((res: IDonationsByProjectIdGQL) => {
 				const donationsByProjectId = res.data.donationsByProjectId;
@@ -213,6 +216,9 @@ export const ProjectProvider = ({
 						query: FETCH_PROJECT_BOOSTERS,
 						variables: {
 							projectId: +projectId,
+						},
+						context: {
+							skipAuth: true,
 						},
 					});
 

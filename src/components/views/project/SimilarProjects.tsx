@@ -17,7 +17,6 @@ import { Navigation, Pagination } from 'swiper/modules';
 import { Swiper as SwiperClass } from 'swiper/types';
 import { useIntl } from 'react-intl';
 import { client } from '@/apollo/apolloClient';
-import { SIMILAR_PROJECTS } from '@/apollo/gql/gqlProjects';
 import { IProject } from '@/apollo/types/types';
 import ProjectCard from '@/components/project-card/ProjectCard';
 import { showToastError } from '@/lib/helpers';
@@ -29,6 +28,7 @@ import {
 	SwiperPaginationWrapper,
 } from '@/components/styled-components/SwiperPagination';
 import useMediaQuery from '@/hooks/useMediaQuery';
+import { SIMILAR_PROJECTS_NEW } from '@/apollo/gql/gqlProjects';
 
 const projectsToFetch = 12;
 
@@ -59,12 +59,15 @@ const SimilarProjects = (props: { slug: string }) => {
 		swiperInstance?.slideTo(0);
 		client
 			.query({
-				query: SIMILAR_PROJECTS,
+				query: SIMILAR_PROJECTS_NEW,
 				variables: {
 					slug,
 					take: projectsToFetch,
 				},
 				fetchPolicy: 'no-cache',
+				context: {
+					skipAuth: true,
+				},
 			})
 			.then((res: ISuggestedProjectsGQL) => {
 				const { similarProjectsBySlug } = res.data;

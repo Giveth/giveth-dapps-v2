@@ -112,6 +112,9 @@ const ProjectDonationTable = ({ selectedQF }: IProjectDonationTable) => {
 					orderBy: { field: order.by, direction: order.direction },
 					status: isAdmin ? null : EDonationStatus.VERIFIED,
 				},
+				context: {
+					skipAuth: isAdmin ? false : true,
+				},
 			});
 			setLoading(false);
 			const { donationsByProjectId } = projectDonations;
