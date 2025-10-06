@@ -567,7 +567,7 @@ export interface IQFRound {
 	bannerMobile?: string;
 	hubCardImage?: string;
 	priority?: number;
-	projectQfRoundRelations?: IProjectQfRoundRelation;
+	projectQfRoundRelations?: IProjectQfRoundRelation[];
 }
 
 export interface IArchivedQFRound extends IQFRound {

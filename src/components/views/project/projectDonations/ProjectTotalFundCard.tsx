@@ -121,15 +121,13 @@ const ProjectTotalFundCard = ({ selectedQF }: IProjectTotalFundCardProps) => {
 		}
 	}, [id, isAdmin, selectedQF]);
 
-	const roundTotalDonation =
-		selectedQF && selectedQF.isActive
-			? projectData?.sumDonationValueUsdForActiveQfRound
-			: qfRoundHistory?.raisedFundInUsd || 0;
+	const roundTotalDonation = selectedQF
+		? selectedQF?.projectQfRoundRelations?.[0]?.sumDonationValueUsd || 0
+		: qfRoundHistory?.raisedFundInUsd || 0;
 
-	const roundDonorsCount =
-		selectedQF && selectedQF.isActive
-			? projectData?.countUniqueDonorsForActiveQfRound
-			: qfRoundHistory?.uniqueDonors;
+	const roundDonorsCount = selectedQF
+		? selectedQF?.projectQfRoundRelations?.[0]?.countUniqueDonors || 0
+		: qfRoundHistory?.uniqueDonors || 0;
 
 	const matchFund = selectedQF
 		? selectedQF.isActive
@@ -154,13 +152,13 @@ const ProjectTotalFundCard = ({ selectedQF }: IProjectTotalFundCardProps) => {
 
 	const totalDonations =
 		projectData?.qfRounds?.find(round => round.id === selectedQF?.id)
-			?.projectQfRoundRelations?.sumDonationValueUsd ||
+			?.projectQfRoundRelations?.[0]?.sumDonationValueUsd ||
 		projectData?.totalDonations ||
 		0;
 
 	const countUniqueDonors =
 		projectData?.qfRounds?.find(round => round.id === selectedQF?.id)
-			?.projectQfRoundRelations?.countUniqueDonors ||
+			?.projectQfRoundRelations?.[0]?.countUniqueDonors ||
 		projectData?.countUniqueDonors ||
 		0;
 
