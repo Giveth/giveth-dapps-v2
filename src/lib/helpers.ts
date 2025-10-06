@@ -487,8 +487,22 @@ async function handleEthTransfer(params: TransactionParams): Promise<Address> {
 	});
 
 	// Check if to address is a safe address if it is, we don't need to add the referral data
-	const isSafeAddress = await isGnosisSafeAddress(params.to);
-	const data = isSafeAddress ? '0x' : (('0x' + dataSuffix) as `0x${string}`);
+	// Skip Safe detection for Gnosis network (xDAI) to prevent transaction failures
+	let isSafeAddress = false;
+	if (params.chainId !== 100) {
+		// Skip for Gnosis network (xDAI)
+		try {
+			isSafeAddress = await isGnosisSafeAddress(params.to);
+		} catch (error) {
+			console.log(
+				'Safe detection failed, proceeding without referral data',
+			);
+		}
+	}
+	const data =
+		isSafeAddress || params.chainId === 100
+			? '0x'
+			: (('0x' + dataSuffix) as `0x${string}`);
 
 	const hash = await wagmiSendTransaction(wagmiConfig, {
 		to: params.to,
@@ -497,7 +511,7 @@ async function handleEthTransfer(params: TransactionParams): Promise<Address> {
 	});
 
 	// Step 5: Report to Divvi
-	if (params.chainId) {
+	if (params.chainId && data !== '0x') {
 		try {
 			await submitReferral({
 				txHash: hash,
