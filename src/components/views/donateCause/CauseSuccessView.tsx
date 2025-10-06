@@ -27,7 +27,6 @@ import {
 	usePassport,
 	EQFElegibilityState,
 } from '@/hooks/usePassport';
-import { getActiveRound } from '@/helpers/qf';
 import ProjectCardImage from '@/components/project-card/ProjectCardImage';
 import { DonatePageProjectDescription } from '@/components/views/donate/DonatePageProjectDescription';
 import SocialBox from '@/components/SocialBox';
@@ -105,9 +104,7 @@ export const CauseSuccessView: FC<ISuccessView> = ({
 		)
 	);
 
-	const { activeStartedRound } = getActiveRound(project.qfRounds);
-
-	const isOnEligibleNetworks = activeStartedRound?.eligibleNetworks?.includes(
+	const isOnEligibleNetworks = selectedQFRound?.eligibleNetworks?.includes(
 		(isStellar ? config.STELLAR_NETWORK_NUMBER : chainId) || 0,
 	);
 
