@@ -105,7 +105,9 @@ export interface IProject {
 	ownerTotalEarned?: number;
 	ownerTotalEarnedUsdValue?: number;
 	totalRaisedUsd?: number;
-	projectQfRoundRelations?: IProjectQfRoundRelation;
+	projectQfRoundRelations?:
+		| IProjectQfRoundRelation[]
+		| IProjectQfRoundRelation;
 	isQfActive?: boolean;
 }
 
@@ -537,6 +539,8 @@ export interface IUsersPFPTokens {
 }
 
 export interface IProjectQfRoundRelation {
+	qfRoundId?: string;
+	projectId?: string;
 	sumDonationValueUsd?: number;
 	countUniqueDonors?: number;
 }
@@ -567,7 +571,9 @@ export interface IQFRound {
 	bannerMobile?: string;
 	hubCardImage?: string;
 	priority?: number;
-	projectQfRoundRelations?: IProjectQfRoundRelation[];
+	projectQfRoundRelations?:
+		| IProjectQfRoundRelation[]
+		| IProjectQfRoundRelation;
 }
 
 export interface IArchivedQFRound extends IQFRound {
