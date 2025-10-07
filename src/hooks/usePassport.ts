@@ -21,7 +21,7 @@ export enum EPassportState {
 	NOT_CREATED,
 	INVALID,
 	LOADING_SCORE, // when fetching passport score or refreshing it
-	CONNECTING, // connecting to gitcoin passport
+	CONNECTING, // connecting to passport
 	ERROR,
 	SIGNED,
 }
