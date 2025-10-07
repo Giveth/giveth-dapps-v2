@@ -313,6 +313,12 @@ export const FETCH_PROJECT_BY_SLUG_SINGLE_PROJECT = gql`
 				allProjectsSum
 				matchingPool
 			}
+			projectQfRoundRelations {
+				qfRoundId
+				projectId
+				sumDonationValueUsd
+				countUniqueDonors
+			}
 			qfRounds {
 				id
 				slug
@@ -325,10 +331,6 @@ export const FETCH_PROJECT_BY_SLUG_SINGLE_PROJECT = gql`
 				allocatedTokenSymbol
 				allocatedFundUSDPreferred
 				allocatedFundUSD
-				projectQfRoundRelations {
-					sumDonationValueUsd
-					countUniqueDonors
-				}
 			}
 			campaigns {
 				id
