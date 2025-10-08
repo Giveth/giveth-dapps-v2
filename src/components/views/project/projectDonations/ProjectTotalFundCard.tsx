@@ -33,13 +33,14 @@ import { formatDonation } from '@/helpers/number';
 import { ProjectRaised } from './ProjectRaised';
 
 interface IProjectTotalFundCardProps {
+	qfRounds: IQFRound[];
 	selectedQF: IQFRound | null;
 }
 
 const ProjectTotalFundCard = ({ selectedQF }: IProjectTotalFundCardProps) => {
 	const [qfRoundHistory, setQfRoundHistory] = useState<IGetQfRoundHistory>();
 	const { projectData, isAdmin, isCause } = useProjectContext();
-	const { id, addresses, qfRounds, estimatedMatching } = projectData || {};
+	const { id, addresses, estimatedMatching } = projectData || {};
 	const { formatMessage, locale } = useIntl();
 	const recipientAddresses = addresses?.filter(a => a.isRecipient);
 
@@ -48,8 +49,6 @@ const ProjectTotalFundCard = ({ selectedQF }: IProjectTotalFundCardProps) => {
 		allocatedFundUSD,
 		allocatedTokenSymbol,
 	} = selectedQF || {};
-
-	const selectedQFData = qfRounds?.find(round => round.id === selectedQF?.id);
 
 	// Find round that matches the selectedQFRound
 	const [matchingData, setMatchingData] = useState({
@@ -63,7 +62,7 @@ const ProjectTotalFundCard = ({ selectedQF }: IProjectTotalFundCardProps) => {
 			const estimatedMatched = estimatedMatching.find(
 				estimatedMatching =>
 					String(estimatedMatching.qfRoundId) ===
-					(selectedQFData?.id ?? ''),
+					(selectedQF?.id ?? ''),
 			);
 			if (estimatedMatched) {
 				setMatchingData({
@@ -74,7 +73,7 @@ const ProjectTotalFundCard = ({ selectedQF }: IProjectTotalFundCardProps) => {
 				});
 			}
 		}
-	}, [estimatedMatching, selectedQFData]);
+	}, [estimatedMatching, selectedQF]);
 
 	const { allProjectsSum, matchingPool, projectDonationsSqrtRootSum } =
 		matchingData;
@@ -126,29 +125,33 @@ const ProjectTotalFundCard = ({ selectedQF }: IProjectTotalFundCardProps) => {
 	}, [id, isAdmin, selectedQF]);
 
 	let roundTotalDonation =
-		selectedQF && projectData?.projectQfRoundRelations
-			? Array.isArray(projectData.projectQfRoundRelations)
-				? projectData.projectQfRoundRelations.find(
+		selectedQF && selectedQF?.projectQfRoundRelations
+			? Array.isArray(selectedQF?.projectQfRoundRelations)
+				? selectedQF?.projectQfRoundRelations.find(
 						(relation: IProjectQfRoundRelation) =>
-							relation.qfRoundId === selectedQF.id,
+							relation.qfRoundId === selectedQF.id &&
+							relation.projectId === projectData?.id,
 					)?.sumDonationValueUsd || 0
-				: projectData.projectQfRoundRelations.qfRoundId ===
+				: selectedQF?.projectQfRoundRelations.qfRoundId ===
 					  selectedQF.id
-					? projectData.projectQfRoundRelations.sumDonationValueUsd ||
+					? selectedQF.projectQfRoundRelations.sumDonationValueUsd ||
 						0
 					: 0
 			: 0;
 
+	console.log('selectedQF', selectedQF);
+
 	let roundDonorsCount =
-		selectedQF && projectData?.projectQfRoundRelations
-			? Array.isArray(projectData.projectQfRoundRelations)
-				? projectData.projectQfRoundRelations.find(
+		selectedQF && selectedQF?.projectQfRoundRelations
+			? Array.isArray(selectedQF?.projectQfRoundRelations)
+				? selectedQF?.projectQfRoundRelations.find(
 						(relation: IProjectQfRoundRelation) =>
-							relation.qfRoundId === selectedQF.id,
+							relation.qfRoundId === selectedQF.id &&
+							relation.projectId === projectData?.id,
 					)?.countUniqueDonors || 0
-				: projectData.projectQfRoundRelations.qfRoundId ===
+				: selectedQF?.projectQfRoundRelations.qfRoundId ===
 					  selectedQF.id
-					? projectData.projectQfRoundRelations.countUniqueDonors || 0
+					? selectedQF?.projectQfRoundRelations.countUniqueDonors || 0
 					: 0
 			: 0;
 
@@ -262,13 +265,13 @@ const ProjectTotalFundCard = ({ selectedQF }: IProjectTotalFundCardProps) => {
 														? '$'
 														: '',
 													locale,
-													!!selectedQFData?.isActive,
+													!!selectedQF?.isActive,
 												)}{' '}
 												{!allocatedFundUSDPreferred &&
 													allocatedTokenSymbol}
 											</EstimatedMatchingPrice>
 											<EstimatedMatchingText>
-												{selectedQFData?.isActive
+												{selectedQF?.isActive
 													? 'Estimated Matching'
 													: 'Matching Funds'}
 											</EstimatedMatchingText>
