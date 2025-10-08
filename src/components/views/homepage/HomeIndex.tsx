@@ -33,6 +33,9 @@ const HomeIndex: FC<IHomeRoute> = props => {
 					connectedWalletUserId: Number(userData?.id),
 				},
 				fetchPolicy: 'no-cache',
+				context: {
+					skipAuth: true,
+				},
 			});
 			const _campaigns = data.campaigns;
 
