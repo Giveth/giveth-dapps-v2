@@ -139,8 +139,6 @@ const ProjectTotalFundCard = ({ selectedQF }: IProjectTotalFundCardProps) => {
 					: 0
 			: 0;
 
-	console.log('selectedQF', selectedQF);
-
 	let roundDonorsCount =
 		selectedQF && selectedQF?.projectQfRoundRelations
 			? Array.isArray(selectedQF?.projectQfRoundRelations)
