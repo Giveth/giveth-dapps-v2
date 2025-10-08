@@ -165,3 +165,35 @@ export const FETCH_QF_PROJECTS = gql`
 		}
 	}
 `;
+
+export const FETCH_PROJECT_QF_ROUNDS = gql`
+	query ProjectQfRounds(
+		$projectId: Int!
+		$activeOnly: Boolean
+		$sortBy: String
+	) {
+		projectQfRounds(
+			projectId: $projectId
+			activeOnly: $activeOnly
+			sortBy: $sortBy
+		) {
+			id
+			name
+			title
+			description
+			slug
+			isActive
+			allocatedFund
+			allocatedFundUSD
+			priority
+			beginDate
+			endDate
+			projectQfRoundRelations {
+				qfRoundId
+				projectId
+				sumDonationValueUsd
+				countUniqueDonors
+			}
+		}
+	}
+`;
