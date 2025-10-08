@@ -1,5 +1,7 @@
 import { EProjectsSortBy } from '@/apollo/types/gqlEnums';
 import { EVerificationSteps, IProjectVerification } from '@/apollo/types/types';
+import { FETCH_PROJECT_QF_ROUNDS } from '../apollo/gql/gqlQF';
+import { client } from '../apollo/apolloClient';
 
 export const getMainCategorySlug = (category?: { slug: string }) =>
 	category?.slug === 'all' ? undefined : category?.slug;
@@ -135,3 +137,30 @@ export function findFirstIncompleteStep(
 	// Return -1 if all steps are complete
 	return -1;
 }
+
+/**
+ * Fetch the QF rounds for a project
+ *
+ * @param projectId - string
+ * @returns IQFRound[]
+ */
+export const fetchProjectQfRounds = async (
+	projectId: string,
+	activeOnly: boolean = true,
+	sortBy: string = '',
+) => {
+	try {
+		const { data } = await client.query({
+			query: FETCH_PROJECT_QF_ROUNDS,
+			variables: { projectId: parseInt(projectId), activeOnly, sortBy },
+			fetchPolicy: 'no-cache',
+			context: {
+				skipAuth: true,
+			},
+		});
+		return data.projectQfRounds ?? [];
+	} catch (error) {
+		console.error('Error fetching project QF rounds:', error);
+		return [];
+	}
+};
