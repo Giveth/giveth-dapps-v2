@@ -18,6 +18,7 @@ import type { ProjectDonationSwiperState } from './ProjectDonations.index';
 import type { StylesConfig, GroupBase } from 'react-select';
 
 type Props = {
+	qfRounds: IQFRound[];
 	projectDonationSwiperState: ProjectDonationSwiperState;
 	setProjectDonationSwiperState: React.Dispatch<
 		React.SetStateAction<ProjectDonationSwiperState>
@@ -30,20 +31,21 @@ type OptionType =
 	| { type: 'round'; label: string; value: string; round: IQFRound };
 
 export default function ProjectDonationsDropdown({
+	qfRounds,
 	projectDonationSwiperState,
 	setProjectDonationSwiperState,
 }: Props) {
 	const { formatMessage } = useIntl();
-	const { projectData, isCause } = useProjectContext();
+	const { isCause } = useProjectContext();
 
 	const sortedRounds: IQFRound[] = useMemo(() => {
-		const list = projectData?.qfRounds ?? [];
+		const list = qfRounds ?? [];
 		return [...list].sort((a, b) => {
 			const act = Number(b.isActive) - Number(a.isActive);
 			if (act !== 0) return act;
 			return new Date(b.beginDate) > new Date(a.beginDate) ? 1 : -1;
 		});
-	}, [projectData?.qfRounds]);
+	}, [qfRounds]);
 
 	const options: OptionType[] = useMemo(() => {
 		const base: OptionType[] = [
@@ -91,6 +93,7 @@ export default function ProjectDonationsDropdown({
 				};
 
 	const onChange = (opt: OptionType | null) => {
+		console.log('opt', opt);
 		if (!opt) return;
 		if (opt.type === 'all') {
 			setProjectDonationSwiperState(prev => ({
