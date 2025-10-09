@@ -39,6 +39,20 @@ const QFRoundsIndex = () => {
 		}
 	}, [qfRounds, router, loading]);
 
+	const filteredQFRounds = qfRounds.filter(round => {
+		if (!round.isActive || !round.name) return false;
+		const cleanName = round.name.trim().toLowerCase();
+		return !cleanName.includes('test');
+	});
+
+	const filteredLast3ArchivedQFRounds = last3ArchivedQFRounds?.filter(
+		round => {
+			if (!round.name) return false;
+			const cleanName = round.name.trim().toLowerCase();
+			return !cleanName.includes('test');
+		},
+	);
+
 	return (
 		<>
 			{loading && (
@@ -51,8 +65,8 @@ const QFRoundsIndex = () => {
 				<QFRoundsBanner />
 				<Title>{formatMessage({ id: 'label.qf.active_rounds' })}</Title>
 				<QFRoundsWrapper>
-					{qfRounds &&
-						qfRounds.map(round => (
+					{filteredQFRounds &&
+						filteredQFRounds.map(round => (
 							<QFRoundCard
 								key={round.id}
 								layout={
@@ -96,9 +110,9 @@ const QFRoundsIndex = () => {
 						{formatMessage({ id: 'label.archived_rounds' })} →
 					</ArchivedRoundsLink>
 				</ClosedHeader>
-				{last3ArchivedQFRounds && (
+				{filteredLast3ArchivedQFRounds && (
 					<QFRoundsWrapper>
-						{last3ArchivedQFRounds.map(round => (
+						{filteredLast3ArchivedQFRounds.map(round => (
 							<QFRoundCard
 								key={round.id}
 								layout='grid'
