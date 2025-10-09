@@ -177,18 +177,41 @@ export const signToGetToken = createAsyncThunk(
 					const safeMessageTimestamp = new Date().getTime();
 					// small delay to allow Safe service to index the message
 					await new Promise(resolve => setTimeout(resolve, 1500));
-					// calls the backend to create gnosis safe token
-					const safeToken = await postRequest(
-						`${config.MICROSERVICES.authentication}/multisigAuthentication`,
-						false,
-						{
-							safeMessageTimestamp,
-							safeAddress,
-							network: chainId,
-							jwt: currentUserToken,
-							approvalExpirationDays: expiration || 8, // defaults to 1 week
-						},
-					);
+					// calls the backend to create gnosis safe token with retries to handle Safe indexing lag
+					let safeToken: any = null;
+					const maxAttempts = 4;
+					for (let attempt = 1; attempt <= maxAttempts; attempt++) {
+						try {
+							safeToken = await postRequest(
+								`${config.MICROSERVICES.authentication}/multisigAuthentication`,
+								false,
+								{
+									safeMessageTimestamp,
+									safeAddress,
+									network: chainId,
+									jwt: currentUserToken,
+									approvalExpirationDays: expiration || 8, // defaults to 1 week
+								},
+							);
+							break;
+						} catch (err: any) {
+							const message =
+								typeof err === 'string' ? err : err?.message;
+							const isNotFound =
+								message
+									?.toLowerCase?.()
+									.includes('multisig message not found') ||
+								message?.toLowerCase?.().includes('404');
+							if (attempt < maxAttempts && isNotFound) {
+								const delayMs = 1000 * attempt; // 1s, 2s, 3s ...
+								await new Promise(resolve =>
+									setTimeout(resolve, delayMs),
+								);
+								continue;
+							}
+							throw err;
+						}
+					}
 					console.log({ safeToken });
 
 					if (safeToken?.jwt) {
