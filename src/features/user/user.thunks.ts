@@ -134,11 +134,12 @@ export const signToGetToken = createAsyncThunk(
 						sessionPending = false;
 
 					try {
+						const safeMessageTimestamp = new Date().getTime();
 						const sessionCheck = await postRequest(
 							`${config.MICROSERVICES.authentication}/multisigAuthentication`,
 							false,
 							{
-								safeMessageTimestamp: null,
+								safeMessageTimestamp,
 								safeAddress,
 								network: chainId,
 								jwt: currentUserToken,
