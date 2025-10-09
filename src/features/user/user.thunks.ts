@@ -134,16 +134,13 @@ export const signToGetToken = createAsyncThunk(
 						sessionPending = false;
 
 					try {
-						const safeMessageTimestamp = new Date().getTime();
 						const sessionCheck = await postRequest(
 							`${config.MICROSERVICES.authentication}/multisigAuthentication`,
 							false,
 							{
-								safeMessageTimestamp,
 								safeAddress,
 								network: chainId,
 								jwt: currentUserToken,
-								approvalExpirationDays: expiration || 8, // defaults to 1 week
 							},
 						);
 						if (sessionCheck?.status === 'successful') {
@@ -168,16 +165,18 @@ export const signToGetToken = createAsyncThunk(
 
 					await returnToGnosisSafe();
 
-					let safeSignature;
-					const safeMessageTimestamp = new Date().getTime();
+					let _safeSignature;
 					try {
-						safeSignature = await signMessage(wagmiConfig, {
+						_safeSignature = await signMessage(wagmiConfig, {
 							message: safeMessage.message,
 						});
 					} catch (error) {
 						// user will close the transaction but it will create anyway
 						console.error({ error });
 					}
+					const safeMessageTimestamp = new Date().getTime();
+					// small delay to allow Safe service to index the message
+					await new Promise(resolve => setTimeout(resolve, 1500));
 					// calls the backend to create gnosis safe token
 					const safeToken = await postRequest(
 						`${config.MICROSERVICES.authentication}/multisigAuthentication`,
