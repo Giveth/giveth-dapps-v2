@@ -46,9 +46,13 @@ export const getServerSideProps: GetServerSideProps = async context => {
 				: [query.filter]
 			: undefined;
 
-		_filters
-			? _filters.push(EProjectsFilter.ACTIVE_QF_ROUND)
-			: (_filters = [EProjectsFilter.ACTIVE_QF_ROUND]);
+		if (_filters) {
+			if (!_filters.includes(EProjectsFilter.ACTIVE_QF_ROUND)) {
+				_filters.push(EProjectsFilter.ACTIVE_QF_ROUND);
+			}
+		} else {
+			_filters = [EProjectsFilter.ACTIVE_QF_ROUND];
+		}
 
 		const { data } = await apolloClient.query({
 			query: FETCH_QF_PROJECTS,
@@ -63,6 +67,9 @@ export const getServerSideProps: GetServerSideProps = async context => {
 				mainCategory: getMainCategorySlug({ slug }),
 				notifyOnNetworkStatusChange,
 				projectType: EProjectType.ALL,
+			},
+			context: {
+				skipAuth: true,
 			},
 		});
 		const { projects, totalCount } = data.qfProjects;

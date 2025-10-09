@@ -48,26 +48,57 @@ export function QFRoundFilterSelect() {
 	const menuRef = useRef<HTMLDivElement | null>(null);
 	const [open, setOpen] = useState(false);
 
-	// Selected from URL
-	const selected: string[] = Array.isArray(router.query.filter)
-		? (router.query.filter as string[])
+	// Selected from URL + ensure ACTIVE_QF_ROUND is always present
+	let selected: string[] = Array.isArray(router.query.filter)
+		? [...new Set(router.query.filter as string[])] // dedupe if array
 		: router.query.filter
 			? [router.query.filter as string]
 			: [];
 
+	// Ensure ACTIVE_QF_ROUND is always included
+	if (!selected.includes(EProjectsFilter.ACTIVE_QF_ROUND)) {
+		selected = [...selected, EProjectsFilter.ACTIVE_QF_ROUND];
+	}
+
 	const funds = isCauses ? fundsFilterCauses : fundsFilterProjects;
 
 	// Toggle a filter and update URL
-	const toggleFilter = (checked: boolean, value: EProjectsFilter) => {
-		const set = new Set(selected);
-		checked ? set.add(value) : set.delete(value);
-		const next = Array.from(set);
-		const query = { ...router.query };
-		if (next.length) query.filter = next;
-		else delete (query as any).filter;
-		router.push({ pathname: router.pathname, query }, undefined, {
-			shallow: true,
+	const handleSelectFilter = (e: boolean, filter: EProjectsFilter) => {
+		let updatedQuery;
+		if (e) {
+			updatedQuery = {
+				...router.query,
+				filter: Array.from(
+					new Set(
+						router.query.filter
+							? Array.isArray(router.query.filter)
+								? [...router.query.filter, filter]
+								: [router.query.filter, filter]
+							: [filter],
+					),
+				),
+			};
+		} else {
+			updatedQuery = {
+				...router.query,
+				filter: router.query.filter
+					? Array.from(
+							new Set(
+								Array.isArray(router.query.filter)
+									? router.query.filter.filter(
+											f => f !== filter,
+										)
+									: [],
+							),
+						)
+					: [],
+			};
+		}
+		router.push({
+			pathname: router.pathname,
+			query: updatedQuery,
 		});
+		setOpen(false);
 	};
 
 	// Close on outside click / Escape
@@ -100,8 +131,7 @@ export function QFRoundFilterSelect() {
 		});
 	};
 
-	const count =
-		(variables?.filters?.length ?? 0) + (variables?.campaignSlug ? 1 : 0);
+	const count = (selected?.length ?? 1) + (variables?.campaignSlug ? 1 : 0);
 
 	return (
 		<Wrapper>
@@ -139,7 +169,7 @@ export function QFRoundFilterSelect() {
 									size={14}
 									checked={selected.includes(pf.value)}
 									onChange={(v: boolean) =>
-										toggleFilter(v, pf.value)
+										handleSelectFilter(v, pf.value)
 									}
 								/>
 							</Item>
@@ -172,7 +202,7 @@ export function QFRoundFilterSelect() {
 								size={14}
 								checked={selected.includes(f.value)}
 								onChange={(v: boolean) =>
-									toggleFilter(v, f.value)
+									handleSelectFilter(v, f.value)
 								}
 							/>
 						</Item>

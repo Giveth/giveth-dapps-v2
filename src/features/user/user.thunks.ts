@@ -1,23 +1,23 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { connect, signMessage } from '@wagmi/core';
-import { backendGQLRequest, postRequest } from '@/helpers/requests';
-import {
-	GET_USER_BY_ADDRESS,
-	REGISTER_ON_CHAINVINE,
-	REGISTER_CLICK_ON_REFERRAL,
-} from './user.queries';
-import {
-	ISignToGetToken,
-	IChainvineSetReferral,
-	IChainvineClickCount,
-	ISolanaSignToGetToken,
-} from './user.types';
-import { RootState } from '../store';
 import config from '@/configuration';
-import StorageLabel from '@/lib/localStorage';
+import { backendGQLRequest, postRequest } from '@/helpers/requests';
 import { getTokens } from '@/helpers/user';
 import { createSiweMessage, signWithEvm } from '@/lib/authentication';
+import StorageLabel from '@/lib/localStorage';
 import { wagmiConfig } from '@/wagmiConfigs';
+import { RootState } from '../store';
+import {
+	GET_USER_BY_ADDRESS,
+	REGISTER_CLICK_ON_REFERRAL,
+	REGISTER_ON_CHAINVINE,
+} from './user.queries';
+import {
+	IChainvineClickCount,
+	IChainvineSetReferral,
+	ISignToGetToken,
+	ISolanaSignToGetToken,
+} from './user.types';
 
 const saveTokenToLocalstorage = (address: string, token: string) => {
 	const _address = address.toLowerCase();
@@ -142,6 +142,7 @@ export const signToGetToken = createAsyncThunk(
 								safeAddress,
 								network: chainId,
 								jwt: currentUserToken,
+								approvalExpirationDays: expiration || 8, // defaults to 1 week
 							},
 						);
 						if (sessionCheck?.status === 'successful') {

@@ -38,6 +38,9 @@ export const getStaticProps: GetStaticProps = async () => {
 		query: FETCH_HOMEPAGE_DATA_REDUCED,
 		variables: HOME_QUERY_VARIABLES,
 		fetchPolicy: 'no-cache',
+		context: {
+			skipAuth: true,
+		},
 	});
 	return {
 		props: {

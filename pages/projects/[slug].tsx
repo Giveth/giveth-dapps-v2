@@ -54,6 +54,9 @@ export const getServerSideProps: GetServerSideProps = async context => {
 				notifyOnNetworkStatusChange,
 			},
 			fetchPolicy: 'no-cache',
+			context: {
+				skipAuth: true,
+			},
 		});
 		const { projects, totalCount } = data.newAllProjects;
 		return {
