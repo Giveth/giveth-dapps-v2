@@ -3,9 +3,10 @@ import { gql } from '@apollo/client';
 import { QF_ROUNDS_QUERY } from '@/apollo/gql/gqlQF';
 import { client } from '@/apollo/apolloClient';
 import { MAIN_CATEGORIES_QUERY } from '@/apollo/gql/gqlProjects';
+import { FETCH_GLOBAL_SCORE_SETTINGS } from '@/apollo/gql/gqlGlobalSettings';
 
 const MAIN_CATEGORIES_AND_ACTIVE_QF_ROUND_QUERY = gql`
-	query fetchMainCategoriesAndQFRounds($slug: String, $activeOnly: Boolean) {
+	query fetchMainCategoriesAndQFRounds($slug: String, $activeOnly: Boolean, $sortBy: QfRoundsSortType) {
 		${QF_ROUNDS_QUERY}
 		${MAIN_CATEGORIES_QUERY}
 	}
@@ -20,7 +21,26 @@ export const fetchMainCategoriesAndActiveQFRound = createAsyncThunk(
 			query: MAIN_CATEGORIES_AND_ACTIVE_QF_ROUND_QUERY,
 			variables: { activeOnly: true },
 			fetchPolicy: 'no-cache',
+			context: {
+				skipAuth: true,
+			},
 		});
 		return { mainCategories, qfRounds };
+	},
+);
+
+export const fetchGlobalScoreSettings = createAsyncThunk(
+	'general/fetchGlobalScoreSettings',
+	async () => {
+		const {
+			data: { globalScoreSettings },
+		} = await client.query({
+			query: FETCH_GLOBAL_SCORE_SETTINGS,
+			fetchPolicy: 'no-cache',
+			context: {
+				skipAuth: true,
+			},
+		});
+		return globalScoreSettings;
 	},
 );

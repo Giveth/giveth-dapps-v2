@@ -1,6 +1,13 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { fetchMainCategoriesAndActiveQFRound } from './general.thunk';
-import { IMainCategory, IQFRound } from '@/apollo/types/types';
+import {
+	fetchGlobalScoreSettings,
+	fetchMainCategoriesAndActiveQFRound,
+} from './general.thunk';
+import {
+	IMainCategory,
+	IQFRound,
+	IGlobalScoreSettings,
+} from '@/apollo/types/types';
 import { QF_SPECIFIC_CATEGORIES } from '@/configuration';
 import type { PayloadAction } from '@reduxjs/toolkit';
 
@@ -17,6 +24,10 @@ const initialState = {
 	mainCategories: [] as IMainCategory[],
 	qfRounds: [] as IQFRound[],
 	activeQFRound: null as IQFRound | null,
+	globalScoreSettings: {
+		globalMinimumPassportScore: 0,
+		globalMinimumMBDScore: 0,
+	} as IGlobalScoreSettings,
 };
 
 export const GeneralSlice = createSlice({
@@ -55,9 +66,17 @@ export const GeneralSlice = createSlice({
 							c => c === mainCategory.slug,
 						),
 				);
+				state.qfRounds = qfRounds;
 				state.activeQFRound = qfRounds ? qfRounds[0] : null;
 			},
 		);
+
+		builder.addCase(fetchGlobalScoreSettings.fulfilled, (state, action) => {
+			state.globalScoreSettings = action.payload || {
+				globalMinimumPassportScore: 0,
+				globalMinimumMBDScore: 0,
+			};
+		});
 	},
 });
 

@@ -4,6 +4,7 @@ import { useIntl } from 'react-intl';
 import styled from 'styled-components';
 import { useRouter } from 'next/router';
 import Routes from '@/lib/constants/Routes';
+import { useAppSelector } from '../../../features/hooks';
 
 enum EQFPageStatus {
 	ACTIVE = 'label.active_round',
@@ -15,13 +16,18 @@ export const QFHeader = () => {
 	const { pathname } = useRouter();
 	const isArchivedPath = pathname.startsWith(Routes.QFArchived);
 
+	// Get active round
+	const { activeQFRound } = useAppSelector((state: any) => state.general);
+
 	return (
 		<Flex gap='24px'>
-			<Link href={Routes.AllQFProjects}>
-				<Item active={!isArchivedPath}>
-					{formatMessage({ id: EQFPageStatus.ACTIVE })}
-				</Item>
-			</Link>
+			{activeQFRound && (
+				<Link href={Routes.QFProjects}>
+					<Item active={!isArchivedPath}>
+						{formatMessage({ id: EQFPageStatus.ACTIVE })}
+					</Item>
+				</Link>
+			)}
 			<Link href={Routes.QFArchived}>
 				<Item active={isArchivedPath}>
 					{formatMessage({ id: EQFPageStatus.ARCHIVED })}

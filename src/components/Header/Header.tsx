@@ -15,9 +15,7 @@ import {
 	ConnectButton,
 	HeaderLinks,
 	StyledHeader,
-	SmallCreateProject,
 	Logo,
-	SmallCreateProjectParent,
 	HomeButton,
 	GLinkNoWrap,
 	SearchButton,
@@ -55,7 +53,6 @@ import { useNavigationInfo } from '@/hooks/useNavigationInfo';
 import config from '@/configuration';
 import { useGeneralWallet } from '@/providers/generalWalletProvider';
 import { EScrollDir, useScrollDetection } from '@/hooks/useScrollDetection';
-import { CausesMenu } from '../menu/CausesMenu';
 
 export interface IHeader {
 	theme?: ETheme;
@@ -150,7 +147,6 @@ const Header: FC<IHeader> = ({ showQFBanner }) => {
 			dispatch(setShowCompleteProfile(true));
 		}
 	};
-
 	return (
 		<StyledHeader
 			$alignItems='center'
@@ -194,18 +190,11 @@ const Header: FC<IHeader> = ({ showQFBanner }) => {
 			{isDesktop && !showBackBtn && (
 				<HeaderLinks $baseTheme={theme}>
 					<LinkWithMenu
-						title={formatMessage({ id: 'label.projects' })}
+						title={formatMessage({ id: 'label.donate' })}
 						isHeaderShowing={scrollDir !== EScrollDir.Down}
 						href={Routes.AllProjects}
 					>
 						<ProjectsMenu />
-					</LinkWithMenu>
-					<LinkWithMenu
-						title={formatMessage({ id: 'label.causes' })}
-						isHeaderShowing={scrollDir !== EScrollDir.Down}
-						href={Routes.AllCauses}
-					>
-						<CausesMenu />
 					</LinkWithMenu>
 					<LinkWithMenu
 						title='GIVeconomy'
@@ -242,19 +231,14 @@ const Header: FC<IHeader> = ({ showQFBanner }) => {
 					size='small'
 					isProjectPage={isProjectPage}
 				/>
-				<SmallCreateProjectParent>
-					<SmallCreateProject
-						onClick={handleCreateButton}
-						buttonType='primary'
-						label='+'
-					/>
-				</SmallCreateProjectParent>
 				{walletAddress ? (
 					<>
-						<NotificationButtonWithMenu
-							isHeaderShowing={scrollDir !== EScrollDir.Down}
-							theme={theme}
-						/>
+						{isDesktop && (
+							<NotificationButtonWithMenu
+								isHeaderShowing={scrollDir !== EScrollDir.Down}
+								theme={theme}
+							/>
+						)}
 						{networkHasGIV && (
 							<RewardButtonWithMenu
 								isHeaderShowing={scrollDir !== EScrollDir.Down}

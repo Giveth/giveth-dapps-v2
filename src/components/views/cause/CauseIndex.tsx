@@ -23,17 +23,14 @@ import { useProjectContext } from '@/context/project.context';
 import { ProjectActionCard } from '@/components/views/project/projectActionCard/ProjectActionCard';
 import ProjectBadges from '@/components/views/project/ProjectBadges';
 import ProjectCategoriesBadges from '@/components/views/project/ProjectCategoriesBadges';
-import { PassportBanner } from '@/components/PassportBanner';
 import ProjectGIVbackToast from '@/components/views/project/ProjectGIVbackToast';
 import useMediaQuery from '@/hooks/useMediaQuery';
 import { device } from '@/lib/constants/constants';
-import QFSection from '@/components/views/project/projectActionCard/QFSection';
 import { DonateSection } from '@/components/views/project/projectActionCard/DonationSection';
 import { ProjectStats } from '@/components/views/project/projectActionCard/ProjectStats';
 import { AdminActions } from '@/components/views/project/projectActionCard/AdminActions';
 import ProjectOwnerBanner from '@/components/views/project/ProjectOwnerBanner';
 import { useGeneralWallet } from '@/providers/generalWalletProvider';
-import ProjectSocials from '@/components/views/project/ProjectSocials';
 import VerifyEmailBanner from '../userProfile/VerifyEmailBanner';
 import config from '@/configuration';
 import { getActiveRound } from '@/helpers/qf';
@@ -142,10 +139,6 @@ const CauseIndex: FC<ICauseBySlug> = () => {
 	return (
 		<Wrapper>
 			{!isAdminEmailVerified && isAdmin && <VerifyEmailBanner />}
-			{hasActiveQFRound &&
-				!isOnSolana &&
-				!isStellarOnlyQF &&
-				isAdminEmailVerified && <PassportBanner />}
 			<Head>
 				<title>{title && `${title} |`} Giveth</title>
 				<ProjectMeta project={projectData} />
@@ -167,11 +160,7 @@ const CauseIndex: FC<ICauseBySlug> = () => {
 						)}
 						{isMobile && (
 							<MobileContainer $hasActiveRound={hasActiveQFRound}>
-								{hasActiveQFRound ? (
-									<QFSection projectData={projectData} />
-								) : (
-									<DonateSection projectData={projectData} />
-								)}
+								<DonateSection projectData={projectData} />
 							</MobileContainer>
 						)}
 						<ProjectGIVbackToast />
@@ -201,12 +190,14 @@ const CauseIndex: FC<ICauseBySlug> = () => {
 					{activeTab === 0 && (
 						<>
 							<RichTextViewer content={description} />
+							{/* Causes do not have social media handles... yet 
+							
 							{projectData?.socialMedia?.length !== 0 && (
 								<>
 									<Separator />
 									<ProjectSocials />
 								</>
-							)}
+							)} */}
 							<Separator />
 							<ProjectCategoriesBadges
 								categories={categories || []}

@@ -11,6 +11,7 @@ import { IProject } from '@/apollo/types/types';
 import InlineToast, { EToastType } from '@/components/toasts/InlineToast';
 import config from '@/configuration';
 import { EProjectStatus } from '@/apollo/types/gqlEnums';
+import links from '@/lib/constants/links';
 
 export const CauseSelectedProjects = () => {
 	const { watch, setValue } = useFormContext();
@@ -46,7 +47,7 @@ export const CauseSelectedProjects = () => {
 							values={{
 								link: (chunks: React.ReactNode) => (
 									<Link
-										href='https://docs.giveth.io/donation-agents'
+										href={links.CAUSES_DOC}
 										target='_blank'
 									>
 										{chunks}

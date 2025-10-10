@@ -1,17 +1,20 @@
 import { useEffect, useState } from 'react';
 import { client } from '@/apollo/apolloClient';
 import { FETCH_DOES_DONATED_PROJECT_IN_ROUND } from '@/apollo/gql/gqlQF';
-import { IProject } from '@/apollo/types/types';
+import { IProject, IQFRound } from '@/apollo/types/types';
 import { useAppSelector } from '@/features/hooks';
-import { getActiveRound } from '@/helpers/qf';
+import { hasRoundStarted } from '@/helpers/qf';
 
-export const useAlreadyDonatedToProject = (project?: IProject) => {
+export const useAlreadyDonatedToProject = (
+	project?: IProject,
+	qfRound?: IQFRound,
+) => {
 	const [alreadyDonated, setAlreadyDonated] = useState(false);
 	const { userData } = useAppSelector(state => state.user);
 
 	useEffect(() => {
-		if (!userData?.id || !project?.id) return;
-		const { activeStartedRound } = getActiveRound(project?.qfRounds);
+		if (!userData?.id || !project?.id || !qfRound) return;
+		const activeStartedRound = hasRoundStarted(qfRound);
 		if (!activeStartedRound) return;
 		const doesAlreadyDonated = async () => {
 			try {
@@ -19,9 +22,10 @@ export const useAlreadyDonatedToProject = (project?: IProject) => {
 					query: FETCH_DOES_DONATED_PROJECT_IN_ROUND,
 					variables: {
 						projectId: Number(project.id),
-						qfRoundId: Number(activeStartedRound.id),
+						qfRoundId: Number(qfRound.id),
 						userId: Number(userData.id),
 					},
+					fetchPolicy: 'no-cache',
 				});
 				setAlreadyDonated(
 					data.doesDonatedToProjectInQfRound as boolean,
@@ -34,6 +38,6 @@ export const useAlreadyDonatedToProject = (project?: IProject) => {
 			}
 		};
 		doesAlreadyDonated();
-	}, [userData?.id, project?.id, project?.qfRounds]);
+	}, [userData?.id, project?.id, qfRound]);
 	return alreadyDonated;
 };

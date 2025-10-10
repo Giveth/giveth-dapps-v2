@@ -1,5 +1,10 @@
 import styled from 'styled-components';
-import { Caption, neutralColors, Flex } from '@giveth/ui-design-system';
+import {
+	Caption,
+	neutralColors,
+	Flex,
+	IconHelpFilled16,
+} from '@giveth/ui-design-system';
 import { FC } from 'react';
 import { useIntl } from 'react-intl';
 import { formatPrice } from '@/lib/helpers';
@@ -8,6 +13,12 @@ import {
 	calcDonationShareFor8Decimals,
 } from '@/components/views/donate/common/helpers';
 import { IProjectAcceptedToken } from '@/apollo/types/gqlTypes';
+import {
+	GIVGARDEN_FEE_PERCENTAGE,
+	CAUSE_OWNER_FEE_PERCENTAGE,
+	DISTRIBUTION_PROJECTS_PERCENTAGE,
+} from '@/components/views/causes/constants';
+import { IconWithTooltip } from '@/components/IconWithToolTip';
 
 interface ITotalDonation {
 	projectTitle?: string;
@@ -32,6 +43,11 @@ const CauseTotalDonation: FC<ITotalDonation> = props => {
 			? calcDonationShareFor8Decimals(totalDonation, 0)
 			: calcDonationShare(totalDonation, 0, decimals);
 
+	const givgardenFee = projectDonation * GIVGARDEN_FEE_PERCENTAGE;
+	const causeOwnerFee = projectDonation * CAUSE_OWNER_FEE_PERCENTAGE;
+	const distributionProjectsFee =
+		projectDonation * DISTRIBUTION_PROJECTS_PERCENTAGE;
+
 	return (
 		<Container $isActive={isActive}>
 			<TableRow>
@@ -45,18 +61,50 @@ const CauseTotalDonation: FC<ITotalDonation> = props => {
 						: '---'}
 				</Caption>
 			</TableRow>
-			<Total>
-				<Caption $medium>
-					{formatMessage({ id: 'label.your_total_donation' })}
-				</Caption>
-				<Caption $medium>
-					{isActive
-						? formatPrice(projectDonation + givethDonation) +
-							' ' +
-							symbol
-						: '---'}
-				</Caption>
-			</Total>
+			<DistributionSummary>
+				<TableRow>
+					<DistributionHeader>
+						{formatMessage({ id: 'label.distribution_breakdown' })}{' '}
+						<IconWithTooltipStyled
+							direction='right'
+							icon={<IconHelpFilled16 />}
+						>
+							{formatMessage({
+								id: 'label.distribution_breakdown_tooltip',
+							})}
+						</IconWithTooltipStyled>
+					</DistributionHeader>
+				</TableRow>
+				<TableRow>
+					<Caption>
+						{formatMessage({
+							id: 'label.givgarden_community_pool',
+						})}
+					</Caption>
+					<Caption>
+						{isActive ? formatPrice(givgardenFee) : '---'} {symbol}
+					</Caption>
+				</TableRow>
+				<TableRow>
+					<Caption>
+						{formatMessage({ id: 'label.cause_owner' })}
+					</Caption>
+					<Caption>
+						{isActive ? formatPrice(causeOwnerFee) : '---'} {symbol}
+					</Caption>
+				</TableRow>
+				<TableRow>
+					<Caption>
+						{formatMessage({ id: 'label.distributed_to_projects' })}
+					</Caption>
+					<Caption>
+						{isActive
+							? formatPrice(distributionProjectsFee)
+							: '---'}{' '}
+						{symbol}
+					</Caption>
+				</TableRow>
+			</DistributionSummary>
 		</Container>
 	);
 };
@@ -69,7 +117,7 @@ const FlexStyled = styled(Flex)`
 	}
 `;
 
-const Total = styled(FlexStyled)`
+const DistributionSummary = styled.div`
 	border-radius: 8px;
 	background: ${neutralColors.gray[300]};
 	padding: 8px;
@@ -87,6 +135,18 @@ const Container = styled.div<{ $isActive?: boolean }>`
 	b {
 		font-weight: 500;
 	}
+`;
+
+const DistributionHeader = styled.h4`
+	margin-top: 0px;
+	margin-bottom: 4px;
+	color: ${neutralColors.gray[800]};
+`;
+
+const IconWithTooltipStyled = styled(IconWithTooltip)`
+	justify-self: center;
+	align-self: center;
+	margin-left: 4px;
 `;
 
 export default CauseTotalDonation;

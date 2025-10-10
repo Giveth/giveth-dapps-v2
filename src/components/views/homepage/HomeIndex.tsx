@@ -2,33 +2,22 @@ import { FC, Fragment, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { neutralColors } from '@giveth/ui-design-system';
 import HomeFromBlog from '@/components/views/homepage/HomeFromBlog';
-import WhyGiveth from '@/components/views/homepage/whyGiveth';
 import ProjectsCampaignBlock from '@/components/views/homepage/ProjectsCampaignBlock';
 import IntroBlock from '@/components/views/homepage/introBlock';
 import VideoBlock from '@/components/views/homepage/videoBlock';
-import AboutGiveconomy from '@/components/views/homepage/aboutGiveconomy';
-import InformationBlock from '@/components/views/homepage/InformationBlock';
 import { CampaignsBlock } from '@/components/views/homepage/campaignsBlock/CampaignsBlock';
 import HomePartners from '@/components/views/homepage/partners';
 import GetUpdates from '@/components/GetUpdates';
-import { ProjectUpdatesBlock } from '@/components/views/homepage/projectUpdatesBlock/ProjectUpdatesBlock';
 import { useAppSelector } from '@/features/hooks';
 import { client } from '@/apollo/apolloClient';
-import { FETCH_CAMPAIGNS_AND_FEATURED_PROJECTS } from '@/apollo/gql/gqlHomePage';
 import { LatestUpdatesBlock } from '@/components/views/homepage/latestUpdates/LatestUpdatesBlock';
 import { IHomeRoute } from '../../../../pages';
+import { FETCH_CAMPAIGNS } from '@/apollo/gql/gqlHomePage';
+import WhyGiveth from '@/components/views/homepage/whyGiveth';
 
 const HomeIndex: FC<IHomeRoute> = props => {
-	const {
-		campaigns: campaignsFromServer,
-		featuredProjects: featuredProjectsFromServer,
-		latestUpdates,
-		...rest
-	} = props;
+	const { campaigns: campaignsFromServer, latestUpdates, ...rest } = props;
 	const [campaigns, setCampaigns] = useState(campaignsFromServer);
-	const [featuredProjects, setFeaturedProjects] = useState(
-		featuredProjectsFromServer,
-	);
 	const featuredProjectsCampaigns = campaigns.filter(
 		campaign => campaign.isFeatured && campaign.relatedProjects?.length > 0,
 	);
@@ -37,21 +26,22 @@ const HomeIndex: FC<IHomeRoute> = props => {
 
 	useEffect(() => {
 		if (!userData?.id) return;
-		async function fetchFeaturedUpdateProjects() {
+		async function fetchCampaigns() {
 			const { data } = await client.query({
-				query: FETCH_CAMPAIGNS_AND_FEATURED_PROJECTS,
+				query: FETCH_CAMPAIGNS,
 				variables: {
 					connectedWalletUserId: Number(userData?.id),
 				},
 				fetchPolicy: 'no-cache',
+				context: {
+					skipAuth: true,
+				},
 			});
 			const _campaigns = data.campaigns;
-			const _featuredProjects = data.featuredProjects.projects;
 
 			_campaigns && setCampaigns(_campaigns);
-			_featuredProjects && setFeaturedProjects(_featuredProjects);
 		}
-		fetchFeaturedUpdateProjects();
+		fetchCampaigns();
 	}, [userData?.id]);
 
 	return (
@@ -70,21 +60,14 @@ const HomeIndex: FC<IHomeRoute> = props => {
 			{newCampaigns && newCampaigns.length > 0 ? (
 				<CampaignsBlock campaigns={newCampaigns} />
 			) : null}
-			<InformationBlock />
-			<Separator />
 			<WhyGiveth {...rest} />
 			<Separator />
 			<VideoBlock />
-			<Separator />
-			<AboutGiveconomy />
 			<Separator />
 			<HomePartners />
 			<Separator />
 			<HomeFromBlog />
 			<GetUpdates />
-			{featuredProjects && featuredProjects.length > 0 ? (
-				<ProjectUpdatesBlock projects={featuredProjects} />
-			) : null}
 			<LatestUpdatesBlock updates={latestUpdates} />
 		</Wrapper>
 	);

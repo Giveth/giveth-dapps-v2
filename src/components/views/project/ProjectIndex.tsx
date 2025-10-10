@@ -33,16 +33,13 @@ import { useProjectContext } from '@/context/project.context';
 import { ProjectActionCard } from './projectActionCard/ProjectActionCard';
 import ProjectBadges from './ProjectBadges';
 import ProjectCategoriesBadges from './ProjectCategoriesBadges';
-import { PassportBanner } from '@/components/PassportBanner';
 import ProjectGIVbackToast from '@/components/views/project/ProjectGIVbackToast';
 import useMediaQuery from '@/hooks/useMediaQuery';
 import { device, mediaQueries } from '@/lib/constants/constants';
-import QFSection from './projectActionCard/QFSection';
 import { DonateSection } from './projectActionCard/DonationSection';
 import { ProjectStats } from './projectActionCard/ProjectStats';
 import { AdminActions } from './projectActionCard/AdminActions';
 import ProjectOwnerBanner from './ProjectOwnerBanner';
-import { useGeneralWallet } from '@/providers/generalWalletProvider';
 import ProjectSocials from './ProjectSocials';
 import ProjectDevouchBox from './ProjectDevouchBox';
 import Routes from '@/lib/constants/Routes';
@@ -50,8 +47,6 @@ import { ChainType } from '@/types/config';
 import { useAppSelector } from '@/features/hooks';
 import { EndaomentProjectsInfo } from '@/components/views/project/EndaomentProjectsInfo';
 import VerifyEmailBanner from '../userProfile/VerifyEmailBanner';
-import config from '@/configuration';
-import { getActiveRound } from '@/helpers/qf';
 
 const ProjectDonations = dynamic(
 	() => import('./projectDonations/ProjectDonations.index'),
@@ -92,9 +87,6 @@ const ProjectIndex: FC<IProjectBySlug> = () => {
 		isLoading,
 	} = useProjectContext();
 
-	const { isOnSolana } = useGeneralWallet();
-	const { activeStartedRound } = getActiveRound(projectData?.qfRounds);
-
 	const router = useRouter();
 	const slug = router.query.projectIdSlug as string;
 	const { categories, addresses } = projectData || {};
@@ -113,12 +105,6 @@ const ProjectIndex: FC<IProjectBySlug> = () => {
 	};
 
 	const isEmailVerifiedStatus = isAdmin ? isAdminEmailVerified : true;
-	const isStellarOnlyQF =
-		hasActiveQFRound &&
-		activeStartedRound?.eligibleNetworks?.length === 1 &&
-		activeStartedRound?.eligibleNetworks?.includes(
-			config.STELLAR_NETWORK_NUMBER,
-		);
 
 	useEffect(() => {
 		if (!isSSRMode) {
@@ -168,10 +154,6 @@ const ProjectIndex: FC<IProjectBySlug> = () => {
 	return (
 		<Wrapper>
 			{!isAdminEmailVerified && isAdmin && <VerifyEmailBanner />}
-			{hasActiveQFRound &&
-				!isOnSolana &&
-				!isStellarOnlyQF &&
-				isAdminEmailVerified && <PassportBanner />}
 			<Head>
 				<title>{title && `${title} |`} Giveth</title>
 				<ProjectMeta project={projectData} />
@@ -230,11 +212,7 @@ const ProjectIndex: FC<IProjectBySlug> = () => {
 						)}
 						{isMobile && (
 							<MobileContainer $hasActiveRound={hasActiveQFRound}>
-								{hasActiveQFRound ? (
-									<QFSection projectData={projectData} />
-								) : (
-									<DonateSection projectData={projectData} />
-								)}
+								<DonateSection projectData={projectData} />
 							</MobileContainer>
 						)}
 						<ProjectGIVbackToast />

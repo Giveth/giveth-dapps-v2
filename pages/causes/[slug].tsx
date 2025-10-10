@@ -66,7 +66,6 @@ export const getServerSideProps: GetServerSideProps = async context => {
 				notifyOnNetworkStatusChange,
 				projectType: EProjectType.CAUSE,
 			},
-			fetchPolicy: 'no-cache',
 		});
 		const { projects: causes = [], totalCount = 0 } = data.allProjects;
 		return {

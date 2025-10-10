@@ -1,6 +1,6 @@
 // components/ProjectsIndex.tsx
 
-import { Fragment, useCallback, useEffect, useRef } from 'react';
+import { Fragment, useCallback, useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/router';
 import {
 	brandColors,
@@ -20,7 +20,6 @@ import { isUserRegistered, showToastError } from '@/lib/helpers';
 import ProjectsNoResults from '@/components/views/projects/ProjectsNoResults';
 import { useAppDispatch, useAppSelector } from '@/features/hooks';
 import { setShowCompleteProfile } from '@/features/modal/modal.slice';
-import { ProjectsBanner } from './ProjectsBanner';
 import { useProjectsContext } from '@/context/projects.context';
 import { ProjectsMiddleGivethVaultBanner } from './MiddleBanners/ProjectsMiddleGivethVaultBanner';
 import { ActiveQFProjectsBanner } from './qfBanner/ActiveQFProjectsBanner';
@@ -34,26 +33,44 @@ import { ArchivedQFRoundStats } from './ArchivedQFRoundStats';
 import { ArchivedQFProjectsBanner } from './qfBanner/ArchivedQFProjectsBanner';
 import { ActiveQFRoundStats } from './ActiveQFRoundStats';
 import useMediaQuery from '@/hooks/useMediaQuery';
-import { DefaultQFBanner } from '@/components/DefaultQFBanner';
 import { fetchProjects, IQueries } from './services';
-import { IProject } from '@/apollo/types/types';
+import { IProject, IQFRound } from '@/apollo/types/types';
 import { LAST_PROJECT_CLICKED } from './constants';
 import { hasRoundStarted } from '@/helpers/qf';
 import config from '@/configuration';
 import { EProjectType } from '@/apollo/types/gqlEnums';
+import { ProjectsBanner } from '@/components/views/projects/ProjectsBanner';
 
 export interface IProjectsView {
 	projects: IProject[];
 	totalCount: number;
+	qfRound?: IQFRound;
 }
 
 const ProjectsIndex = (props: IProjectsView) => {
 	const { formatMessage } = useIntl();
-	const { projects, totalCount: _totalCount } = props;
+	const { projects, totalCount: _totalCount, qfRound } = props;
 	const user = useAppSelector(state => state.user.userData);
-	const { activeQFRound, mainCategories } = useAppSelector(
-		state => state.general,
+	const { mainCategories } = useAppSelector(state => state.general);
+
+	// Check if the round is started
+	const [activeQFRound, setActiveQFRound] = useState<IQFRound | undefined>(
+		qfRound,
 	);
+	const [activeRoundStarted, setActiveRoundStarted] = useState(
+		qfRound ? hasRoundStarted(qfRound) && qfRound.isActive : false,
+	);
+
+	useEffect(() => {
+		if (qfRound) {
+			setActiveQFRound(qfRound);
+			setActiveRoundStarted(hasRoundStarted(qfRound) && qfRound.isActive);
+		} else {
+			setActiveQFRound(undefined);
+			setActiveRoundStarted(false);
+		}
+	}, [qfRound]);
+
 	const isMobile = useMediaQuery(`(max-width: ${deviceSize.tablet - 1}px)`);
 	const dispatch = useAppDispatch();
 	const {
@@ -62,8 +79,6 @@ const ProjectsIndex = (props: IProjectsView) => {
 		isQF,
 		isArchivedQF,
 	} = useProjectsContext();
-
-	const activeRoundStarted = hasRoundStarted(activeQFRound);
 
 	const router = useRouter();
 	const lastElementRef = useRef<HTMLDivElement>(null);
@@ -89,6 +104,10 @@ const ProjectsIndex = (props: IProjectsView) => {
 			variables.connectedWalletUserId = Number(user.id);
 		}
 
+		if (isQF && qfRound) {
+			variables.qfRoundId = Number(qfRound.id);
+		}
+
 		return await fetchProjects(
 			pageParam,
 			variables,
@@ -96,6 +115,7 @@ const ProjectsIndex = (props: IProjectsView) => {
 			isArchivedQF,
 			selectedMainCategory,
 			router.query.slug,
+			isQF ? Number(qfRound?.id) || 0 : undefined, // if this qf round page fetch different query
 		);
 	};
 
@@ -114,16 +134,30 @@ const ProjectsIndex = (props: IProjectsView) => {
 			contextVariables,
 			isArchivedQF,
 			selectedMainCategory,
+			isQF,
+			qfRound?.id,
+			router.query.slug,
 		],
 		queryFn: fetchProjectsPage,
 		getNextPageParam: lastPage => lastPage.nextCursor,
 		getPreviousPageParam: firstPage => firstPage.previousCursor,
 		initialPageParam: 0,
-		// placeholderData: keepPreviousData,
-		placeholderData: {
-			pageParams: [0],
-			pages: [{ data: projects, totalCount: _totalCount }],
-		},
+		refetchOnWindowFocus: false,
+		staleTime: 5 * 60 * 1000, // Consider data fresh for 5 minutes
+		initialData:
+			projects && projects.length > 0
+				? {
+						pageParams: [0],
+						pages: [
+							{
+								data: projects,
+								totalCount: _totalCount,
+								nextCursor: projects.length > 0 ? 1 : undefined,
+								previousCursor: undefined,
+							},
+						],
+					}
+				: undefined,
 	});
 
 	// Function to load more data when scrolling
@@ -140,8 +174,6 @@ const ProjectsIndex = (props: IProjectsView) => {
 			dispatch(setShowCompleteProfile(true));
 		}
 	};
-
-	const onProjectsPageOrActiveQFPage = !isQF || (isQF && activeQFRound);
 
 	// Intersection Observer for infinite scrolling
 	useEffect(() => {
@@ -230,38 +262,40 @@ const ProjectsIndex = (props: IProjectsView) => {
 					<Spinner />
 				</Loading>
 			)}
-			{isQF && !isStellarOnlyQF && <PassportBanner />}
+			{isQF &&
+				qfRound &&
+				qfRound.isActive &&
+				!isStellarOnlyQF &&
+				!isArchivedQF &&
+				activeRoundStarted && <PassportBanner />}
 			<Wrapper>
-				{isQF && !isArchivedQF && (
+				{qfRound && qfRound.isActive && !isArchivedQF && (
 					<>
-						{activeQFRound ? (
-							<ActiveQFProjectsBanner />
-						) : (
-							<DefaultQFBanner />
-						)}
+						<ActiveQFProjectsBanner qfRound={qfRound} />
+						<ActiveQFRoundStats qfRound={qfRound} />
 					</>
 				)}
-				{isArchivedQF && !isMobile && <ArchivedQFProjectsBanner />}
-				{isArchivedQF ? (
-					<ArchivedQFRoundStats />
-				) : (
+				{!qfRound && !isArchivedQF && (
 					<>
-						{!isQF && <ProjectsBanner />}
-						{onProjectsPageOrActiveQFPage && <FilterContainer />}
-						{isQF && activeQFRound && <ActiveQFRoundStats />}
+						<ProjectsBanner />
+						<FilterContainer />
 					</>
 				)}
-				{onProjectsPageOrActiveQFPage && (
-					<SortingContainer>
-						<SortContainer totalCount={totalCount} />
-					</SortingContainer>
+				{qfRound && (!qfRound.isActive || isArchivedQF) && (
+					<>
+						<ArchivedQFProjectsBanner />
+						<ArchivedQFRoundStats />
+					</>
 				)}
+				<SortingContainer>
+					<SortContainer totalCount={totalCount} />
+				</SortingContainer>
 				{isFetchingNextPage && <Loader className='dot-flashing' />}
 				{data?.pages.some(page => page.data.length > 0) ? (
 					<ProjectsWrapper>
 						<ProjectsContainer>
-							{isQF ? (
-								<QFProjectsMiddleBanner />
+							{isQF && qfRound ? (
+								<QFProjectsMiddleBanner qfRound={qfRound} />
 							) : (
 								<ProjectsMiddleGivethVaultBanner />
 							)}
@@ -278,6 +312,9 @@ const ProjectsIndex = (props: IProjectsView) => {
 											<ProjectCard
 												project={project}
 												order={idx}
+												providedQFRoundId={Number(
+													qfRound?.id,
+												)}
 											/>
 										</div>
 									))}
@@ -355,13 +392,19 @@ export const ProjectsContainer = styled.div`
 	gap: 25px;
 	padding: 0 23px;
 
+	justify-content: stretch;
+	align-items: stretch;
+	justify-items: stretch;
+
+	grid-template-columns: repeat(1, minmax(310px, 1fr));
+
 	${mediaQueries.tablet} {
 		padding: 0;
-		grid-template-columns: repeat(2, 1fr);
+		grid-template-columns: repeat(2, minmax(310px, 1fr));
 	}
 
 	${mediaQueries.laptopL} {
-		grid-template-columns: repeat(3, 1fr);
+		grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
 	}
 `;
 

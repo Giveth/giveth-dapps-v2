@@ -4,6 +4,7 @@ import { FormattedMessage, useIntl } from 'react-intl';
 import Link from 'next/link';
 import styled from 'styled-components';
 import { TipListItem } from './common.styles';
+import links from '@/lib/constants/links';
 
 const DefaultTip = () => {
 	const { formatMessage } = useIntl();
@@ -53,7 +54,7 @@ const DefaultTip = () => {
 							values={{
 								link: chunks => (
 									<Link
-										href='https://docs.giveth.io/donation-agents'
+										href={links.CAUSES_DOC}
 										target='_blank'
 									>
 										{chunks}

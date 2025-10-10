@@ -32,7 +32,7 @@ interface IEligibilityBadges {
 const EligibilityBadges: FC<IEligibilityBadges> = props => {
 	const { tokenPrice, amount, token, style } = props;
 	const { isConnected, chain } = useGeneralWallet();
-	const { activeStartedRound, project } = useDonateData();
+	const { selectedQFRound, project } = useDonateData();
 	const { formatMessage } = useIntl();
 	const { isGivbackEligible } = project || {};
 	const router = useRouter();
@@ -44,8 +44,9 @@ const EligibilityBadges: FC<IEligibilityBadges> = props => {
 		? config.STELLAR_NETWORK_NUMBER
 		: (chain as Chain)?.id || config.SOLANA_CONFIG.networkId;
 
-	const isOnQFEligibleNetworks =
-		activeStartedRound?.eligibleNetworks?.includes(networkId || 0);
+	const isOnQFEligibleNetworks = selectedQFRound?.eligibleNetworks?.includes(
+		networkId || 0,
+	);
 
 	const decimals = isStellar ? 18 : token?.decimals || 18;
 
@@ -53,11 +54,11 @@ const EligibilityBadges: FC<IEligibilityBadges> = props => {
 		(tokenPrice || 0) *
 		(truncateToDecimalPlaces(formatUnits(amount, decimals), decimals) || 0);
 
-	const qfEligibleWarning = !activeStartedRound || !isOnQFEligibleNetworks;
+	const qfEligibleWarning = !selectedQFRound || !isOnQFEligibleNetworks;
 	const isDonationMatched =
-		!!activeStartedRound &&
+		!!selectedQFRound &&
 		isOnQFEligibleNetworks &&
-		donationUsdValue >= (activeStartedRound?.minimumValidUsdValue || 0);
+		donationUsdValue >= (selectedQFRound?.minimumValidUsdValue || 0);
 	const givbacksEligibleWarning =
 		(token && !isTokenGivbacksEligible) || !isProjectGivbacksEligible;
 	const isGivbacksEligible =
@@ -66,16 +67,19 @@ const EligibilityBadges: FC<IEligibilityBadges> = props => {
 		donationUsdValue >= GIVBACKS_DONATION_QUALIFICATION_VALUE_USD;
 
 	const isStellarOnlyRound =
-		activeStartedRound?.eligibleNetworks?.length === 1 &&
-		activeStartedRound?.eligibleNetworks[0] ===
-			config.STELLAR_NETWORK_NUMBER;
+		selectedQFRound?.eligibleNetworks?.length === 1 &&
+		selectedQFRound?.eligibleNetworks[0] === config.STELLAR_NETWORK_NUMBER;
 
 	//  Define messageId BEFORE rendering to avoid issues
 	const messageId = isDonationMatched
 		? 'page.donate.donations_will_be_matched'
-		: !isOnQFEligibleNetworks && activeStartedRound
+		: !isOnQFEligibleNetworks &&
+			  selectedQFRound &&
+			  selectedQFRound.eligibleNetworks?.length > 0
 			? 'page.donate.network_not_eligible_for_qf'
-			: isOnQFEligibleNetworks && activeStartedRound
+			: isOnQFEligibleNetworks &&
+				  selectedQFRound &&
+				  selectedQFRound.eligibleNetworks?.length > 0
 				? 'page.donate.unlocks_matching_funds'
 				: null; // Prevents invalid id values
 
@@ -83,7 +87,11 @@ const EligibilityBadges: FC<IEligibilityBadges> = props => {
 		(isStellar && isStellarOnlyRound && !isProjectGivbacksEligible) ? (
 		<EligibilityBadgeWrapper style={style}>
 			{/* Prevents QF Badge from rendering when !isOnQFEligibleNetworks && !activeStartedRound */}
-			{!(isOnQFEligibleNetworks || activeStartedRound) ? null : (
+			{!(
+				isOnQFEligibleNetworks ||
+				(selectedQFRound &&
+					selectedQFRound.eligibleNetworks?.length > 0)
+			) ? null : (
 				<BadgesBase
 					warning={qfEligibleWarning}
 					active={isDonationMatched}
@@ -97,7 +105,7 @@ const EligibilityBadges: FC<IEligibilityBadges> = props => {
 						formatMessage(
 							{ id: messageId },
 							{
-								value: activeStartedRound?.minimumValidUsdValue,
+								value: selectedQFRound?.minimumValidUsdValue,
 								network:
 									config.NETWORKS_CONFIG_WITH_ID[networkId]
 										?.name,

@@ -220,6 +220,35 @@ export const formatDate = (date: Date, locale?: string) => {
 		.replace(/,/g, '');
 };
 
+/**
+ * Format: "March 18" or, if includeYear: true → "April 1, 2025"
+ *
+ * @param dateInput Date or string or number
+ * @param opts Include year or not, locale and time zone
+ * @returns
+ */
+export function formatMonthDay(
+	dateInput: Date | string | number,
+	opts?: { includeYear?: boolean; locale?: string; timeZone?: string },
+): string {
+	const {
+		includeYear = false,
+		locale = 'en-US',
+		timeZone = 'UTC',
+	} = opts || {};
+	const d = new Date(dateInput);
+	if (Number.isNaN(d.getTime())) return '';
+
+	const options: Intl.DateTimeFormatOptions = {
+		month: 'long',
+		day: 'numeric',
+		timeZone,
+		...(includeYear ? { year: 'numeric' } : {}),
+	};
+
+	return new Intl.DateTimeFormat(locale, options).format(d);
+}
+
 export const smallFormatDate = (date: Date, locale?: string) => {
 	return date.toLocaleString(locale || 'en-US', {
 		day: 'numeric',
@@ -458,8 +487,22 @@ async function handleEthTransfer(params: TransactionParams): Promise<Address> {
 	});
 
 	// Check if to address is a safe address if it is, we don't need to add the referral data
-	const isSafeAddress = await isGnosisSafeAddress(params.to);
-	const data = isSafeAddress ? '0x' : (('0x' + dataSuffix) as `0x${string}`);
+	// Skip Safe detection for Gnosis network (xDAI) to prevent transaction failures
+	let isSafeAddress = false;
+	if (params.chainId !== 100) {
+		// Skip for Gnosis network (xDAI)
+		try {
+			isSafeAddress = await isGnosisSafeAddress(params.to);
+		} catch (error) {
+			console.log(
+				'Safe detection failed, proceeding without referral data',
+			);
+		}
+	}
+	const data =
+		isSafeAddress || params.chainId === 100
+			? '0x'
+			: (('0x' + dataSuffix) as `0x${string}`);
 
 	const hash = await wagmiSendTransaction(wagmiConfig, {
 		to: params.to,
@@ -468,7 +511,7 @@ async function handleEthTransfer(params: TransactionParams): Promise<Address> {
 	});
 
 	// Step 5: Report to Divvi
-	if (params.chainId) {
+	if (params.chainId && data !== '0x') {
 		try {
 			await submitReferral({
 				txHash: hash,
@@ -574,7 +617,7 @@ async function handleEthTransfer(params: TransactionParams): Promise<Address> {
 
 // 		return signedMessage;
 // 	} catch (error) {
-// 		console.log('Signing Error!', { error });
+// 		console.log('Signing Error!!', { error });
 // 		captureException(error, {
 // 			tags: {
 // 				section: 'signError',
@@ -762,3 +805,21 @@ export function generateRandomNonce(): number {
 
 	return nonce;
 }
+
+/**
+ * Truncates text to a maximum length
+ * @param text - The text to truncate
+ * @param maxLength - The maximum length of the text
+ * @param ellipsis - The ellipsis to use
+ * @returns The truncated text
+ */
+export const truncateText = (
+	text: string,
+	maxLength: number = 50,
+	ellipsis: string = '...',
+) => {
+	if (!text) return '';
+	return text.length > maxLength
+		? `${text.slice(0, maxLength)}${ellipsis}`
+		: text;
+};

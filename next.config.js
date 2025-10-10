@@ -108,33 +108,7 @@ const moduleExports = withBundleAnalyzer({
 					'https://giveth.notion.site/Giveth-Quadratic-Funding-3478aa27eb094a699f9ddd6a8b611027',
 				permanent: false,
 			},
-			{
-				source: '/qf',
-				destination: '/qf/all',
-				permanent: false,
-			},
 		];
-
-		// if (isProduction) {
-		// 	redirects.push(
-		// 		{
-		// 			source: '/qf',
-		// 			destination: '/projects/all',
-		// 			permanent: false,
-		// 		},
-		// 		{
-		// 			source: '/qf/all',
-		// 			destination: '/projects/all',
-		// 			permanent: false,
-		// 		},
-		// 	);
-		// } else {
-		// 	redirects.push({
-		// 		source: '/qf',
-		// 		destination: '/qf/all',
-		// 		permanent: false,
-		// 	});
-		// }
 
 		return redirects;
 	},

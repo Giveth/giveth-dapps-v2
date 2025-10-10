@@ -1,12 +1,15 @@
 import { Contract, ethers } from 'ethers';
 import { getConnectorClient } from 'wagmi/actions';
 import { captureException } from '@sentry/nextjs';
+import { useQuery } from '@tanstack/react-query';
 import { wagmiConfig } from '@/wagmiConfigs';
 import { EDonationFailedType } from '@/components/modals/FailedDonation';
 import { IOnTxHash } from '@/services/donation';
 import { client } from '@/apollo/apolloClient';
 import { CREATE_CAUSE_DONATION } from '@/apollo/gql/gqlDonations';
+import { FETCH_QF_ROUND_SMART_SELECT } from '@/apollo/gql/gqlQF';
 import { SENTRY_URGENT } from '@/configuration';
+import { IQFRound } from '@/apollo/types/types';
 
 const NATIVE_TOKEN_ADDRESS = '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee';
 const ZERO_ADDRESS = '0x0000000000000000000000000000000000000000';
@@ -257,6 +260,7 @@ const createCauseDonation = async (props: IOnTxHash) => {
 		swapData,
 		fromTokenAmount,
 		txHash,
+		qfRoundId,
 	} = props;
 	const { address, symbol } = token;
 	let donationId = 0;
@@ -280,6 +284,7 @@ const createCauseDonation = async (props: IOnTxHash) => {
 				swapData,
 				fromTokenAmount,
 				transactionId: txHash,
+				roundId: qfRoundId,
 			},
 		});
 		donationId = data.createDonation;
@@ -294,4 +299,54 @@ const createCauseDonation = async (props: IOnTxHash) => {
 	}
 
 	return donationId;
+};
+
+/**
+ * Get the active QF rounds
+ *
+ * @param QFRounds - The QF rounds
+ * @returns the active QF rounds
+ */
+export const getActiveQFRounds = (QFRounds: IQFRound[]) => {
+	return QFRounds.filter(round => round.isActive);
+};
+
+/**
+ * @title useFetchQFRoundSmartSelect
+ *
+ * @description Fetch QF round smart select data for a specific project and network
+ * @param projectId - The project ID
+ * @param networkId - The network ID
+ * @param enabled - Whether the query should be enabled (optional)
+ * @returns QF round smart select data
+ */
+export const useFetchQFRoundSmartSelect = (
+	projectId: number,
+	networkId: number,
+	enabled: boolean = true,
+) => {
+	return useQuery({
+		queryKey: ['qfRoundSmartSelect', projectId, networkId],
+		queryFn: async () => {
+			try {
+				const { data } = await client.query({
+					query: FETCH_QF_ROUND_SMART_SELECT,
+					variables: {
+						projectId,
+						networkId,
+					},
+					fetchPolicy: 'no-cache',
+				});
+
+				return data?.qfRoundSmartSelect || null;
+			} catch (error) {
+				console.error('Error fetching QF round smart select:', error);
+				throw error;
+			}
+		},
+		enabled: enabled && !!projectId && !!networkId,
+		retry: 1,
+		staleTime: 5 * 60 * 1000, // 5 minutes
+		gcTime: 10 * 60 * 1000, // 10 minutes
+	});
 };

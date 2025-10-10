@@ -15,7 +15,7 @@ import {
 } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
 import styled from 'styled-components';
-import { type FC } from 'react';
+import { useEffect, useState, type FC } from 'react';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
 import useMediaQuery from '@/hooks/useMediaQuery';
@@ -59,10 +59,36 @@ const QFSection: FC<IQFSectionProps> = ({ projectData }) => {
 	const router = useRouter();
 	const isOnDonatePage = router.pathname.includes('/donate');
 
-	const { projectDonationsSqrtRootSum, matchingPool, allProjectsSum } =
-		estimatedMatching ?? {};
-
 	const { activeStartedRound } = getActiveRound(qfRounds);
+
+	// Find round that matches the selectedQFRound
+	const [matchingData, setMatchingData] = useState({
+		allProjectsSum: 0,
+		matchingPool: 0,
+		projectDonationsSqrtRootSum: 0,
+	});
+
+	useEffect(() => {
+		if (estimatedMatching) {
+			const estimatedMatched = estimatedMatching.find(
+				estimatedMatching =>
+					String(estimatedMatching.qfRoundId) ===
+					(activeStartedRound?.id ?? ''),
+			);
+			if (estimatedMatched) {
+				setMatchingData({
+					allProjectsSum: estimatedMatched.allProjectsSum,
+					matchingPool: estimatedMatched.matchingPool,
+					projectDonationsSqrtRootSum:
+						estimatedMatched.projectDonationsSqrtRootSum,
+				});
+			}
+		}
+	}, [estimatedMatching, activeStartedRound]);
+
+	const { allProjectsSum, matchingPool, projectDonationsSqrtRootSum } =
+		matchingData;
+
 	const {
 		allocatedFundUSD,
 		allocatedTokenSymbol,

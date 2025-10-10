@@ -87,7 +87,7 @@ const CauseDonateModal: FC<IDonateModalProps> = props => {
 	const dispatch = useAppDispatch();
 	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
 	const { formatMessage } = useIntl();
-	const { setSuccessDonation, project, activeStartedRound } =
+	const { setSuccessDonation, project, activeStartedRound, selectedQFRound } =
 		useCauseDonateData();
 
 	const [step, setStep] = useState('approve');
@@ -348,6 +348,9 @@ const CauseDonateModal: FC<IDonateModalProps> = props => {
 					symbol: token.symbol,
 					setFailedModalType,
 					fromTokenAmount: parseFloat(projectDonation.toString()),
+					qfRoundId: selectedQFRound?.id
+						? Number(selectedQFRound?.id)
+						: undefined,
 				};
 
 				// Set up this for Polygon GIV donation, same token same network
@@ -385,14 +388,24 @@ const CauseDonateModal: FC<IDonateModalProps> = props => {
 	};
 
 	// Check if selected token is native token of the network
+	// or same token as recipient token same network, skip approval
 	useEffect(() => {
+		// Native network token skip approval
 		if (
 			token.chainType === ChainType.EVM &&
 			token.address === zeroAddress
 		) {
 			setStep('donate');
 		}
-	}, [token]);
+		// Same token as recipient token same network, skip approval
+		else if (
+			token.networkId === chainId &&
+			token.address.toLowerCase() ===
+				config.CAUSES_CONFIG.recipientToken.address.toLowerCase()
+		) {
+			setStep('donate');
+		}
+	}, [chainId, token]);
 
 	return isSanctioned ? (
 		<SanctionModal

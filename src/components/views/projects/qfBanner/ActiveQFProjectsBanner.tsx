@@ -1,4 +1,13 @@
-import { B, Lead, Container, Flex, Row, Col } from '@giveth/ui-design-system';
+import {
+	B,
+	Lead,
+	Container,
+	Flex,
+	Row,
+	Col,
+	brandColors,
+	neutralColors,
+} from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
 import Image from 'next/image';
 import { useState, useEffect } from 'react';
@@ -8,6 +17,9 @@ import { getNowUnixMS } from '@/helpers/time';
 import { durationToString } from '@/lib/helpers';
 import { Desc, Title } from './common';
 import { useAppSelector } from '@/features/hooks';
+import { IQFRound } from '@/apollo/types/types';
+import { getQFRoundImage } from '@/lib/helpers/qfroundHelpers';
+import useDetectDevice from '@/hooks/useDetectDevice';
 
 enum ERoundStatus {
 	LOADING,
@@ -17,18 +29,24 @@ enum ERoundStatus {
 	NO_ACTIVE,
 }
 
-export const ActiveQFProjectsBanner = () => {
+export const ActiveQFProjectsBanner = ({
+	qfRound,
+}: { qfRound?: IQFRound } = {}) => {
+	const { isMobile } = useDetectDevice();
+
 	const [state, setState] = useState(ERoundStatus.LOADING);
 	const [timer, setTimer] = useState<number | null>(null);
 	const { formatMessage } = useIntl();
 	const { activeQFRound } = useAppSelector(state => state.general);
 
+	// Use prop qfRound if provided, otherwise fall back to activeQFRound from state
+	const currentRound = qfRound || activeQFRound;
+
 	// Image format is being bad formatted so managing locally instead
-	const isGIVPalooza = activeQFRound?.name === 'GIV-a-Palooza';
 	useEffect(() => {
-		if (!activeQFRound) return setState(ERoundStatus.NO_ACTIVE);
-		const _startDate = new Date(activeQFRound?.beginDate).getTime();
-		const _endDate = new Date(activeQFRound?.endDate).getTime();
+		if (!currentRound) return setState(ERoundStatus.NO_ACTIVE);
+		const _startDate = new Date(currentRound?.beginDate).getTime();
+		const _endDate = new Date(currentRound?.endDate).getTime();
 		const now = getNowUnixMS();
 		const isRoundStarted = now > _startDate;
 		const isRoundEnded = now > _endDate;
@@ -39,15 +57,15 @@ export const ActiveQFProjectsBanner = () => {
 		} else {
 			setState(ERoundStatus.ENDED);
 		}
-	}, [activeQFRound]);
+	}, [currentRound]);
 
 	useEffect(() => {
 		let _date: number;
-		if (!activeQFRound) return;
+		if (!currentRound) return;
 		if (state === ERoundStatus.NOT_STARTED) {
-			_date = new Date(activeQFRound.beginDate).getTime();
+			_date = new Date(currentRound.beginDate).getTime();
 		} else if (state === ERoundStatus.RUNNING) {
-			_date = new Date(activeQFRound.endDate).getTime();
+			_date = new Date(currentRound.endDate).getTime();
 		} else {
 			return;
 		}
@@ -66,33 +84,27 @@ export const ActiveQFProjectsBanner = () => {
 		return () => {
 			clearInterval(interval);
 		};
-	}, [state, activeQFRound]);
+	}, [state, currentRound]);
 
 	return (
 		<BannerContainer>
-			<Image
-				src={
-					isGIVPalooza
-						? '/images/banners/giv-palooza-bg1.svg'
-						: activeQFRound?.bannerBgImage ||
-							'/images/banners/qf-round/bg.svg'
-				}
-				style={{ objectFit: 'cover' }}
-				fill
-				alt='QF Banner'
-			/>
+			{currentRound && (
+				<Image
+					src={getQFRoundImage(currentRound, isMobile ?? false)}
+					style={{ objectFit: 'cover' }}
+					fill
+					alt='QF Banner'
+				/>
+			)}
 			<Container>
 				<ActiveStyledRow>
 					<ActiveStyledCol xs={12} md={6}>
 						<TitleWrapper weight={700}>
-							{activeQFRound ? activeQFRound.name : null}
+							{currentRound ? currentRound.name : null}
 						</TitleWrapper>
-						{/*<H2>*/}
-						{/*	{formatMessage({ id: 'label.quadratic_funding' })}*/}
-						{/*</H2>*/}
 						{(state === ERoundStatus.NOT_STARTED ||
 							state === ERoundStatus.RUNNING) && (
-							<Desc>
+							<DescWrapper>
 								<Lead>
 									{formatMessage({
 										id:
@@ -102,61 +114,12 @@ export const ActiveQFProjectsBanner = () => {
 									})}
 								</Lead>
 								<B>
-									{activeQFRound && timer && timer > 0
+									{currentRound && timer && timer > 0
 										? durationToString(timer, 3)
 										: '--'}
 								</B>
-							</Desc>
+							</DescWrapper>
 						)}
-					</ActiveStyledCol>
-					<ActiveStyledCol
-						xs={12}
-						md={6}
-						style={{ alignItems: 'center' }}
-					>
-						{/* <Flex>
-							{topSponsors.map(s => (
-								<SmallerSponsor
-									key={s.title}
-									src={s.image}
-									alt={s.title}
-									width={120}
-									height={120}
-								/>
-							))}
-						</Flex> */}
-						{/* <ImagesWrapper>
-							{sponsors.map(s => (
-								<Sponsor
-									key={s.title}
-									src={s.image}
-									alt={s.title}
-									width={80}
-									height={80}
-								/>
-							))}
-						</ImagesWrapper> */}
-						{/* <CustomSponsors>
-							<Image
-								src={'/images/banners/qf-round/giv-palooza.svg'}
-								style={{
-									objectFit: 'contain',
-								}}
-								fill
-								alt='QF Sponsors'
-							/>
-						</CustomSponsors> */}
-						{/* <BottomSponsors>
-							{bottomSponsors.map(s => (
-								<SmallerSponsor
-									key={s.title}
-									src={s.image}
-									alt={s.title}
-									width={120}
-									height={120}
-								/>
-							))}
-						</BottomSponsors> */}
 					</ActiveStyledCol>
 				</ActiveStyledRow>
 			</Container>
@@ -165,20 +128,17 @@ export const ActiveQFProjectsBanner = () => {
 };
 
 export const BannerContainer = styled(Flex)`
-	height: 0;
 	position: relative;
 	overflow: hidden;
-	margin-bottom: 0;
 	align-items: start !important;
-	border-top-left-radius: 16px;
-	border-top-right-radius: 16px;
+	border-radius: 16px;
 	${mediaQueries.tablet} {
-		height: 210px;
-		margin-bottom: -50px;
+		height: 220px;
 	}
 `;
 
 export const ActiveStyledRow = styled(Row)`
+	padding-top: 10px;
 	flex-direction: row;
 	@media (max-width: 1350px) {
 		flex-direction: column-reverse;
@@ -198,74 +158,19 @@ export const ActiveStyledCol = styled(Col)`
 	}
 `;
 
-const TitleWrapper = styled(Title)`
-	font-size: 36px;
+const DescWrapper = styled(Desc)`
+	font-size: 16px;
+	background: ${brandColors.giv[500]};
+	border-color: ${neutralColors.gray[100]};
+	color: ${neutralColors.gray[100]};
 `;
 
-const ImagesWrapper = styled(Flex)`
-	width: 100%;
-	font-size: 36px;
-	justify-content: end;
+const TitleWrapper = styled(Title)`
+	font-weight: 700;
+	font-size: 32px;
 `;
 
 export const Sponsor = styled(Image)`
 	width: 85px;
 	height: 95px;
 `;
-
-const sponsors = [
-	{
-		title: '@GloDollar',
-		image: '/images/banners/qf-round/loving-PG/GloDollar.svg',
-	},
-	{
-		title: '@PublicNouns',
-		image: '/images/banners/qf-round/loving-PG/PublicNouns.svg',
-	},
-	{
-		title: '@MUX',
-		image: '/images/banners/qf-round/loving-PG/MUX.svg',
-	},
-	{
-		title: '@Giveth',
-		image: '/images/banners/qf-round/loving-PG/GivethDonors.svg',
-	},
-];
-
-// const topSponsors = [
-// {
-// 	title: '@Arbitrum',
-// 	image: '/images/banners/qf-round/sponsor3.svg',
-// },
-// {
-// 	title: '@GloDollar',
-// 	image: '/images/banners/qf-round/sponsor6.svg',
-// },
-// {
-// 	title: '@LottoPGF',
-// 	image: '/images/banners/qf-round/sponsor7.svg',
-// },
-// 	{
-// 		title: '@Open_Dollar',
-// 		image: '/images/banners/qf-round/sponsor8.svg',
-// 	},
-// ];
-
-// const bottomSponsors = [
-// {
-// 	title: '@Glodollar',
-// 	image: '/images/banners/qf-round/Glodollar.svg',
-// },
-// {
-// 	title: '@OctantApp',
-// 	image: '/images/banners/qf-round/OctantApp.svg',
-// },
-// {
-// 	title: '@maearthmedia',
-// 	image: '/images/banners/qf-round/maearthmedia.svg',
-// },
-// {
-// 	title: '@RegenToken',
-// 	image: '/images/banners/qf-round/regenToken.svg',
-// },
-// ];

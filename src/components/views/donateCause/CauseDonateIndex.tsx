@@ -22,14 +22,9 @@ import { useAppDispatch, useAppSelector } from '@/features/hooks';
 import { setShowHeader } from '@/features/general/general.slice';
 import { CauseDonateHeader } from '@/components/views/donateCause/CauseDonateHeader';
 import { CauseSuccessView } from '@/components/views/donateCause/CauseSuccessView';
-import QFSection from '../project/projectActionCard/QFSection';
-import ProjectCardImage from '@/components/project-card/ProjectCardImage';
 import { useGeneralWallet } from '@/providers/generalWalletProvider';
-import { DonatePageProjectDescription } from '../donate/DonatePageProjectDescription';
 import DonationByProjectOwner from '@/components/modals/DonationByProjectOwner';
 import SanctionModal from '@/components/modals/SanctionedModal';
-import { PassportBanner } from '@/components/PassportBanner';
-import QFEligibleNetworks from '@/components/views/donate/QFEligibleNetworks';
 import { CauseDonationCard } from './CauseDonationCard';
 import {
 	useCauseDonateData,
@@ -42,14 +37,14 @@ const CauseDonateIndex: FC = () => {
 	const {
 		project,
 		successDonation,
-		hasActiveQFRound,
+		selectedQFRound,
 		shouldRenderModal,
 		activeStartedRound,
 		setDonateModalByPriority,
 		setIsModalPriorityChecked,
 	} = useCauseDonateData();
 
-	const alreadyDonated = useAlreadyDonatedToProject(project);
+	const alreadyDonated = useAlreadyDonatedToProject(project, selectedQFRound);
 	const { userData } = useAppSelector(state => state.user);
 
 	const dispatch = useAppDispatch();
@@ -58,7 +53,7 @@ const CauseDonateIndex: FC = () => {
 	const { chainId } = useAccount();
 
 	const { walletAddress: address } = useGeneralWallet();
-
+	const projectType = project.projectType;
 	useEffect(() => {
 		dispatch(setShowHeader(false));
 		return () => {
@@ -98,7 +93,8 @@ const CauseDonateIndex: FC = () => {
 	const isOnEligibleNetworks =
 		chainId && activeStartedRound?.eligibleNetworks?.includes(chainId);
 	const showAlreadyDonatedWrapper = alreadyDonated && isOnEligibleNetworks;
-
+	const causeProjectsCount = project.activeProjectsCount || 0;
+	console.log('project', project);
 	return successDonation ? (
 		<>
 			<CauseDonateHeader
@@ -122,6 +118,7 @@ const CauseDonateIndex: FC = () => {
 									DonateModalPriorityValues.None,
 								);
 							}}
+							projectType={projectType}
 						/>
 					)}
 
@@ -147,38 +144,11 @@ const CauseDonateIndex: FC = () => {
 							</SublineBold>
 						</AlreadyDonatedWrapper>
 					)}
-					{!isSafeEnv && hasActiveQFRound && !isOnSolana && (
-						<PassportBanner />
-					)}
-					<Row>
+					<DonateRow>
 						<Col xs={12} lg={6}>
 							<CauseDonationCard chainId={chainId || 0} />
 						</Col>
-						<Col xs={12} lg={6}>
-							<InfoWrapper>
-								<>
-									{activeStartedRound && (
-										<QFEligibleNetworks />
-									)}
-									<ImageWrapper>
-										<ProjectCardImage
-											image={project.image}
-										/>
-									</ImageWrapper>
-
-									{!isMobile ? (
-										isOnEligibleNetworks ? (
-											<QFSection projectData={project} />
-										) : (
-											<DonatePageProjectDescription
-												projectData={project}
-											/>
-										)
-									) : null}
-								</>
-							</InfoWrapper>
-						</Col>
-					</Row>
+					</DonateRow>
 					{!isMobile && (
 						<SocialBox
 							contentType={EContentType.thisProject}
@@ -194,6 +164,10 @@ const CauseDonateIndex: FC = () => {
 
 const Wrapper = styled.div`
 	margin-top: 91px;
+`;
+
+const DonateRow = styled(Row)`
+	justify-content: center;
 `;
 
 const AlreadyDonatedWrapper = styled(Flex)`

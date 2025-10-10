@@ -26,7 +26,6 @@ import { useDonateData } from '@/context/donate.context';
 import { EScrollDir, useScrollDetection } from '@/hooks/useScrollDetection';
 import { useGeneralWallet } from '@/providers/generalWalletProvider';
 import { setShowWelcomeModal } from '@/features/modal/modal.slice';
-import { getActiveRound } from '@/helpers/qf';
 
 export interface IHeader {
 	theme?: ETheme;
@@ -42,7 +41,7 @@ export const DonateHeader: FC<IHeader> = props => {
 	const dispatch = useAppDispatch();
 	const router = useRouter();
 
-	const { project } = useDonateData();
+	const { project, selectedQFRound } = useDonateData();
 	const scrollDir = useScrollDetection();
 
 	const isGIVeconomyRoute = checkIsGIVeconomyRoute(router.route);
@@ -50,13 +49,10 @@ export const DonateHeader: FC<IHeader> = props => {
 	let routePath = Routes.Project + '/' + project.slug;
 
 	// Change route if donation done successfully
-	if (isSuccessDonation) {
-		const { qfRounds } = project;
-		const { activeQFRound } = getActiveRound(qfRounds);
-
-		const isActiveQF = activeQFRound?.isActive;
-
-		routePath = isActiveQF ? Routes.AllQFProjects : Routes.AllProjects;
+	if (isSuccessDonation && selectedQFRound?.isActive) {
+		routePath = selectedQFRound
+			? Routes.QFProjects + '/' + selectedQFRound.slug
+			: Routes.AllProjects;
 	}
 
 	return (

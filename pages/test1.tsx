@@ -72,7 +72,6 @@ const TestIndex = () => {
 		});
 	};
 
-	// console.log('gnosisValues', gnosisValues);
 	// useEffect(() => {
 	// 	if (!library) return;
 	// 	library.on('block', (evt: any) => {

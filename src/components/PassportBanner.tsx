@@ -12,7 +12,7 @@ import {
 	Flex,
 } from '@giveth/ui-design-system';
 import { useAccount } from 'wagmi';
-import React, { ReactNode, useState } from 'react';
+import React, { ReactNode, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { useIntl } from 'react-intl';
 import { EQFElegibilityState, usePassport } from '@/hooks/usePassport';
@@ -21,6 +21,8 @@ import { smallFormatDate } from '@/lib/helpers';
 import { Spinner } from '@/components/Spinner';
 import PassportModal from '@/components/modals/PassportModal';
 import { SignWithWalletModal } from '@/components/modals/SignWithWalletModal';
+import { useFetchQFRounds } from '@/lib/helpers/qfroundHelpers';
+import { IQFRound } from '@/apollo/types/types';
 
 enum EPBGState {
 	SUCCESS,
@@ -112,23 +114,62 @@ export const PassportBannerData: IData = {
 	},
 };
 export const PassportBanner = () => {
-	const { info, updateState, fetchUserMBDScore, handleSign, refreshScore } =
-		usePassport();
+	const {
+		info,
+		updateState,
+		fetchUserMBDScore,
+		handleSign,
+		refreshScore,
+		globalScoreSettings,
+	} = usePassport();
 	const { currentRound, passportState, passportScore, qfEligibilityState } =
 		info;
+
+	const { data: roundsData } = useFetchQFRounds(true);
+
 	const { formatMessage, locale } = useIntl();
 	const { connector } = useAccount();
 	const { isOnSolana, handleSingOutAndSignInWithEVM } = useGeneralWallet();
 	const [showModal, setShowModal] = useState<boolean>(false);
 	const [signWithWallet, setSignWithWallet] = useState<boolean>(false);
+	const [roundData, setRoundData] = useState<IQFRound | null>(
+		currentRound || null,
+	);
 
 	const isGSafeConnector = connector?.id === 'safe';
 
 	// Check if the eligibility state or current round is not loaded yet
 	const isLoading = !qfEligibilityState || !currentRound;
 
-	// Only render the banner when the data is available
-	if (isLoading) {
+	// Get rounds data and set the round data
+	useEffect(() => {
+		// If there is more than one round, match one that is active
+		if (roundsData && roundsData?.length > 1) {
+			const activeRound = roundsData.find(round => {
+				const now = Date.now();
+				return (
+					round.isActive &&
+					now > new Date(round.beginDate).getTime() &&
+					now < new Date(round.endDate).getTime()
+				);
+			});
+			if (activeRound) {
+				setRoundData(activeRound);
+			}
+		}
+		// If there is only one round, set the round data to the first round
+		else if (roundsData && roundsData?.length === 1) {
+			setRoundData(roundsData[0]);
+		}
+	}, [roundsData]);
+
+	// Only render the banner when the data is available and
+	// if MBD and passport score are 0 (not set)
+	if (
+		isLoading ||
+		(globalScoreSettings?.globalMinimumMBDScore === 0 &&
+			globalScoreSettings?.globalMinimumPassportScore === 0)
+	) {
 		return null; // Or return a spinner or loading message if you'd like
 	}
 
@@ -151,30 +192,13 @@ export const PassportBanner = () => {
 								data:
 									qfEligibilityState ===
 										EQFElegibilityState.NOT_STARTED &&
-									currentRound
+									roundData
 										? smallFormatDate(
-												new Date(
-													currentRound?.beginDate,
-												),
+												new Date(roundData?.beginDate),
 											)
 										: undefined,
 							},
 						)}
-						{currentRound &&
-							qfEligibilityState ===
-								EQFElegibilityState.RECHECK_ELIGIBILITY && (
-								<>
-									{' '}
-									<strong>
-										{new Date(currentRound.endDate)
-											.toLocaleString(locale || 'en-US', {
-												day: 'numeric',
-												month: 'short',
-											})
-											.replace(/,/g, '')}
-									</strong>
-								</>
-							)}
 					</P>
 				</Flex>
 				{qfEligibilityState ===
@@ -232,7 +256,7 @@ export const PassportBanner = () => {
 					qfEligibilityState={qfEligibilityState}
 					passportState={passportState}
 					passportScore={passportScore}
-					currentRound={currentRound}
+					globalScoreSettings={globalScoreSettings}
 					setShowModal={setShowModal}
 					updateState={updateState}
 					refreshScore={refreshScore}

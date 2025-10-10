@@ -21,7 +21,7 @@ export enum EPassportState {
 	NOT_CREATED,
 	INVALID,
 	LOADING_SCORE, // when fetching passport score or refreshing it
-	CONNECTING, // connecting to gitcoin passport
+	CONNECTING, // connecting to passport
 	ERROR,
 	SIGNED,
 }
@@ -67,7 +67,35 @@ export const usePassport = () => {
 	const { userData: user, isUserFullFilled } = useAppSelector(
 		state => state.user,
 	);
-	const { activeQFRound } = useAppSelector(state => state.general);
+
+	const { qfRounds, globalScoreSettings } = useAppSelector(
+		state => state.general,
+	);
+
+	const [activeQFRound, setActiveQFRound] = useState<IQFRound | null>(null);
+
+	// Get rounds data and set the round data
+	useEffect(() => {
+		// If there is more than one round, match one that is active
+		if (qfRounds && qfRounds?.length > 1) {
+			const activeRound = qfRounds.find(round => {
+				const now = Date.now();
+				return (
+					round.isActive &&
+					now > new Date(round.beginDate).getTime() &&
+					now < new Date(round.endDate).getTime()
+				);
+			});
+			if (activeRound) {
+				setActiveQFRound(activeRound);
+			}
+		}
+		// If there is only one round, set the round data to the first round
+		else if (qfRounds && qfRounds?.length === 1) {
+			setActiveQFRound(qfRounds[0]);
+		}
+	}, [qfRounds]);
+
 	const isSafeEnv = useIsSafeEnvironment();
 
 	const setNotAvailableForGSafe = useCallback(() => {
@@ -158,9 +186,9 @@ export const usePassport = () => {
 				}
 
 				if (
-					activeQFRound.minMBDScore != null &&
+					globalScoreSettings.globalMinimumMBDScore != null &&
 					refreshUserScores.activeQFMBDScore >=
-						activeQFRound.minMBDScore
+						globalScoreSettings.globalMinimumMBDScore
 				) {
 					return setInfo({
 						qfEligibilityState: EQFElegibilityState.ELIGIBLE,
@@ -184,7 +212,7 @@ export const usePassport = () => {
 
 				if (
 					refreshUserScores.passportScore <
-					activeQFRound.minimumPassportScore
+					globalScoreSettings.globalMinimumPassportScore
 				) {
 					return setInfo({
 						qfEligibilityState:
@@ -219,6 +247,7 @@ export const usePassport = () => {
 			isSafeEnv,
 			setEndedState,
 			setNotAvailableForGSafe,
+			globalScoreSettings,
 		],
 	);
 
@@ -371,7 +400,8 @@ export const usePassport = () => {
 						user.activeQFMBDScore == null ||
 						(user.activeQFMBDScore != null &&
 							activeQFRound &&
-							user.activeQFMBDScore >= activeQFRound.minMBDScore))
+							user.activeQFMBDScore >=
+								globalScoreSettings?.globalMinimumMBDScore))
 				) {
 					console.log('******5', address, isUserFullFilled, user);
 					await updateState(user);
@@ -382,7 +412,8 @@ export const usePassport = () => {
 						user &&
 						user.activeQFMBDScore != null &&
 						activeQFRound &&
-						user.activeQFMBDScore < activeQFRound.minMBDScore
+						user.activeQFMBDScore <
+							globalScoreSettings?.globalMinimumMBDScore
 					) {
 						return setInfo({
 							qfEligibilityState:
@@ -415,6 +446,7 @@ export const usePassport = () => {
 		activeQFRound,
 		isUserFullFilled,
 		updateState,
+		globalScoreSettings,
 	]);
 
 	return {
@@ -424,5 +456,6 @@ export const usePassport = () => {
 		handleSignWallet,
 		refreshScore,
 		fetchUserMBDScore,
+		globalScoreSettings,
 	};
 };

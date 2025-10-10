@@ -19,13 +19,12 @@ import styled from 'styled-components';
 import { useIntl } from 'react-intl';
 import Link from 'next/link';
 import { TooltipContent } from '@/components/modals/HarvestAll.sc';
-import { IProject } from '@/apollo/types/types';
+import { EVerificationStatus, IProject } from '@/apollo/types/types';
 import { smallFormatDate } from '@/lib/helpers';
 import { ManageProjectAddressesModal } from '@/components/modals/ManageProjectAddresses/ManageProjectAddressesModal';
 import ProjectActions from './ProjectActions';
 import ClaimRecurringDonationModal from './ClaimRecurringDonationModal';
 import ProjectStatusBadge from './ProjectStatusBadge';
-import ProjectQFStatus from './ProjectQFStatus';
 import ProjectListedStatus from './ProjectListedStatus';
 import { formatDonation, limitFraction } from '@/helpers/number';
 import VerificationBadge from '@/components/VerificationBadge';
@@ -159,7 +158,11 @@ const ProjectItem: FC<IProjectItem> = props => {
 							<VerificationBadge
 								isGivbackEligible={project?.isGivbackEligible}
 								verificationStatus={
-									project.projectVerificationForm?.status
+									// hardcode givbacks eligiblity form status to verified because causes are automatically givbacks eligible
+									project.projectType === EProjectType.CAUSE
+										? EVerificationStatus.VERIFIED
+										: project.projectVerificationForm
+												?.status || undefined
 								}
 							/>
 						</div>
@@ -179,6 +182,7 @@ const ProjectItem: FC<IProjectItem> = props => {
 						</Flex>
 					)}
 					<Flex $justifyContent='space-between'>
+						{/*
 						<div>
 							{formatMessage({
 								id: 'label.qf_eligibility',
@@ -187,6 +191,7 @@ const ProjectItem: FC<IProjectItem> = props => {
 						<div>
 							<ProjectQFStatus project={project} showRoundName />
 						</div>
+						*/}
 					</Flex>
 				</ProjectStatusesContainer>
 				<ProjectStatusesContainer $flexDirection='column' gap='16px'>
