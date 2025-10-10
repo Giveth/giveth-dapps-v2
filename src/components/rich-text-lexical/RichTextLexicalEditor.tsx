@@ -11,10 +11,11 @@ import {
 	EditorState,
 	// LexicalEditor,
 } from 'lexical';
-import { $generateHtmlFromNodes } from '@lexical/html';
+import { $generateHtmlFromNodes, $generateNodesFromDOM } from '@lexical/html';
 import { $createListNode, $createListItemNode } from '@lexical/list';
 import { $createLinkNode } from '@lexical/link';
 import { $createHeadingNode, $createQuoteNode } from '@lexical/rich-text';
+import { useEffect, useState } from 'react';
 import { useSettings } from './context/SettingsContext';
 import Editor from './Editor';
 import { SharedHistoryContext } from './context/SharedHistoryContext';
@@ -195,62 +196,117 @@ function OnChangeHandler({ onChange }: { onChange?: (html: string) => void }) {
 
 // Function to create initial editor state from HTML or text
 function createInitialEditorState(content?: string) {
-	return () => {
+	return (editor: any) => {
 		const root = $getRoot();
-		if (root.getFirstChild() === null) {
-			if (content && content.trim() !== '') {
-				// Check if content looks like HTML
-				if (content.includes('<') && content.includes('>')) {
-					try {
-						// Split content by paragraph tags and create separate paragraphs
-						const paragraphs = content
-							.split(/<\/p>\s*<p[^>]*>/)
-							.map(p =>
-								p
-									.replace(/<\/?p[^>]*>/g, '')
-									.replace(/<br\s*\/?>/gi, '')
-									.trim(),
-							)
-							.filter(p => p.length > 0);
+		if (!content || root.getFirstChild() !== null) return;
 
-						if (paragraphs.length > 0) {
-							paragraphs.forEach(paragraphText => {
-								const paragraph = $createParagraphNode();
-								paragraph.append(
-									$createTextNode(paragraphText),
-								);
-								root.append(paragraph);
-							});
-						} else {
-							// Fallback: strip all HTML and create single paragraph
-							const textContent = content
-								.replace(/<[^>]*>/g, '')
-								.trim();
-							if (textContent) {
-								const paragraph = $createParagraphNode();
-								paragraph.append($createTextNode(textContent));
-								root.append(paragraph);
-							}
-						}
-					} catch (error) {
-						// Fallback to plain text if HTML parsing fails
-						const paragraph = $createParagraphNode();
-						paragraph.append($createTextNode(content));
-						root.append(paragraph);
-					}
-				} else {
-					// Plain text content
-					const paragraph = $createParagraphNode();
-					paragraph.append($createTextNode(content));
-					root.append(paragraph);
-				}
-			} else {
-				// Add empty paragraph if no content
-				const paragraph = $createParagraphNode();
-				root.append(paragraph);
-			}
+		try {
+			// Clean up problematic HTML patterns before parsing
+			const cleanedContent = content
+				.replace(/<p[^>]*><span[^>]*>([^<])<\/span><\/p>/g, '<p>$1</p>') // Single character spans
+				.replace(/style="[^"]*white-space:\s*pre-wrap[^"]*"/g, ''); // Remove problematic styles
+
+			const parser = new DOMParser();
+			const dom = parser.parseFromString(cleanedContent, 'text/html');
+			const nodes = $generateNodesFromDOM(editor, dom);
+
+			root.clear();
+			root.append(...nodes);
+		} catch (err) {
+			console.error('Error parsing HTML content:', err);
+			// Fallback to plain text paragraph
+			const paragraph = $createParagraphNode();
+			paragraph.append($createTextNode(content || ''));
+			root.append(paragraph);
 		}
 	};
+
+	// return () => {
+	// 	const root = $getRoot();
+	// 	if (root.getFirstChild() === null) {
+	// 		if (content && content.trim() !== '') {
+	// 			// Check if content looks like HTML
+	// 			if (content.includes('<') && content.includes('>')) {
+	// 				try {
+	// 					// Split content by paragraph tags and create separate paragraphs
+	// 					const paragraphs = content
+	// 						.split(/<\/p>\s*<p[^>]*>/)
+	// 						.map(p =>
+	// 							p
+	// 								.replace(/<\/?p[^>]*>/g, '')
+	// 								.replace(/<br\s*\/?>/gi, '')
+	// 								.trim(),
+	// 						)
+	// 						.filter(p => p.length > 0);
+
+	// 					if (paragraphs.length > 0) {
+	// 						paragraphs.forEach(paragraphText => {
+	// 							const paragraph = $createParagraphNode();
+	// 							paragraph.append(
+	// 								$createTextNode(paragraphText),
+	// 							);
+	// 							root.append(paragraph);
+	// 						});
+	// 					} else {
+	// 						// Fallback: strip all HTML and create single paragraph
+	// 						const textContent = content
+	// 							.replace(/<[^>]*>/g, '')
+	// 							.trim();
+	// 						if (textContent) {
+	// 							const paragraph = $createParagraphNode();
+	// 							paragraph.append($createTextNode(textContent));
+	// 							root.append(paragraph);
+	// 						}
+	// 					}
+	// 				} catch (error) {
+	// 					// Fallback to plain text if HTML parsing fails
+	// 					const paragraph = $createParagraphNode();
+	// 					paragraph.append($createTextNode(content));
+	// 					root.append(paragraph);
+	// 				}
+	// 			} else {
+	// 				// Plain text content
+	// 				const paragraph = $createParagraphNode();
+	// 				paragraph.append($createTextNode(content));
+	// 				root.append(paragraph);
+	// 			}
+	// 		} else {
+	// 			// Add empty paragraph if no content
+	// 			const paragraph = $createParagraphNode();
+	// 			root.append(paragraph);
+	// 		}
+	// 	}
+	// };
+}
+
+function EditorInitializer({ html }: { html?: string }) {
+	const [editor] = useLexicalComposerContext();
+	const [isInitialized, setIsInitialized] = useState(false);
+
+	useEffect(() => {
+		// Only run once on initial load, not on every content change
+		if (!html || isInitialized) return;
+
+		editor.update(() => {
+			const root = $getRoot();
+			root.clear();
+
+			// Clean up problematic HTML patterns before parsing
+			const cleanedHtml = html
+				.replace(/<p[^>]*><span[^>]*>([^<])<\/span><\/p>/g, '<p>$1</p>') // Single character spans
+				.replace(/style="[^"]*white-space:\s*pre-wrap[^"]*"/g, ''); // Remove problematic styles
+
+			const parser = new DOMParser();
+			const dom = parser.parseFromString(cleanedHtml, 'text/html');
+			const nodes = $generateNodesFromDOM(editor, dom);
+
+			root.append(...nodes);
+		});
+
+		setIsInitialized(true);
+	}, [editor, html, isInitialized]);
+
+	return null;
 }
 
 export default function RichTextLexicalEditor({
@@ -287,6 +343,7 @@ export default function RichTextLexicalEditor({
 							<EditorShell className='editor-shell'>
 								<Editor />
 							</EditorShell>
+							<EditorInitializer html={initialValue} />
 							<OnChangeHandler onChange={onChange} />
 							{measureTypingPerf ? <TypingPerfPlugin /> : null}
 						</ToolbarContext>
