@@ -4,6 +4,7 @@ import config from '@/configuration';
 import { backendGQLRequest, postRequest } from '@/helpers/requests';
 import { getTokens } from '@/helpers/user';
 import { createSiweMessage, signWithEvm } from '@/lib/authentication';
+import { showToastError } from '@/lib/helpers';
 import StorageLabel from '@/lib/localStorage';
 import { wagmiConfig } from '@/wagmiConfigs';
 import { RootState } from '../store';
@@ -207,6 +208,7 @@ export const signToGetToken = createAsyncThunk(
 			}
 		} catch (error) {
 			console.error({ error });
+			showToastError(error);
 			return Promise.reject('Signing failed');
 		}
 	},
