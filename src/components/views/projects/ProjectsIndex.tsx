@@ -115,7 +115,7 @@ const ProjectsIndex = (props: IProjectsView) => {
 			isArchivedQF,
 			selectedMainCategory,
 			router.query.slug,
-			isQF ? Number(qfRound?.id) || 0 : undefined, // if this qf round page fetch different query
+			isQF ? Number(qfRound?.id) || 0 : undefined, 
 		);
 	};
 
@@ -180,7 +180,6 @@ const ProjectsIndex = (props: IProjectsView) => {
 		}
 	};
 
-	// Intersection Observer for infinite scrolling
 	useEffect(() => {
 		const handleObserver = (entries: IntersectionObserverEntry[]) => {
 			if (!isInfiniteScrolling.current) return;
@@ -209,7 +208,7 @@ const ProjectsIndex = (props: IProjectsView) => {
 			mainCategories.length > 0 &&
 			!selectedMainCategory &&
 			!isArchivedQF &&
-			!isQF // <-- add this guard so QF pages keep infinite scroll ON
+			!isQF
 		) {
 			isInfiniteScrolling.current = false;
 		} else {
