@@ -6,7 +6,7 @@ import {
 	neutralColors,
 } from '@giveth/ui-design-system';
 import React from 'react';
-import styled, { css } from 'styled-components';
+import styled from 'styled-components';
 import { useIntl } from 'react-intl';
 import { useQuery } from '@apollo/client';
 import { FETCH_QF_ROUND_STATS } from '@/apollo/gql/gqlQF';
@@ -49,31 +49,26 @@ export const ActiveQFRoundStats = ({ qfRound }: { qfRound?: IQFRound }) => {
 						{!allocatedFundUSDPreferred && allocatedTokenSymbol}
 					</ItemValue>
 				</ItemContainer>
-				{isRoundStarted && (
-					<ItemContainer>
-						<ItemTitle weight={700}>
-							{formatMessage({ id: 'label.donations' })}
-						</ItemTitle>
-						<ItemValue weight={500}>
-							$
-							{formatUSD(
-								data?.qfRoundStats?.allDonationsUsdValue,
-							) || ' --'}
-						</ItemValue>
-					</ItemContainer>
-				)}
-				{isRoundStarted && (
-					<ItemContainer>
-						<ItemTitle weight={700}>
-							{formatMessage({
-								id: 'label.number_of_donations',
-							})}
-						</ItemTitle>
-						<ItemValue weight={500}>
-							{data?.qfRoundStats?.donationsCount || '--'}
-						</ItemValue>
-					</ItemContainer>
-				)}
+				<ItemContainer>
+					<ItemTitle weight={700}>
+						{formatMessage({ id: 'label.donations' })}
+					</ItemTitle>
+					<ItemValue weight={500}>
+						$
+						{formatUSD(data?.qfRoundStats?.allDonationsUsdValue) ||
+							' --'}
+					</ItemValue>
+				</ItemContainer>
+				<ItemContainer>
+					<ItemTitle weight={700}>
+						{formatMessage({
+							id: 'label.number_of_donations',
+						})}
+					</ItemTitle>
+					<ItemValue weight={500}>
+						{data?.qfRoundStats?.donationsCount || '--'}
+					</ItemValue>
+				</ItemContainer>
 				<ItemContainer>
 					<ItemTitle weight={700}>
 						{currentRound?.beginDate && currentRound?.endDate
@@ -96,6 +91,7 @@ const Wrapper = styled.div`
 `;
 
 const InfoSection = styled(Flex)<{ $started: boolean }>`
+	width: 100%;
 	flex-direction: column;
 	padding: 24px;
 	background-color: ${neutralColors.gray[100]};
@@ -106,13 +102,6 @@ const InfoSection = styled(Flex)<{ $started: boolean }>`
 	${mediaQueries.tablet} {
 		flex-direction: row;
 	}
-	${props =>
-		!props.$started &&
-		css`
-			justify-content: flex-start;
-			gap: 64px;
-			width: fit-content;
-		`}
 `;
 
 const ItemContainer = styled.div`

@@ -39,6 +39,28 @@ const QFRoundsIndex = () => {
 		}
 	}, [qfRounds, router, loading]);
 
+	// SHow only active and not test rounds
+	const filteredQFRounds = qfRounds.filter(round => {
+		if (!round.isActive || !round.name) return false;
+		const cleanName = round.name.trim().toLowerCase();
+		return !cleanName.includes('test');
+	});
+
+	// Show only not test rounds from last 3 archived QF rounds
+	let filteredLast3ArchivedQFRounds = last3ArchivedQFRounds?.filter(round => {
+		if (!round.name) return false;
+		const cleanName = round.name.trim().toLowerCase();
+		return !cleanName.includes('test');
+	});
+
+	// Remove last archived QF round if it is the same as the last 3 archived QF rounds if there are 4 archived QF rounds
+	if (filteredLast3ArchivedQFRounds?.length === 4) {
+		filteredLast3ArchivedQFRounds = filteredLast3ArchivedQFRounds.slice(
+			0,
+			3,
+		);
+	}
+
 	return (
 		<>
 			{loading && (
@@ -51,8 +73,8 @@ const QFRoundsIndex = () => {
 				<QFRoundsBanner />
 				<Title>{formatMessage({ id: 'label.qf.active_rounds' })}</Title>
 				<QFRoundsWrapper>
-					{qfRounds &&
-						qfRounds.map(round => (
+					{filteredQFRounds &&
+						filteredQFRounds.map(round => (
 							<QFRoundCard
 								key={round.id}
 								layout={
@@ -96,9 +118,9 @@ const QFRoundsIndex = () => {
 						{formatMessage({ id: 'label.archived_rounds' })} →
 					</ArchivedRoundsLink>
 				</ClosedHeader>
-				{last3ArchivedQFRounds && (
+				{filteredLast3ArchivedQFRounds && (
 					<QFRoundsWrapper>
-						{last3ArchivedQFRounds.map(round => (
+						{filteredLast3ArchivedQFRounds.map(round => (
 							<QFRoundCard
 								key={round.id}
 								layout='grid'
