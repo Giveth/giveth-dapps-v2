@@ -95,8 +95,8 @@ const ProjectsIndex = (props: IProjectsView) => {
 				: EProjectType.PROJECT;
 
 		const variables: IQueries = {
-			limit: 20, // Adjust the limit as needed
-			skip: 20 * pageParam,
+			limit: 15, // Adjust the limit as needed
+			skip: 15 * pageParam,
 			projectType,
 		};
 
