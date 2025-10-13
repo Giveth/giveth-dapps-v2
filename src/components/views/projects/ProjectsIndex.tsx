@@ -81,6 +81,14 @@ const ProjectsIndex = (props: IProjectsView) => {
 	} = useProjectsContext();
 
 	const router = useRouter();
+	const isSearch =
+		typeof router.query.searchTerm === 'string' &&
+		router.query.searchTerm.trim() !== '';
+
+	const isQFPage = router.pathname === '/qf/[slug]' || isQF;
+
+	// SSR usually sends 15 for QF/search pages; keep 20 elsewhere
+	const PAGE_SIZE = isQFPage || isSearch ? 15 : 20;
 	const lastElementRef = useRef<HTMLDivElement>(null);
 	const isInfiniteScrolling = useRef(true);
 
@@ -93,10 +101,9 @@ const ProjectsIndex = (props: IProjectsView) => {
 				router.query.searchTerm.trim() !== '')
 				? EProjectType.ALL
 				: EProjectType.PROJECT;
-
 		const variables: IQueries = {
-			limit: 20, // Adjust the limit as needed
-			skip: 20 * pageParam,
+			limit: PAGE_SIZE,
+			skip: PAGE_SIZE * pageParam,
 			projectType,
 		};
 
@@ -137,6 +144,8 @@ const ProjectsIndex = (props: IProjectsView) => {
 			isQF,
 			qfRound?.id,
 			router.query.slug,
+			,
+			PAGE_SIZE, // <--
 		],
 		queryFn: fetchProjectsPage,
 		getNextPageParam: lastPage => lastPage.nextCursor,
@@ -152,7 +161,10 @@ const ProjectsIndex = (props: IProjectsView) => {
 							{
 								data: projects,
 								totalCount: _totalCount,
-								nextCursor: projects.length > 0 ? 1 : undefined,
+								nextCursor:
+									_totalCount > projects.length
+										? 1
+										: undefined, // <-- only if more pages exist
 								previousCursor: undefined,
 							},
 						],
@@ -203,13 +215,14 @@ const ProjectsIndex = (props: IProjectsView) => {
 		if (
 			mainCategories.length > 0 &&
 			!selectedMainCategory &&
-			!isArchivedQF
+			!isArchivedQF &&
+			!isQF // <-- add this guard so QF pages keep infinite scroll ON
 		) {
 			isInfiniteScrolling.current = false;
 		} else {
 			isInfiniteScrolling.current = true;
 		}
-	}, [selectedMainCategory, mainCategories.length, isArchivedQF]);
+	}, [selectedMainCategory, mainCategories.length, isArchivedQF, isQF]);
 
 	// Save last clicked project
 	const handleProjectClick = (slug: string) => {
@@ -329,7 +342,9 @@ const ProjectsIndex = (props: IProjectsView) => {
 					<ProjectsNoResults />
 				)}
 				{hasNextPage && <div ref={lastElementRef} />}
-				{!isFetching && !isFetchingNextPage && hasNextPage && (
+
+				{/* Show manual Load More button ONLY on non-QF pages */}
+				{!isQF && !isFetching && !isFetchingNextPage && hasNextPage && (
 					<>
 						<StyledButton
 							onClick={() => fetchNextPage()}
