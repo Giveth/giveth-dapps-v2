@@ -31,7 +31,7 @@ import {
 import { ORGANIZATION } from '@/lib/constants/organizations';
 import { mediaQueries } from '@/lib/constants/constants';
 import { ProjectCardUserName } from './ProjectCardUserName';
-import { getActiveRound } from '@/helpers/qf';
+import { getActiveRound, hasRoundStarted } from '@/helpers/qf';
 import { RoundNotStartedModal } from './RoundNotStartedModal';
 import { FETCH_RECURRING_DONATIONS_BY_DATE } from '@/apollo/gql/gqlProjects';
 import { client } from '@/apollo/apolloClient';
@@ -127,7 +127,9 @@ const ProjectCard = (props: IProjectCard) => {
 	const { activeStartedRound: checkActiveRound, activeQFRound } =
 		getActiveRound(qfRounds);
 
-	const activeStartedRound = checkActiveRound || activeQFRound?.isActive;
+	const activeStartedRound =
+		checkActiveRound ||
+		(activeQFRound?.isActive && hasRoundStarted(activeQFRound));
 
 	const hasFooter =
 		activeStartedRound ||
