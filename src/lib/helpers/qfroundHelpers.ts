@@ -20,7 +20,7 @@ export const useFetchLast3ArchivedQFRounds = () => {
 				const { data } = await client.query({
 					query: FETCH_ARCHIVED_QF_ROUNDS,
 					variables: {
-						limit: 3,
+						limit: 4,
 						skip: 0,
 						orderBy: {
 							field: 'beginDate',
