@@ -48,10 +48,9 @@ const QFAnnouncementBanner = ({ onShow }: IQFAnnouncementBannerProps) => {
 		<Wrapper>
 			<LinkWrapper href={Routes.QFProjects}>
 				<PStyled>
-					💜{' '}
 					{formatMessage({
 						id: 'label.qf.quadratic_funding_is_live',
-					})}{' '}
+					})}
 					<IconArrowRight16 size={20} color='#FF96C6' />
 				</PStyled>
 			</LinkWrapper>
