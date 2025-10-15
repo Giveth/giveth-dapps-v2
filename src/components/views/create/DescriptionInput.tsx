@@ -18,6 +18,14 @@ const RichTextInput = dynamic(
 	},
 );
 
+const RichTextLexicalEditor = dynamic(
+	() => import('@/components/rich-text-lexical/RichTextLexicalEditor'),
+	{
+		ssr: false,
+		loading: () => <WrappedSpinner size={500} />,
+	},
+);
+
 const DESCRIPTION_MIN_LIMIT = 1200;
 
 interface IDescriptionInputProps {
@@ -41,6 +49,9 @@ const DescriptionInput = ({
 	const [description, setDescription] = useState(
 		getValues(EInputs.description),
 	);
+
+	// Debug: Log the description value
+	console.log('Description value:', description);
 
 	const handleDescription = (value: string) => {
 		setDescription(value);
@@ -95,7 +106,11 @@ const DescriptionInput = ({
 			</CaptionContainer>
 			<InputContainer>
 				<Label>{formatMessage({ id: 'label.project_story' })}</Label>
-				<RichTextInput
+				<RichTextLexicalEditor
+					initialValue={description}
+					onChange={handleDescription}
+				/>
+				{/* <RichTextInput
 					style={TextInputStyle}
 					setValue={handleDescription}
 					value={description}
@@ -103,7 +118,7 @@ const DescriptionInput = ({
 					minLimit={DESCRIPTION_MIN_LIMIT}
 					setHasLimitError={setHasLimitError}
 					error={errors[EInputs.description]?.message}
-				/>
+				/> */}
 			</InputContainer>
 		</div>
 	);
