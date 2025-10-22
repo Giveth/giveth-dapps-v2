@@ -30,13 +30,35 @@ export async function isGnosisSafeAddress(address: string): Promise<boolean> {
 			return false;
 		}
 
+		// Validate input address first
+		if (!ethers.utils.isAddress(address)) {
+			console.log(
+				'Invalid address provided to isGnosisSafeAddress:',
+				address,
+			);
+			return false;
+		}
+
 		const result = await provider.call({
 			to: address,
 			data: '0xa619486e',
 		});
 
+		// Validate result before processing
+		if (!result || result === '0x' || result.length < 42) {
+			console.log('Invalid result from provider.call:', result);
+			return false;
+		}
+
+		// Extract the last 40 characters (without 0x prefix)
+		const addressPart = result.slice(-40);
+		if (addressPart.length !== 40) {
+			console.log('Invalid address part extracted:', addressPart);
+			return false;
+		}
+
 		// Parse returned address from bytes
-		const masterCopy = ethers.utils.getAddress('0x' + result.slice(-40));
+		const masterCopy = ethers.utils.getAddress('0x' + addressPart);
 		return ethers.utils.isAddress(masterCopy);
 	} catch (e) {
 		console.error('Error checking if address is Gnosis Safe', e);
