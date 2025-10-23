@@ -50,7 +50,7 @@ export async function isGnosisSafeAddress(address: string): Promise<boolean> {
 			return false;
 		}
 
-		// Extract the last 40 characters (without 0x prefix)
+		// Extract the last 40 characters (without 0x prefix) and check if it's 40 characters long
 		const addressPart = result.slice(-40);
 		if (addressPart.length !== 40) {
 			console.log('Invalid address part extracted:', addressPart);
