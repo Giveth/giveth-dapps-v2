@@ -224,6 +224,12 @@ const Wrapper = styled.div<IWrapperProps>`
 		box-shadow: ${props =>
 			props.$showOptions ? Shadow.Neutral[500] : 'none'};
 	}
+
+	@media (max-width: 640px) {
+		flex: auto;
+		width: 100%;
+		max-width: none;
+	}
 `;
 
 interface ICardBody {
