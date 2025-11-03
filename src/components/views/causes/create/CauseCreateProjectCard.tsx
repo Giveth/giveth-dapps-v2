@@ -207,7 +207,6 @@ interface IWrapperProps {
 
 const Wrapper = styled.div<IWrapperProps>`
 	position: relative;
-	width: ${props => (props.$showOptions ? '50%' : '100%')};
 	border-radius: 12px;
 	margin: 4px 0 0 0;
 	background: white;
@@ -223,6 +222,10 @@ const Wrapper = styled.div<IWrapperProps>`
 			props.$showOptions ? 'translateY(-8px) scale(1.02)' : 'none'};
 		box-shadow: ${props =>
 			props.$showOptions ? Shadow.Neutral[500] : 'none'};
+	}
+
+	@media (min-width: 641px) {
+		width: ${props => (props.$showOptions ? '50%' : '100%')};
 	}
 
 	@media (max-width: 640px) {
