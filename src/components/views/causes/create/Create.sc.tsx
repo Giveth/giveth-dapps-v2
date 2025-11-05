@@ -10,6 +10,10 @@ import {
 
 export const StyledContainer = styled(Container)`
 	margin-top: 56px;
+
+	@media (max-width: 640px) {
+		margin-top: 170px;
+	}
 `;
 
 export const Title = styled(H3)`
