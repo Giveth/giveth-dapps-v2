@@ -47,8 +47,10 @@ const ProjectTotalFundCard = ({ selectedQF }: IProjectTotalFundCardProps) => {
 	const {
 		allocatedFundUSDPreferred,
 		allocatedFundUSD,
-		allocatedTokenSymbol,
+		matchingFundCurrency,
 	} = selectedQF || {};
+
+	console.log('selectedQF', selectedQF);
 
 	// Find round that matches the selectedQFRound
 	const [matchingData, setMatchingData] = useState({
@@ -266,7 +268,8 @@ const ProjectTotalFundCard = ({ selectedQF }: IProjectTotalFundCardProps) => {
 													!!selectedQF?.isActive,
 												)}{' '}
 												{!allocatedFundUSDPreferred &&
-													allocatedTokenSymbol}
+													(qfRoundHistory?.matchingFundCurrency ||
+														matchingFundCurrency)}
 											</EstimatedMatchingPrice>
 											<EstimatedMatchingText>
 												{selectedQF?.isActive
