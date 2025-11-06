@@ -50,8 +50,6 @@ const ProjectTotalFundCard = ({ selectedQF }: IProjectTotalFundCardProps) => {
 		matchingFundCurrency,
 	} = selectedQF || {};
 
-	console.log('selectedQF', selectedQF);
-
 	// Find round that matches the selectedQFRound
 	const [matchingData, setMatchingData] = useState({
 		allProjectsSum: 0,
