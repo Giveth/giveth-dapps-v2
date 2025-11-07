@@ -101,6 +101,7 @@ const ProjectCard = (props: IProjectCard) => {
 		projectType,
 		addresses,
 	} = project;
+
 	const [recurringDonationSumInQF, setRecurringDonationSumInQF] = useState(0);
 	const [isHover, setIsHover] = useState(false);
 	const [showHintModal, setShowHintModal] = useState(false);
@@ -304,7 +305,24 @@ const ProjectCard = (props: IProjectCard) => {
 								isCause={projectType === EProjectType.CAUSE}
 							/>
 						)}
+						{providedQFRoundId && (
+							<ProjectCardTotalRaised
+								activeStartedRound={true}
+								totalDonations={getProjectTotalRaisedUSD(
+									project,
+								)}
+								sumDonationValueUsdForActiveQfRound={getSumDonationValueUsdForActiveQfRound(
+									project,
+								)}
+								countUniqueDonors={getCountUniqueDonorsForActiveQfRound(
+									project,
+								)}
+								projectsCount={project.activeProjectsCount || 0}
+								isCause={projectType === EProjectType.CAUSE}
+							/>
+						)}
 						{!activeStartedRound &&
+							!providedQFRoundId &&
 							!isListingInsideProjectsCausesAllPage &&
 							!isListingInsideCauseProjectTabs && (
 								<ProjectCardTotalRaised
