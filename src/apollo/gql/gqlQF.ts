@@ -128,6 +128,7 @@ export const FETCH_QF_PROJECTS = gql`
 				title
 				descriptionSummary
 				updatedAt
+				latestUpdateCreationDate
 				slug
 				addresses {
 					address
