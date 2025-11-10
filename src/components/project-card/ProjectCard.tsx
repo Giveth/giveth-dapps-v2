@@ -305,22 +305,25 @@ const ProjectCard = (props: IProjectCard) => {
 								isCause={projectType === EProjectType.CAUSE}
 							/>
 						)}
-						{providedQFRoundId && (
-							<ProjectCardTotalRaised
-								activeStartedRound={true}
-								totalDonations={getProjectTotalRaisedUSD(
-									project,
-								)}
-								sumDonationValueUsdForActiveQfRound={getSumDonationValueUsdForActiveQfRound(
-									project,
-								)}
-								countUniqueDonors={getCountUniqueDonorsForActiveQfRound(
-									project,
-								)}
-								projectsCount={project.activeProjectsCount || 0}
-								isCause={projectType === EProjectType.CAUSE}
-							/>
-						)}
+						{(providedQFRoundId ?? 0) > 0 &&
+							!activeStartedRound && (
+								<ProjectCardTotalRaised
+									activeStartedRound={true}
+									totalDonations={getProjectTotalRaisedUSD(
+										project,
+									)}
+									sumDonationValueUsdForActiveQfRound={getSumDonationValueUsdForActiveQfRound(
+										project,
+									)}
+									countUniqueDonors={getCountUniqueDonorsForActiveQfRound(
+										project,
+									)}
+									projectsCount={
+										project.activeProjectsCount || 0
+									}
+									isCause={projectType === EProjectType.CAUSE}
+								/>
+							)}
 						{!activeStartedRound &&
 							!providedQFRoundId &&
 							!isListingInsideProjectsCausesAllPage &&
