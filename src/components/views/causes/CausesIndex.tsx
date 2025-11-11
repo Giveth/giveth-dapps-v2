@@ -71,8 +71,8 @@ const CausesIndex = (props: ICausesView) => {
 	// Define the fetch function for React Query
 	const fetchProjectsPage = async ({ pageParam = 0 }) => {
 		const variables: IQueries = {
-			limit: 20, // Adjust the limit as needed
-			skip: 20 * pageParam,
+			limit: 15,
+			skip: 15 * pageParam,
 			projectType: EProjectType.CAUSE,
 		};
 
