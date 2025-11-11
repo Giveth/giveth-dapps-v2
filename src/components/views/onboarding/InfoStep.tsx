@@ -39,10 +39,7 @@ import { useGeneralWallet } from '@/providers/generalWalletProvider';
 import { client } from '@/apollo/apolloClient';
 import InputStyled from '@/components/styled-components/Input';
 import { EInputValidation } from '@/types/inputValidation';
-import {
-	cleanTelegramUsername,
-	cleanTwitterUsername,
-} from '../../../helpers/user';
+import { cleanTelegramUsername, cleanTwitterUsername } from '@/helpers/user';
 
 export interface IUserInfo {
 	twitterName: string;

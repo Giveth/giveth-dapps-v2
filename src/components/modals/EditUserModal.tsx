@@ -25,6 +25,7 @@ import { useModalAnimation } from '@/hooks/useModalAnimation';
 import useUpload from '@/hooks/useUpload';
 import { useGeneralWallet } from '@/providers/generalWalletProvider';
 import InputUserEmailVerify from '../InputUserEmailVerify';
+import { cleanTelegramUsername, cleanTwitterUsername } from '@/helpers/user';
 
 interface IEditUserModal extends IModal {
 	user: IUser;
@@ -37,6 +38,8 @@ type Inputs = {
 	location: string;
 	email: string;
 	url: string;
+	twitterName: string;
+	telegramName: string;
 };
 
 const EditUserModal = ({
@@ -99,6 +102,8 @@ const EditUserModal = ({
 				mutation: UPDATE_USER,
 				variables: {
 					...formData,
+					twitterName: cleanTwitterUsername(formData.twitterName),
+					telegramName: cleanTelegramUsername(formData.telegramName),
 				},
 			});
 			if (data.updateUser) {
@@ -252,6 +257,16 @@ const inputFields = [
 		name: 'email',
 		type: 'email',
 		registerOptions: requiredOptions.email,
+	},
+	{
+		label: 'label.user.x_twitter_profile',
+		placeholder: 'Your X/Twitter username',
+		name: 'twitterName',
+	},
+	{
+		label: 'label.user.telegram_profile',
+		placeholder: 'Your Telegram username',
+		name: 'telegramName',
 	},
 	{
 		label: 'label.location_optional',
