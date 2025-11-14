@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState } from 'react';
 import { useIntl } from 'react-intl';
 import styled from 'styled-components';
 import {
@@ -53,25 +53,9 @@ export const CauseProjectsSearch = ({
 	const [filters, setFilters] = useState<EProjectsFilter[]>([]);
 
 	// Get main categories from Redux store
-	const mainCategoriesFromStore = useAppSelector(
+	const mainCategories = useAppSelector(
 		state => state.general.mainCategories,
 	);
-
-	// Add DeSci category and sort alphabetically
-	const mainCategories = useMemo(() => {
-		const desciCategory: IMainCategory = {
-			title: 'DeSci',
-			slug: 'desci',
-			banner: '',
-			description: '',
-			categories: [],
-		};
-
-		const allCategories = [...mainCategoriesFromStore, desciCategory];
-
-		// Sort alphabetically by title
-		return allCategories.sort((a, b) => a.title.localeCompare(b.title));
-	}, [mainCategoriesFromStore]);
 
 	// Handle filters change
 	const handleFiltersChange = (filters: {
