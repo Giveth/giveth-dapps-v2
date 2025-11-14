@@ -87,6 +87,7 @@ export const FETCH_ARCHIVED_QF_ROUNDS = gql`
 			bannerBgImage
 			bannerFull
 			bannerMobile
+			hubCardImage
 		}
 	}
 `;
