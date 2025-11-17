@@ -57,7 +57,7 @@ export const CauseProjectsSearch = ({
 		state => state.general.mainCategories,
 	);
 
-	//
+	// Handle filters change
 	const handleFiltersChange = (filters: {
 		filters: never[];
 		searchTerm: string;
