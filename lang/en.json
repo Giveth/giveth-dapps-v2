@@ -1932,6 +1932,8 @@
 	"label.cause.cause_technology_desc": "Support Causes focused on tech innovation, research, and DeSci.",
 	"label.cause.cause_public-goods": "Public Goods",
 	"label.cause.cause_public-goods_desc": "Support public goods Causes through direct giving.",
+	"label.cause.cause_desci": "DeSci",
+	"label.cause.cause_desci_desc": "Support Causes focused on DeSci, research, and innovation.",
 	"label.cause.cause_features": "Cause Features",
 	"label.cause.explore_causes": "Explore Causes",
 	"label.cause.there_are_no_causes_matching_your_search": "There are no Causes matching your search",

@@ -1932,6 +1932,8 @@
 	"label.cause.cause_technology_desc": "Dona suport a Causes centrades en innovació tecnològica, recerca i DeSci.",
 	"label.cause.cause_public-goods": "Béns Públics",
 	"label.cause.cause_public-goods_desc": "Dona suport a Causes de béns públics mitjançant donacions directes.",
+	"label.cause.cause_desci": "DeSci",
+	"label.cause.cause_desci_desc": "Dona suport a Causes centrades en DeSci, recerca i innovació.",
 	"label.cause.cause_features": "Funcionalitats de la Causa",
 	"label.cause.explore_causes": "Explora Causes",
 	"label.cause.there_are_no_causes_matching_your_search": "No hi ha Causes que coincideixin amb la teva cerca",
