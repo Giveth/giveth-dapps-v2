@@ -1932,6 +1932,8 @@
 	"label.cause.cause_technology_desc": "Apoya Causas centradas en innovación tecnológica, investigación y DeSci.",
 	"label.cause.cause_public-goods": "Bienes Públicos",
 	"label.cause.cause_public-goods_desc": "Apoya Causas de bienes públicos mediante donaciones directas.",
+	"label.cause.cause_desci": "DeSci",
+	"label.cause.cause_desci_desc": "Apoya Causas centradas en DeSci, investigación y innovación.",
 	"label.cause.cause_real-estate": "Bienes Raíces",
 	"label.cause.cause_real-estate_desc": "Apoya Causas centradas en bienes raíces, construcción y desarrollo inmobiliario.",
 	"label.cause.cause_refi": "Refi",
