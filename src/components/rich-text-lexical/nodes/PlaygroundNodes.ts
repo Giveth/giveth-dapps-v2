@@ -6,8 +6,6 @@
  *
  */
 
-import type { Klass, LexicalNode } from 'lexical';
-
 import { CodeHighlightNode, CodeNode } from '@lexical/code';
 import { HashtagNode } from '@lexical/hashtag';
 import { AutoLinkNode, LinkNode } from '@lexical/link';
@@ -39,6 +37,7 @@ import { SpecialTextNode } from './SpecialTextNode';
 import { StickyNode } from './StickyNode';
 import { TweetNode } from './TweetNode';
 import { YouTubeNode } from './YouTubeNode';
+import type { Klass, LexicalNode } from 'lexical';
 
 const PlaygroundNodes: Array<Klass<LexicalNode>> = [
 	HeadingNode,
