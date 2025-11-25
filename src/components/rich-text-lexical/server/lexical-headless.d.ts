@@ -3,7 +3,12 @@
  * This module provides headless editor functionality for server-side Lexical usage
  */
 declare module '@lexical/headless' {
-	import type { LexicalEditor, EditorThemeClasses, Klass, LexicalNode } from 'lexical';
+	import type {
+		LexicalEditor,
+		EditorThemeClasses,
+		Klass,
+		LexicalNode,
+	} from 'lexical';
 
 	export type CreateEditorArgs = {
 		namespace?: string;
@@ -21,3 +26,11 @@ declare module '@lexical/headless' {
 	): LexicalEditor;
 }
 
+/**
+ * Global type declarations for Lexical server-side usage
+ */
+declare global {
+	var __DEV__: boolean;
+}
+
+export {};
