@@ -6,8 +6,6 @@
  *
  */
 
-import type { JSX } from 'react';
-
 import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext';
 import { useLexicalEditable } from '@lexical/react/useLexicalEditable';
 import {
@@ -36,6 +34,7 @@ import { createPortal } from 'react-dom';
 
 import { getThemeSelector } from '../../utils/getThemeSelector';
 import { useDebounce } from '../CodeActionMenuPlugin/utils';
+import type { JSX } from 'react';
 
 const BUTTON_WIDTH_PX = 20;
 
