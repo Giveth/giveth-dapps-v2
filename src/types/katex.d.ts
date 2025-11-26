@@ -52,4 +52,3 @@ declare module 'katex' {
 	};
 	export default katex;
 }
-
