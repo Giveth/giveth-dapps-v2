@@ -10,7 +10,6 @@
 import type { JSX } from 'react';
 
 import 'react-day-picker/style.css';
-import styles from './DateTimeNode.module.css';
 
 import {
 	autoUpdate,
@@ -50,7 +49,6 @@ export default function DateTimeComponent({
 	const [selected, setSelected] = useState(dateTime);
 	const [includeTime, setIncludeTime] = useState(false);
 	const [timeValue, setTimeValue] = useState('00:00');
-	// eslint-disable-next-line @typescript-eslint/no-unused-vars
 	const [isNodeSelected, setNodeSelected, clearNodeSelection] =
 		useLexicalNodeSelection(nodeKey);
 
