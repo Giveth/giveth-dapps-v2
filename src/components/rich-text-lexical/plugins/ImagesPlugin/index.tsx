@@ -40,9 +40,8 @@ import {
 } from 'lexical';
 import { useEffect, useRef, useState } from 'react';
 import * as React from 'react';
+import { captureException } from '@sentry/nextjs';
 
-import landscapeImage from '../../images/landscape.jpg';
-import yellowFlowerImage from '../../images/yellow-flower.jpg';
 import {
 	$createImageNode,
 	$isImageNode,
@@ -50,9 +49,12 @@ import {
 	ImagePayload,
 } from '../../nodes/ImageNode';
 import Button from '../../ui/Button';
-import { DialogActions, DialogButtonsList } from '../../ui/Dialog';
+import { DialogActions } from '../../ui/Dialog';
 import FileInput from '../../ui/FileInput';
 import TextInput from '../../ui/TextInput';
+import { client } from '@/apollo/apolloClient';
+import { UPLOAD_IMAGE } from '@/apollo/gql/gqlProjects';
+import { showToastError } from '@/lib/helpers';
 import type { JSX } from 'react';
 
 export type InsertImagePayload = Readonly<ImagePayload>;
@@ -101,24 +103,62 @@ export function InsertImageUriDialogBody({
 
 export function InsertImageUploadedDialogBody({
 	onClick,
+	projectId,
 }: {
 	onClick: (payload: InsertImagePayload) => void;
+	projectId?: string;
 }) {
+	console.log('projectId', projectId);
 	const [src, setSrc] = useState('');
 	const [altText, setAltText] = useState('');
+	const [isUploading, setIsUploading] = useState(false);
+	const [selectedFile, setSelectedFile] = useState<File | null>(null);
 
-	const isDisabled = src === '';
+	const isDisabled = !selectedFile || isUploading;
 
-	const loadImage = (files: FileList | null) => {
-		const reader = new FileReader();
-		reader.onload = function () {
-			if (typeof reader.result === 'string') {
-				setSrc(reader.result);
-			}
-			return '';
-		};
-		if (files !== null) {
+	const handleFileSelect = (files: FileList | null) => {
+		if (files && files[0]) {
+			setSelectedFile(files[0]);
+			// Show preview
+			const reader = new FileReader();
+			reader.onload = function () {
+				if (typeof reader.result === 'string') {
+					setSrc(reader.result);
+				}
+			};
 			reader.readAsDataURL(files[0]);
+		}
+	};
+
+	const uploadImage = async () => {
+		if (!selectedFile) return;
+
+		setIsUploading(true);
+		try {
+			console.log('Uploading image to Pinata, please wait...');
+			const { data: imageUploaded } = await client.mutate({
+				mutation: UPLOAD_IMAGE,
+				variables: {
+					imageUpload: {
+						image: selectedFile,
+						projectId: projectId ? parseFloat(projectId) : null,
+					},
+				},
+			});
+
+			const uploadedUrl = imageUploaded?.uploadImage?.url;
+			if (uploadedUrl) {
+				onClick({ altText, src: uploadedUrl });
+			}
+		} catch (error) {
+			showToastError(error);
+			captureException(error, {
+				tags: {
+					section: 'LexicalImageUpload',
+				},
+			});
+		} finally {
+			setIsUploading(false);
 		}
 	};
 
@@ -126,10 +166,23 @@ export function InsertImageUploadedDialogBody({
 		<>
 			<FileInput
 				label='Image Upload'
-				onChange={loadImage}
+				onChange={handleFileSelect}
 				accept='image/*'
 				data-test-id='image-modal-file-upload'
 			/>
+			{src && (
+				// eslint-disable-next-line @next/next/no-img-element
+				<img
+					src={src}
+					alt='Preview'
+					style={{
+						maxWidth: '100%',
+						maxHeight: '200px',
+						marginTop: '10px',
+						borderRadius: '8px',
+					}}
+				/>
+			)}
 			<TextInput
 				label='Alt Text'
 				placeholder='Descriptive alternative text'
@@ -141,9 +194,9 @@ export function InsertImageUploadedDialogBody({
 				<Button
 					data-test-id='image-modal-file-upload-btn'
 					disabled={isDisabled}
-					onClick={() => onClick({ altText, src })}
+					onClick={uploadImage}
 				>
-					Confirm
+					{isUploading ? 'Uploading...' : 'Confirm'}
 				</Button>
 			</DialogActions>
 		</>
@@ -153,11 +206,12 @@ export function InsertImageUploadedDialogBody({
 export function InsertImageDialog({
 	activeEditor,
 	onClose,
+	projectId,
 }: {
 	activeEditor: LexicalEditor;
 	onClose: () => void;
+	projectId?: string;
 }): JSX.Element {
-	const [mode, setMode] = useState<null | 'url' | 'file'>(null);
 	const hasModifier = useRef(false);
 
 	useEffect(() => {
@@ -178,40 +232,10 @@ export function InsertImageDialog({
 
 	return (
 		<>
-			{!mode && (
-				<DialogButtonsList>
-					<Button
-						data-test-id='image-modal-option-sample'
-						onClick={() =>
-							onClick(
-								hasModifier.current
-									? {
-											altText:
-												'Daylight fir trees forest glacier green high ice landscape',
-											src: landscapeImage.src,
-										}
-									: {
-											altText:
-												'Yellow flower in tilt shift lens',
-											src: yellowFlowerImage.src,
-										},
-							)
-						}
-					>
-						Sample
-					</Button>
-					<Button
-						data-test-id='image-modal-option-file'
-						onClick={() => setMode('file')}
-					>
-						File
-					</Button>
-				</DialogButtonsList>
-			)}
-			{mode === 'url' && <InsertImageUriDialogBody onClick={onClick} />}
-			{mode === 'file' && (
-				<InsertImageUploadedDialogBody onClick={onClick} />
-			)}
+			<InsertImageUploadedDialogBody
+				onClick={onClick}
+				projectId={projectId}
+			/>
 		</>
 	);
 }

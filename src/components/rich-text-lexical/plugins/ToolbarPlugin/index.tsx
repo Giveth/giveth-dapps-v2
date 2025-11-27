@@ -589,11 +589,13 @@ export default function ToolbarPlugin({
 	activeEditor,
 	setActiveEditor,
 	setIsLinkEditMode,
+	projectId,
 }: {
 	editor: LexicalEditor;
 	activeEditor: LexicalEditor;
 	setActiveEditor: Dispatch<LexicalEditor>;
 	setIsLinkEditMode: Dispatch<boolean>;
+	projectId?: string;
 }): JSX.Element {
 	const [selectedElementKey, setSelectedElementKey] =
 		useState<NodeKey | null>(null);
@@ -1418,6 +1420,7 @@ export default function ToolbarPlugin({
 											<InsertImageDialog
 												activeEditor={activeEditor}
 												onClose={onClose}
+												projectId={projectId}
 											/>
 										));
 									}}

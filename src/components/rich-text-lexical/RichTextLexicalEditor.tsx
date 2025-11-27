@@ -312,9 +312,11 @@ function EditorInitializer({ html }: { html?: string }) {
 export default function RichTextLexicalEditor({
 	initialValue,
 	onChange,
+	projectId,
 }: {
 	initialValue?: string;
 	onChange?: (html: string) => void;
+	projectId?: string;
 } = {}) {
 	// Debug: Log the initial value
 	console.log('RichTextLexicalEditor initialValue:', initialValue);
@@ -341,7 +343,7 @@ export default function RichTextLexicalEditor({
 					<TableContext>
 						<ToolbarContext>
 							<EditorShell className='editor-shell'>
-								<Editor />
+								<Editor projectId={projectId} />
 							</EditorShell>
 							<EditorInitializer html={initialValue} />
 							<OnChangeHandler onChange={onChange} />

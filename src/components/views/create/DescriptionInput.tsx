@@ -30,10 +30,12 @@ const DESCRIPTION_MIN_LIMIT = 1200;
 
 interface IDescriptionInputProps {
 	setActiveProjectSection: (section: ECreateProjectSections) => void;
+	projectId?: string;
 }
 
 const DescriptionInput = ({
 	setActiveProjectSection,
+	projectId,
 }: IDescriptionInputProps) => {
 	const {
 		getValues,
@@ -109,6 +111,7 @@ const DescriptionInput = ({
 				<RichTextLexicalEditor
 					initialValue={description}
 					onChange={handleDescription}
+					projectId={projectId}
 				/>
 				{/* <RichTextInput
 					style={TextInputStyle}

@@ -149,7 +149,11 @@ function getDynamicOptions(editor: LexicalEditor, queryString: string) {
 
 type ShowModal = ReturnType<typeof useModal>[1];
 
-function getBaseOptions(editor: LexicalEditor, showModal: ShowModal) {
+function getBaseOptions(
+	editor: LexicalEditor,
+	showModal: ShowModal,
+	projectId?: string,
+) {
 	return [
 		new ComponentPickerOption('Paragraph', {
 			icon: <i className='icon paragraph' />,
@@ -348,6 +352,7 @@ function getBaseOptions(editor: LexicalEditor, showModal: ShowModal) {
 					<InsertImageDialog
 						activeEditor={editor}
 						onClose={onClose}
+						projectId={projectId}
 					/>
 				)),
 		}),
@@ -383,7 +388,11 @@ function getBaseOptions(editor: LexicalEditor, showModal: ShowModal) {
 	];
 }
 
-export default function ComponentPickerMenuPlugin(): JSX.Element {
+export default function ComponentPickerMenuPlugin({
+	projectId,
+}: {
+	projectId?: string;
+} = {}): JSX.Element {
 	const [editor] = useLexicalComposerContext();
 	const [modal, showModal] = useModal();
 	const [queryString, setQueryString] = useState<string | null>(null);
@@ -394,7 +403,7 @@ export default function ComponentPickerMenuPlugin(): JSX.Element {
 	});
 
 	const options = useMemo(() => {
-		const baseOptions = getBaseOptions(editor, showModal);
+		const baseOptions = getBaseOptions(editor, showModal, projectId);
 
 		if (!queryString) {
 			return baseOptions;
@@ -410,7 +419,7 @@ export default function ComponentPickerMenuPlugin(): JSX.Element {
 					option.keywords.some(keyword => regex.test(keyword)),
 			),
 		];
-	}, [editor, queryString, showModal]);
+	}, [editor, queryString, showModal, projectId]);
 
 	const onSelectOption = useCallback(
 		(

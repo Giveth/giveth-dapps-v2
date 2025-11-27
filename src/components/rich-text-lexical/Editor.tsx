@@ -78,7 +78,11 @@ import type { JSX } from 'react';
 const skipCollaborationInit =
 	window.parent != null && window.parent.frames.right === window;
 
-export default function Editor(): JSX.Element {
+export default function Editor({
+	projectId,
+}: {
+	projectId?: string;
+} = {}): JSX.Element {
 	const { historyState } = useSharedHistoryContext();
 	const {
 		settings: {
@@ -147,6 +151,7 @@ export default function Editor(): JSX.Element {
 					activeEditor={activeEditor}
 					setActiveEditor={setActiveEditor}
 					setIsLinkEditMode={setIsLinkEditMode}
+					projectId={projectId}
 				/>
 			)}
 			{isRichText && (
@@ -165,7 +170,7 @@ export default function Editor(): JSX.Element {
 				<AutoFocusPlugin />
 				{selectionAlwaysOnDisplay && <SelectionAlwaysOnDisplay />}
 				<ClearEditorPlugin />
-				<ComponentPickerPlugin />
+				<ComponentPickerPlugin projectId={projectId} />
 				<EmojiPickerPlugin />
 				<AutoEmbedPlugin />
 				<MentionsPlugin />
