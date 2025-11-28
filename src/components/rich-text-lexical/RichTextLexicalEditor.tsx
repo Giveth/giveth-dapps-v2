@@ -294,7 +294,9 @@ function EditorInitializer({ html }: { html?: string }) {
 			// Clean up problematic HTML patterns before parsing
 			const cleanedHtml = html
 				.replace(/<p[^>]*><span[^>]*>([^<])<\/span><\/p>/g, '<p>$1</p>') // Single character spans
-				.replace(/style="[^"]*white-space:\s*pre-wrap[^"]*"/g, ''); // Remove problematic styles
+				.replace(/style="[^"]*white-space:\s*pre-wrap[^"]*"/g, '') // Remove problematic styles
+				.replace(/<span[^>]*class=["']image-uploading["'][^>]*>/g, '') // Remove opening <span class="image-uploading">
+				.replace(/<\/span>/g, ''); // Remove closing </span>
 
 			const parser = new DOMParser();
 			const dom = parser.parseFromString(cleanedHtml, 'text/html');
