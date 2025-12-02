@@ -42,6 +42,7 @@ import { zIndex } from '@/lib/constants/constants';
 import configuration, { isProduction } from '@/configuration';
 import MaintenanceIndex from '@/components/views/Errors/MaintenanceIndex';
 import { SolanaProvider } from '@/providers/solanaWalletProvider';
+import { MiniKitProvider } from '@/components/MiniKitProvider';
 import type { AppProps } from 'next/app';
 
 if (!isProduction) {
@@ -196,52 +197,61 @@ function MyApp({ Component, pageProps }: AppProps) {
 			<GoogleAnalytics
 				gaId={process.env.NEXT_PUBLIC_ANALYTICS_WRITE_KEY || ''}
 			/>
-			<ReduxProvider store={store}>
-				<IntlProvider
-					locale={locale!}
-					messages={IntlMessages[locale as keyof typeof IntlMessages]}
-					defaultLocale={defaultLocale}
-				>
-					<ApolloProvider client={apolloClient}>
-						<SolanaProvider>
-							<WagmiProvider config={wagmiConfig}>
-								<ThirdwebProvider>
-									<QueryClientProvider client={queryClient}>
-										<GeneralWalletProvider>
-											<PostHogProvider client={posthog}>
-												{isMaintenanceMode ? (
-													<MaintenanceIndex />
-												) : (
-													<>
-														<NotificationController />
-														<GeneralController />
-														<SubgraphController />
-														<UserController />
-														<HeaderWrapper />
-														{isGIVeconomyRoute(
-															router.route,
-														) && <GIVeconomyTab />}
-														{(pageProps as any)
-															.errorStatus ? (
-															<ErrorsIndex
-																statusCode={
-																	(
-																		pageProps as any
-																	)
-																		.errorStatus
-																}
-															/>
-														) : (
-															<RenderComponent
-																Component={
-																	Component
-																}
-																pageProps={
-																	pageProps
-																}
-															/>
-														)}
-														{/* {process.env.NEXT_PUBLIC_ENV !==
+			<MiniKitProvider>
+				<ReduxProvider store={store}>
+					<IntlProvider
+						locale={locale!}
+						messages={
+							IntlMessages[locale as keyof typeof IntlMessages]
+						}
+						defaultLocale={defaultLocale}
+					>
+						<ApolloProvider client={apolloClient}>
+							<SolanaProvider>
+								<WagmiProvider config={wagmiConfig}>
+									<ThirdwebProvider>
+										<QueryClientProvider
+											client={queryClient}
+										>
+											<GeneralWalletProvider>
+												<PostHogProvider
+													client={posthog}
+												>
+													{isMaintenanceMode ? (
+														<MaintenanceIndex />
+													) : (
+														<>
+															<NotificationController />
+															<GeneralController />
+															<SubgraphController />
+															<UserController />
+															<HeaderWrapper />
+															{isGIVeconomyRoute(
+																router.route,
+															) && (
+																<GIVeconomyTab />
+															)}
+															{(pageProps as any)
+																.errorStatus ? (
+																<ErrorsIndex
+																	statusCode={
+																		(
+																			pageProps as any
+																		)
+																			.errorStatus
+																	}
+																/>
+															) : (
+																<RenderComponent
+																	Component={
+																		Component
+																	}
+																	pageProps={
+																		pageProps
+																	}
+																/>
+															)}
+															{/* {process.env.NEXT_PUBLIC_ENV !==
 												'production' && (
 												<Script
 													id='console-script'
@@ -252,20 +262,21 @@ function MyApp({ Component, pageProps }: AppProps) {
 												/>
 											)} */}
 
-														<FooterWrapper />
-														<ModalController />
-														<PfpController />
-													</>
-												)}
-											</PostHogProvider>
-										</GeneralWalletProvider>
-									</QueryClientProvider>
-								</ThirdwebProvider>
-							</WagmiProvider>
-						</SolanaProvider>
-					</ApolloProvider>
-				</IntlProvider>
-			</ReduxProvider>
+															<FooterWrapper />
+															<ModalController />
+															<PfpController />
+														</>
+													)}
+												</PostHogProvider>
+											</GeneralWalletProvider>
+										</QueryClientProvider>
+									</ThirdwebProvider>
+								</WagmiProvider>
+							</SolanaProvider>
+						</ApolloProvider>
+					</IntlProvider>
+				</ReduxProvider>
+			</MiniKitProvider>
 
 			<Toaster containerStyle={{ top: '80px' }} />
 			<SpeedInsights />

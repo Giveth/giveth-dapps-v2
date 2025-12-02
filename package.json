@@ -18,7 +18,9 @@
 	},
 	"dependencies": {
 		"@apollo/client": "^3.11.8",
+		"@coinbase/onchainkit": "^1.1.2",
 		"@divvi/referral-sdk": "^1.0.0",
+		"@farcaster/miniapp-sdk": "^0.2.1",
 		"@giveth/ui-design-system": "^1.11.36",
 		"@next/third-parties": "^14.2.5",
 		"@react-google-maps/api": "^2.19.3",

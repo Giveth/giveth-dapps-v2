@@ -1,0 +1,35 @@
+{
+  "accountAssociation": {
+    "header": "",
+    "payload": "",
+    "signature": ""
+  },
+  "baseBuilder": {
+    "ownerAddress": "0x"
+  },
+  "miniapp": {
+    "version": "1",
+    "name": "Giveth",
+    "homeUrl": "https://giveth.io",
+    "iconUrl": "https://giveth.io/images/miniapp/icon.png",
+    "splashImageUrl": "https://giveth.io/images/miniapp/splash.png",
+    "splashBackgroundColor": "#1B1657",
+    "webhookUrl": "https://giveth.io/api/miniapp/webhook",
+    "subtitle": "Future of Giving",
+    "description": "Get rewarded for giving to for-good projects with zero added fees. Donate crypto directly to thousands of nonprofits & charities!",
+    "screenshotUrls": [
+      "https://giveth.io/images/miniapp/screenshot-1.png",
+      "https://giveth.io/images/miniapp/screenshot-2.png",
+      "https://giveth.io/images/miniapp/screenshot-3.png"
+    ],
+    "primaryCategory": "social",
+    "tags": ["donations", "crypto", "nonprofit", "charity", "giveth", "web3", "public-goods"],
+    "heroImageUrl": "https://giveth.mypinata.cloud/ipfs/QmQ9sfdevs9vS7czBXBfDaRRPhU8a6T5gXxF3NDGSnQe1c",
+    "tagline": "Zero-Fee Crypto Donations",
+    "ogTitle": "Giveth: Future of Giving with Zero-Fee Crypto Donation",
+    "ogDescription": "Get rewarded for crypto donations to for-good projects with zero added fees. Donate crypto directly to thousands of nonprofits & charities!",
+    "ogImageUrl": "https://giveth.mypinata.cloud/ipfs/QmQ9sfdevs9vS7czBXBfDaRRPhU8a6T5gXxF3NDGSnQe1c",
+    "noindex": false
+  }
+}
+
