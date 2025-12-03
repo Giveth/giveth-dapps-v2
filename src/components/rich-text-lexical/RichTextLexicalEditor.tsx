@@ -9,6 +9,8 @@ import {
 	DOMConversionMap,
 	TextNode,
 	EditorState,
+	LexicalNode,
+	ParagraphNode,
 	// LexicalEditor,
 } from 'lexical';
 import { $generateHtmlFromNodes, $generateNodesFromDOM } from '@lexical/html';
@@ -194,6 +196,47 @@ function OnChangeHandler({ onChange }: { onChange?: (html: string) => void }) {
 	return onChange ? <OnChangePlugin onChange={handleChange} /> : null;
 }
 
+function parseHtmlToLexicalNodes(editor: any, html: string) {
+	// 🧹 Clean up problematic input
+	const cleanedHtml = html
+		.replace(/""/g, '"')
+		.replace(/<p[^>]*><span[^>]*>([^<])<\/span><\/p>/g, '<p>$1</p>')
+		.replace(/style="[^"]*white-space:\s*pre-wrap[^"]*"/g, '')
+		.replace(/<span[^>]*class=["']image-uploading["'][^>]*>/g, '')
+		.replace(/<span[^>]*>\s*(<img[^>]+>)\s*<\/span>/gi, '<p>$1</p>')
+		.replace(/<\/span>/g, '');
+
+	const parser = new DOMParser();
+	const dom = parser.parseFromString(cleanedHtml, 'text/html');
+	const nodes = $generateNodesFromDOM(editor, dom);
+
+	// 🛠 Fix orphan text nodes being directly at root level
+	const fixedNodes: (LexicalNode | ParagraphNode)[] = [];
+	let buffer: LexicalNode[] = [];
+
+	const flushBuffer = () => {
+		if (buffer.length > 0) {
+			const p = $createParagraphNode();
+			buffer.forEach(n => p.append(n));
+			fixedNodes.push(p);
+			buffer = [];
+		}
+	};
+
+	nodes.forEach(node => {
+		const type = node.getType?.();
+		if (type === 'text' || type === 'linebreak' || type === 'link') {
+			buffer.push(node);
+		} else {
+			flushBuffer();
+			fixedNodes.push(node);
+		}
+	});
+
+	flushBuffer();
+	return fixedNodes;
+}
+
 // Function to create initial editor state from HTML or text
 function createInitialEditorState(content?: string) {
 	return (editor: any) => {
@@ -201,17 +244,10 @@ function createInitialEditorState(content?: string) {
 		if (!content || root.getFirstChild() !== null) return;
 
 		try {
-			// Clean up problematic HTML patterns before parsing
-			const cleanedContent = content
-				.replace(/<p[^>]*><span[^>]*>([^<])<\/span><\/p>/g, '<p>$1</p>') // Single character spans
-				.replace(/style="[^"]*white-space:\s*pre-wrap[^"]*"/g, ''); // Remove problematic styles
-
-			const parser = new DOMParser();
-			const dom = parser.parseFromString(cleanedContent, 'text/html');
-			const nodes = $generateNodesFromDOM(editor, dom);
+			const fixedNodes = parseHtmlToLexicalNodes(editor, content);
 
 			root.clear();
-			root.append(...nodes);
+			root.append(...fixedNodes);
 		} catch (err) {
 			console.error('Error parsing HTML content:', err);
 			// Fallback to plain text paragraph
@@ -220,63 +256,6 @@ function createInitialEditorState(content?: string) {
 			root.append(paragraph);
 		}
 	};
-
-	// return () => {
-	// 	const root = $getRoot();
-	// 	if (root.getFirstChild() === null) {
-	// 		if (content && content.trim() !== '') {
-	// 			// Check if content looks like HTML
-	// 			if (content.includes('<') && content.includes('>')) {
-	// 				try {
-	// 					// Split content by paragraph tags and create separate paragraphs
-	// 					const paragraphs = content
-	// 						.split(/<\/p>\s*<p[^>]*>/)
-	// 						.map(p =>
-	// 							p
-	// 								.replace(/<\/?p[^>]*>/g, '')
-	// 								.replace(/<br\s*\/?>/gi, '')
-	// 								.trim(),
-	// 						)
-	// 						.filter(p => p.length > 0);
-
-	// 					if (paragraphs.length > 0) {
-	// 						paragraphs.forEach(paragraphText => {
-	// 							const paragraph = $createParagraphNode();
-	// 							paragraph.append(
-	// 								$createTextNode(paragraphText),
-	// 							);
-	// 							root.append(paragraph);
-	// 						});
-	// 					} else {
-	// 						// Fallback: strip all HTML and create single paragraph
-	// 						const textContent = content
-	// 							.replace(/<[^>]*>/g, '')
-	// 							.trim();
-	// 						if (textContent) {
-	// 							const paragraph = $createParagraphNode();
-	// 							paragraph.append($createTextNode(textContent));
-	// 							root.append(paragraph);
-	// 						}
-	// 					}
-	// 				} catch (error) {
-	// 					// Fallback to plain text if HTML parsing fails
-	// 					const paragraph = $createParagraphNode();
-	// 					paragraph.append($createTextNode(content));
-	// 					root.append(paragraph);
-	// 				}
-	// 			} else {
-	// 				// Plain text content
-	// 				const paragraph = $createParagraphNode();
-	// 				paragraph.append($createTextNode(content));
-	// 				root.append(paragraph);
-	// 			}
-	// 		} else {
-	// 			// Add empty paragraph if no content
-	// 			const paragraph = $createParagraphNode();
-	// 			root.append(paragraph);
-	// 		}
-	// 	}
-	// };
 }
 
 function EditorInitializer({ html }: { html?: string }) {
@@ -291,18 +270,10 @@ function EditorInitializer({ html }: { html?: string }) {
 			const root = $getRoot();
 			root.clear();
 
-			// Clean up problematic HTML patterns before parsing
-			const cleanedHtml = html
-				.replace(/<p[^>]*><span[^>]*>([^<])<\/span><\/p>/g, '<p>$1</p>') // Single character spans
-				.replace(/style="[^"]*white-space:\s*pre-wrap[^"]*"/g, '') // Remove problematic styles
-				.replace(/<span[^>]*class=["']image-uploading["'][^>]*>/g, '') // Remove opening <span class="image-uploading">
-				.replace(/<\/span>/g, ''); // Remove closing </span>
+			const fixedNodes = parseHtmlToLexicalNodes(editor, html);
 
-			const parser = new DOMParser();
-			const dom = parser.parseFromString(cleanedHtml, 'text/html');
-			const nodes = $generateNodesFromDOM(editor, dom);
-
-			root.append(...nodes);
+			root.clear();
+			root.append(...fixedNodes);
 		});
 
 		setIsInitialized(true);
