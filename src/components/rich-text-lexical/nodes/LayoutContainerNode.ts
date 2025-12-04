@@ -30,15 +30,16 @@ export type SerializedLayoutContainerNode = Spread<
 function $convertLayoutContainerElement(
 	domNode: HTMLElement,
 ): DOMConversionOutput | null {
-	const styleAttributes = window.getComputedStyle(domNode);
-	const templateColumns = styleAttributes.getPropertyValue(
-		'grid-template-columns',
-	);
-	if (templateColumns) {
-		const node = $createLayoutContainerNode(templateColumns);
-		return { node };
-	}
-	return null;
+	// Read inline style directly instead of getComputedStyle (which doesn't work on detached DOM)
+	const templateColumns =
+		domNode.style.gridTemplateColumns ||
+		domNode
+			.getAttribute('style')
+			?.match(/grid-template-columns:\s*([^;]+)/)?.[1] ||
+		'1fr 1fr'; // fallback default
+
+	const node = $createLayoutContainerNode(templateColumns);
+	return { node };
 }
 
 export class LayoutContainerNode extends ElementNode {
@@ -70,6 +71,7 @@ export class LayoutContainerNode extends ElementNode {
 		const element = document.createElement('div');
 		element.style.gridTemplateColumns = this.__templateColumns;
 		element.setAttribute('data-lexical-layout-container', 'true');
+		element.classList.add('PlaygroundEditorTheme__layoutContainer');
 		return { element };
 	}
 

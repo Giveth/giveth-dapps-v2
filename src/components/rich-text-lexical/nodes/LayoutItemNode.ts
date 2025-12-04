@@ -11,6 +11,7 @@ import { $isParagraphNode, ElementNode } from 'lexical';
 import type {
 	DOMConversionMap,
 	DOMConversionOutput,
+	DOMExportOutput,
 	EditorConfig,
 	LexicalNode,
 	SerializedElementNode,
@@ -50,6 +51,13 @@ export class LayoutItemNode extends ElementNode {
 
 	updateDOM(): boolean {
 		return false;
+	}
+
+	exportDOM(): DOMExportOutput {
+		const element = document.createElement('div');
+		element.setAttribute('data-lexical-layout-item', 'true');
+		element.classList.add('PlaygroundEditorTheme__layoutItem');
+		return { element };
 	}
 
 	collapseAtStart(): boolean {

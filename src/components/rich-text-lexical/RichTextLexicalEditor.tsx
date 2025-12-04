@@ -181,6 +181,7 @@ function buildImportMap(): DOMConversionMap {
 }
 
 // Component to handle onChange events
+// End here is what data is being saved
 function OnChangeHandler({ onChange }: { onChange?: (html: string) => void }) {
 	const [editor] = useLexicalComposerContext();
 
@@ -196,8 +197,9 @@ function OnChangeHandler({ onChange }: { onChange?: (html: string) => void }) {
 	return onChange ? <OnChangePlugin onChange={handleChange} /> : null;
 }
 
+// End here is what data is being loaded
 function parseHtmlToLexicalNodes(editor: any, html: string) {
-	// 🧹 Clean up problematic input
+	// Clean up problematic input
 	const cleanedHtml = html
 		.replace(/""/g, '"')
 		.replace(/<p[^>]*><span[^>]*>([^<])<\/span><\/p>/g, '<p>$1</p>')
