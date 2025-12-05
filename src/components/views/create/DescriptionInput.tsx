@@ -112,16 +112,10 @@ const DescriptionInput = ({
 					initialValue={description}
 					onChange={handleDescription}
 					projectId={projectId}
-				/>
-				{/* <RichTextInput
-					style={TextInputStyle}
-					setValue={handleDescription}
-					value={description}
-					noShadow
-					minLimit={DESCRIPTION_MIN_LIMIT}
 					setHasLimitError={setHasLimitError}
+					maxLength={DESCRIPTION_MIN_LIMIT}
 					error={errors[EInputs.description]?.message}
-				/> */}
+				/>
 			</InputContainer>
 		</div>
 	);

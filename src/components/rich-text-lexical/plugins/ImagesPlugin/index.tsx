@@ -108,7 +108,6 @@ export function InsertImageUploadedDialogBody({
 	onClick: (payload: InsertImagePayload) => void;
 	projectId?: string;
 }) {
-	console.log('projectId', projectId);
 	const [src, setSrc] = useState('');
 	const [altText, setAltText] = useState('');
 	const [isUploading, setIsUploading] = useState(false);

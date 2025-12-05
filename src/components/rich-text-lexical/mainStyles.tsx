@@ -668,6 +668,8 @@ export const DropdownUI = styled.div`
 `;
 
 export const EditorShell = styled.div`
+	position: relative;
+
 	span.editor-image {
 		cursor: default;
 		display: inline-block;
