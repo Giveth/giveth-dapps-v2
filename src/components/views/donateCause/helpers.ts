@@ -10,6 +10,7 @@ import { CREATE_CAUSE_DONATION } from '@/apollo/gql/gqlDonations';
 import { FETCH_QF_ROUND_SMART_SELECT } from '@/apollo/gql/gqlQF';
 import { SENTRY_URGENT } from '@/configuration';
 import { IQFRound } from '@/apollo/types/types';
+import { hasRoundStarted } from '@/helpers/qf';
 
 const NATIVE_TOKEN_ADDRESS = '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee';
 const ZERO_ADDRESS = '0x0000000000000000000000000000000000000000';
@@ -308,7 +309,7 @@ const createCauseDonation = async (props: IOnTxHash) => {
  * @returns the active QF rounds
  */
 export const getActiveQFRounds = (QFRounds: IQFRound[]) => {
-	return QFRounds.filter(round => round.isActive);
+	return QFRounds.filter(round => round.isActive && hasRoundStarted(round));
 };
 
 /**

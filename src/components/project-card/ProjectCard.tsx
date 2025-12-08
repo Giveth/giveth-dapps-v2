@@ -31,7 +31,7 @@ import {
 import { ORGANIZATION } from '@/lib/constants/organizations';
 import { mediaQueries } from '@/lib/constants/constants';
 import { ProjectCardUserName } from './ProjectCardUserName';
-import { getActiveRound } from '@/helpers/qf';
+import { getActiveRound, hasRoundStarted } from '@/helpers/qf';
 import { RoundNotStartedModal } from './RoundNotStartedModal';
 import { FETCH_RECURRING_DONATIONS_BY_DATE } from '@/apollo/gql/gqlProjects';
 import { client } from '@/apollo/apolloClient';
@@ -101,6 +101,7 @@ const ProjectCard = (props: IProjectCard) => {
 		projectType,
 		addresses,
 	} = project;
+
 	const [recurringDonationSumInQF, setRecurringDonationSumInQF] = useState(0);
 	const [isHover, setIsHover] = useState(false);
 	const [showHintModal, setShowHintModal] = useState(false);
@@ -127,7 +128,9 @@ const ProjectCard = (props: IProjectCard) => {
 	const { activeStartedRound: checkActiveRound, activeQFRound } =
 		getActiveRound(qfRounds);
 
-	const activeStartedRound = checkActiveRound || activeQFRound?.isActive;
+	const activeStartedRound =
+		checkActiveRound ||
+		(activeQFRound?.isActive && hasRoundStarted(activeQFRound));
 
 	const hasFooter =
 		activeStartedRound ||
@@ -302,7 +305,27 @@ const ProjectCard = (props: IProjectCard) => {
 								isCause={projectType === EProjectType.CAUSE}
 							/>
 						)}
+						{(providedQFRoundId ?? 0) > 0 &&
+							!activeStartedRound && (
+								<ProjectCardTotalRaised
+									activeStartedRound={true}
+									totalDonations={getProjectTotalRaisedUSD(
+										project,
+									)}
+									sumDonationValueUsdForActiveQfRound={getSumDonationValueUsdForActiveQfRound(
+										project,
+									)}
+									countUniqueDonors={getCountUniqueDonorsForActiveQfRound(
+										project,
+									)}
+									projectsCount={
+										project.activeProjectsCount || 0
+									}
+									isCause={projectType === EProjectType.CAUSE}
+								/>
+							)}
 						{!activeStartedRound &&
+							!providedQFRoundId &&
 							!isListingInsideProjectsCausesAllPage &&
 							!isListingInsideCauseProjectTabs && (
 								<ProjectCardTotalRaised

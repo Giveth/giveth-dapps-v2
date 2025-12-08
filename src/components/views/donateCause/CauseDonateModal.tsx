@@ -1,62 +1,62 @@
-import React, { FC, useEffect, useState } from 'react';
-import styled from 'styled-components';
 import {
 	brandColors,
+	Button,
 	IconDonation,
 	Lead,
 	neutralColors,
-	Button,
 } from '@giveth/ui-design-system';
-import { useIntl } from 'react-intl';
-import { Chain, Address, zeroAddress, formatUnits } from 'viem';
 import { ethers } from 'ethers';
+import { FC, useEffect, useState } from 'react';
+import { useIntl } from 'react-intl';
+import styled from 'styled-components';
+import { Address, Chain, formatUnits, zeroAddress } from 'viem';
+import { client } from '@/apollo/apolloClient';
+import { VALIDATE_TOKEN } from '@/apollo/gql/gqlUser';
+import {
+	IMeGQL,
+	IProjectAcceptedToken,
+	SwapTransactionInput,
+} from '@/apollo/types/gqlTypes';
+import { IWalletAddress } from '@/apollo/types/types';
+import ExternalLink from '@/components/ExternalLink';
+import FailedDonation, {
+	EDonationFailedType,
+} from '@/components/modals/FailedDonation';
 import { Modal } from '@/components/modals/Modal';
+import InlineToast, { EToastType } from '@/components/toasts/InlineToast';
+import { calcDonationShare } from '@/components/views/donate/common/helpers';
+import DonateSummary from '@/components/views/donate/DonateSummary';
+import {
+	TxHashWithChainType,
+	useCauseDonateData,
+} from '@/context/donate.cause.context';
+import { useAppDispatch } from '@/features/hooks';
+import { setShowSignWithWallet } from '@/features/modal/modal.slice';
+import { signOut } from '@/features/user/user.thunks';
+import { useCreateEvmDonation } from '@/hooks/useCreateEvmDonation';
+import { useCreateSolanaDonation } from '@/hooks/useCreateSolanaDonation';
+import { useModalAnimation } from '@/hooks/useModalAnimation';
+import { useTokenPrice } from '@/hooks/useTokenPrice';
+import { mediaQueries } from '@/lib/constants/constants';
 import {
 	compareAddresses,
 	formatTxLink,
 	sendEvmTransaction,
 	showToastError,
 } from '@/lib/helpers';
-import { mediaQueries } from '@/lib/constants/constants';
-import {
-	IMeGQL,
-	IProjectAcceptedToken,
-	SwapTransactionInput,
-} from '@/apollo/types/gqlTypes';
-import { IModal } from '@/types/common';
-import FailedDonation, {
-	EDonationFailedType,
-} from '@/components/modals/FailedDonation';
-import { client } from '@/apollo/apolloClient';
-import { VALIDATE_TOKEN } from '@/apollo/gql/gqlUser';
-import { useAppDispatch } from '@/features/hooks';
-import { signOut } from '@/features/user/user.thunks';
-import { setShowSignWithWallet } from '@/features/modal/modal.slice';
-import { useModalAnimation } from '@/hooks/useModalAnimation';
-import DonateSummary from '@/components/views/donate/DonateSummary';
-import ExternalLink from '@/components/ExternalLink';
-import InlineToast, { EToastType } from '@/components/toasts/InlineToast';
-import {
-	useCauseDonateData,
-	TxHashWithChainType,
-} from '@/context/donate.cause.context';
-import { useCreateEvmDonation } from '@/hooks/useCreateEvmDonation';
 import { useGeneralWallet } from '@/providers/generalWalletProvider';
+import { IModal } from '@/types/common';
 import { ChainType } from '@/types/config';
-import { IWalletAddress } from '@/apollo/types/types';
-import { useCreateSolanaDonation } from '@/hooks/useCreateSolanaDonation';
-import { useTokenPrice } from '@/hooks/useTokenPrice';
-import { calcDonationShare } from '@/components/views/donate/common/helpers';
 // import createGoogleTagEventPurchase from '@/helpers/googleAnalytics';
 import SanctionModal from '@/components/modals/SanctionedModal';
+import config from '@/configuration';
+import { IOnTxHash } from '@/services/donation';
 import {
 	approveSpending,
 	executeSquidTransaction,
 	getSquidRoute,
 	saveCauseDonation,
 } from './helpers';
-import config from '@/configuration';
-import { IOnTxHash } from '@/services/donation';
 
 interface IDonateModalProps extends IModal {
 	token: IProjectAcceptedToken;
@@ -302,7 +302,9 @@ const CauseDonateModal: FC<IDonateModalProps> = props => {
 						toChainId: parseInt(squidParams.toChain),
 						fromTokenAddress: squidParams.fromToken,
 						toTokenAddress: squidParams.toToken,
-						fromAmount: parseFloat(squidParams.fromAmount),
+						fromAmount: parseFloat(
+							formatUnits(amount, token.decimals),
+						),
 						toAmount: parseFloat(
 							squidRoute.route.estimate.toAmount,
 						),

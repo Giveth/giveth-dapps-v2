@@ -1768,6 +1768,8 @@
 	"projects_polygon_desc": "Support projects growing and enhancing the Polygon ecosystem.",
 	"projects_technology": "Technology",
 	"projects_technology_desc": "Support projects focused on tech innovation, research, and DeSci.",
+	"projects_desci": "DeSci",
+	"projects_desci_desc": "Support projects focused on DeSci, research, and innovation.",
 	"public-goods": "Public Goods",
 	"qf_donor_eligibility.banner.link.check_eligibility": "Check Eligibility",
 	"qf_donor_eligibility.banner.link.recheck_eligibility": "Re-check Eligibility",
@@ -2021,5 +2023,13 @@
 	"label.qf.enter_dontation": "Enter your donation",
 	"label.qf.project": "QF Project",
 	"label.qf.recurring_auto_matched": "Recurring donations are auto-matched in eligible QF rounds.",
-	"label.qf.quadratic_funding_is_live": "Quadratic Funding is live! Get your donations amplified by a matching pool"
+	"label.qf.quadratic_funding_is_live": "GG24: Quadratic Funding is Live 💚 Get your donations amplified with matching funds",
+	"label.user.what_should_we_call_you": "What should we call you?",
+	"label.user.where_are_you": "Where are you?",
+	"label.user.personal_website_or_url": "Personal website or URL to somewhere special?",
+	"label.user.how_can_we_contact_you": "How can we contact you?",	
+	"label.user.x_twitter_profile": "X/Twitter Profile",
+	"label.user.x_twitter_profile_placeholder": "Your X/Twitter username",
+	"label.user.telegram_profile": "Telegram Handle",
+	"label.user.telegram_profile_placeholder": "Your Telegram username"
 }

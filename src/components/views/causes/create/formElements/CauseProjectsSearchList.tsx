@@ -139,6 +139,7 @@ export const CauseProjectsSearchList = ({
 						totalCount={data?.totalCount ?? 0}
 						setPage={setPage}
 						itemPerPage={itemPerPage}
+						maxPagesToShow={4}
 					/>
 				</>
 			)}
@@ -160,13 +161,22 @@ const EmptyState = styled.div`
 const ProjectsList = styled.div`
 	display: flex;
 	flex-direction: row;
-	align-items: flex-end;
+	align-items: flex-start;
 	gap: 16px;
 	flex-wrap: wrap;
 	padding: 16px 0;
 
-	& > * {
-		flex: 0 0 calc(50% - 8px);
-		max-width: calc(50% - 8px);
+	@media (min-width: 641px) {
+		& > * {
+			flex: 0 0 calc(50% - 8px);
+			max-width: calc(50% - 8px);
+		}
+	}
+
+	@media (max-width: 640px) {
+		& > * {
+			flex: 0 0 100%;
+			max-width: 100%;
+		}
 	}
 `;
