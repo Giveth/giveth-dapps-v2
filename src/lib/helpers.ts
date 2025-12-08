@@ -494,7 +494,7 @@ async function handleEthTransfer(params: TransactionParams): Promise<Address> {
 		try {
 			isSafeAddress = await isGnosisSafeAddress(params.to);
 		} catch (error) {
-			console.log(
+			console.error(
 				'Safe detection failed, proceeding without referral data',
 			);
 		}

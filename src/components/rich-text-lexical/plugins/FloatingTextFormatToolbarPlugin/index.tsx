@@ -512,7 +512,7 @@ export default function FloatingTextFormatToolbarPlugin({
 	setIsLinkEditMode: Dispatch<boolean>;
 }): JSX.Element | null {
 	const [editor] = useLexicalComposerContext();
-	console.log('anchorElem', anchorElem);
+
 	return useFloatingTextFormatToolbar(editor, anchorElem, setIsLinkEditMode);
 }
 
