@@ -155,7 +155,7 @@ const ProjectsIndex = (props: IProjectsView) => {
 								nextCursor:
 									_totalCount > projects.length
 										? 1
-										: undefined, // <-- only if more pages exist
+										: undefined,
 								previousCursor: undefined,
 							},
 						],
