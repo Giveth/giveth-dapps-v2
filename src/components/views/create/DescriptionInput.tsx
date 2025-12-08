@@ -52,9 +52,6 @@ const DescriptionInput = ({
 		getValues(EInputs.description),
 	);
 
-	// Debug: Log the description value
-	console.log('Description value:', description);
-
 	const handleDescription = (value: string) => {
 		setDescription(value);
 		setValue(EInputs.description, value);
