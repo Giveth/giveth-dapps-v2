@@ -115,7 +115,7 @@ const ProjectsIndex = (props: IProjectsView) => {
 			isArchivedQF,
 			selectedMainCategory,
 			router.query.slug,
-			isQF ? Number(qfRound?.id) || 0 : undefined, 
+			isQF ? Number(qfRound?.id) || 0 : undefined,
 		);
 	};
 
