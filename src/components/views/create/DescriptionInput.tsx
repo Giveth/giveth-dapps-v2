@@ -18,14 +18,24 @@ const RichTextInput = dynamic(
 	},
 );
 
+const RichTextLexicalEditor = dynamic(
+	() => import('@/components/rich-text-lexical/RichTextLexicalEditor'),
+	{
+		ssr: false,
+		loading: () => <WrappedSpinner size={500} />,
+	},
+);
+
 const DESCRIPTION_MIN_LIMIT = 1200;
 
 interface IDescriptionInputProps {
 	setActiveProjectSection: (section: ECreateProjectSections) => void;
+	projectId?: string;
 }
 
 const DescriptionInput = ({
 	setActiveProjectSection,
+	projectId,
 }: IDescriptionInputProps) => {
 	const {
 		getValues,
@@ -95,13 +105,12 @@ const DescriptionInput = ({
 			</CaptionContainer>
 			<InputContainer>
 				<Label>{formatMessage({ id: 'label.project_story' })}</Label>
-				<RichTextInput
-					style={TextInputStyle}
-					setValue={handleDescription}
-					value={description}
-					noShadow
-					minLimit={DESCRIPTION_MIN_LIMIT}
+				<RichTextLexicalEditor
+					initialValue={description}
+					onChange={handleDescription}
+					projectId={projectId}
 					setHasLimitError={setHasLimitError}
+					maxLength={DESCRIPTION_MIN_LIMIT}
 					error={errors[EInputs.description]?.message}
 				/>
 			</InputContainer>

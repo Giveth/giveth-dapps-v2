@@ -530,6 +530,7 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 									setActiveProjectSection={
 										setActiveProjectSection
 									}
+									projectId={project?.id}
 								/>
 								<SocialMedias
 									setActiveProjectSection={
