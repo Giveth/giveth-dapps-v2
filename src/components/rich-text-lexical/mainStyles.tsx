@@ -1216,4 +1216,20 @@ export const EditorShell = styled.div`
 	.PlaygroundEditorTheme__autocomplete {
 		color: #ccc;
 	}
+
+	.PlaygroundEditorTheme__textItalic {
+		font-style: italic;
+	}
+
+	.PlaygroundEditorTheme__textUnderline {
+		text-decoration: underline;
+	}
+
+	.PlaygroundEditorTheme__textStrikethrough {
+		text-decoration: line-through;
+	}
+
+	.PlaygroundEditorTheme__textUnderlineStrikethrough {
+		text-decoration: underline line-through;
+	}
 `;

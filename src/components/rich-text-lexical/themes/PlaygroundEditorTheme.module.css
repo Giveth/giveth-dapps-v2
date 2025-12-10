@@ -55,6 +55,7 @@
 .PlaygroundEditorTheme__textItalic {
   font-style: italic;
 }
+
 .PlaygroundEditorTheme__textUnderline {
   text-decoration: underline;
 }
@@ -70,6 +71,10 @@
 .PlaygroundEditorTheme__tabNode {
   position: relative;
   text-decoration: none;
+}
+
+.PlaygroundEditorTheme__tabNode.PlaygroundEditorTheme__textUnderline {
+  text-decoration: underline;
 }
 
 .PlaygroundEditorTheme__tabNode.PlaygroundEditorTheme__textUnderline::after {
