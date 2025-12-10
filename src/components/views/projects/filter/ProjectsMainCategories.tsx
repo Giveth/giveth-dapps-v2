@@ -29,6 +29,15 @@ function ProjectsMainCategories() {
 		return categorySlug === query.slug;
 	};
 
+	// Toggle: if clicking already-selected category, go to 'all'
+	const getTargetSlug = (categorySlug: string) => {
+		const isAlreadySelected = handleIsSelected(categorySlug);
+		if (isAlreadySelected && categorySlug !== 'all') {
+			return 'all';
+		}
+		return categorySlug;
+	};
+
 	const newQuery = {
 		...query,
 	};
@@ -56,28 +65,31 @@ function ProjectsMainCategories() {
 				}
 			}}
 		>
-			{mainCategories.map(category => (
-				<SwiperSlide key={category.slug} style={{ width: 'auto' }}>
-					<Link
-						href={{
-							pathname: isCauses
-								? causeRoute + category.slug
-								: projectsRoute + category.slug,
-							query: newQuery,
-						}}
-					>
-						<MainCategoryItem
-							$isSelected={handleIsSelected(category.slug)}
+			{mainCategories.map(category => {
+				const targetSlug = getTargetSlug(category.slug);
+				return (
+					<SwiperSlide key={category.slug} style={{ width: 'auto' }}>
+						<Link
+							href={{
+								pathname: isCauses
+									? causeRoute + targetSlug
+									: projectsRoute + targetSlug,
+								query: newQuery,
+							}}
 						>
-							{formatMessage({
-								id: isCauses
-									? 'label.cause.cause_' + category.slug
-									: 'projects_' + category.slug,
-							})}
-						</MainCategoryItem>
-					</Link>
-				</SwiperSlide>
-			))}
+							<MainCategoryItem
+								$isSelected={handleIsSelected(category.slug)}
+							>
+								{formatMessage({
+									id: isCauses
+										? 'label.cause.cause_' + category.slug
+										: 'projects_' + category.slug,
+								})}
+							</MainCategoryItem>
+						</Link>
+					</SwiperSlide>
+				);
+			})}
 		</Swiper>
 	);
 }
