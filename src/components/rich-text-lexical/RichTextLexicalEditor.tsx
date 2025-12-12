@@ -122,10 +122,19 @@ function parseHtmlToLexicalNodes(editor: any, html: string) {
 	const cleanedHtml = html
 		.replace(/""/g, '"')
 		.replace(/<p[^>]*><span[^>]*>([^<])<\/span><\/p>/g, '<p>$1</p>')
-		.replace(/style="[^"]*white-space:\s*pre-wrap[^"]*"/g, '')
-		.replace(/<span[^>]*class=["']image-uploading["'][^>]*>/g, '')
-		.replace(/<span[^>]*>\s*(<img[^>]+>)\s*<\/span>/gi, '<p>$1</p>')
-		.replace(/<\/span>/g, '');
+		// .replace(/style="[^"]*white-space:\s*pre-wrap[^"]*"/g, '')
+		// Unwrap image-uploading spans that contain images (keep the image)
+		.replace(
+			/<span[^>]*class=["']image-uploading["'][^>]*>\s*(<img[^>]+>)\s*<\/span>/gi,
+			'<p>$1</p>',
+		)
+		// Remove image-uploading spans with text/br content (no images)
+		.replace(
+			/<span[^>]*class=["']image-uploading["'][^>]*>(?!<img)[^<]*(?:<br\s*\/?>)*<\/span>/gi,
+			'',
+		)
+		// Unwrap other spans containing only images
+		.replace(/<span[^>]*>\s*(<img[^>]+>)\s*<\/span>/gi, '<p>$1</p>');
 
 	const parser = new DOMParser();
 	const dom = parser.parseFromString(cleanedHtml, 'text/html');
