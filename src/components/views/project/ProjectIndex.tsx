@@ -318,6 +318,10 @@ const ContainerStyled = styled(Container)`
 		padding-right: 0;
 		width: 1250px;
 	}
+
+	.ql-align-center {
+		text-align: center;
+	}
 `;
 
 const DraftIndicator = styled.div`
