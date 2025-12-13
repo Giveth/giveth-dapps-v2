@@ -193,6 +193,7 @@ function MyApp({ Component, pageProps }: AppProps) {
 					name='viewport'
 					content='width=device-width, initial-scale=1.0'
 				/>
+				<meta name='base:app_id' content='693dbd37d19763ca26ddc284' />
 			</Head>
 			<GoogleAnalytics
 				gaId={process.env.NEXT_PUBLIC_ANALYTICS_WRITE_KEY || ''}
