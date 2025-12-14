@@ -48,11 +48,11 @@ export default class MyDocument extends Document {
 							imageUrl:
 								'https://giveth.mypinata.cloud/ipfs/QmQ9sfdevs9vS7czBXBfDaRRPhU8a6T5gXxF3NDGSnQe1c',
 							button: {
-								title: 'Donate Now',
+								title: 'Donate Now - Giveth',
 								action: {
 									type: 'launch_miniapp',
 									name: 'Giveth',
-									url: 'https://giveth.io',
+									url: 'https://giveth-dapps-v2-git-feature-base-mini-app-general-magic.vercel.app/',
 								},
 							},
 						})}
