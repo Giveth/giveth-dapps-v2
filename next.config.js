@@ -142,6 +142,8 @@ const moduleExports = withBundleAnalyzer({
 			'https://base.dev',
 			'https://warpcast.com',
 			'https://www.warpcast.com',
+			'https://www.farcaster.xyz',
+			'https://farcaster.xyz',
 		];
 		const frameAncestors = ["'self'", safe, ...nounspace, ...baseApp].join(
 			' ',
