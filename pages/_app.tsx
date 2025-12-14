@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { createWeb3Modal } from '@web3modal/wagmi/react';
 import Head from 'next/head';
+import dynamic from 'next/dynamic';
 import { IntlProvider } from 'react-intl';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { Toaster } from 'react-hot-toast';
@@ -42,8 +43,14 @@ import { zIndex } from '@/lib/constants/constants';
 import configuration, { isProduction } from '@/configuration';
 import MaintenanceIndex from '@/components/views/Errors/MaintenanceIndex';
 import { SolanaProvider } from '@/providers/solanaWalletProvider';
-import { MiniKitProvider } from '@/components/MiniKitProvider';
 import type { AppProps } from 'next/app';
+
+// Dynamically import MiniKitProvider with SSR disabled to prevent SDK issues
+const MiniKitProvider = dynamic(
+	() =>
+		import('@/components/MiniKitProvider').then(mod => mod.MiniKitProvider),
+	{ ssr: false },
+);
 
 if (!isProduction) {
 	// Adds messages only in a dev environment

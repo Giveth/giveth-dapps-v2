@@ -16,6 +16,8 @@ const locales = ['en', 'ct', 'es'];
 const moduleExports = withBundleAnalyzer({
 	// Your existing module.exports
 	reactStrictMode: true,
+	// Transpile the Farcaster SDK for proper ESM support
+	transpilePackages: ['@farcaster/miniapp-sdk', '@farcaster/miniapp-core'],
 	images: {
 		remotePatterns: [
 			{ protocol: 'https', port: '', hostname: 'placekitten.com' },

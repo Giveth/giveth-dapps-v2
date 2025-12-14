@@ -1,7 +1,4 @@
-'use client';
-
-import { useEffect, useState } from 'react';
-import { sdk } from '@farcaster/miniapp-sdk';
+import { useEffect, useRef } from 'react';
 
 interface MiniKitProviderProps {
 	children: React.ReactNode;
@@ -10,45 +7,31 @@ interface MiniKitProviderProps {
 export const MiniKitProvider: React.FC<MiniKitProviderProps> = ({
 	children,
 }) => {
-	const [isInitialized, setIsInitialized] = useState(false);
+	const initialized = useRef(false);
 
 	useEffect(() => {
-		if (isInitialized) return;
+		// Prevent double initialization in React Strict Mode
+		if (initialized.current) return;
+		initialized.current = true;
 
-		const initializeMiniKit = async () => {
-			try {
-				// Check if we're running inside a mini app
-				const isInMiniApp = await sdk.isInMiniApp();
-				console.log('[MiniKit] isInMiniApp:', isInMiniApp);
+		// Only run on client side
+		if (typeof window === 'undefined') return;
 
-				if (isInMiniApp) {
-					// Signal that the app is ready to be displayed FIRST
-					// This is CRITICAL - without this, the mini app shows a white screen
-					await sdk.actions.ready();
-					console.log('[MiniKit] App ready signal sent');
+		console.log('[MiniKit] useEffect triggered, calling ready()...');
 
-					// Then get the context (non-blocking for UI)
-					const context = await sdk.context;
-					console.log('[MiniKit] Context loaded:', context);
-				}
-			} catch (error) {
-				console.error('[MiniKit] Error initializing:', error);
-				// Even on error, try to signal ready to avoid permanent white screen
-				try {
-					await sdk.actions.ready();
-					console.log(
-						'[MiniKit] App ready signal sent (error recovery)',
-					);
-				} catch {
-					// Ignore if this also fails - we're not in a mini app context
-				}
-			} finally {
-				setIsInitialized(true);
-			}
-		};
-
-		initializeMiniKit();
-	}, [isInitialized]);
+		// Import and call ready() immediately
+		import('@farcaster/miniapp-sdk')
+			.then(({ sdk }) => {
+				console.log('[MiniKit] SDK imported, calling ready()...');
+				return sdk.actions.ready();
+			})
+			.then(() => {
+				console.log('[MiniKit] ready() called successfully!');
+			})
+			.catch(err => {
+				console.log('[MiniKit] Error:', err);
+			});
+	}, []);
 
 	return <>{children}</>;
 };
