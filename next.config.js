@@ -140,6 +140,7 @@ const moduleExports = withBundleAnalyzer({
 			'https://base.org',
 			'https://www.base.org',
 			'https://base.dev',
+			'https://www.base.dev',
 			'https://warpcast.com',
 			'https://www.warpcast.com',
 			'https://www.farcaster.xyz',
