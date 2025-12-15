@@ -134,7 +134,7 @@ export const FigmaEmbedConfig: PlaygroundEmbedConfig = {
 	// Determine if a given URL is a match and return url data.
 	parseUrl: (text: string) => {
 		const match =
-			/https:\/\/([\w.-]+\.)?figma.com\/(file|proto)\/([0-9a-zA-Z]{22,128})(?:\/.*)?$/.exec(
+			/https:\/\/([\w.-]+\.)?figma.com\/(file|proto|design)\/([0-9a-zA-Z]{22,128})(?:\/.*)?$/.exec(
 				text,
 			);
 
