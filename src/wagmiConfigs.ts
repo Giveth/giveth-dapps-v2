@@ -2,6 +2,7 @@ import { createThirdwebClient, defineChain as thirdwebChain } from 'thirdweb';
 import { cookieStorage, createConfig, createStorage } from 'wagmi';
 import { walletConnect, coinbaseWallet, safe } from '@wagmi/connectors';
 import { inAppWalletConnector } from '@thirdweb-dev/wagmi-adapter';
+import { farcasterMiniApp } from '@farcaster/miniapp-wagmi-connector';
 import { createClient, http } from 'viem';
 import { getDrpcNetwork } from './lib/network';
 import configuration from './configuration';
@@ -37,6 +38,8 @@ const clientUnicorn = createThirdwebClient({
 export const wagmiConfig = createConfig({
 	chains: chains, // required
 	connectors: [
+		// Farcaster Mini App connector - auto-connects when running inside Farcaster/Base mini app
+		farcasterMiniApp(),
 		walletConnect({
 			projectId,
 			metadata,

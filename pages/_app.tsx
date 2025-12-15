@@ -52,6 +52,15 @@ const MiniKitProvider = dynamic(
 	{ ssr: false },
 );
 
+// Dynamically import FarcasterAutoConnect to handle automatic wallet connection in mini app
+const FarcasterAutoConnect = dynamic(
+	() =>
+		import('@/components/FarcasterAutoConnect').then(
+			mod => mod.FarcasterAutoConnect,
+		),
+	{ ssr: false },
+);
+
 if (!isProduction) {
 	// Adds messages only in a dev environment
 	loadDevMessages();
@@ -221,6 +230,8 @@ function MyApp({ Component, pageProps }: AppProps) {
 										<QueryClientProvider
 											client={queryClient}
 										>
+											{/* Auto-connect to Farcaster wallet when in mini app */}
+											<FarcasterAutoConnect />
 											<GeneralWalletProvider>
 												<PostHogProvider
 													client={posthog}

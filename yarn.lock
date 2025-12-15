@@ -1288,7 +1288,7 @@
     eventemitter3 "^5.0.1"
     ox "^0.4.4"
 
-"@farcaster/miniapp-wagmi-connector@^1.0.0":
+"@farcaster/miniapp-wagmi-connector@^1.0.0", "@farcaster/miniapp-wagmi-connector@^1.1.0":
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/@farcaster/miniapp-wagmi-connector/-/miniapp-wagmi-connector-1.1.0.tgz#7265c77b1bce5ee81712b3f5c335252264d5abb7"
   integrity sha512-gf0nDx9nNJ6hJXbFBCgiTitb0eEqBvCU/njcyTXf7ebZhT0pzOrarOod2dkeisU5Py+WWjFyOVcqmeo4G3IvDA==

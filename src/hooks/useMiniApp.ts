@@ -1,6 +1,8 @@
 import { useState, useEffect, useCallback } from 'react';
 import { sdk, Context } from '@farcaster/miniapp-sdk';
+import { useAccount } from 'wagmi';
 import { MiniKitContextType } from 'node_modules/@coinbase/onchainkit/dist/minikit/types';
+import { FARCASTER_CONNECTOR_ID } from '@/components/FarcasterAutoConnect';
 
 interface MiniAppContext {
 	isInMiniApp: boolean;
@@ -8,6 +10,8 @@ interface MiniAppContext {
 	context: MiniKitContextType['context'] | null;
 	user: Context.UserContext | null;
 	fid: number | null;
+	/** Whether connected with Farcaster smart contract wallet */
+	isFarcasterWalletConnected: boolean;
 }
 
 interface MiniAppActions {
@@ -38,7 +42,11 @@ interface UseMiniAppReturn extends MiniAppContext {
  * @see https://docs.base.org/mini-apps/features/sharing-and-social-graph
  */
 export function useMiniApp(): UseMiniAppReturn {
-	const [state, setState] = useState<MiniAppContext>({
+	const { isConnected, connector } = useAccount();
+	const isFarcasterWalletConnected =
+		isConnected && connector?.id === FARCASTER_CONNECTOR_ID;
+
+	const [state, setState] = useState<Omit<MiniAppContext, 'isFarcasterWalletConnected'>>({
 		isInMiniApp: false,
 		isLoading: true,
 		context: null,
@@ -153,6 +161,7 @@ export function useMiniApp(): UseMiniAppReturn {
 
 	return {
 		...state,
+		isFarcasterWalletConnected,
 		actions: {
 			openUrl,
 			shareText,

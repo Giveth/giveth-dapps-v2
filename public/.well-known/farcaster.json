@@ -29,7 +29,19 @@
     "ogTitle": "Giveth: Future of Giving with Zero-Fee Crypto Donation",
     "ogDescription": "Get rewarded for crypto donations to for-good projects with zero added fees. Donate crypto directly to thousands of nonprofits & charities!",
     "ogImageUrl": "https://giveth.mypinata.cloud/ipfs/QmQ9sfdevs9vS7czBXBfDaRRPhU8a6T5gXxF3NDGSnQe1c",
-    "noindex": false
+    "noindex": false,
+    "requiredChains": [
+      "eip155:1",
+      "eip155:10",
+      "eip155:137",
+      "eip155:42161",
+      "eip155:8453",
+      "eip155:100"
+    ],
+    "requiredCapabilities": [
+      "wallet.getEthereumProvider",
+      "actions.signIn"
+    ]
   }
 }
 
