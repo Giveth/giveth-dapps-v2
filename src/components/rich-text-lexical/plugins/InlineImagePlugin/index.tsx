@@ -30,6 +30,7 @@ import {
 } from 'lexical';
 import * as React from 'react';
 import { useEffect, useRef, useState } from 'react';
+import { captureException } from '@sentry/nextjs';
 import styles from '../../nodes/InlineImageNode/InlineImageNode.module.css';
 
 import {
@@ -43,6 +44,9 @@ import { DialogActions } from '../../ui/Dialog';
 import FileInput from '../../ui/FileInput';
 import Select from '../../ui/Select';
 import TextInput from '../../ui/TextInput';
+import { client } from '@/apollo/apolloClient';
+import { UPLOAD_IMAGE } from '@/apollo/gql/gqlProjects';
+import { showToastError } from '@/lib/helpers';
 import type { JSX } from 'react';
 import type { Position } from '../../nodes/InlineImageNode/InlineImageNode';
 
@@ -54,9 +58,11 @@ export const INSERT_INLINE_IMAGE_COMMAND: LexicalCommand<InlineImagePayload> =
 export function InsertInlineImageDialog({
 	activeEditor,
 	onClose,
+	projectId,
 }: {
 	activeEditor: LexicalEditor;
 	onClose: () => void;
+	projectId?: string;
 }): JSX.Element {
 	const hasModifier = useRef(false);
 
@@ -64,8 +70,10 @@ export function InsertInlineImageDialog({
 	const [altText, setAltText] = useState('');
 	const [showCaption, setShowCaption] = useState(false);
 	const [position, setPosition] = useState<Position>('left');
+	const [isUploading, setIsUploading] = useState(false);
+	const [selectedFile, setSelectedFile] = useState<File | null>(null);
 
-	const isDisabled = src === '';
+	const isDisabled = !selectedFile || isUploading;
 
 	const handleShowCaptionChange = (
 		e: React.ChangeEvent<HTMLInputElement>,
@@ -78,14 +86,15 @@ export function InsertInlineImageDialog({
 	};
 
 	const loadImage = (files: FileList | null) => {
-		const reader = new FileReader();
-		reader.onload = function () {
-			if (typeof reader.result === 'string') {
-				setSrc(reader.result);
-			}
-			return '';
-		};
-		if (files !== null) {
+		if (files && files[0]) {
+			setSelectedFile(files[0]);
+			// Show preview
+			const reader = new FileReader();
+			reader.onload = function () {
+				if (typeof reader.result === 'string') {
+					setSrc(reader.result);
+				}
+			};
 			reader.readAsDataURL(files[0]);
 		}
 	};
@@ -101,10 +110,38 @@ export function InsertInlineImageDialog({
 		};
 	}, [activeEditor]);
 
-	const handleOnClick = () => {
-		const payload = { altText, position, showCaption, src };
-		activeEditor.dispatchCommand(INSERT_INLINE_IMAGE_COMMAND, payload);
-		onClose();
+	const uploadImage = async () => {
+		if (!selectedFile) return;
+
+		setIsUploading(true);
+		try {
+			console.log('Uploading inline image to Pinata, please wait...');
+			const { data: imageUploaded } = await client.mutate({
+				mutation: UPLOAD_IMAGE,
+				variables: {
+					imageUpload: {
+						image: selectedFile,
+						projectId: projectId ? parseFloat(projectId) : null,
+					},
+				},
+			});
+
+			const uploadedUrl = imageUploaded?.uploadImage?.url;
+			if (uploadedUrl) {
+				const payload = { altText, position, showCaption, src: uploadedUrl };
+				activeEditor.dispatchCommand(INSERT_INLINE_IMAGE_COMMAND, payload);
+				onClose();
+			}
+		} catch (error) {
+			showToastError(error);
+			captureException(error, {
+				tags: {
+					section: 'LexicalInlineImageUpload',
+				},
+			});
+		} finally {
+			setIsUploading(false);
+		}
 	};
 
 	return (
@@ -117,6 +154,20 @@ export function InsertInlineImageDialog({
 					data-test-id='image-modal-file-upload'
 				/>
 			</div>
+			{src && (
+				// eslint-disable-next-line @next/next/no-img-element
+				<img
+					src={src}
+					alt='Preview'
+					style={{
+						maxWidth: '100%',
+						maxHeight: '200px',
+						marginTop: '10px',
+						marginBottom: '10px',
+						borderRadius: '8px',
+					}}
+				/>
+			)}
 			<div style={{ marginBottom: '1em' }}>
 				<TextInput
 					label='Alt Text'
@@ -154,9 +205,9 @@ export function InsertInlineImageDialog({
 				<Button
 					data-test-id='image-modal-file-upload-btn'
 					disabled={isDisabled}
-					onClick={() => handleOnClick()}
+					onClick={uploadImage}
 				>
-					Confirm
+					{isUploading ? 'Uploading...' : 'Confirm'}
 				</Button>
 			</DialogActions>
 		</>

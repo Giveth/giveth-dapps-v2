@@ -1437,6 +1437,7 @@ export default function ToolbarPlugin({
 												<InsertInlineImageDialog
 													activeEditor={activeEditor}
 													onClose={onClose}
+													projectId={projectId}
 												/>
 											),
 										);
