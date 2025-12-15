@@ -322,6 +322,8 @@ const ContainerStyled = styled(Container)`
 	.ql-align-center {
 		text-align: center;
 	}
+
+	/* Table support*/
 `;
 
 const DraftIndicator = styled.div`

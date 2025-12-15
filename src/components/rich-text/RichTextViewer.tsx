@@ -1,19 +1,7 @@
-import ReactQuill from 'react-quill';
-import styled from 'styled-components';
-import { QuillWrapper } from '@/components/styled-components/Quill';
+import RichTextLexicalViewer from '@/components/rich-text-lexical/RichTextLexicalViewer';
 
 const RichTextViewer = (props: { content?: string }) => {
-	return (
-		<Wrapper>
-			<ReactQuill value={props.content} readOnly theme='bubble' />
-		</Wrapper>
-	);
+	return <RichTextLexicalViewer content={props.content} />;
 };
-
-const Wrapper = styled(QuillWrapper)`
-	.ql-container > .ql-editor {
-		padding: 0;
-	}
-`;
 
 export default RichTextViewer;
