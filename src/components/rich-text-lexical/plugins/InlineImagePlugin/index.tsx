@@ -128,8 +128,16 @@ export function InsertInlineImageDialog({
 
 			const uploadedUrl = imageUploaded?.uploadImage?.url;
 			if (uploadedUrl) {
-				const payload = { altText, position, showCaption, src: uploadedUrl };
-				activeEditor.dispatchCommand(INSERT_INLINE_IMAGE_COMMAND, payload);
+				const payload = {
+					altText,
+					position,
+					showCaption,
+					src: uploadedUrl,
+				};
+				activeEditor.dispatchCommand(
+					INSERT_INLINE_IMAGE_COMMAND,
+					payload,
+				);
 				onClose();
 			}
 		} catch (error) {
