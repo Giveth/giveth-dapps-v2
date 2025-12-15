@@ -65,7 +65,6 @@ import {
 	useToolbarState,
 } from '../../context/ToolbarContext';
 import useModal from '../../hooks/useModal';
-import catTypingGif from '../../images/cat-typing.gif';
 import DropDown, { DropDownItem } from '../../ui/DropDown';
 import DropdownColorPicker from '../../ui/DropdownColorPicker';
 import { getSelectedNode } from '../../utils/getSelectedNode';
@@ -74,11 +73,7 @@ import { EmbedConfigs } from '../AutoEmbedPlugin';
 import { INSERT_COLLAPSIBLE_COMMAND } from '../CollapsiblePlugin';
 import { InsertEquationDialog } from '../EquationsPlugin';
 import { INSERT_EXCALIDRAW_COMMAND } from '../ExcalidrawPlugin';
-import {
-	INSERT_IMAGE_COMMAND,
-	InsertImageDialog,
-	InsertImagePayload,
-} from '../ImagesPlugin';
+import { InsertImageDialog } from '../ImagesPlugin';
 import { InsertInlineImageDialog } from '../InlineImagePlugin';
 import InsertLayoutDialog from '../LayoutPlugin/InsertLayoutDialog';
 import { INSERT_PAGE_BREAK } from '../PageBreakPlugin';
@@ -926,9 +921,6 @@ export default function ToolbarPlugin({
 		},
 		[activeEditor, selectedElementKey],
 	);
-	const insertGifOnClick = (payload: InsertImagePayload) => {
-		activeEditor.dispatchCommand(INSERT_IMAGE_COMMAND, payload);
-	};
 
 	const canViewerSeeInsertDropdown = !toolbarState.isImageCaption;
 	const canViewerSeeInsertCodeButton = !toolbarState.isImageCaption;
@@ -1446,18 +1438,6 @@ export default function ToolbarPlugin({
 								>
 									<i className='icon image' />
 									<span className='text'>Inline Image</span>
-								</DropDownItem>
-								<DropDownItem
-									onClick={() =>
-										insertGifOnClick({
-											altText: 'Cat typing on a laptop',
-											src: catTypingGif.src,
-										})
-									}
-									className='item'
-								>
-									<i className='icon gif' />
-									<span className='text'>GIF</span>
 								</DropDownItem>
 								<DropDownItem
 									onClick={() => {
