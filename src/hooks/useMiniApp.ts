@@ -46,7 +46,9 @@ export function useMiniApp(): UseMiniAppReturn {
 	const isFarcasterWalletConnected =
 		isConnected && connector?.id === FARCASTER_CONNECTOR_ID;
 
-	const [state, setState] = useState<Omit<MiniAppContext, 'isFarcasterWalletConnected'>>({
+	const [state, setState] = useState<
+		Omit<MiniAppContext, 'isFarcasterWalletConnected'>
+	>({
 		isInMiniApp: false,
 		isLoading: true,
 		context: null,
