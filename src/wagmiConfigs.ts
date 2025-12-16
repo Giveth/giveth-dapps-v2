@@ -2,7 +2,6 @@ import { createThirdwebClient, defineChain as thirdwebChain } from 'thirdweb';
 import { cookieStorage, createConfig, createStorage } from 'wagmi';
 import { walletConnect, coinbaseWallet, safe } from '@wagmi/connectors';
 import { inAppWalletConnector } from '@thirdweb-dev/wagmi-adapter';
-import { farcasterMiniApp } from '@farcaster/miniapp-wagmi-connector';
 import { createClient, http } from 'viem';
 import { getDrpcNetwork } from './lib/network';
 import configuration from './configuration';
@@ -34,29 +33,45 @@ const clientUnicorn = createThirdwebClient({
 	clientId: '4e8c81182c3709ee441e30d776223354',
 });
 
+// Build connector list without pulling Farcaster SDK into SSR.
+// The Farcaster miniapp connector depends on @farcaster/miniapp-sdk (ESM-only),
+// which causes Vercel SSR to crash if it gets required server-side.
+const connectors = [
+	walletConnect({
+		projectId,
+		metadata,
+	}),
+	coinbaseWallet({ appName: 'Giveth', version: '3' }),
+	safe({
+		allowedDomains: [/app.safe.global$/],
+	}),
+	inAppWalletConnector({
+		client: clientUnicorn,
+		smartAccount: {
+			sponsorGas: true,
+			chain: thirdwebChain(137),
+			factoryAddress: '0xD771615c873ba5a2149D5312448cE01D677Ee48A',
+		},
+	}),
+];
+
+// Only include Farcaster connector on the client.
+if (typeof window !== 'undefined') {
+	try {
+		const { farcasterMiniApp } =
+			require('@farcaster/miniapp-wagmi-connector') as {
+				farcasterMiniApp: () => any;
+			};
+		connectors.unshift(farcasterMiniApp());
+	} catch {
+		// No-op: keep regular wallets working even if connector can't load.
+	}
+}
+
 // Create wagmiConfig
 export const wagmiConfig = createConfig({
 	chains: chains, // required
-	connectors: [
-		// Farcaster Mini App connector - auto-connects when running inside Farcaster/Base mini app
-		farcasterMiniApp(),
-		walletConnect({
-			projectId,
-			metadata,
-		}),
-		coinbaseWallet({ appName: 'Giveth', version: '3' }),
-		safe({
-			allowedDomains: [/app.safe.global$/],
-		}),
-		inAppWalletConnector({
-			client: clientUnicorn,
-			smartAccount: {
-				sponsorGas: true,
-				chain: thirdwebChain(137),
-				factoryAddress: '0xD771615c873ba5a2149D5312448cE01D677Ee48A',
-			},
-		}),
-	],
+	connectors,
 	ssr: true,
 	storage: createStorage({
 		storage: cookieStorage,
