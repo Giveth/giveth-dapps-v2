@@ -12,6 +12,7 @@ import {
 	TextNode,
 	LexicalNode,
 	ParagraphNode,
+	LexicalEditor,
 } from 'lexical';
 import { $generateNodesFromDOM } from '@lexical/html';
 import { useEffect, useState } from 'react';
@@ -85,8 +86,7 @@ function buildImportMap(): DOMConversionMap {
 	return importMap;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-function parseHtmlToLexicalNodes(editor: any, html: string) {
+function parseHtmlToLexicalNodes(editor: LexicalEditor, html: string) {
 	const cleanedHtml = html
 		.replace(/""/g, '"')
 		.replace(/<p[^>]*><span[^>]*>([^<])<\/span><\/p>/g, '<p>$1</p>')
@@ -214,4 +214,3 @@ const StyledContentEditable = styled(ContentEditable)`
 		pointer-events: auto;
 	}
 `;
-
