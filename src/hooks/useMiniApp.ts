@@ -2,16 +2,19 @@ import { useState, useEffect, useCallback, useRef } from 'react';
 import { useAccount } from 'wagmi';
 import { MiniKitContextType } from 'node_modules/@coinbase/onchainkit/dist/minikit/types';
 import { FARCASTER_CONNECTOR_ID } from '@/components/FarcasterAutoConnect';
-import type { Context } from '@farcaster/miniapp-sdk';
 
 // Type for the SDK module - we use dynamic import to avoid SSR issues
-type FarcasterSDK = typeof import('@farcaster/miniapp-sdk').sdk;
+// NOTE: We avoid importing types directly from @farcaster/miniapp-sdk at the top level
+// because it causes SSR issues on Vercel (ESM module resolution errors)
+type FarcasterSDK = Awaited<typeof import('@farcaster/miniapp-sdk')>['sdk'];
+type FarcasterContext = Awaited<FarcasterSDK['context']>;
+type FarcasterUserContext = NonNullable<FarcasterContext>['user'];
 
 interface MiniAppContext {
 	isInMiniApp: boolean;
 	isLoading: boolean;
 	context: MiniKitContextType['context'] | null;
-	user: Context.UserContext | null;
+	user: FarcasterUserContext | null;
 	fid: number | null;
 	/** Whether connected with Farcaster smart contract wallet */
 	isFarcasterWalletConnected: boolean;
