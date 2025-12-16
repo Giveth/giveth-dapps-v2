@@ -1,8 +1,11 @@
-import { useState, useEffect, useCallback } from 'react';
-import { sdk, Context } from '@farcaster/miniapp-sdk';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { useAccount } from 'wagmi';
 import { MiniKitContextType } from 'node_modules/@coinbase/onchainkit/dist/minikit/types';
 import { FARCASTER_CONNECTOR_ID } from '@/components/FarcasterAutoConnect';
+import type { Context } from '@farcaster/miniapp-sdk';
+
+// Type for the SDK module - we use dynamic import to avoid SSR issues
+type FarcasterSDK = typeof import('@farcaster/miniapp-sdk').sdk;
 
 interface MiniAppContext {
 	isInMiniApp: boolean;
@@ -46,6 +49,9 @@ export function useMiniApp(): UseMiniAppReturn {
 	const isFarcasterWalletConnected =
 		isConnected && connector?.id === FARCASTER_CONNECTOR_ID;
 
+	// Store SDK reference for use in callbacks (avoid re-importing)
+	const sdkRef = useRef<FarcasterSDK | null>(null);
+
 	const [state, setState] = useState<
 		Omit<MiniAppContext, 'isFarcasterWalletConnected'>
 	>({
@@ -59,6 +65,10 @@ export function useMiniApp(): UseMiniAppReturn {
 	useEffect(() => {
 		const initContext = async () => {
 			try {
+				// Dynamic import to avoid SSR issues - SDK uses browser APIs
+				const { sdk } = await import('@farcaster/miniapp-sdk');
+				sdkRef.current = sdk;
+
 				const context = await sdk.context;
 
 				if (context) {
@@ -95,8 +105,8 @@ export function useMiniApp(): UseMiniAppReturn {
 	 */
 	const openUrl = useCallback(
 		async (url: string) => {
-			if (state.isInMiniApp) {
-				await sdk.actions.openUrl(url);
+			if (state.isInMiniApp && sdkRef.current) {
+				await sdkRef.current.actions.openUrl(url);
 			} else {
 				window.open(url, '_blank', 'noopener,noreferrer');
 			}
@@ -110,14 +120,14 @@ export function useMiniApp(): UseMiniAppReturn {
 	 */
 	const shareText = useCallback(
 		async (text: string, embeds?: string[]) => {
-			if (!state.isInMiniApp) {
+			if (!state.isInMiniApp || !sdkRef.current) {
 				console.warn(
 					'[useMiniApp] shareText only works inside mini app',
 				);
 				return;
 			}
 
-			await sdk.actions.composeCast({
+			await sdkRef.current.actions.composeCast({
 				text,
 				// embeds accept max 2 elements
 				embeds: embeds?.slice(0, 2) as
@@ -136,14 +146,14 @@ export function useMiniApp(): UseMiniAppReturn {
 	 */
 	const viewProfile = useCallback(
 		async (fid: number) => {
-			if (!state.isInMiniApp) {
+			if (!state.isInMiniApp || !sdkRef.current) {
 				console.warn(
 					'[useMiniApp] viewProfile only works inside mini app',
 				);
 				return;
 			}
 
-			await sdk.actions.viewProfile({ fid });
+			await sdkRef.current.actions.viewProfile({ fid });
 		},
 		[state.isInMiniApp],
 	);
@@ -153,12 +163,12 @@ export function useMiniApp(): UseMiniAppReturn {
 	 * Only works when running inside the mini app
 	 */
 	const close = useCallback(async () => {
-		if (!state.isInMiniApp) {
+		if (!state.isInMiniApp || !sdkRef.current) {
 			console.warn('[useMiniApp] close only works inside mini app');
 			return;
 		}
 
-		await sdk.actions.close();
+		await sdkRef.current.actions.close();
 	}, [state.isInMiniApp]);
 
 	return {
