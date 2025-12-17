@@ -14,6 +14,9 @@ import {
 import * as React from 'react';
 import type { JSX } from 'react';
 import type {
+	DOMConversionMap,
+	DOMConversionOutput,
+	DOMExportOutput,
 	EditorConfig,
 	ElementFormatType,
 	LexicalEditor,
@@ -38,6 +41,10 @@ function FigmaComponent({
 	nodeKey,
 	documentID,
 }: FigmaComponentProps) {
+	const figmaUrl = `https://www.figma.com/file/${documentID}`;
+	const iframeSrc = `https://www.figma.com/embed?embed_host=lexical&url=${encodeURIComponent(
+		figmaUrl,
+	)}`;
 	return (
 		<BlockWithAlignableContents
 			className={className}
@@ -47,8 +54,7 @@ function FigmaComponent({
 			<iframe
 				width='560'
 				height='315'
-				src={`https://www.figma.com/embed?embed_host=lexical&url=\
-        https://www.figma.com/file/${documentID}`}
+				src={iframeSrc}
 				allowFullScreen={true}
 			/>
 		</BlockWithAlignableContents>
@@ -91,6 +97,38 @@ export class FigmaNode extends DecoratorBlockNode {
 		this.__id = id;
 	}
 
+	exportDOM(): DOMExportOutput {
+		const figmaUrl = `https://www.figma.com/file/${this.__id}`;
+		const iframeSrc = `https://www.figma.com/embed?embed_host=lexical&url=${encodeURIComponent(
+			figmaUrl,
+		)}`;
+		const element = document.createElement('iframe');
+		element.setAttribute('data-lexical-figma', this.__id);
+		element.setAttribute('width', '560');
+		element.setAttribute('height', '315');
+		element.setAttribute('src', iframeSrc);
+		element.setAttribute('allowfullscreen', 'true');
+		return { element };
+	}
+
+	static importDOM(): DOMConversionMap | null {
+		return {
+			iframe: (domNode: HTMLElement) => {
+				const src = domNode.getAttribute('src') || '';
+				const hasFigmaAttr = domNode.hasAttribute('data-lexical-figma');
+				const isFigmaEmbed =
+					src.includes('figma.com/embed') || hasFigmaAttr;
+				if (!isFigmaEmbed) {
+					return null;
+				}
+				return {
+					conversion: $convertFigmaElement,
+					priority: 2,
+				};
+			},
+		};
+	}
+
 	updateDOM(): false {
 		return false;
 	}
@@ -121,6 +159,43 @@ export class FigmaNode extends DecoratorBlockNode {
 			/>
 		);
 	}
+}
+
+function extractFigmaDocumentIdFromEmbedSrc(src: string): string | null {
+	try {
+		const url = new URL(src);
+		// Example: https://www.figma.com/embed?embed_host=lexical&url=https://www.figma.com/file/<ID>
+		const inner = url.searchParams.get('url');
+		if (!inner) return null;
+		const decoded = decodeURIComponent(inner).trim();
+		const innerUrl = new URL(decoded);
+		const parts = innerUrl.pathname.split('/').filter(Boolean);
+		// /file/<ID>/..., /design/<ID>/..., /proto/<ID>/...
+		if (parts.length >= 2) {
+			const kind = parts[0];
+			if (kind === 'file' || kind === 'design' || kind === 'proto') {
+				return parts[1] || null;
+			}
+		}
+		return null;
+	} catch {
+		return null;
+	}
+}
+
+function $convertFigmaElement(
+	domNode: HTMLElement,
+): null | DOMConversionOutput {
+	const byAttr = domNode.getAttribute('data-lexical-figma');
+	if (byAttr) {
+		return { node: $createFigmaNode(byAttr) };
+	}
+	const src = domNode.getAttribute('src') || '';
+	const id = extractFigmaDocumentIdFromEmbedSrc(src);
+	if (id) {
+		return { node: $createFigmaNode(id) };
+	}
+	return null;
 }
 
 export function $createFigmaNode(documentID: string): FigmaNode {
