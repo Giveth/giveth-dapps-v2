@@ -119,12 +119,12 @@ export function InsertImageUploadedDialogBody({
 		if (files && files[0]) {
 			setSelectedFile(files[0]);
 			// Show preview
-			const reader = new FileReader();
-			reader.onload = function () {
-				if (typeof reader.result === 'string') {
-					setSrc(reader.result);
-				}
-			};
+		const reader = new FileReader();
+		reader.onload = function () {
+			if (typeof reader.result === 'string') {
+				setSrc(reader.result);
+			}
+		};
 			reader.readAsDataURL(files[0]);
 		}
 	};
