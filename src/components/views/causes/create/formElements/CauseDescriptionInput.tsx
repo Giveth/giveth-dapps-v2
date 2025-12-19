@@ -10,8 +10,8 @@ import {
 } from '@/components/views/causes/create/types';
 import InlineToast, { EToastType } from '@/components/toasts/InlineToast';
 
-const RichTextInput = dynamic(
-	() => import('@/components/rich-text/RichTextInput'),
+const RichTextLexicalEditor = dynamic(
+	() => import('@/components/rich-text-lexical/RichTextLexicalEditor'),
 	{
 		ssr: false,
 		loading: () => <WrappedSpinner size={500} />,
@@ -22,10 +22,12 @@ export const CAUSE_DESCRIPTION_MIN_LIMIT = 1200;
 
 interface ICauseDescriptionInputProps {
 	setActiveCauseSection: (section: ECreateCauseSections) => void;
+	causeId?: number;
 }
 
 const CauseDescriptionInput = ({
 	setActiveCauseSection,
+	causeId,
 }: ICauseDescriptionInputProps) => {
 	const {
 		getValues,
@@ -84,14 +86,13 @@ const CauseDescriptionInput = ({
 				message={formatMessage({ id: 'label.cause.please_note_desc' })}
 			/>
 			<InputContainer>
-				<RichTextInput
-					style={TextInputStyle}
-					setValue={handleDescription}
-					value={description}
-					noShadow
-					minLimit={CAUSE_DESCRIPTION_MIN_LIMIT}
+				<RichTextLexicalEditor
+					initialValue={description}
+					onChange={handleDescription}
 					setHasLimitError={setHasLimitError}
+					maxLength={CAUSE_DESCRIPTION_MIN_LIMIT}
 					error={errors[EInputs.description]?.message}
+					projectId={causeId ? causeId.toString() : undefined}
 				/>
 			</InputContainer>
 		</div>

@@ -10,14 +10,6 @@ import { GoodProjectDescription } from '@/components/modals/GoodProjectDescripti
 import { WrappedSpinner } from '@/components/Spinner';
 import { ECreateProjectSections, EInputs } from './types';
 
-const RichTextInput = dynamic(
-	() => import('@/components/rich-text/RichTextInput'),
-	{
-		ssr: false,
-		loading: () => <WrappedSpinner size={500} />,
-	},
-);
-
 const RichTextLexicalEditor = dynamic(
 	() => import('@/components/rich-text-lexical/RichTextLexicalEditor'),
 	{

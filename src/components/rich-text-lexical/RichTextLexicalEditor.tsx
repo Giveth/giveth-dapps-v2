@@ -121,7 +121,7 @@ function parseHtmlToLexicalNodes(editor: any, html: string) {
 	// Clean up problematic input
 	const cleanedHtml = html
 		.replace(/""/g, '"')
-		.replace(/<p[^>]*><span[^>]*>([^<])<\/span><\/p>/g, '<p>$1</p>')
+		.replace(/<p[^>]*><span[^>]*>([^<]*)<\/span><\/p>/g, '<p>$1</p>')
 		// .replace(/style="[^"]*white-space:\s*pre-wrap[^"]*"/g, '')
 		// Unwrap image-uploading spans that contain images (keep the image)
 		.replace(

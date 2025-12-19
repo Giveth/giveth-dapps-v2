@@ -70,6 +70,7 @@ export const EditCauseInformationStep = ({
 					<CauseTitleInput causeId={causeId} />
 					<CauseDescriptionInput
 						setActiveCauseSection={setActiveCauseSection}
+						causeId={causeId}
 					/>
 					<CauseImageInput
 						setIsLoading={setIsLoading}
