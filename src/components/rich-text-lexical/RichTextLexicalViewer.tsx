@@ -132,10 +132,12 @@ function parseHtmlToLexicalNodes(editor: LexicalEditor, html: string) {
 
 function ContentInitializer({ html }: { html?: string }) {
 	const [editor] = useLexicalComposerContext();
-	const [isInitialized, setIsInitialized] = useState(false);
+	const [initializedHtml, setInitializedHtml] = useState<
+		string | undefined
+	>();
 
 	useEffect(() => {
-		if (!html || isInitialized) return;
+		if (!html || initializedHtml === html) return;
 
 		editor.update(() => {
 			const root = $getRoot();
@@ -152,8 +154,8 @@ function ContentInitializer({ html }: { html?: string }) {
 			}
 		});
 
-		setIsInitialized(true);
-	}, [editor, html, isInitialized]);
+		setInitializedHtml(html);
+	}, [editor, html, initializedHtml]);
 
 	return null;
 }
