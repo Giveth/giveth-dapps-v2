@@ -89,7 +89,7 @@ function buildImportMap(): DOMConversionMap {
 function parseHtmlToLexicalNodes(editor: LexicalEditor, html: string) {
 	const cleanedHtml = html
 		.replace(/""/g, '"')
-		.replace(/<p[^>]*><span[^>]*>([^<])<\/span><\/p>/g, '<p>$1</p>')
+		.replace(/<p[^>]*><span[^>]*>([^<]*)<\/span><\/p>/g, '<p>$1</p>')
 		.replace(
 			/<span[^>]*class=["']image-uploading["'][^>]*>\s*(<img[^>]+>)\s*<\/span>/gi,
 			'<p>$1</p>',
