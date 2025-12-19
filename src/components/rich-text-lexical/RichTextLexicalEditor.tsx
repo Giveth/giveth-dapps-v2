@@ -230,7 +230,7 @@ export default function RichTextLexicalEditor({
 	const [currentValue, setCurrentValue] = useState(initialValue || '');
 
 	const {
-		settings: { isCollab, emptyEditor, measureTypingPerf },
+		settings: { isCollab, measureTypingPerf },
 	} = useSettings();
 
 	// Wrapper to track current value for the counter
@@ -266,7 +266,9 @@ export default function RichTextLexicalEditor({
 									/>
 								)}
 							</EditorShell>
-							<EditorInitializer html={initialValue} />
+							{isCollab ? (
+								<EditorInitializer html={initialValue} />
+							) : null}
 							<OnChangeHandler onChange={handleChange} />
 							{measureTypingPerf ? <TypingPerfPlugin /> : null}
 							{error && <Error>{error as string}</Error>}
