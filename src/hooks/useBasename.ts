@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { usePublicClient } from 'wagmi';
-import { isAddress, toCoinType } from 'viem';
+import { isAddress } from 'viem';
 import config from '@/configuration';
 
 /**
@@ -29,7 +29,6 @@ export function useBasename(address?: string | null, enabled = true) {
 			try {
 				const name = await client.getEnsName({
 					address: address as `0x${string}`,
-					coinType: toCoinType(config.BASE_NETWORK_NUMBER),
 				});
 				if (!cancelled) setBasename(name);
 			} catch {
@@ -47,7 +46,3 @@ export function useBasename(address?: string | null, enabled = true) {
 
 	return { basename, isLoading };
 }
-
-
-
-
