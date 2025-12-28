@@ -229,12 +229,14 @@ const Header: FC<IHeader> = ({ showQFBanner }) => {
 			)}
 			<FlexSpacer />
 			<Flex gap='8px'>
-				<CreateButtonWithMenu
-					isHeaderShowing={scrollDir !== EScrollDir.Down}
-					onClick={handleCreateButton}
-					size='small'
-					isProjectPage={isProjectPage}
-				/>
+				{!isInMiniApp && (
+					<CreateButtonWithMenu
+						isHeaderShowing={scrollDir !== EScrollDir.Down}
+						onClick={handleCreateButton}
+						size='small'
+						isProjectPage={isProjectPage}
+					/>
+				)}
 				{walletAddress ? (
 					<>
 						{isDesktop && (

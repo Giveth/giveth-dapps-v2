@@ -150,11 +150,13 @@ const walletMenuArray = (isInMiniApp: boolean) =>
 			url: Routes.MyAccount,
 			requiresSign: true,
 		},
-		{
-			title: 'label.my_projects',
-			url: Routes.MyProjects,
-			requiresSign: true,
-		},
+		!isInMiniApp
+			? {
+					title: 'label.my_projects',
+					url: Routes.MyProjects,
+					requiresSign: true,
+				}
+			: null,
 		{
 			title: 'label.cause.my_causes',
 			url: Routes.MyCauses,
@@ -172,12 +174,14 @@ const walletMenuArray = (isInMiniApp: boolean) =>
 					requiresSign: true,
 				}
 			: null,
-		{
-			title: 'label.create_a_project',
-			url: Routes.CreateProject,
-			requiresSign: true,
-			requiresRegistration: true,
-		},
+		!isInMiniApp
+			? {
+					title: 'label.create_a_project',
+					url: Routes.CreateProject,
+					requiresSign: true,
+					requiresRegistration: true,
+				}
+			: null,
 		{
 			title: 'label.report_a_bug',
 			url: links.REPORT_ISSUE,
