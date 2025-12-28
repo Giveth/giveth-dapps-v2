@@ -27,6 +27,8 @@ import { UserItems } from './UserItems';
 import { ItemsProvider } from '@/context/Items.context';
 import { SignWithWalletModal } from '../modals/SignWithWalletModal';
 import { useGeneralWallet } from '@/providers/generalWalletProvider';
+import useMiniApp from '@/hooks/useMiniApp';
+import { useBasename } from '@/hooks/useBasename';
 
 export interface IHeaderButtonProps {
 	isHeaderShowing: boolean;
@@ -125,6 +127,8 @@ const HeaderUserButton = ({}) => {
 	const { walletAddress, chainName } = useGeneralWallet();
 	const { userData } = useAppSelector(state => state.user);
 	const { formatMessage } = useIntl();
+	const { isInMiniApp } = useMiniApp();
+	const { basename } = useBasename(walletAddress, isInMiniApp);
 	return (
 		<HBContainer>
 			<HBPic
@@ -135,7 +139,7 @@ const HeaderUserButton = ({}) => {
 			/>
 			<WBInfo>
 				<UserName size='Medium'>
-					{userData?.name || shortenAddress(walletAddress)}
+					{userData?.name || basename || shortenAddress(walletAddress)}
 				</UserName>
 				<WBNetwork size='Tiny'>
 					{formatMessage({

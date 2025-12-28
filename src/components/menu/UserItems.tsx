@@ -23,6 +23,8 @@ import { Item } from './Item';
 import NetworkLogo from '@/components/NetworkLogo';
 import StorageLabel from '@/lib/localStorage';
 import { useGeneralWallet } from '@/providers/generalWalletProvider';
+import useMiniApp from '@/hooks/useMiniApp';
+import { useBasename } from '@/hooks/useBasename';
 interface IUserItemsProps {
 	setSignWithWallet: Dispatch<SetStateAction<boolean>>;
 	setQueueRoute: Dispatch<SetStateAction<string>>;
@@ -48,6 +50,8 @@ export const UserItems: FC<IUserItemsProps> = ({
 	const { isSignedIn, userData, token } = useAppSelector(state => state.user);
 	const theme = useAppSelector(state => state.general.theme);
 	const isSafeEnv = useIsSafeEnvironment();
+	const { isInMiniApp } = useMiniApp();
+	const { basename } = useBasename(walletAddress, isInMiniApp && !isOnSolana);
 
 	const { open: openChainModal } = useWeb3Modal();
 
@@ -75,42 +79,44 @@ export const UserItems: FC<IUserItemsProps> = ({
 					{formatMessage({ id: 'label.wallet' })}
 				</ItemTitle>
 				<ItemRow>
-					<B>{shortenAddress(walletAddress)}</B>
+					<B>{basename || shortenAddress(walletAddress)}</B>
 				</ItemRow>
 			</Item>
-			<Item
-				baseTheme={theme}
-				onClick={() => {
-					openChainModal &&
-						openChainModal({
-							view: 'Networks',
-						});
-				}}
-			>
-				<ItemTitle $baseTheme={theme}>
-					{formatMessage({ id: 'label.network' })}
-				</ItemTitle>
-				<ItemRow>
-					<FlexCenter gap='4px'>
-						<NetworkLogo
-							chainId={chainId}
-							chainType={walletChainType}
-							logoSize={16}
-						/>
-						<NetworkName $width={isOnSolana ? '120px' : '90px'}>
-							{chainName}
-						</NetworkName>
-					</FlexCenter>
+			{!isInMiniApp && (
+				<Item
+					baseTheme={theme}
+					onClick={() => {
+						openChainModal &&
+							openChainModal({
+								view: 'Networks',
+							});
+					}}
+				>
+					<ItemTitle $baseTheme={theme}>
+						{formatMessage({ id: 'label.network' })}
+					</ItemTitle>
+					<ItemRow>
+						<FlexCenter gap='4px'>
+							<NetworkLogo
+								chainId={chainId}
+								chainType={walletChainType}
+								logoSize={16}
+							/>
+							<NetworkName $width={isOnSolana ? '120px' : '90px'}>
+								{chainName}
+							</NetworkName>
+						</FlexCenter>
 
-					{!isSafeEnv && !isOnSolana && (
-						<ItemAction size='Small'>
-							{formatMessage({ id: 'label.switch_network' })}
-						</ItemAction>
-					)}
-				</ItemRow>
-			</Item>
+						{!isSafeEnv && !isOnSolana && (
+							<ItemAction size='Small'>
+								{formatMessage({ id: 'label.switch_network' })}
+							</ItemAction>
+						)}
+					</ItemRow>
+				</Item>
+			)}
 			<ItemSpacer />
-			{walletMenuArray.map(i => (
+			{walletMenuArray(isInMiniApp).map(i => (
 				<Item
 					key={i.title}
 					onClick={() => goRoute(i)}
@@ -138,41 +144,50 @@ export const UserItems: FC<IUserItemsProps> = ({
 };
 
 const walletMenuArray = [
-	{
-		title: 'label.my_account',
-		url: Routes.MyAccount,
-		requiresSign: true,
-	},
-	{
-		title: 'label.my_projects',
-		url: Routes.MyProjects,
-		requiresSign: true,
-	},
-	{
-		title: 'label.cause.my_causes',
-		url: Routes.MyCauses,
-		requiresSign: true,
-	},
-	{
-		title: 'label.my_donations',
-		url: Routes.MyDonations,
-		requiresSign: true,
-	},
-	{
-		title: 'label.my_givpower',
-		url: Routes.MyBoostedProjects,
-		requiresSign: true,
-	},
-	{
-		title: 'label.create_a_project',
-		url: Routes.CreateProject,
-		requiresSign: true,
-		requiresRegistration: true,
-	},
-	{
-		title: 'label.report_a_bug',
-		url: links.REPORT_ISSUE,
-		requiresSign: false,
-	},
-	{ title: 'label.support', url: Routes.Support, requiresSign: false },
-];
+const walletMenuArray = (isInMiniApp: boolean) =>
+	[
+		{
+			title: 'label.my_account',
+			url: Routes.MyAccount,
+			requiresSign: true,
+		},
+		{
+			title: 'label.my_projects',
+			url: Routes.MyProjects,
+			requiresSign: true,
+		},
+		{
+			title: 'label.cause.my_causes',
+			url: Routes.MyCauses,
+			requiresSign: true,
+		},
+		{
+			title: 'label.my_donations',
+			url: Routes.MyDonations,
+			requiresSign: true,
+		},
+		!isInMiniApp
+			? {
+					title: 'label.my_givpower',
+					url: Routes.MyBoostedProjects,
+					requiresSign: true,
+				}
+			: null,
+		{
+			title: 'label.create_a_project',
+			url: Routes.CreateProject,
+			requiresSign: true,
+			requiresRegistration: true,
+		},
+		{
+			title: 'label.report_a_bug',
+			url: links.REPORT_ISSUE,
+			requiresSign: false,
+		},
+		{ title: 'label.support', url: Routes.Support, requiresSign: false },
+	].filter(Boolean) as Array<{
+		title: string;
+		url: string;
+		requiresSign: boolean;
+		requiresRegistration?: boolean;
+	}>;
