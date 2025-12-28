@@ -143,7 +143,6 @@ export const UserItems: FC<IUserItemsProps> = ({
 	);
 };
 
-const walletMenuArray = [
 const walletMenuArray = (isInMiniApp: boolean) =>
 	[
 		{

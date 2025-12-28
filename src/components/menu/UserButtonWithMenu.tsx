@@ -139,7 +139,9 @@ const HeaderUserButton = ({}) => {
 			/>
 			<WBInfo>
 				<UserName size='Medium'>
-					{userData?.name || basename || shortenAddress(walletAddress)}
+					{userData?.name ||
+						basename ||
+						shortenAddress(walletAddress)}
 				</UserName>
 				<WBNetwork size='Tiny'>
 					{formatMessage({
