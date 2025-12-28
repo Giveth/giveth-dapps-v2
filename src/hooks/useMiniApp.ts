@@ -3,6 +3,21 @@ import { useAccount } from 'wagmi';
 import { MiniKitContextType } from 'node_modules/@coinbase/onchainkit/dist/minikit/types';
 import { FARCASTER_CONNECTOR_ID } from '@/components/FarcasterAutoConnect';
 
+/**
+ * Base App Farcaster client fid.
+ *
+ * Used to distinguish Base App vs Farcaster/Warpcast when running as a Mini App.
+ *
+ * @see https://docs.base.org/mini-apps/
+ */
+export const BASE_APP_CLIENT_FID = 309857;
+export const BASE_APP_CLIENT_FID_EFFECTIVE =
+	process.env.NEXT_PUBLIC_BASE_APP_CLIENT_FID != null
+		? Number(process.env.NEXT_PUBLIC_BASE_APP_CLIENT_FID)
+		: BASE_APP_CLIENT_FID;
+
+export type MiniAppHost = 'base' | 'farcaster' | null;
+
 // Type for the SDK module - we use dynamic import to avoid SSR issues
 // NOTE: We avoid importing types directly from @farcaster/miniapp-sdk at the top level
 // because it causes SSR issues on Vercel (ESM module resolution errors)
@@ -16,6 +31,10 @@ interface MiniAppContext {
 	context: MiniKitContextType['context'] | null;
 	user: FarcasterUserContext | null;
 	fid: number | null;
+	/** Hosting client fid (used to differentiate Base App vs Farcaster clients) */
+	clientFid: number | null;
+	/** Hosting app (Base vs Farcaster/Warpcast). Null when not in mini app. */
+	miniAppHost: MiniAppHost;
 	/** Whether connected with Farcaster smart contract wallet */
 	isFarcasterWalletConnected: boolean;
 }
@@ -63,6 +82,8 @@ export function useMiniApp(): UseMiniAppReturn {
 		context: null,
 		user: null,
 		fid: null,
+		clientFid: null,
+		miniAppHost: null,
 	});
 
 	useEffect(() => {
@@ -75,18 +96,30 @@ export function useMiniApp(): UseMiniAppReturn {
 				const context = await sdk.context;
 
 				if (context) {
+					const clientFid =
+						(context as any)?.client?.clientFid != null
+							? Number((context as any).client.clientFid)
+							: null;
+					const miniAppHost: MiniAppHost =
+						clientFid === BASE_APP_CLIENT_FID_EFFECTIVE
+							? 'base'
+							: 'farcaster';
 					setState({
 						isInMiniApp: true,
 						isLoading: false,
 						context,
 						user: context.user || null,
 						fid: context.user?.fid || null,
+						clientFid,
+						miniAppHost,
 					});
 				} else {
 					setState(prev => ({
 						...prev,
 						isInMiniApp: false,
 						isLoading: false,
+						clientFid: null,
+						miniAppHost: null,
 					}));
 				}
 			} catch (error) {
@@ -95,6 +128,8 @@ export function useMiniApp(): UseMiniAppReturn {
 					...prev,
 					isInMiniApp: false,
 					isLoading: false,
+					clientFid: null,
+					miniAppHost: null,
 				}));
 			}
 		};
