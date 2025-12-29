@@ -1239,4 +1239,13 @@ export const EditorShell = styled.div`
 		font-family: Menlo, Consolas, Monaco, monospace;
 		font-size: 94%;
 	}
+
+	.PlaygroundEditorTheme__link {
+		color: rgb(33, 111, 219);
+		text-decoration: none;
+	}
+	.PlaygroundEditorTheme__link:hover {
+		text-decoration: underline;
+		cursor: pointer;
+	}
 `;
