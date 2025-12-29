@@ -1232,4 +1232,11 @@ export const EditorShell = styled.div`
 	.PlaygroundEditorTheme__textUnderlineStrikethrough {
 		text-decoration: underline line-through;
 	}
+
+	.PlaygroundEditorTheme__textCode {
+		background-color: rgb(240, 242, 245);
+		padding: 1px 0.25rem;
+		font-family: Menlo, Consolas, Monaco, monospace;
+		font-size: 94%;
+	}
 `;

@@ -203,6 +203,46 @@ const ViewerWrapper = styled.div`
 		box-shadow: none;
 		background: transparent;
 	}
+
+	/* Viewer-only code styling (project description, etc.) */
+	.editor-shell.viewer-mode {
+		.PlaygroundEditorTheme__textCode {
+			background-color: rgb(240, 242, 245);
+			padding: 1px 0.25rem;
+			border-radius: 4px;
+			font-family: Menlo, Consolas, Monaco, monospace;
+			font-size: 94%;
+		}
+
+		.PlaygroundEditorTheme__code {
+			background-color: rgb(240, 242, 245);
+			font-family: Menlo, Consolas, Monaco, monospace;
+			display: block;
+			padding: 8px 8px 8px 52px;
+			line-height: 1.53;
+			font-size: 13px;
+			margin: 8px 0;
+			overflow-x: auto;
+			position: relative;
+			tab-size: 2;
+			border-radius: 8px;
+		}
+
+		.PlaygroundEditorTheme__code:before {
+			content: attr(data-gutter);
+			position: absolute;
+			background-color: #eee;
+			left: 0;
+			top: 0;
+			bottom: 0;
+			border-right: 1px solid #ccc;
+			padding: 8px;
+			color: #777;
+			white-space: pre-wrap;
+			text-align: right;
+			min-width: 25px;
+		}
+	}
 `;
 
 const StyledContentEditable = styled(ContentEditable)`
