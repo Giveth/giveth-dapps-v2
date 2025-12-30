@@ -19,15 +19,12 @@ const AccountRoute = () => {
 		return <WalletNotConnected />;
 	} else if (!isSignedIn) {
 		return <UserNotSignedIn />;
-	} else if (!userData) {
-		// In some flows `isSignedIn` can become true before `userData` is fetched.
-		return <WrappedSpinner />;
 	}
 
 	return (
 		<>
 			<Head>
-				<title>{userData?.name || 'My account'} | Giveth</title>
+				<title>{userData?.name} | Giveth</title>
 			</Head>
 			<ProfileProvider user={userData!} myAccount>
 				<UserProfileView />
