@@ -25,13 +25,18 @@ const ProfileContext = createContext<ProfileContext>({
 ProfileContext.displayName = 'ProfileContext';
 
 export const ProfileProvider = (props: {
-	user: IUser;
+	user?: IUser;
 	myAccount: boolean;
 	children: ReactNode;
 }) => {
 	const { user: initialUser, myAccount, children } = props;
-	const [user, setUser] = useState<IUser>(initialUser);
+	const [user, setUser] = useState<IUser>(() => initialUser ?? ({} as IUser));
 	const [balance, setBalance] = useState('0');
+
+	// Keep internal user state in sync with prop changes (e.g. async fetch after sign-in)
+	useEffect(() => {
+		setUser(initialUser ?? ({} as IUser));
+	}, [initialUser]);
 
 	// Update user data
 	const updateUser = (updatedUser: Partial<IUser>) => {
@@ -44,10 +49,11 @@ export const ProfileProvider = (props: {
 	useEffect(() => {
 		const fetchTotal = async () => {
 			try {
+				if (!user?.walletAddress) return;
 				const res = await getGIVpowerBalanceByAddress([
-					user?.walletAddress!,
+					user.walletAddress,
 				]);
-				setBalance(res[user?.walletAddress!]);
+				setBalance(res[user.walletAddress]);
 			} catch (error) {
 				console.error('error on getGIVpowerBalanceByAddress', {
 					error,
