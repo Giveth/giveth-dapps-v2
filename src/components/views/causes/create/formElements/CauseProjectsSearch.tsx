@@ -57,7 +57,7 @@ export const CauseProjectsSearch = ({
 		state => state.general.mainCategories,
 	);
 
-	//
+	// Handle filters change
 	const handleFiltersChange = (filters: {
 		filters: never[];
 		searchTerm: string;
@@ -321,6 +321,11 @@ const SearchInputWrapper = styled.div`
 	&:focus-within {
 		border-color: ${brandColors.giv[500]};
 	}
+
+	@media (max-width: 640px) {
+		width: 100%;
+		margin-bottom: 12px;
+	}
 `;
 
 const SearchInput = styled.input`
@@ -343,6 +348,11 @@ const CategorySection = styled.div`
 	display: flex;
 	flex-direction: column;
 	gap: 16px;
+
+	@media (max-width: 640px) {
+		width: 100%;
+		margin-bottom: 12px;
+	}
 `;
 
 const CategoryTitle = styled.div`
@@ -370,6 +380,11 @@ const CategoryTitle = styled.div`
 	&:hover {
 		border-color: ${brandColors.giv[300]};
 	}
+
+	@media (max-width: 640px) {
+		width: 100%;
+		max-width: none;
+	}
 `;
 
 const ModalOverlay = styled.div`
@@ -394,6 +409,11 @@ const CategoryModal = styled.div`
 	width: 400px;
 	max-height: 80vh;
 	overflow-y: auto;
+
+	@media (max-width: 390px) {
+		width: 100%;
+		max-width: none;
+	}
 `;
 
 const ModalHeader = styled.div`
@@ -472,6 +492,10 @@ const FilterSection = styled.div`
 	display: flex;
 	flex-direction: column;
 	gap: 16px;
+
+	@media (max-width: 640px) {
+		width: 100%;
+	}
 `;
 
 const FilterTitle = styled.div`
@@ -498,6 +522,10 @@ const FilterTitle = styled.div`
 
 	&:hover {
 		border-color: ${brandColors.giv[300]};
+	}
+
+	@media (max-width: 640px) {
+		width: 100%;
 	}
 `;
 

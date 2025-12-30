@@ -78,26 +78,26 @@ export const EditCauseHeader: FC<IHeader> = ({
 };
 
 const BackButton = styled(Flex)`
-	display: none;
 	${mediaQueries.tablet} {
 		display: flex;
 	}
 `;
 
 const StyledFlexSpacer = styled(FlexSpacer)`
-	display: none;
 	${mediaQueries.tablet} {
 		display: flex;
 	}
 `;
 
 const StepsNavigation = styled(Flex)`
-	display: none;
+	flex-wrap: wrap;
+	display: flex;
+	width: 100%;
+	margin-left: 24px;
 	${mediaQueries.tablet} {
-		display: flex;
-		width: 100%;
 		justify-content: center;
 		align-items: center;
+		margin-left: 0;
 	}
 `;
 
@@ -118,6 +118,10 @@ const StepLink = styled(Flex)<IStepState>`
 
 	&:hover {
 		opacity: 1;
+	}
+
+	@media (max-width: 640px) {
+		width: 100%;
 	}
 `;
 

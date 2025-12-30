@@ -19,19 +19,8 @@ import type {
 	OptionProps,
 	StylesConfig,
 	DropdownIndicatorProps,
-	GroupBase,
 	CSSObjectWithLabel,
 } from 'react-select';
-
-declare module 'react-select/dist/declarations/src/Select' {
-	export interface Props<
-		Option,
-		IsMulti extends boolean,
-		Group extends GroupBase<Option>,
-	> {
-		hasError?: boolean;
-	}
-}
 
 interface IProps {
 	networkOptions?: ISelectedNetwork[];
@@ -40,14 +29,21 @@ interface IProps {
 	error?: FieldError;
 }
 
+// Cast Select to accept custom props like hasError
+const CustomSelect = Select as typeof Select & {
+	(
+		props: React.ComponentProps<typeof Select> & { hasError?: boolean },
+	): JSX.Element;
+};
+
 const SelectNetwork = forwardRef<HTMLElement, IProps>((props, ref) => {
 	const { networkOptions, onChange, selectedNetwork, error } = props;
 	return (
 		<>
-			<Select
+			<CustomSelect
 				components={{
 					DropdownIndicator,
-					Option: (props: any) => <Option {...props} />,
+					Option: (optionProps: any) => <Option {...optionProps} />,
 				}}
 				value={selectedNetwork}
 				onChange={(e: any) => onChange(e)}
@@ -91,14 +87,14 @@ const Option: ComponentType<OptionProps<ISelectedNetwork>> = props => {
 
 const selectStyles: StylesConfig = {
 	...selectCustomStyles,
-	placeholder: (baseStyles, props) =>
+	placeholder: (baseStyles, _props) =>
 		({
 			...baseStyles,
 			color: neutralColors.gray[900],
 			fontSize: '16px',
 			fontWeight: 500,
 		}) as CSSObjectWithLabel,
-	indicatorSeparator: (baseStyles, props) =>
+	indicatorSeparator: (baseStyles, _props) =>
 		({
 			...baseStyles,
 			display: 'none',
