@@ -6,6 +6,7 @@ import {
 	optimismSepolia,
 	polygon,
 	arbitrumSepolia,
+	base,
 	baseSepolia,
 	polygonZkEvmCardona,
 } from 'wagmi/chains';
@@ -124,6 +125,7 @@ const EVM_CHAINS = [
 	optimismSepolia,
 	celoAlfajores,
 	arbitrumSepolia,
+	base,
 	baseSepolia,
 	classic,
 	polygonZkEvmCardona,
