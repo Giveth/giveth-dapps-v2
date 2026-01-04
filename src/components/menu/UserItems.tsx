@@ -157,11 +157,13 @@ const walletMenuArray = (isInMiniApp: boolean) =>
 					requiresSign: true,
 				}
 			: null,
-		{
-			title: 'label.cause.my_causes',
-			url: Routes.MyCauses,
-			requiresSign: true,
-		},
+		!isInMiniApp
+			? {
+					title: 'label.cause.my_causes',
+					url: Routes.MyCauses,
+					requiresSign: true,
+				}
+			: null,
 		{
 			title: 'label.my_donations',
 			url: Routes.MyDonations,
