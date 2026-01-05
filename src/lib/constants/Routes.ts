@@ -18,13 +18,18 @@ export enum ProfileModal {
 	PFPModal = 'pfp',
 }
 
+const newFrontend =
+	process.env.NEW_FRONTEND_URL || 'https://v6-staging.giveth.io';
+const newFrontendPath = (path: string, fallback: string) =>
+	newFrontend ? `${newFrontend}${path}` : fallback;
+
 const Routes = {
 	Home: '/',
 	CreateProject: '/create',
 	AllProjects: '/projects/all',
 	Projects: '/projects',
 	AllQFProjects: '/qf/all',
-	QFProjects: '/qf',
+	QFProjects: newFrontendPath('/qf', '/qf'),
 	QFArchived: '/qf-archive',
 	Project: '/project',
 	Success: '/success',
