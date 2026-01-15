@@ -15,6 +15,7 @@ import {
 import { useIntl } from 'react-intl';
 import { useFormContext } from 'react-hook-form';
 import { useEffect, useMemo, useState } from 'react';
+import dynamic from 'next/dynamic';
 import Image from 'next/image';
 import { useWeb3Modal } from '@web3modal/wagmi/react';
 import toast from 'react-hot-toast';
@@ -38,6 +39,11 @@ import FailedDonation, {
 } from '@/components/modals/FailedDonation';
 import { formatTxLink } from '@/lib/helpers';
 import { gToast, ToastType } from '@/components/toasts';
+
+const RichTextViewer = dynamic(
+	() => import('@/components/rich-text/RichTextViewer'),
+	{ ssr: false },
+);
 
 interface IProps {
 	onPrevious: () => void;
@@ -340,11 +346,11 @@ export const CauseReviewStep = ({
 								id: 'label.cause.create_description',
 							})}
 						</TitleLable>
-						<DescriptionValue
-							dangerouslySetInnerHTML={{
-								__html: description || 'No description',
-							}}
-						/>
+						<DescriptionValue>
+							<RichTextViewer
+								content={description || '<p>No description</p>'}
+							/>
+						</DescriptionValue>
 					</Col>
 					{image && (
 						<Col lg={4} md={12}>
@@ -608,14 +614,7 @@ const TitleValue = styled.div`
 `;
 
 const DescriptionValue = styled.div`
-	font-weight: 400;
-	font-size: 16px;
-	line-height: 150%;
 	color: ${neutralColors.gray[900]};
-
-	p {
-		margin: 0;
-	}
 `;
 
 const CauseProjects = styled.div`
