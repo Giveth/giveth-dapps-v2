@@ -11,11 +11,11 @@
     "version": "1",
     "name": "Giveth",
     "homeUrl": "https://giveth-dapps-v2-git-feature-base-mini-app-general-magic.vercel.app/",
-    "iconUrl": "https://giveth.io/images/miniapp/icon.png",
+    "iconUrl": "https://giveth.io/images/logo/logo.svg",
     "splashImageUrl": "https://giveth.io/images/miniapp/splash.png",
     "splashBackgroundColor": "#1B1657",
     "webhookUrl": "https://giveth.io/api/miniapp/webhook",
-    "subtitle": "Future of Giving",
+    "subtitle": "Crypto Donations",
     "description": "Get rewarded for giving to for-good projects with zero added fees. Donate crypto directly to thousands of nonprofits & charities!",
     "screenshotUrls": [
       "https://giveth.io/images/miniapp/screenshot-1.png",
