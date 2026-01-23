@@ -287,8 +287,6 @@ export interface IUser {
 	totalCausesRaised?: number;
 	causesTotalEarned?: number;
 	causesTotalEarnedUsdValue?: number;
-	twitterName?: string;
-	telegramName?: string;
 }
 
 export interface IPassportInfo {

@@ -39,11 +39,7 @@ import { useGeneralWallet } from '@/providers/generalWalletProvider';
 import { client } from '@/apollo/apolloClient';
 import InputStyled from '@/components/styled-components/Input';
 import { EInputValidation } from '@/types/inputValidation';
-import { cleanTelegramUsername, cleanTwitterUsername } from '@/helpers/user';
-
 export interface IUserInfo {
-	twitterName: string;
-	telegramName: string;
 	email: string;
 	firstName: string;
 	lastName: string;
@@ -52,8 +48,6 @@ export interface IUserInfo {
 }
 
 enum EUserInfo {
-	TWITTER_NAME = 'twitterName',
-	TELEGRAM_NAME = 'telegramName',
 	EMAIL = 'email',
 	FIRST_NAME = 'firstName',
 	LAST_NAME = 'lastName',
@@ -263,8 +257,6 @@ const InfoStep: FC<IStep> = ({ setStep }) => {
 			const { data: response } = await updateUser({
 				variables: {
 					...formData,
-					twitterName: cleanTwitterUsername(formData.twitterName),
-					telegramName: cleanTelegramUsername(formData.telegramName),
 					newUser: true,
 				},
 			});
@@ -414,37 +406,6 @@ const InfoStep: FC<IStep> = ({ setStep }) => {
 							</Col>
 						</>
 					)}
-				</Section>
-				<SectionHeader>
-					{formatMessage({
-						id: 'label.user.how_can_we_contact_you',
-					})}
-				</SectionHeader>
-				<Section>
-					<Col xs={12} md={8}>
-						<Input
-							label={formatMessage({
-								id: 'label.user.x_twitter_profile',
-							})}
-							placeholder={formatMessage({
-								id: 'label.user.x_twitter_profile_placeholder',
-							})}
-							registerName={EUserInfo.TWITTER_NAME}
-							register={register}
-						/>
-					</Col>
-					<Col xs={12} md={8}>
-						<Input
-							label={formatMessage({
-								id: 'label.user.telegram_profile',
-							})}
-							placeholder={formatMessage({
-								id: 'label.user.telegram_profile_placeholder',
-							})}
-							registerName={EUserInfo.TELEGRAM_NAME}
-							register={register}
-						/>
-					</Col>
 				</Section>
 				<SectionHeader>
 					{formatMessage({

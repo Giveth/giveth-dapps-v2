@@ -191,8 +191,6 @@ export const UPDATE_USER = gql`
 		$firstName: String
 		$avatar: String
 		$newUser: Boolean
-		$twitterName: String
-		$telegramName: String
 	) {
 		updateUser(
 			url: $url
@@ -202,8 +200,6 @@ export const UPDATE_USER = gql`
 			lastName: $lastName
 			avatar: $avatar
 			newUser: $newUser
-			twitterName: $twitterName
-			telegramName: $telegramName
 		)
 	}
 `;
