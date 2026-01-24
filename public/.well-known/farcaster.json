@@ -11,7 +11,7 @@
     "version": "1",
     "name": "Giveth",
     "homeUrl": "https://giveth-dapps-v2-git-feature-base-mini-app-general-magic.vercel.app/",
-    "iconUrl": "https://giveth.io/images/logo/logo.svg",
+    "iconUrl": "https://giveth.io/favicon.svg",
     "splashImageUrl": "https://giveth.io/images/miniapp/splash.png",
     "splashBackgroundColor": "#1B1657",
     "webhookUrl": "https://giveth.io/api/miniapp/webhook",
