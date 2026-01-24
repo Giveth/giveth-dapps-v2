@@ -363,6 +363,13 @@ export const ProjectsContainer = styled.div`
 	display: grid;
 	gap: 25px;
 	padding: 0 23px;
+	/* Prevent horizontal overflow on small screens.
+	   Grid items default to min-width: auto, so any nowrap text inside cards
+	   can force the item wider than the viewport unless we allow shrinking. */
+	grid-template-columns: minmax(0, 1fr);
+	& > * {
+		min-width: 0;
+	}
 
 	${mediaQueries.tablet} {
 		padding: 0;
