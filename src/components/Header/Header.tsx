@@ -91,6 +91,8 @@ const Header: FC<IHeader> = ({ showQFBanner }) => {
 	const scrollDir = useScrollDetection();
 
 	const isGIVeconomyRoute = checkIsGIVeconomyRoute(router.route);
+	const shouldShowMobileNavLabel =
+		currentLabel && currentLabel !== formatMessage({ id: 'label.donate' });
 
 	const handleBack = () => {
 		const calculateSlug = () => {
@@ -183,7 +185,9 @@ const Header: FC<IHeader> = ({ showQFBanner }) => {
 						{!isDesktop && (
 							<HomeButton gap='4px' onClick={openSidebar}>
 								<IconMenu24 />
-								<GLink size='Big'>{currentLabel} </GLink>
+								{shouldShowMobileNavLabel && (
+									<GLink size='Big'>{currentLabel}</GLink>
+								)}
 							</HomeButton>
 						)}
 					</Flex>
