@@ -9,9 +9,9 @@
   },
   "miniapp": {
     "version": "1",
-    "name": "Giveth",
-    "homeUrl": "https://base.giveth.io",
-    "iconUrl": "https://giveth.io/favicon.svg",
+    "name": "Test app",
+    "homeUrl": "https://base.test.io",
+    "iconUrl": "https://test.io/favicon.svg",
     "splashImageUrl": "https://giveth.io/images/miniapp/splash.png",
     "splashBackgroundColor": "#1B1657",
     "webhookUrl": "https://giveth.io/api/miniapp/webhook",
@@ -23,7 +23,7 @@
       "https://giveth.io/images/miniapp/screenshot-3.png"
     ],
     "primaryCategory": "social",
-    "tags": ["donations", "publicgoods", "nonprofit", "charity", "giveth"],
+    "tags": ["donations", "publicgoods", "nonprofit", "charity"],
     "heroImageUrl": "https://giveth.mypinata.cloud/ipfs/QmQ9sfdevs9vS7czBXBfDaRRPhU8a6T5gXxF3NDGSnQe1c",
     "tagline": "Zero-Fee Crypto Donations",
     "ogTitle": "Giveth: Zero-Fee Crypto Donation",
