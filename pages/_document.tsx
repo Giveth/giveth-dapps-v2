@@ -40,23 +40,6 @@ export default class MyDocument extends Document {
 			<Html>
 				<Head>
 					<link rel='shortcut icon' href='/favicon.svg' />
-					{/* Base Mini App Embed Metadata */}
-					<meta
-						name='fc:miniapp'
-						content={JSON.stringify({
-							version: 'next',
-							imageUrl:
-								'https://giveth.mypinata.cloud/ipfs/QmQ9sfdevs9vS7czBXBfDaRRPhU8a6T5gXxF3NDGSnQe1c',
-							button: {
-								title: 'Donate Now - Giveth',
-								action: {
-									type: 'launch_miniapp',
-									name: 'Giveth',
-									url: 'https://giveth-dapps-v2-git-feature-base-mini-app-general-magic.vercel.app/',
-								},
-							},
-						})}
-					/>
 					<script
 						type='text/javascript'
 						dangerouslySetInnerHTML={{
