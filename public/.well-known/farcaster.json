@@ -29,7 +29,7 @@
     "ogTitle": "Giveth: Zero-Fee Crypto Donation",
     "ogDescription": "Get rewarded for crypto donations to for-good projects with zero added fees. Donate crypto directly to thousands of nonprofits & charities!",
     "ogImageUrl": "https://giveth.mypinata.cloud/ipfs/QmQ9sfdevs9vS7czBXBfDaRRPhU8a6T5gXxF3NDGSnQe1c",
-    "noindex": false,
+    "noindex": true,
     "requiredChains": [
       "eip155:1",
       "eip155:10",
