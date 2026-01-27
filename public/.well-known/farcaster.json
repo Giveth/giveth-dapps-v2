@@ -9,13 +9,13 @@
   },
   "miniapp": {
     "version": "1",
-    "name": "Giveth",
+    "name": "Test App",
     "homeUrl": "https://giveth-dapps-v2-git-feature-base-mini-app-general-magic.vercel.app/",
     "iconUrl": "https://giveth.io/images/miniapp/icon.png",
     "splashImageUrl": "https://giveth.io/images/miniapp/splash.png",
     "splashBackgroundColor": "#1B1657",
     "webhookUrl": "https://giveth.io/api/miniapp/webhook",
-    "subtitle": "Future of Giving",
+    "subtitle": "Test",
     "description": "Get rewarded for giving to for-good projects with zero added fees. Donate crypto directly to thousands of nonprofits & charities!",
     "screenshotUrls": [
       "https://giveth.io/images/miniapp/screenshot-1.png",
@@ -29,7 +29,7 @@
     "ogTitle": "Giveth: Future of Giving with Zero-Fee Crypto Donation",
     "ogDescription": "Get rewarded for crypto donations to for-good projects with zero added fees. Donate crypto directly to thousands of nonprofits & charities!",
     "ogImageUrl": "https://giveth.mypinata.cloud/ipfs/QmQ9sfdevs9vS7czBXBfDaRRPhU8a6T5gXxF3NDGSnQe1c",
-    "noindex": false,
+    "noindex": true,
     "requiredChains": [
       "eip155:1",
       "eip155:10",
