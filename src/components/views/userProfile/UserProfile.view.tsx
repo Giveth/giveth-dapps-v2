@@ -44,6 +44,7 @@ import { IGiverPFPToken } from '@/apollo/types/types';
 import { useProfileContext } from '@/context/profile.context';
 import { useGeneralWallet } from '@/providers/generalWalletProvider';
 import VerifyEmailBanner from './VerifyEmailBanner';
+import useMiniApp from '@/hooks/useMiniApp';
 
 export interface IUserProfileView {}
 
@@ -60,6 +61,7 @@ const UserProfileView: FC<IUserProfileView> = () => {
 	const [pfpData, setPfpData] = useState<IGiverPFPToken[]>();
 	const { walletChainType, chain } = useGeneralWallet();
 	const { user, myAccount } = useProfileContext();
+	const { isInMiniApp } = useMiniApp();
 	const pfpToken = useGiverPFPToken(user?.walletAddress, user?.avatar);
 
 	const showCompleteProfile =
@@ -74,7 +76,7 @@ const UserProfileView: FC<IUserProfileView> = () => {
 		if (user && !isUserRegistered(user) && myAccount) {
 			setShowIncompleteWarning(true);
 		}
-	}, [user]);
+	}, [myAccount, user]);
 
 	useEffect(() => {
 		if (myAccount && !isSignedIn) {
@@ -87,7 +89,7 @@ const UserProfileView: FC<IUserProfileView> = () => {
 			setShowUploadProfileModal(true);
 			removeQueryParamAndRedirect(router, ['modal']);
 		}
-	}, [router.query.modal]);
+	}, [router, router.query.modal]);
 
 	useEffect(() => {
 		const fetchPFPInfo = async (walletAddress: string) => {
@@ -188,6 +190,7 @@ const UserProfileView: FC<IUserProfileView> = () => {
 							{/* check pfp data, if truthy we check if user is looking at their account, 
 							based on this we show two different messages and links relating to pfp use on profile page  */}
 							{pfpData &&
+								!(myAccount && isInMiniApp) &&
 								(myAccount && !pfpToken ? (
 									<RaribleLinkContainer>
 										<GLink>

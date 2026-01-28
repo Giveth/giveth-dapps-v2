@@ -563,6 +563,7 @@ export interface IQFRound {
 	allocatedFundUSD: number;
 	allocatedFundUSDPreferred: boolean;
 	allocatedTokenSymbol: string;
+	matchingFundCurrency?: string;
 	allocatedTokenChainId: number;
 	minimumValidUsdValue?: number;
 	minMBDScore: number;
@@ -587,6 +588,7 @@ export interface IGetQfRoundHistory {
 	distributedFundTxHash: string;
 	donationsCount: number;
 	matchingFund: number;
+	matchingFundCurrency?: string;
 	raisedFundInUsd: number;
 	uniqueDonors: number;
 	estimatedMatching: IEstimatedMatching;

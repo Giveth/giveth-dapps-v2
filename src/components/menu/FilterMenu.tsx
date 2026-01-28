@@ -15,6 +15,7 @@ import CheckBox from '../Checkbox';
 import { useProjectsContext } from '@/context/projects.context';
 import { EProjectsFilter } from '@/apollo/types/types';
 import { PinkyColoredNumber } from '../styled-components/PinkyColoredNumber';
+import useMiniApp from '@/hooks/useMiniApp';
 
 interface IFilterMenuProps {
 	handleClose: (e?: any) => void;
@@ -90,8 +91,36 @@ export const FilterMenu = forwardRef<HTMLDivElement, IFilterMenuProps>(
 		const campaignCount = variables?.campaignSlug ? 1 : 0;
 		const count = filtersCount + campaignCount;
 		const router = useRouter();
+		const {
+			isInMiniApp,
+			isLoading: isMiniAppLoading,
+			miniAppHost,
+		} = useMiniApp();
 
-		const fundsFilter = isCauses ? fundsFilterCauses : fundsFilterProjects;
+		const isMiniAppScopedProjects =
+			!isCauses && !isMiniAppLoading && isInMiniApp && !!miniAppHost;
+
+		const requiredChainFilter = isMiniAppScopedProjects
+			? miniAppHost === 'base'
+				? EProjectsFilter.ACCEPT_FUND_ON_BASE
+				: EProjectsFilter.ACCEPT_FUND_ON_POLYGON
+			: null;
+
+		const fundsFilter = isCauses
+			? fundsFilterCauses
+			: isMiniAppScopedProjects
+				? [
+						miniAppHost === 'base'
+							? {
+									label: 'Base',
+									value: EProjectsFilter.ACCEPT_FUND_ON_BASE,
+								}
+							: {
+									label: 'Polygon',
+									value: EProjectsFilter.ACCEPT_FUND_ON_POLYGON,
+								},
+					]
+				: fundsFilterProjects;
 
 		const handleSelectFilter = (e: boolean, filter: EProjectsFilter) => {
 			let updatedQuery;
@@ -125,7 +154,12 @@ export const FilterMenu = forwardRef<HTMLDivElement, IFilterMenuProps>(
 			const updatedQuery = {
 				...router.query,
 			};
-			delete updatedQuery.filter;
+			if (isMiniAppScopedProjects && requiredChainFilter) {
+				// Keep the required chain filter in Base/Farcaster mini apps.
+				updatedQuery.filter = [requiredChainFilter];
+			} else {
+				delete updatedQuery.filter;
+			}
 			delete updatedQuery.campaign;
 			router.push({
 				pathname: router.pathname,
@@ -210,10 +244,18 @@ export const FilterMenu = forwardRef<HTMLDivElement, IFilterMenuProps>(
 								onChange={e => {
 									handleSelectFilter(e, projectFeature.value);
 								}}
+								disabled={
+									!!requiredChainFilter &&
+									projectFeature.value === requiredChainFilter
+								}
 								checked={
-									variables?.filters?.includes(
+									(requiredChainFilter &&
+										projectFeature.value ===
+											requiredChainFilter) ||
+									(variables?.filters?.includes(
 										projectFeature.value,
-									) ?? false
+									) ??
+										false)
 								}
 								size={14}
 							/>

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { createWeb3Modal } from '@web3modal/wagmi/react';
 import Head from 'next/head';
+import dynamic from 'next/dynamic';
 import { IntlProvider } from 'react-intl';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { Toaster } from 'react-hot-toast';
@@ -41,6 +42,22 @@ import configuration, { isProduction } from '@/configuration';
 import MaintenanceIndex from '@/components/views/Errors/MaintenanceIndex';
 import { SolanaProvider } from '@/providers/solanaWalletProvider';
 import type { AppProps } from 'next/app';
+
+// Dynamically import MiniKitProvider with SSR disabled to prevent SDK issues
+const MiniKitProvider = dynamic(
+	() =>
+		import('@/components/MiniKitProvider').then(mod => mod.MiniKitProvider),
+	{ ssr: false },
+);
+
+// Dynamically import FarcasterAutoConnect to handle automatic wallet connection in mini app
+const FarcasterAutoConnect = dynamic(
+	() =>
+		import('@/components/FarcasterAutoConnect').then(
+			mod => mod.FarcasterAutoConnect,
+		),
+	{ ssr: false },
+);
 
 if (!isProduction) {
 	// Adds messages only in a dev environment
@@ -174,54 +191,63 @@ function MyApp({ Component, pageProps }: AppProps) {
 					name='viewport'
 					content='width=device-width, initial-scale=1.0'
 				/>
+				<meta name='base:app_id' content='693dbd37d19763ca26ddc284' />
 			</Head>
 			<GoogleAnalytics
 				gaId={process.env.NEXT_PUBLIC_ANALYTICS_WRITE_KEY || ''}
 			/>
-			<ReduxProvider store={store}>
-				<IntlProvider
-					locale={locale!}
-					messages={IntlMessages[locale as keyof typeof IntlMessages]}
-					defaultLocale={defaultLocale}
-				>
-					<ApolloProvider client={apolloClient}>
-						<SolanaProvider>
-							<WagmiProvider config={wagmiConfig}>
-								<ThirdwebProvider>
-									<QueryClientProvider client={queryClient}>
-										<GeneralWalletProvider>
-											{isMaintenanceMode ? (
-												<MaintenanceIndex />
-											) : (
-												<>
-													<NotificationController />
-													<GeneralController />
-													<SubgraphController />
-													<UserController />
-													<HeaderWrapper />
-													{isGIVeconomyRoute(
-														router.route,
-													) && <GIVeconomyTab />}
-													{(pageProps as any)
-														.errorStatus ? (
-														<ErrorsIndex
-															statusCode={
-																(
-																	pageProps as any
-																).errorStatus
-															}
-														/>
-													) : (
-														<RenderComponent
-															Component={
-																Component
-															}
-															pageProps={
-																pageProps
-															}
-														/>
-													)}
-													{/* {process.env.NEXT_PUBLIC_ENV !==
+			<MiniKitProvider>
+				<ReduxProvider store={store}>
+					<IntlProvider
+						locale={locale!}
+						messages={
+							IntlMessages[locale as keyof typeof IntlMessages]
+						}
+						defaultLocale={defaultLocale}
+					>
+						<ApolloProvider client={apolloClient}>
+							<SolanaProvider>
+								<WagmiProvider config={wagmiConfig}>
+									<ThirdwebProvider>
+										<QueryClientProvider
+											client={queryClient}
+										>
+											{/* Auto-connect to Farcaster wallet when in mini app */}
+											<FarcasterAutoConnect />
+											<GeneralWalletProvider>
+												{isMaintenanceMode ? (
+													<MaintenanceIndex />
+												) : (
+													<>
+														<NotificationController />
+														<GeneralController />
+														<SubgraphController />
+														<UserController />
+														<HeaderWrapper />
+														{isGIVeconomyRoute(
+															router.route,
+														) && <GIVeconomyTab />}
+														{(pageProps as any)
+															.errorStatus ? (
+															<ErrorsIndex
+																statusCode={
+																	(
+																		pageProps as any
+																	)
+																		.errorStatus
+																}
+															/>
+														) : (
+															<RenderComponent
+																Component={
+																	Component
+																}
+																pageProps={
+																	pageProps
+																}
+															/>
+														)}
+														{/* {process.env.NEXT_PUBLIC_ENV !==
 												'production' && (
 												<Script
 													id='console-script'
@@ -232,19 +258,20 @@ function MyApp({ Component, pageProps }: AppProps) {
 												/>
 											)} */}
 
-													<FooterWrapper />
-													<ModalController />
-													<PfpController />
-												</>
-											)}
-										</GeneralWalletProvider>
-									</QueryClientProvider>
-								</ThirdwebProvider>
-							</WagmiProvider>
-						</SolanaProvider>
-					</ApolloProvider>
-				</IntlProvider>
-			</ReduxProvider>
+														<FooterWrapper />
+														<ModalController />
+														<PfpController />
+													</>
+												)}
+											</GeneralWalletProvider>
+										</QueryClientProvider>
+									</ThirdwebProvider>
+								</WagmiProvider>
+							</SolanaProvider>
+						</ApolloProvider>
+					</IntlProvider>
+				</ReduxProvider>
+			</MiniKitProvider>
 
 			<Toaster containerStyle={{ top: '80px' }} />
 			<SpeedInsights />

@@ -78,24 +78,24 @@ export const CreateCauseHeader: FC<IHeader> = ({
 };
 
 const BackButton = styled(Flex)`
-	display: none;
 	${mediaQueries.tablet} {
 		display: flex;
 	}
 `;
 
 const StyledFlexSpacer = styled(FlexSpacer)`
-	display: none;
 	${mediaQueries.tablet} {
 		display: flex;
 	}
 `;
 
 const StepsNavigation = styled(Flex)`
-	display: none;
+	display: flex;
+	width: 100%;
+	margin-left: 24px;
+	flex-wrap: wrap;
+
 	${mediaQueries.tablet} {
-		display: flex;
-		width: 100%;
 		justify-content: center;
 		align-items: center;
 	}

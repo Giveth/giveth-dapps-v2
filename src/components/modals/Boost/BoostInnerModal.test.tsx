@@ -1,21 +1,22 @@
 import React from 'react';
 import { setupServer } from 'msw/node';
-import { graphql } from 'msw';
+import { graphql, HttpResponse } from 'msw';
 import { screen } from '@testing-library/react';
+import BigNumber from 'bignumber.js';
 import { renderWithProviders } from '@/tests/utils';
 import '@testing-library/jest-dom';
 import BoostInnerModal from './BoostInnerModal';
 import { EBoostModalState } from './BoostModal';
 
 export const handlers = [
-	graphql.query('getPowerBoostingsQuery', (req, res, ctx) => {
-		return res(
-			ctx.data({
+	graphql.query('getPowerBoostingsQuery', () => {
+		return HttpResponse.json({
+			data: {
 				getPowerBoosting: {
 					powerBoostings: [],
 				},
-			}),
-		);
+			},
+		});
 	}),
 ];
 
@@ -36,7 +37,7 @@ test('showing user total GIVpower amount correctly', async () => {
 	jest.spyOn(React, 'useState').mockImplementation(useStateMock);
 	renderWithProviders(
 		<BoostInnerModal
-			totalGIVpower={1000000000000000000000n}
+			totalGIVpower={new BigNumber('1000000000000000000000')}
 			projectId='0'
 			setPercentage={setStateMock}
 			setState={setStateMock}
@@ -49,12 +50,14 @@ test('showing user total GIVpower amount correctly', async () => {
 					userData: {
 						id: '1',
 						isSignedIn: true,
+						passportScore: 0,
+						passportStamps: 0,
 					},
 					token: '',
 					isEnabled: true,
 					isSignedIn: true,
-					balance: '1000',
 					isLoading: false,
+					isUserFullFilled: true,
 				},
 			},
 		},
@@ -62,13 +65,13 @@ test('showing user total GIVpower amount correctly', async () => {
 	expect(await screen.getByText(/1,000/)).toBeInTheDocument();
 });
 
-test('showing user total GIVpower amount correctly', async () => {
+test('showing user total GIVpower amount correctly 2', async () => {
 	const setStateMock = jest.fn();
 	const useStateMock: any = (useState: any) => [useState, setStateMock];
 	jest.spyOn(React, 'useState').mockImplementation(useStateMock);
 	renderWithProviders(
 		<BoostInnerModal
-			totalGIVpower={1000000000000000000000n}
+			totalGIVpower={new BigNumber('1000000000000000000000')}
 			projectId='0'
 			setPercentage={setStateMock}
 			setState={setStateMock}
@@ -81,12 +84,14 @@ test('showing user total GIVpower amount correctly', async () => {
 					userData: {
 						id: '1',
 						isSignedIn: true,
+						passportScore: 0,
+						passportStamps: 0,
 					},
 					token: '',
 					isEnabled: true,
 					isSignedIn: true,
-					balance: '1000',
 					isLoading: false,
+					isUserFullFilled: true,
 				},
 			},
 		},
