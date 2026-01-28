@@ -127,7 +127,10 @@ export const ProjectsProvider = (props: {
 				},
 			},
 			undefined,
-			{ shallow: true },
+			// IMPORTANT: do NOT use shallow routing here.
+			// We need Next.js to re-run `getServerSideProps` so SSR props (and react-query initialData)
+			// are consistent with the enforced mini-app chain filter.
+			{ shallow: false },
 		);
 	}, [
 		router.isReady,
