@@ -6,13 +6,17 @@ import {
 import { Shadow } from '@/components/styled-components/Shadow';
 import type { CSSObjectWithLabel, StylesConfig } from 'react-select';
 
+interface CustomSelectProps {
+	hasError?: boolean;
+}
+
 const selectCustomStyles: StylesConfig = {
 	control: (baseStyles, { isDisabled, selectProps }) =>
 		({
 			...baseStyles,
 			maxWidth: '520px',
 
-			borderColor: selectProps.hasError
+			borderColor: (selectProps as unknown as CustomSelectProps).hasError
 				? semanticColors.punch[500]
 				: neutralColors.gray[300],
 

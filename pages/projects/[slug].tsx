@@ -58,6 +58,7 @@ export const getServerSideProps: GetServerSideProps = async context => {
 				skipAuth: true,
 			},
 		});
+
 		const { projects, totalCount } = data.newAllProjects;
 		return {
 			props: {

@@ -10,6 +10,10 @@ import {
 
 export const StyledContainer = styled(Container)`
 	margin-top: 56px;
+
+	@media (max-width: 640px) {
+		margin-top: 170px;
+	}
 `;
 
 export const Title = styled(H3)`
@@ -65,6 +69,7 @@ export const ButtonContainer = styled.div`
 	margin-top: 12px;
 	display: flex;
 	justify-content: flex-start;
+	flex-wrap: wrap;
 	padding: 0;
 
 	button {
@@ -97,5 +102,9 @@ export const BackButton = styled.button`
 
 	&:active {
 		background-color: ${neutralColors.gray[400]};
+	}
+
+	@media (max-width: 640px) {
+		margin-bottom: 12px;
 	}
 `;

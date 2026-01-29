@@ -15,14 +15,7 @@ const server = setupServer(
 				notifications: [
 					{
 						id: 8,
-						projectId: null,
-						emailStatus: 'noNeedToSend',
-						email: null,
-						trackId:
-							'100-0xf640b47ea690e00098a13898a35d87f735c0850d10e8236f61f8c5be24528e48-2',
-						emailContent: null,
 						isRead: true,
-						segmentData: null,
 						metadata: {
 							amount: '4.0',
 							network: '100',
@@ -31,27 +24,10 @@ const server = setupServer(
 								'0xf640b47ea690e00098a13898a35d87f735c0850d10e8236f61f8c5be24528e48',
 						},
 						createdAt: '2022-12-27T15:21:25.000Z',
-						updatedAt: '2023-02-26T14:07:09.322Z',
 						notificationType: {
-							id: 26,
-							microService: 'giveconomy-notification-service',
-							isGlobal: false,
-							isGroupParent: true,
-							showOnSettingPage: true,
-							isEmailEditable: false,
-							isWebEditable: true,
-							emailDefaultValue: false,
-							webDefaultValue: true,
-							categoryGroup: 'givBacks',
-							name: 'GIVback is ready to claim',
+							category: 'givEconomy',
 							description:
 								'Notify me when my GIV from GIVbacks is ready to claim.',
-							schemaValidator: 'givBackReadyToClaim',
-							category: 'givEconomy',
-							emailNotifierService: null,
-							emailNotificationId: null,
-							pushNotifierService: null,
-							requiresTemplate: true,
 							htmlTemplate: [
 								{ type: 'p', content: 'Your GIVback ' },
 								{ type: 'b', content: '$amount' },
@@ -70,15 +46,10 @@ const server = setupServer(
 									content: ' to take a shortcut.',
 								},
 							],
-							title: 'GIVbacks',
 							icon: 'IconGIVBack',
 							content:
 								'Your GIVback {amount} GIV is ready to claim! \n[Click here] to take a shortcut.',
-							createdAt: '2023-02-26T12:11:37.493Z',
-							updatedAt: '2023-02-26T12:11:37.493Z',
 						},
-						notificationTypeId: 26,
-						userAddressId: 1,
 					},
 				],
 			});

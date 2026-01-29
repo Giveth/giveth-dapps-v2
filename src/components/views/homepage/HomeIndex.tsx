@@ -11,9 +11,9 @@ import GetUpdates from '@/components/GetUpdates';
 import { useAppSelector } from '@/features/hooks';
 import { client } from '@/apollo/apolloClient';
 import { LatestUpdatesBlock } from '@/components/views/homepage/latestUpdates/LatestUpdatesBlock';
-import { IHomeRoute } from '../../../../pages';
 import { FETCH_CAMPAIGNS } from '@/apollo/gql/gqlHomePage';
 import WhyGiveth from '@/components/views/homepage/whyGiveth';
+import type { IHomeRoute } from '../../../../pages';
 
 const HomeIndex: FC<IHomeRoute> = props => {
 	const { campaigns: campaignsFromServer, latestUpdates, ...rest } = props;

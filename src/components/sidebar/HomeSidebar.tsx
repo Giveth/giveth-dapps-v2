@@ -11,11 +11,13 @@ import { GIVeconomyItems } from '../menu/GIVeconomyItems';
 import { Item } from '../menu/Item';
 import { setShowSearchModal } from '@/features/modal/modal.slice';
 import { CommunityItems } from '../menu/CommunityItems';
+import useMiniApp from '@/hooks/useMiniApp';
 
 export const HomeSidebar = () => {
 	const { theme } = useAppSelector(state => state.general);
 	const dispatch = useAppDispatch();
 	const { formatMessage } = useIntl();
+	const { isInMiniApp } = useMiniApp();
 
 	return (
 		<HomeSidebarContainer>
@@ -34,9 +36,11 @@ export const HomeSidebar = () => {
 			>
 				<ProjectsItems />
 			</SidebarParentItem>
-			<SidebarParentItem item={{ title: 'GIVeconomy' }}>
-				<GIVeconomyItems />
-			</SidebarParentItem>
+			{!isInMiniApp && (
+				<SidebarParentItem item={{ title: 'GIVeconomy' }}>
+					<GIVeconomyItems />
+				</SidebarParentItem>
+			)}
 			<SidebarParentItem
 				item={{ title: formatMessage({ id: 'label.community' }) }}
 			>

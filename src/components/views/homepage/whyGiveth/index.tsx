@@ -12,7 +12,7 @@ import StatsCard from '@/components/views/homepage/whyGiveth/StatsCard';
 import { thousandsSeparator } from '@/lib/helpers';
 import { Relative } from '@/components/styled-components/Position';
 import CominhoPlusIcon from 'public/images/cominho-plus.svg';
-import { IHomeRoute } from 'pages';
+import type { IHomeRoute } from 'pages';
 
 type IWhyGivethProps = Omit<IHomeRoute, 'campaigns' | 'latestUpdates'> & {};
 

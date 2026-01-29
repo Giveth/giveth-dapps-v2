@@ -53,6 +53,7 @@ import { useNavigationInfo } from '@/hooks/useNavigationInfo';
 import config from '@/configuration';
 import { useGeneralWallet } from '@/providers/generalWalletProvider';
 import { EScrollDir, useScrollDetection } from '@/hooks/useScrollDetection';
+import useMiniApp from '@/hooks/useMiniApp';
 
 export interface IHeader {
 	theme?: ETheme;
@@ -67,6 +68,7 @@ const Header: FC<IHeader> = ({ showQFBanner }) => {
 		useDelayedState();
 
 	const { walletAddress, openWalletConnectModal } = useGeneralWallet();
+	const { isInMiniApp } = useMiniApp();
 	const { chain } = useAccount();
 	const chainId = chain?.id;
 
@@ -89,6 +91,8 @@ const Header: FC<IHeader> = ({ showQFBanner }) => {
 	const scrollDir = useScrollDetection();
 
 	const isGIVeconomyRoute = checkIsGIVeconomyRoute(router.route);
+	const shouldShowMobileNavLabel =
+		currentLabel && currentLabel !== formatMessage({ id: 'label.donate' });
 
 	const handleBack = () => {
 		const calculateSlug = () => {
@@ -181,7 +185,9 @@ const Header: FC<IHeader> = ({ showQFBanner }) => {
 						{!isDesktop && (
 							<HomeButton gap='4px' onClick={openSidebar}>
 								<IconMenu24 />
-								<GLink size='Big'>{currentLabel} </GLink>
+								{shouldShowMobileNavLabel && (
+									<GLink size='Big'>{currentLabel}</GLink>
+								)}
 							</HomeButton>
 						)}
 					</Flex>
@@ -196,13 +202,15 @@ const Header: FC<IHeader> = ({ showQFBanner }) => {
 					>
 						<ProjectsMenu />
 					</LinkWithMenu>
-					<LinkWithMenu
-						title='GIVeconomy'
-						isHeaderShowing={scrollDir !== EScrollDir.Down}
-						href={Routes.GIVeconomy}
-					>
-						<GIVeconomyMenu />
-					</LinkWithMenu>
+					{!isInMiniApp && (
+						<LinkWithMenu
+							title='GIVeconomy'
+							isHeaderShowing={scrollDir !== EScrollDir.Down}
+							href={Routes.GIVeconomy}
+						>
+							<GIVeconomyMenu />
+						</LinkWithMenu>
+					)}
 					<LinkWithMenu
 						title={formatMessage({ id: 'label.community' })}
 						isHeaderShowing={scrollDir !== EScrollDir.Down}
@@ -225,12 +233,14 @@ const Header: FC<IHeader> = ({ showQFBanner }) => {
 			)}
 			<FlexSpacer />
 			<Flex gap='8px'>
-				<CreateButtonWithMenu
-					isHeaderShowing={scrollDir !== EScrollDir.Down}
-					onClick={handleCreateButton}
-					size='small'
-					isProjectPage={isProjectPage}
-				/>
+				{!isInMiniApp && (
+					<CreateButtonWithMenu
+						isHeaderShowing={scrollDir !== EScrollDir.Down}
+						onClick={handleCreateButton}
+						size='small'
+						isProjectPage={isProjectPage}
+					/>
+				)}
 				{walletAddress ? (
 					<>
 						{isDesktop && (

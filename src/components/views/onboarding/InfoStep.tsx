@@ -39,7 +39,6 @@ import { useGeneralWallet } from '@/providers/generalWalletProvider';
 import { client } from '@/apollo/apolloClient';
 import InputStyled from '@/components/styled-components/Input';
 import { EInputValidation } from '@/types/inputValidation';
-
 export interface IUserInfo {
 	email: string;
 	firstName: string;
@@ -290,7 +289,11 @@ const InfoStep: FC<IStep> = ({ setStep }) => {
 	return (
 		<OnboardStep xs={12} xl={8} sm={12}>
 			<form onSubmit={handleSubmit(onSave)} noValidate>
-				<SectionHeader>What should we call you?</SectionHeader>
+				<SectionHeader>
+					{formatMessage({
+						id: 'label.user.what_should_we_call_you',
+					})}
+				</SectionHeader>
 				<Section>
 					<Col xs={12} md={6}>
 						<Input
@@ -404,7 +407,11 @@ const InfoStep: FC<IStep> = ({ setStep }) => {
 						</>
 					)}
 				</Section>
-				<SectionHeader>Where are you?</SectionHeader>
+				<SectionHeader>
+					{formatMessage({
+						id: 'label.user.where_are_you',
+					})}
+				</SectionHeader>
 				<Section>
 					<Col xs={12} md={6}>
 						<Input
@@ -416,7 +423,9 @@ const InfoStep: FC<IStep> = ({ setStep }) => {
 					</Col>
 				</Section>
 				<SectionHeader>
-					Personal website or URL to somewhere special?
+					{formatMessage({
+						id: 'label.user.personal_website_or_url',
+					})}
 				</SectionHeader>
 				<Section>
 					<Col xs={12} md={6}>
