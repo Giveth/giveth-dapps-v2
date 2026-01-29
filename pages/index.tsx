@@ -1,10 +1,7 @@
 import { GetStaticProps } from 'next/types';
 
-import HomeIndex from '@/components/views/homepage/HomeIndex';
 import { client } from '@/apollo/apolloClient';
 import { ICampaign, IProjectUpdateWithProject } from '@/apollo/types/types';
-import { homeMetatags } from '@/content/metatags';
-import { GeneralMetatags } from '@/components/Metatag';
 import { FETCH_HOMEPAGE_DATA_REDUCED } from '@/apollo/gql/gqlHomePage';
 
 export interface IHomeRoute {
@@ -24,13 +21,8 @@ export const HOME_QUERY_VARIABLES = {
 	connectedWalletUserId: null,
 };
 
-const HomeRoute = (props: IHomeRoute) => {
-	return (
-		<>
-			<GeneralMetatags info={homeMetatags} />
-			<HomeIndex {...props} />
-		</>
-	);
+const HomeRoute = () => {
+	return <p> Please check Giveth - Crypto Donations mini app</p>;
 };
 
 export const getStaticProps: GetStaticProps = async () => {
