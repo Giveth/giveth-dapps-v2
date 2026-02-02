@@ -4,7 +4,6 @@ import {
 	sendTransaction as wagmiSendTransaction,
 	readContract,
 } from '@wagmi/core';
-import { getDataSuffix, submitReferral } from '@divvi/referral-sdk';
 // @ts-ignore
 import { captureException } from '@sentry/nextjs';
 // import { type Address, erc20Abi } from 'wagmi';
@@ -26,7 +25,6 @@ import { AddressZero } from './constants/constants';
 import { ChainType, NonEVMChain } from '@/types/config';
 import { wagmiConfig } from '@/wagmiConfigs';
 import usdtMainnetABI from '@/artifacts/usdtMainnetABI.json';
-import { isGnosisSafeAddress } from './safe';
 
 declare let window: any;
 interface TransactionParams {
@@ -437,41 +435,19 @@ export async function handleErc20Transfer(
 
 	const value = parseUnits(params.value, decimals as number);
 
-	// Step 1: Encode function data manually
-	const baseData = encodeFunctionData({
+	// Encode ERC20 transfer function call
+	const data = encodeFunctionData({
 		abi: ABItoUse,
 		functionName: 'transfer',
 		args: [params.to, value],
 	});
 
-	// Step 2: Get referral data suffix
-	const dataSuffix = getDataSuffix({
-		consumer: '0x62Bb362d63f14449398B79EBC46574F859A6045D',
-		providers: ['0x0423189886d7966f0dd7e7d256898daeee625dca'],
-	});
-
-	const chainId = params.chainId;
-
-	// Step 3: Create a wallet client
-
-	// Step 4: Send transaction with referral data
+	// Send transaction
 	const txHash = await wagmiSendTransaction(wagmiConfig, {
 		to: contractAddress,
-		data: `${baseData}${dataSuffix}` as `0x${string}`,
+		data: data as `0x${string}`,
 		value: 0n,
 	});
-
-	// Step 5: Report to Divvi
-	if (chainId) {
-		try {
-			await submitReferral({
-				txHash,
-				chainId,
-			});
-		} catch {
-			return txHash;
-		}
-	}
 
 	return txHash;
 }
@@ -480,47 +456,12 @@ export async function handleErc20Transfer(
 async function handleEthTransfer(params: TransactionParams): Promise<Address> {
 	const value = parseEther(params.value);
 
-	// Step 2: Get referral data suffix
-	const dataSuffix = getDataSuffix({
-		consumer: '0x62Bb362d63f14449398B79EBC46574F859A6045D',
-		providers: ['0x0423189886d7966f0dd7e7d256898daeee625dca'],
-	});
-
-	// Check if to address is a safe address if it is, we don't need to add the referral data
-	// Skip Safe detection for Gnosis network (xDAI) to prevent transaction failures
-	let isSafeAddress = false;
-	if (params.chainId !== 100) {
-		// Skip for Gnosis network (xDAI)
-		try {
-			isSafeAddress = await isGnosisSafeAddress(params.to);
-		} catch (error) {
-			console.log(
-				'Safe detection failed, proceeding without referral data',
-			);
-		}
-	}
-	const data =
-		isSafeAddress || params.chainId === 100
-			? '0x'
-			: (('0x' + dataSuffix) as `0x${string}`);
-
+	// Send transaction (no data for simple ETH transfer)
 	const hash = await wagmiSendTransaction(wagmiConfig, {
 		to: params.to,
 		value: value,
-		data,
+		data: '0x',
 	});
-
-	// Step 5: Report to Divvi
-	if (params.chainId && data !== '0x') {
-		try {
-			await submitReferral({
-				txHash: hash,
-				chainId: params.chainId,
-			});
-		} catch {
-			return hash;
-		}
-	}
 
 	console.log('ETH transfer result', { hash });
 	return hash;

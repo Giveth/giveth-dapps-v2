@@ -1932,6 +1932,8 @@
 	"label.cause.cause_technology_desc": "Apoya Causas centradas en innovación tecnológica, investigación y DeSci.",
 	"label.cause.cause_public-goods": "Bienes Públicos",
 	"label.cause.cause_public-goods_desc": "Apoya Causas de bienes públicos mediante donaciones directas.",
+	"label.cause.cause_desci": "DeSci",
+	"label.cause.cause_desci_desc": "Apoya Causas centradas en DeSci, investigación y innovación.",
 	"label.cause.cause_real-estate": "Bienes Raíces",
 	"label.cause.cause_real-estate_desc": "Apoya Causas centradas en bienes raíces, construcción y desarrollo inmobiliario.",
 	"label.cause.cause_refi": "Refi",
@@ -2023,7 +2025,6 @@
 	"label.qf.enter_dontation": "Introduce tu donación",
 	"label.qf.project": "Proyecto QF",
 	"label.qf.recurring_auto_matched": "Las donaciones recurrentes se auto-coinciden en rondas QF eligibles.",
-	"label.qf.quadratic_funding_is_live": "GG24: ¡La Financiación Cuadrática está en marcha 💚 Multiplica tus donaciones con fondos de emparejamiento!",
 	"label.user.what_should_we_call_you": "¿Cómo te llamas?",
 	"label.user.where_are_you": "¿Dónde estás?",
 	"label.user.personal_website_or_url": "¿Página web personal o enlace a algún lugar especial?",
@@ -2032,4 +2033,5 @@
 	"label.user.x_twitter_profile_placeholder": "Tu nombre de usuario en X/Twitter",
 	"label.user.telegram_profile": "Usuario de Telegram",
 	"label.user.telegram_profile_placeholder": "Tu nombre de usuario de Telegram"
+	"label.qf.quadratic_funding_is_live": "💜 La Financiación Cuadrática está activa. Haz que tus donaciones se amplifiquen con fondos de compensación."
 }

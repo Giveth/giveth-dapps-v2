@@ -1932,6 +1932,8 @@
 	"label.cause.cause_technology_desc": "Dona suport a Causes centrades en innovació tecnològica, recerca i DeSci.",
 	"label.cause.cause_public-goods": "Béns Públics",
 	"label.cause.cause_public-goods_desc": "Dona suport a Causes de béns públics mitjançant donacions directes.",
+	"label.cause.cause_desci": "DeSci",
+	"label.cause.cause_desci_desc": "Dona suport a Causes centrades en DeSci, recerca i innovació.",
 	"label.cause.cause_features": "Funcionalitats de la Causa",
 	"label.cause.explore_causes": "Explora Causes",
 	"label.cause.there_are_no_causes_matching_your_search": "No hi ha Causes que coincideixin amb la teva cerca",
@@ -2023,7 +2025,6 @@
 	"label.qf.enter_dontation": "Entra la teva donació",
 	"label.qf.project": "Projecte QF",
 	"label.qf.recurring_auto_matched": "Les donacions recurrents s'igualen automàticament en rondes QF elegibles.",
-	"label.qf.quadratic_funding_is_live": "GG24: El Finançament Quadràtic ja és en marxa 💚 Amplifica les teves donacions amb fons de correspondència!",
 	"label.user.what_should_we_call_you": "Com ens diem?",
 	"label.user.where_are_you": "On ets?",
 	"label.user.personal_website_or_url": "Pàgina web personal o enllaç a algun lloc especial?",
@@ -2032,4 +2033,5 @@
 	"label.user.x_twitter_profile_placeholder": "El teu nom d'usuari a X/Twitter",
 	"label.user.telegram_profile": "Usuari de Telegram",
 	"label.user.telegram_profile_placeholder": "El teu nom d'usuari de Telegram"
+	"label.qf.quadratic_funding_is_live": "💜 El Finançament Quadràtic és en marxa. Fes que les teves donacions es multipliquin amb fons complementaris."
 }
