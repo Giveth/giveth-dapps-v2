@@ -2032,6 +2032,6 @@
 	"label.user.x_twitter_profile": "X/Twitter Profile",
 	"label.user.x_twitter_profile_placeholder": "Your X/Twitter username",
 	"label.user.telegram_profile": "Telegram Handle",
-	"label.user.telegram_profile_placeholder": "Your Telegram username"
+	"label.user.telegram_profile_placeholder": "Your Telegram username",
 	"label.qf.quadratic_funding_is_live": "💜 Quadratic Funding is Live. Get your donations amplified by a matching funds"
 }

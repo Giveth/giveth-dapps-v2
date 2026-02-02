@@ -2032,6 +2032,6 @@
 	"label.user.x_twitter_profile": "Perfil de X/Twitter",
 	"label.user.x_twitter_profile_placeholder": "El teu nom d'usuari a X/Twitter",
 	"label.user.telegram_profile": "Usuari de Telegram",
-	"label.user.telegram_profile_placeholder": "El teu nom d'usuari de Telegram"
+	"label.user.telegram_profile_placeholder": "El teu nom d'usuari de Telegram",
 	"label.qf.quadratic_funding_is_live": "💜 El Finançament Quadràtic és en marxa. Fes que les teves donacions es multipliquin amb fons complementaris."
 }
