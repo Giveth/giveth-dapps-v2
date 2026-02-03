@@ -11,10 +11,17 @@ interface IPagination {
 	totalCount: number;
 	currentPage: number;
 	itemPerPage: number;
+	maxPagesToShow?: number; // How many page numbers to show around current page
 }
 
 const Pagination = (props: IPagination) => {
-	const { setPage, currentPage, totalCount, itemPerPage } = props;
+	const {
+		setPage,
+		currentPage,
+		totalCount,
+		itemPerPage,
+		maxPagesToShow = 6,
+	} = props;
 	const [pages, setPages] = useState<any[]>([]);
 	const [pageCount, setPageCount] = useState(0);
 	const theme = useAppSelector(state => state.general.theme);
@@ -26,8 +33,8 @@ const Pagination = (props: IPagination) => {
 		const current_page = currentPage + 1;
 		// Loop through
 		for (let i = 1; i <= nop; i++) {
-			// Define offset
-			const offset = i == 1 || nop ? itemPerPage + 1 : itemPerPage;
+			// Define offset - how many page numbers to show around current page
+			const offset = i == 1 || nop ? maxPagesToShow + 1 : maxPagesToShow;
 			// If added
 			if (
 				i == 1 ||
@@ -45,7 +52,7 @@ const Pagination = (props: IPagination) => {
 		}
 		setPages(_pages);
 		setPageCount(nop);
-	}, [totalCount, currentPage, itemPerPage]);
+	}, [totalCount, currentPage, itemPerPage, maxPagesToShow]);
 
 	if (pageCount < 2) return null;
 	return (

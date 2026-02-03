@@ -87,6 +87,7 @@ export const FETCH_ARCHIVED_QF_ROUNDS = gql`
 			bannerBgImage
 			bannerFull
 			bannerMobile
+			hubCardImage
 		}
 	}
 `;
@@ -128,6 +129,7 @@ export const FETCH_QF_PROJECTS = gql`
 				title
 				descriptionSummary
 				updatedAt
+				latestUpdateCreationDate
 				slug
 				addresses {
 					address

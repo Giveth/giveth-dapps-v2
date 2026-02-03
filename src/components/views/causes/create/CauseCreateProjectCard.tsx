@@ -207,7 +207,6 @@ interface IWrapperProps {
 
 const Wrapper = styled.div<IWrapperProps>`
 	position: relative;
-	width: ${props => (props.$showOptions ? '50%' : '100%')};
 	border-radius: 12px;
 	margin: 4px 0 0 0;
 	background: white;

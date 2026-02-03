@@ -81,6 +81,7 @@ const ProjectsIndex = (props: IProjectsView) => {
 	} = useProjectsContext();
 
 	const router = useRouter();
+	const PAGE_SIZE = 15;
 	const lastElementRef = useRef<HTMLDivElement>(null);
 	const isInfiniteScrolling = useRef(true);
 
@@ -93,10 +94,9 @@ const ProjectsIndex = (props: IProjectsView) => {
 				router.query.searchTerm.trim() !== '')
 				? EProjectType.ALL
 				: EProjectType.PROJECT;
-
 		const variables: IQueries = {
-			limit: 15, // Adjust the limit as needed
-			skip: 15 * pageParam,
+			limit: PAGE_SIZE,
+			skip: PAGE_SIZE * pageParam,
 			projectType,
 		};
 
@@ -115,7 +115,7 @@ const ProjectsIndex = (props: IProjectsView) => {
 			isArchivedQF,
 			selectedMainCategory,
 			router.query.slug,
-			isQF ? Number(qfRound?.id) || 0 : undefined, // if this qf round page fetch different query
+			isQF ? Number(qfRound?.id) || 0 : undefined,
 		);
 	};
 
@@ -152,7 +152,10 @@ const ProjectsIndex = (props: IProjectsView) => {
 							{
 								data: projects,
 								totalCount: _totalCount,
-								nextCursor: projects.length > 0 ? 1 : undefined,
+								nextCursor:
+									_totalCount > projects.length
+										? 1
+										: undefined,
 								previousCursor: undefined,
 							},
 						],
@@ -175,7 +178,6 @@ const ProjectsIndex = (props: IProjectsView) => {
 		}
 	};
 
-	// Intersection Observer for infinite scrolling
 	useEffect(() => {
 		const handleObserver = (entries: IntersectionObserverEntry[]) => {
 			if (!isInfiniteScrolling.current) return;
@@ -203,13 +205,14 @@ const ProjectsIndex = (props: IProjectsView) => {
 		if (
 			mainCategories.length > 0 &&
 			!selectedMainCategory &&
-			!isArchivedQF
+			!isArchivedQF &&
+			!isQF
 		) {
 			isInfiniteScrolling.current = false;
 		} else {
 			isInfiniteScrolling.current = true;
 		}
-	}, [selectedMainCategory, mainCategories.length, isArchivedQF]);
+	}, [selectedMainCategory, mainCategories.length, isArchivedQF, isQF]);
 
 	// Save last clicked project
 	const handleProjectClick = (slug: string) => {
@@ -329,7 +332,9 @@ const ProjectsIndex = (props: IProjectsView) => {
 					<ProjectsNoResults />
 				)}
 				{hasNextPage && <div ref={lastElementRef} />}
-				{!isFetching && !isFetchingNextPage && hasNextPage && (
+
+				{/* Show manual Load More button ONLY on non-QF pages */}
+				{!isQF && !isFetching && !isFetchingNextPage && hasNextPage && (
 					<>
 						<StyledButton
 							onClick={() => fetchNextPage()}

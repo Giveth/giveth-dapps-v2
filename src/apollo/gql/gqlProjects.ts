@@ -901,6 +901,7 @@ export const PROJECT_CARD_FIELDS_NEW = gql`
 		descriptionSummary
 		creationDate
 		updatedAt
+		latestUpdateCreationDate
 		adminUserId
 		walletAddress
 		activeProjectsCount

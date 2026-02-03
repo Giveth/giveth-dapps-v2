@@ -28,7 +28,6 @@ import { DefaultQFBanner } from '@/components/DefaultQFBanner';
 import { ICause } from '@/apollo/types/types';
 import { LAST_CAUSE_CLICKED } from '@/components/views/causes/constants';
 import { hasRoundStarted } from '@/helpers/qf';
-import config from '@/configuration';
 import { EProjectType } from '@/apollo/types/gqlEnums';
 import { useProjectsContext } from '@/context/projects.context';
 import { ActiveQFProjectsBanner } from '@/components/views/projects/qfBanner/ActiveQFProjectsBanner';
@@ -65,14 +64,15 @@ const CausesIndex = (props: ICausesView) => {
 	const activeRoundStarted = hasRoundStarted(activeQFRound);
 
 	const router = useRouter();
+	const PAGE_SIZE = 15;
 	const lastElementRef = useRef<HTMLDivElement>(null);
 	const isInfiniteScrolling = useRef(true);
 
 	// Define the fetch function for React Query
 	const fetchProjectsPage = async ({ pageParam = 0 }) => {
 		const variables: IQueries = {
-			limit: 15,
-			skip: 15 * pageParam,
+			limit: PAGE_SIZE,
+			skip: PAGE_SIZE * pageParam,
 			projectType: EProjectType.CAUSE,
 		};
 
@@ -122,7 +122,8 @@ const CausesIndex = (props: ICausesView) => {
 							{
 								data: causes,
 								totalCount: _totalCount,
-								nextCursor: causes.length > 0 ? 1 : undefined,
+								nextCursor:
+									_totalCount > causes.length ? 1 : undefined,
 								previousCursor: undefined,
 							},
 						],
@@ -175,25 +176,19 @@ const CausesIndex = (props: ICausesView) => {
 		if (
 			mainCategories.length > 0 &&
 			!selectedMainCategory &&
-			!isArchivedQF
+			!isArchivedQF &&
+			!isQF
 		) {
 			isInfiniteScrolling.current = false;
 		} else {
 			isInfiniteScrolling.current = true;
 		}
-	}, [selectedMainCategory, mainCategories.length, isArchivedQF]);
+	}, [selectedMainCategory, mainCategories.length, isArchivedQF, isQF]);
 
 	// Save last clicked project
 	const handleProjectClick = (slug: string) => {
 		sessionStorage.setItem(LAST_CAUSE_CLICKED, slug);
 	};
-
-	const isStellarOnlyQF =
-		activeRoundStarted &&
-		activeQFRound?.eligibleNetworks?.length === 1 &&
-		activeQFRound?.eligibleNetworks?.includes(
-			config.STELLAR_NETWORK_NUMBER,
-		);
 
 	// Scroll to last clicked project
 	useEffect(() => {
@@ -301,7 +296,7 @@ const CausesIndex = (props: ICausesView) => {
 					<ProjectsNoResults />
 				)}
 				{hasNextPage && <div ref={lastElementRef} />}
-				{!isFetching && !isFetchingNextPage && hasNextPage && (
+				{!isFetching && !isFetchingNextPage && hasNextPage && !isQF && (
 					<>
 						<StyledButton
 							onClick={() => fetchNextPage()}
