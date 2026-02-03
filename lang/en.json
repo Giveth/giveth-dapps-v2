@@ -1932,6 +1932,8 @@
 	"label.cause.cause_technology_desc": "Support Causes focused on tech innovation, research, and DeSci.",
 	"label.cause.cause_public-goods": "Public Goods",
 	"label.cause.cause_public-goods_desc": "Support public goods Causes through direct giving.",
+	"label.cause.cause_desci": "DeSci",
+	"label.cause.cause_desci_desc": "Support Causes focused on DeSci, research, and innovation.",
 	"label.cause.cause_features": "Cause Features",
 	"label.cause.explore_causes": "Explore Causes",
 	"label.cause.there_are_no_causes_matching_your_search": "There are no Causes matching your search",
@@ -2023,7 +2025,6 @@
 	"label.qf.enter_dontation": "Enter your donation",
 	"label.qf.project": "QF Project",
 	"label.qf.recurring_auto_matched": "Recurring donations are auto-matched in eligible QF rounds.",
-	"label.qf.quadratic_funding_is_live": "GG24: Quadratic Funding is Live 💚 Get your donations amplified with matching funds",
 	"label.user.what_should_we_call_you": "What should we call you?",
 	"label.user.where_are_you": "Where are you?",
 	"label.user.personal_website_or_url": "Personal website or URL to somewhere special?",
@@ -2031,5 +2032,6 @@
 	"label.user.x_twitter_profile": "X/Twitter Profile",
 	"label.user.x_twitter_profile_placeholder": "Your X/Twitter username",
 	"label.user.telegram_profile": "Telegram Handle",
-	"label.user.telegram_profile_placeholder": "Your Telegram username"
+	"label.user.telegram_profile_placeholder": "Your Telegram username",
+	"label.qf.quadratic_funding_is_live": "💜 Quadratic Funding is Live. Get your donations amplified by a matching funds"
 }

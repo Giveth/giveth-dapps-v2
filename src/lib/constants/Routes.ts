@@ -19,7 +19,7 @@ export enum ProfileModal {
 }
 
 const newFrontend =
-	process.env.NEW_FRONTEND_URL || 'https://v6-staging.giveth.io';
+	process.env.NEXT_PUBLIC_NEW_FRONTEND_URL || 'https://v6-staging.giveth.io';
 const newFrontendPath = (path: string, fallback: string) =>
 	newFrontend ? `${newFrontend}${path}` : fallback;
 
