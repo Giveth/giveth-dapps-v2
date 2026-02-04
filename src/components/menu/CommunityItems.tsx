@@ -8,6 +8,7 @@ import { ItemRow } from './common';
 import { Item } from './Item';
 import Routes from '@/lib/constants/Routes';
 import links from '@/lib/constants/links';
+import useMiniApp from '@/hooks/useMiniApp';
 
 export const communityItems = [
 	{
@@ -37,9 +38,13 @@ export const communityItems = [
 ];
 
 export const CommunityItems = () => {
+	const { isInMiniApp } = useMiniApp();
+	const filteredItems = isInMiniApp
+		? communityItems.filter(i => i.label !== 'label.givers_nft')
+		: communityItems;
 	return (
 		<>
-			{communityItems.map((item, idx) =>
+			{filteredItems.map((item, idx) =>
 				item.href !== links.FEEDBACK ? (
 					<Link key={idx} href={item.href}>
 						<CommunityItem item={item} />

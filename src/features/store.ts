@@ -18,9 +18,10 @@ const rootReducer = combineReducers({
 	pfp: pfpReducer,
 });
 
-export const setupStore = () => {
+export const setupStore = (preloadedState?: Partial<RootState>) => {
 	return configureStore({
 		reducer: rootReducer,
+		preloadedState,
 	});
 };
 
