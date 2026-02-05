@@ -189,6 +189,61 @@ export const TabGIVbacksBottom = () => {
 		}
 	}, [givTokenDistroHelper, isLoaded]);
 
+	const february2026Round = 108; //February 2026 round
+
+	const newRoundNumber = (() => {
+		const now = new Date();
+		const currentYear = now.getFullYear();
+		const currentMonth = now.getMonth(); // 0-based (0 = Jan, 1 = Feb, etc.)
+
+		// Feb 2026 is the baseline (year: 2026, month: 1)
+		const baselineYear = 2026;
+		const baselineMonth = 1; // Feb
+
+		// Calculate months elapsed since Feb 2026
+		const monthsElapsed =
+			(currentYear - baselineYear) * 12 + (currentMonth - baselineMonth);
+
+		return february2026Round + monthsElapsed;
+	})();
+
+	const newRoundStarTime = (() => {
+		const now = new Date();
+		const currentYear = now.getFullYear();
+		const currentMonth = now.getMonth(); // 0-based (0 = Jan, 1 = Feb, etc.)
+
+		// Determine the current round start date (1st of current month)
+		let roundStart = new Date(currentYear, currentMonth, 1);
+
+		// Special case: Feb 2026 starts on the 3rd
+		if (currentYear === 2026 && currentMonth === 1) {
+			// Feb is month 1
+			roundStart = new Date(2026, 1, 3); // Feb 3, 2026
+		}
+
+		// If today is before this month's start, use previous month
+		if (now < roundStart) {
+			roundStart = new Date(currentYear, currentMonth - 1, 1);
+			// Check if previous month was Feb 2026
+			if (currentYear === 2026 && currentMonth === 2) {
+				// currentMonth 2 = March, so previous is Feb
+				roundStart = new Date(2026, 1, 3);
+			}
+		}
+
+		return roundStart;
+	})();
+
+	// Last day of the month
+	const newRoundEndTime = new Date(
+		newRoundStarTime.getFullYear(),
+		newRoundStarTime.getMonth() + 1,
+		0,
+		23,
+		59,
+		59,
+	);
+
 	return (
 		<GIVbacksBottomContainer>
 			<Container>
@@ -200,7 +255,7 @@ export const TabGIVbacksBottom = () => {
 									GIVbacks{' '}
 									<NoWrap>
 										{formatMessage({ id: 'label.round' })}{' '}
-										{isLoaded ? round : '--'}
+										{isLoaded ? newRoundNumber : '--'}
 									</NoWrap>
 								</RoundTitle>
 								<RoundInfo>
@@ -221,7 +276,7 @@ export const TabGIVbacksBottom = () => {
 											<NoWrap>
 												{isLoaded
 													? formatDate(
-															roundStarTime,
+															newRoundStarTime,
 															locale,
 														)
 													: '--'}
@@ -244,7 +299,7 @@ export const TabGIVbacksBottom = () => {
 											<NoWrap>
 												{isLoaded
 													? formatDate(
-															roundEndTime,
+															newRoundEndTime,
 															locale,
 														)
 													: '--'}
