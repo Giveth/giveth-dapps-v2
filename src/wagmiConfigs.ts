@@ -33,27 +33,45 @@ const clientUnicorn = createThirdwebClient({
 	clientId: '4e8c81182c3709ee441e30d776223354',
 });
 
+// Build connector list without pulling Farcaster SDK into SSR.
+// The Farcaster miniapp connector depends on @farcaster/miniapp-sdk (ESM-only),
+// which causes Vercel SSR to crash if it gets required server-side.
+const connectors = [
+	walletConnect({
+		projectId,
+		metadata,
+	}),
+	coinbaseWallet({ appName: 'Giveth', version: '3' }),
+	safe({
+		allowedDomains: [/app.safe.global$/],
+	}),
+	inAppWalletConnector({
+		client: clientUnicorn,
+		smartAccount: {
+			sponsorGas: true,
+			chain: thirdwebChain(137),
+			factoryAddress: '0xD771615c873ba5a2149D5312448cE01D677Ee48A',
+		},
+	}),
+];
+
+// Only include Farcaster connector on the client.
+if (typeof window !== 'undefined') {
+	try {
+		const { farcasterMiniApp } =
+			require('@farcaster/miniapp-wagmi-connector') as {
+				farcasterMiniApp: () => any;
+			};
+		connectors.unshift(farcasterMiniApp());
+	} catch {
+		// No-op: keep regular wallets working even if connector can't load.
+	}
+}
+
 // Create wagmiConfig
 export const wagmiConfig = createConfig({
 	chains: chains, // required
-	connectors: [
-		walletConnect({
-			projectId,
-			metadata,
-		}),
-		coinbaseWallet({ appName: 'Giveth', version: '3' }),
-		safe({
-			allowedDomains: [/app.safe.global$/],
-		}),
-		inAppWalletConnector({
-			client: clientUnicorn,
-			smartAccount: {
-				sponsorGas: true,
-				chain: thirdwebChain(137),
-				factoryAddress: '0xD771615c873ba5a2149D5312448cE01D677Ee48A',
-			},
-		}),
-	],
+	connectors,
 	ssr: true,
 	storage: createStorage({
 		storage: cookieStorage,

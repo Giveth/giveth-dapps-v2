@@ -2,7 +2,7 @@ import React, { PropsWithChildren } from 'react';
 import { render } from '@testing-library/react';
 import { Provider } from 'react-redux';
 import { IntlProvider } from 'react-intl';
-import { AppStore, setupStore } from '@/features/store';
+import { AppStore, RootState, setupStore } from '@/features/store';
 import { IntlMessages } from 'pages/_app';
 import type { RenderOptions } from '@testing-library/react';
 
@@ -25,6 +25,7 @@ Object.defineProperty(window, 'matchMedia', {
 // This type interface extends the default options for render from RTL, as well
 // as allows the user to specify other things such as initialState, store.
 interface ExtendedRenderOptions extends Omit<RenderOptions, 'queries'> {
+	preloadedState?: Partial<RootState>;
 	store?: AppStore;
 	locale?: string;
 }
@@ -33,8 +34,9 @@ export function renderWithProviders(
 	ui: React.ReactElement,
 	{
 		locale = 'en',
+		preloadedState,
 		// Automatically create a store instance if no store was passed in
-		store = setupStore(),
+		store = setupStore(preloadedState),
 		...renderOptions
 	}: ExtendedRenderOptions = {},
 ) {

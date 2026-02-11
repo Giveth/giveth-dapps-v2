@@ -20,6 +20,7 @@ import { IUserProfileView } from './UserProfile.view';
 import { ProfileBoostedTab } from './boostedTab/ProfileBoostedTab';
 import { PublicProfileBoostedTab } from './boostedTab/PublicProfileBoostedTab';
 import { useProfileContext } from '@/context/profile.context';
+import useMiniApp from '@/hooks/useMiniApp';
 
 enum EProfile {
 	OVERVIEW,
@@ -39,6 +40,8 @@ const ProfileContributes: FC<IUserProfileView> = () => {
 	const [tab, setTab] = useState(EProfile.OVERVIEW);
 	const { user, myAccount } = useProfileContext();
 	const { formatMessage } = useIntl();
+	const { isInMiniApp } = useMiniApp();
+	const shouldHideAccountMiniAppTabs = myAccount && isInMiniApp;
 
 	useEffect(() => {
 		const tab = router?.query?.tab;
@@ -47,13 +50,25 @@ const ProfileContributes: FC<IUserProfileView> = () => {
 				setTab(EProfile.OVERVIEW);
 				break;
 			case 'givpower':
-				setTab(EProfile.GIVPOWER);
+				setTab(
+					shouldHideAccountMiniAppTabs
+						? EProfile.OVERVIEW
+						: EProfile.GIVPOWER,
+				);
 				break;
 			case 'projects':
-				setTab(EProfile.PROJECTS);
+				setTab(
+					shouldHideAccountMiniAppTabs
+						? EProfile.OVERVIEW
+						: EProfile.PROJECTS,
+				);
 				break;
 			case 'causes':
-				setTab(EProfile.CAUSES);
+				setTab(
+					shouldHideAccountMiniAppTabs
+						? EProfile.OVERVIEW
+						: EProfile.CAUSES,
+				);
 				break;
 			case 'donations':
 			case 'recurring-donations':
@@ -65,7 +80,7 @@ const ProfileContributes: FC<IUserProfileView> = () => {
 			default:
 				setTab(EProfile.OVERVIEW);
 		}
-	}, [router?.query?.tab]);
+	}, [router?.query?.tab, shouldHideAccountMiniAppTabs]);
 
 	const baseQuery = router.route.startsWith('/account')
 		? {}
@@ -86,60 +101,68 @@ const ProfileContributes: FC<IUserProfileView> = () => {
 						{formatMessage({ id: 'label.overview' })}
 					</ProfileTab>
 				</Link>
-				<Link
-					href={{
-						query: { tab: 'givpower', ...baseQuery },
-					}}
-				>
-					<ProfileTab $active={tab === EProfile.GIVPOWER}>
-						{`${
-							myAccount
-								? formatMessage({ id: 'label.my_givpower' })
-								: 'GIVpower'
-						}`}
-						{myAccount && user?.boostedProjectsCount !== 0 && (
-							<Count $active={tab === EProfile.GIVPOWER}>
-								{user?.boostedProjectsCount}
-							</Count>
-						)}
-					</ProfileTab>
-				</Link>
-				<Link
-					href={{
-						query: { tab: 'projects', ...baseQuery },
-					}}
-				>
-					<ProfileTab $active={tab === EProfile.PROJECTS}>
-						{`${
-							myAccount
-								? formatMessage({ id: 'label.my_projects' })
-								: formatMessage({ id: 'label.projects' })
-						}`}
-						{myAccount && user?.projectsCount != 0 && (
-							<Count $active={tab === EProfile.PROJECTS}>
-								{user?.projectsCount}
-							</Count>
-						)}
-					</ProfileTab>
-				</Link>
-				<Link
-					href={{
-						query: { tab: 'causes', ...baseQuery },
-					}}
-				>
-					<ProfileTab $active={tab === EProfile.CAUSES}>
-						{`${
-							myAccount
-								? formatMessage({ id: 'label.cause.my_causes' })
-								: formatMessage({ id: 'label.causes' })
-						}`}
-						{myAccount && user?.ownedCausesCount != 0 && (
-							<Count $active={tab === EProfile.CAUSES}>
-								{user?.ownedCausesCount}
-							</Count>
-						)}
-					</ProfileTab>
-				</Link>
+				{!shouldHideAccountMiniAppTabs && (
+					<Link
+						href={{
+							query: { tab: 'givpower', ...baseQuery },
+						}}
+					>
+						<ProfileTab $active={tab === EProfile.GIVPOWER}>
+							{`${
+								myAccount
+									? formatMessage({ id: 'label.my_givpower' })
+									: 'GIVpower'
+							}`}
+							{myAccount && user?.boostedProjectsCount !== 0 && (
+								<Count $active={tab === EProfile.GIVPOWER}>
+									{user?.boostedProjectsCount}
+								</Count>
+							)}
+						</ProfileTab>
+					</Link>
+				)}
+				{!shouldHideAccountMiniAppTabs && (
+					<Link
+						href={{
+							query: { tab: 'projects', ...baseQuery },
+						}}
+					>
+						<ProfileTab $active={tab === EProfile.PROJECTS}>
+							{`${
+								myAccount
+									? formatMessage({ id: 'label.my_projects' })
+									: formatMessage({ id: 'label.projects' })
+							}`}
+							{myAccount && user?.projectsCount != 0 && (
+								<Count $active={tab === EProfile.PROJECTS}>
+									{user?.projectsCount}
+								</Count>
+							)}
+						</ProfileTab>
+					</Link>
+				)}
+				{!shouldHideAccountMiniAppTabs && (
+					<Link
+						href={{
+							query: { tab: 'causes', ...baseQuery },
+						}}
+					>
+						<ProfileTab $active={tab === EProfile.CAUSES}>
+							{`${
+								myAccount
+									? formatMessage({
+											id: 'label.cause.my_causes',
+										})
+									: formatMessage({ id: 'label.causes' })
+							}`}
+							{myAccount && user?.ownedCausesCount != 0 && (
+								<Count $active={tab === EProfile.CAUSES}>
+									{user?.ownedCausesCount}
+								</Count>
+							)}
+						</ProfileTab>
+					</Link>
+				)}
 				<Link
 					href={{
 						query: { tab: 'donations', ...baseQuery },
@@ -179,14 +202,19 @@ const ProfileContributes: FC<IUserProfileView> = () => {
 				</Link>
 			</ProfileTabsContainer>
 			{tab === EProfile.OVERVIEW && <ProfileOverviewTab />}
-			{tab === EProfile.GIVPOWER &&
+			{!shouldHideAccountMiniAppTabs &&
+				tab === EProfile.GIVPOWER &&
 				(myAccount ? (
 					<ProfileBoostedTab />
 				) : (
 					<PublicProfileBoostedTab />
 				))}
-			{tab === EProfile.PROJECTS && <ProfileProjectsTab />}
-			{tab === EProfile.CAUSES && <ProfileCausesTab />}
+			{!shouldHideAccountMiniAppTabs && tab === EProfile.PROJECTS && (
+				<ProfileProjectsTab />
+			)}
+			{!shouldHideAccountMiniAppTabs && tab === EProfile.CAUSES && (
+				<ProfileCausesTab />
+			)}
 			{tab === EProfile.DONATIONS && <ProfileDonationsTab />}
 			{tab === EProfile.LIKED && <ProfileLikedTab />}
 		</Container>

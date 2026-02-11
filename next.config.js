@@ -16,6 +16,8 @@ const locales = ['en', 'ct', 'es'];
 const moduleExports = withBundleAnalyzer({
 	// Your existing module.exports
 	reactStrictMode: true,
+	// Transpile the Farcaster SDK for proper ESM support
+	transpilePackages: ['@farcaster/miniapp-sdk', '@farcaster/miniapp-core'],
 	images: {
 		remotePatterns: [
 			{ protocol: 'https', port: '', hostname: 'placekitten.com' },
@@ -133,7 +135,20 @@ const moduleExports = withBundleAnalyzer({
 			'https://nounspace.com',
 			'https://www.nounspace.com',
 		];
-		const frameAncestors = ["'self'", safe, ...nounspace].join(' ');
+		// Base Mini App and Farcaster clients
+		const baseApp = [
+			'https://base.org',
+			'https://www.base.org',
+			'https://base.dev',
+			'https://www.base.dev',
+			'https://warpcast.com',
+			'https://www.warpcast.com',
+			'https://www.farcaster.xyz',
+			'https://farcaster.xyz',
+		];
+		const frameAncestors = ["'self'", safe, ...nounspace, ...baseApp].join(
+			' ',
+		);
 		// Declare additional consts and include them in frameAncestors to enable additional domains to embed Giveth pages in iframes.
 		return [
 			{
@@ -183,6 +198,26 @@ const moduleExports = withBundleAnalyzer({
 					{
 						key: 'Access-Control-Allow-Headers',
 						value: 'X-Requested-With, content-type, Authorization',
+					},
+				],
+			},
+			{
+				// Adding CORS headers for /.well-known/farcaster.json (Base Mini App manifest)
+				source: '/.well-known/farcaster.json',
+				locale: false,
+				headers: [
+					{
+						key: 'Access-Control-Allow-Origin',
+						value: '*',
+					},
+					{ key: 'Access-Control-Allow-Methods', value: 'GET' },
+					{
+						key: 'Access-Control-Allow-Headers',
+						value: 'X-Requested-With, content-type, Authorization',
+					},
+					{
+						key: 'Cache-Control',
+						value: 'public, max-age=3600',
 					},
 				],
 			},
