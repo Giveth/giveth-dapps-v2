@@ -1,4 +1,4 @@
-{
+﻿{
 	"component.archive_cover.archived": "ARCHIVADO",
 	"component.donation_section.100_to_the_project": "El 100% va al proyecto.",
 	"component.donation_section.desc": "Cada donación es de igual a igual, sin tarifas ni intermediarios.",
@@ -13,7 +13,7 @@
 	"component.title.commons_stack": "Commons Stack",
 	"component.title.faq": "Preguntas Frecuentes",
 	"component.title.giveth_trace": "Rastro de Giveth",
-	"desci": "Desci",
+	"desci": "DeSci",
 	"general": "General",
 	"giveconomy": "Economía de Giveth",
 	"giveth": "Giveth",
