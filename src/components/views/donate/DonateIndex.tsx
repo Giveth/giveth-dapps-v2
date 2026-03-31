@@ -42,6 +42,7 @@ import { isWalletSanctioned } from '@/services/donation';
 import SanctionModal from '@/components/modals/SanctionedModal';
 import { GIVBACKS_DONATION_QUALIFICATION_VALUE_USD } from '@/lib/constants/constants';
 import QRDonationDetails from './OneTime/SelectTokenModal/QRCodeDonation/QRDonationDetails';
+import V6ProjectQFRedirectModal from '@/components/modals/V6ProjectQFRedirectModal';
 
 const DonateIndex: FC = () => {
 	const { formatMessage } = useIntl();
@@ -61,6 +62,10 @@ const DonateIndex: FC = () => {
 		startTimer,
 		setDonateModalByPriority,
 		setIsModalPriorityChecked,
+		isV6ProjectInActiveQFRound,
+		v6ProjectRedirectUrl,
+		showV6ProjectRedirectModal,
+		setShowV6ProjectRedirectModal,
 	} = useDonateData();
 	const { renewExpirationDate, retrieveDraftDonation } =
 		useQRCodeDonation(project);
@@ -117,6 +122,12 @@ const DonateIndex: FC = () => {
 	useEffect(() => {
 		validateSanctions();
 	}, [project, address]);
+
+	useEffect(() => {
+		if (isV6ProjectInActiveQFRound) {
+			setShowV6ProjectRedirectModal(true);
+		}
+	}, [isV6ProjectInActiveQFRound, setShowV6ProjectRedirectModal]);
 
 	useEffect(() => {
 		if (
@@ -272,29 +283,38 @@ const DonateIndex: FC = () => {
 			<DonateHeader />
 			<Wrapper>
 				<DonateContainer>
-					{shouldRenderModal(
-						DonateModalPriorityValues.DonationByProjectOwner,
-					) && (
-						<DonationByProjectOwner
-							closeModal={() => {
-								setDonateModalByPriority(
-									DonateModalPriorityValues.None,
-								);
-							}}
+					{showV6ProjectRedirectModal && v6ProjectRedirectUrl && (
+						<V6ProjectQFRedirectModal
+							setShowModal={setShowV6ProjectRedirectModal}
+							redirectUrl={v6ProjectRedirectUrl}
 						/>
 					)}
 
 					{shouldRenderModal(
+						DonateModalPriorityValues.DonationByProjectOwner,
+					) &&
+						!isV6ProjectInActiveQFRound && (
+							<DonationByProjectOwner
+								closeModal={() => {
+									setDonateModalByPriority(
+										DonateModalPriorityValues.None,
+									);
+								}}
+							/>
+						)}
+
+					{shouldRenderModal(
 						DonateModalPriorityValues.OFACSanctionListModal,
-					) && (
-						<SanctionModal
-							closeModal={() => {
-								setDonateModalByPriority(
-									DonateModalPriorityValues.None,
-								);
-							}}
-						/>
-					)}
+					) &&
+						!isV6ProjectInActiveQFRound && (
+							<SanctionModal
+								closeModal={() => {
+									setDonateModalByPriority(
+										DonateModalPriorityValues.None,
+									);
+								}}
+							/>
+						)}
 
 					{showAlreadyDonatedWrapper && (
 						<AlreadyDonatedWrapper>
