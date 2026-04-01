@@ -65,7 +65,7 @@ export const getV6ActiveQfProjectRedirect = async (projectId?: number) => {
 	}
 };
 
-export const qcOptions = (projectId: number) => {
+export const v6QfRedirectQueryOptions = (projectId: number) => {
 	return {
 		queryKey: ['v6-active-qf-project-redirect', projectId],
 		queryFn: () => getV6ActiveQfProjectRedirect(projectId),

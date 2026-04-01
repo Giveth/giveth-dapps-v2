@@ -23,7 +23,7 @@ import { IProjectAcceptedToken, IDraftDonation } from '@/apollo/types/gqlTypes';
 import { useQRCodeDonation, TQRStatus } from '@/hooks/useQRCodeDonation';
 import {
 	type IV6ActiveQfProjectRedirect,
-	qcOptions,
+	v6QfRedirectQueryOptions,
 	V6_ACTIVE_QF_PROJECT_REDIRECT_STALE_TIME,
 } from '@/services/v6QF';
 export interface TxHashWithChainType {
@@ -264,7 +264,7 @@ export const DonateProvider: FC<IProviderProps> = ({ children, project }) => {
 		data: v6ActiveQfProjectRedirect,
 		isLoading: isV6ProjectInActiveQFRoundLoading,
 	} = useQuery({
-		...qcOptions(Number(projectData.id)),
+		...v6QfRedirectQueryOptions(Number(projectData.id)),
 		enabled: !!projectData.id,
 		refetchInterval: V6_ACTIVE_QF_PROJECT_REDIRECT_STALE_TIME,
 	});
@@ -276,7 +276,7 @@ export const DonateProvider: FC<IProviderProps> = ({ children, project }) => {
 
 		const redirectInfo =
 			await queryClient.fetchQuery<IV6ActiveQfProjectRedirect | null>(
-				qcOptions(projectId),
+				v6QfRedirectQueryOptions(projectId),
 			);
 
 		if (redirectInfo?.redirectUrl) {

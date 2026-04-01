@@ -3,7 +3,7 @@ import { CSSProperties, MouseEvent, ReactNode, useState } from 'react';
 import { useRouter } from 'next/router';
 import { useQueryClient } from '@tanstack/react-query';
 import V6ProjectQFRedirectModal from '@/components/modals/V6ProjectQFRedirectModal';
-import { qcOptions } from '@/services/v6QF';
+import { v6QfRedirectQueryOptions } from '@/services/v6QF';
 
 interface IV6ProjectDonateLinkProps extends LinkProps {
 	children: ReactNode;
@@ -36,6 +36,7 @@ export const V6ProjectDonateLink = ({
 	const queryClient = useQueryClient();
 	const [redirectUrl, setRedirectUrl] = useState<string>();
 	const [showRedirectModal, setShowRedirectModal] = useState(false);
+	const [isChecking, setIsChecking] = useState(false);
 
 	return (
 		<>
@@ -53,18 +54,26 @@ export const V6ProjectDonateLink = ({
 					}
 
 					event.preventDefault();
+					setIsChecking(true);
 
-					const redirectInfo = await queryClient.fetchQuery(
-						qcOptions(Number(projectId)),
-					);
-					if (redirectInfo?.redirectUrl) {
-						setRedirectUrl(redirectInfo.redirectUrl);
-						setShowRedirectModal(true);
-						return;
+					try {
+						const redirectInfo = await queryClient.fetchQuery(
+							v6QfRedirectQueryOptions(Number(projectId)),
+						);
+						if (redirectInfo?.redirectUrl) {
+							setRedirectUrl(redirectInfo.redirectUrl);
+							setShowRedirectModal(true);
+							return;
+						}
+					} catch {
+						// Fall through to normal navigation on error
+					} finally {
+						setIsChecking(false);
 					}
 
 					router.push(href);
 				}}
+				aria-busy={isChecking || undefined}
 			>
 				{children}
 			</Link>
