@@ -20,11 +20,13 @@ export const V6_PROJECT_BY_ID_WITH_QF_ROUNDS_QUERY = `
 			id
 			slug
 			title
-			qfRounds {
-				id
-				isActive
-				beginDate
-				endDate
+			projectQfRounds {
+				qfRound {
+					id
+					isActive
+					beginDate
+					endDate
+				}
 			}
 		}
 	}
