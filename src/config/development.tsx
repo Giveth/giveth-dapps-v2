@@ -39,6 +39,8 @@ const BACKEND_LINK =
 	process.env.NEXT_PUBLIC_BACKEND_LINK || `${BASE_ROUTE}/graphql`;
 const FRONTEND_LINK =
 	process.env.NEXT_PUBLIC_FRONTEND_LINK || 'https://staging.giveth.io';
+const V6_FRONTEND_LINK = process.env.NEXT_PUBLIC_V6_FRONTEND_LINK || '';
+const V6_GRAPHQL_ENDPOINT = process.env.NEXT_PUBLIC_V6_GRAPHQL_ENDPOINT || '';
 const NOTIFICATION_BASE_ROUTE =
 	process.env.NEXT_PUBLIC_NOTIFICATION_BASE_ROUTE ||
 	'https://notification.serve.giveth.io';
@@ -135,6 +137,8 @@ const config: EnvConfig = {
 	GIVETH_PROJECT_ID: 1,
 	BACKEND_LINK: BACKEND_LINK,
 	FRONTEND_LINK: FRONTEND_LINK,
+	V6_FRONTEND_LINK: V6_FRONTEND_LINK,
+	V6_GRAPHQL_ENDPOINT: V6_GRAPHQL_ENDPOINT,
 	MICROSERVICES: {
 		authentication: AUTH_BASE_ROUTE,
 		notification: `${NOTIFICATION_BASE_ROUTE}/v1/notifications`,

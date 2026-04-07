@@ -234,6 +234,8 @@ export interface EnvConfig {
 	CLASSIC_CONFIG: NetworkConfig;
 	BACKEND_LINK: string;
 	FRONTEND_LINK: string;
+	V6_FRONTEND_LINK: string;
+	V6_GRAPHQL_ENDPOINT: string;
 	MICROSERVICES: MicroservicesConfig;
 	RARIBLE_ADDRESS: string;
 	SOLANA_CONFIG: NonEVMNetworkConfig;

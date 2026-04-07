@@ -88,6 +88,9 @@ const CryptoDonation: FC<{
 		shouldRenderModal,
 		setDonateModalByPriority,
 		setIsModalPriorityChecked,
+		isV6ProjectInActiveQFRound,
+		setShowV6ProjectRedirectModal,
+		ensureV6ProjectRedirect,
 	} = useDonateData();
 	const dispatch = useAppDispatch();
 
@@ -586,7 +589,16 @@ const CryptoDonation: FC<{
 							id='Donate_Final'
 							label={formatMessage({ id: 'label.donate' })}
 							size='medium'
-							onClick={handleDonate}
+							onClick={async () => {
+								if (isV6ProjectInActiveQFRound) {
+									setShowV6ProjectRedirectModal(true);
+									return;
+								}
+								if (await ensureV6ProjectRedirect()) {
+									return;
+								}
+								handleDonate();
+							}}
 						/>
 					))}
 				{!isConnected && (
