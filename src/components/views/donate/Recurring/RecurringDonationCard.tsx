@@ -98,7 +98,14 @@ export function mapValueInverse(value: number) {
 }
 
 export const RecurringDonationCard = () => {
-	const { project, selectedRecurringToken, tokenStreams } = useDonateData();
+	const {
+		project,
+		selectedRecurringToken,
+		tokenStreams,
+		isV6ProjectInActiveQFRound,
+		setShowV6ProjectRedirectModal,
+		ensureV6ProjectRedirect,
+	} = useDonateData();
 	const isGivethProject = Number(project.id!) === config.GIVETH_PROJECT_ID;
 	const isActive = project.status?.name === EProjectStatus.ACTIVE;
 	const [amount, setAmount] = useState(0n);
@@ -774,7 +781,16 @@ export const RecurringDonationCard = () => {
 					)}
 					<ActionButton
 						label={formatMessage({ id: 'label.donate' })}
-						onClick={handleDonate}
+						onClick={async () => {
+							if (isV6ProjectInActiveQFRound) {
+								setShowV6ProjectRedirectModal(true);
+								return;
+							}
+							if (await ensureV6ProjectRedirect()) {
+								return;
+							}
+							handleDonate();
+						}}
 						disabled={!isActive || isFormInvalid}
 					/>
 				</>

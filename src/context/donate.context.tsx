@@ -10,6 +10,7 @@ import {
 	useEffect,
 	useRef,
 } from 'react';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useAccount } from 'wagmi';
 import { IProject, IQFRound } from '@/apollo/types/types';
 import { getActiveRound, hasActiveRound } from '@/helpers/qf';
@@ -20,6 +21,11 @@ import { client } from '@/apollo/apolloClient';
 import { FETCH_PROJECT_BY_SLUG_DONATION } from '@/apollo/gql/gqlProjects';
 import { IProjectAcceptedToken, IDraftDonation } from '@/apollo/types/gqlTypes';
 import { useQRCodeDonation, TQRStatus } from '@/hooks/useQRCodeDonation';
+import {
+	type IV6ActiveQfProjectRedirect,
+	v6QfRedirectQueryOptions,
+	V6_ACTIVE_QF_PROJECT_REDIRECT_STALE_TIME,
+} from '@/services/v6QF';
 export interface TxHashWithChainType {
 	txHash: string;
 	chainType: ChainType;
@@ -69,6 +75,12 @@ interface IDonateContext {
 	draftDonationLoading?: boolean;
 	setDraftDonationData: Dispatch<SetStateAction<IDraftDonation | null>>;
 	setPendingDonationExists?: Dispatch<SetStateAction<boolean>>;
+	isV6ProjectInActiveQFRound: boolean;
+	isV6ProjectInActiveQFRoundLoading: boolean;
+	v6ProjectRedirectUrl?: string;
+	showV6ProjectRedirectModal: boolean;
+	setShowV6ProjectRedirectModal: Dispatch<SetStateAction<boolean>>;
+	ensureV6ProjectRedirect: () => Promise<boolean>;
 }
 
 interface IProviderProps {
@@ -104,6 +116,11 @@ const DonateContext = createContext<IDonateContext>({
 	draftDonationLoading: false,
 	setDraftDonationData: () => {},
 	setPendingDonationExists: () => {},
+	isV6ProjectInActiveQFRound: false,
+	isV6ProjectInActiveQFRoundLoading: false,
+	showV6ProjectRedirectModal: false,
+	setShowV6ProjectRedirectModal: () => {},
+	ensureV6ProjectRedirect: async () => false,
 });
 
 DonateContext.displayName = 'DonateContext';
@@ -143,8 +160,11 @@ export const DonateProvider: FC<IProviderProps> = ({ children, project }) => {
 	const [projectData, setProjectData] = useState<IProject>(project);
 	const [currentDonateModal, setCurrentDonateModal] =
 		useState<DonateModalPriorityValues>(DonateModalPriorityValues.None);
+	const [showV6ProjectRedirectModal, setShowV6ProjectRedirectModal] =
+		useState(false);
 
 	const { chain } = useAccount();
+	const queryClient = useQueryClient();
 
 	useEffect(() => {
 		setSelectedOneTimeToken(undefined);
@@ -240,6 +260,33 @@ export const DonateProvider: FC<IProviderProps> = ({ children, project }) => {
 		project?.qfRounds,
 	).activeStartedRound;
 
+	const {
+		data: v6ActiveQfProjectRedirect,
+		isLoading: isV6ProjectInActiveQFRoundLoading,
+	} = useQuery({
+		...v6QfRedirectQueryOptions(Number(projectData.id)),
+		enabled: !!projectData.id,
+		refetchInterval: V6_ACTIVE_QF_PROJECT_REDIRECT_STALE_TIME,
+	});
+	const v6ProjectRedirectUrl = v6ActiveQfProjectRedirect?.redirectUrl;
+	const isV6ProjectInActiveQFRound = !!v6ProjectRedirectUrl;
+
+	const ensureV6ProjectRedirect = useCallback(async () => {
+		const projectId = Number(projectData.id);
+
+		const redirectInfo =
+			await queryClient.fetchQuery<IV6ActiveQfProjectRedirect | null>(
+				v6QfRedirectQueryOptions(projectId),
+			);
+
+		if (redirectInfo?.redirectUrl) {
+			setShowV6ProjectRedirectModal(true);
+			return true;
+		}
+
+		return false;
+	}, [projectData?.id, queryClient]);
+
 	return (
 		<DonateContext.Provider
 			value={{
@@ -270,6 +317,12 @@ export const DonateProvider: FC<IProviderProps> = ({ children, project }) => {
 				draftDonationLoading: loading,
 				choosedModalRound,
 				setChoosedModalRound,
+				isV6ProjectInActiveQFRound,
+				isV6ProjectInActiveQFRoundLoading,
+				v6ProjectRedirectUrl,
+				showV6ProjectRedirectModal,
+				setShowV6ProjectRedirectModal,
+				ensureV6ProjectRedirect,
 			}}
 		>
 			{children}

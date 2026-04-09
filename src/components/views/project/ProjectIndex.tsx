@@ -16,7 +16,6 @@ import {
 	P,
 	IconSpark,
 } from '@giveth/ui-design-system';
-import Link from 'next/link';
 import styled from 'styled-components';
 import { useIntl } from 'react-intl';
 import ProjectHeader from './ProjectHeader';
@@ -47,6 +46,7 @@ import { ChainType } from '@/types/config';
 import { useAppSelector } from '@/features/hooks';
 import { EndaomentProjectsInfo } from '@/components/views/project/EndaomentProjectsInfo';
 import VerifyEmailBanner from '../userProfile/VerifyEmailBanner';
+import V6ProjectDonateLink from '@/components/V6ProjectDonateLink';
 
 const ProjectDonations = dynamic(
 	() => import('./projectDonations/ProjectDonations.index'),
@@ -184,7 +184,8 @@ const ProjectIndex: FC<IProjectBySlug> = () => {
 									</P>
 								</ToastText>
 							</Flex>
-							<Link
+							<V6ProjectDonateLink
+								projectId={id}
 								href={Routes.Donate + `/${slug}?chain=stellar`}
 							>
 								<LinkItem color={brandColors.giv[300]}>
@@ -192,7 +193,7 @@ const ProjectIndex: FC<IProjectBySlug> = () => {
 										id: 'page.project.donate_with_stellar',
 									})}
 								</LinkItem>
-							</Link>
+							</V6ProjectDonateLink>
 						</StellarSupportToast>
 					)}
 				<EndaomentProjectsInfo
