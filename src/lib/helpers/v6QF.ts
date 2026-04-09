@@ -11,7 +11,7 @@ export interface IV6Project {
 	id: number | string;
 	slug: string;
 	title: string;
-	qfRounds?: IV6QFRound[];
+	projectQfRounds?: { qfRound: IV6QFRound }[];
 }
 
 export const V6_PROJECT_BY_ID_WITH_QF_ROUNDS_QUERY = `
@@ -43,7 +43,9 @@ export const isV6QfRoundCurrentlyActive = (round?: IV6QFRound | null) => {
 };
 
 export const getActiveV6QfRound = (project?: IV6Project | null) => {
-	return project?.qfRounds?.find(round => isV6QfRoundCurrentlyActive(round));
+	return project?.projectQfRounds?.find(qf =>
+		isV6QfRoundCurrentlyActive(qf.qfRound),
+	)?.qfRound;
 };
 
 export const buildV6ProjectUrl = (baseUrl: string, projectSlug: string) => {
