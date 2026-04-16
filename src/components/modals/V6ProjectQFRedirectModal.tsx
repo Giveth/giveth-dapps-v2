@@ -1,11 +1,16 @@
 import { FC } from 'react';
 import styled from 'styled-components';
-import { Button, P } from '@giveth/ui-design-system';
+import { Caption } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
 import { mediaQueries } from '@/lib/constants/constants';
 import { Modal } from '@/components/modals/Modal';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
 import { IModal } from '@/types/common';
+import {
+	ConfirmButton,
+	DescToast,
+	NotNowButton,
+} from '@/components/modals/Boost/BoostModal.sc';
 
 interface IV6ProjectQFRedirectModalProps extends IModal {
 	redirectUrl: string;
@@ -30,56 +35,43 @@ export const V6ProjectQFRedirectModal: FC<IV6ProjectQFRedirectModalProps> = ({
 			doNotCloseOnClickOutside
 		>
 			<ModalContainer>
-				<Description>
-					{formatMessage({
-						id: 'label.v6_qf_redirect.body',
+				<DescToast>
+					<Caption style={{ whiteSpace: `pre-line` }}>
+						{formatMessage({
+							id: 'label.v6_qf_redirect.body',
+						})}
+					</Caption>
+				</DescToast>
+				<ConfirmButton
+					label={formatMessage({
+						id: 'label.v6_qf_redirect.go_to_qf_project_page',
 					})}
-				</Description>
-				<Buttons>
-					<PrimaryButton
-						buttonType='primary'
-						label={formatMessage({
-							id: 'label.v6_qf_redirect.go_to_qf_project_page',
-						})}
-						onClick={() => {
-							window.location.assign(redirectUrl);
-						}}
-					/>
-					<SecondaryButton
-						buttonType='secondary'
-						label={formatMessage({
-							id: 'label.cancel',
-						})}
-						onClick={closeModal}
-					/>
-				</Buttons>
+					size='small'
+					onClick={() => {
+						window.location.assign(redirectUrl);
+					}}
+				/>
+				<NotNowButton
+					buttonType='texty-primary'
+					label={formatMessage({
+						id: 'label.cancel',
+					})}
+					onClick={closeModal}
+				/>
 			</ModalContainer>
 		</Modal>
 	);
 };
 
 const ModalContainer = styled.div`
-	padding: 24px;
 	width: 100%;
-
+	transition:
+		width 0.2s ease,
+		height 0.2s ease;
 	${mediaQueries.tablet} {
-		width: 494px;
+		width: 480px;
 	}
+	padding: 24px;
 `;
-
-const Description = styled(P)`
-	margin: 0 0 24px;
-	text-align: left;
-`;
-
-const Buttons = styled.div`
-	display: flex;
-	flex-direction: column;
-	gap: 12px;
-`;
-
-const PrimaryButton = styled(Button)``;
-
-const SecondaryButton = styled(Button)``;
 
 export default V6ProjectQFRedirectModal;
