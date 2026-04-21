@@ -1,4 +1,9 @@
 import { GetServerSideProps } from 'next/types';
+import Routes from '@/lib/constants/Routes';
+
+/*
+Old local QF round page implementation kept here for reference.
+
 import { EProjectsFilter } from '@/apollo/types/types';
 import { transformGraphQLErrorsToStatusCode } from '@/helpers/requests';
 import { initializeApollo } from '@/apollo/apolloClient';
@@ -93,3 +98,17 @@ export const getServerSideProps: GetServerSideProps = async context => {
 };
 
 export default QFProjectsCategoriesRoute;
+*/
+
+export const getServerSideProps: GetServerSideProps = async context => {
+	return {
+		redirect: {
+			destination: Routes.QFProjects,
+			permanent: false,
+		},
+	};
+};
+
+export default function QFProjectsRedirect() {
+	return null;
+}
