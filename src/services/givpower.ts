@@ -37,8 +37,9 @@ export const getGIVpowerBalanceByAddress = async (users: string[]) => {
 		if (!unipoolBalances) continue;
 		for (let i = 0; i < unipoolBalances.length; i++) {
 			const unipoolBalance = unipoolBalances[i];
-			let currentBalance = unipoolBalancesObj[unipoolBalance.user.id];
-			unipoolBalancesObj[unipoolBalance.user.id] = !currentBalance
+			const userId = unipoolBalance.user.id.toLowerCase();
+			let currentBalance = unipoolBalancesObj[userId];
+			unipoolBalancesObj[userId] = !currentBalance
 				? unipoolBalance.balance
 				: new BigNumber(currentBalance)
 						.plus(unipoolBalance.balance)

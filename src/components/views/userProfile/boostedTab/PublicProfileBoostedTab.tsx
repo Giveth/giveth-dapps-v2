@@ -15,16 +15,26 @@ import { useFetchPowerBoostingInfo } from './useFetchPowerBoostingInfo';
 import { useProfileContext } from '@/context/profile.context';
 import { PublicGIVpowerContributeCard } from '@/components/ContributeCard';
 import { PublicBoostsTable } from './PublicBoostsTable';
+import { useAppSelector } from '@/features/hooks';
+import { compareAddresses } from '@/lib/helpers';
 
 export const PublicProfileBoostedTab: FC<IUserProfileView> = () => {
 	const { user, givpowerBalance } = useProfileContext();
+	const { isSignedIn } = useAppSelector(state => state.user);
 
 	const { loading, boosts, order, totalCount, changeOrder } =
 		useFetchPowerBoostingInfo(user);
-	const { chain } = useAccount();
+	const { address, chain, isConnected } = useAccount();
 	const chainId = chain?.id;
-	const givpower = new BigNumber(givpowerBalance);
-	const isZeroGivPower = givpower.isZero();
+	const givpower = new BigNumber(givpowerBalance || '0');
+	const safeGivpower = givpower.isNaN() ? new BigNumber(0) : givpower;
+	const isZeroGivPower = safeGivpower.isZero();
+	const shouldShowZeroBalanceNotice =
+		Boolean(totalCount) &&
+		isZeroGivPower &&
+		isSignedIn &&
+		isConnected &&
+		compareAddresses(address, user?.walletAddress);
 
 	return (
 		<UserProfileTab>
@@ -33,7 +43,7 @@ export const PublicProfileBoostedTab: FC<IUserProfileView> = () => {
 					<PublicGIVpowerContributeCard />
 				</Col>
 			</Row>
-			{totalCount && totalCount > 0 && isZeroGivPower ? (
+			{shouldShowZeroBalanceNotice ? (
 				<ZeroGivPowerContainer>
 					<InlineToast
 						title='Your GIVpower balance is zero!'
@@ -51,7 +61,7 @@ export const PublicProfileBoostedTab: FC<IUserProfileView> = () => {
 				{totalCount && totalCount > 0 ? (
 					<PublicBoostsTable
 						boosts={boosts}
-						totalAmountOfGIVpower={givpower}
+						totalAmountOfGIVpower={safeGivpower}
 						order={order}
 						changeOrder={changeOrder}
 					/>

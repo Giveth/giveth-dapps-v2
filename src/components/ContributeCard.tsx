@@ -81,6 +81,12 @@ export const ProjectsContributeCard: FC<IUserProfileView> = () => {
 export const PublicGIVpowerContributeCard: FC<IUserProfileView> = () => {
 	const { user, givpowerBalance } = useProfileContext();
 	const { formatMessage } = useIntl();
+	const formattedGivpower =
+		givpowerBalance !== undefined
+			? formatWeiHelper(givpowerBalance) === '0'
+				? '0'
+				: formatWeiHelper(givpowerBalance)
+			: '--';
 
 	return (
 		<ContributeCard
@@ -90,10 +96,7 @@ export const PublicGIVpowerContributeCard: FC<IUserProfileView> = () => {
 			}}
 			data2={{
 				label: 'GIVpower',
-				value:
-					givpowerBalance !== undefined
-						? formatWeiHelper(givpowerBalance)
-						: '--',
+				value: formattedGivpower,
 			}}
 		/>
 	);
