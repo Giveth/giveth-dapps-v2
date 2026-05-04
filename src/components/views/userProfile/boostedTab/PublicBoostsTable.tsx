@@ -32,6 +32,10 @@ export const PublicBoostsTable: FC<IBoostsTable> = ({
 	boosts,
 	changeOrder,
 }) => {
+	const formattedTotalAmount = totalAmountOfGIVpower.isZero()
+		? '0'
+		: formatWeiHelper(totalAmountOfGIVpower);
+
 	return (
 		<>
 			<Header $justifyContent='space-between' $flexWrap gap='16px'>
@@ -52,6 +56,10 @@ export const PublicBoostsTable: FC<IBoostsTable> = ({
 				</TableHeader>
 				<TableHeader>% of Total</TableHeader>
 				{boosts?.map(boost => {
+					const amount = totalAmountOfGIVpower
+						.multipliedBy(boost.percentage || 0)
+						.dividedBy(100);
+
 					return (
 						<BoostsRowWrapper key={boost.project.id}>
 							<BoostsTableCell $bold>
@@ -62,11 +70,9 @@ export const PublicBoostsTable: FC<IBoostsTable> = ({
 								</Link>
 							</BoostsTableCell>
 							<BoostsTableCell>
-								{formatWeiHelper(
-									totalAmountOfGIVpower
-										.multipliedBy(boost.percentage || 0)
-										.dividedBy(100),
-								)}
+								{amount.isZero()
+									? '0'
+									: formatWeiHelper(amount)}
 							</BoostsTableCell>
 							<BoostsTableCell $bold>
 								{boost.percentage}%
@@ -75,7 +81,7 @@ export const PublicBoostsTable: FC<IBoostsTable> = ({
 					);
 				})}
 				<TableFooter>Total GIVpower</TableFooter>
-				<TableFooter></TableFooter>
+				<TableFooter>{formattedTotalAmount}</TableFooter>
 				<TableFooter>100%</TableFooter>
 			</Table>
 		</>

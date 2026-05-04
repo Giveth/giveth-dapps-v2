@@ -253,15 +253,26 @@ export const ProjectProvider = ({
 						i++
 					) {
 						const powerBoosting = _boostersData.powerBoostings[i];
+						const walletAddress =
+							powerBoosting.user?.walletAddress?.toLowerCase();
+						const rawGivpowerBalance =
+							(walletAddress &&
+								unipoolBalancesObj[walletAddress]) ||
+							'0';
+						const givpowerBalance = new BigNumber(
+							rawGivpowerBalance,
+						);
+						const percentage = new BigNumber(
+							powerBoosting.percentage || 0,
+						);
 						powerBoosting.user.givpowerBalance =
-							unipoolBalancesObj[
-								powerBoosting.user?.walletAddress.toLowerCase()
-							];
-						const _allocated = new BigNumber(
-							powerBoosting.user.givpowerBalance,
-						)
-							.multipliedBy(powerBoosting.percentage)
-							.div(100);
+							givpowerBalance.isNaN() ? '0' : rawGivpowerBalance;
+						const _allocated =
+							givpowerBalance.isNaN() || percentage.isNaN()
+								? new BigNumber(0)
+								: givpowerBalance
+										.multipliedBy(percentage)
+										.div(100);
 						powerBoosting.user.allocated = _allocated;
 						_total = _total.plus(_allocated);
 					}

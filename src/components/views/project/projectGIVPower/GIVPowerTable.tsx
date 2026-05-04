@@ -20,6 +20,11 @@ const GIVPowerTable: FC<IGIVPowerTableProps> = ({
 	powerBoostings,
 	totalPowerBoosting,
 }) => {
+	const safeTotalPowerBoosting =
+		!totalPowerBoosting || totalPowerBoosting === 'NaN'
+			? '0'
+			: totalPowerBoosting;
+
 	return (
 		<Container>
 			<BoosterHeader>Booster</BoosterHeader>
@@ -36,7 +41,7 @@ const GIVPowerTable: FC<IGIVPowerTableProps> = ({
 				</GIVpowerRowWrapper>
 			))}
 			<TableHeader>TOTAL GIVPOWER</TableHeader>
-			<TableHeader>{totalPowerBoosting || 0}</TableHeader>
+			<TableHeader>{safeTotalPowerBoosting}</TableHeader>
 		</Container>
 	);
 };

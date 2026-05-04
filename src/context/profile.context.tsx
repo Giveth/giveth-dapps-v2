@@ -5,6 +5,7 @@ import {
 	useEffect,
 	useState,
 } from 'react';
+import BigNumber from 'bignumber.js';
 import { IUser } from '@/apollo/types/types';
 import { getGIVpowerBalanceByAddress } from '@/services/givpower';
 
@@ -43,12 +44,20 @@ export const ProfileProvider = (props: {
 
 	useEffect(() => {
 		const fetchTotal = async () => {
+			const walletAddress = user?.walletAddress?.toLowerCase();
+			if (!walletAddress) {
+				setBalance('0');
+				return;
+			}
+
 			try {
-				const res = await getGIVpowerBalanceByAddress([
-					user?.walletAddress!,
-				]);
-				setBalance(res[user?.walletAddress!]);
+				const res = await getGIVpowerBalanceByAddress([walletAddress]);
+				const nextBalance = res[walletAddress] || '0';
+				setBalance(
+					new BigNumber(nextBalance).isNaN() ? '0' : nextBalance,
+				);
 			} catch (error) {
+				setBalance('0');
 				console.error('error on getGIVpowerBalanceByAddress', {
 					error,
 				});
