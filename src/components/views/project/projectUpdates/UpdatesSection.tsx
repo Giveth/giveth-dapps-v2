@@ -40,6 +40,7 @@ interface IProps {
 	editUpdate?: Function;
 	isOwner?: boolean;
 	isProjectEditLocked?: boolean;
+	isCheckingProjectEditLock?: boolean;
 	onBlockedAction?: () => void;
 }
 
@@ -50,6 +51,7 @@ const UpdatesSection: FC<IProps> = props => {
 		editUpdate,
 		projectUpdate,
 		isProjectEditLocked,
+		isCheckingProjectEditLock,
 		onBlockedAction,
 	} = props;
 	const { content, createdAt, title, projectId, id } = projectUpdate;
@@ -93,7 +95,9 @@ const UpdatesSection: FC<IProps> = props => {
 								label={isEditing ? 'SAVE' : 'REMOVE'}
 								buttonType='texty-primary'
 								icon={isEditing ? null : <IconTrash />}
+								loading={isCheckingProjectEditLock}
 								onClick={async () => {
+									if (isCheckingProjectEditLock) return;
 									if (isProjectEditLocked) {
 										onBlockedAction && onBlockedAction();
 										return;
@@ -115,7 +119,9 @@ const UpdatesSection: FC<IProps> = props => {
 								label={isEditing ? 'CANCEL' : 'EDIT'}
 								buttonType='texty-secondary'
 								icon={isEditing ? null : <IconEdit />}
+								loading={isCheckingProjectEditLock}
 								onClick={() => {
+									if (isCheckingProjectEditLock) return;
 									if (!isEditing && isProjectEditLocked) {
 										onBlockedAction && onBlockedAction();
 										return;

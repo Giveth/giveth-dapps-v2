@@ -26,8 +26,9 @@ import { setShowSignWithWallet } from '@/features/modal/modal.slice';
 import { useProjectContext } from '@/context/project.context';
 import ProjectTimeline from '@/components/views/project/projectUpdates/ProjectTimeline';
 import TimelineSection from '@/components/views/project/projectUpdates/TimelineSection';
-import { isProjectInActiveEthereumSecurityQFRound } from '@/helpers/qf';
 import { ProjectEditLockedModal } from '@/components/modals/ProjectEditLockedModal';
+import { useProjectEditLock } from '@/hooks/useProjectEditLock';
+import { Spinner } from '@/components/Spinner';
 
 const RichTextInput = dynamic(
 	() => import('@/components/rich-text/RichTextInput'),
@@ -69,9 +70,14 @@ const ProjectUpdates = () => {
 
 	const sortedUpdates = data?.getProjectUpdates;
 	const isOwner = adminUser?.id === user?.id;
-	const isProjectEditLocked = isProjectInActiveEthereumSecurityQFRound(
-		projectData?.qfRounds,
-	);
+	const {
+		checkProjectEditLock,
+		isCheckingProjectEditLock,
+		isProjectEditLocked,
+	} = useProjectEditLock({
+		projectId: id,
+		enabled: isOwner,
+	});
 	const handleProjectEditLockedAttempt = () => {
 		setShowProjectEditLockedModal(true);
 	};
@@ -81,7 +87,7 @@ const ProjectUpdates = () => {
 		content: string,
 		updateId: string,
 	) => {
-		if (isProjectEditLocked) {
+		if (isProjectEditLocked || (await checkProjectEditLock())) {
 			handleProjectEditLockedAttempt();
 			return false;
 		}
@@ -129,7 +135,7 @@ const ProjectUpdates = () => {
 	};
 
 	const removeUpdate = async (updateId: string) => {
-		if (isProjectEditLocked) {
+		if (isProjectEditLocked || (await checkProjectEditLock())) {
 			handleProjectEditLockedAttempt();
 			return false;
 		}
@@ -168,7 +174,7 @@ const ProjectUpdates = () => {
 
 	const addUpdate = async () => {
 		try {
-			if (isProjectEditLocked) {
+			if (isProjectEditLocked || (await checkProjectEditLock())) {
 				handleProjectEditLockedAttempt();
 				return;
 			}
@@ -263,6 +269,7 @@ const ProjectUpdates = () => {
 							<Input
 								value={title}
 								onChange={e =>
+									!isCheckingProjectEditLock &&
 									!isProjectEditLocked &&
 									setTitle(e.target.value)
 								}
@@ -276,10 +283,18 @@ const ProjectUpdates = () => {
 										? handleProjectEditLockedAttempt
 										: undefined
 								}
-								readOnly={isProjectEditLocked}
+								readOnly={
+									isProjectEditLocked ||
+									isCheckingProjectEditLock
+								}
 								placeholder='Type a title...'
 							/>
-							{isProjectEditLocked ? (
+							{isCheckingProjectEditLock ? (
+								<LoadingRichTextInput>
+									<Spinner size={32} />
+									<span>Checking project edit status...</span>
+								</LoadingRichTextInput>
+							) : isProjectEditLocked ? (
 								<LockedRichTextInput
 									onClick={handleProjectEditLockedAttempt}
 									role='button'
@@ -312,6 +327,7 @@ const ProjectUpdates = () => {
 							size='small'
 							label='SUBMIT'
 							onClick={addUpdate}
+							loading={isCheckingProjectEditLock}
 						/>
 					</Content>
 				</InputContainer>
@@ -335,6 +351,9 @@ const ProjectUpdates = () => {
 							}}
 							isOwner={isOwner}
 							isProjectEditLocked={isProjectEditLocked}
+							isCheckingProjectEditLock={
+								isCheckingProjectEditLock
+							}
 							onBlockedAction={handleProjectEditLockedAttempt}
 						/>
 					),
@@ -400,6 +419,13 @@ const LockedRichTextInput = styled.div`
 	background-color: ${neutralColors.gray[100]};
 	color: ${neutralColors.gray[600]};
 	cursor: pointer;
+`;
+
+const LoadingRichTextInput = styled(LockedRichTextInput)`
+	display: flex;
+	align-items: center;
+	gap: 12px;
+	cursor: default;
 `;
 
 const TextInputStyle = {

@@ -31,8 +31,9 @@ import { isDeleteProjectEnabled } from '@/configuration';
 import DeactivateProjectModal from '@/components/modals/deactivateProject/DeactivateProjectIndex';
 import { client } from '@/apollo/apolloClient';
 import { ACTIVATE_PROJECT } from '@/apollo/gql/gqlProjects';
-import { isProjectInActiveEthereumSecurityQFRound } from '@/helpers/qf';
 import { ProjectEditLockedModal } from '@/components/modals/ProjectEditLockedModal';
+import { useProjectEditLock } from '@/hooks/useProjectEditLock';
+import { Spinner } from '@/components/Spinner';
 
 interface IProjectActions {
 	project: IProject;
@@ -69,11 +70,28 @@ const ProjectActions: FC<IProjectActions> = ({
 	const isCause = project.projectType === EProjectType.CAUSE;
 	const isActive = project?.status.name === EProjectStatus.ACTIVE;
 	const verificationStatus = project?.projectVerificationForm?.status;
-	const isProjectEditLocked =
-		!isCause && isProjectInActiveEthereumSecurityQFRound(project.qfRounds);
+	const {
+		checkProjectEditLock,
+		isCheckingProjectEditLock,
+		isProjectEditLocked,
+	} = useProjectEditLock({
+		projectId,
+		enabled: false,
+	});
 
 	const openProjectEditLockedModal = () => {
 		setShowProjectEditLockedModal(true);
+	};
+
+	const runProjectEditGuard = async (callback: () => void) => {
+		if (
+			!isCause &&
+			(isProjectEditLocked || (await checkProjectEditLock()))
+		) {
+			openProjectEditLockedModal();
+			return;
+		}
+		callback();
 	};
 
 	// Handle activate project action
@@ -125,15 +143,12 @@ const ProjectActions: FC<IProjectActions> = ({
 				? formatMessage({ id: 'label.cause.edit_cause' })
 				: formatMessage({ id: 'label.edit_project' }),
 			icon: <IconEdit16 />,
-			cb: () => {
-				if (isProjectEditLocked) {
-					openProjectEditLockedModal();
-					return;
-				}
-				isCause
-					? router.push(idToCauseEdit(projectId))
-					: router.push(idToProjectEdit(projectId));
-			},
+			cb: () =>
+				runProjectEditGuard(() => {
+					isCause
+						? router.push(idToCauseEdit(projectId))
+						: router.push(idToProjectEdit(projectId));
+				}),
 		},
 		{
 			label: capitalizeAllWords(
@@ -157,13 +172,12 @@ const ProjectActions: FC<IProjectActions> = ({
 		options.splice(1, 0, {
 			label: formatMessage({ id: 'label.add_update' }),
 			icon: <IconUpdate16 />,
-			cb: () => {
-				if (isProjectEditLocked) {
-					openProjectEditLockedModal();
-					return;
-				}
-				router.push(slugToProjectView(project.slug) + '?tab=updates');
-			},
+			cb: () =>
+				runProjectEditGuard(() => {
+					router.push(
+						slugToProjectView(project.slug) + '?tab=updates',
+					);
+				}),
 		});
 
 		options.splice(3, 0, {
@@ -171,14 +185,11 @@ const ProjectActions: FC<IProjectActions> = ({
 				formatMessage({ id: 'label.manage_addresses' }),
 			),
 			icon: <IconWalletOutline16 />,
-			cb: () => {
-				if (isProjectEditLocked) {
-					openProjectEditLockedModal();
-					return;
-				}
-				setSelectedProject(project);
-				setShowAddressModal(true);
-			},
+			cb: () =>
+				runProjectEditGuard(() => {
+					setSelectedProject(project);
+					setShowAddressModal(true);
+				}),
 		});
 	}
 
@@ -256,12 +267,18 @@ const ProjectActions: FC<IProjectActions> = ({
 				<CancelledWrapper>CANCELLED</CancelledWrapper>
 			) : (
 				<>
-					<Dropdown
-						style={dropdownStyle}
-						label={formatMessage({ id: 'label.actions' })}
-						options={options}
-						stickToRight
-					/>
+					{isCheckingProjectEditLock ? (
+						<ActionLoading>
+							<Spinner size={24} />
+						</ActionLoading>
+					) : (
+						<Dropdown
+							style={dropdownStyle}
+							label={formatMessage({ id: 'label.actions' })}
+							options={options}
+							stickToRight
+						/>
+					)}
 					{deactivateModal && (
 						<DeactivateProjectModal
 							setShowModal={setDeactivateModal}
@@ -290,6 +307,12 @@ const Actions = styled.div<{ $isCancelled: boolean; $isOpen: boolean }>`
 	background-color: ${neutralColors.gray[200]};
 	border-radius: 8px;
 	padding: 8px 10px;
+`;
+
+const ActionLoading = styled.div`
+	display: flex;
+	justify-content: center;
+	min-width: 96px;
 `;
 
 export default ProjectActions;

@@ -214,9 +214,6 @@ export interface IProjectEdition {
 		name?: string;
 	};
 	slug: string;
-	qfRounds?: Array<
-		Pick<IQFRound, 'slug' | 'isActive' | 'beginDate' | 'endDate' | 'id'>
-	>;
 	anchorContracts?: IAnchorContractData[];
 	socialMedia: IProjectSocialMedia[];
 }
