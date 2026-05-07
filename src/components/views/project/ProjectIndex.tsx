@@ -47,6 +47,8 @@ import { useAppSelector } from '@/features/hooks';
 import { EndaomentProjectsInfo } from '@/components/views/project/EndaomentProjectsInfo';
 import VerifyEmailBanner from '../userProfile/VerifyEmailBanner';
 import V6ProjectDonateLink from '@/components/V6ProjectDonateLink';
+import { isProjectInActiveEthereumSecurityQFRound } from '@/helpers/qf';
+import { ProjectEditLockedModal } from '@/components/modals/ProjectEditLockedModal';
 
 const ProjectDonations = dynamic(
 	() => import('./projectDonations/ProjectDonations.index'),
@@ -95,6 +97,8 @@ const ProjectIndex: FC<IProjectBySlug> = () => {
 		address => address.chainType === ChainType.STELLAR,
 	);
 	const [isTooltipVisible, setTooltipVisible] = useState(false);
+	const [showProjectEditLockedModal, setShowProjectEditLockedModal] =
+		useState(false);
 
 	const handleMouseEnter = () => {
 		setTooltipVisible(true);
@@ -105,6 +109,17 @@ const ProjectIndex: FC<IProjectBySlug> = () => {
 	};
 
 	const isEmailVerifiedStatus = isAdmin ? isAdminEmailVerified : true;
+	const isProjectEditLocked = isProjectInActiveEthereumSecurityQFRound(
+		projectData?.qfRounds,
+	);
+
+	const handleContinueCreation = () => {
+		if (isProjectEditLocked) {
+			setShowProjectEditLockedModal(true);
+			return;
+		}
+		router.push(idToProjectEdit(projectData?.id || ''));
+	};
 
 	useEffect(() => {
 		if (!isSSRMode) {
@@ -294,16 +309,15 @@ const ProjectIndex: FC<IProjectBySlug> = () => {
 									disabled={!isEmailVerifiedStatus} // Button disabled when email is not verified
 									buttonType='primary'
 									type='submit'
-									onClick={() =>
-										router.push(
-											idToProjectEdit(
-												projectData?.id || '',
-											),
-										)
-									}
+									onClick={handleContinueCreation}
 								/>
 							</div>
 						</Flex>
+					)}
+					{showProjectEditLockedModal && (
+						<ProjectEditLockedModal
+							setShowModal={setShowProjectEditLockedModal}
+						/>
 					)}
 					<ProjectDevouchBox />
 				</ContainerStyled>

@@ -530,6 +530,8 @@
 	"label.giv_staking_is_available_on_gnosis_chain": "Staking de GIV esta disponible en Gnosis Chain. Por favor transfiere tu GIV a Gnosis Chain, luego cambia tu red y haz stake para recibir recompensas.",
 	"label.global_impact": "Impacto Global",
 	"label.got_it": "Entendido",
+	"label.project_edits_temporarily_disabled": "Project edits are temporarily disabled",
+	"label.project_edits_disabled_ethereum_security_qf": "This project is participating in the Ethereum Security QF round. To keep project information stable during the round, edits are disabled until the round ends.",
 	"label.govern": "Gobernar",
 	"label.governance": "Gobernanza",
 	"label.go_back_and_check_network": "Vuelve atrás y asegúrate de que estás en la red correcta.",

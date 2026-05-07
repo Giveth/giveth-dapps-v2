@@ -18,12 +18,17 @@ import UserNotSignedIn from '@/components/UserNotSignedIn';
 import CompleteProfile from '@/components/CompleteProfile';
 import { EProjectStatus } from '@/apollo/types/gqlEnums';
 import { useGeneralWallet } from '@/providers/generalWalletProvider';
+import { isProjectInActiveEthereumSecurityQFRound } from '@/helpers/qf';
+import { ProjectEditLockedModal } from '@/components/modals/ProjectEditLockedModal';
 
 const EditIndex = () => {
 	const [project, setProject] = useState<IProjectEdition>();
 	const [isLoadingProject, setIsLoadingProject] = useState(true);
 	const [isCancelled, setIsCancelled] = useState(false);
 	const [ownerAddress, setOwnerAddress] = useState<string>();
+	const [isProjectEditLocked, setIsProjectEditLocked] = useState(false);
+	const [showProjectEditLockedModal, setShowProjectEditLockedModal] =
+		useState(false);
 
 	const { openWalletConnectModal } = useGeneralWallet();
 
@@ -42,6 +47,7 @@ const EditIndex = () => {
 	useEffect(() => {
 		setOwnerAddress(undefined);
 		setIsCancelled(false);
+		setIsProjectEditLocked(false);
 		if (isLoadingUser) return;
 		if (isEnabled) {
 			if (project) setProject(undefined);
@@ -75,6 +81,14 @@ const EditIndex = () => {
 						)
 					) {
 						setProject(undefined);
+					} else if (
+						isProjectInActiveEthereumSecurityQFRound(
+							project.qfRounds,
+						)
+					) {
+						setIsProjectEditLocked(true);
+						setShowProjectEditLockedModal(true);
+						setProject(undefined);
 					} else {
 						setProject(project);
 					}
@@ -105,6 +119,17 @@ const EditIndex = () => {
 		return <UserNotSignedIn />;
 	} else if (!isRegistered) {
 		return <CompleteProfile />;
+	} else if (isProjectEditLocked) {
+		return (
+			<>
+				<NotAvailableHandler ownerAddress={ownerAddress} />
+				{showProjectEditLockedModal && (
+					<ProjectEditLockedModal
+						setShowModal={setShowProjectEditLockedModal}
+					/>
+				)}
+			</>
+		);
 	} else if (!project) {
 		return (
 			<NotAvailableHandler

@@ -214,6 +214,7 @@ export interface IProjectEdition {
 		name?: string;
 	};
 	slug: string;
+	qfRounds?: IQFRound[];
 	anchorContracts?: IAnchorContractData[];
 	socialMedia: IProjectSocialMedia[];
 }

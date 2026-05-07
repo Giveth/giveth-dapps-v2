@@ -31,6 +31,8 @@ import { isDeleteProjectEnabled } from '@/configuration';
 import DeactivateProjectModal from '@/components/modals/deactivateProject/DeactivateProjectIndex';
 import { client } from '@/apollo/apolloClient';
 import { ACTIVATE_PROJECT } from '@/apollo/gql/gqlProjects';
+import { isProjectInActiveEthereumSecurityQFRound } from '@/helpers/qf';
+import { ProjectEditLockedModal } from '@/components/modals/ProjectEditLockedModal';
 
 interface IProjectActions {
 	project: IProject;
@@ -53,6 +55,8 @@ const ProjectActions: FC<IProjectActions> = ({
 }) => {
 	const [isHover, setIsHover] = useState(false);
 	const [deactivateModal, setDeactivateModal] = useState(false);
+	const [showProjectEditLockedModal, setShowProjectEditLockedModal] =
+		useState(false);
 	const { formatMessage } = useIntl();
 
 	const status = project.status.name;
@@ -65,6 +69,12 @@ const ProjectActions: FC<IProjectActions> = ({
 	const isCause = project.projectType === EProjectType.CAUSE;
 	const isActive = project?.status.name === EProjectStatus.ACTIVE;
 	const verificationStatus = project?.projectVerificationForm?.status;
+	const isProjectEditLocked =
+		!isCause && isProjectInActiveEthereumSecurityQFRound(project.qfRounds);
+
+	const openProjectEditLockedModal = () => {
+		setShowProjectEditLockedModal(true);
+	};
 
 	// Handle activate project action
 	const handleActivateProject = async () => {
@@ -115,10 +125,15 @@ const ProjectActions: FC<IProjectActions> = ({
 				? formatMessage({ id: 'label.cause.edit_cause' })
 				: formatMessage({ id: 'label.edit_project' }),
 			icon: <IconEdit16 />,
-			cb: () =>
+			cb: () => {
+				if (isProjectEditLocked) {
+					openProjectEditLockedModal();
+					return;
+				}
 				isCause
 					? router.push(idToCauseEdit(projectId))
-					: router.push(idToProjectEdit(projectId)),
+					: router.push(idToProjectEdit(projectId));
+			},
 		},
 		{
 			label: capitalizeAllWords(
@@ -142,8 +157,13 @@ const ProjectActions: FC<IProjectActions> = ({
 		options.splice(1, 0, {
 			label: formatMessage({ id: 'label.add_update' }),
 			icon: <IconUpdate16 />,
-			cb: () =>
-				router.push(slugToProjectView(project.slug) + '?tab=updates'),
+			cb: () => {
+				if (isProjectEditLocked) {
+					openProjectEditLockedModal();
+					return;
+				}
+				router.push(slugToProjectView(project.slug) + '?tab=updates');
+			},
 		});
 
 		options.splice(3, 0, {
@@ -152,6 +172,10 @@ const ProjectActions: FC<IProjectActions> = ({
 			),
 			icon: <IconWalletOutline16 />,
 			cb: () => {
+				if (isProjectEditLocked) {
+					openProjectEditLockedModal();
+					return;
+				}
 				setSelectedProject(project);
 				setShowAddressModal(true);
 			},
@@ -244,6 +268,11 @@ const ProjectActions: FC<IProjectActions> = ({
 							projectId={projectId}
 							onSuccess={onDeactivateProject}
 							isCause={isCause}
+						/>
+					)}
+					{showProjectEditLockedModal && (
+						<ProjectEditLockedModal
+							setShowModal={setShowProjectEditLockedModal}
 						/>
 					)}
 				</>

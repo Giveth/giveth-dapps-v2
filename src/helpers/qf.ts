@@ -1,4 +1,5 @@
 import { IQFRound } from '@/apollo/types/types';
+import { ethereumSecurityQfRoundSlug } from '@/configuration';
 import { getNowUnixMS } from './time';
 // import { formatDonation } from '@/helpers/number';
 
@@ -25,6 +26,23 @@ export const getActiveRound = (qfRounds: IQFRound[] | undefined) => {
 
 export const hasRoundStarted = (qfRound: IQFRound | null): boolean => {
 	return !!qfRound && new Date(qfRound.beginDate).getTime() < getNowUnixMS();
+};
+
+export const isProjectInActiveEthereumSecurityQFRound = (
+	qfRounds: IQFRound[] | undefined,
+) => {
+	if (!ethereumSecurityQfRoundSlug || !qfRounds?.length) return false;
+	const now = getNowUnixMS();
+	return qfRounds.some(round => {
+		const beginDate = new Date(round.beginDate).getTime();
+		const endDate = new Date(round.endDate).getTime();
+		return (
+			round.slug === ethereumSecurityQfRoundSlug &&
+			round.isActive &&
+			beginDate <= now &&
+			now <= endDate
+		);
+	});
 };
 
 export const calculateTotalEstimatedMatching = (

@@ -532,6 +532,8 @@
 	"label.giv_staking_is_available_on_gnosis_chain": "El staking de GIV està disponible a Gnosis Chain. Si us plau, traslladeu el vostre GIV a Gnosis Chain, després canvieu de xarxa i feu stake per obtenir recompenses.",
 	"label.global_impact": "Impacte Global",
 	"label.got_it": "D'acord",
+	"label.project_edits_temporarily_disabled": "Project edits are temporarily disabled",
+	"label.project_edits_disabled_ethereum_security_qf": "This project is participating in the Ethereum Security QF round. To keep project information stable during the round, edits are disabled until the round ends.",
 	"label.govern": "Governar",
 	"label.governance": "Governança",
 	"label.go_back_and_check_network": "Torna enrere i assegura't que estàs a la xarxa correcta.",

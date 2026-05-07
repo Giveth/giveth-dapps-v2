@@ -317,6 +317,13 @@ export const FETCH_PROJECT_BY_SLUG_SINGLE_PROJECT = gql`
 				id
 				title
 			}
+			qfRounds {
+				id
+				slug
+				isActive
+				beginDate
+				endDate
+			}
 			anchorContracts {
 				address
 				isActive
@@ -386,6 +393,13 @@ export const FETCH_PROJECT_BY_ID = gql`
 				name
 			}
 			slug
+			qfRounds {
+				id
+				slug
+				isActive
+				beginDate
+				endDate
+			}
 			anchorContracts {
 				address
 				isActive

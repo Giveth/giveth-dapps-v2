@@ -10,6 +10,8 @@ import {
 export const isProduction = process.env.NEXT_PUBLIC_ENV === 'production';
 export const isDeleteProjectEnabled =
 	process.env.NEXT_PUBLIC_DELETE_PROJECT_ENABLED === 'true';
+export const ethereumSecurityQfRoundSlug =
+	process.env.NEXT_PUBLIC_ETHEREUM_SECURITY_QF_ROUND_SLUG || '';
 
 const envConfig = isProduction ? production : development;
 
