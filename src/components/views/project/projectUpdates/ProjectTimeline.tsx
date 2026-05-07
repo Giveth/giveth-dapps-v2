@@ -10,6 +10,7 @@ interface IProps {
 	editUpdate?: Function;
 	isOwner?: boolean;
 	isProjectEditLocked?: boolean;
+	isCheckingProjectEditLock?: boolean;
 	onBlockedAction?: () => void;
 }
 
@@ -21,6 +22,7 @@ const ProjectTimeline: FC<IProps> = props => {
 		editUpdate,
 		isOwner,
 		isProjectEditLocked,
+		isCheckingProjectEditLock,
 		onBlockedAction,
 	} = props;
 	if (creationDate) return <LaunchSection creationDate={creationDate} />;
@@ -32,6 +34,7 @@ const ProjectTimeline: FC<IProps> = props => {
 				editUpdate={editUpdate}
 				isOwner={isOwner}
 				isProjectEditLocked={isProjectEditLocked}
+				isCheckingProjectEditLock={isCheckingProjectEditLock}
 				onBlockedAction={onBlockedAction}
 			/>
 		);

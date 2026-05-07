@@ -68,32 +68,34 @@ const EditIndex = () => {
 					variables: { id: Number(projectId) },
 					fetchPolicy: 'no-cache',
 				})
-				.then((res: { data: { projectById: IProjectEdition } }) => {
-					const project = res.data.projectById;
-					setOwnerAddress(project.adminUser?.walletAddress);
-					if (project.status.name === EProjectStatus.CANCEL) {
-						setIsCancelled(true);
-						setProject(undefined);
-					} else if (
-						!compareAddresses(
-							project.adminUser?.walletAddress,
-							user?.walletAddress,
-						)
-					) {
-						setProject(undefined);
-					} else if (
-						isProjectInActiveEthereumSecurityQFRound(
-							project.qfRounds,
-						)
-					) {
-						setIsProjectEditLocked(true);
-						setShowProjectEditLockedModal(true);
-						setProject(undefined);
-					} else {
-						setProject(project);
-					}
-					setIsLoadingProject(false);
-				})
+				.then(
+					async (res: { data: { projectById: IProjectEdition } }) => {
+						const project = res.data.projectById;
+						setOwnerAddress(project.adminUser?.walletAddress);
+						if (project.status.name === EProjectStatus.CANCEL) {
+							setIsCancelled(true);
+							setProject(undefined);
+						} else if (
+							!compareAddresses(
+								project.adminUser?.walletAddress,
+								user?.walletAddress,
+							)
+						) {
+							setProject(undefined);
+						} else if (
+							await isProjectInActiveEthereumSecurityQFRound(
+								project.id || projectId,
+							)
+						) {
+							setIsProjectEditLocked(true);
+							setShowProjectEditLockedModal(true);
+							setProject(undefined);
+						} else {
+							setProject(project);
+						}
+						setIsLoadingProject(false);
+					},
+				)
 				.catch((error: unknown) => {
 					setIsLoadingProject(false);
 					console.error(error);
