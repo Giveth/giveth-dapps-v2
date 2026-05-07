@@ -32,6 +32,8 @@ import { EVerificationStatus } from '@/apollo/types/types';
 import ClaimRecurringDonationModal from '../../userProfile/projectsTab/ClaimRecurringDonationModal';
 import { findAnchorContractAddress } from '@/helpers/superfluid';
 import { ProjectCardNotification } from './ProjectCardNotification';
+import { isProjectInActiveEthereumSecurityQFRound } from '@/helpers/qf';
+import { ProjectEditLockedModal } from '@/components/modals/ProjectEditLockedModal';
 
 interface IMobileActionsModalProps {
 	setShowModal: (value: boolean) => void;
@@ -44,6 +46,8 @@ export const AdminActions = () => {
 	const [showShareModal, setShowShareModal] = useState(false);
 	const [showMobileActionsModal, setShowMobileActionsModal] = useState(false);
 	const [showClaimModal, setShowClaimModal] = useState(false);
+	const [showProjectEditLockedModal, setShowProjectEditLockedModal] =
+		useState(false);
 	const {
 		projectData,
 		isActive,
@@ -59,6 +63,22 @@ export const AdminActions = () => {
 	const router = useRouter();
 	const isMobile = !useMediaQuery(device.tablet);
 	const { chain } = useAccount();
+	const isProjectEditLocked =
+		!isCause &&
+		isProjectInActiveEthereumSecurityQFRound(projectData?.qfRounds);
+
+	const handleEditProject = () => {
+		if (isProjectEditLocked) {
+			setShowMobileActionsModal(false);
+			setShowProjectEditLockedModal(true);
+			return;
+		}
+		router.push(
+			isCause
+				? idToCauseEdit(projectData?.id || '')
+				: idToProjectEdit(projectData?.id || ''),
+		);
+	};
 
 	const isVerificationDisabled =
 		isGivbackEligible ||
@@ -78,12 +98,7 @@ export const AdminActions = () => {
 			}),
 			type: EOptionType.ITEM,
 			icon: <IconEdit16 />,
-			cb: () =>
-				router.push(
-					isCause
-						? idToCauseEdit(projectData?.id || '')
-						: idToProjectEdit(projectData?.id || ''),
-				),
+			cb: handleEditProject,
 		},
 		{
 			label: formatMessage({
@@ -192,6 +207,11 @@ export const AdminActions = () => {
 						project={project}
 					/>
 				)}
+				{showProjectEditLockedModal && (
+					<ProjectEditLockedModal
+						setShowModal={setShowProjectEditLockedModal}
+					/>
+				)}
 				<ProjectCardNotification />
 			</Wrapper>
 		</>
@@ -256,6 +276,11 @@ export const AdminActions = () => {
 					/>
 				)}
 			</MobileWrapper>
+			{showProjectEditLockedModal && (
+				<ProjectEditLockedModal
+					setShowModal={setShowProjectEditLockedModal}
+				/>
+			)}
 			<ProjectCardNotification />
 		</>
 	);
