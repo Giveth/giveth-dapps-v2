@@ -111,6 +111,12 @@ const EditIndex = () => {
 		}
 	}, [user, isSignedIn, isLoadingUser]);
 
+	useEffect(() => {
+		if (isProjectEditLocked && !showProjectEditLockedModal && projectId) {
+			router.replace(`/project/${projectId}`);
+		}
+	}, [isProjectEditLocked, showProjectEditLockedModal, projectId, router]);
+
 	if (isLoadingProject || isLoadingUser) {
 		return <WrappedSpinner />;
 	} else if (!isEnabled) {
@@ -120,16 +126,11 @@ const EditIndex = () => {
 	} else if (!isRegistered) {
 		return <CompleteProfile />;
 	} else if (isProjectEditLocked) {
-		return (
-			<>
-				<NotAvailableHandler ownerAddress={ownerAddress} />
-				{showProjectEditLockedModal && (
-					<ProjectEditLockedModal
-						setShowModal={setShowProjectEditLockedModal}
-					/>
-				)}
-			</>
-		);
+		return showProjectEditLockedModal ? (
+			<ProjectEditLockedModal
+				setShowModal={setShowProjectEditLockedModal}
+			/>
+		) : null;
 	} else if (!project) {
 		return (
 			<NotAvailableHandler

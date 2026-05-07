@@ -1,4 +1,4 @@
-import { IQFRound } from '@/apollo/types/types';
+import { IProjectEdition, IQFRound } from '@/apollo/types/types';
 import { getNowUnixMS } from './time';
 // import { formatDonation } from '@/helpers/number';
 
@@ -29,9 +29,9 @@ export const hasRoundStarted = (qfRound: IQFRound | null): boolean => {
 
 // TODO remove this onece the ethereum security QF round is no longer active
 export const isProjectInActiveEthereumSecurityQFRound = (
-	qfRounds: IQFRound[] | undefined,
+	qfRounds: IProjectEdition['qfRounds'],
 ) => {
-	if (!qfRounds?.length) return false;
+	if (!qfRounds || !qfRounds.length) return false;
 	const now = getNowUnixMS();
 	return qfRounds.some(round => {
 		const beginDate = new Date(round.beginDate).getTime();
