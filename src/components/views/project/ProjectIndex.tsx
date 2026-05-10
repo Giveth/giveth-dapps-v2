@@ -47,6 +47,8 @@ import { useAppSelector } from '@/features/hooks';
 import { EndaomentProjectsInfo } from '@/components/views/project/EndaomentProjectsInfo';
 import VerifyEmailBanner from '../userProfile/VerifyEmailBanner';
 import V6ProjectDonateLink from '@/components/V6ProjectDonateLink';
+import { ProjectEditLockedModal } from '@/components/modals/ProjectEditLockedModal';
+import { useProjectEditLock } from '@/hooks/useProjectEditLock';
 
 const ProjectDonations = dynamic(
 	() => import('./projectDonations/ProjectDonations.index'),
@@ -95,6 +97,8 @@ const ProjectIndex: FC<IProjectBySlug> = () => {
 		address => address.chainType === ChainType.STELLAR,
 	);
 	const [isTooltipVisible, setTooltipVisible] = useState(false);
+	const [showProjectEditLockedModal, setShowProjectEditLockedModal] =
+		useState(false);
 
 	const handleMouseEnter = () => {
 		setTooltipVisible(true);
@@ -105,6 +109,22 @@ const ProjectIndex: FC<IProjectBySlug> = () => {
 	};
 
 	const isEmailVerifiedStatus = isAdmin ? isAdminEmailVerified : true;
+	const {
+		checkProjectEditLock,
+		isCheckingProjectEditLock,
+		isProjectEditLocked,
+	} = useProjectEditLock({
+		projectId: projectData?.id,
+		enabled: isAdmin && isDraft,
+	});
+
+	const handleContinueCreation = async () => {
+		if (isProjectEditLocked || (await checkProjectEditLock())) {
+			setShowProjectEditLockedModal(true);
+			return;
+		}
+		router.push(idToProjectEdit(projectData?.id || ''));
+	};
 
 	useEffect(() => {
 		if (!isSSRMode) {
@@ -291,19 +311,22 @@ const ProjectIndex: FC<IProjectBySlug> = () => {
 									label={formatMessage({
 										id: 'label.continue_creation',
 									})}
-									disabled={!isEmailVerifiedStatus} // Button disabled when email is not verified
+									disabled={
+										!isEmailVerifiedStatus ||
+										isCheckingProjectEditLock
+									} // Button disabled when email is not verified
+									loading={isCheckingProjectEditLock}
 									buttonType='primary'
 									type='submit'
-									onClick={() =>
-										router.push(
-											idToProjectEdit(
-												projectData?.id || '',
-											),
-										)
-									}
+									onClick={handleContinueCreation}
 								/>
 							</div>
 						</Flex>
+					)}
+					{showProjectEditLockedModal && (
+						<ProjectEditLockedModal
+							setShowModal={setShowProjectEditLockedModal}
+						/>
 					)}
 					<ProjectDevouchBox />
 				</ContainerStyled>
@@ -426,11 +449,12 @@ interface TooltipWrapperProps {
 	left?: string;
 }
 const TooltipWrapper = styled.div<TooltipWrapperProps>`
-	visibility: ${isTooltipVisible => (isTooltipVisible ? 'visible' : 'hidden')};
+	visibility: ${isTooltipVisible =>
+		isTooltipVisible ? 'visible' : 'hidden'};
 	opacity: ${({ isTooltipVisible }) => (isTooltipVisible ? 1 : 0)};
 	position: absolute;
 	bottom: -35px;
-	left: buttonRect.left + window.scrollX + 10;
+	left: 50%;
 	transform: translateX(-50%);
 	background: #1a1a1a;
 	color: #fff;
@@ -438,14 +462,14 @@ const TooltipWrapper = styled.div<TooltipWrapperProps>`
 	border-radius: 4px;
 	font-size: 12px;
 	white-space: nowrap;
-	transition: 'opacity 0.2s ease';
+	transition: opacity 0.2s ease;
 	z-index: 1000;
 	/* Tooltip on hover */
 	${ContinueCreationButton}:hover & {
 		opacity: 1;
 		visibility: visible;
-	display: 'inline-block', // Ensures it wraps the button
-    cursor: !isEmailVerifiedStatus ? 'not-allowed' : 'pointer'
+		display: inline-block;
+		cursor: pointer;
 	}
 `;
 

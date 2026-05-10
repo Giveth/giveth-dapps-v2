@@ -1,4 +1,5 @@
 import { IQFRound } from '@/apollo/types/types';
+import { getV6ActiveQfProjectRedirect } from '@/services/v6QF';
 import { getNowUnixMS } from './time';
 // import { formatDonation } from '@/helpers/number';
 
@@ -25,6 +26,15 @@ export const getActiveRound = (qfRounds: IQFRound[] | undefined) => {
 
 export const hasRoundStarted = (qfRound: IQFRound | null): boolean => {
 	return !!qfRound && new Date(qfRound.beginDate).getTime() < getNowUnixMS();
+};
+
+// TODO remove this once the ethereum security QF round is no longer active
+export const isProjectInActiveEthereumSecurityQFRound = async (
+	projectId: number | string,
+) => {
+	const numericProjectId = Number(projectId);
+	if (!projectId || Number.isNaN(numericProjectId)) return false;
+	return !!(await getV6ActiveQfProjectRedirect(numericProjectId));
 };
 
 export const calculateTotalEstimatedMatching = (

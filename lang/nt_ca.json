@@ -10,6 +10,8 @@
 	"label.gitcoin_passport": "Passport",
 	"label.givbacks": "GIVbacks",
 	"label.givpower": "GIVpower",
+	"label.project_edits_temporarily_disabled": "Les edicions del projecte estan temporalment desactivades",
+	"label.project_edits_disabled_ethereum_security_qf": "Aquest projecte està participant en la ronda QF de Seguretat d'Ethereum. Per mantenir estable la informació del projecte durant la ronda, les edicions estan desactivades fins que la ronda finalitzi.",
 	"label.n/a": "N/A",
 	"label.no": "No",
 	"label.oh_no": "Oh no!",
