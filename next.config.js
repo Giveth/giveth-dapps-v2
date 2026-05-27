@@ -112,6 +112,14 @@ const moduleExports = withBundleAnalyzer({
 
 		return redirects;
 	},
+	rewrites: () => {
+		return [
+			{
+				source: '/dashboard/ethereum-security',
+				destination: '/dashboard/ethereum-security/index.html',
+			},
+		];
+	},
 	webpack: (config, { isServer, dev }) => {
 		if (isServer && !dev) {
 			generateRobotsTxt();
