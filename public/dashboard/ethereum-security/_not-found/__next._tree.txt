@@ -1,2 +1,2 @@
-:HL["/dashboard/ethereum-security/_next/static/chunks/0v4p2tx.ewp.~.css","style"]
-0:{"tree":{"name":"","param":null,"prefetchHints":16,"slots":{"children":{"name":"/_not-found","param":null,"prefetchHints":0,"slots":{"children":{"name":"__PAGE__","param":null,"prefetchHints":0,"slots":null}}}}},"staleTime":300,"buildId":"j2h5Y5knHcwTf-o-s-cUE"}
+:HL["/dashboard/ethereum-security/_next/static/chunks/08zmhv-r-cwxo.css","style"]
+0:{"tree":{"name":"","param":null,"prefetchHints":16,"slots":{"children":{"name":"/_not-found","param":null,"prefetchHints":0,"slots":{"children":{"name":"__PAGE__","param":null,"prefetchHints":0,"slots":null}}}}},"staleTime":300,"buildId":"Kv67cYP-r8f-Cng6Pv5NW"}
