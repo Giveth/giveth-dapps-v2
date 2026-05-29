@@ -1,13 +1,13 @@
 import { GLink } from '@giveth/ui-design-system';
-import React, { FC } from 'react';
-import { useIntl } from 'react-intl';
 import Link from 'next/link';
+import { FC } from 'react';
+import { useIntl } from 'react-intl';
 
 import { useAppSelector } from '@/features/hooks';
-import { Item } from './Item';
+import links from '@/lib/constants/links';
 import Routes from '@/lib/constants/Routes';
 import { ItemRow } from './common';
-import links from '@/lib/constants/links';
+import { Item } from './Item';
 
 interface IProjectsItems {
 	item: {
