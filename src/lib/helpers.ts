@@ -218,6 +218,12 @@ export const formatDate = (date: Date, locale?: string) => {
 		.replace(/,/g, '');
 };
 
+// QF round dates are authored in these wall-clock time zones (mirrors v6).
+// Begin dates are anchored to Eastern; end dates to Hawaii so the round stays
+// "open" until end-of-day in the latest US time zone.
+export const QF_ROUND_BEGIN_DATE_TIME_ZONE = 'America/Toronto';
+export const QF_ROUND_END_DATE_TIME_ZONE = 'Pacific/Honolulu';
+
 /**
  * Format: "March 18" or, if includeYear: true → "April 1, 2025"
  *
