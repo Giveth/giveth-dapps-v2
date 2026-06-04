@@ -1,4 +1,5 @@
 import React, { FC, useEffect, useRef, useState } from 'react';
+import dynamic from 'next/dynamic';
 import styled from 'styled-components';
 import {
 	B,
@@ -7,7 +8,6 @@ import {
 	H6,
 	IconChevronRight32,
 	neutralColors,
-	P,
 	Flex,
 	FlexCenter,
 } from '@giveth/ui-design-system';
@@ -20,6 +20,11 @@ import { client } from '@/apollo/apolloClient';
 import { FETCH_FEATURED_PROJECT_UPDATES } from '@/apollo/gql/gqlProjects';
 import Routes from '@/lib/constants/Routes';
 import { EProjectPageTabs } from '../../project/ProjectIndex';
+
+const RichTextViewer = dynamic(
+	() => import('@/components/rich-text/RichTextViewer'),
+	{ ssr: false },
+);
 
 interface IProjectUpdateSlideProps {
 	project: IProject;
@@ -88,11 +93,9 @@ export const ProjectUpdateSlide: FC<IProjectUpdateSlideProps> = ({
 								: ''}
 						</UpdateDate>
 						<UpdateTitle weight={700}>{update?.title}</UpdateTitle>
-						<UpdateDesc
-							dangerouslySetInnerHTML={{
-								__html: update?.content || '',
-							}}
-						/>
+						<UpdateDesc>
+							<RichTextViewer content={update?.content} />
+						</UpdateDesc>
 						<Flex $justifyContent='flex-end'>
 							<Link
 								href={`${Routes.Project}/${project.slug}?tab=${EProjectPageTabs.UPDATES}`}
@@ -150,7 +153,7 @@ const UpdateTitle = styled(H6)`
 	margin-bottom: 8px;
 `;
 
-const UpdateDesc = styled(P)`
+const UpdateDesc = styled.div`
 	color: ${neutralColors.gray[900]};
 	margin-bottom: 8px;
 	height: 290px;

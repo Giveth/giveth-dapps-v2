@@ -26,6 +26,9 @@ import { setShowSignWithWallet } from '@/features/modal/modal.slice';
 import { useProjectContext } from '@/context/project.context';
 import ProjectTimeline from '@/components/views/project/projectUpdates/ProjectTimeline';
 import TimelineSection from '@/components/views/project/projectUpdates/TimelineSection';
+import { ProjectEditLockedModal } from '@/components/modals/ProjectEditLockedModal';
+import { useProjectEditLock } from '@/hooks/useProjectEditLock';
+import { Spinner } from '@/components/Spinner';
 
 const RichTextInput = dynamic(
 	() => import('@/components/rich-text/RichTextInput'),
@@ -35,6 +38,8 @@ const RichTextInput = dynamic(
 );
 
 const UPDATE_LIMIT = 2000;
+const UPDATE_PLACEHOLDER =
+	'Clear project description explaining who you are and what you want to do with the funds...';
 
 const ProjectUpdates = () => {
 	const { projectData, fetchProjectBySlug } = useProjectContext();
@@ -48,6 +53,8 @@ const ProjectUpdates = () => {
 	const [currentUpdate, setCurrentUpdate] = useState<string>('');
 	const [showRemoveUpdateModal, setShowRemoveUpdateModal] = useState(false);
 	const [isLimitExceeded, setIsLimitExceeded] = useState(false);
+	const [showProjectEditLockedModal, setShowProjectEditLockedModal] =
+		useState(false);
 
 	const [addUpdateMutation] = useMutation(ADD_PROJECT_UPDATE);
 	const [deleteUpdateMutation] = useMutation(DELETE_PROJECT_UPDATE);
@@ -63,12 +70,27 @@ const ProjectUpdates = () => {
 
 	const sortedUpdates = data?.getProjectUpdates;
 	const isOwner = adminUser?.id === user?.id;
+	const {
+		checkProjectEditLock,
+		isCheckingProjectEditLock,
+		isProjectEditLocked,
+	} = useProjectEditLock({
+		projectId: id,
+		enabled: isOwner,
+	});
+	const handleProjectEditLockedAttempt = () => {
+		setShowProjectEditLockedModal(true);
+	};
 
 	const editUpdate = async (
 		title: string,
 		content: string,
 		updateId: string,
 	) => {
+		if (isProjectEditLocked || (await checkProjectEditLock())) {
+			handleProjectEditLockedAttempt();
+			return false;
+		}
 		try {
 			await editUpdateMutation({
 				variables: {
@@ -113,6 +135,10 @@ const ProjectUpdates = () => {
 	};
 
 	const removeUpdate = async (updateId: string) => {
+		if (isProjectEditLocked || (await checkProjectEditLock())) {
+			handleProjectEditLockedAttempt();
+			return false;
+		}
 		try {
 			await deleteUpdateMutation({
 				variables: {
@@ -148,6 +174,10 @@ const ProjectUpdates = () => {
 
 	const addUpdate = async () => {
 		try {
+			if (isProjectEditLocked || (await checkProjectEditLock())) {
+				handleProjectEditLockedAttempt();
+				return;
+			}
 			if (!isSignedIn) {
 				dispatch(setShowSignWithWallet(true));
 				return;
@@ -225,6 +255,11 @@ const ProjectUpdates = () => {
 					}}
 				/>
 			)}
+			{showProjectEditLockedModal && (
+				<ProjectEditLockedModal
+					setShowModal={setShowProjectEditLockedModal}
+				/>
+			)}
 			{isOwner && (
 				<InputContainer>
 					<TimelineSection date='' newUpdate />
@@ -233,24 +268,66 @@ const ProjectUpdates = () => {
 							<Title>Post an update</Title>
 							<Input
 								value={title}
-								onChange={e => setTitle(e.target.value)}
+								onChange={e =>
+									!isCheckingProjectEditLock &&
+									!isProjectEditLocked &&
+									setTitle(e.target.value)
+								}
+								onClick={
+									isProjectEditLocked
+										? handleProjectEditLockedAttempt
+										: undefined
+								}
+								onFocus={
+									isProjectEditLocked
+										? handleProjectEditLockedAttempt
+										: undefined
+								}
+								readOnly={
+									isProjectEditLocked ||
+									isCheckingProjectEditLock
+								}
 								placeholder='Type a title...'
 							/>
-							<RichTextInput
-								projectId={id}
-								value={newUpdate}
-								style={TextInputStyle}
-								setValue={setNewUpdate}
-								setHasLimitError={setIsLimitExceeded}
-								maxLimit={UPDATE_LIMIT}
-								placeholder='Clear project description explaining who you are and what you want to do with the funds...'
-							/>
+							{isCheckingProjectEditLock ? (
+								<LoadingRichTextInput>
+									<Spinner size={32} />
+									<span>Checking project edit status...</span>
+								</LoadingRichTextInput>
+							) : isProjectEditLocked ? (
+								<LockedRichTextInput
+									onClick={handleProjectEditLockedAttempt}
+									role='button'
+									tabIndex={0}
+									onKeyDown={event => {
+										if (
+											event.key === 'Enter' ||
+											event.key === ' '
+										) {
+											handleProjectEditLockedAttempt();
+										}
+									}}
+								>
+									{UPDATE_PLACEHOLDER}
+								</LockedRichTextInput>
+							) : (
+								<RichTextInput
+									projectId={id}
+									value={newUpdate}
+									style={TextInputStyle}
+									setValue={setNewUpdate}
+									setHasLimitError={setIsLimitExceeded}
+									maxLimit={UPDATE_LIMIT}
+									placeholder={UPDATE_PLACEHOLDER}
+								/>
+							)}
 						</div>
 						<Button
 							buttonType='secondary'
 							size='small'
 							label='SUBMIT'
 							onClick={addUpdate}
+							loading={isCheckingProjectEditLock}
 						/>
 					</Content>
 				</InputContainer>
@@ -273,6 +350,11 @@ const ProjectUpdates = () => {
 								editUpdate(title, content, updateId);
 							}}
 							isOwner={isOwner}
+							isProjectEditLocked={isProjectEditLocked}
+							isCheckingProjectEditLock={
+								isCheckingProjectEditLock
+							}
+							onBlockedAction={handleProjectEditLockedAttempt}
 						/>
 					),
 			)}
@@ -325,6 +407,25 @@ const Input = styled.input`
 	::placeholder {
 		color: ${neutralColors.gray[600]};
 	}
+`;
+
+const LockedRichTextInput = styled.div`
+	margin-top: 4px;
+	margin-bottom: 24px;
+	padding: 16px;
+	min-height: 160px;
+	border: 1px solid ${neutralColors.gray[400]};
+	border-radius: 8px;
+	background-color: ${neutralColors.gray[100]};
+	color: ${neutralColors.gray[600]};
+	cursor: pointer;
+`;
+
+const LoadingRichTextInput = styled(LockedRichTextInput)`
+	display: flex;
+	align-items: center;
+	gap: 12px;
+	cursor: default;
 `;
 
 const TextInputStyle = {

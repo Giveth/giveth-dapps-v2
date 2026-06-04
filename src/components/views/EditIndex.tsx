@@ -18,12 +18,17 @@ import UserNotSignedIn from '@/components/UserNotSignedIn';
 import CompleteProfile from '@/components/CompleteProfile';
 import { EProjectStatus } from '@/apollo/types/gqlEnums';
 import { useGeneralWallet } from '@/providers/generalWalletProvider';
+import { isProjectInActiveEthereumSecurityQFRound } from '@/helpers/qf';
+import { ProjectEditLockedModal } from '@/components/modals/ProjectEditLockedModal';
 
 const EditIndex = () => {
 	const [project, setProject] = useState<IProjectEdition>();
 	const [isLoadingProject, setIsLoadingProject] = useState(true);
 	const [isCancelled, setIsCancelled] = useState(false);
 	const [ownerAddress, setOwnerAddress] = useState<string>();
+	const [isProjectEditLocked, setIsProjectEditLocked] = useState(false);
+	const [showProjectEditLockedModal, setShowProjectEditLockedModal] =
+		useState(false);
 
 	const { openWalletConnectModal } = useGeneralWallet();
 
@@ -42,6 +47,7 @@ const EditIndex = () => {
 	useEffect(() => {
 		setOwnerAddress(undefined);
 		setIsCancelled(false);
+		setIsProjectEditLocked(false);
 		if (isLoadingUser) return;
 		if (isEnabled) {
 			if (project) setProject(undefined);
@@ -62,24 +68,34 @@ const EditIndex = () => {
 					variables: { id: Number(projectId) },
 					fetchPolicy: 'no-cache',
 				})
-				.then((res: { data: { projectById: IProjectEdition } }) => {
-					const project = res.data.projectById;
-					setOwnerAddress(project.adminUser?.walletAddress);
-					if (project.status.name === EProjectStatus.CANCEL) {
-						setIsCancelled(true);
-						setProject(undefined);
-					} else if (
-						!compareAddresses(
-							project.adminUser?.walletAddress,
-							user?.walletAddress,
-						)
-					) {
-						setProject(undefined);
-					} else {
-						setProject(project);
-					}
-					setIsLoadingProject(false);
-				})
+				.then(
+					async (res: { data: { projectById: IProjectEdition } }) => {
+						const project = res.data.projectById;
+						setOwnerAddress(project.adminUser?.walletAddress);
+						if (project.status.name === EProjectStatus.CANCEL) {
+							setIsCancelled(true);
+							setProject(undefined);
+						} else if (
+							!compareAddresses(
+								project.adminUser?.walletAddress,
+								user?.walletAddress,
+							)
+						) {
+							setProject(undefined);
+						} else if (
+							await isProjectInActiveEthereumSecurityQFRound(
+								project.id || projectId,
+							)
+						) {
+							setIsProjectEditLocked(true);
+							setShowProjectEditLockedModal(true);
+							setProject(undefined);
+						} else {
+							setProject(project);
+						}
+						setIsLoadingProject(false);
+					},
+				)
 				.catch((error: unknown) => {
 					setIsLoadingProject(false);
 					console.error(error);
@@ -97,6 +113,12 @@ const EditIndex = () => {
 		}
 	}, [user, isSignedIn, isLoadingUser]);
 
+	useEffect(() => {
+		if (isProjectEditLocked && !showProjectEditLockedModal && projectId) {
+			router.replace(`/project/${projectId}`);
+		}
+	}, [isProjectEditLocked, showProjectEditLockedModal, projectId, router]);
+
 	if (isLoadingProject || isLoadingUser) {
 		return <WrappedSpinner />;
 	} else if (!isEnabled) {
@@ -105,6 +127,12 @@ const EditIndex = () => {
 		return <UserNotSignedIn />;
 	} else if (!isRegistered) {
 		return <CompleteProfile />;
+	} else if (isProjectEditLocked) {
+		return showProjectEditLockedModal ? (
+			<ProjectEditLockedModal
+				setShowModal={setShowProjectEditLockedModal}
+			/>
+		) : null;
 	} else if (!project) {
 		return (
 			<NotAvailableHandler

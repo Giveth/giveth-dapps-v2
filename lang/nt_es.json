@@ -5,6 +5,8 @@
 	"general": "General",
 	"giveth": "Giveth",
 	"label.givpower": "GIVpower",
+	"label.project_edits_temporarily_disabled": "Las ediciones del proyecto están temporalmente deshabilitadas",
+	"label.project_edits_disabled_ethereum_security_qf": "Este proyecto está participando en la ronda QF de Seguridad de Ethereum. Para mantener estable la información del proyecto durante la ronda, las ediciones están deshabilitadas hasta que finalice la ronda.",
 	"label.no": "No",
 	"label.tokens": "Tokens",
 	"label.tutorial": "tutorial",

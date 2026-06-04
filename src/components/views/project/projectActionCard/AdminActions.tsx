@@ -32,6 +32,9 @@ import { EVerificationStatus } from '@/apollo/types/types';
 import ClaimRecurringDonationModal from '../../userProfile/projectsTab/ClaimRecurringDonationModal';
 import { findAnchorContractAddress } from '@/helpers/superfluid';
 import { ProjectCardNotification } from './ProjectCardNotification';
+import { ProjectEditLockedModal } from '@/components/modals/ProjectEditLockedModal';
+import { useProjectEditLock } from '@/hooks/useProjectEditLock';
+import { Spinner } from '@/components/Spinner';
 
 interface IMobileActionsModalProps {
 	setShowModal: (value: boolean) => void;
@@ -44,6 +47,8 @@ export const AdminActions = () => {
 	const [showShareModal, setShowShareModal] = useState(false);
 	const [showMobileActionsModal, setShowMobileActionsModal] = useState(false);
 	const [showClaimModal, setShowClaimModal] = useState(false);
+	const [showProjectEditLockedModal, setShowProjectEditLockedModal] =
+		useState(false);
 	const {
 		projectData,
 		isActive,
@@ -59,6 +64,30 @@ export const AdminActions = () => {
 	const router = useRouter();
 	const isMobile = !useMediaQuery(device.tablet);
 	const { chain } = useAccount();
+	const {
+		checkProjectEditLock,
+		isCheckingProjectEditLock,
+		isProjectEditLocked,
+	} = useProjectEditLock({
+		projectId: projectData?.id,
+		enabled: !isCause,
+	});
+
+	const handleEditProject = async () => {
+		if (
+			!isCause &&
+			(isProjectEditLocked || (await checkProjectEditLock()))
+		) {
+			setShowMobileActionsModal(false);
+			setShowProjectEditLockedModal(true);
+			return;
+		}
+		router.push(
+			isCause
+				? idToCauseEdit(projectData?.id || '')
+				: idToProjectEdit(projectData?.id || ''),
+		);
+	};
 
 	const isVerificationDisabled =
 		isGivbackEligible ||
@@ -78,12 +107,7 @@ export const AdminActions = () => {
 			}),
 			type: EOptionType.ITEM,
 			icon: <IconEdit16 />,
-			cb: () =>
-				router.push(
-					isCause
-						? idToCauseEdit(projectData?.id || '')
-						: idToProjectEdit(projectData?.id || ''),
-				),
+			cb: handleEditProject,
 		},
 		{
 			label: formatMessage({
@@ -153,15 +177,21 @@ export const AdminActions = () => {
 				</VerifyNotification>
 			)}
 			<Wrapper $verified={isAdminEmailVerified}>
-				<Dropdown
-					style={dropdownStyle}
-					label={formatMessage({
-						id: isCause
-							? 'label.cause.cause_actions'
-							: 'label.project.project_actions',
-					})}
-					options={options}
-				/>
+				{isCheckingProjectEditLock ? (
+					<ActionLoading>
+						<Spinner size={24} />
+					</ActionLoading>
+				) : (
+					<Dropdown
+						style={dropdownStyle}
+						label={formatMessage({
+							id: isCause
+								? 'label.cause.cause_actions'
+								: 'label.project.project_actions',
+						})}
+						options={options}
+					/>
+				)}
 				{showVerificationModal && (
 					<VerificationModal
 						onClose={() => setShowVerificationModal(false)}
@@ -192,6 +222,11 @@ export const AdminActions = () => {
 						project={project}
 					/>
 				)}
+				{showProjectEditLockedModal && (
+					<ProjectEditLockedModal
+						setShowModal={setShowProjectEditLockedModal}
+					/>
+				)}
 				<ProjectCardNotification />
 			</Wrapper>
 		</>
@@ -206,11 +241,20 @@ export const AdminActions = () => {
 			)}
 			<MobileWrapper
 				gap='4px'
-				onClick={() => setShowMobileActionsModal(true)}
+				onClick={() =>
+					!isCheckingProjectEditLock &&
+					setShowMobileActionsModal(true)
+				}
 				$verified={isAdminEmailVerified}
 			>
-				<div>Project Actions</div>
-				<IconChevronDown24 />
+				{isCheckingProjectEditLock ? (
+					<Spinner size={24} />
+				) : (
+					<>
+						<div>Project Actions</div>
+						<IconChevronDown24 />
+					</>
+				)}
 				{showMobileActionsModal && (
 					<MobileActionsModal
 						setShowModal={setShowMobileActionsModal}
@@ -256,6 +300,11 @@ export const AdminActions = () => {
 					/>
 				)}
 			</MobileWrapper>
+			{showProjectEditLockedModal && (
+				<ProjectEditLockedModal
+					setShowModal={setShowProjectEditLockedModal}
+				/>
+			)}
 			<ProjectCardNotification />
 		</>
 	);
@@ -299,6 +348,10 @@ const MobileWrapper = styled(FlexCenter)<WrapperProps>`
 	opacity: ${({ $verified }) => ($verified ? 1 : 0.5)};
 	pointer-events: ${({ $verified }) => ($verified ? 'auto' : 'none')};
 	border-radius: 8px;
+`;
+
+const ActionLoading = styled(FlexCenter)`
+	min-height: 44px;
 `;
 
 const MobileActionModalItem = styled(Flex)`
