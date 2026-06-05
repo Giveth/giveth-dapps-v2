@@ -1,0 +1,51 @@
+# TheDAO Ethereum Security QF Round Dashboard
+
+This is a public Next.js dashboard for exploring matching outcomes from TheDAO's Ethereum Security QF Round.
+
+Canonical app purpose:
+- Load a scrubbed public donation CSV from `/dashboard/ethereum-security/data-scrubbed-public.csv`.
+- Abstract donor identities as `Donor N`; do not expose wallet addresses, emails, token addresses, or other donor PII.
+- Let users compare QF settings for the round, including algorithm, QF eligibility filtering, badge holder treatment, anti-gaming adjustment, token filters, matching cap, matching floor, matching pool, and badge holder boost multiplier.
+- Display per-project direct donations, contributor counts, simulated matching, Wintermute matching allocation, ranks, and comparison deltas.
+
+Important public links:
+- Dashboard source: https://github.com/Giveth/qf-dashboard
+- Official results: https://forum.giveth.io/t/ethereum-security-qf-round-results-april-23-may-14-2026/2201
+- COCM explainer: https://wtfiscocm.streamlit.app/
+- Project pages use `https://qf.giveth.io/project/{slug}`.
+
+Key local files:
+- `src/app/page.tsx`: renders the dashboard.
+- `src/components/Dashboard.tsx`: owns dataset loading, scenario state, comparison mode, and scenario execution.
+- `src/components/Hero.tsx`: top copy, round configuration inputs, stat cards, and prominent resource links.
+- `src/components/ScenarioPanel.tsx`: controls for scenario settings.
+- `src/components/ResultsTable.tsx`: sortable and searchable result table, including project page links.
+- `src/lib/loader.ts`: CSV loading, donor abstraction, and PII guardrails.
+- `src/lib/qf/runner.ts`: scenario pipeline that filters donations, applies boosts/caps, runs QF or COCM, and distributes matching.
+- `src/lib/qf/cocm.ts` and `src/lib/qf/standardQf.ts`: matching formulas.
+- `src/lib/qf/matchingLimits.ts`: matching cap and floor distribution.
+- `src/lib/projectSlugs.ts`: project title to Giveth slug lookup.
+- `public/dashboard/ethereum-security/data-scrubbed-public.csv`: source public scrubbed dataset loaded by the dashboard.
+- `public/dashboard/ethereum-security/results-scrubbed-public.csv`: public download CSV with only project name, donor number, chain, token, amount, amountUSD, QF eligibility, and badgeholder columns.
+
+Data shape:
+- Required fields include project name, donor label, amountUSD, badgeholder flag, QF eligibility flag, and self-donation flag.
+- The source public CSV also includes chain id (`transactionNetworkId`), token currency, native amount, project id, timestamps, and model scores.
+- The loader refuses forbidden donor-identifying columns if they contain values.
+
+Default simulation settings:
+- Matching pool: 637.4274 ETH.
+- Per-project cap: 5%.
+- Per-project floor: 0.3333 ETH.
+- Minimum donation included in matching: 1 USD.
+- Badge holder boost multiplier: 4x.
+- Scenario A: COCM, badge holder boost, QF-eligible only, cap and floor, no 80/20 rule.
+- Scenario B: same as Scenario A, but with the 80/20 rule enabled.
+
+Implementation notes for rebuilding:
+- Keep all donor identifiers abstracted. Use donor numbers, not addresses.
+- Compute scenario A and B with the same loaded dataset.
+- Apply anti-gaming before filters and badge holder boost.
+- Apply badge holder boost before the minimum donation threshold.
+- Convert ETH pool and floors to USD using the local ETH price helper.
+- Include every project in the output table, even if the active filters give it zero matching.
