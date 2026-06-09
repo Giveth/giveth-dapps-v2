@@ -86,11 +86,15 @@ export const DonationCardQFRounds = ({
 	const [showQFRoundModal, setShowQFRoundModal] = useState(false);
 
 	// Fetch QF round smart selection data
+	// Stellar (QR) donations are not tied to a connected EVM chain, so enable
+	// the query using the Stellar network number rather than requiring chainId.
 	const { data: smartSelectData, isFetching: isFetchingSmartSelect } =
 		useFetchQFRoundSmartSelect(
 			project.id ? parseInt(project.id) : 0,
 			isQRDonation ? config.STELLAR_NETWORK_NUMBER : chainId,
-			!!project.id && !!chainId && activeQFRounds.length > 0,
+			!!project.id &&
+				(isQRDonation || !!chainId) &&
+				activeQFRounds.length > 0,
 		);
 
 	const handleRoundSelect = (round: IQFRound) => {
@@ -144,9 +148,12 @@ export const DonationCardQFRounds = ({
 			}
 		} else if (
 			activeQFRounds.length > 0 &&
-			activeQFRounds[0].eligibleNetworks.includes(chainId)
+			activeQFRounds[0].eligibleNetworks.includes(
+				isQRDonation ? config.STELLAR_NETWORK_NUMBER : chainId,
+			)
 		) {
-			// Fallback to first active round if no smart selection and same chain is eligible
+			// Fallback to first active round if no smart selection and the
+			// network is eligible (Stellar network for QR donations).
 			setSelectedQFRound(activeQFRounds[0]);
 		} else {
 			setSelectedQFRound(EmptyRound);
@@ -177,6 +184,7 @@ export const DonationCardQFRounds = ({
 		chainId,
 		setSelectedQFRound,
 		choosedModalRound,
+		isQRDonation,
 	]);
 
 	// Return nothing if there are no QF rounds

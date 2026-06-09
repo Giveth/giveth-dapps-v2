@@ -8,7 +8,6 @@ import {
 	neutralColors,
 	IconArrowLeft,
 	mediaQueries,
-	IconWalletOutline24,
 	OutlineButton,
 	IconArrowRight16,
 	Button,
@@ -21,7 +20,6 @@ import { ethers } from 'ethers';
 import {
 	InputWrapper,
 	SelectTokenWrapper,
-	BadgesBase,
 	ForEstimatedMatchingAnimation,
 } from '../../../common/common.styled';
 import { TokenIconWithGIVBack } from '../../../TokenIcon/TokenIconWithGIVBack';
@@ -43,7 +41,6 @@ import StorageLabel from '@/lib/localStorage';
 import InlineToast, { EToastType } from '@/components/toasts/InlineToast';
 import { useAppSelector } from '@/features/hooks';
 import { useModalCallback } from '@/hooks/useModalCallback';
-import { useGeneralWallet } from '@/providers/generalWalletProvider';
 import EligibilityBadges from '@/components/views/donate/common/EligibilityBadges';
 import EstimatedMatchingToast from '../../EstimatedMatchingToast';
 
@@ -73,7 +70,6 @@ export const QRDonationCard: FC<QRDonationCardProps> = ({
 	const { modalCallback: signInThenDonate } = useModalCallback(() =>
 		setShowDonateModal(true),
 	);
-	const { isConnected, chain } = useGeneralWallet();
 
 	const {
 		project,
@@ -94,7 +90,7 @@ export const QRDonationCard: FC<QRDonationCardProps> = ({
 		retrieveDraftDonation,
 	} = useQRCodeDonation(project);
 
-	const { addresses, id, isGivbackEligible } = project;
+	const { addresses, id } = project;
 	const draftDonationId = Number(router.query.draft_donation!);
 	const [amount, setAmount] = useState(0n);
 	const [usdAmount, setUsdAmount] = useState(0);
@@ -110,34 +106,6 @@ export const QRDonationCard: FC<QRDonationCardProps> = ({
 	const isOnEligibleNetworks = selectedQFRound?.eligibleNetworks?.includes(
 		config.STELLAR_NETWORK_NUMBER,
 	);
-	const isProjectGivbacksEligible = !!isGivbackEligible;
-	const isInQF = !!isOnEligibleNetworks;
-	const showConnectWallet = isProjectGivbacksEligible || isInQF;
-
-	const textToDisplayOnConnect = () => {
-		const onlyInQF =
-			selectedQFRound?.eligibleNetworks?.length === 1 &&
-			selectedQFRound?.eligibleNetworks[0] ===
-				config.STELLAR_NETWORK_NUMBER;
-
-		if (isProjectGivbacksEligible && onlyInQF) {
-			return 'label.sign_into_giveth_for_a_chance_to_win_givbacks';
-		}
-
-		if (isProjectGivbacksEligible && isInQF && !!selectedQFRound) {
-			return 'label.please_connect_your_wallet_to_win_givbacks_and_match';
-		}
-
-		if (isProjectGivbacksEligible) {
-			return 'label.sign_into_giveth_for_a_chance_to_win_givbacks';
-		}
-
-		if (!onlyInQF) {
-			return 'label.please_connect_your_wallet_to_match';
-		}
-
-		return null;
-	};
 
 	const donationUsdValue =
 		(tokenPrice || 0) * Number(ethers.utils.formatEther(amount));
@@ -311,9 +279,11 @@ export const QRDonationCard: FC<QRDonationCardProps> = ({
 		fetchTokenPrice();
 	}, []);
 
+	// Stellar QR donations don't connect an EVM/Solana wallet, so `chain` is
+	// always undefined here. The estimated matching is computed purely from
+	// project data + amount, so show it regardless of wallet/sign-in state.
 	const showEstimatedMatching =
 		!showQRCode &&
-		!!chain &&
 		selectedQFRound &&
 		!!selectedQFRound?.eligibleNetworks?.includes(
 			config.NON_EVM_NETWORKS_CONFIG[ChainType.STELLAR].networkId,
@@ -343,17 +313,6 @@ export const QRDonationCard: FC<QRDonationCardProps> = ({
 					})}
 				/>
 			)}
-			{!showQRCode &&
-				!isConnected &&
-				showConnectWallet &&
-				textToDisplayOnConnect() && (
-					<ConnectWallet>
-						<IconWalletOutline24 color={neutralColors.gray[700]} />
-						{formatMessage({
-							id: textToDisplayOnConnect() || '',
-						})}
-					</ConnectWallet>
-				)}
 			{!showQRCode && (
 				<EligibilityBadges
 					amount={amount}
@@ -467,10 +426,6 @@ export const QRDonationCard: FC<QRDonationCardProps> = ({
 		</>
 	);
 };
-
-const ConnectWallet = styled(BadgesBase)`
-	margin-bottom: 5px;
-`;
 
 const CardHead = styled(Flex)`
 	align-items: center;
