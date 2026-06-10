@@ -17,6 +17,8 @@ import {
 import { GIVBACKS_DONATION_QUALIFICATION_VALUE_USD } from '@/lib/constants/constants';
 import { useGeneralWallet } from '@/providers/generalWalletProvider';
 import { useDonateData } from '@/context/donate.context';
+import { useAppSelector } from '@/features/hooks';
+import { shouldShowGivbacksSignInPrompt } from '@/helpers/qf';
 import { IProjectAcceptedToken } from '@/apollo/types/gqlTypes';
 import config from '@/configuration';
 import { ChainType } from '@/types/config';
@@ -32,6 +34,7 @@ interface IEligibilityBadges {
 const EligibilityBadges: FC<IEligibilityBadges> = props => {
 	const { tokenPrice, amount, token, style } = props;
 	const { isConnected, chain } = useGeneralWallet();
+	const { isSignedIn, isEnabled } = useAppSelector(state => state.user);
 	const { selectedQFRound, project } = useDonateData();
 	const { formatMessage } = useIntl();
 	const { isGivbackEligible } = project || {};
@@ -66,6 +69,17 @@ const EligibilityBadges: FC<IEligibilityBadges> = props => {
 		isProjectGivbacksEligible &&
 		donationUsdValue >= GIVBACKS_DONATION_QUALIFICATION_VALUE_USD;
 
+	// The Stellar (QR) flow shows a "sign in for GIVbacks" prompt in this same
+	// case (see shouldShowGivbacksSignInPrompt / QRDonationCard). Render the
+	// badges only when that prompt does NOT — so for Stellar the two are mutually
+	// exclusive (no overlap, no gap) off a single shared predicate.
+	const showGivbacksSignInPrompt = shouldShowGivbacksSignInPrompt({
+		isProjectGivbacksEligible,
+		isTokenGivbacksEligible: !!isTokenGivbacksEligible,
+		isSignedIn,
+		isEnabled,
+	});
+
 	//  Define messageId BEFORE rendering to avoid issues
 	const messageId = isDonationMatched
 		? 'page.donate.donations_will_be_matched'
@@ -79,9 +93,7 @@ const EligibilityBadges: FC<IEligibilityBadges> = props => {
 				? 'page.donate.unlocks_matching_funds'
 				: null; // Prevents invalid id values
 
-	// Stellar (QR) donations don't require a connected wallet, so always show
-	// the eligibility badges for the Stellar flow — same as a connected wallet.
-	return isConnected || isStellar ? (
+	return (isStellar ? !showGivbacksSignInPrompt : isConnected) ? (
 		<EligibilityBadgeWrapper style={style}>
 			{/* Prevents QF Badge from rendering when !isOnQFEligibleNetworks && !activeStartedRound */}
 			{!(
