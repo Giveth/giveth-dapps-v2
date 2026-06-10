@@ -66,6 +66,10 @@ const EligibilityBadges: FC<IEligibilityBadges> = props => {
 		isProjectGivbacksEligible &&
 		donationUsdValue >= GIVBACKS_DONATION_QUALIFICATION_VALUE_USD;
 
+	const isStellarOnlyRound =
+		selectedQFRound?.eligibleNetworks?.length === 1 &&
+		selectedQFRound?.eligibleNetworks[0] === config.STELLAR_NETWORK_NUMBER;
+
 	//  Define messageId BEFORE rendering to avoid issues
 	const messageId = isDonationMatched
 		? 'page.donate.donations_will_be_matched'
@@ -79,9 +83,8 @@ const EligibilityBadges: FC<IEligibilityBadges> = props => {
 				? 'page.donate.unlocks_matching_funds'
 				: null; // Prevents invalid id values
 
-	// Stellar (QR) donations don't require a connected wallet, so always show
-	// the eligibility badges for the Stellar flow — same as a connected wallet.
-	return isConnected || isStellar ? (
+	return isConnected ||
+		(isStellar && isStellarOnlyRound && !isProjectGivbacksEligible) ? (
 		<EligibilityBadgeWrapper style={style}>
 			{/* Prevents QF Badge from rendering when !isOnQFEligibleNetworks && !activeStartedRound */}
 			{!(
