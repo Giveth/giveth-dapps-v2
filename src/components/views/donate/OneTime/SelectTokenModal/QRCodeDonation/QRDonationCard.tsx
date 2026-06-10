@@ -41,9 +41,10 @@ import { useDonateData } from '@/context/donate.context';
 import { AmountInput } from '@/components/AmountInput/AmountInput';
 import StorageLabel from '@/lib/localStorage';
 import InlineToast, { EToastType } from '@/components/toasts/InlineToast';
-import { useAppSelector } from '@/features/hooks';
+import { useAppDispatch, useAppSelector } from '@/features/hooks';
+import { setShowSignWithWallet } from '@/features/modal/modal.slice';
+import { shouldShowGivbacksSignInPrompt } from '@/helpers/qf';
 import { useModalCallback } from '@/hooks/useModalCallback';
-import { useGeneralWallet } from '@/providers/generalWalletProvider';
 import EligibilityBadges from '@/components/views/donate/common/EligibilityBadges';
 import EstimatedMatchingToast from '../../EstimatedMatchingToast';
 
@@ -69,11 +70,11 @@ export const QRDonationCard: FC<QRDonationCardProps> = ({
 	const { formatMessage } = useIntl();
 	const router = useRouter();
 	const { isSignedIn, isEnabled } = useAppSelector(state => state.user);
+	const dispatch = useAppDispatch();
 	const [_showDonateModal, setShowDonateModal] = useState(false);
 	const { modalCallback: signInThenDonate } = useModalCallback(() =>
 		setShowDonateModal(true),
 	);
-	const { isConnected } = useGeneralWallet();
 
 	const {
 		project,
@@ -112,19 +113,22 @@ export const QRDonationCard: FC<QRDonationCardProps> = ({
 	);
 	const isProjectGivbacksEligible = !!isGivbackEligible;
 	const isTokenGivbacksEligible = !!stellarToken?.isGivbackEligible;
-	const isGivbacksEligible =
-		isProjectGivbacksEligible && isTokenGivbacksEligible;
 
-	// Stellar QR donations are matched without connecting a wallet — QF matching
-	// eligibility is surfaced by EligibilityBadges and the estimated matching UI.
-	// The only action worth prompting here is signing in for GIVbacks, and only
-	// when both the project and the selected token are GIVbacks eligible.
-	const showConnectWallet = isGivbacksEligible;
-
-	const textToDisplayOnConnect = () =>
-		isGivbacksEligible
-			? 'label.sign_into_giveth_for_a_chance_to_win_givbacks'
-			: null;
+	// Stellar QR donations are matched without connecting a wallet — matching is
+	// surfaced by EligibilityBadges / the estimated matching UI. The only action
+	// worth prompting here is signing in for GIVbacks. This shared predicate is
+	// the single source of truth: EligibilityBadges renders in the complementary
+	// case, so the prompt and the badges never overlap or leave a gap.
+	const showGivbacksSignInPrompt = shouldShowGivbacksSignInPrompt({
+		isProjectGivbacksEligible,
+		isTokenGivbacksEligible,
+		isSignedIn,
+		isEnabled,
+	});
+	// Signing in requires a wallet, so only offer the click-through when one is
+	// connected (mirrors handleNext, which signs in only when isEnabled). A
+	// wallet-less donor reads the prompt as guidance and uses the header Sign In.
+	const canSignIn = isEnabled && !isSignedIn;
 
 	const donationUsdValue =
 		(tokenPrice || 0) * Number(ethers.utils.formatEther(amount));
@@ -332,18 +336,21 @@ export const QRDonationCard: FC<QRDonationCardProps> = ({
 					})}
 				/>
 			)}
-			{!showQRCode &&
-				!isConnected &&
-				!showEstimatedMatching &&
-				showConnectWallet &&
-				textToDisplayOnConnect() && (
-					<ConnectWallet>
-						<IconWalletOutline24 color={neutralColors.gray[700]} />
-						{formatMessage({
-							id: textToDisplayOnConnect() || '',
-						})}
-					</ConnectWallet>
-				)}
+			{!showQRCode && showGivbacksSignInPrompt && (
+				<ConnectWallet
+					$clickable={canSignIn}
+					onClick={
+						canSignIn
+							? () => dispatch(setShowSignWithWallet(true))
+							: undefined
+					}
+				>
+					<IconWalletOutline24 color={neutralColors.gray[700]} />
+					{formatMessage({
+						id: 'label.sign_into_giveth_for_a_chance_to_win_givbacks',
+					})}
+				</ConnectWallet>
+			)}
 			{!showQRCode && (
 				<EligibilityBadges
 					amount={amount}
@@ -458,8 +465,9 @@ export const QRDonationCard: FC<QRDonationCardProps> = ({
 	);
 };
 
-const ConnectWallet = styled(BadgesBase)`
+const ConnectWallet = styled(BadgesBase)<{ $clickable?: boolean }>`
 	margin-bottom: 5px;
+	cursor: ${({ $clickable }) => ($clickable ? 'pointer' : 'default')};
 `;
 
 const CardHead = styled(Flex)`
