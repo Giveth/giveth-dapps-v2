@@ -5,6 +5,7 @@ import {
 	B,
 	P,
 	Flex,
+	brandColors,
 	neutralColors,
 	IconArrowLeft,
 	mediaQueries,
@@ -129,6 +130,13 @@ export const QRDonationCard: FC<QRDonationCardProps> = ({
 	// connected (mirrors handleNext, which signs in only when isEnabled). A
 	// wallet-less donor reads the prompt as guidance and uses the header Sign In.
 	const canSignIn = isEnabled && !isSignedIn;
+	const openSignIn = () => dispatch(setShowSignWithWallet(true));
+	const handleSignInKeyDown = (e: React.KeyboardEvent) => {
+		if (e.key === 'Enter' || e.key === ' ') {
+			e.preventDefault();
+			openSignIn();
+		}
+	};
 
 	const donationUsdValue =
 		(tokenPrice || 0) * Number(ethers.utils.formatEther(amount));
@@ -339,11 +347,10 @@ export const QRDonationCard: FC<QRDonationCardProps> = ({
 			{!showQRCode && showGivbacksSignInPrompt && (
 				<ConnectWallet
 					$clickable={canSignIn}
-					onClick={
-						canSignIn
-							? () => dispatch(setShowSignWithWallet(true))
-							: undefined
-					}
+					role={canSignIn ? 'button' : undefined}
+					tabIndex={canSignIn ? 0 : undefined}
+					onClick={canSignIn ? openSignIn : undefined}
+					onKeyDown={canSignIn ? handleSignInKeyDown : undefined}
 				>
 					<IconWalletOutline24 color={neutralColors.gray[700]} />
 					{formatMessage({
@@ -468,6 +475,11 @@ export const QRDonationCard: FC<QRDonationCardProps> = ({
 const ConnectWallet = styled(BadgesBase)<{ $clickable?: boolean }>`
 	margin-bottom: 5px;
 	cursor: ${({ $clickable }) => ($clickable ? 'pointer' : 'default')};
+
+	&:focus-visible {
+		outline: 2px solid ${brandColors.giv[500]};
+		outline-offset: 2px;
+	}
 `;
 
 const CardHead = styled(Flex)`
