@@ -1,4 +1,4 @@
-{
+﻿{
 	"animals": "Animals",
 	"art": "Art",
 	"component.archive_cover.archived": "ARXIVAT",
@@ -14,7 +14,7 @@
 	"component.regenstream_card.harvest_caption": "Utilitzeu el botó de Collita per reclamar recompenses líquides d'aquest RegenStream",
 	"component.title.commons_stack": "Commons Stack",
 	"component.title.giveth_trace": "Giveth Trace",
-	"desci": "Desci",
+	"desci": "DeSci",
 	"general": "General",
 	"giveconomy": "GIVeconomia",
 	"giveth": "Giveth",
