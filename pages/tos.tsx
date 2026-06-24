@@ -5,7 +5,7 @@ const TermsRoute = () => {
 	return (
 		<>
 			<Head>
-				<title>Terms of use | Giveth</title>
+				<title>Terms of Use | Giveth</title>
 			</Head>
 			<TermsIndex />
 		</>
