@@ -1,11 +1,23 @@
 import Image from 'next/image';
 import styled from 'styled-components';
-import { brandColors, D3, Lead } from '@giveth/ui-design-system';
+import { brandColors, D3, Lead, P } from '@giveth/ui-design-system';
 
-import TermsArray from '@/content/Terms';
-import Accordion from '../Accordion';
+import termsArray from '@/content/Terms';
 import FlowerIcon from '/public//images/flower_terms.svg';
 import { mediaQueries } from '@/lib/constants/constants';
+
+const TermsBlock = ({ block }: { block: string | string[] }) => {
+	if (Array.isArray(block)) {
+		return (
+			<List>
+				{block.map(item => (
+					<li key={item}>{item}</li>
+				))}
+			</List>
+		);
+	}
+	return <Paragraph>{block}</Paragraph>;
+};
 
 const TermsIndex = () => {
 	return (
@@ -14,15 +26,16 @@ const TermsIndex = () => {
 				<Image src={FlowerIcon} alt='flower' />
 			</FlowerContainer>
 			<Wrapper>
-				<Title>Terms of use</Title>
-				<Lead>Last updated December 23, 2021</Lead>
+				<Title>Terms of Use</Title>
+				<Lead>Zug, Switzerland — June 2026</Lead>
 				<TermsContainer>
-					{TermsArray.map(i => (
-						<Accordion
-							key={i.title}
-							title={i.title}
-							description={i.description}
-						/>
+					{termsArray.map(section => (
+						<Section key={section.title}>
+							<SectionTitle>{section.title}</SectionTitle>
+							{section.description.map((block, index) => (
+								<TermsBlock key={index} block={block} />
+							))}
+						</Section>
 					))}
 				</TermsContainer>
 			</Wrapper>
@@ -41,7 +54,33 @@ const FlowerContainer = styled.div`
 `;
 
 const TermsContainer = styled.div`
-	margin-top: 100px;
+	margin-top: 40px;
+`;
+
+const Section = styled.div`
+	margin-bottom: 32px;
+`;
+
+const SectionTitle = styled(Lead)`
+	color: ${brandColors.deep[600]};
+	margin-bottom: 12px;
+`;
+
+const Paragraph = styled(P)`
+	color: ${brandColors.giv[800]};
+	text-align: left;
+	margin-bottom: 12px;
+`;
+
+const List = styled.ul`
+	color: ${brandColors.giv[800]};
+	text-align: left;
+	margin: 0 0 12px;
+	padding-left: 24px;
+
+	li {
+		margin-bottom: 8px;
+	}
 `;
 
 const Title = styled(D3)`
