@@ -5,6 +5,7 @@ import {
 	B,
 	P,
 	Flex,
+	brandColors,
 	neutralColors,
 	IconArrowLeft,
 	mediaQueries,
@@ -41,9 +42,10 @@ import { useDonateData } from '@/context/donate.context';
 import { AmountInput } from '@/components/AmountInput/AmountInput';
 import StorageLabel from '@/lib/localStorage';
 import InlineToast, { EToastType } from '@/components/toasts/InlineToast';
-import { useAppSelector } from '@/features/hooks';
+import { useAppDispatch, useAppSelector } from '@/features/hooks';
+import { setShowSignWithWallet } from '@/features/modal/modal.slice';
+import { shouldShowGivbacksSignInPrompt } from '@/helpers/qf';
 import { useModalCallback } from '@/hooks/useModalCallback';
-import { useGeneralWallet } from '@/providers/generalWalletProvider';
 import EligibilityBadges from '@/components/views/donate/common/EligibilityBadges';
 import EstimatedMatchingToast from '../../EstimatedMatchingToast';
 
@@ -69,11 +71,11 @@ export const QRDonationCard: FC<QRDonationCardProps> = ({
 	const { formatMessage } = useIntl();
 	const router = useRouter();
 	const { isSignedIn, isEnabled } = useAppSelector(state => state.user);
+	const dispatch = useAppDispatch();
 	const [_showDonateModal, setShowDonateModal] = useState(false);
 	const { modalCallback: signInThenDonate } = useModalCallback(() =>
 		setShowDonateModal(true),
 	);
-	const { isConnected, chain } = useGeneralWallet();
 
 	const {
 		project,
@@ -111,32 +113,29 @@ export const QRDonationCard: FC<QRDonationCardProps> = ({
 		config.STELLAR_NETWORK_NUMBER,
 	);
 	const isProjectGivbacksEligible = !!isGivbackEligible;
-	const isInQF = !!isOnEligibleNetworks;
-	const showConnectWallet = isProjectGivbacksEligible || isInQF;
+	const isTokenGivbacksEligible = !!stellarToken?.isGivbackEligible;
 
-	const textToDisplayOnConnect = () => {
-		const onlyInQF =
-			selectedQFRound?.eligibleNetworks?.length === 1 &&
-			selectedQFRound?.eligibleNetworks[0] ===
-				config.STELLAR_NETWORK_NUMBER;
-
-		if (isProjectGivbacksEligible && onlyInQF) {
-			return 'label.sign_into_giveth_for_a_chance_to_win_givbacks';
+	// Stellar QR donations are matched without connecting a wallet — matching is
+	// surfaced by EligibilityBadges / the estimated matching UI. The only action
+	// worth prompting here is signing in for GIVbacks. This shared predicate is
+	// the single source of truth: EligibilityBadges renders in the complementary
+	// case, so the prompt and the badges never overlap or leave a gap.
+	const showGivbacksSignInPrompt = shouldShowGivbacksSignInPrompt({
+		isProjectGivbacksEligible,
+		isTokenGivbacksEligible,
+		isSignedIn,
+		isEnabled,
+	});
+	// Signing in requires a wallet, so only offer the click-through when one is
+	// connected (mirrors handleNext, which signs in only when isEnabled). A
+	// wallet-less donor reads the prompt as guidance and uses the header Sign In.
+	const canSignIn = isEnabled && !isSignedIn;
+	const openSignIn = () => dispatch(setShowSignWithWallet(true));
+	const handleSignInKeyDown = (e: React.KeyboardEvent) => {
+		if (e.key === 'Enter' || e.key === ' ') {
+			e.preventDefault();
+			openSignIn();
 		}
-
-		if (isProjectGivbacksEligible && isInQF && !!selectedQFRound) {
-			return 'label.please_connect_your_wallet_to_win_givbacks_and_match';
-		}
-
-		if (isProjectGivbacksEligible) {
-			return 'label.sign_into_giveth_for_a_chance_to_win_givbacks';
-		}
-
-		if (!onlyInQF) {
-			return 'label.please_connect_your_wallet_to_match';
-		}
-
-		return null;
 	};
 
 	const donationUsdValue =
@@ -311,9 +310,11 @@ export const QRDonationCard: FC<QRDonationCardProps> = ({
 		fetchTokenPrice();
 	}, []);
 
+	// Stellar QR donations don't connect an EVM/Solana wallet, so `chain` is
+	// always undefined here. The estimated matching is computed purely from
+	// project data + amount, so show it regardless of wallet/sign-in state.
 	const showEstimatedMatching =
 		!showQRCode &&
-		!!chain &&
 		selectedQFRound &&
 		!!selectedQFRound?.eligibleNetworks?.includes(
 			config.NON_EVM_NETWORKS_CONFIG[ChainType.STELLAR].networkId,
@@ -343,17 +344,20 @@ export const QRDonationCard: FC<QRDonationCardProps> = ({
 					})}
 				/>
 			)}
-			{!showQRCode &&
-				!isConnected &&
-				showConnectWallet &&
-				textToDisplayOnConnect() && (
-					<ConnectWallet>
-						<IconWalletOutline24 color={neutralColors.gray[700]} />
-						{formatMessage({
-							id: textToDisplayOnConnect() || '',
-						})}
-					</ConnectWallet>
-				)}
+			{!showQRCode && showGivbacksSignInPrompt && (
+				<ConnectWallet
+					$clickable={canSignIn}
+					role={canSignIn ? 'button' : undefined}
+					tabIndex={canSignIn ? 0 : undefined}
+					onClick={canSignIn ? openSignIn : undefined}
+					onKeyDown={canSignIn ? handleSignInKeyDown : undefined}
+				>
+					<IconWalletOutline24 color={neutralColors.gray[700]} />
+					{formatMessage({
+						id: 'label.sign_into_giveth_for_a_chance_to_win_givbacks',
+					})}
+				</ConnectWallet>
+			)}
 			{!showQRCode && (
 				<EligibilityBadges
 					amount={amount}
@@ -468,8 +472,14 @@ export const QRDonationCard: FC<QRDonationCardProps> = ({
 	);
 };
 
-const ConnectWallet = styled(BadgesBase)`
+const ConnectWallet = styled(BadgesBase)<{ $clickable?: boolean }>`
 	margin-bottom: 5px;
+	cursor: ${({ $clickable }) => ($clickable ? 'pointer' : 'default')};
+
+	&:focus-visible {
+		outline: 2px solid ${brandColors.giv[500]};
+		outline-offset: 2px;
+	}
 `;
 
 const CardHead = styled(Flex)`

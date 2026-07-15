@@ -10,7 +10,13 @@ import styled from 'styled-components';
 import { useIntl } from 'react-intl';
 import { useQuery } from '@apollo/client';
 import { FETCH_QF_ROUND_STATS } from '@/apollo/gql/gqlQF';
-import { formatMonthDay, formatUSD, thousandsSeparator } from '@/lib/helpers';
+import {
+	formatMonthDay,
+	formatUSD,
+	thousandsSeparator,
+	QF_ROUND_BEGIN_DATE_TIME_ZONE,
+	QF_ROUND_END_DATE_TIME_ZONE,
+} from '@/lib/helpers';
 import { useAppSelector } from '@/features/hooks';
 import { hasRoundStarted } from '@/helpers/qf';
 import { IQFRound } from '@/apollo/types/types';
@@ -72,7 +78,7 @@ export const ActiveQFRoundStats = ({ qfRound }: { qfRound?: IQFRound }) => {
 				<ItemContainer>
 					<ItemTitle weight={700}>
 						{currentRound?.beginDate && currentRound?.endDate
-							? `${formatMonthDay(new Date(currentRound.beginDate))} - ${formatMonthDay(new Date(currentRound.endDate), { includeYear: true })}`
+							? `${formatMonthDay(new Date(currentRound.beginDate), { timeZone: QF_ROUND_BEGIN_DATE_TIME_ZONE })} - ${formatMonthDay(new Date(currentRound.endDate), { includeYear: true, timeZone: QF_ROUND_END_DATE_TIME_ZONE })}`
 							: '--'}
 					</ItemTitle>
 				</ItemContainer>

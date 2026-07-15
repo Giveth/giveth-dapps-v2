@@ -20,13 +20,19 @@ const QFRoundsContext = createContext<IQFRoundsContext>({
 
 QFRoundsContext.displayName = 'QFRoundsContext';
 
-export const QFRoundsProvider = ({ children }: { children: ReactNode }) => {
+export const QFRoundsProvider = ({
+	children,
+	initialQFRounds,
+}: {
+	children: ReactNode;
+	initialQFRounds?: IQFRound[];
+}) => {
 	const {
 		data: qfRounds = [],
 		isLoading: loading,
 		error,
 		refetch,
-	} = useFetchQFRounds(true);
+	} = useFetchQFRounds(true, initialQFRounds);
 
 	// Filter active QF rounds
 	const activeQFRounds = qfRounds.filter(round => round.isActive);

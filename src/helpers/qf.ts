@@ -28,6 +28,34 @@ export const hasRoundStarted = (qfRound: IQFRound | null): boolean => {
 	return !!qfRound && new Date(qfRound.beginDate).getTime() < getNowUnixMS();
 };
 
+/**
+ * Single source of truth for the Stellar (QR) "sign in for GIVbacks" prompt.
+ *
+ * Stellar QR donations are matched without connecting a wallet, but GIVbacks
+ * attribution still requires the donor to be signed in (the donation is sent
+ * anonymously otherwise). The prompt should own the UI when GIVbacks is
+ * achievable purely by signing in — i.e. both the project and the token are
+ * GIVbacks eligible and the donor isn't fully signed in.
+ *
+ * Shared by QRDonationCard (renders the prompt when this is true) and
+ * EligibilityBadges (renders the badges only when this is false), so the two
+ * partition the disconnected-Stellar state with no overlap and no gap.
+ */
+export const shouldShowGivbacksSignInPrompt = ({
+	isProjectGivbacksEligible,
+	isTokenGivbacksEligible,
+	isSignedIn,
+	isEnabled,
+}: {
+	isProjectGivbacksEligible: boolean;
+	isTokenGivbacksEligible: boolean;
+	isSignedIn: boolean;
+	isEnabled: boolean;
+}): boolean =>
+	isProjectGivbacksEligible &&
+	isTokenGivbacksEligible &&
+	(!isEnabled || !isSignedIn);
+
 // TODO remove this once the ethereum security QF round is no longer active
 export const isProjectInActiveEthereumSecurityQFRound = async (
 	projectId: number | string,
