@@ -46,7 +46,6 @@ import {
 	getSumDonationValueUsdForActiveQfRound,
 	haveProjectRound,
 } from '@/lib/helpers/projectHelpers';
-import V6ProjectDonateLink from '@/components/V6ProjectDonateLink';
 
 const cardRadius = '12px';
 const imgHeight = '226px';
@@ -425,9 +424,8 @@ const ProjectCard = (props: IProjectCard) => {
 			</CardBody>
 			{!isListingInsideCauseProjectTabs && (
 				<ActionButtons className='action-buttons'>
-					<V6ProjectDonateLink
+					<Link
 						id='Donate_Card'
-						projectId={id}
 						href={donateLink}
 						onClick={e => {
 							setDestination(donateLink);
@@ -440,7 +438,7 @@ const ProjectCard = (props: IProjectCard) => {
 							label={formatMessage({ id: 'label.donate' })}
 							$isHover={isHover}
 						/>
-					</V6ProjectDonateLink>
+					</Link>
 				</ActionButtons>
 			)}
 			{showHintModal && activeQFRound && (

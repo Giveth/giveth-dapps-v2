@@ -12,6 +12,7 @@ import {
 import { captureException } from '@sentry/nextjs';
 import { useIntl } from 'react-intl';
 import { useWeb3Modal } from '@web3modal/wagmi/react';
+import Link from 'next/link';
 import { EProjectType } from '@/apollo/types/gqlEnums';
 import useDetectDevice from '@/hooks/useDetectDevice';
 import ShareModal from '@/components/modals/ShareModal';
@@ -33,7 +34,6 @@ import {
 import { BadgeButton } from '@/components/project-card/ProjectCardBadgeButtons';
 import config from '@/configuration';
 import { getActiveRound } from '@/helpers/qf';
-import V6ProjectDonateLink from '@/components/V6ProjectDonateLink';
 
 export const ProjectPublicActions = () => {
 	const [showModal, setShowShareModal] = useState<boolean>(false);
@@ -134,9 +134,8 @@ export const ProjectPublicActions = () => {
 
 	return (
 		<ProjectPublicActionsWrapper gap='16px'>
-			<V6ProjectDonateLink
+			<Link
 				id='Donate_Project'
-				projectId={projectId}
 				href={
 					isActive
 						? isStellarOnlyRound
@@ -156,7 +155,7 @@ export const ProjectPublicActions = () => {
 					disabled={!isActive}
 					linkType='primary'
 				/>
-			</V6ProjectDonateLink>
+			</Link>
 			<BadgeWrapper gap='4px'>
 				<ShareLikeBadge
 					onClick={() => isActive && setShowShareModal(true)}

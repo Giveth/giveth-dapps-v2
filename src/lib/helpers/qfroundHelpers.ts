@@ -48,11 +48,19 @@ export const useFetchLast3ArchivedQFRounds = () => {
  *
  * @description Fetch all QF rounds with optional activeOnly filter
  * @param activeOnly - If true, fetch only active rounds. If false, fetch all rounds
+ * @param initialData - Optional server-fetched rounds to seed the cache with
  * @returns IQFRound[]
  */
-export const useFetchQFRounds = (activeOnly: boolean = false) => {
+export const useFetchQFRounds = (
+	activeOnly: boolean = false,
+	initialData?: IQFRound[],
+) => {
 	return useQuery({
 		queryKey: ['qfRounds', activeOnly],
+		initialData,
+		// Render the seeded data instantly but treat it as stale so the
+		// client revalidates in the background right away
+		initialDataUpdatedAt: initialData ? 0 : undefined,
 		queryFn: async (): Promise<IQFRound[]> => {
 			try {
 				const { data } = await client.query({
@@ -74,6 +82,20 @@ export const useFetchQFRounds = (activeOnly: boolean = false) => {
 		gcTime: 10 * 60 * 1000, // 10 minutes
 	});
 };
+
+/**
+ * @title filterDisplayableQFRounds
+ *
+ * @description Active rounds shown on the QF hub — named, non-test rounds
+ * @param rounds - IQFRound[]
+ * @returns IQFRound[]
+ */
+export const filterDisplayableQFRounds = (rounds: IQFRound[]): IQFRound[] =>
+	rounds.filter(round => {
+		if (!round.isActive || !round.name) return false;
+		const cleanName = round.name.trim().toLowerCase();
+		return !cleanName.includes('test');
+	});
 
 /**
  * @title getQFRoundImage

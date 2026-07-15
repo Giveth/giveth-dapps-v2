@@ -9,11 +9,12 @@ import styled from 'styled-components';
 import { useIntl } from 'react-intl';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { useEffect } from 'react';
+import { useEffect, useMemo } from 'react';
 import { useQFRoundsContext } from '@/context/qfrounds.context';
 import useDetectDevice from '@/hooks/useDetectDevice';
 import Routes from '@/lib/constants/Routes';
 import {
+	filterDisplayableQFRounds,
 	getQFRoundHubCardImage,
 	useFetchLast3ArchivedQFRounds,
 } from '@/lib/helpers/qfroundHelpers';
@@ -30,21 +31,22 @@ const QFRoundsIndex = () => {
 	const { isMobile, isTablet } = useDetectDevice();
 	const { data: last3ArchivedQFRounds } = useFetchLast3ArchivedQFRounds();
 
-	// Redirect to the first QF round if there is only one
-	useEffect(() => {
-		if (qfRounds.length === 1 && !loading) {
-			router.push(`/qf/${qfRounds[0].slug}`);
-		} else if (qfRounds.length === 0 && !loading) {
-			router.push(Routes.QFArchived);
-		}
-	}, [qfRounds, router, loading]);
+	// Show only active and not test rounds
+	const filteredQFRounds = useMemo(
+		() => filterDisplayableQFRounds(qfRounds),
+		[qfRounds],
+	);
 
-	// SHow only active and not test rounds
-	const filteredQFRounds = qfRounds.filter(round => {
-		if (!round.isActive || !round.name) return false;
-		const cleanName = round.name.trim().toLowerCase();
-		return !cleanName.includes('test');
-	});
+	// Fallback for the server-side redirect in pages/qf/index.tsx, in case
+	// the rounds changed between the server render and the client fetch
+	useEffect(() => {
+		if (loading) return;
+		if (filteredQFRounds.length === 1 && filteredQFRounds[0].slug) {
+			router.replace(`/qf/${filteredQFRounds[0].slug}`);
+		} else if (filteredQFRounds.length === 0) {
+			router.replace(Routes.QFArchived);
+		}
+	}, [filteredQFRounds, router, loading]);
 
 	// Show only not test rounds from last 3 archived QF rounds
 	let filteredLast3ArchivedQFRounds = last3ArchivedQFRounds?.filter(round => {
