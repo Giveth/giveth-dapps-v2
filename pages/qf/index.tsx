@@ -51,7 +51,11 @@ export const getServerSideProps: GetServerSideProps = async context => {
 				locale && locale !== defaultLocale
 					? `/${locale}${destination}`
 					: destination;
-			const queryString = context.resolvedUrl.split('?')[1];
+			const queryIndex = context.resolvedUrl.indexOf('?');
+			const queryString =
+				queryIndex > -1
+					? context.resolvedUrl.substring(queryIndex + 1)
+					: '';
 			return {
 				redirect: {
 					destination: queryString
