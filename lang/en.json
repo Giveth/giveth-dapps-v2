@@ -941,7 +941,7 @@
 	"label.save_changes": "Save Changes",
 	"label.save_on_gas_fees": "Save on gas fees, switch network.",
 	"label.say_hello_to": "Say Hello to...",
-	"label.scan_to_donate": "Scan the QR code or copy the address to make the transfer. For best results use a Stellar native wallet, donations directly from Centralized Exchanges may not be detected.",
+	"label.scan_to_donate": "Scan with LOBSTR or Exodus, or copy the address and memo below into your wallet. Please use a Stellar native wallet, donations directly from Centralized Exchanges may not be detected.",
 	"label.sdg_impact_fund": "SDG impact fund",
 	"label.search": "Search",
 	"label.search_for_a_project_or_a_cause": "Search for a project or a cause on all of the categories",

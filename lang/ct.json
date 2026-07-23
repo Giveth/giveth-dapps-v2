@@ -940,7 +940,7 @@
 	"label.save_changes": "Desa els canvis",
 	"label.save_on_gas_fees": "Estalvia en taxes de gas, canvia de xarxa.",
 	"label.say_hello_to": "Saluda a...",
-	"label.scan_to_donate": "Escaneja el codi QR o copia l’adreça per fer la transferència. Per obtenir millors resultats, utilitza una cartera nativa de Stellar; les donacions enviades directament des d’intercanvis centralitzats poden no ser detectades.",
+	"label.scan_to_donate": "Escaneja amb LOBSTR o Exodus, o copia l'adreça i el memo següents a la teva cartera. Si us plau, utilitza una cartera nativa de Stellar; és possible que les donacions enviades directament des d'intercanvis centralitzats no es detectin.",
 	"label.sdg_impact_fund": "Fons d'impacte SDG",
 	"label.search": "Cerca",
 	"label.search_for_a_project_or_a_cause": "Cerca un projecte o una causa a totes les categories",

@@ -940,7 +940,7 @@
 	"label.save_changes": "Guardar cambios",
 	"label.save_on_gas_fees": "Ahorra en tarifas de gas, cambia de red.",
 	"label.say_hello_to": "Dile hola a...",
-	"label.scan_to_donate": "Escanea el código QR o copia la dirección para realizar la transferencia. Para obtener mejores resultados, usa una billetera nativa de Stellar; las donaciones enviadas directamente desde exchanges centralizados pueden no ser detectadas.",
+	"label.scan_to_donate": "Escanea con LOBSTR o Exodus, o copia la dirección y el memo que aparecen a continuación en tu billetera. Por favor, utiliza una billetera nativa de Stellar; es posible que las donaciones enviadas directamente desde exchanges centralizados no se detecten.",
 	"label.sdg_impact_fund": "Fondo de impacto SDG",
 	"label.search": "Buscar",
 	"label.search_for_a_project_or_a_cause": "Busca un proyecto o una Causa en todas las categorias",
