@@ -26,7 +26,7 @@ import ProjectCategoriesBadges from '@/components/views/project/ProjectCategorie
 import ProjectGIVbackToast from '@/components/views/project/ProjectGIVbackToast';
 import useMediaQuery from '@/hooks/useMediaQuery';
 import { device } from '@/lib/constants/constants';
-import { DonateSection } from '@/components/views/project/projectActionCard/DonationSection';
+import { DonateSectionSwitcher } from '@/components/views/project/projectActionCard/DonationSection';
 import { ProjectStats } from '@/components/views/project/projectActionCard/ProjectStats';
 import { AdminActions } from '@/components/views/project/projectActionCard/AdminActions';
 import ProjectOwnerBanner from '@/components/views/project/ProjectOwnerBanner';
@@ -160,7 +160,7 @@ const CauseIndex: FC<ICauseBySlug> = () => {
 						)}
 						{isMobile && (
 							<MobileContainer $hasActiveRound={hasActiveQFRound}>
-								<DonateSection projectData={projectData} />
+								<DonateSectionSwitcher />
 							</MobileContainer>
 						)}
 						<ProjectGIVbackToast />
