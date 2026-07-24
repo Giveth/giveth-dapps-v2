@@ -32,8 +32,11 @@ import {
 	slugToProjectDonateStellar,
 } from '@/lib/routeCreators';
 import { BadgeButton } from '@/components/project-card/ProjectCardBadgeButtons';
-import config from '@/configuration';
-import { getActiveRound } from '@/helpers/qf';
+import {
+	getActiveRound,
+	hasStellarAddress,
+	isStellarOnlyRound,
+} from '@/helpers/qf';
 
 export const ProjectPublicActions = () => {
 	const [showModal, setShowShareModal] = useState<boolean>(false);
@@ -57,10 +60,11 @@ export const ProjectPublicActions = () => {
 		project?.addresses?.length === 1 &&
 		project?.addresses[0]?.chainType === 'STELLAR';
 
-	const isStellarOnlyRound =
-		activeStartedRound?.eligibleNetworks?.length === 1 &&
-		activeStartedRound?.eligibleNetworks[0] ===
-			config.STELLAR_NETWORK_NUMBER;
+	// During an active, started Stellar-only round, Donate goes straight to
+	// the Stellar (QR) flow — provided the project can receive on Stellar.
+	const routeToStellarDonate =
+		isStellarOnlyRound(activeStartedRound) &&
+		hasStellarAddress(project?.addresses);
 
 	useEffect(() => {
 		const fetchProjectReaction = async () => {
@@ -138,7 +142,7 @@ export const ProjectPublicActions = () => {
 				id='Donate_Project'
 				href={
 					isActive
-						? isStellarOnlyRound
+						? routeToStellarDonate
 							? slugToProjectDonateStellar(slug || '')
 							: isCause
 								? slugToCauseDonate(slug || '')

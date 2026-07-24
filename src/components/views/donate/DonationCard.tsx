@@ -6,7 +6,7 @@ import {
 	SublineBold,
 	brandColors,
 } from '@giveth/ui-design-system';
-import React, { FC, useState, useEffect, useRef } from 'react';
+import React, { FC, useState, useEffect, useRef, useCallback } from 'react';
 import styled, { css } from 'styled-components';
 import { useIntl } from 'react-intl';
 import { useRouter } from 'next/router';
@@ -30,7 +30,11 @@ import {
 } from '@/apollo/types/gqlTypes';
 import { DonationCardTabs } from '@/components/views/donate/DonationCardTabs';
 import { DonationCardQFRounds } from '@/components/views/donate/DonationCardQFRounds/DonationCardQFRounds';
-import { getActiveRound } from '@/helpers/qf';
+import {
+	getActiveRound,
+	hasStellarAddress,
+	isStellarOnlyRound,
+} from '@/helpers/qf';
 import { getDonationNetworkId } from '@/helpers/network';
 import { useGeneralWallet } from '@/providers/generalWalletProvider';
 
@@ -94,11 +98,12 @@ export const DonationCard: FC<IDonationCardProps> = ({
 
 	const disableRecurringDonations = organization?.disableRecurringDonations;
 
-	const hasStellarAddress = addresses?.some(
-		address => address.chainType === ChainType.STELLAR,
-	);
+	const projectHasStellarAddress = hasStellarAddress(addresses);
 
-	const handleQRDonation = () => {
+	// Memoized: passed down as onStellarDonation, where a fresh identity
+	// each render would re-trigger the round-selection effect and revert
+	// manual round picks in the regular flow.
+	const handleQRDonation = useCallback(() => {
 		setIsQRDonation(true);
 		router.push(
 			{
@@ -110,7 +115,7 @@ export const DonationCard: FC<IDonationCardProps> = ({
 			undefined,
 			{ shallow: true },
 		);
-	};
+	}, [router]);
 
 	// Auto-switch to the Stellar (QR) flow when the active round is
 	// Stellar-only and the project accepts Stellar donations, so entry
@@ -127,15 +132,11 @@ export const DonationCard: FC<IDonationCardProps> = ({
 			return;
 		didEvaluateStellarAutoSwitch.current = true;
 		const { activeStartedRound } = getActiveRound(project.qfRounds);
-		const isStellarOnlyRound =
-			activeStartedRound?.eligibleNetworks?.length === 1 &&
-			activeStartedRound?.eligibleNetworks[0] ===
-				config.STELLAR_NETWORK_NUMBER;
 		if (
 			!router.query.chain &&
 			router.query.tab !== ETabs.RECURRING &&
-			isStellarOnlyRound &&
-			hasStellarAddress
+			isStellarOnlyRound(activeStartedRound) &&
+			projectHasStellarAddress
 		) {
 			handleQRDonation();
 		}
@@ -199,6 +200,7 @@ export const DonationCard: FC<IDonationCardProps> = ({
 						choosedModalRound={choosedModalRound}
 						setChoosedModalRound={setChoosedModalRound}
 						isQRDonation={isQRDonation}
+						onStellarDonation={handleQRDonation}
 					/>
 				)}
 				{!isQRDonation ? (
@@ -220,7 +222,7 @@ export const DonationCard: FC<IDonationCardProps> = ({
 								<RecurringDonationCard />
 							)}
 						</TabWrapper>
-						{hasStellarAddress && (
+						{projectHasStellarAddress && (
 							<QRToastLink onClick={handleQRDonation}>
 								<Image
 									src='/images/logo/stellar.svg'
