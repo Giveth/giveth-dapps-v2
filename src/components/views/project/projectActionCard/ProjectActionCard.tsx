@@ -6,7 +6,7 @@ import { useProjectContext } from '@/context/project.context';
 import useMediaQuery from '@/hooks/useMediaQuery';
 import { device } from '@/lib/constants/constants';
 import MobileDonateFooter from './MobileDonateFooter';
-import { DonateSection } from './DonationSection';
+import { DonateSectionSwitcher } from './DonationSection';
 import { ProjectPublicActions } from './ProjectPublicActions';
 
 export const ProjectActionCard = () => {
@@ -31,14 +31,13 @@ export const ProjectActionCard = () => {
 };
 
 const ProjectActionInnerCard = () => {
-	const { isAdmin, hasActiveQFRound, isDraft, projectData } =
-		useProjectContext();
+	const { isAdmin, isDraft } = useProjectContext();
 	const isMobile = !useMediaQuery(device.tablet);
 
 	return (
 		<>
 			{isAdmin && !isDraft && <AdminActions />}
-			<DonateSection projectData={projectData} />
+			<DonateSectionSwitcher />
 			{!isMobile && !isAdmin && <ProjectPublicActions />}
 			{isAdmin && <ProjectStats />}
 		</>

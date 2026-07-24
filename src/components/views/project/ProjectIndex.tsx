@@ -36,7 +36,7 @@ import ProjectCategoriesBadges from './ProjectCategoriesBadges';
 import ProjectGIVbackToast from '@/components/views/project/ProjectGIVbackToast';
 import useMediaQuery from '@/hooks/useMediaQuery';
 import { device, mediaQueries } from '@/lib/constants/constants';
-import { DonateSection } from './projectActionCard/DonationSection';
+import { DonateSectionSwitcher } from './projectActionCard/DonationSection';
 import { ProjectStats } from './projectActionCard/ProjectStats';
 import { AdminActions } from './projectActionCard/AdminActions';
 import ProjectOwnerBanner from './ProjectOwnerBanner';
@@ -232,7 +232,7 @@ const ProjectIndex: FC<IProjectBySlug> = () => {
 						)}
 						{isMobile && (
 							<MobileContainer $hasActiveRound={hasActiveQFRound}>
-								<DonateSection projectData={projectData} />
+								<DonateSectionSwitcher />
 							</MobileContainer>
 						)}
 						<ProjectGIVbackToast />
