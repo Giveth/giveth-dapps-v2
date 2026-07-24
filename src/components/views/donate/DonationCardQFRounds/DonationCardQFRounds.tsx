@@ -146,17 +146,26 @@ export const DonationCardQFRounds = ({
 				// Fallback to first active round
 				setSelectedQFRound(activeQFRounds[0] || EmptyRound);
 			}
-		} else if (
-			activeQFRounds.length > 0 &&
-			activeQFRounds[0].eligibleNetworks.includes(
-				isQRDonation ? config.STELLAR_NETWORK_NUMBER : chainId,
-			)
-		) {
-			// Fallback to first active round if no smart selection and the
-			// network is eligible (Stellar network for QR donations).
-			setSelectedQFRound(activeQFRounds[0]);
 		} else {
-			setSelectedQFRound(EmptyRound);
+			const effectiveChainId = isQRDonation
+				? config.STELLAR_NETWORK_NUMBER
+				: chainId;
+			// Fallback to the first active round eligible for the current
+			// network (Stellar network for QR donations).
+			const eligibleRound = activeQFRounds.find(round =>
+				round.eligibleNetworks.includes(effectiveChainId),
+			);
+			if (eligibleRound) {
+				setSelectedQFRound(eligibleRound);
+			} else if (!chainId && !isQRDonation) {
+				// Wallet not connected yet — default to the first active
+				// round instead of asking the user to pick; eligibility is
+				// re-evaluated on connect and EligibilityBadges warns if the
+				// network is not eligible for matching.
+				setSelectedQFRound(activeQFRounds[0] || EmptyRound);
+			} else {
+				setSelectedQFRound(EmptyRound);
+			}
 		}
 		setIsSmartSelect(!!smartSelectData);
 

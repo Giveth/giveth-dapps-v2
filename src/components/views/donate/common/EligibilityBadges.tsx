@@ -8,7 +8,7 @@ import {
 } from '@giveth/ui-design-system';
 import React, { CSSProperties, FC } from 'react';
 import { useIntl } from 'react-intl';
-import { Chain, formatUnits } from 'viem';
+import { formatUnits } from 'viem';
 import { useRouter } from 'next/router';
 import {
 	BadgesBase,
@@ -19,6 +19,7 @@ import { useGeneralWallet } from '@/providers/generalWalletProvider';
 import { useDonateData } from '@/context/donate.context';
 import { useAppSelector } from '@/features/hooks';
 import { shouldShowGivbacksSignInPrompt } from '@/helpers/qf';
+import { getDonationNetworkId } from '@/helpers/network';
 import { IProjectAcceptedToken } from '@/apollo/types/gqlTypes';
 import config from '@/configuration';
 import { ChainType } from '@/types/config';
@@ -33,7 +34,7 @@ interface IEligibilityBadges {
 
 const EligibilityBadges: FC<IEligibilityBadges> = props => {
 	const { tokenPrice, amount, token, style } = props;
-	const { isConnected, chain } = useGeneralWallet();
+	const { isConnected, chain, walletChainType } = useGeneralWallet();
 	const { isSignedIn, isEnabled } = useAppSelector(state => state.user);
 	const { selectedQFRound, project } = useDonateData();
 	const { formatMessage } = useIntl();
@@ -43,9 +44,7 @@ const EligibilityBadges: FC<IEligibilityBadges> = props => {
 	const isTokenGivbacksEligible = token?.isGivbackEligible;
 	const isProjectGivbacksEligible = !!isGivbackEligible;
 
-	const networkId = isStellar
-		? config.STELLAR_NETWORK_NUMBER
-		: (chain as Chain)?.id || config.SOLANA_CONFIG.networkId;
+	const networkId = getDonationNetworkId(chain, walletChainType, isStellar);
 
 	const isOnQFEligibleNetworks = selectedQFRound?.eligibleNetworks?.includes(
 		networkId || 0,
@@ -116,8 +115,9 @@ const EligibilityBadges: FC<IEligibilityBadges> = props => {
 							{
 								value: selectedQFRound?.minimumValidUsdValue,
 								network:
-									config.NETWORKS_CONFIG_WITH_ID[networkId]
-										?.name,
+									config.NETWORKS_CONFIG_WITH_ID[
+										networkId ?? 0
+									]?.name,
 							},
 						)}
 				</BadgesBase>

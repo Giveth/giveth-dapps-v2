@@ -149,10 +149,12 @@ export const fetchProjectQfRounds = async (
 	activeOnly: boolean = true,
 	sortBy: string = '',
 ) => {
+	const numericProjectId = parseInt(projectId);
+	if (Number.isNaN(numericProjectId)) return [];
 	try {
 		const { data } = await client.query({
 			query: FETCH_PROJECT_QF_ROUNDS,
-			variables: { projectId: parseInt(projectId), activeOnly, sortBy },
+			variables: { projectId: numericProjectId, activeOnly, sortBy },
 			fetchPolicy: 'no-cache',
 			context: {
 				skipAuth: true,
