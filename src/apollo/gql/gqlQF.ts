@@ -187,6 +187,11 @@ export const FETCH_PROJECT_QF_ROUNDS = gql`
 			isActive
 			allocatedFund
 			allocatedFundUSD
+			allocatedFundUSDPreferred
+			allocatedTokenSymbol
+			eligibleNetworks
+			maximumReward
+			minimumValidUsdValue
 			priority
 			beginDate
 			endDate
