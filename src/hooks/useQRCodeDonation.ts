@@ -15,6 +15,89 @@ import { IProject } from '@/apollo/types/types';
 
 export type TQRStatus = 'waiting' | 'failed' | 'success' | 'expired';
 
+type TDraftDonationsStorage = Record<string, number>;
+
+export const parseDraftDonationsStorage = (
+	storedDraftDonations: string | null,
+): TDraftDonationsStorage => {
+	if (!storedDraftDonations) return {};
+
+	try {
+		const parsed = JSON.parse(storedDraftDonations);
+		if (!parsed || typeof parsed !== 'object' || Array.isArray(parsed)) {
+			return {};
+		}
+
+		return Object.entries(parsed).reduce<TDraftDonationsStorage>(
+			(drafts, [key, draftId]) => {
+				if (typeof draftId === 'number' && Number.isFinite(draftId)) {
+					drafts[key] = draftId;
+				}
+				return drafts;
+			},
+			{},
+		);
+	} catch {
+		return {};
+	}
+};
+
+const getDraftDonationStorageKey = (projectId: number, walletAddress: string) =>
+	`${projectId}:${walletAddress.toUpperCase()}`;
+
+export const getStoredDraftDonationId = (
+	projectId: number,
+	walletAddress: string,
+): number | undefined => {
+	const storedDraftDonations = parseDraftDonationsStorage(
+		localStorage.getItem(StorageLabel.DRAFT_DONATIONS),
+	);
+
+	return (
+		storedDraftDonations[
+			getDraftDonationStorageKey(projectId, walletAddress)
+		] ??
+		storedDraftDonations[walletAddress] ??
+		storedDraftDonations[walletAddress.toUpperCase()]
+	);
+};
+
+export const clearStoredDraftDonationId = (
+	projectId: number,
+	walletAddress: string,
+) => {
+	const storedDraftDonations = parseDraftDonationsStorage(
+		localStorage.getItem(StorageLabel.DRAFT_DONATIONS),
+	);
+
+	delete storedDraftDonations[
+		getDraftDonationStorageKey(projectId, walletAddress)
+	];
+	delete storedDraftDonations[walletAddress];
+	delete storedDraftDonations[walletAddress.toUpperCase()];
+
+	localStorage.setItem(
+		StorageLabel.DRAFT_DONATIONS,
+		JSON.stringify(storedDraftDonations),
+	);
+};
+
+const storeDraftDonationId = (
+	projectId: number,
+	walletAddress: string,
+	draftDonationId: number,
+) => {
+	const storedDraftDonations = parseDraftDonationsStorage(
+		localStorage.getItem(StorageLabel.DRAFT_DONATIONS),
+	);
+	storedDraftDonations[getDraftDonationStorageKey(projectId, walletAddress)] =
+		draftDonationId;
+	localStorage.setItem(
+		StorageLabel.DRAFT_DONATIONS,
+		JSON.stringify(storedDraftDonations),
+	);
+};
+
 export const generateStellarPaymentQRCode = async (
 	toWalletAddress: string,
 	amount: number,
@@ -41,7 +124,6 @@ export const useQRCodeDonation = (project: IProject) => {
 	);
 	const [status, setStatus] = useState<TQRStatus>('waiting');
 	const [loading, setLoading] = useState(false);
-	const [pendingDonationExists, setPendingDonationExists] = useState(false);
 
 	const createDraftDonation = async (
 		payload: ICreateDraftDonation,
@@ -91,26 +173,7 @@ export const useQRCodeDonation = (project: IProject) => {
 				fetchPolicy: 'no-cache',
 			});
 
-			// save draft donation to local storage
-			const localStorageItem = localStorage.getItem(
-				StorageLabel.DRAFT_DONATIONS,
-			);
-			if (localStorageItem) {
-				const parsedLocalStorageItem = JSON.parse(localStorageItem);
-				parsedLocalStorageItem[walletAddress] = createDraftDonation;
-				localStorage.setItem(
-					StorageLabel.DRAFT_DONATIONS,
-					JSON.stringify(parsedLocalStorageItem),
-				);
-			} else {
-				const newLocalStorageItem = {
-					[walletAddress]: createDraftDonation,
-				};
-				localStorage.setItem(
-					StorageLabel.DRAFT_DONATIONS,
-					JSON.stringify(newLocalStorageItem),
-				);
-			}
+			storeDraftDonationId(projectId, walletAddress, createDraftDonation);
 			return createDraftDonation;
 		} catch (error: any) {
 			console.error('Error creating draft donation', error.message);
@@ -118,7 +181,10 @@ export const useQRCodeDonation = (project: IProject) => {
 		}
 	};
 
-	const retrieveDraftDonation = async (draftDonationId: number) => {
+	const retrieveDraftDonation = async (
+		draftDonationId: number,
+		options?: { throwOnError?: boolean },
+	) => {
 		const statusMap: Record<string, TQRStatus> = {
 			pending: 'waiting',
 			matched: 'success',
@@ -139,7 +205,13 @@ export const useQRCodeDonation = (project: IProject) => {
 				query: FETCH_DRAFT_DONATION,
 				variables: { id: draftDonationId },
 				fetchPolicy: 'no-cache',
-			})) as { data: { getDraftDonationById: IDraftDonation } };
+			})) as { data: { getDraftDonationById: IDraftDonation | null } };
+
+			if (!getDraftDonationById) {
+				setDraftDonation(null);
+				setLoading(false);
+				return null;
+			}
 
 			if (
 				getDraftDonationById.expiresAt &&
@@ -156,6 +228,7 @@ export const useQRCodeDonation = (project: IProject) => {
 			console.error('Error retrieving draft donation', error);
 			setDraftDonation(null);
 			setLoading(false);
+			if (options?.throwOnError) throw error;
 			return;
 		}
 	};
@@ -208,7 +281,7 @@ export const useQRCodeDonation = (project: IProject) => {
 
 	const renewExpirationDate = async (
 		id: number,
-	): Promise<Date | undefined> => {
+	): Promise<string | undefined> => {
 		try {
 			const {
 				data: { renewDraftDonationExpirationDate },
@@ -219,7 +292,14 @@ export const useQRCodeDonation = (project: IProject) => {
 				},
 				fetchPolicy: 'no-cache',
 			});
-			return renewDraftDonationExpirationDate.expiresAt;
+
+			const expiresAt = renewDraftDonationExpirationDate?.expiresAt;
+			if (!expiresAt) return;
+
+			const parsedExpirationDate = new Date(expiresAt);
+			if (Number.isNaN(parsedExpirationDate.getTime())) return;
+
+			return parsedExpirationDate.toISOString();
 		} catch (error: any) {
 			console.error(
 				'Error renewing draft donation expiration date',
@@ -290,14 +370,12 @@ export const useQRCodeDonation = (project: IProject) => {
 		status,
 		loading,
 		draftDonation,
-		pendingDonationExists,
 		setStatus,
 		startTimer,
 		setDraftDonation,
 		renewExpirationDate,
 		createDraftDonation,
 		retrieveDraftDonation,
-		setPendingDonationExists,
 		checkDraftDonationStatus,
 		markDraftDonationAsFailed,
 	};

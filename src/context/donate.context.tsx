@@ -67,14 +67,12 @@ interface IDonateContext {
 	draftDonationData?: IDraftDonation;
 	fetchDraftDonation?: (
 		draftDonationId: number,
-	) => Promise<void | IDraftDonation>;
+	) => Promise<void | IDraftDonation | null>;
 	qrDonationStatus: TQRStatus;
-	pendingDonationExists: boolean;
 	startTimer?: (startTime: Date) => void;
 	setQRDonationStatus: Dispatch<SetStateAction<TQRStatus>>;
 	draftDonationLoading?: boolean;
 	setDraftDonationData: Dispatch<SetStateAction<IDraftDonation | null>>;
-	setPendingDonationExists?: Dispatch<SetStateAction<boolean>>;
 	isV6ProjectInActiveQFRound: boolean;
 	isV6ProjectInActiveQFRoundLoading: boolean;
 	v6ProjectRedirectUrl?: string;
@@ -110,12 +108,10 @@ const DonateContext = createContext<IDonateContext>({
 	draftDonationData: {} as IDraftDonation,
 	fetchDraftDonation: async () => {},
 	qrDonationStatus: 'waiting',
-	pendingDonationExists: false,
 	startTimer: () => {},
 	setQRDonationStatus: () => {},
 	draftDonationLoading: false,
 	setDraftDonationData: () => {},
-	setPendingDonationExists: () => {},
 	isV6ProjectInActiveQFRound: false,
 	isV6ProjectInActiveQFRoundLoading: false,
 	showV6ProjectRedirectModal: false,
@@ -247,8 +243,6 @@ export const DonateProvider: FC<IProviderProps> = ({ children, project }) => {
 		draftDonation,
 		status,
 		retrieveDraftDonation,
-		pendingDonationExists,
-		setPendingDonationExists,
 		startTimer,
 		setStatus,
 		loading,
@@ -296,7 +290,6 @@ export const DonateProvider: FC<IProviderProps> = ({ children, project }) => {
 				successDonation,
 				setSuccessDonation,
 				selectedOneTimeToken,
-				pendingDonationExists,
 				selectedRecurringToken,
 				selectedQFRound,
 				setDonateModalByPriority,
@@ -313,7 +306,6 @@ export const DonateProvider: FC<IProviderProps> = ({ children, project }) => {
 				qrDonationStatus: status,
 				startTimer,
 				setQRDonationStatus: setStatus,
-				setPendingDonationExists,
 				draftDonationLoading: loading,
 				choosedModalRound,
 				setChoosedModalRound,

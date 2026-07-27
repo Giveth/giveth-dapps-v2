@@ -128,5 +128,6 @@
 	"refi": "Refi",
 	"testfilter": "testfilter",
 	"tooltip.donation.matching": "Esta estimación se basa en las donaciones realizadas hasta ahora en esta ronda de financiación cuadrática y no está considerando el análisis de fraude. La cantidad de igualación real puede variar.",
-	"ubi": "RBI"
+	"ubi": "RBI",
+	"label.unable_to_check_pending_donation": "Unable to check your pending donation. Please try again."
 }
