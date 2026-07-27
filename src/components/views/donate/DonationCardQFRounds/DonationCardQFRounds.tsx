@@ -107,20 +107,21 @@ export const DonationCardQFRounds = ({
 
 	// Networks the switch-network modal can act on for a round: eligible
 	// for the round, accepted by the project, and — for Stellar — only
-	// when the caller can open the Stellar (QR) flow.
+	// when the caller can open the Stellar (QR) flow. Stellar addresses are
+	// identified by chainType (their networkId is not guaranteed); other
+	// networks match by networkId.
 	const getSwitchableNetworks = useCallback(
 		(round: IQFRound) => {
 			const projectAcceptedChains = project.addresses?.map(
 				address => address.networkId,
 			);
-			return round.eligibleNetworks.filter(
-				network =>
-					projectAcceptedChains?.includes(network) &&
-					(network !== config.STELLAR_NETWORK_NUMBER ||
-						!!onStellarDonation),
+			return round.eligibleNetworks.filter(network =>
+				network === config.STELLAR_NETWORK_NUMBER
+					? projectHasStellarAddress && !!onStellarDonation
+					: projectAcceptedChains?.includes(network),
 			);
 		},
-		[project.addresses, onStellarDonation],
+		[project.addresses, projectHasStellarAddress, onStellarDonation],
 	);
 
 	// Rounds this flow has a route to donate to — the single source of
