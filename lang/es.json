@@ -2038,5 +2038,5 @@
 	"label.user.telegram_profile": "Usuario de Telegram",
 	"label.user.telegram_profile_placeholder": "Tu nombre de usuario de Telegram",
 	"label.qf.quadratic_funding_is_live": "💜 La Financiación Cuadrática está activa. Haz que tus donaciones se amplifiquen con un fondo de igualación",
-	"label.unable_to_check_pending_donation": "Unable to check your pending donation. Please try again."
+	"label.unable_to_check_pending_donation": "No se ha podido comprobar tu donación pendiente. Por favor, inténtalo de nuevo."
 }

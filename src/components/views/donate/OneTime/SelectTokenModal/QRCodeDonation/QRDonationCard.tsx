@@ -274,8 +274,12 @@ export const QRDonationCard: FC<QRDonationCardProps> = ({
 			const isExpired =
 				expiresAt !== undefined &&
 				(!Number.isFinite(expiresAt) || expiresAt <= Date.now());
+			// The stored amount round-trips through the API as a float, so compare
+			// with a tolerance far below the 6-decimal granularity the amount input
+			// exposes — tight enough that two distinct amounts never collide.
 			const amountMatches =
-				Number(retDraftDonation?.amount) === requestedAmount;
+				Math.abs(Number(retDraftDonation?.amount) - requestedAmount) <
+				1e-9;
 			// Stellar addresses can be shared across projects. Reuse a stored draft
 			// only when it represents exactly the donation the donor just confirmed.
 			const canReuseDraft =

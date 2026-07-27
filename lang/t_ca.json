@@ -162,5 +162,5 @@
 	"refi": "Refi",
 	"testfilter": "testfilter",
 	"tooltip.donation.matching": "Aquesta estimació es basa en les donacions fetes fins ara aquesta ronda de finançament quadràtic i no està considerant l'anàlisi de frau. La quantitat real de coincidència pot variar.",
-	"label.unable_to_check_pending_donation": "Unable to check your pending donation. Please try again."
+	"label.unable_to_check_pending_donation": "No s'ha pogut comprovar la teva donació pendent. Torna-ho a provar."
 }

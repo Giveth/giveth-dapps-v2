@@ -2038,5 +2038,5 @@
 	"label.user.telegram_profile": "Usuari de Telegram",
 	"label.user.telegram_profile_placeholder": "El teu nom d'usuari de Telegram",
 	"label.qf.quadratic_funding_is_live": "💜 El Finançament Quadràtic és en marxa. Fes que les teves donacions s’amplifiquin amb un fons de compensació",
-	"label.unable_to_check_pending_donation": "Unable to check your pending donation. Please try again."
+	"label.unable_to_check_pending_donation": "No s'ha pogut comprovar la teva donació pendent. Torna-ho a provar."
 }
