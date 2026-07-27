@@ -28,6 +28,11 @@ interface IQFRoundModalProps extends IModal {
 	chainId: number;
 	setChoosedModalRound: (round: IQFRound | undefined) => void;
 	isQRDonation?: boolean;
+	onStellarDonation?: () => void;
+	// Reachability predicates owned by DonationCardQFRounds — the same
+	// source of truth that filters the QFRounds list passed in.
+	opensStellarFlow: (round: IQFRound) => boolean;
+	getSwitchableNetworks: (round: IQFRound) => number[];
 }
 
 export const QFRoundsModal = ({
@@ -39,6 +44,9 @@ export const QFRoundsModal = ({
 	chainId,
 	setChoosedModalRound,
 	isQRDonation,
+	onStellarDonation,
+	opensStellarFlow,
+	getSwitchableNetworks,
 }: IQFRoundModalProps) => {
 	const { formatMessage, locale } = useIntl();
 	const [showSwitchModal, setShowSwitchModal] = useState(false);
@@ -57,25 +65,38 @@ export const QFRoundsModal = ({
 	);
 
 	const handleRoundSelect = (round: IQFRound) => {
+		// Stellar is not a wallet network: a Stellar-only round opens the
+		// Stellar (QR) donate flow directly — never the switch-network
+		// modal.
+		if (opensStellarFlow(round)) {
+			setCurrentSelected(round);
+			setChoosedModalRound(round);
+			onRoundSelect?.(round);
+			if (!isQRDonation) onStellarDonation?.();
+			closeModal();
+			return;
+		}
 		if (
 			round.eligibleNetworks.includes(chainId) ||
 			(isQRDonation &&
 				round.eligibleNetworks.includes(config.STELLAR_NETWORK_NUMBER))
 		) {
 			setCurrentSelected(round);
+			// Pin every explicit pick so the default-selection effect
+			// preserves it when its dependencies change (smart-select
+			// refetch, wallet network switch). The pin is released by the
+			// web3modal network-change handler and, for Stellar-only rounds,
+			// on backing out of the QR flow.
+			setChoosedModalRound(round);
 			onRoundSelect?.(round);
 			closeModal();
 		} else {
+			const switchableNetworks = getSwitchableNetworks(round);
+			// No network to switch to — never open an empty modal
+			// (unreachable for rounds in the grid, which are pre-filtered)
+			if (switchableNetworks.length === 0) return;
 			setClickedRound(round);
-			// Setup the networks for the newly selected round and only accepted by project
-			const projectAcceptedChains = project.addresses?.map(
-				address => address.networkId,
-			);
-			setAcceptedChains(
-				round.eligibleNetworks.filter(network =>
-					projectAcceptedChains?.includes(network),
-				),
-			);
+			setAcceptedChains(switchableNetworks);
 			setShowSwitchModal(true);
 		}
 	};
@@ -186,7 +207,9 @@ export const QFRoundsModal = ({
 						networkId: network,
 						chainType: config.EVM_NETWORKS_CONFIG[network]
 							? ChainType.EVM
-							: ChainType.SOLANA,
+							: network === config.STELLAR_NETWORK_NUMBER
+								? ChainType.STELLAR
+								: ChainType.SOLANA,
 					}))}
 					desc={
 						<FormattedMessage
@@ -200,6 +223,7 @@ export const QFRoundsModal = ({
 					clickedRound={clickedRound}
 					setChoosedModalRound={setChoosedModalRound}
 					onRoundSelect={onRoundSelect}
+					onStellarDonation={onStellarDonation}
 				/>
 			)}
 		</>

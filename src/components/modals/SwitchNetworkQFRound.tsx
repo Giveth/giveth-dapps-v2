@@ -37,6 +37,7 @@ interface ISwitchNetworkModal extends IModal {
 	clickedRound?: IQFRound | null;
 	setChoosedModalRound?: (round: IQFRound | undefined) => void;
 	onRoundSelect?: (round: IQFRound) => void;
+	onStellarDonation?: () => void;
 }
 
 const SwitchNetworkQFRound: FC<ISwitchNetworkModal> = ({
@@ -47,6 +48,7 @@ const SwitchNetworkQFRound: FC<ISwitchNetworkModal> = ({
 	clickedRound,
 	setChoosedModalRound,
 	onRoundSelect,
+	onStellarDonation,
 }) => {
 	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
 	const { switchChain } = useSwitchChain();
@@ -61,6 +63,8 @@ const SwitchNetworkQFRound: FC<ISwitchNetworkModal> = ({
 	const chainId = (chain as Chain)?.id;
 	const theme = useAppSelector(state => state.general.theme);
 
+	// Callers only include a Stellar entry when the Stellar (QR) donate
+	// flow can be opened (see getSwitchableNetworks in DonationCardQFRounds)
 	const networks =
 		customNetworks?.map(network => {
 			return {
@@ -70,6 +74,18 @@ const SwitchNetworkQFRound: FC<ISwitchNetworkModal> = ({
 		}) || defaultNetworks;
 
 	const handleNetworkItemClick = (networkId: number, chainType: string) => {
+		// Stellar donations happen via QR code — no wallet connection or
+		// network switch involved. Open the Stellar donate flow directly.
+		if (chainType === ChainType.STELLAR) {
+			if (clickedRound) {
+				setChoosedModalRound?.(clickedRound);
+				onRoundSelect?.(clickedRound);
+			}
+			onStellarDonation?.();
+			closeModal();
+			closeOtherModal?.();
+			return;
+		}
 		if (walletChainType === ChainType.SOLANA) {
 			setPendingNetworkId(networkId);
 			handleSingOutAndSignInWithEVM();

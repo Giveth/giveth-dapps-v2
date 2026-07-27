@@ -31,13 +31,17 @@ import {
 import { ORGANIZATION } from '@/lib/constants/organizations';
 import { mediaQueries } from '@/lib/constants/constants';
 import { ProjectCardUserName } from './ProjectCardUserName';
-import { getActiveRound, hasRoundStarted } from '@/helpers/qf';
+import {
+	getActiveRound,
+	hasRoundStarted,
+	hasStellarAddress,
+	isStellarOnlyRound,
+} from '@/helpers/qf';
 import { RoundNotStartedModal } from './RoundNotStartedModal';
 import { FETCH_RECURRING_DONATIONS_BY_DATE } from '@/apollo/gql/gqlProjects';
 import { client } from '@/apollo/apolloClient';
 import { ProjectCardTotalRaised } from './ProjectCardTotalRaised';
 import { ProjectCardTotalRaisedQF } from './ProjectCardTotalRaisedQF';
-import config from '@/configuration';
 import { EProjectType } from '@/apollo/types/gqlEnums';
 import { ProjectCardCauseTotalRaised } from './ProjectCardCauseTotalRaised';
 import {
@@ -143,16 +147,17 @@ const ProjectCard = (props: IProjectCard) => {
 	const isOnlyStellar =
 		addresses?.length === 1 && addresses[0]?.chainType === 'STELLAR';
 
-	const isStellarOnlyRound =
-		activeQFRound?.eligibleNetworks?.length === 1 &&
-		activeQFRound?.eligibleNetworks[0] === config.STELLAR_NETWORK_NUMBER;
+	// During an active, started Stellar-only round, Donate goes straight to
+	// the Stellar (QR) flow — provided the project can receive on Stellar.
+	const routeToStellarDonate =
+		isStellarOnlyRound(checkActiveRound) && hasStellarAddress(addresses);
 
 	const projectLink =
 		projectType === EProjectType.CAUSE
 			? slugToCauseView(slug)
 			: slugToProjectView(slug);
 
-	const donateLink = isStellarOnlyRound
+	const donateLink = routeToStellarDonate
 		? slugToProjectDonateStellar(slug)
 		: projectType === EProjectType.CAUSE
 			? slugToCauseDonate(slug) +

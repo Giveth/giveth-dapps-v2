@@ -1,6 +1,8 @@
-import { IQFRound } from '@/apollo/types/types';
+import { IQFRound, IWalletAddress } from '@/apollo/types/types';
 import { getV6ActiveQfProjectRedirect } from '@/services/v6QF';
 import { getNowUnixMS } from './time';
+import config from '@/configuration';
+import { ChainType } from '@/types/config';
 // import { formatDonation } from '@/helpers/number';
 
 export const hasActiveRound = (qfRounds: IQFRound[] | undefined) => {
@@ -27,6 +29,18 @@ export const getActiveRound = (qfRounds: IQFRound[] | undefined) => {
 export const hasRoundStarted = (qfRound: IQFRound | null): boolean => {
 	return !!qfRound && new Date(qfRound.beginDate).getTime() < getNowUnixMS();
 };
+
+/**
+ * Stellar is not a wallet network: a round whose only eligible network is
+ * Stellar is donated to via the Stellar (QR) flow, never from a connected
+ * wallet.
+ */
+export const isStellarOnlyRound = (round?: IQFRound | null): boolean =>
+	round?.eligibleNetworks?.length === 1 &&
+	round.eligibleNetworks[0] === config.STELLAR_NETWORK_NUMBER;
+
+export const hasStellarAddress = (addresses?: IWalletAddress[]): boolean =>
+	!!addresses?.some(address => address.chainType === ChainType.STELLAR);
 
 /**
  * Single source of truth for the Stellar (QR) "sign in for GIVbacks" prompt.
