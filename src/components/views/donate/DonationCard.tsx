@@ -181,15 +181,17 @@ export const DonationCard: FC<IDonationCardProps> = ({
 
 	return (
 		<DonationCardHolder>
-			<DonationCardTabs
-				tab={tab}
-				setTab={setTab}
-				recurringEnabled={Boolean(
-					!disableRecurringDonations &&
-						(hasOpAddress || hasBaseAddress) &&
-						isOwnerOnEVM,
-				)}
-			/>
+			{!isQRDonation && (
+				<DonationCardTabs
+					tab={tab}
+					setTab={setTab}
+					recurringEnabled={Boolean(
+						!disableRecurringDonations &&
+							(hasOpAddress || hasBaseAddress) &&
+							isOwnerOnEVM,
+					)}
+				/>
+			)}
 			<DonationCardWrapper>
 				{tab === ETabs.ONE_TIME && (
 					<DonationCardQFRounds
