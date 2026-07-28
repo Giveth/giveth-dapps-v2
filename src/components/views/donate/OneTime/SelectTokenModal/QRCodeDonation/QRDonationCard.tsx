@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useState } from 'react';
+import React, { FC, useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/router';
 import styled from 'styled-components';
 import {
@@ -17,6 +17,7 @@ import {
 } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
 import { formatUnits } from 'viem';
+import { captureException } from '@sentry/nextjs';
 
 import { ethers } from 'ethers';
 import {
@@ -37,15 +38,16 @@ import {
 } from '@/lib/helpers';
 import { IDonationCardProps } from '../../../DonationCard';
 import QRDonationCardContent from './QRDonationCardContent';
-import { useQRCodeDonation } from '@/hooks/useQRCodeDonation';
+import {
+	clearStoredDraftDonationId,
+	getStoredDraftDonationId,
+	useQRCodeDonation,
+} from '@/hooks/useQRCodeDonation';
 import { useDonateData } from '@/context/donate.context';
 import { AmountInput } from '@/components/AmountInput/AmountInput';
-import StorageLabel from '@/lib/localStorage';
-import InlineToast, { EToastType } from '@/components/toasts/InlineToast';
 import { useAppDispatch, useAppSelector } from '@/features/hooks';
 import { setShowSignWithWallet } from '@/features/modal/modal.slice';
 import { shouldShowGivbacksSignInPrompt } from '@/helpers/qf';
-import { useModalCallback } from '@/hooks/useModalCallback';
 import EligibilityBadges from '@/components/views/donate/common/EligibilityBadges';
 import EstimatedMatchingToast from '../../EstimatedMatchingToast';
 
@@ -72,19 +74,13 @@ export const QRDonationCard: FC<QRDonationCardProps> = ({
 	const router = useRouter();
 	const { isSignedIn, isEnabled } = useAppSelector(state => state.user);
 	const dispatch = useAppDispatch();
-	const [_showDonateModal, setShowDonateModal] = useState(false);
-	const { modalCallback: signInThenDonate } = useModalCallback(() =>
-		setShowDonateModal(true),
-	);
 
 	const {
 		project,
 		selectedQFRound,
 		setQRDonationStatus,
 		setDraftDonationData,
-		setPendingDonationExists,
 		fetchDraftDonation,
-		pendingDonationExists,
 		qrDonationStatus,
 		draftDonationData,
 		draftDonationLoading,
@@ -94,6 +90,7 @@ export const QRDonationCard: FC<QRDonationCardProps> = ({
 		markDraftDonationAsFailed,
 		checkDraftDonationStatus,
 		retrieveDraftDonation,
+		renewExpirationDate,
 	} = useQRCodeDonation(project);
 
 	const { addresses, id, isGivbackEligible } = project;
@@ -101,6 +98,8 @@ export const QRDonationCard: FC<QRDonationCardProps> = ({
 	const [amount, setAmount] = useState(0n);
 	const [usdAmount, setUsdAmount] = useState(0);
 	const [tokenPrice, setTokenPrice] = useState(0);
+	const [isSubmitting, setIsSubmitting] = useState(false);
+	const isSubmittingRef = useRef(false);
 
 	const stellarToken = qrAcceptedTokens.find(
 		token => token.chainType === ChainType.STELLAR,
@@ -126,9 +125,9 @@ export const QRDonationCard: FC<QRDonationCardProps> = ({
 		isSignedIn,
 		isEnabled,
 	});
-	// Signing in requires a wallet, so only offer the click-through when one is
-	// connected (mirrors handleNext, which signs in only when isEnabled). A
-	// wallet-less donor reads the prompt as guidance and uses the header Sign In.
+	// Signing in requires a wallet, so only offer the optional click-through when
+	// one is connected. A wallet-less donor reads the prompt as guidance and can
+	// use the header Sign In. Ignoring either path never blocks QR generation.
 	const canSignIn = isEnabled && !isSignedIn;
 	const openSignIn = () => dispatch(setShowSignWithWallet(true));
 	const handleSignInKeyDown = (e: React.KeyboardEvent) => {
@@ -203,7 +202,6 @@ export const QRDonationCard: FC<QRDonationCardProps> = ({
 			}
 
 			await markDraftDonationAsFailed(draftDonationId);
-			setPendingDonationExists?.(false);
 			setShowQRCode(false);
 
 			await router.push(
@@ -223,36 +221,123 @@ export const QRDonationCard: FC<QRDonationCardProps> = ({
 	};
 
 	const handleNext = async () => {
-		if (isEnabled && !isSignedIn) {
-			signInThenDonate();
-		} else {
-			const draftDonations = localStorage.getItem(
-				StorageLabel.DRAFT_DONATIONS,
-			);
-			const parsedLocalStorageItem = JSON.parse(draftDonations!);
+		if (isSubmittingRef.current) return;
+		isSubmittingRef.current = true;
+		setIsSubmitting(true);
+
+		try {
 			const projectAddress = project.addresses?.find(
 				address => address.chainType === ChainType.STELLAR,
 			);
-			let draftDonationId = parsedLocalStorageItem
-				? parsedLocalStorageItem[projectAddress?.address!]
-				: null;
+			if (!stellarToken?.symbol || !projectAddress?.address) return;
 
-			const retDraftDonation = draftDonationId
-				? await retrieveDraftDonation(Number(draftDonationId))
-				: null;
+			const projectId = Number(id);
+			const requestedAmount = Number(formatAmountToDisplay(amount));
+			let draftDonationId = getStoredDraftDonationId(
+				projectId,
+				projectAddress.address,
+			);
+			let retDraftDonation;
 
-			if (retDraftDonation && retDraftDonation.status === 'pending') {
-				setPendingDonationExists?.(true);
+			if (draftDonationId) {
+				try {
+					retDraftDonation = await retrieveDraftDonation(
+						draftDonationId,
+						{
+							throwOnError: true,
+						},
+					);
+				} catch {
+					showToastError(
+						formatMessage({
+							id: 'label.unable_to_check_pending_donation',
+						}),
+					);
+					return;
+				}
+
+				if (retDraftDonation === null) {
+					clearStoredDraftDonationId(
+						projectId,
+						projectAddress.address,
+					);
+					draftDonationId = undefined;
+				}
+			}
+
+			const belongsToCurrentProject =
+				retDraftDonation?.projectId === projectId;
+			const isPending = retDraftDonation?.status === 'pending';
+			const expiresAt = retDraftDonation?.expiresAt
+				? new Date(retDraftDonation.expiresAt).getTime()
+				: undefined;
+			const isExpired =
+				expiresAt !== undefined &&
+				(!Number.isFinite(expiresAt) || expiresAt <= Date.now());
+			// The stored amount round-trips through the API as a float, so compare
+			// with a tolerance far below the 6-decimal granularity the amount input
+			// exposes — tight enough that two distinct amounts never collide.
+			const amountMatches =
+				Math.abs(Number(retDraftDonation?.amount) - requestedAmount) <
+				1e-9;
+			// Stellar addresses can be shared across projects. Reuse a stored draft
+			// only when it represents exactly the donation the donor just confirmed.
+			const canReuseDraft =
+				belongsToCurrentProject &&
+				isPending &&
+				!isExpired &&
+				amountMatches;
+
+			if (canReuseDraft && retDraftDonation) {
+				const renewedExpirationDate = await renewExpirationDate(
+					retDraftDonation.id,
+				);
+				setDraftDonationData({
+					...retDraftDonation,
+					expiresAt:
+						renewedExpirationDate ?? retDraftDonation.expiresAt,
+				});
+				setQRDonationStatus('waiting');
 			} else {
-				if (!stellarToken?.symbol || !projectAddress?.address) return;
+				if (belongsToCurrentProject && isPending && draftDonationId) {
+					let verifiedDraftDonation;
+					try {
+						verifiedDraftDonation =
+							await checkDraftDonationStatus(draftDonationId);
+					} catch (error) {
+						console.error(
+							'Error verifying draft donation status',
+							error,
+						);
+						captureException(error, {
+							tags: {
+								section: 'QRDonationCard handleNext verify',
+							},
+						});
+						showToastError(
+							formatMessage({
+								id: 'label.unable_to_check_pending_donation',
+							}),
+						);
+						return;
+					}
+
+					if (verifiedDraftDonation?.status === 'matched') {
+						setQRDonationStatus('success');
+						setDraftDonationData(verifiedDraftDonation);
+						return;
+					}
+
+					await markDraftDonationAsFailed(draftDonationId);
+				}
 
 				try {
 					const payload = {
 						walletAddress: projectAddress.address,
-						projectId: Number(id),
-						amount: Number(formatAmountToDisplay(amount)),
+						projectId,
+						amount: requestedAmount,
 						token: stellarToken,
-						anonymous: isSignedIn && isEnabled ? false : true,
+						anonymous: !(isSignedIn && isEnabled),
 						symbol: stellarToken.symbol,
 						setFailedModalType: () => {},
 						useDonationBox: false,
@@ -266,7 +351,6 @@ export const QRDonationCard: FC<QRDonationCardProps> = ({
 					showToastError(error);
 					return;
 				}
-				setPendingDonationExists?.(false);
 			}
 
 			if (draftDonationId) {
@@ -282,6 +366,21 @@ export const QRDonationCard: FC<QRDonationCardProps> = ({
 				);
 			}
 			setShowQRCode(true);
+		} catch (error) {
+			console.error('Error preparing QR donation', error);
+			captureException(error, {
+				tags: {
+					section: 'QRDonationCard handleNext',
+				},
+			});
+			showToastError(
+				formatMessage({
+					id: 'label.something_went_wrong',
+				}),
+			);
+		} finally {
+			isSubmittingRef.current = false;
+			setIsSubmitting(false);
 		}
 	};
 
@@ -336,14 +435,6 @@ export const QRDonationCard: FC<QRDonationCardProps> = ({
 					})}
 				</Title>
 			</CardHead>
-			{pendingDonationExists && (
-				<MarginLessInlineToast
-					type={EToastType.Warning}
-					message={formatMessage({
-						id: 'label.you_already_have_another_pending_donation',
-					})}
-				/>
-			)}
 			{!showQRCode && showGivbacksSignInPrompt && (
 				<ConnectWallet
 					$clickable={canSignIn}
@@ -450,6 +541,8 @@ export const QRDonationCard: FC<QRDonationCardProps> = ({
 									color='primary'
 									icon={<IconArrowRight16 />}
 									onClick={handleNext}
+									loading={isSubmitting}
+									disabled={isSubmitting}
 								/>
 							)}
 						</CardBottom>
@@ -560,8 +653,4 @@ const StyledInputWrapper = styled(InputWrapper)`
 	${mediaQueries.tablet} {
 		flex-direction: row;
 	}
-`;
-
-const MarginLessInlineToast = styled(InlineToast)`
-	margin: 0;
 `;

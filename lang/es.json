@@ -1344,7 +1344,6 @@
 	"label.your_withdrawal_from_this_stream_balance_is_being_processed": "Tu retiro de este saldo de transmisión se está procesando.",
 	"label.your_withdrawal_from_this_stream_balance_was_successful": "Tu retiro de este saldo de transmisión ha sido exitoso.",
 	"label.you_already_completed_your_profile": "¡Ya has completado tu perfil!",
-	"label.you_already_have_another_pending_donation": "Ya tienes otra donación pendiente, por favor dona o vuelve a hacer clic para crear otra con un importe diferente.",
 	"label.you_are_about_to_save_the_changes_you_made": "Estas a punto de guardar los cambios que realizaste a tu distribución de GIVpower. Esto no puede revertirse.",
 	"label.you_are_all_set": "¡Ya está!",
 	"label.you_are_donating": "Estas donando",
@@ -2038,5 +2037,6 @@
 	"label.user.x_twitter_profile_placeholder": "Tu nombre de usuario en X/Twitter",
 	"label.user.telegram_profile": "Usuario de Telegram",
 	"label.user.telegram_profile_placeholder": "Tu nombre de usuario de Telegram",
-	"label.qf.quadratic_funding_is_live": "💜 La Financiación Cuadrática está activa. Haz que tus donaciones se amplifiquen con un fondo de igualación"
+	"label.qf.quadratic_funding_is_live": "💜 La Financiación Cuadrática está activa. Haz que tus donaciones se amplifiquen con un fondo de igualación",
+	"label.unable_to_check_pending_donation": "No se ha podido comprobar tu donación pendiente. Por favor, inténtalo de nuevo."
 }

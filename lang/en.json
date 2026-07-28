@@ -1344,7 +1344,6 @@
 	"label.your_withdrawal_from_this_stream_balance_is_being_processed": "Your withdrawal from this stream balance is being processed.",
 	"label.your_withdrawal_from_this_stream_balance_was_successful": "Your withdrawal from this stream balance was successful.",
 	"label.you_already_completed_your_profile": "You've already completed your profile!",
-	"label.you_already_have_another_pending_donation": "You already have another pending donation. Please complete the donation or click above to set a different amount.",
 	"label.you_are_about_to_save_the_changes_you_made": "You are about to save the changes you made to your GIVpower allocations. This cannot be undone.",
 	"label.you_are_all_set": "You’re all set!",
 	"label.you_are_donating": "You are donating",
@@ -2038,5 +2037,6 @@
 	"label.user.x_twitter_profile_placeholder": "Your X/Twitter username",
 	"label.user.telegram_profile": "Telegram Handle",
 	"label.user.telegram_profile_placeholder": "Your Telegram username",
-	"label.qf.quadratic_funding_is_live": "💜 Quadratic Funding is live. Get your donations amplified by a matching pool"
+	"label.qf.quadratic_funding_is_live": "💜 Quadratic Funding is live. Get your donations amplified by a matching pool",
+	"label.unable_to_check_pending_donation": "Unable to check your pending donation. Please try again."
 }

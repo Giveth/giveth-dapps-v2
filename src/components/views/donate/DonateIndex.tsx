@@ -15,7 +15,6 @@ import { useRouter } from 'next/router';
 import { useAccount } from 'wagmi';
 import SocialBox from '../../DonateSocialBox';
 import useDetectDevice from '@/hooks/useDetectDevice';
-import { useIsSafeEnvironment } from '@/hooks/useSafeAutoConnect';
 import {
 	DonateModalPriorityValues,
 	useDonateData,
@@ -26,17 +25,14 @@ import { Shadow } from '@/components/styled-components/Shadow';
 import { useAppDispatch, useAppSelector } from '@/features/hooks';
 import { setShowHeader } from '@/features/general/general.slice';
 import { DonateHeader } from './DonateHeader';
-import { DonationCard, ETabs } from './DonationCard';
+import { DonationCard } from './DonationCard';
 import { SuccessView } from './SuccessView';
 import { useGeneralWallet } from '@/providers/generalWalletProvider';
 import { client } from '@/apollo/apolloClient';
 import { FETCH_DONATION_BY_ID } from '@/apollo/gql/gqlDonations';
-import { IDonation, IWalletAddress } from '@/apollo/types/types';
+import { IDonation } from '@/apollo/types/types';
 import config from '@/configuration';
 import { ChainType } from '@/types/config';
-import { useQRCodeDonation } from '@/hooks/useQRCodeDonation';
-import { IDraftDonation } from '@/apollo/types/gqlTypes';
-import StorageLabel from '@/lib/localStorage';
 import DonationByProjectOwner from '@/components/modals/DonationByProjectOwner';
 import { isWalletSanctioned } from '@/services/donation';
 import SanctionModal from '@/components/modals/SanctionedModal';
@@ -54,12 +50,8 @@ const DonateIndex: FC = () => {
 		draftDonationData,
 		shouldRenderModal,
 		setSuccessDonation,
-		setQRDonationStatus,
-		setDraftDonationData,
-		setPendingDonationExists,
 		activeStartedRound,
 		selectedQFRound,
-		startTimer,
 		setDonateModalByPriority,
 		setIsModalPriorityChecked,
 		isV6ProjectInActiveQFRound,
@@ -67,34 +59,23 @@ const DonateIndex: FC = () => {
 		showV6ProjectRedirectModal,
 		setShowV6ProjectRedirectModal,
 	} = useDonateData();
-	const { renewExpirationDate, retrieveDraftDonation } =
-		useQRCodeDonation(project);
 	const { isSignedIn, isEnabled } = useAppSelector(state => state.user);
 
 	const alreadyDonated = useAlreadyDonatedToProject(project, selectedQFRound);
 	const { userData } = useAppSelector(state => state.user);
 
 	const dispatch = useAppDispatch();
-	const isSafeEnv = useIsSafeEnvironment();
-	const { isOnSolana } = useGeneralWallet();
 	const router = useRouter();
 	const { chainId } = useAccount();
 	const [showQRCode, setShowQRCode] = React.useState(
 		!!router.query.draft_donation,
 	);
 	const { walletAddress: address } = useGeneralWallet();
-	const [stopTimer, setStopTimer] = React.useState<void | (() => void)>();
-
 	const isQRDonation = router.query.chain === ChainType.STELLAR.toLowerCase();
 	const isStellarIncludedInQF =
 		activeStartedRound?.eligibleNetworks?.includes(
 			config.STELLAR_NETWORK_NUMBER,
 		);
-
-	const isStellarOnlyQF =
-		isQRDonation &&
-		activeStartedRound?.eligibleNetworks?.length === 1 &&
-		isStellarIncludedInQF;
 
 	useEffect(() => {
 		dispatch(setShowHeader(false));
@@ -186,85 +167,12 @@ const DonateIndex: FC = () => {
 		fetchDonation();
 	}, [qrDonationStatus]);
 
-	const isRecurringTab = router.query.tab?.toString() === ETabs.RECURRING;
 	const isOnEligibleNetworks =
 		chainId && activeStartedRound?.eligibleNetworks?.includes(chainId);
 	const isFailedOperation = ['expired', 'failed'].includes(qrDonationStatus);
 	const showAlreadyDonatedWrapper =
 		alreadyDonated &&
 		(isQRDonation ? isStellarIncludedInQF : isOnEligibleNetworks);
-
-	const updateQRCode = async () => {
-		if (!draftDonationData?.id) return;
-
-		const draftDonations = localStorage.getItem(
-			StorageLabel.DRAFT_DONATIONS,
-		);
-
-		const parsedLocalStorageItem = JSON.parse(draftDonations!);
-
-		const projectAddress: IWalletAddress | undefined =
-			project.addresses?.find(
-				address => address.chainType === ChainType.STELLAR,
-			);
-		let draftDonationId = parsedLocalStorageItem
-			? parsedLocalStorageItem[projectAddress?.address!]
-			: null;
-
-		const retDraftDonation = !!draftDonationId
-			? await retrieveDraftDonation(Number(draftDonationId))
-			: null;
-
-		if (retDraftDonation && retDraftDonation.status === 'pending') {
-			setPendingDonationExists?.(true);
-			parsedLocalStorageItem[projectAddress?.address!] =
-				retDraftDonation.id;
-			localStorage.setItem(
-				StorageLabel.DRAFT_DONATIONS,
-				JSON.stringify(parsedLocalStorageItem),
-			);
-			router.push(
-				{
-					query: {
-						...router.query,
-						draft_donation: retDraftDonation.id,
-					},
-				},
-				undefined,
-				{ shallow: true },
-			);
-		} else {
-			const expiresAt = await renewExpirationDate(draftDonationData?.id);
-			setDraftDonationData((prev: IDraftDonation | null) => {
-				if (!prev) return null;
-				return {
-					...prev,
-					status: 'pending',
-					expiresAt: expiresAt?.toString() ?? undefined,
-				};
-			});
-			parsedLocalStorageItem[projectAddress?.address!] =
-				draftDonationData.id;
-			localStorage.setItem(
-				StorageLabel.DRAFT_DONATIONS,
-				JSON.stringify(parsedLocalStorageItem),
-			);
-			setQRDonationStatus('waiting');
-			const stopTimerFun = startTimer?.(new Date(expiresAt!));
-			setStopTimer(() => stopTimerFun);
-		}
-	};
-
-	useEffect(() => {
-		if (!showQRCode) stopTimer?.();
-		else setStopTimer(() => undefined);
-	}, [showQRCode]);
-
-	useEffect(() => {
-		if (qrDonationStatus === 'failed') {
-			stopTimer?.();
-		}
-	}, [qrDonationStatus]);
 
 	return successDonation ? (
 		<>
