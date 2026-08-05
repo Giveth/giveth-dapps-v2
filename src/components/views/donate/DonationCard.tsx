@@ -6,7 +6,7 @@ import {
 	SublineBold,
 	brandColors,
 } from '@giveth/ui-design-system';
-import React, { FC, useState, useEffect } from 'react';
+import React, { FC, useState, useEffect, useRef, useCallback } from 'react';
 import styled, { css } from 'styled-components';
 import { useIntl } from 'react-intl';
 import { useRouter } from 'next/router';
@@ -14,7 +14,6 @@ import { isAddress } from 'viem';
 import { captureException } from '@sentry/nextjs';
 import Image from 'next/image';
 
-import { useAccount } from 'wagmi';
 import { Shadow } from '@/components/styled-components/Shadow';
 import { RecurringDonationCard } from './Recurring/RecurringDonationCard';
 import OneTimeDonationCard from '@/components/views/donate/OneTime/OneTimeDonationCard';
@@ -31,6 +30,13 @@ import {
 } from '@/apollo/types/gqlTypes';
 import { DonationCardTabs } from '@/components/views/donate/DonationCardTabs';
 import { DonationCardQFRounds } from '@/components/views/donate/DonationCardQFRounds/DonationCardQFRounds';
+import {
+	getActiveRound,
+	hasStellarAddress,
+	isStellarOnlyRound,
+} from '@/helpers/qf';
+import { getDonationNetworkId } from '@/helpers/network';
+import { useGeneralWallet } from '@/providers/generalWalletProvider';
 
 export enum ETabs {
 	ONE_TIME = 'one-time',
@@ -47,7 +53,10 @@ export const DonationCard: FC<IDonationCardProps> = ({
 	setShowQRCode,
 }) => {
 	const router = useRouter();
-	const { chainId } = useAccount();
+	const { chain, walletChainType } = useGeneralWallet();
+	// Resolved for EVM and Solana wallets alike, so QF round selection and
+	// smart select work for both.
+	const chainId = getDonationNetworkId(chain, walletChainType);
 	const [tab, setTab] = useState(
 		router.query.tab === ETabs.RECURRING ? ETabs.RECURRING : ETabs.ONE_TIME,
 	);
@@ -89,11 +98,12 @@ export const DonationCard: FC<IDonationCardProps> = ({
 
 	const disableRecurringDonations = organization?.disableRecurringDonations;
 
-	const hasStellarAddress = addresses?.some(
-		address => address.chainType === ChainType.STELLAR,
-	);
+	const projectHasStellarAddress = hasStellarAddress(addresses);
 
-	const handleQRDonation = () => {
+	// Memoized: passed down as onStellarDonation, where a fresh identity
+	// each render would re-trigger the round-selection effect and revert
+	// manual round picks in the regular flow.
+	const handleQRDonation = useCallback(() => {
 		setIsQRDonation(true);
 		router.push(
 			{
@@ -105,7 +115,33 @@ export const DonationCard: FC<IDonationCardProps> = ({
 			undefined,
 			{ shallow: true },
 		);
-	};
+	}, [router]);
+
+	// Auto-switch to the Stellar (QR) flow when the active round is
+	// Stellar-only and the project accepts Stellar donations, so entry
+	// points without round data (e.g. project cards) still land on the
+	// right flow. Decided once, as soon as any rounds are available, so the
+	// QR flow's back button can opt out of it without being re-triggered.
+	const didEvaluateStellarAutoSwitch = useRef(false);
+	useEffect(() => {
+		if (
+			!router.isReady ||
+			didEvaluateStellarAutoSwitch.current ||
+			!project.qfRounds?.length
+		)
+			return;
+		didEvaluateStellarAutoSwitch.current = true;
+		const { activeStartedRound } = getActiveRound(project.qfRounds);
+		if (
+			!router.query.chain &&
+			router.query.tab !== ETabs.RECURRING &&
+			isStellarOnlyRound(activeStartedRound) &&
+			projectHasStellarAddress
+		) {
+			handleQRDonation();
+		}
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [project.qfRounds, router.isReady]);
 
 	useEffect(() => {
 		client
@@ -145,15 +181,17 @@ export const DonationCard: FC<IDonationCardProps> = ({
 
 	return (
 		<DonationCardHolder>
-			<DonationCardTabs
-				tab={tab}
-				setTab={setTab}
-				recurringEnabled={Boolean(
-					!disableRecurringDonations &&
-						(hasOpAddress || hasBaseAddress) &&
-						isOwnerOnEVM,
-				)}
-			/>
+			{!isQRDonation && (
+				<DonationCardTabs
+					tab={tab}
+					setTab={setTab}
+					recurringEnabled={Boolean(
+						!disableRecurringDonations &&
+							(hasOpAddress || hasBaseAddress) &&
+							isOwnerOnEVM,
+					)}
+				/>
+			)}
 			<DonationCardWrapper>
 				{tab === ETabs.ONE_TIME && (
 					<DonationCardQFRounds
@@ -164,6 +202,7 @@ export const DonationCard: FC<IDonationCardProps> = ({
 						choosedModalRound={choosedModalRound}
 						setChoosedModalRound={setChoosedModalRound}
 						isQRDonation={isQRDonation}
+						onStellarDonation={handleQRDonation}
 					/>
 				)}
 				{!isQRDonation ? (
@@ -185,7 +224,7 @@ export const DonationCard: FC<IDonationCardProps> = ({
 								<RecurringDonationCard />
 							)}
 						</TabWrapper>
-						{hasStellarAddress && (
+						{projectHasStellarAddress && (
 							<QRToastLink onClick={handleQRDonation}>
 								<Image
 									src='/images/logo/stellar.svg'

@@ -19,13 +19,27 @@ import { device } from '@/lib/constants/constants';
 import { formatDonation } from '@/helpers/number';
 import { IProject } from '@/apollo/types/types';
 import { useDonateData } from '@/context/donate.context';
+import { useProjectContext } from '@/context/project.context';
 import { ORGANIZATION } from '@/lib/constants/organizations';
 import links from '@/lib/constants/links';
 import { EProjectType } from '@/apollo/types/gqlEnums';
+import QFSection from './QFSection';
 
 interface IDonateSectionProps {
 	projectData?: IProject;
 }
+
+// Single source of truth for picking the donate section on project and
+// cause pages: the QF variant (estimated matching + eligible networks)
+// during an active started round, the regular one otherwise.
+export const DonateSectionSwitcher = () => {
+	const { hasActiveQFRound, projectData } = useProjectContext();
+	return hasActiveQFRound ? (
+		<QFSection projectData={projectData} />
+	) : (
+		<DonateSection projectData={projectData} />
+	);
+};
 
 export const DonateSection: FC<IDonateSectionProps> = ({ projectData }) => {
 	const { formatMessage, locale } = useIntl();

@@ -34,6 +34,7 @@ import {
 import { IDonationsByProjectIdGQL } from '@/apollo/types/gqlTypes';
 import { FETCH_PROJECT_DONATIONS_COUNT } from '@/apollo/gql/gqlDonations';
 import { hasActiveRound } from '@/helpers/qf';
+import { fetchProjectQfRounds } from '@/helpers/projects';
 import { getGIVpowerBalanceByAddress } from '@/services/givpower';
 import { setShowSignWithWallet } from '@/features/modal/modal.slice';
 
@@ -118,6 +119,26 @@ export const ProjectProvider = ({
 	const isAdminEmailVerified = !!(isAdmin && user?.isEmailVerified);
 
 	const hasActiveQFRound = hasActiveRound(projectData?.qfRounds);
+
+	// The single project query skips the heavy qfRounds subquery, so attach
+	// the active rounds with the lighter projectQfRounds query whenever
+	// projectData is missing them (on mount and after client-side refetches).
+	useEffect(() => {
+		const projectId = projectData?.id;
+		if (!projectId || projectData?.qfRounds) return;
+		let ignore = false;
+		fetchProjectQfRounds(projectId, true).then(qfRounds => {
+			if (ignore) return;
+			setProjectData(prev =>
+				prev && prev.id === projectId && !prev.qfRounds
+					? { ...prev, qfRounds }
+					: prev,
+			);
+		});
+		return () => {
+			ignore = true;
+		};
+	}, [projectData?.id, projectData?.qfRounds]);
 
 	const fetchProjectBySlug = useCallback(async () => {
 		setIsLoading(true);

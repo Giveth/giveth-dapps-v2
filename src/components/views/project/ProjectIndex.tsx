@@ -26,7 +26,10 @@ import { IProjectBySlug } from '@/apollo/types/gqlTypes';
 import InlineToast, { EToastType } from '@/components/toasts/InlineToast';
 import SimilarProjects from '@/components/views/project/SimilarProjects';
 import { isSSRMode } from '@/lib/helpers';
-import { idToProjectEdit } from '@/lib/routeCreators';
+import {
+	idToProjectEdit,
+	slugToProjectDonateStellar,
+} from '@/lib/routeCreators';
 import { ProjectMeta } from '@/components/Metatag';
 import ProjectGIVPowerIndex from '@/components/views/project/projectGIVPower';
 import { useProjectContext } from '@/context/project.context';
@@ -36,13 +39,12 @@ import ProjectCategoriesBadges from './ProjectCategoriesBadges';
 import ProjectGIVbackToast from '@/components/views/project/ProjectGIVbackToast';
 import useMediaQuery from '@/hooks/useMediaQuery';
 import { device, mediaQueries } from '@/lib/constants/constants';
-import { DonateSection } from './projectActionCard/DonationSection';
+import { DonateSectionSwitcher } from './projectActionCard/DonationSection';
 import { ProjectStats } from './projectActionCard/ProjectStats';
 import { AdminActions } from './projectActionCard/AdminActions';
 import ProjectOwnerBanner from './ProjectOwnerBanner';
 import ProjectSocials from './ProjectSocials';
 import ProjectDevouchBox from './ProjectDevouchBox';
-import Routes from '@/lib/constants/Routes';
 import { ChainType } from '@/types/config';
 import { useAppSelector } from '@/features/hooks';
 import { EndaomentProjectsInfo } from '@/components/views/project/EndaomentProjectsInfo';
@@ -204,9 +206,7 @@ const ProjectIndex: FC<IProjectBySlug> = () => {
 									</P>
 								</ToastText>
 							</Flex>
-							<Link
-								href={Routes.Donate + `/${slug}?chain=stellar`}
-							>
+							<Link href={slugToProjectDonateStellar(slug)}>
 								<LinkItem color={brandColors.giv[300]}>
 									{formatMessage({
 										id: 'page.project.donate_with_stellar',
@@ -232,7 +232,7 @@ const ProjectIndex: FC<IProjectBySlug> = () => {
 						)}
 						{isMobile && (
 							<MobileContainer $hasActiveRound={hasActiveQFRound}>
-								<DonateSection projectData={projectData} />
+								<DonateSectionSwitcher />
 							</MobileContainer>
 						)}
 						<ProjectGIVbackToast />

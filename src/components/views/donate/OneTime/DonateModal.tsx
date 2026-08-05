@@ -33,6 +33,7 @@ import { TxHashWithChainType, useDonateData } from '@/context/donate.context';
 import { useCreateEvmDonation } from '@/hooks/useCreateEvmDonation';
 import { useGeneralWallet } from '@/providers/generalWalletProvider';
 import { ChainType } from '@/types/config';
+import { getDonationNetworkId } from '@/helpers/network';
 import { IProject, IWalletAddress } from '@/apollo/types/types';
 import { useCreateSolanaDonation } from '@/hooks/useCreateSolanaDonation';
 import { useTokenPrice } from '@/hooks/useTokenPrice';
@@ -127,9 +128,12 @@ const DonateModal: FC<IDonateModalProps> = props => {
 
 	const tokenPrice = useTokenPrice(token);
 
-	const isOnEligibleNetworks = selectedQFRound?.eligibleNetworks?.includes(
-		(chain as Chain).id,
-	);
+	// EVM wallets have a numeric chain id; Solana wallets resolve to the
+	// configured Solana network id.
+	const donationNetworkId = getDonationNetworkId(chain, walletChainType);
+	const isOnEligibleNetworks =
+		!!donationNetworkId &&
+		selectedQFRound?.eligibleNetworks?.includes(donationNetworkId);
 	const includeInQF = selectedQFRound && isOnEligibleNetworks;
 	const chainvineReferred = getWithExpiry(StorageLabel.CHAINVINEREFERRED);
 	const { title, addresses } = project || {};
@@ -226,9 +230,12 @@ const DonateModal: FC<IDonateModalProps> = props => {
 			setFailedModalType,
 			symbol: token.symbol,
 			useDonationBox: isDonatingToGiveth,
-			qfRoundId: selectedQFRound?.id
-				? Number(selectedQFRound?.id)
-				: undefined,
+			// Only associate the donation with the round when the connected
+			// network is eligible for matching in it.
+			qfRoundId:
+				includeInQF && selectedQFRound?.id
+					? Number(selectedQFRound.id)
+					: undefined,
 		})
 			.then(({ isSaved, txHash: firstHash }) => {
 				if (!firstHash) {
