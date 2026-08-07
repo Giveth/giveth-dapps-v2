@@ -63,7 +63,7 @@ export const ActiveStyledCol = styled(Col)`
 
 export const Title = styled(H1)`
 	margin-top: 32px;
-	color: ${neutralColors.gray[100]};
+	color: ${neutralColors.gray[900]};
 `;
 
 export const Desc = styled(Flex)`
