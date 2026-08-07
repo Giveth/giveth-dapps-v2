@@ -70,7 +70,14 @@ export const ClaimRecurringItem = ({
 						6,
 					)} 
                     ${tokenWithBalance.token.underlyingToken?.symbol} ~
-                    ${formatDonation(allTokensUsd[symbol]!)}
+                    ${formatDonation(
+						allTokensUsd[symbol]!,
+						'',
+						undefined,
+						undefined,
+						undefined,
+						true,
+					)}
                     USD
                 `}
 				</B>

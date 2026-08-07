@@ -23,9 +23,14 @@ const ClaimWithdrawalItem = ({
 				{`${limitFraction(
 					utils.formatUnits(stream.balance, stream.token.decimals),
 					6,
-				)} ${
-					stream.token.underlyingToken?.symbol
-				} ~ ${formatDonation(balanceInUsd)} USD`}
+				)} ${stream.token.underlyingToken?.symbol} ~ ${formatDonation(
+					balanceInUsd,
+					'',
+					undefined,
+					undefined,
+					undefined,
+					true,
+				)} USD`}
 			</B>
 		</Container>
 	);

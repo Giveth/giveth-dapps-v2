@@ -99,7 +99,10 @@ export const ActiveQFProjectsBanner = ({
 			<Container>
 				<ActiveStyledRow>
 					<ActiveStyledCol xs={12} md={6}>
-						<TitleWrapper weight={700}>
+						<TitleWrapper
+							weight={700}
+							color={neutralColors.gray[900]}
+						>
 							{currentRound ? currentRound.name : null}
 						</TitleWrapper>
 						{(state === ERoundStatus.NOT_STARTED ||

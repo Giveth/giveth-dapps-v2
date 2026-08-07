@@ -7,7 +7,7 @@ import {
 	neutralColors,
 	Flex,
 } from '@giveth/ui-design-system';
-import { shortenAddress } from '@/lib/helpers';
+import { formatUSD, shortenAddress } from '@/lib/helpers';
 import { Shadow } from '@/components/styled-components/Shadow';
 import ExternalLink from '@/components/ExternalLink';
 import { slugToProjectView } from '@/lib/routeCreators';
@@ -35,7 +35,7 @@ const DonationCard: FC<IDonationCard> = props => {
 					<Section>
 						<B>{'@' + shortenAddress(address?.toLowerCase())}</B>
 						<div>donated</div>
-						<Amount>{'~$' + amount.toFixed(1)}</Amount>
+						<Amount>{'~$' + formatUSD(amount)}</Amount>
 					</Section>
 					<Section>
 						<Arrow>

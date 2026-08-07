@@ -1,7 +1,7 @@
 import BigNumber from 'bignumber.js';
 import { formatEther, formatUnits } from 'viem';
 import config from '@/configuration';
-import { truncateToDecimalPlaces } from '@/lib/helpers';
+import { truncateToDecimalPlaces, usdFractionDigits } from '@/lib/helpers';
 
 export const Zero = new BigNumber(0);
 
@@ -56,6 +56,9 @@ export const formatDonation = (
 	local: Intl.LocalesArgument = 'en-US',
 	rounded: boolean = false,
 	maximumFractionDigits: number = 2,
+	// A '$' symbol means the amount is USD. Amounts labelled with a 'USD' suffix
+	// instead of a '$' prefix have to opt in so they get the same 2 decimals.
+	isUSD: boolean = symbol === '$',
 ): string => {
 	if (amount === '<0.000001') {
 		return '< 0.01';
@@ -69,9 +72,17 @@ export const formatDonation = (
 			: `${symbol}${threshold.toString().replace('1', '0')}`;
 	}
 	if (num < threshold) return `< ${symbol}${threshold}`;
-	return !rounded
-		? symbol + num.toLocaleString(local, { maximumFractionDigits })
-		: symbol + Math.round(num).toLocaleString(local);
+	if (rounded) return symbol + Math.round(num).toLocaleString(local);
+	// USD amounts always show 2 decimals when they aren't a whole amount
+	return (
+		symbol +
+		num.toLocaleString(
+			local,
+			isUSD
+				? usdFractionDigits(num, maximumFractionDigits)
+				: { maximumFractionDigits },
+		)
+	);
 };
 
 export function limitFraction(

@@ -13,8 +13,10 @@ import {
 import React, { FC, MouseEventHandler, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { useIntl } from 'react-intl';
+import { formatEther } from 'viem';
 import { IconGIV } from './Icons/GIV';
 import { formatWeiHelper } from '@/helpers/number';
+import { formatUSD } from '@/lib/helpers';
 import { WhatIsStreamModal } from '@/components/modals/WhatIsStream';
 import useGIVTokenDistroHelper from '@/hooks/useGIVTokenDistroHelper';
 
@@ -110,7 +112,7 @@ export const RewardCard: FC<IRewardCardProps> = ({
 							<AmountUnit>{rewardTokenSymbol}</AmountUnit>
 						</AmountInfo>
 						<Converted>
-							~${formatWeiHelper(usdAmount.toString())}
+							~${formatUSD(formatEther(usdAmount))}
 						</Converted>
 						<RateInfo $alignItems='center' gap='8px'>
 							<IconGIVStream size={24} />

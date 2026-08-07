@@ -239,7 +239,7 @@ const DonationStatusSection: FC<TDonationStatusSectionProps> = ({
 					<Label>{formatMessage({ id: 'label.amount' })}</Label>
 					<FlexWrap $alignItems='center' gap='8px'>
 						<B>{draftDonationData?.amount}</B>
-						<UsdAmountCard>$ {usdAmount}</UsdAmountCard>
+						<UsdAmountCard>{usdAmount}</UsdAmountCard>
 						<TokenSymbol>
 							<TokenIcon
 								symbol={
