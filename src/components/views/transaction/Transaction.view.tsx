@@ -13,7 +13,7 @@ import {
 	FETCH_DRAFT_DONATION,
 } from '@/apollo/gql/gqlDonations';
 import { FETCH_PROJECT_BY_ID } from '@/apollo/gql/gqlProjects';
-import { formatBalance } from '@/lib/helpers';
+import { formatDonation } from '@/helpers/number';
 import config from '@/configuration';
 import { ChainType } from '@/types/config';
 import { fetchPriceWithCoingeckoId } from '@/services/token';
@@ -28,13 +28,13 @@ const TransactionView = () => {
 	const [draftDonationData, setDraftDonationData] =
 		useState<IDraftDonation | null>(null);
 	const [donationData, setDonationData] = useState<any>(null);
-	const [usdAmount, setUsdAmount] = useState<string>('0.00');
+	const [usdAmount, setUsdAmount] = useState<string>('$0.00');
 	const [isLoading, setIsLoading] = useState<boolean>(true);
 
 	const calculateUsdAmount = useCallback(
 		(tokenPrice?: number, amount?: number): string => {
-			if (!tokenPrice || !amount) return '0.00';
-			return formatBalance(amount * tokenPrice);
+			if (!tokenPrice || !amount) return '$0.00';
+			return formatDonation(amount * tokenPrice, '$');
 		},
 		[],
 	);
@@ -89,7 +89,7 @@ const TransactionView = () => {
 					fetchPolicy: 'no-cache',
 				});
 				setDonationData(donationById);
-				setUsdAmount(formatBalance(donationById.valueUsd));
+				setUsdAmount(formatDonation(donationById.valueUsd, '$'));
 			} else {
 				setUsdAmount(
 					calculateUsdAmount(

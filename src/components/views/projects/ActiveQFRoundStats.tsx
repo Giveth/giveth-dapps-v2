@@ -38,6 +38,12 @@ export const ActiveQFRoundStats = ({ qfRound }: { qfRound?: IQFRound }) => {
 		variables: { slug: currentRound?.slug },
 	});
 
+	const matchingPool = allocatedFundUSDPreferred
+		? allocatedFundUSD != null
+			? formatUSD(allocatedFundUSD)
+			: undefined
+		: thousandsSeparator(allocatedFund);
+
 	return (
 		<Wrapper>
 			<InfoSection $started={isRoundStarted}>
@@ -47,11 +53,7 @@ export const ActiveQFRoundStats = ({ qfRound }: { qfRound?: IQFRound }) => {
 					</ItemTitle>
 					<ItemValue weight={500}>
 						{allocatedFundUSDPreferred && '$'}
-						{thousandsSeparator(
-							allocatedFundUSDPreferred
-								? allocatedFundUSD
-								: allocatedFund,
-						) || ' --'}{' '}
+						{matchingPool || ' --'}{' '}
 						{!allocatedFundUSDPreferred && allocatedTokenSymbol}
 					</ItemValue>
 				</ItemContainer>

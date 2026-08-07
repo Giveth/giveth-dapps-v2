@@ -20,7 +20,7 @@ import { TokenIcon } from '../../../TokenIcon/TokenIcon';
 import config from '@/configuration';
 import { ChainType } from '@/types/config';
 import { fetchPriceWithCoingeckoId } from '@/services/token';
-import { formatBalance } from '@/lib/helpers';
+import { formatDonation } from '@/helpers/number';
 import links from '@/lib/constants/links';
 import Routes from '@/lib/constants/Routes';
 import { useQRCodeDonation } from '@/hooks/useQRCodeDonation';
@@ -51,10 +51,10 @@ const QRDonationDetails = () => {
 
 	const convertToUSD = (amount: number) => {
 		if (!amount) return '--';
-		if (!tokenPrice) return '0.00';
+		if (!tokenPrice) return '$0.00';
 
 		const amountInUsd = tokenPrice * amount;
-		return formatBalance(amountInUsd);
+		return formatDonation(amountInUsd, '$');
 	};
 
 	const isFailedOperation = ['expired', 'failed'].includes(qrDonationStatus);
@@ -160,7 +160,7 @@ const QRDonationDetails = () => {
 					<FlexWrap $alignItems='center' gap='8px'>
 						<B>{draftDonationData?.amount ?? '--'}</B>
 						<UsdAmountCard>
-							$ {convertToUSD(draftDonationData?.amount!)}
+							{convertToUSD(draftDonationData?.amount!)}
 						</UsdAmountCard>
 						<Flex gap='8px' $alignItems='center'>
 							<TokenIcon

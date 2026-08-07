@@ -284,6 +284,9 @@ const ProjectItem: FC<IProjectItem> = props => {
 										project.ownerTotalEarnedUsdValue || 0,
 										'',
 										locale,
+										undefined,
+										undefined,
+										true,
 									)}
 									USD
 								</span>

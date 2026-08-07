@@ -128,10 +128,7 @@ const QRDonationCardContent: FC<IQRDonationCardContentProps> = ({
 				<AmountWrapper>
 					<Flex $alignItems='center' gap='2px'>
 						<B>{amount ?? '--'}</B>
-						<UsdAmountCard>
-							{' '}
-							{usdAmount ? `$ ${usdAmount}` : '--'}
-						</UsdAmountCard>
+						<UsdAmountCard> {usdAmount || '--'}</UsdAmountCard>
 						<IconArrowRight size={20} />
 					</Flex>
 					<Flex $alignItems='center' gap='2px'>

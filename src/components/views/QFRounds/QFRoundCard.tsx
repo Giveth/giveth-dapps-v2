@@ -13,7 +13,7 @@ import {
 } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
 import Link from 'next/link';
-import { thousandsSeparator, truncateText } from '@/lib/helpers';
+import { formatUSD, thousandsSeparator, truncateText } from '@/lib/helpers';
 
 type Layout = 'horizontal' | 'grid';
 
@@ -48,6 +48,12 @@ export default function QFRoundCard({
 }: QFRoundCardProps) {
 	const { formatMessage } = useIntl();
 
+	const matchingPool = allocatedFundUSDPreferred
+		? allocatedFundUSD != null
+			? formatUSD(allocatedFundUSD)
+			: undefined
+		: thousandsSeparator(allocatedFund);
+
 	return (
 		<Card $layout={layout}>
 			{layout === 'horizontal' ? (
@@ -77,11 +83,7 @@ export default function QFRoundCard({
 									<Chip $layout={layout}>
 										<span>
 											{allocatedFundUSDPreferred && '$'}
-											{thousandsSeparator(
-												allocatedFundUSDPreferred
-													? allocatedFundUSD
-													: allocatedFund,
-											) || ' --'}{' '}
+											{matchingPool || ' --'}{' '}
 											{!allocatedFundUSDPreferred &&
 												allocatedTokenSymbol}
 										</span>
@@ -146,11 +148,7 @@ export default function QFRoundCard({
 									<Chip $layout={layout}>
 										<span>
 											{allocatedFundUSDPreferred && '$'}
-											{thousandsSeparator(
-												allocatedFundUSDPreferred
-													? allocatedFundUSD
-													: allocatedFund,
-											) || ' --'}{' '}
+											{matchingPool || ' --'}{' '}
 											{!allocatedFundUSDPreferred &&
 												allocatedTokenSymbol}
 										</span>
