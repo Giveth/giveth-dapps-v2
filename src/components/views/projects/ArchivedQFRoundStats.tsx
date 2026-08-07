@@ -32,6 +32,12 @@ export const ArchivedQFRoundStats = () => {
 		allocatedTokenSymbol,
 	} = qfRound || {};
 
+	const matchingPool = allocatedFundUSDPreferred
+		? allocatedFundUSD != null
+			? formatUSD(allocatedFundUSD)
+			: undefined
+		: thousandsSeparator(allocatedFund);
+
 	return (
 		<Wrapper>
 			<Smile src='/images/arc3.svg' width={70} height={100} alt='arc' />
@@ -45,11 +51,7 @@ export const ArchivedQFRoundStats = () => {
 					</ItemTitle>
 					<ItemValue>
 						{allocatedFundUSDPreferred && '$'}
-						{thousandsSeparator(
-							allocatedFundUSDPreferred
-								? allocatedFundUSD
-								: allocatedFund,
-						) || ' --'}{' '}
+						{matchingPool || ' --'}{' '}
 						{!allocatedFundUSDPreferred && allocatedTokenSymbol}
 					</ItemValue>
 				</ItemContainer>

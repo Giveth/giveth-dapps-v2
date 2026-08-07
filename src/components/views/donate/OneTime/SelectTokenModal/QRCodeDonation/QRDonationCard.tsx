@@ -31,11 +31,8 @@ import { IProjectAcceptedToken } from '@/apollo/types/gqlTypes';
 import { fetchPriceWithCoingeckoId } from '@/services/token';
 import { ChainType } from '@/types/config';
 import config from '@/configuration';
-import {
-	truncateToDecimalPlaces,
-	formatBalance,
-	showToastError,
-} from '@/lib/helpers';
+import { truncateToDecimalPlaces, showToastError } from '@/lib/helpers';
+import { formatDonation } from '@/helpers/number';
 import { IDonationCardProps } from '../../../DonationCard';
 import QRDonationCardContent from './QRDonationCardContent';
 import {
@@ -385,9 +382,9 @@ export const QRDonationCard: FC<QRDonationCardProps> = ({
 	};
 
 	const calculateUsdAmount = (amount?: number) => {
-		if (!tokenPrice || !amount) return '0.00';
+		if (!tokenPrice || !amount) return '$0.00';
 
-		return formatBalance(amount * tokenPrice);
+		return formatDonation(amount * tokenPrice, '$');
 	};
 
 	useEffect(() => {
@@ -498,7 +495,7 @@ export const QRDonationCard: FC<QRDonationCardProps> = ({
 							<QRDonationInput>
 								<Input amount={amount} setAmount={setAmount} />
 								<UsdAmountCard>
-									$ {usdAmount.toFixed(2)}
+									{formatDonation(usdAmount, '$')}
 								</UsdAmountCard>
 							</QRDonationInput>
 						</StyledInputWrapper>

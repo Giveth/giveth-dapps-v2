@@ -38,17 +38,29 @@ const locales = process.env.locales;
 
 export const fullPath = (path: string) => `${config.FRONTEND_LINK}${path}`;
 
-export const formatBalance = (balance?: string | number) => {
-	return parseFloat(String(balance || 0)).toLocaleString('en-US', {
-		maximumFractionDigits: 6,
-		minimumFractionDigits: 2,
-	});
+/**
+ * USD amounts are never shown with a partial decimal: when there is any
+ * fractional part it's displayed with exactly 2 decimals (2.6 -> 2.60), while
+ * whole amounts stay whole (4000 -> 4,000).
+ */
+export const usdFractionDigits = (
+	amount: number,
+	maximumFractionDigits = 2,
+): Intl.NumberFormatOptions => {
+	const hasDecimals = !Number.isInteger(
+		Number(amount.toFixed(maximumFractionDigits)),
+	);
+	return {
+		maximumFractionDigits,
+		minimumFractionDigits: hasDecimals
+			? Math.min(2, maximumFractionDigits)
+			: 0,
+	};
 };
 
 export const formatUSD = (balance?: string | number, decimals = 2) => {
-	return parseFloat(String(balance || 0)).toLocaleString('en-US', {
-		maximumFractionDigits: decimals,
-	});
+	const amount = parseFloat(String(balance || 0));
+	return amount.toLocaleString('en-US', usdFractionDigits(amount, decimals));
 };
 
 export const formatPrice = (balance?: string | number) => {

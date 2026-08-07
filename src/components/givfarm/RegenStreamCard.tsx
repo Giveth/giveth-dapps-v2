@@ -20,7 +20,7 @@ import BigNumber from 'bignumber.js';
 import styled from 'styled-components';
 import { useIntl } from 'react-intl';
 import { useAccount } from 'wagmi';
-import { durationToString } from '@/lib/helpers';
+import { durationToString, formatUSD } from '@/lib/helpers';
 import { Bar, GsPTooltip } from '@/components/GIVeconomyPages/GIVstream.sc';
 import { IconWithTooltip } from '@/components/IconWithToolTip';
 import { RegenStreamConfig, StreamType } from '@/types/config';
@@ -103,11 +103,11 @@ export const RegenStreamCard: FC<RegenStreamProps> = ({ streamConfig }) => {
 		);
 		if (!price || price.isNaN()) return;
 
-		const usd = formatWeiHelper(
-			price.times(rewardLiquidPart.toString()).toFixed(0),
-			2,
-		);
-		setUSDAmount(usd);
+		const usd = price
+			.times(rewardLiquidPart.toString())
+			.div(10 ** 18)
+			.toFixed();
+		setUSDAmount(formatUSD(usd));
 	}, [
 		rewardLiquidPart,
 		chainId,
