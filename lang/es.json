@@ -1,4 +1,4 @@
-{
+﻿{
 	"agriculture": "Agricultura",
 	"air": "Aire",
 	"all": "Todos",
@@ -104,7 +104,7 @@
 	"component.tooltip.donate_privately": "Si seleccionas esto, ocultaremos tu nombre y el enlace de la transacción de donación de la página del proyecto, y no mostraremos esta donación en tu página de perfil público.",
 	"conservation-and-biodiversity": "Conservación y Biodiversidad",
 	"culture": "Cultura",
-	"desci": "Desci",
+	"desci": "DeSci",
 	"education-tech": "Tecnología de la Educación",
 	"employment": "Empleo",
 	"energy": "Energía",
