@@ -223,6 +223,7 @@ export interface EnvConfig {
 	CLASSIC_NETWORK_NUMBER: number;
 	ZKEVM_NETWORK_NUMBER: number;
 	STELLAR_NETWORK_NUMBER: number;
+	ROBINHOOD_NETWORK_NUMBER: number;
 	MAINNET_CONFIG: MainnetNetworkConfig | SepoliaNetworkConfig;
 	GNOSIS_CONFIG: GnosisNetworkConfig;
 	POLYGON_CONFIG: NetworkConfig;
@@ -232,6 +233,7 @@ export interface EnvConfig {
 	BASE_CONFIG: BaseNetworkConfig;
 	ZKEVM_CONFIG: NetworkConfig;
 	CLASSIC_CONFIG: NetworkConfig;
+	ROBINHOOD_CONFIG: NetworkConfig;
 	BACKEND_LINK: string;
 	FRONTEND_LINK: string;
 	V6_FRONTEND_LINK: string;

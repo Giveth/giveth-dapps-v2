@@ -10,7 +10,7 @@ import {
 	polygonZkEvmCardona,
 } from 'wagmi/chains';
 import { WalletAdapterNetwork } from '@solana/wallet-adapter-base';
-import { type Chain } from 'viem';
+import { type Chain, defineChain } from 'viem';
 import {
 	ChainType,
 	EnvConfig,
@@ -31,6 +31,7 @@ import IconZKEVM from '@/components/Icons/ZKEVM';
 import IconArbitrum from '@/components/Icons/Arbitrum';
 import IconStellar from '@/components/Icons/Stellar';
 import { IconClassic } from '@/components/Icons/Classic';
+import IconRobinhood from '@/components/Icons/Robinhood';
 
 const BASE_ROUTE =
 	process.env.NEXT_PUBLIC_BASE_ROUTE ||
@@ -65,6 +66,32 @@ const SOLANA_NETWORK_NUMBER = 103;
 const ARBITRUM_NETWORK_NUMBER = arbitrumSepolia.id;
 const BASE_NETWORK_NUMBER = baseSepolia.id;
 const ZKEVM_NETWORK_NUMBER = polygonZkEvmCardona.id;
+const ROBINHOOD_NETWORK_NUMBER = 46630;
+
+// viem ships a `robinhoodTestnet` definition only after the pinned viem
+// version; defined locally until a routine dependency bump lets us import it.
+const robinhoodTestnet = defineChain({
+	id: ROBINHOOD_NETWORK_NUMBER,
+	name: 'Robinhood Chain Testnet',
+	nativeCurrency: { name: 'Ether', symbol: 'ETH', decimals: 18 },
+	rpcUrls: {
+		default: {
+			http: ['https://rpc.testnet.chain.robinhood.com'],
+		},
+	},
+	blockExplorers: {
+		default: {
+			name: 'Blockscout',
+			url: 'https://explorer.testnet.chain.robinhood.com',
+		},
+	},
+	contracts: {
+		multicall3: {
+			address: '0xca11bde05977b3631167028862be2a173976ca11',
+		},
+	},
+	testnet: true,
+});
 
 const SOLANA_NETWORK: NonEVMChain = {
 	id: SOLANA_NETWORK_NUMBER,
@@ -129,6 +156,7 @@ const EVM_CHAINS = [
 	baseSepolia,
 	classic,
 	polygonZkEvmCardona,
+	robinhoodTestnet,
 ] as readonly [Chain, ...Chain[]];
 
 const NON_EVM_CHAINS: NonEVMChain[] = [STELLAR_NETWORK, SOLANA_NETWORK];
@@ -157,6 +185,7 @@ const config: EnvConfig = {
 	BASE_NETWORK_NUMBER: BASE_NETWORK_NUMBER,
 	ZKEVM_NETWORK_NUMBER: ZKEVM_NETWORK_NUMBER,
 	STELLAR_NETWORK_NUMBER: STELLAR_NETWORK_NUMBER,
+	ROBINHOOD_NETWORK_NUMBER: ROBINHOOD_NETWORK_NUMBER,
 
 	RARIBLE_ADDRESS: 'https://testnet.rarible.com/',
 	MAINNET_CONFIG: {
@@ -544,6 +573,21 @@ const config: EnvConfig = {
 		},
 		chainLogo: (logoSize?: number) => <IconClassic size={logoSize} />,
 		coingeckoChainName: 'ethereum-classic',
+	},
+	ROBINHOOD_CONFIG: {
+		...robinhoodTestnet,
+		chainType: ChainType.EVM,
+		gasPreference: {
+			// Keep it empty for automatic configuration
+		},
+		blockExplorers: {
+			default: {
+				name: 'Blockscout',
+				url: 'https://explorer.testnet.chain.robinhood.com',
+			},
+		},
+		coingeckoChainName: 'robinhood',
+		chainLogo: (logoSize = 24) => <IconRobinhood size={logoSize} />,
 	},
 	STELLAR_CONFIG: {
 		...STELLAR_NETWORK,

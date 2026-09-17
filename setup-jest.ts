@@ -1,7 +1,7 @@
 // @ts-nocheck
 
 import * as matchers from 'jest-extended';
-import '@testing-library/jest-dom/extend-expect';
+import '@testing-library/jest-dom';
 import 'jest-axe/extend-expect';
 
 expect.extend(matchers);

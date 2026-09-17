@@ -27,6 +27,7 @@ const EVM_NETWORKS_CONFIG = {
 	[envConfig.BASE_NETWORK_NUMBER]: envConfig.BASE_CONFIG,
 	[envConfig.CLASSIC_NETWORK_NUMBER]: envConfig.CLASSIC_CONFIG,
 	[envConfig.ZKEVM_NETWORK_NUMBER]: envConfig.ZKEVM_CONFIG,
+	[envConfig.ROBINHOOD_NETWORK_NUMBER]: envConfig.ROBINHOOD_CONFIG,
 };
 
 const NON_EVM_NETWORKS_CONFIG: { [key: string]: NonEVMNetworkConfig } = {};
