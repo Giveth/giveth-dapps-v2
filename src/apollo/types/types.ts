@@ -139,6 +139,7 @@ export enum EProjectsFilter {
 	ACCEPT_FUND_ON_SOLANA = 'AcceptFundOnSolana',
 	ACCEPT_FUND_ON_ZKEVM = 'AcceptFundOnZKEVM',
 	ACCEPT_FUND_ON_STELLAR = 'AcceptFundOnStellar',
+	ACCEPT_FUND_ON_ROBINHOOD = 'AcceptFundOnRobinhood',
 	ACTIVE_QF_ROUND = 'ActiveQfRound',
 }
 
@@ -166,6 +167,7 @@ export enum ECampaignFilterField {
 	AcceptFundOnSolana = 'acceptFundOnSolana',
 	AcceptFundOnZKEVM = 'acceptFundOnZKEVM',
 	AcceptFundOnStellar = 'acceptFundOnStellar',
+	AcceptFundOnRobinhood = 'acceptFundOnRobinhood',
 }
 
 export interface ICampaign {

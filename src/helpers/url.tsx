@@ -102,6 +102,12 @@ export function campaignLinkGenerator(campaign: ICampaign) {
 						EProjectsFilter.ACCEPT_FUND_ON_STELLAR,
 					);
 					break;
+				case ECampaignFilterField.AcceptFundOnRobinhood:
+					params.append(
+						'filter',
+						EProjectsFilter.ACCEPT_FUND_ON_ROBINHOOD,
+					);
+					break;
 				default:
 					break;
 			}

@@ -73,6 +73,10 @@ const fundsFilterProjects = [
 		label: 'Solana',
 		value: EProjectsFilter.ACCEPT_FUND_ON_SOLANA,
 	},
+	{
+		label: 'Robinhood Chain',
+		value: EProjectsFilter.ACCEPT_FUND_ON_ROBINHOOD,
+	},
 ];
 
 const fundsFilterCauses = [
