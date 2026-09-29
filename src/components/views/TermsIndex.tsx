@@ -2,7 +2,7 @@ import Image from 'next/image';
 import styled from 'styled-components';
 import { brandColors, D3, Lead, P } from '@giveth/ui-design-system';
 
-import termsArray from '@/content/Terms';
+import termsArray, { termsEffectiveDate } from '@/content/Terms';
 import FlowerIcon from '/public//images/flower_terms.svg';
 import { mediaQueries } from '@/lib/constants/constants';
 
@@ -27,7 +27,7 @@ const TermsIndex = () => {
 			</FlowerContainer>
 			<Wrapper>
 				<Title>Terms of Use</Title>
-				<Lead>Zug, Switzerland — June 2026</Lead>
+				<Lead>Zug, Switzerland — {termsEffectiveDate}</Lead>
 				<TermsContainer>
 					{termsArray.map(section => (
 						<Section key={section.title}>

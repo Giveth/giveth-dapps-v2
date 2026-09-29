@@ -6,6 +6,9 @@ type TermsSection = {
 	description: (string | string[])[];
 };
 
+// Effective date shown in the /tos page header; update it together with the content.
+export const termsEffectiveDate = 'September 2026';
+
 const termsArray: TermsSection[] = [
 	{
 		title: '1. Introduction',
@@ -43,7 +46,10 @@ const termsArray: TermsSection[] = [
 		description: [
 			`The Platform may directly or indirectly collect and temporarily store personally identifiable information for operational purposes, including for the purpose of identifying blockchain addresses or IP addresses that may indicate use of the Platform from prohibited jurisdictions or by sanctioned persons.`,
 			`We use the information we collect to detect, prevent, and mitigate financial crime and other illicit or harmful activities on the Platform. For these purposes, we may share information with blockchain analytics providers solely to help us promote the safety, security, and integrity of the Platform. We do not retain information any longer than necessary for these purposes.`,
+			`When you use the AI assistant to create a project, your messages and the assistant's replies are stored with our analytics provider, PostHog, so we can analyse and improve the product. Members of the Giveth team can view these conversations. Please do not share information in the assistant that you do not want stored.`,
 			`Please note that when you use the Platform, you are interacting with public blockchain infrastructure, which provides transparency into your transactions. Giveth does not control and is not responsible for any information you make public on the blockchain by taking actions through the Platform.`,
+			`You may request deletion of your account and associated personal information at any time by contacting Giveth support or, where available, by using the account-deletion option in your profile. Upon deletion, personal information such as your name, email address, avatar, and social media links is removed from our systems. Donation records, including blockchain transaction details and amounts, are retained in anonymized form for accounting and statistical purposes.`,
+			`Images you upload to the Platform, such as profile pictures and project images, are published to public decentralized storage (IPFS). Copies of published images may persist on third-party infrastructure and may not be fully removable, even after your account or content is deleted.`,
 		],
 	},
 	{
