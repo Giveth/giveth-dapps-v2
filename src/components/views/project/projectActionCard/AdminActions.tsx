@@ -31,7 +31,10 @@ import { useModalAnimation } from '@/hooks/useModalAnimation';
 import { Modal } from '@/components/modals/Modal';
 import { EVerificationStatus } from '@/apollo/types/types';
 import ClaimRecurringDonationModal from '../../userProfile/projectsTab/ClaimRecurringDonationModal';
-import { findAnchorContractAddress } from '@/helpers/superfluid';
+import {
+	findAnchorContractAddress,
+	hasClaimableAnchorContract,
+} from '@/helpers/superfluid';
 import { ProjectCardNotification } from './ProjectCardNotification';
 import { ProjectEditLockedModal } from '@/components/modals/ProjectEditLockedModal';
 import { useProjectEditLock } from '@/hooks/useProjectEditLock';
@@ -171,7 +174,7 @@ export const AdminActions = () => {
 	};
 
 	(isLegacyMode
-		? (project.anchorContracts?.length ?? 0) > 0
+		? hasClaimableAnchorContract(project.anchorContracts)
 		: anchorContractAddress) && options.push(recurringDonationOption);
 
 	const dropdownStyle = {

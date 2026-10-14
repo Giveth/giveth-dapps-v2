@@ -17,6 +17,7 @@ import { useIntl } from 'react-intl';
 import router from 'next/router';
 import { captureException } from '@sentry/nextjs';
 import { isLegacyMode } from '@/lib/legacy';
+import { hasClaimableAnchorContract } from '@/helpers/superfluid';
 import { EVerificationStatus, IProject } from '@/apollo/types/types';
 import { EProjectStatus, EProjectType } from '@/apollo/types/gqlEnums';
 import { Dropdown, IOption, EOptionType } from '@/components/Dropdown';
@@ -64,8 +65,10 @@ const ProjectActions: FC<IProjectActions> = ({
 	const status = project.status.name;
 	const isCancelled = status === EProjectStatus.CANCEL;
 
-	// Simply check if there's at least one anchor contract
-	const hasAnchorContract = project.anchorContracts?.length > 0;
+	// Only networks the claim modal supports (active Optimism/Base anchor contracts)
+	const hasAnchorContract = hasClaimableAnchorContract(
+		project.anchorContracts,
+	);
 
 	const projectId = project?.id;
 	const isCause = project.projectType === EProjectType.CAUSE;

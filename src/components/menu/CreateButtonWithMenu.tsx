@@ -64,6 +64,7 @@ export const CreateButtonWithMenu: FC<ICreateButtonWithMenu> = ({
 				<StyledCreateButton
 					as='a'
 					href={NEW_GIVETH_URL}
+					aria-label={formatMessage({ id: 'label.button.create' })}
 					$isProjectPage={isProjectPage}
 				>
 					<ButtonContent>

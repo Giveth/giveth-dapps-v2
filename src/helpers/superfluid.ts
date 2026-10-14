@@ -35,3 +35,18 @@ export const findAnchorContractAddress = (
 		contract => contract.isActive && contract.networkId == chainId,
 	)?.address;
 };
+
+// Networks the recurring-donation claim flow supports (see ClaimRecurringDonationModal).
+const CLAIMABLE_NETWORK_IDS = [
+	config.OPTIMISM_NETWORK_NUMBER,
+	config.BASE_NETWORK_NUMBER,
+];
+
+export const hasClaimableAnchorContract = (
+	anchorContracts?: IAnchorContractData[],
+) =>
+	!!anchorContracts?.some(
+		contract =>
+			contract.isActive &&
+			CLAIMABLE_NETWORK_IDS.includes(Number(contract.networkId)),
+	);
