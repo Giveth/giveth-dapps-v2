@@ -1,4 +1,3 @@
-import { isLegacyMode } from '@/lib/legacy';
 import React, { useState, FC, useEffect } from 'react';
 import Image from 'next/image';
 import styled, { keyframes } from 'styled-components';
@@ -14,6 +13,7 @@ import {
 	deviceSize,
 	FlexCenter,
 } from '@giveth/ui-design-system';
+import { isLegacyMode } from '@/lib/legacy';
 import { Shadow } from '@/components/styled-components/Shadow';
 import { EContentType } from '@/lib/constants/shareContent';
 import ShareRewardedModal from '@/components/modals/ShareRewardedModal';

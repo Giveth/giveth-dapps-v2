@@ -1,6 +1,6 @@
-import { isLegacyMode } from '@/lib/legacy';
 import { useEffect } from 'react';
 import { useAccount } from 'wagmi';
+import { isLegacyMode } from '@/lib/legacy';
 import WelcomeModal from '@/components/modals/WelcomeModal';
 import { FirstWelcomeModal } from '@/components/modals/FirstWelcomeModal';
 import { SignWithWalletModal } from '@/components/modals/SignWithWalletModal';

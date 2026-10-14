@@ -1,9 +1,9 @@
-import { isLegacyMode } from '@/lib/legacy';
 import { neutralColors, Col, Row, Flex } from '@giveth/ui-design-system';
 import { FC, useState } from 'react';
 import styled from 'styled-components';
 import { useIntl } from 'react-intl';
 import { useQuery } from '@tanstack/react-query';
+import { isLegacyMode } from '@/lib/legacy';
 import { IUserProfileView } from '../UserProfile.view';
 import NothingToSee from '@/components/views/userProfile/NothingToSee';
 import Pagination from '@/components/Pagination';

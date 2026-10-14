@@ -1,4 +1,3 @@
-import { isLegacyMode } from '@/lib/legacy';
 import { FC, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { useIntl } from 'react-intl';
@@ -17,6 +16,7 @@ import {
 	FlexCenter,
 } from '@giveth/ui-design-system';
 import { useRouter } from 'next/router';
+import { isLegacyMode } from '@/lib/legacy';
 import config from '@/configuration';
 
 import {

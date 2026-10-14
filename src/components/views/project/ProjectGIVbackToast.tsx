@@ -1,4 +1,3 @@
-import { isLegacyMode } from '@/lib/legacy';
 import styled from 'styled-components';
 import {
 	B,
@@ -24,6 +23,7 @@ import { useIntl } from 'react-intl';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import { useWeb3Modal } from '@web3modal/wagmi/react';
+import { isLegacyMode } from '@/lib/legacy';
 import ExternalLink from '@/components/ExternalLink';
 import links from '@/lib/constants/links';
 import { useProjectContext } from '@/context/project.context';

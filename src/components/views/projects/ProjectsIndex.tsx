@@ -1,4 +1,3 @@
-import { isLegacyMode } from '@/lib/legacy';
 // components/ProjectsIndex.tsx
 
 import { Fragment, useCallback, useEffect, useRef, useState } from 'react';
@@ -15,6 +14,7 @@ import { useIntl } from 'react-intl';
 import { captureException } from '@sentry/nextjs';
 import { useInfiniteQuery } from '@tanstack/react-query';
 import styled from 'styled-components';
+import { isLegacyMode } from '@/lib/legacy';
 import ProjectCard from '@/components/project-card/ProjectCard';
 import Routes from '@/lib/constants/Routes';
 import { isUserRegistered, showToastError } from '@/lib/helpers';

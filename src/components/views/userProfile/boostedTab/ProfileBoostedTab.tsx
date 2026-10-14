@@ -1,10 +1,10 @@
-import { isLegacyMode } from '@/lib/legacy';
 import styled from 'styled-components';
 import { FC, useCallback } from 'react';
 import { captureException } from '@sentry/nextjs';
 
 import { Col, Row } from '@giveth/ui-design-system';
 import { useAccount } from 'wagmi';
+import { isLegacyMode } from '@/lib/legacy';
 import { IUserProfileView } from '../UserProfile.view';
 import BoostsTable from './BoostsTable';
 import { IPowerBoosting } from '@/apollo/types/types';

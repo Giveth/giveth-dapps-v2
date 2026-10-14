@@ -1,4 +1,3 @@
-import { isLegacyMode } from '@/lib/legacy';
 import {
 	B,
 	brandColors,
@@ -19,6 +18,7 @@ import { ChangeEvent, FC, useEffect, useState } from 'react';
 import styled, { css } from 'styled-components';
 import BigNumber from 'bignumber.js';
 import Link from 'next/link';
+import { isLegacyMode } from '@/lib/legacy';
 
 import {
 	RowWrapper,

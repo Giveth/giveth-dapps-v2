@@ -1,4 +1,3 @@
-import { isLegacyMode } from '@/lib/legacy';
 import {
 	IconArchiving,
 	IconArrowDownCircle16,
@@ -17,6 +16,7 @@ import { Dispatch, type FC, SetStateAction, useState } from 'react';
 import { useIntl } from 'react-intl';
 import router from 'next/router';
 import { captureException } from '@sentry/nextjs';
+import { isLegacyMode } from '@/lib/legacy';
 import { EVerificationStatus, IProject } from '@/apollo/types/types';
 import { EProjectStatus, EProjectType } from '@/apollo/types/gqlEnums';
 import { Dropdown, IOption, EOptionType } from '@/components/Dropdown';

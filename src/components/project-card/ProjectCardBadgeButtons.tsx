@@ -1,4 +1,3 @@
-import { isLegacyMode } from '@/lib/legacy';
 import { FC, useState } from 'react';
 import {
 	brandColors,
@@ -9,6 +8,7 @@ import {
 } from '@giveth/ui-design-system';
 import styled, { css } from 'styled-components';
 import { useWeb3Modal } from '@web3modal/wagmi/react';
+import { isLegacyMode } from '@/lib/legacy';
 import { IProject } from '@/apollo/types/types';
 import { useAppSelector } from '@/features/hooks';
 import { useModalCallback } from '@/hooks/useModalCallback';

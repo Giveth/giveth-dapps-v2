@@ -1,4 +1,3 @@
-import { isLegacyMode } from '@/lib/legacy';
 import styled from 'styled-components';
 import {
 	ButtonLink,
@@ -10,6 +9,7 @@ import { useIntl } from 'react-intl';
 import Link from 'next/link';
 import { FC } from 'react';
 import { useAccount } from 'wagmi';
+import { isLegacyMode } from '@/lib/legacy';
 import Routes from '@/lib/constants/Routes';
 import { getTotalGIVpower } from '@/helpers/givpower';
 import { useFetchSubgraphDataForAllChains } from '@/hooks/useFetchSubgraphDataForAllChains';

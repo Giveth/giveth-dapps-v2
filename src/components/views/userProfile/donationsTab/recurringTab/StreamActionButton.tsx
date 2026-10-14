@@ -1,4 +1,3 @@
-import { isLegacyMode } from '@/lib/legacy';
 import {
 	IconArchive16,
 	IconEdit16,
@@ -10,6 +9,7 @@ import { type FC, useState } from 'react';
 import { useIntl } from 'react-intl';
 import { useRouter } from 'next/router';
 import { useAccount, useSwitchChain } from 'wagmi';
+import { isLegacyMode } from '@/lib/legacy';
 import { Dropdown, EOptionType, IOption } from '@/components/Dropdown';
 import { capitalizeAllWords } from '@/lib/helpers';
 import { ModifyStreamModal } from './ModifyStreamModal/ModifyStreamModal';

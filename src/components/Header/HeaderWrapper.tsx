@@ -1,9 +1,9 @@
-import { isLegacyMode } from '@/lib/legacy';
 import dynamic from 'next/dynamic';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useState } from 'react';
 import { Flex } from '@giveth/ui-design-system';
+import { isLegacyMode } from '@/lib/legacy';
 import { useAppSelector } from '@/features/hooks';
 import {
 	HeaderLink,

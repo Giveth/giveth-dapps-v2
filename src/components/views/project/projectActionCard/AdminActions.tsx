@@ -1,4 +1,3 @@
-import { isLegacyMode } from '@/lib/legacy';
 import {
 	IconArchiving,
 	IconChevronDown24,
@@ -17,6 +16,7 @@ import { useIntl } from 'react-intl';
 import { useRouter } from 'next/router';
 import styled from 'styled-components';
 import { useAccount } from 'wagmi';
+import { isLegacyMode } from '@/lib/legacy';
 import { useProjectContext } from '@/context/project.context';
 import { VerificationModal } from '@/components/modals/VerificationModal';
 import DeactivateProjectModal from '@/components/modals/deactivateProject/DeactivateProjectIndex';
@@ -171,7 +171,7 @@ export const AdminActions = () => {
 	};
 
 	(isLegacyMode
-		? project.anchorContracts?.length > 0
+		? (project.anchorContracts?.length ?? 0) > 0
 		: anchorContractAddress) && options.push(recurringDonationOption);
 
 	const dropdownStyle = {

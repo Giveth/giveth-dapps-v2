@@ -1,4 +1,3 @@
-import { isLegacyMode } from '@/lib/legacy';
 // components/CausesIndex.tsx
 
 import { Fragment, useCallback, useEffect, useRef } from 'react';
@@ -15,6 +14,7 @@ import { useIntl } from 'react-intl';
 import { captureException } from '@sentry/nextjs';
 import { useInfiniteQuery } from '@tanstack/react-query';
 import styled from 'styled-components';
+import { isLegacyMode } from '@/lib/legacy';
 import Routes from '@/lib/constants/Routes';
 import { isUserRegistered, showToastError } from '@/lib/helpers';
 import { useAppDispatch, useAppSelector } from '@/features/hooks';

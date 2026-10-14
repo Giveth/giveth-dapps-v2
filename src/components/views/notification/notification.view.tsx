@@ -1,4 +1,3 @@
-import { isLegacyMode } from '@/lib/legacy';
 import {
 	H5,
 	IconConfig24,
@@ -11,6 +10,7 @@ import {
 } from '@giveth/ui-design-system';
 import { useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
+import { isLegacyMode } from '@/lib/legacy';
 import {
 	NotificationContainer,
 	IconContainer,

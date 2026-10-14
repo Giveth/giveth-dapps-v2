@@ -1,4 +1,3 @@
-import { isLegacyMode } from '@/lib/legacy';
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import {
@@ -14,6 +13,7 @@ import { captureException } from '@sentry/nextjs';
 import { useIntl } from 'react-intl';
 import { useWeb3Modal } from '@web3modal/wagmi/react';
 import Link from 'next/link';
+import { isLegacyMode } from '@/lib/legacy';
 import { EProjectType } from '@/apollo/types/gqlEnums';
 import useDetectDevice from '@/hooks/useDetectDevice';
 import ShareModal from '@/components/modals/ShareModal';
