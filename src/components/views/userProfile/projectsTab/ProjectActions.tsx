@@ -1,3 +1,4 @@
+import { isLegacyMode } from '@/lib/legacy';
 import {
 	IconArchiving,
 	IconArrowDownCircle16,
@@ -138,37 +139,43 @@ const ProjectActions: FC<IProjectActions> = ({
 					? router.push(slugToCauseView(project.slug))
 					: router.push(slugToProjectView(project.slug)),
 		},
-		{
-			label: isCause
-				? formatMessage({ id: 'label.cause.edit_cause' })
-				: formatMessage({ id: 'label.edit_project' }),
-			icon: <IconEdit16 />,
-			cb: () =>
-				runProjectEditGuard(() => {
-					isCause
-						? router.push(idToCauseEdit(projectId))
-						: router.push(idToProjectEdit(projectId));
-				}),
-		},
-		{
-			label: capitalizeAllWords(
-				formatMessage({
-					id: isActive
-						? isCause
-							? 'label.cause.deactivate_cause'
-							: 'label.deactivate_project'
-						: isCause
-							? 'label.cause.activate_cause'
-							: 'label.activate_project',
-				}),
-			),
-			icon: <IconArchiving />,
-			cb: () =>
-				isActive ? handleDeactivateProject() : handleActivateProject(),
-		},
+		...(!isLegacyMode
+			? [
+					{
+						label: isCause
+							? formatMessage({ id: 'label.cause.edit_cause' })
+							: formatMessage({ id: 'label.edit_project' }),
+						icon: <IconEdit16 />,
+						cb: () =>
+							runProjectEditGuard(() => {
+								isCause
+									? router.push(idToCauseEdit(projectId))
+									: router.push(idToProjectEdit(projectId));
+							}),
+					},
+					{
+						label: capitalizeAllWords(
+							formatMessage({
+								id: isActive
+									? isCause
+										? 'label.cause.deactivate_cause'
+										: 'label.deactivate_project'
+									: isCause
+										? 'label.cause.activate_cause'
+										: 'label.activate_project',
+							}),
+						),
+						icon: <IconArchiving />,
+						cb: () =>
+							isActive
+								? handleDeactivateProject()
+								: handleActivateProject(),
+					},
+				]
+			: []),
 	];
 
-	if (!isCause) {
+	if (!isLegacyMode && !isCause) {
 		options.splice(1, 0, {
 			label: formatMessage({ id: 'label.add_update' }),
 			icon: <IconUpdate16 />,
@@ -209,6 +216,7 @@ const ProjectActions: FC<IProjectActions> = ({
 
 	// Add action if project need verification or verification is partially done
 	if (
+		!isLegacyMode &&
 		(verificationStatus === EVerificationStatus.DRAFT ||
 			!verificationStatus) &&
 		!project.isGivbackEligible &&
@@ -231,6 +239,7 @@ const ProjectActions: FC<IProjectActions> = ({
 	}
 
 	if (
+		!isLegacyMode &&
 		isDeleteProjectEnabled &&
 		project.status.name === EProjectStatus.DRAFT
 	) {
@@ -263,7 +272,7 @@ const ProjectActions: FC<IProjectActions> = ({
 			$isCancelled={isCancelled}
 			className={className}
 		>
-			{isCancelled ? (
+			{isCancelled && !isLegacyMode ? (
 				<CancelledWrapper>CANCELLED</CancelledWrapper>
 			) : (
 				<>

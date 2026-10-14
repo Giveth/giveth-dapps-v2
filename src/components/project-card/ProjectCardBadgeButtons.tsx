@@ -1,3 +1,4 @@
+import { isLegacyMode } from '@/lib/legacy';
 import { FC, useState } from 'react';
 import {
 	brandColors,
@@ -65,7 +66,7 @@ const ProjectCardBadgeButtons: FC<IProjectCardBadgeButtons> = ({ project }) => {
 
 			<BadgeWrapper>
 				<Flex gap='6px'>
-					{verified && (
+					{!isLegacyMode && verified && (
 						<BadgeButton onClick={checkSignInThenBoost}>
 							<IconRocketInSpace />
 						</BadgeButton>

@@ -1,3 +1,4 @@
+import { isLegacyMode } from '@/lib/legacy';
 import React, { useState, FC, useEffect } from 'react';
 import Image from 'next/image';
 import styled, { keyframes } from 'styled-components';
@@ -62,6 +63,8 @@ const FloatingButtonReferral: FC<IFloatingReferral> = props => {
 
 		return () => window.removeEventListener('scroll', onScroll);
 	}, [showFloatingReferral]);
+
+	if (isLegacyMode) return null;
 
 	return (
 		<>

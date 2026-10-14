@@ -1,3 +1,4 @@
+import { isLegacyMode } from '@/lib/legacy';
 import { FC, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { useIntl } from 'react-intl';
@@ -67,7 +68,7 @@ const UserProfileView: FC<IUserProfileView> = () => {
 
 	// Update the modal state if the query changes
 	useEffect(() => {
-		setShowModal(!!router.query.opencheck);
+		setShowModal(!isLegacyMode && !!router.query.opencheck);
 	}, [router.query.opencheck]);
 
 	useEffect(() => {
@@ -83,7 +84,7 @@ const UserProfileView: FC<IUserProfileView> = () => {
 	}, [dispatch, isSignedIn, myAccount]);
 
 	useEffect(() => {
-		if (router.query.modal === ProfileModal.PFPModal) {
+		if (!isLegacyMode && router.query.modal === ProfileModal.PFPModal) {
 			setShowUploadProfileModal(true);
 			removeQueryParamAndRedirect(router, ['modal']);
 		}
@@ -125,7 +126,8 @@ const UserProfileView: FC<IUserProfileView> = () => {
 
 	return (
 		<>
-			{user &&
+			{!isLegacyMode &&
+				user &&
 				myAccount &&
 				(user.projectsCount ?? 0) > 0 &&
 				!user?.isEmailVerified &&
@@ -134,7 +136,7 @@ const UserProfileView: FC<IUserProfileView> = () => {
 				)}
 			<ProfileHeader>
 				<Container>
-					{showCompleteProfile && (
+					{!isLegacyMode && showCompleteProfile && (
 						<IncompleteProfileToast
 							close={() => setShowIncompleteWarning(false)}
 						/>
@@ -156,16 +158,18 @@ const UserProfileView: FC<IUserProfileView> = () => {
 								<GLink size='Big'>{user?.email}</GLink>
 							)}
 							<WalletContainer>
-								{myAccount && isUserRegistered(user) && (
-									<EditProfile
-										size='Big'
-										onClick={() => setShowModal(true)}
-									>
-										{formatMessage({
-											id: 'label.edit_profile',
-										})}
-									</EditProfile>
-								)}
+								{!isLegacyMode &&
+									myAccount &&
+									isUserRegistered(user) && (
+										<EditProfile
+											size='Big'
+											onClick={() => setShowModal(true)}
+										>
+											{formatMessage({
+												id: 'label.edit_profile',
+											})}
+										</EditProfile>
+									)}
 								<AddressContainer>
 									<AddressTextNonMobile size='Big'>
 										{user?.walletAddress}
@@ -188,7 +192,7 @@ const UserProfileView: FC<IUserProfileView> = () => {
 							{/* check pfp data, if truthy we check if user is looking at their account, 
 							based on this we show two different messages and links relating to pfp use on profile page  */}
 							{pfpData &&
-								(myAccount && !pfpToken ? (
+								(myAccount && !pfpToken && !isLegacyMode ? (
 									<RaribleLinkContainer>
 										<GLink>
 											<a href={Routes.MyAccountSetPfp}>
@@ -226,14 +230,14 @@ const UserProfileView: FC<IUserProfileView> = () => {
 				</Container>
 			</ProfileHeader>
 			<ProfileContributes />
-			{showModal && (
+			{!isLegacyMode && showModal && (
 				<EditUserModal
 					setShowModal={setShowModal}
 					user={user}
 					setShowProfilePicModal={setShowUploadProfileModal}
 				/>
 			)}
-			{showUploadProfileModal && (
+			{!isLegacyMode && showUploadProfileModal && (
 				<UploadProfilePicModal
 					setShowModal={setShowUploadProfileModal}
 				/>

@@ -1,3 +1,4 @@
+import { isLegacyMode } from '@/lib/legacy';
 import { ButtonLink, H1, H2, brandColors } from '@giveth/ui-design-system';
 import { FC, useState } from 'react';
 import styled from 'styled-components';
@@ -54,20 +55,26 @@ export const NoDonation: FC<INoDonation> = ({ selectedQF, recurring }) => {
 					{selectedQF && selectedQF.isActive && (
 						<H1>in This Round</H1>
 					)}
-					{isActive ? (
-						<Link href={destination} onClick={e => handleClick(e)}>
+					{!isLegacyMode &&
+						(isActive ? (
+							<Link
+								href={destination}
+								onClick={e => handleClick(e)}
+							>
+								<DonateButton
+									linkType='primary'
+									label={formatMessage({
+										id: 'label.donate',
+									})}
+								/>
+							</Link>
+						) : (
 							<DonateButton
 								linkType='primary'
 								label={formatMessage({ id: 'label.donate' })}
+								disabled
 							/>
-						</Link>
-					) : (
-						<DonateButton
-							linkType='primary'
-							label={formatMessage({ id: 'label.donate' })}
-							disabled
-						/>
-					)}
+						))}
 				</>
 			)}
 			{showHintModal && selectedQF && (

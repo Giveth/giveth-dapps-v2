@@ -1,3 +1,4 @@
+import { isLegacyMode } from '@/lib/legacy';
 import dynamic from 'next/dynamic';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -53,7 +54,7 @@ export const HeaderWrapper = () => {
 
 	return showHeader ? (
 		<>
-			<QFAnnouncementBanner onShow={setShowQFBanner} />
+			{!isLegacyMode && <QFAnnouncementBanner onShow={setShowQFBanner} />}
 			<HeaderPlaceHolder />
 			<Header showQFBanner={showQFBanner} />
 		</>

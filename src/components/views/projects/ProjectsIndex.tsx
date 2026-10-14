@@ -1,3 +1,4 @@
+import { isLegacyMode } from '@/lib/legacy';
 // components/ProjectsIndex.tsx
 
 import { Fragment, useCallback, useEffect, useRef, useState } from 'react';
@@ -270,6 +271,7 @@ const ProjectsIndex = (props: IProjectsView) => {
 				qfRound.isActive &&
 				!isStellarOnlyQF &&
 				!isArchivedQF &&
+				!isLegacyMode &&
 				activeRoundStarted && <PassportBanner />}
 			<Wrapper>
 				{qfRound && qfRound.isActive && !isArchivedQF && (
@@ -353,13 +355,15 @@ const ProjectsIndex = (props: IProjectsView) => {
 								)
 							}
 						/>
-						<StyledButton
-							onClick={handleCreateButton}
-							label={formatMessage({
-								id: 'component.button.create_project',
-							})}
-							$transparent
-						/>
+						{!isLegacyMode && (
+							<StyledButton
+								onClick={handleCreateButton}
+								label={formatMessage({
+									id: 'component.button.create_project',
+								})}
+								$transparent
+							/>
+						)}
 					</>
 				)}
 			</Wrapper>

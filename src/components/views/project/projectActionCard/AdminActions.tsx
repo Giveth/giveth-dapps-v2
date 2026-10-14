@@ -1,3 +1,4 @@
+import { isLegacyMode } from '@/lib/legacy';
 import {
 	IconArchiving,
 	IconChevronDown24,
@@ -70,7 +71,7 @@ export const AdminActions = () => {
 		isProjectEditLocked,
 	} = useProjectEditLock({
 		projectId: projectData?.id,
-		enabled: !isCause,
+		enabled: !isLegacyMode && !isCause,
 	});
 
 	const handleEditProject = async () => {
@@ -101,43 +102,53 @@ export const AdminActions = () => {
 	);
 
 	const options: IOption[] = [
-		{
-			label: formatMessage({
-				id: isCause ? 'label.cause.edit_cause' : 'label.edit_project',
-			}),
-			type: EOptionType.ITEM,
-			icon: <IconEdit16 />,
-			cb: handleEditProject,
-		},
-		{
-			label: formatMessage({
-				id:
-					verificationFormStatus === EVerificationStatus.DRAFT
-						? 'label.resume_your_project'
-						: 'label.verify_your_project',
-			}),
+		...(!isLegacyMode
+			? [
+					{
+						label: formatMessage({
+							id: isCause
+								? 'label.cause.edit_cause'
+								: 'label.edit_project',
+						}),
+						type: EOptionType.ITEM,
+						icon: <IconEdit16 />,
+						cb: handleEditProject,
+					},
+					{
+						label: formatMessage({
+							id:
+								verificationFormStatus ===
+								EVerificationStatus.DRAFT
+									? 'label.resume_your_project'
+									: 'label.verify_your_project',
+						}),
 
-			type: EOptionType.ITEM,
-			icon: <IconVerifiedBadge16 />,
-			cb: () => setShowVerificationModal(true),
-			isHidden: isVerificationDisabled,
-		},
-		{
-			label: capitalizeAllWords(
-				formatMessage({
-					id: isActive
-						? isCause
-							? 'label.cause.deactivate_cause'
-							: 'label.deactivate_project'
-						: isCause
-							? 'label.cause.activate_cause'
-							: 'label.activate_project',
-				}),
-			),
-			type: EOptionType.ITEM,
-			icon: <IconArchiving size={16} />,
-			cb: () => (isActive ? setDeactivateModal(true) : activateProject()),
-		},
+						type: EOptionType.ITEM,
+						icon: <IconVerifiedBadge16 />,
+						cb: () => setShowVerificationModal(true),
+						isHidden: isVerificationDisabled,
+					},
+					{
+						label: capitalizeAllWords(
+							formatMessage({
+								id: isActive
+									? isCause
+										? 'label.cause.deactivate_cause'
+										: 'label.deactivate_project'
+									: isCause
+										? 'label.cause.activate_cause'
+										: 'label.activate_project',
+							}),
+						),
+						type: EOptionType.ITEM,
+						icon: <IconArchiving size={16} />,
+						cb: () =>
+							isActive
+								? setDeactivateModal(true)
+								: activateProject(),
+					},
+				]
+			: []),
 		{
 			label: formatMessage({
 				id: 'label.share',
@@ -159,7 +170,9 @@ export const AdminActions = () => {
 		},
 	};
 
-	anchorContractAddress && options.push(recurringDonationOption);
+	(isLegacyMode
+		? project.anchorContracts?.length > 0
+		: anchorContractAddress) && options.push(recurringDonationOption);
 
 	const dropdownStyle = {
 		padding: '10px 16px',
@@ -169,14 +182,14 @@ export const AdminActions = () => {
 
 	return !isMobile ? (
 		<>
-			{!isAdminEmailVerified && (
+			{!isLegacyMode && !isAdminEmailVerified && (
 				<VerifyNotification>
 					{formatMessage({
 						id: 'label.email_actions_text',
 					})}
 				</VerifyNotification>
 			)}
-			<Wrapper $verified={isAdminEmailVerified}>
+			<Wrapper $verified={isLegacyMode || isAdminEmailVerified}>
 				{isCheckingProjectEditLock ? (
 					<ActionLoading>
 						<Spinner size={24} />
@@ -232,7 +245,7 @@ export const AdminActions = () => {
 		</>
 	) : (
 		<>
-			{!isAdminEmailVerified && (
+			{!isLegacyMode && !isAdminEmailVerified && (
 				<VerifyNotification>
 					{formatMessage({
 						id: 'label.email_actions_text',
@@ -245,7 +258,7 @@ export const AdminActions = () => {
 					!isCheckingProjectEditLock &&
 					setShowMobileActionsModal(true)
 				}
-				$verified={isAdminEmailVerified}
+				$verified={isLegacyMode || isAdminEmailVerified}
 			>
 				{isCheckingProjectEditLock ? (
 					<Spinner size={24} />

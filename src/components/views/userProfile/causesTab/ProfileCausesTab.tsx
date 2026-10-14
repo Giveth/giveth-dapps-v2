@@ -1,3 +1,4 @@
+import { isLegacyMode } from '@/lib/legacy';
 import { neutralColors, Col, Row, Flex } from '@giveth/ui-design-system';
 import { FC, useState } from 'react';
 import styled from 'styled-components';
@@ -63,7 +64,7 @@ const ProfileCausesTab: FC<IUserProfileView> = () => {
 				</UserContributeTitle>
 			)}
 			<ProjectsContainer
-				$verified={!!user.isEmailVerified}
+				$verified={isLegacyMode || !!user.isEmailVerified}
 				$isOwner={isOwner}
 			>
 				{!isLoading && data?.totalCount === 0 ? (
@@ -81,7 +82,7 @@ const ProfileCausesTab: FC<IUserProfileView> = () => {
 						/>
 					</NothingWrapper>
 				) : myAccount ? (
-					!user.isEmailVerified ? (
+					!isLegacyMode && !user.isEmailVerified ? (
 						<div style={{ opacity: 0.5, pointerEvents: 'none' }}>
 							<Flex $flexDirection='column' gap='18px'>
 								{data?.projects.map(project => (

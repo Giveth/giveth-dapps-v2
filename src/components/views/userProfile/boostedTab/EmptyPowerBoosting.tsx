@@ -1,3 +1,4 @@
+import { isLegacyMode } from '@/lib/legacy';
 import styled from 'styled-components';
 import {
 	ButtonLink,
@@ -42,12 +43,16 @@ export const EmptyPowerBoosting: FC<IEmptyPowerBoosting> = ({ myAccount }) => {
 						})}
 					</Title>
 					<br />
-					<Link href={Routes.GIVfarm}>
-						<ButtonLink
-							label={formatMessage({ id: 'label.get_givpower' })}
-							size='small'
-						/>
-					</Link>
+					{!isLegacyMode && (
+						<Link href={Routes.GIVfarm}>
+							<ButtonLink
+								label={formatMessage({
+									id: 'label.get_givpower',
+								})}
+								size='small'
+							/>
+						</Link>
+					)}
 				</>
 			) : (
 				<>

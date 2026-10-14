@@ -1,6 +1,8 @@
 import { GetStaticProps } from 'next/types';
 
 import HomeIndex from '@/components/views/homepage/HomeIndex';
+import LegacyHome from '@/components/views/homepage/LegacyHome';
+import { isLegacyMode } from '@/lib/legacy';
 import { client } from '@/apollo/apolloClient';
 import { ICampaign, IProjectUpdateWithProject } from '@/apollo/types/types';
 import { homeMetatags } from '@/content/metatags';
@@ -28,12 +30,13 @@ const HomeRoute = (props: IHomeRoute) => {
 	return (
 		<>
 			<GeneralMetatags info={homeMetatags} />
-			<HomeIndex {...props} />
+			{isLegacyMode ? <LegacyHome /> : <HomeIndex {...props} />}
 		</>
 	);
 };
 
 export const getStaticProps: GetStaticProps = async () => {
+	if (isLegacyMode) return { props: {} };
 	const { data } = await client.query({
 		query: FETCH_HOMEPAGE_DATA_REDUCED,
 		variables: HOME_QUERY_VARIABLES,

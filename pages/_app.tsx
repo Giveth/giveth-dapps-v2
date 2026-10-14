@@ -13,8 +13,10 @@ import { GoogleAnalytics } from '@next/third-parties/google';
 import { loadErrorMessages, loadDevMessages } from '@apollo/client/dev';
 import { WagmiProvider } from 'wagmi';
 import { ThirdwebProvider } from 'thirdweb/react';
+import { isLegacyBlockedPath, isLegacyMode } from '@/lib/legacy';
 import { projectId, wagmiConfig } from '@/wagmiConfigs';
 import { useApollo } from '@/apollo/apolloClient';
+import LegacyBanner from '@/components/LegacyBanner';
 import { HeaderWrapper } from '@/components/Header/HeaderWrapper';
 import { FooterWrapper } from '@/components/Footer/FooterWrapper';
 import '../styles/globals.css';
@@ -104,6 +106,14 @@ function MyApp({ Component, pageProps }: AppProps) {
 			setIsBypassingMaintenance(bypass);
 		}
 	}, []);
+
+	// Next redirects only run on full page loads; apply the same legacy rules to
+	// client-side navigation (header/footer/menu links to disabled pages).
+	useEffect(() => {
+		if (isLegacyMode && isLegacyBlockedPath(asPath)) {
+			router.replace('/');
+		}
+	}, [asPath]);
 
 	// enable maintenance mode only if it is enabled inside ENV file and user has not bypassed it
 	const isMaintenanceMode =
@@ -198,6 +208,9 @@ function MyApp({ Component, pageProps }: AppProps) {
 													<GeneralController />
 													<SubgraphController />
 													<UserController />
+													{isLegacyMode && (
+														<LegacyBanner />
+													)}
 													<HeaderWrapper />
 													{isGIVeconomyRoute(
 														router.route,

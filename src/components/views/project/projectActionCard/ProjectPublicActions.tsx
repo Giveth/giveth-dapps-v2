@@ -1,3 +1,4 @@
+import { isLegacyMode } from '@/lib/legacy';
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import {
@@ -138,43 +139,49 @@ export const ProjectPublicActions = () => {
 
 	return (
 		<ProjectPublicActionsWrapper gap='16px'>
-			<Link
-				id='Donate_Project'
-				href={
-					isActive
-						? routeToStellarDonate
-							? slugToProjectDonateStellar(slug || '')
-							: isCause
-								? slugToCauseDonate(slug || '')
-								: isOnlyStellar
-									? slugToProjectDonateStellar(slug || '')
-									: slugToProjectDonate(slug || '')
-						: '#'
-				}
-				onClick={e => !isActive && e.preventDefault()}
-				style={{ pointerEvents: !isActive ? 'none' : 'auto' }}
-			>
-				<DonateButton
-					label={formatMessage({ id: 'label.donate' })}
-					disabled={!isActive}
-					linkType='primary'
-				/>
-			</Link>
+			{!isLegacyMode && (
+				<Link
+					id='Donate_Project'
+					href={
+						isActive
+							? routeToStellarDonate
+								? slugToProjectDonateStellar(slug || '')
+								: isCause
+									? slugToCauseDonate(slug || '')
+									: isOnlyStellar
+										? slugToProjectDonateStellar(slug || '')
+										: slugToProjectDonate(slug || '')
+							: '#'
+					}
+					onClick={e => !isActive && e.preventDefault()}
+					style={{ pointerEvents: !isActive ? 'none' : 'auto' }}
+				>
+					<DonateButton
+						label={formatMessage({ id: 'label.donate' })}
+						disabled={!isActive}
+						linkType='primary'
+					/>
+				</Link>
+			)}
 			<BadgeWrapper gap='4px'>
 				<ShareLikeBadge
 					onClick={() => isActive && setShowShareModal(true)}
 					isSimple={isMobile}
 				/>
-				<StyledBadgeButton
-					$isLoading={likeLoading}
-					onClick={likeLoading ? undefined : checkSignInThenLike}
-				>
-					{reaction?.userId && reaction?.userId === user?.id ? (
-						<IconBookmarkFilled16 color={brandColors.pinky[500]} />
-					) : (
-						<IconBookmark16 color='#525f7f' />
-					)}
-				</StyledBadgeButton>
+				{!isLegacyMode && (
+					<StyledBadgeButton
+						$isLoading={likeLoading}
+						onClick={likeLoading ? undefined : checkSignInThenLike}
+					>
+						{reaction?.userId && reaction?.userId === user?.id ? (
+							<IconBookmarkFilled16
+								color={brandColors.pinky[500]}
+							/>
+						) : (
+							<IconBookmark16 color='#525f7f' />
+						)}
+					</StyledBadgeButton>
+				)}
 			</BadgeWrapper>
 			{showModal && slug && (
 				<ShareModal

@@ -11,6 +11,7 @@ import { useIntl } from 'react-intl';
 import styled from 'styled-components';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
+import { isLegacyMode } from '@/lib/legacy';
 import { Box, BigArc, Title, Caption } from './common.sc';
 import links from '@/lib/constants/links';
 import Routes from '@/lib/constants/Routes';
@@ -33,16 +34,20 @@ export const QFNoResultBanner = () => {
 				})}
 			</Caption>
 			<Actions>
-				<Link href={links.GIVETH_MATCHING}>
-					<DonateButton
-						label={formatMessage({
-							id: 'label.donate',
-						})}
-						size='large'
-						linkType='primary'
-					/>
-				</Link>
-				<Lead color={neutralColors.gray[800]}>or</Lead>
+				{!isLegacyMode && (
+					<>
+						<Link href={links.GIVETH_MATCHING}>
+							<DonateButton
+								label={formatMessage({
+									id: 'label.donate',
+								})}
+								size='large'
+								linkType='primary'
+							/>
+						</Link>
+						<Lead color={neutralColors.gray[800]}>or</Lead>
+					</>
+				)}
 				<Link
 					href={isCauses ? Routes.Causes + '/all' : Routes.Projects}
 				>

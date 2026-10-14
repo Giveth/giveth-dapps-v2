@@ -1,3 +1,4 @@
+import { isLegacyMode } from '@/lib/legacy';
 import {
 	IconArchive16,
 	IconEdit16,
@@ -66,22 +67,26 @@ export const StreamActionButton: FC<IStreamActionButtonProps> = ({
 				]
 			: donation.status === ERecurringDonationStatus.ENDED
 				? [
-						{
-							label: formatMessage({
-								id: 'label.start_new_donation',
-							}),
-							icon: <IconEdit16 />,
-							cb: () =>
-								router.push(
-									slugToProjectDonate(
-										donation.project.slug,
-										true,
-									),
-								),
-						},
-						{
-							type: EOptionType.SEPARATOR,
-						},
+						...(!isLegacyMode
+							? [
+									{
+										label: formatMessage({
+											id: 'label.start_new_donation',
+										}),
+										icon: <IconEdit16 />,
+										cb: () =>
+											router.push(
+												slugToProjectDonate(
+													donation.project.slug,
+													true,
+												),
+											),
+									},
+									{
+										type: EOptionType.SEPARATOR,
+									},
+								]
+							: []),
 						{
 							label: capitalizeAllWords(
 								formatMessage({ id: 'label.archive_donation' }),

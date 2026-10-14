@@ -9,6 +9,7 @@ import {
 	neutralColors,
 } from '@giveth/ui-design-system';
 import { captureException } from '@sentry/nextjs';
+import { isLegacyMode } from '@/lib/legacy';
 
 import {
 	FETCH_PROJECT_UPDATES,
@@ -70,13 +71,15 @@ const ProjectUpdates = () => {
 
 	const sortedUpdates = data?.getProjectUpdates;
 	const isOwner = adminUser?.id === user?.id;
+	// Owners cannot post or edit updates in legacy mode, so skip the lock poll too.
+	const canEdit = isOwner && !isLegacyMode;
 	const {
 		checkProjectEditLock,
 		isCheckingProjectEditLock,
 		isProjectEditLocked,
 	} = useProjectEditLock({
 		projectId: id,
-		enabled: isOwner,
+		enabled: canEdit,
 	});
 	const handleProjectEditLockedAttempt = () => {
 		setShowProjectEditLockedModal(true);
@@ -260,7 +263,7 @@ const ProjectUpdates = () => {
 					setShowModal={setShowProjectEditLockedModal}
 				/>
 			)}
-			{isOwner && (
+			{canEdit && (
 				<InputContainer>
 					<TimelineSection date='' newUpdate />
 					<Content>
@@ -349,7 +352,7 @@ const ProjectUpdates = () => {
 							) => {
 								editUpdate(title, content, updateId);
 							}}
-							isOwner={isOwner}
+							isOwner={canEdit}
 							isProjectEditLocked={isProjectEditLocked}
 							isCheckingProjectEditLock={
 								isCheckingProjectEditLock

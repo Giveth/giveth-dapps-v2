@@ -1,3 +1,4 @@
+import { isLegacyMode } from '@/lib/legacy';
 // components/CausesIndex.tsx
 
 import { Fragment, useCallback, useEffect, useRef } from 'react';
@@ -315,13 +316,15 @@ const CausesIndex = (props: ICausesView) => {
 								)
 							}
 						/>
-						<StyledButton
-							onClick={handleCreateButton}
-							label={formatMessage({
-								id: 'component.button.create_project',
-							})}
-							$transparent
-						/>
+						{!isLegacyMode && (
+							<StyledButton
+								onClick={handleCreateButton}
+								label={formatMessage({
+									id: 'component.button.create_project',
+								})}
+								$transparent
+							/>
+						)}
 					</>
 				)}
 			</Wrapper>

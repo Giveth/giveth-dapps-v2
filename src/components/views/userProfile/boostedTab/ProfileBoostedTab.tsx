@@ -1,3 +1,4 @@
+import { isLegacyMode } from '@/lib/legacy';
 import styled from 'styled-components';
 import { FC, useCallback } from 'react';
 import { captureException } from '@sentry/nextjs';
@@ -160,7 +161,9 @@ export const ProfileBoostedTab: FC<IUserProfileView> = () => {
 						title='Your GIVpower balance is zero!'
 						message='Stake GIV to boost these projects again.'
 						type={EToastType.Warning}
-						link={getGIVpowerLink(chainId)}
+						link={
+							isLegacyMode ? undefined : getGIVpowerLink(chainId)
+						}
 						linkText='Stake GIV'
 					/>
 				</ZeroGivPowerContainer>
@@ -183,7 +186,7 @@ export const ProfileBoostedTab: FC<IUserProfileView> = () => {
 					<EmptyPowerBoosting myAccount={true} />
 				)}
 			</PowerBoostingContainer>
-			<GetMoreGIVpowerBanner />
+			{!isLegacyMode && <GetMoreGIVpowerBanner />}
 		</UserProfileTab>
 	);
 };

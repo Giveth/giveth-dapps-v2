@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { isLegacyMode } from '@/lib/legacy';
 import styled from 'styled-components';
 import {
 	P,
@@ -216,7 +217,6 @@ const ProjectCard = (props: IProjectCard) => {
 	}, [props]);
 
 	return (
-		// </Link>
 		<Wrapper
 			onMouseEnter={() => setIsHover(true)}
 			onMouseLeave={() => setIsHover(false)}
@@ -427,7 +427,7 @@ const ProjectCard = (props: IProjectCard) => {
 					</Link>
 				)}
 			</CardBody>
-			{!isListingInsideCauseProjectTabs && (
+			{!isLegacyMode && !isListingInsideCauseProjectTabs && (
 				<ActionButtons className='action-buttons'>
 					<Link
 						id='Donate_Card'

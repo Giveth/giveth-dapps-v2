@@ -1,3 +1,4 @@
+import { isLegacyMode } from '@/lib/legacy';
 import {
 	B,
 	brandColors,
@@ -206,7 +207,7 @@ const BoostsTable: FC<IBoostsTable> = ({
 		<>
 			<Header $justifyContent='space-between' $flexWrap gap='16px'>
 				<H5 weight={700}>GIVpower Summary</H5>
-				{myAccount && (
+				{!isLegacyMode && myAccount && (
 					<Actions gap='8px'>
 						{mode === ETableNode.VIEWING ? (
 							<Button
@@ -251,7 +252,11 @@ const BoostsTable: FC<IBoostsTable> = ({
 					</Actions>
 				)}
 			</Header>
-			<Table $hasLastCol={!!myAccount && mode === ETableNode.VIEWING}>
+			<Table
+				$hasLastCol={
+					!isLegacyMode && !!myAccount && mode === ETableNode.VIEWING
+				}
+			>
 				<TableHeader>Projects</TableHeader>
 				<TableHeader
 					onClick={() => {
@@ -266,7 +271,7 @@ const BoostsTable: FC<IBoostsTable> = ({
 					/>
 				</TableHeader>
 				<TableHeader>% of Total</TableHeader>
-				{myAccount && mode === ETableNode.VIEWING && (
+				{!isLegacyMode && myAccount && mode === ETableNode.VIEWING && (
 					<TableHeader></TableHeader>
 				)}
 				{editBoosts?.map((boost, index) => {
@@ -382,41 +387,43 @@ const BoostsTable: FC<IBoostsTable> = ({
 									/>
 								)}
 							</BoostsTableCell>
-							{myAccount && mode === ETableNode.VIEWING && (
-								<BoostsTableCell>
-									<IconWrapper
-										onClick={() => {
-											setSelectedBoost(boost.id);
-											setShowDeleteModal(true);
-										}}
-									>
-										<IconTrash size={24} />
-									</IconWrapper>
-									{!boost.project.verified && (
+							{!isLegacyMode &&
+								myAccount &&
+								mode === ETableNode.VIEWING && (
+									<BoostsTableCell>
 										<IconWrapper
 											onClick={() => {
 												setSelectedBoost(boost.id);
 												setShowDeleteModal(true);
 											}}
 										>
-											<IconWithTooltip
-												icon={<IconAlertCircle16 />}
-												direction='top'
-												align='left'
-											>
-												<BoostTooltip>
-													This project has lost its
-													verified status and
-													therefore is no longer
-													eligible for GIVpower. We
-													recommend removing this
-													boost.
-												</BoostTooltip>
-											</IconWithTooltip>
+											<IconTrash size={24} />
 										</IconWrapper>
-									)}
-								</BoostsTableCell>
-							)}
+										{!boost.project.verified && (
+											<IconWrapper
+												onClick={() => {
+													setSelectedBoost(boost.id);
+													setShowDeleteModal(true);
+												}}
+											>
+												<IconWithTooltip
+													icon={<IconAlertCircle16 />}
+													direction='top'
+													align='left'
+												>
+													<BoostTooltip>
+														This project has lost
+														its verified status and
+														therefore is no longer
+														eligible for GIVpower.
+														We recommend removing
+														this boost.
+													</BoostTooltip>
+												</IconWithTooltip>
+											</IconWrapper>
+										)}
+									</BoostsTableCell>
+								)}
 						</BoostsRowWrapper>
 					);
 				})}
@@ -428,7 +435,7 @@ const BoostsTable: FC<IBoostsTable> = ({
 						<ExceedError>You can’t exceed 100%</ExceedError>
 					)}
 				</CustomTableFooter>
-				{myAccount && mode === ETableNode.VIEWING && (
+				{!isLegacyMode && myAccount && mode === ETableNode.VIEWING && (
 					<TableFooter></TableFooter>
 				)}
 			</Table>

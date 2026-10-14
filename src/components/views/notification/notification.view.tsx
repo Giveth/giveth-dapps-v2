@@ -1,3 +1,4 @@
+import { isLegacyMode } from '@/lib/legacy';
 import {
 	H5,
 	IconConfig24,
@@ -140,11 +141,13 @@ function NotificationView() {
 						<H5 weight={700}>
 							{formatMessage({ id: 'label.notification_center' })}
 						</H5>
-						<InternalLink href={Routes.NotificationsSettings}>
-							<ConfigContainer>
-								<IconConfig24 />
-							</ConfigContainer>
-						</InternalLink>
+						{!isLegacyMode && (
+							<InternalLink href={Routes.NotificationsSettings}>
+								<ConfigContainer>
+									<IconConfig24 />
+								</ConfigContainer>
+							</InternalLink>
+						)}
 					</Flex>
 					<Lead>
 						{formatMessage({

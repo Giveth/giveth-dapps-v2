@@ -1,3 +1,4 @@
+import { isLegacyMode } from '@/lib/legacy';
 import styled from 'styled-components';
 import {
 	B,
@@ -380,7 +381,7 @@ const ProjectGIVbackToast = () => {
 		if (isUserLoading) return;
 		const { open } = router.query;
 		const _open = Array.isArray(open) ? open[0] : open;
-		if (_open === 'boost') {
+		if (!isLegacyMode && _open === 'boost') {
 			handleBoostClick();
 		}
 	}, [isUserLoading, router]);
@@ -406,7 +407,9 @@ const ProjectGIVbackToast = () => {
 						)}
 					</div>
 				</Content>
-				{Button && <ButtonWrapper>{Button}</ButtonWrapper>}
+				{!isLegacyMode && Button && (
+					<ButtonWrapper>{Button}</ButtonWrapper>
+				)}
 			</Wrapper>
 			{showBoost && (
 				<BoostModal
