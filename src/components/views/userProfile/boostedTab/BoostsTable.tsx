@@ -252,11 +252,7 @@ const BoostsTable: FC<IBoostsTable> = ({
 					</Actions>
 				)}
 			</Header>
-			<Table
-				$hasLastCol={
-					!isLegacyMode && !!myAccount && mode === ETableNode.VIEWING
-				}
-			>
+			<Table $hasLastCol={!!myAccount && mode === ETableNode.VIEWING}>
 				<TableHeader>Projects</TableHeader>
 				<TableHeader
 					onClick={() => {
@@ -271,7 +267,7 @@ const BoostsTable: FC<IBoostsTable> = ({
 					/>
 				</TableHeader>
 				<TableHeader>% of Total</TableHeader>
-				{!isLegacyMode && myAccount && mode === ETableNode.VIEWING && (
+				{myAccount && mode === ETableNode.VIEWING && (
 					<TableHeader></TableHeader>
 				)}
 				{editBoosts?.map((boost, index) => {
@@ -387,10 +383,9 @@ const BoostsTable: FC<IBoostsTable> = ({
 									/>
 								)}
 							</BoostsTableCell>
-							{!isLegacyMode &&
-								myAccount &&
-								mode === ETableNode.VIEWING && (
-									<BoostsTableCell>
+							{myAccount && mode === ETableNode.VIEWING && (
+								<BoostsTableCell>
+									{!isLegacyMode && (
 										<IconWrapper
 											onClick={() => {
 												setSelectedBoost(boost.id);
@@ -399,31 +394,40 @@ const BoostsTable: FC<IBoostsTable> = ({
 										>
 											<IconTrash size={24} />
 										</IconWrapper>
-										{!boost.project.verified && (
-											<IconWrapper
-												onClick={() => {
-													setSelectedBoost(boost.id);
-													setShowDeleteModal(true);
-												}}
+									)}
+									{!boost.project.verified && (
+										<IconWrapper
+											onClick={
+												isLegacyMode
+													? undefined
+													: () => {
+															setSelectedBoost(
+																boost.id,
+															);
+															setShowDeleteModal(
+																true,
+															);
+														}
+											}
+										>
+											<IconWithTooltip
+												icon={<IconAlertCircle16 />}
+												direction='top'
+												align='left'
 											>
-												<IconWithTooltip
-													icon={<IconAlertCircle16 />}
-													direction='top'
-													align='left'
-												>
-													<BoostTooltip>
-														This project has lost
-														its verified status and
-														therefore is no longer
-														eligible for GIVpower.
-														We recommend removing
-														this boost.
-													</BoostTooltip>
-												</IconWithTooltip>
-											</IconWrapper>
-										)}
-									</BoostsTableCell>
-								)}
+												<BoostTooltip>
+													This project has lost its
+													verified status and
+													therefore is no longer
+													eligible for GIVpower.
+													{!isLegacyMode &&
+														' We recommend removing this boost.'}
+												</BoostTooltip>
+											</IconWithTooltip>
+										</IconWrapper>
+									)}
+								</BoostsTableCell>
+							)}
 						</BoostsRowWrapper>
 					);
 				})}
@@ -435,7 +439,7 @@ const BoostsTable: FC<IBoostsTable> = ({
 						<ExceedError>You can’t exceed 100%</ExceedError>
 					)}
 				</CustomTableFooter>
-				{!isLegacyMode && myAccount && mode === ETableNode.VIEWING && (
+				{myAccount && mode === ETableNode.VIEWING && (
 					<TableFooter></TableFooter>
 				)}
 			</Table>
