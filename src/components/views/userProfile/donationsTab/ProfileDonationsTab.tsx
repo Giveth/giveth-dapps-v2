@@ -1,4 +1,4 @@
-import { type FC, useState } from 'react';
+import { type FC, useEffect, useState } from 'react';
 import { Col, P, Row, neutralColors, Flex } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
 import styled, { css } from 'styled-components';
@@ -31,13 +31,16 @@ const tabs = [
 	},
 ];
 
+const tabFromQuery = (query?: string | string[]) =>
+	tabs.find(({ query: tabQuery }) => tabQuery === query)?.id ?? ETab.ONE_TIME;
+
 const ProfileDonationsTab: FC<IUserProfileView> = () => {
 	const router = useRouter();
-	const [tab, setTab] = useState(
-		router.query.tab === 'recurring-donations'
-			? ETab.RECURRING
-			: ETab.ONE_TIME,
-	);
+	const [tab, setTab] = useState(tabFromQuery(router.query.tab));
+	// Keep the active tab in sync with the URL (e.g. links to ?tab=recurring-donations).
+	useEffect(() => {
+		setTab(tabFromQuery(router.query.tab));
+	}, [router.query.tab]);
 	const { myAccount, user } = useProfileContext();
 	const { formatMessage } = useIntl();
 
@@ -76,7 +79,6 @@ const ProfileDonationsTab: FC<IUserProfileView> = () => {
 							scroll={false}
 						>
 							<Tab
-								onClick={() => setTab(id)}
 								className={`tab ${tab === id ? 'active' : ''}`}
 								$isActive={tab === id}
 							>

@@ -9,6 +9,7 @@ import { useIntl } from 'react-intl';
 import Link from 'next/link';
 import { FC } from 'react';
 import { useAccount } from 'wagmi';
+import { isLegacyMode } from '@/lib/legacy';
 import Routes from '@/lib/constants/Routes';
 import { getTotalGIVpower } from '@/helpers/givpower';
 import { useFetchSubgraphDataForAllChains } from '@/hooks/useFetchSubgraphDataForAllChains';
@@ -42,12 +43,16 @@ export const EmptyPowerBoosting: FC<IEmptyPowerBoosting> = ({ myAccount }) => {
 						})}
 					</Title>
 					<br />
-					<Link href={Routes.GIVfarm}>
-						<ButtonLink
-							label={formatMessage({ id: 'label.get_givpower' })}
-							size='small'
-						/>
-					</Link>
+					{!isLegacyMode && (
+						<Link href={Routes.GIVfarm}>
+							<ButtonLink
+								label={formatMessage({
+									id: 'label.get_givpower',
+								})}
+								size='small'
+							/>
+						</Link>
+					)}
 				</>
 			) : (
 				<>

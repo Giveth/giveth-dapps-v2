@@ -16,6 +16,8 @@ import { Dispatch, type FC, SetStateAction, useState } from 'react';
 import { useIntl } from 'react-intl';
 import router from 'next/router';
 import { captureException } from '@sentry/nextjs';
+import { isLegacyMode } from '@/lib/legacy';
+import { hasClaimableAnchorContract } from '@/helpers/superfluid';
 import { EVerificationStatus, IProject } from '@/apollo/types/types';
 import { EProjectStatus, EProjectType } from '@/apollo/types/gqlEnums';
 import { Dropdown, IOption, EOptionType } from '@/components/Dropdown';
@@ -63,8 +65,10 @@ const ProjectActions: FC<IProjectActions> = ({
 	const status = project.status.name;
 	const isCancelled = status === EProjectStatus.CANCEL;
 
-	// Simply check if there's at least one anchor contract
-	const hasAnchorContract = project.anchorContracts?.length > 0;
+	// Only networks the claim modal supports (active Optimism/Base anchor contracts)
+	const hasAnchorContract = hasClaimableAnchorContract(
+		project.anchorContracts,
+	);
 
 	const projectId = project?.id;
 	const isCause = project.projectType === EProjectType.CAUSE;
@@ -138,37 +142,43 @@ const ProjectActions: FC<IProjectActions> = ({
 					? router.push(slugToCauseView(project.slug))
 					: router.push(slugToProjectView(project.slug)),
 		},
-		{
-			label: isCause
-				? formatMessage({ id: 'label.cause.edit_cause' })
-				: formatMessage({ id: 'label.edit_project' }),
-			icon: <IconEdit16 />,
-			cb: () =>
-				runProjectEditGuard(() => {
-					isCause
-						? router.push(idToCauseEdit(projectId))
-						: router.push(idToProjectEdit(projectId));
-				}),
-		},
-		{
-			label: capitalizeAllWords(
-				formatMessage({
-					id: isActive
-						? isCause
-							? 'label.cause.deactivate_cause'
-							: 'label.deactivate_project'
-						: isCause
-							? 'label.cause.activate_cause'
-							: 'label.activate_project',
-				}),
-			),
-			icon: <IconArchiving />,
-			cb: () =>
-				isActive ? handleDeactivateProject() : handleActivateProject(),
-		},
+		...(!isLegacyMode
+			? [
+					{
+						label: isCause
+							? formatMessage({ id: 'label.cause.edit_cause' })
+							: formatMessage({ id: 'label.edit_project' }),
+						icon: <IconEdit16 />,
+						cb: () =>
+							runProjectEditGuard(() => {
+								isCause
+									? router.push(idToCauseEdit(projectId))
+									: router.push(idToProjectEdit(projectId));
+							}),
+					},
+					{
+						label: capitalizeAllWords(
+							formatMessage({
+								id: isActive
+									? isCause
+										? 'label.cause.deactivate_cause'
+										: 'label.deactivate_project'
+									: isCause
+										? 'label.cause.activate_cause'
+										: 'label.activate_project',
+							}),
+						),
+						icon: <IconArchiving />,
+						cb: () =>
+							isActive
+								? handleDeactivateProject()
+								: handleActivateProject(),
+					},
+				]
+			: []),
 	];
 
-	if (!isCause) {
+	if (!isLegacyMode && !isCause) {
 		options.splice(1, 0, {
 			label: formatMessage({ id: 'label.add_update' }),
 			icon: <IconUpdate16 />,
@@ -209,6 +219,7 @@ const ProjectActions: FC<IProjectActions> = ({
 
 	// Add action if project need verification or verification is partially done
 	if (
+		!isLegacyMode &&
 		(verificationStatus === EVerificationStatus.DRAFT ||
 			!verificationStatus) &&
 		!project.isGivbackEligible &&
@@ -231,6 +242,7 @@ const ProjectActions: FC<IProjectActions> = ({
 	}
 
 	if (
+		!isLegacyMode &&
 		isDeleteProjectEnabled &&
 		project.status.name === EProjectStatus.DRAFT
 	) {
@@ -263,7 +275,7 @@ const ProjectActions: FC<IProjectActions> = ({
 			$isCancelled={isCancelled}
 			className={className}
 		>
-			{isCancelled ? (
+			{isCancelled && !isLegacyMode ? (
 				<CancelledWrapper>CANCELLED</CancelledWrapper>
 			) : (
 				<>

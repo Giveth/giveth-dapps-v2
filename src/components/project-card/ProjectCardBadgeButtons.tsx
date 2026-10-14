@@ -8,6 +8,7 @@ import {
 } from '@giveth/ui-design-system';
 import styled, { css } from 'styled-components';
 import { useWeb3Modal } from '@web3modal/wagmi/react';
+import { isLegacyMode } from '@/lib/legacy';
 import { IProject } from '@/apollo/types/types';
 import { useAppSelector } from '@/features/hooks';
 import { useModalCallback } from '@/hooks/useModalCallback';
@@ -65,7 +66,7 @@ const ProjectCardBadgeButtons: FC<IProjectCardBadgeButtons> = ({ project }) => {
 
 			<BadgeWrapper>
 				<Flex gap='6px'>
-					{verified && (
+					{!isLegacyMode && verified && (
 						<BadgeButton onClick={checkSignInThenBoost}>
 							<IconRocketInSpace />
 						</BadgeButton>

@@ -9,6 +9,7 @@ import { type FC, useState } from 'react';
 import { useIntl } from 'react-intl';
 import { useRouter } from 'next/router';
 import { useAccount, useSwitchChain } from 'wagmi';
+import { isLegacyMode } from '@/lib/legacy';
 import { Dropdown, EOptionType, IOption } from '@/components/Dropdown';
 import { capitalizeAllWords } from '@/lib/helpers';
 import { ModifyStreamModal } from './ModifyStreamModal/ModifyStreamModal';
@@ -66,22 +67,26 @@ export const StreamActionButton: FC<IStreamActionButtonProps> = ({
 				]
 			: donation.status === ERecurringDonationStatus.ENDED
 				? [
-						{
-							label: formatMessage({
-								id: 'label.start_new_donation',
-							}),
-							icon: <IconEdit16 />,
-							cb: () =>
-								router.push(
-									slugToProjectDonate(
-										donation.project.slug,
-										true,
-									),
-								),
-						},
-						{
-							type: EOptionType.SEPARATOR,
-						},
+						...(!isLegacyMode
+							? [
+									{
+										label: formatMessage({
+											id: 'label.start_new_donation',
+										}),
+										icon: <IconEdit16 />,
+										cb: () =>
+											router.push(
+												slugToProjectDonate(
+													donation.project.slug,
+													true,
+												),
+											),
+									},
+									{
+										type: EOptionType.SEPARATOR,
+									},
+								]
+							: []),
 						{
 							label: capitalizeAllWords(
 								formatMessage({ id: 'label.archive_donation' }),

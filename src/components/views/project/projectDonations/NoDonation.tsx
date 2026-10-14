@@ -3,6 +3,7 @@ import { FC, useState } from 'react';
 import styled from 'styled-components';
 import { useIntl } from 'react-intl';
 import Link from 'next/link';
+import { isLegacyMode } from '@/lib/legacy';
 import { slugToCauseDonate, slugToProjectDonate } from '@/lib/routeCreators';
 import { useProjectContext } from '@/context/project.context';
 import { IQFRound } from '@/apollo/types/types';
@@ -47,27 +48,43 @@ export const NoDonation: FC<INoDonation> = ({ selectedQF, recurring }) => {
 				</H2>
 			) : (
 				<>
-					<H1>Be the</H1>
-					<H1 weight={700}>First</H1>
-					<H1>to</H1>
-					<H1 weight={700}>Donate</H1>
-					{selectedQF && selectedQF.isActive && (
-						<H1>in This Round</H1>
+					{isLegacyMode ? (
+						<H2>
+							{selectedQF && selectedQF.isActive
+								? 'No donations in this round yet.'
+								: 'No donations yet.'}
+						</H2>
+					) : (
+						<>
+							<H1>Be the</H1>
+							<H1 weight={700}>First</H1>
+							<H1>to</H1>
+							<H1 weight={700}>Donate</H1>
+							{selectedQF && selectedQF.isActive && (
+								<H1>in This Round</H1>
+							)}
+						</>
 					)}
-					{isActive ? (
-						<Link href={destination} onClick={e => handleClick(e)}>
+					{!isLegacyMode &&
+						(isActive ? (
+							<Link
+								href={destination}
+								onClick={e => handleClick(e)}
+							>
+								<DonateButton
+									linkType='primary'
+									label={formatMessage({
+										id: 'label.donate',
+									})}
+								/>
+							</Link>
+						) : (
 							<DonateButton
 								linkType='primary'
 								label={formatMessage({ id: 'label.donate' })}
+								disabled
 							/>
-						</Link>
-					) : (
-						<DonateButton
-							linkType='primary'
-							label={formatMessage({ id: 'label.donate' })}
-							disabled
-						/>
-					)}
+						))}
 				</>
 			)}
 			{showHintModal && selectedQF && (

@@ -23,7 +23,8 @@ export const StyledHeader = styled(Flex)<IStyledHeader>`
 	position: fixed;
 	left: 0;
 	right: 0;
-	top: ${props => (props.$show ? 0 : '-100px')};
+	top: ${props =>
+		props.$show ? 'var(--legacy-banner-height, 0px)' : '-100px'};
 
 	z-index: ${zIndex.HEADER};
 	transition: top 0.3s ease;
@@ -40,7 +41,9 @@ export const StyledHeader = styled(Flex)<IStyledHeader>`
 		padding: 16px 32px;
 		top: ${props => {
 			if (!props.$show) return '-100px';
-			return props.$showQFBanner ? '53px' : '0';
+			return props.$showQFBanner
+				? '53px'
+				: 'var(--legacy-banner-height, 0px)';
 		}};
 	}
 `;
