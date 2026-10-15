@@ -5,6 +5,8 @@ import {
 	H1,
 	Lead,
 	ButtonLink,
+	OutlineLinkButton,
+	brandColors,
 	Flex,
 } from '@giveth/ui-design-system';
 import Routes from '@/lib/constants/Routes';
@@ -20,27 +22,27 @@ export default function LegacyHome() {
 				GIVbacks and everything else now live there.
 			</Lead>
 			<Lead>
-				This app stays open for one thing: recurring donation streams.
-				Donors can manage the streams they set up here, and project
-				owners can claim the funds their projects received.
+				This app stays open for one thing: recurring donations. If you
+				set one up here, you can still manage it. If your project
+				received them here, you can still claim them.
 			</Lead>
 			<Actions gap='16px' $flexWrap>
 				<ButtonLink
 					isExternal
 					href={NEW_GIVETH_URL}
 					linkType='primary'
-					label='Go to the new Giveth'
+					label='Go to giveth.io'
 				/>
 				<Link href={Routes.MyRecurringDonations}>
-					<ButtonLink
+					<AccountButton
 						linkType='secondary'
-						label='Manage my streams'
+						label='Manage my recurring donations'
 					/>
 				</Link>
 				<Link href={Routes.MyProjects}>
-					<ButtonLink
+					<AccountButton
 						linkType='secondary'
-						label='Claim project funds'
+						label='Claim recurring donations'
 					/>
 				</Link>
 			</Actions>
@@ -57,6 +59,17 @@ const Wrapper = styled(Container)`
 	}
 	a {
 		text-decoration: underline;
+	}
+`;
+
+// Outline button in the brand purple; the design system only ships white or pink outlines.
+const AccountButton = styled(OutlineLinkButton)`
+	color: ${brandColors.giv[500]};
+	border-color: ${brandColors.giv[500]};
+	&:hover {
+		color: ${brandColors.giv[700]};
+		border-color: ${brandColors.giv[700]};
+		background-color: ${brandColors.giv[100]};
 	}
 `;
 
