@@ -6,6 +6,7 @@ import { useRouter } from 'next/router';
 import { useAccount } from 'wagmi';
 import { useWeb3Modal } from '@web3modal/wagmi/react';
 import Routes from '@/lib/constants/Routes';
+import { isLegacyMode, NEW_GIVETH_URL } from '@/lib/legacy';
 import links from '@/lib/constants/links';
 import { isUserRegistered, shortenAddress } from '@/lib/helpers';
 import { useAppDispatch, useAppSelector } from '@/features/hooks';
@@ -165,9 +166,10 @@ const walletMenuArray = [
 	},
 	{
 		title: 'label.create_a_project',
-		url: Routes.CreateProject,
-		requiresSign: true,
-		requiresRegistration: true,
+		// Legacy mode: creating lives on the new app, same as the header CREATE button.
+		url: isLegacyMode ? NEW_GIVETH_URL : Routes.CreateProject,
+		requiresSign: !isLegacyMode,
+		requiresRegistration: !isLegacyMode,
 	},
 	{
 		title: 'label.report_a_bug',
