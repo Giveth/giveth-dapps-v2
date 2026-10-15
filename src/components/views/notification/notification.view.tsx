@@ -10,6 +10,7 @@ import {
 } from '@giveth/ui-design-system';
 import { useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
+import { isLegacyMode } from '@/lib/legacy';
 import {
 	NotificationContainer,
 	IconContainer,
@@ -140,11 +141,13 @@ function NotificationView() {
 						<H5 weight={700}>
 							{formatMessage({ id: 'label.notification_center' })}
 						</H5>
-						<InternalLink href={Routes.NotificationsSettings}>
-							<ConfigContainer>
-								<IconConfig24 />
-							</ConfigContainer>
-						</InternalLink>
+						{!isLegacyMode && (
+							<InternalLink href={Routes.NotificationsSettings}>
+								<ConfigContainer>
+									<IconConfig24 />
+								</ConfigContainer>
+							</InternalLink>
+						)}
 					</Flex>
 					<Lead>
 						{formatMessage({

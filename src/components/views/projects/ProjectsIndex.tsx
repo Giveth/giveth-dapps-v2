@@ -14,6 +14,7 @@ import { useIntl } from 'react-intl';
 import { captureException } from '@sentry/nextjs';
 import { useInfiniteQuery } from '@tanstack/react-query';
 import styled from 'styled-components';
+import { isLegacyMode } from '@/lib/legacy';
 import ProjectCard from '@/components/project-card/ProjectCard';
 import Routes from '@/lib/constants/Routes';
 import { isUserRegistered, showToastError } from '@/lib/helpers';
@@ -270,6 +271,7 @@ const ProjectsIndex = (props: IProjectsView) => {
 				qfRound.isActive &&
 				!isStellarOnlyQF &&
 				!isArchivedQF &&
+				!isLegacyMode &&
 				activeRoundStarted && <PassportBanner />}
 			<Wrapper>
 				{qfRound && qfRound.isActive && !isArchivedQF && (
@@ -353,13 +355,15 @@ const ProjectsIndex = (props: IProjectsView) => {
 								)
 							}
 						/>
-						<StyledButton
-							onClick={handleCreateButton}
-							label={formatMessage({
-								id: 'component.button.create_project',
-							})}
-							$transparent
-						/>
+						{!isLegacyMode && (
+							<StyledButton
+								onClick={handleCreateButton}
+								label={formatMessage({
+									id: 'component.button.create_project',
+								})}
+								$transparent
+							/>
+						)}
 					</>
 				)}
 			</Wrapper>

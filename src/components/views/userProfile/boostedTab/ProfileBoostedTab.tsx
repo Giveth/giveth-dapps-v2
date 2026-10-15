@@ -4,6 +4,7 @@ import { captureException } from '@sentry/nextjs';
 
 import { Col, Row } from '@giveth/ui-design-system';
 import { useAccount } from 'wagmi';
+import { isLegacyMode } from '@/lib/legacy';
 import { IUserProfileView } from '../UserProfile.view';
 import BoostsTable from './BoostsTable';
 import { IPowerBoosting } from '@/apollo/types/types';
@@ -160,7 +161,9 @@ export const ProfileBoostedTab: FC<IUserProfileView> = () => {
 						title='Your GIVpower balance is zero!'
 						message='Stake GIV to boost these projects again.'
 						type={EToastType.Warning}
-						link={getGIVpowerLink(chainId)}
+						link={
+							isLegacyMode ? undefined : getGIVpowerLink(chainId)
+						}
 						linkText='Stake GIV'
 					/>
 				</ZeroGivPowerContainer>
@@ -183,7 +186,7 @@ export const ProfileBoostedTab: FC<IUserProfileView> = () => {
 					<EmptyPowerBoosting myAccount={true} />
 				)}
 			</PowerBoostingContainer>
-			<GetMoreGIVpowerBanner />
+			{!isLegacyMode && <GetMoreGIVpowerBanner />}
 		</UserProfileTab>
 	);
 };

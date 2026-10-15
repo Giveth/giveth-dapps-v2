@@ -3,6 +3,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useState } from 'react';
 import { Flex } from '@giveth/ui-design-system';
+import { isLegacyMode } from '@/lib/legacy';
 import { useAppSelector } from '@/features/hooks';
 import {
 	HeaderLink,
@@ -53,7 +54,7 @@ export const HeaderWrapper = () => {
 
 	return showHeader ? (
 		<>
-			<QFAnnouncementBanner onShow={setShowQFBanner} />
+			{!isLegacyMode && <QFAnnouncementBanner onShow={setShowQFBanner} />}
 			<HeaderPlaceHolder />
 			<Header showQFBanner={showQFBanner} />
 		</>

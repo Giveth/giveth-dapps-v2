@@ -13,6 +13,7 @@ import {
 	deviceSize,
 	FlexCenter,
 } from '@giveth/ui-design-system';
+import { isLegacyMode } from '@/lib/legacy';
 import { Shadow } from '@/components/styled-components/Shadow';
 import { EContentType } from '@/lib/constants/shareContent';
 import ShareRewardedModal from '@/components/modals/ShareRewardedModal';
@@ -62,6 +63,8 @@ const FloatingButtonReferral: FC<IFloatingReferral> = props => {
 
 		return () => window.removeEventListener('scroll', onScroll);
 	}, [showFloatingReferral]);
+
+	if (isLegacyMode) return null;
 
 	return (
 		<>

@@ -23,6 +23,7 @@ import { useIntl } from 'react-intl';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import { useWeb3Modal } from '@web3modal/wagmi/react';
+import { isLegacyMode } from '@/lib/legacy';
 import ExternalLink from '@/components/ExternalLink';
 import links from '@/lib/constants/links';
 import { useProjectContext } from '@/context/project.context';
@@ -380,7 +381,7 @@ const ProjectGIVbackToast = () => {
 		if (isUserLoading) return;
 		const { open } = router.query;
 		const _open = Array.isArray(open) ? open[0] : open;
-		if (_open === 'boost') {
+		if (!isLegacyMode && _open === 'boost') {
 			handleBoostClick();
 		}
 	}, [isUserLoading, router]);
@@ -406,7 +407,9 @@ const ProjectGIVbackToast = () => {
 						)}
 					</div>
 				</Content>
-				{Button && <ButtonWrapper>{Button}</ButtonWrapper>}
+				{!isLegacyMode && Button && (
+					<ButtonWrapper>{Button}</ButtonWrapper>
+				)}
 			</Wrapper>
 			{showBoost && (
 				<BoostModal

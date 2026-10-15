@@ -9,6 +9,7 @@ const withBundleAnalyzer = require('@next/bundle-analyzer')({
 });
 
 const generateRobotsTxt = require('./scripts/generate-robots-txt');
+const legacyRedirects = require('./scripts/legacy-redirects');
 
 const defaultLocale = 'en';
 const locales = ['en', 'ct', 'es'];
@@ -71,6 +72,7 @@ const moduleExports = withBundleAnalyzer({
 	},
 	redirects: () => {
 		const redirects = [
+			...legacyRedirects(process.env.NEXT_PUBLIC_LEGACY_MODE === 'true'),
 			{
 				source: '/user',
 				destination: '/account',

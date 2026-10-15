@@ -17,6 +17,7 @@ import {
 
 import { useIntl } from 'react-intl';
 import { useAccount } from 'wagmi';
+import { isLegacyMode } from '@/lib/legacy';
 import Routes from '@/lib/constants/Routes';
 import { isUserRegistered } from '@/lib/helpers';
 import { mediaQueries } from '@/lib/constants/constants';
@@ -119,6 +120,9 @@ const ProfileOverviewTab: FC<IUserProfileView> = () => {
 	const subgraphValues = useFetchSubgraphDataForAllChains();
 	const givPower = getTotalGIVpower(subgraphValues, address);
 	const { title, subtitle, buttons } = section;
+	// Legacy mode keeps only the read-only (outline) actions; hide the hero
+	// entirely rather than showing a call to action with no button.
+	const visibleButtons = buttons.filter(btn => !isLegacyMode || btn.outline);
 
 	const startedActiveRound = activeQFRound && hasRoundStarted(activeQFRound);
 
@@ -171,7 +175,7 @@ const ProfileOverviewTab: FC<IUserProfileView> = () => {
 					<CausesContributeCard />
 				</Col>
 			</Row>
-			{myAccount && isSafeEnv ? (
+			{!isLegacyMode && myAccount && isSafeEnv ? (
 				<Row>
 					<Col lg={6}>
 						<SectionTitle weight={700}>
@@ -187,6 +191,7 @@ const ProfileOverviewTab: FC<IUserProfileView> = () => {
 					</Col>
 				</Row>
 			) : (
+				!isLegacyMode &&
 				myAccount &&
 				(isOnSolana ? (
 					<Row>
@@ -225,12 +230,12 @@ const ProfileOverviewTab: FC<IUserProfileView> = () => {
 			<BannerWrapper>
 				<ProjectsMiddleGivethVaultBanner />
 			</BannerWrapper>
-			{myAccount && (
+			{myAccount && visibleButtons.length > 0 && (
 				<AccountHero $leftAlign={title === _sections.donate.title}>
 					<H1>{title}</H1>
 					<QuoteText>{subtitle}</QuoteText>
 					<Buttons>
-						{buttons.map((btn, index) => {
+						{visibleButtons.map((btn, index) => {
 							const props: IButtonProps = {
 								size: 'large',
 								label: btn.label,

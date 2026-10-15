@@ -18,6 +18,7 @@ import { ChangeEvent, FC, useEffect, useState } from 'react';
 import styled, { css } from 'styled-components';
 import BigNumber from 'bignumber.js';
 import Link from 'next/link';
+import { isLegacyMode } from '@/lib/legacy';
 
 import {
 	RowWrapper,
@@ -206,7 +207,7 @@ const BoostsTable: FC<IBoostsTable> = ({
 		<>
 			<Header $justifyContent='space-between' $flexWrap gap='16px'>
 				<H5 weight={700}>GIVpower Summary</H5>
-				{myAccount && (
+				{!isLegacyMode && myAccount && (
 					<Actions gap='8px'>
 						{mode === ETableNode.VIEWING ? (
 							<Button
@@ -384,20 +385,30 @@ const BoostsTable: FC<IBoostsTable> = ({
 							</BoostsTableCell>
 							{myAccount && mode === ETableNode.VIEWING && (
 								<BoostsTableCell>
-									<IconWrapper
-										onClick={() => {
-											setSelectedBoost(boost.id);
-											setShowDeleteModal(true);
-										}}
-									>
-										<IconTrash size={24} />
-									</IconWrapper>
-									{!boost.project.verified && (
+									{!isLegacyMode && (
 										<IconWrapper
 											onClick={() => {
 												setSelectedBoost(boost.id);
 												setShowDeleteModal(true);
 											}}
+										>
+											<IconTrash size={24} />
+										</IconWrapper>
+									)}
+									{!boost.project.verified && (
+										<IconWrapper
+											onClick={
+												isLegacyMode
+													? undefined
+													: () => {
+															setSelectedBoost(
+																boost.id,
+															);
+															setShowDeleteModal(
+																true,
+															);
+														}
+											}
 										>
 											<IconWithTooltip
 												icon={<IconAlertCircle16 />}
@@ -408,9 +419,9 @@ const BoostsTable: FC<IBoostsTable> = ({
 													This project has lost its
 													verified status and
 													therefore is no longer
-													eligible for GIVpower. We
-													recommend removing this
-													boost.
+													eligible for GIVpower.
+													{!isLegacyMode &&
+														' We recommend removing this boost.'}
 												</BoostTooltip>
 											</IconWithTooltip>
 										</IconWrapper>

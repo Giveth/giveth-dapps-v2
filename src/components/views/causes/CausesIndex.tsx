@@ -14,6 +14,7 @@ import { useIntl } from 'react-intl';
 import { captureException } from '@sentry/nextjs';
 import { useInfiniteQuery } from '@tanstack/react-query';
 import styled from 'styled-components';
+import { isLegacyMode } from '@/lib/legacy';
 import Routes from '@/lib/constants/Routes';
 import { isUserRegistered, showToastError } from '@/lib/helpers';
 import { useAppDispatch, useAppSelector } from '@/features/hooks';
@@ -315,13 +316,15 @@ const CausesIndex = (props: ICausesView) => {
 								)
 							}
 						/>
-						<StyledButton
-							onClick={handleCreateButton}
-							label={formatMessage({
-								id: 'component.button.create_project',
-							})}
-							$transparent
-						/>
+						{!isLegacyMode && (
+							<StyledButton
+								onClick={handleCreateButton}
+								label={formatMessage({
+									id: 'component.button.create_project',
+								})}
+								$transparent
+							/>
+						)}
 					</>
 				)}
 			</Wrapper>

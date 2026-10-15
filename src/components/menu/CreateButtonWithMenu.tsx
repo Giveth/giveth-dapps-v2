@@ -9,6 +9,7 @@ import { useDelayedState } from '@/hooks/useDelayedState';
 import { ItemsProvider } from '@/context/Items.context';
 import useMediaQuery from '@/hooks/useMediaQuery';
 import Routes from '@/lib/constants/Routes';
+import { isLegacyMode, NEW_GIVETH_URL } from '@/lib/legacy';
 
 interface ICreateButtonWithMenu {
 	isHeaderShowing: boolean;
@@ -55,6 +56,29 @@ export const CreateButtonWithMenu: FC<ICreateButtonWithMenu> = ({
 		closeMenu();
 		setClickOpen(false);
 	};
+
+	// Legacy mode: creating lives on the new app, so the button is a plain link.
+	if (isLegacyMode) {
+		return (
+			<CreateButtonContainer>
+				<StyledCreateButton
+					as='a'
+					href={NEW_GIVETH_URL}
+					aria-label={formatMessage({ id: 'label.button.create' })}
+					$isProjectPage={isProjectPage}
+				>
+					<ButtonContent>
+						<IconPlus size={16} />
+						{isMobile && (
+							<span>
+								{formatMessage({ id: 'label.button.create' })}
+							</span>
+						)}
+					</ButtonContent>
+				</StyledCreateButton>
+			</CreateButtonContainer>
+		);
+	}
 
 	return (
 		<CreateButtonContainer

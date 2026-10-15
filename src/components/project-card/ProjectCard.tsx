@@ -15,6 +15,7 @@ import {
 import Link from 'next/link';
 import { useIntl } from 'react-intl';
 import { useRouter } from 'next/router';
+import { isLegacyMode } from '@/lib/legacy';
 import { Shadow } from '@/components/styled-components/Shadow';
 import ProjectCardBadges from './ProjectCardBadgeButtons';
 import ProjectCardOrgBadge from './ProjectCardOrgBadge';
@@ -216,7 +217,6 @@ const ProjectCard = (props: IProjectCard) => {
 	}, [props]);
 
 	return (
-		// </Link>
 		<Wrapper
 			onMouseEnter={() => setIsHover(true)}
 			onMouseLeave={() => setIsHover(false)}
@@ -427,7 +427,7 @@ const ProjectCard = (props: IProjectCard) => {
 					</Link>
 				)}
 			</CardBody>
-			{!isListingInsideCauseProjectTabs && (
+			{!isLegacyMode && !isListingInsideCauseProjectTabs && (
 				<ActionButtons className='action-buttons'>
 					<Link
 						id='Donate_Card'

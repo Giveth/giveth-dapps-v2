@@ -1,5 +1,6 @@
 import { useEffect } from 'react';
 import { useAccount } from 'wagmi';
+import { isLegacyMode } from '@/lib/legacy';
 import WelcomeModal from '@/components/modals/WelcomeModal';
 import { FirstWelcomeModal } from '@/components/modals/FirstWelcomeModal';
 import { SignWithWalletModal } from '@/components/modals/SignWithWalletModal';
@@ -75,7 +76,7 @@ const ModalController = () => {
 					}
 				/>
 			)}
-			{showCompleteProfile && (
+			{!isLegacyMode && showCompleteProfile && (
 				<CompleteProfileModal
 					setShowModal={state =>
 						dispatch(setShowCompleteProfile(state))
@@ -87,7 +88,7 @@ const ModalController = () => {
 					setShowModal={state => dispatch(setShowWelcomeModal(state))}
 				/>
 			)}
-			{showFirstWelcomeModal && (
+			{!isLegacyMode && showFirstWelcomeModal && (
 				<FirstWelcomeModal
 					setShowModal={state =>
 						dispatch(setShowFirstWelcomeModal(state))
@@ -106,7 +107,7 @@ const ModalController = () => {
 					}
 				/>
 			)}
-			{showVerifyEmailModal && (
+			{!isLegacyMode && showVerifyEmailModal && (
 				<VerifyEmailModal
 					setShowModal={state =>
 						dispatch(setShowVerifyEmailModal(state))

@@ -19,6 +19,7 @@ import {
 import styled from 'styled-components';
 import { useIntl } from 'react-intl';
 import Link from 'next/link';
+import { isLegacyMode } from '@/lib/legacy';
 import ProjectHeader from './ProjectHeader';
 import ProjectTabs from './ProjectTabs';
 import InfoBadge from '@/components/badges/InfoBadge';
@@ -117,7 +118,7 @@ const ProjectIndex: FC<IProjectBySlug> = () => {
 		isProjectEditLocked,
 	} = useProjectEditLock({
 		projectId: projectData?.id,
-		enabled: isAdmin && isDraft,
+		enabled: !isLegacyMode && isAdmin && isDraft,
 	});
 
 	const handleContinueCreation = async () => {
@@ -183,7 +184,8 @@ const ProjectIndex: FC<IProjectBySlug> = () => {
 			<HeadContainer>
 				{isAdmin && <ProjectOwnerBanner />}
 				<ProjectBadges />
-				{hasStellarAddress &&
+				{!isLegacyMode &&
+					hasStellarAddress &&
 					!isAdmin &&
 					!userDataLoading &&
 					!isLoading && (
