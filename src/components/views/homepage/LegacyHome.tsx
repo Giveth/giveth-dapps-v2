@@ -63,10 +63,15 @@ const Wrapper = styled(Container)`
 `;
 
 // Outline button in the brand purple; the design system only ships white or pink outlines.
+// The doubled selector raises specificity so this wins over the design system's
+// "secondary" (white) rule regardless of stylesheet injection order (dev/HMR
+// could otherwise inject the base rule last and turn the buttons white).
 const AccountButton = styled(OutlineLinkButton)`
-	color: ${brandColors.giv[500]};
-	border-color: ${brandColors.giv[500]};
-	&:hover {
+	&& {
+		color: ${brandColors.giv[500]};
+		border-color: ${brandColors.giv[500]};
+	}
+	&&:hover {
 		color: ${brandColors.giv[700]};
 		border-color: ${brandColors.giv[700]};
 		background-color: ${brandColors.giv[100]};
