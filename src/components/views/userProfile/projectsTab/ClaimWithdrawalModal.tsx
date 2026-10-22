@@ -6,31 +6,32 @@ import {
 	brandColors,
 	P,
 } from '@giveth/ui-design-system';
-import { Address, encodeFunctionData } from 'viem';
+import { Address, isAddress } from 'viem';
 import { useState } from 'react';
 import { useIntl } from 'react-intl';
-import { writeContract, waitForTransactionReceipt } from '@wagmi/core';
-import { useAccount } from 'wagmi';
 import { Modal } from '@/components/modals/Modal';
 import { IModal } from '@/types/common';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
 import { ITokenWithBalance } from '@/hooks/useProjectClaimableDonations';
 import ClaimWithdrawalItem from './ClaimWithdrawalItem';
 import { IProject } from '@/apollo/types/types';
-import config from '@/configuration';
-import superTokenABI from '@/artifacts/superToken.json';
-import ISETH from '@/artifacts/ISETH.json';
-import anchorContractABI from '@/artifacts/anchorContract.json';
 import { ClaimWithdrawalStatus } from './ClaimWithdrawalStatus';
-import { formatTxLink } from '@/lib/helpers';
+import { formatTxLink, showToastError } from '@/lib/helpers';
 import { ChainType } from '@/types/config';
 import { ClaimTransactionState } from './type';
-import { wagmiConfig } from '@/wagmiConfigs';
 import { ensureCorrectNetwork } from '@/helpers/network';
+import {
+	ClaimTransactionError,
+	EClaimStep,
+	executeAnchorClaim,
+	isETHxToken,
+} from '@/helpers/claimRecurringDonation';
+import { isUserRejectedError } from '@/helpers/transactionErrors';
 interface IClaimWithdrawalModal extends IModal {
 	selectedStream: ITokenWithBalance;
 	project: IProject;
 	anchorContractAddress: Address;
+	recurringNetworkId: number;
 	balanceInUsd: number;
 	refetch: () => Promise<void>;
 }
@@ -68,6 +69,7 @@ const ClaimWithdrawalModal = ({
 	selectedStream,
 	project,
 	anchorContractAddress,
+	recurringNetworkId,
 	balanceInUsd,
 	refetch,
 }: IClaimWithdrawalModal) => {
@@ -76,41 +78,48 @@ const ClaimWithdrawalModal = ({
 		useState<ClaimTransactionState>(ClaimTransactionState.NOT_STARTED);
 	const [txHash, setTxHash] = useState<Address>();
 	const { formatMessage } = useIntl();
-	const { chain } = useAccount();
-	const recurringNetworkID = chain?.id ?? 0;
 
 	const projectName = project.title || '';
-	let projectAddress = '';
-	if (recurringNetworkID === config.OPTIMISM_NETWORK_NUMBER) {
-		projectAddress =
-			project.addresses?.find(
-				address => address.networkId === config.OPTIMISM_NETWORK_NUMBER,
-			)?.address || '';
-	} else if (recurringNetworkID === config.BASE_NETWORK_NUMBER) {
-		projectAddress =
-			project.addresses?.find(
-				address => address.networkId === config.BASE_NETWORK_NUMBER,
-			)?.address || '';
-	}
+	// The recipient must be the project's address on the same network as the
+	// Anchor contract we are claiming from, never the wallet's current chain.
+	const projectAddress =
+		project.addresses?.find(
+			address => address.networkId === recurringNetworkId,
+		)?.address || '';
 
-	const isETHx = selectedStream.token.symbol.toLowerCase() === 'ethx';
+	const isETHx = isETHxToken(selectedStream.token);
+
+	const getErrorMessage = (error: unknown) => {
+		if (error instanceof ClaimTransactionError) {
+			return formatMessage({
+				id:
+					error.step === EClaimStep.TRANSFER
+						? 'label.claim_transfer_failed'
+						: 'label.claim_downgrade_failed',
+			});
+		}
+		return error instanceof Error && error.message
+			? error.message
+			: formatMessage({ id: 'label.claim_failed' });
+	};
+
 	const handleConfirm = async () => {
 		try {
-			await ensureCorrectNetwork(recurringNetworkID);
-			const encodedDowngradeTo = isETHx
-				? encodeFunctionData({
-						abi: ISETH.abi,
-						functionName: 'downgradeToETH',
-						args: [selectedStream.balance.toString()],
-					})
-				: encodeFunctionData({
-						abi: superTokenABI.abi,
-						functionName: 'downgradeTo',
-						args: [
-							projectAddress,
-							selectedStream.balance.toString(),
-						],
-					});
+			const isOnCorrectNetwork =
+				await ensureCorrectNetwork(recurringNetworkId);
+			if (!isOnCorrectNetwork) {
+				throw new Error(
+					formatMessage({ id: 'label.claim_switch_network_failed' }),
+				);
+			}
+			if (
+				!projectAddress ||
+				!isAddress(projectAddress, { strict: false })
+			) {
+				throw new Error(
+					formatMessage({ id: 'label.claim_no_recipient_address' }),
+				);
+			}
 
 			setTransactionState(
 				isETHx
@@ -118,64 +127,30 @@ const ClaimWithdrawalModal = ({
 					: ClaimTransactionState.WITHDRAWING,
 			);
 
-			// Execute the anchor contract
-			console.log('Start execute downgrading on Anchor contract');
-			const tx = await writeContract(wagmiConfig, {
-				abi: anchorContractABI.abi,
-				address: anchorContractAddress,
-				functionName: 'execute',
-				chainId: recurringNetworkID,
-				args: [selectedStream.token.id, '', encodedDowngradeTo],
+			await executeAnchorClaim({
+				chainId: recurringNetworkId,
+				anchorContractAddress,
+				projectAddress,
+				token: selectedStream.token,
+				amount: selectedStream.balance,
+				onDowngradeSent: hash => setTxHash(hash),
+				onTransferStarted: () =>
+					setTransactionState(ClaimTransactionState.TRANSFERRING_ETH),
+				onTransferSent: hash => setTxHash(hash),
 			});
 
-			if (tx) {
-				setTxHash(tx);
-				const withdrawRes = await waitForTransactionReceipt(
-					wagmiConfig,
-					{
-						hash: tx,
-						chainId: recurringNetworkID,
-					},
-				);
-
-				console.log('withdrawRes', withdrawRes);
-
-				setTransactionState(
-					isETHx
-						? ClaimTransactionState.TRANSFERRING_ETH
-						: ClaimTransactionState.SUCCESS,
-				);
-
-				// Transfer ETH to the project op address
-				if (isETHx) {
-					console.log("Start transfer ETH to project's op address");
-					const transferEthTx = await writeContract(wagmiConfig, {
-						abi: anchorContractABI.abi,
-						address: anchorContractAddress,
-						functionName: 'execute',
-						chainId: recurringNetworkID,
-						args: [
-							projectAddress,
-							+selectedStream.balance.toString(),
-							'',
-						],
-					});
-					console.log('transferEthTx', transferEthTx);
-					if (transferEthTx) {
-						await waitForTransactionReceipt(wagmiConfig, {
-							hash: transferEthTx,
-							chainId: recurringNetworkID,
-						});
-					}
-					setTransactionState(ClaimTransactionState.SUCCESS);
-				}
-
-				refetch();
-			}
+			setTransactionState(ClaimTransactionState.SUCCESS);
+			await refetch();
 		} catch (error) {
-			console.error(error);
-			console.log('anchorContractAddress', anchorContractAddress);
+			console.error('Claim recurring donation error', {
+				error,
+				anchorContractAddress,
+				recurringNetworkId,
+			});
 			setTransactionState(ClaimTransactionState.NOT_STARTED);
+			if (!isUserRejectedError(error)) {
+				showToastError(getErrorMessage(error));
+			}
 		}
 	};
 
@@ -219,7 +194,7 @@ const ClaimWithdrawalModal = ({
 						<CustomLink
 							href={formatTxLink({
 								txHash,
-								networkId: recurringNetworkID,
+								networkId: recurringNetworkId,
 								chainType: ChainType.EVM,
 							})}
 							target='_blank'

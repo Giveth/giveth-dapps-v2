@@ -16,6 +16,7 @@ import config, { SENTRY_URGENT } from '@/configuration';
 import {
 	CREATE_DRAFT_RECURRING_DONATION,
 	CREATE_RECURRING_DONATION,
+	RECONCILE_RECURRING_DONATION_STATUS,
 	UPDATE_RECURRING_DONATION,
 	UPDATE_RECURRING_DONATION_BY_ID,
 	UPDATE_RECURRING_DONATION_STATUS,
@@ -370,6 +371,33 @@ export const endRecurringDonation = async ({
 			},
 		});
 		console.error('endRecurringDonation error: ', error);
+		throw error;
+	}
+};
+
+// Used when the chain shows a stream has already ended (manually or by
+// Superfluid liquidation) but the backend still reports it as active. The
+// backend verifies the stream itself; the client never sends a status.
+export const reconcileRecurringDonation = async (
+	recurringDonationId: number,
+): Promise<{
+	id: string;
+	status: ERecurringDonationStatus;
+	finished: boolean;
+}> => {
+	try {
+		const { data } = await client.mutate({
+			mutation: RECONCILE_RECURRING_DONATION_STATUS,
+			variables: { recurringDonationId },
+		});
+		return data.reconcileRecurringDonationStatus;
+	} catch (error: any) {
+		captureException(error, {
+			tags: {
+				section: 'reconcileRecurringDonation',
+			},
+		});
+		console.error('reconcileRecurringDonation error: ', error);
 		throw error;
 	}
 };

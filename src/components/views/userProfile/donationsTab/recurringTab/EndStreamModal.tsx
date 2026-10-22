@@ -19,13 +19,27 @@ import config, { isProduction } from '@/configuration';
 import { IWalletRecurringDonation } from '@/apollo/types/types';
 import { getEthersProvider, getEthersSigner } from '@/helpers/ethers';
 import { wagmiConfig } from '@/wagmiConfigs';
-import { endRecurringDonation } from '@/services/donation';
+import {
+	endRecurringDonation,
+	reconcileRecurringDonation,
+} from '@/services/donation';
 import { showToastError } from '@/lib/helpers';
+import {
+	StreamStateUnknownError,
+	getRecurringFlowState,
+	runEndStreamFlow,
+} from '@/helpers/recurringStream';
+import { isUserRejectedError } from '@/helpers/transactionErrors';
+import { isETHxToken } from '@/helpers/claimRecurringDonation';
+import { findAnchorContractAddress } from '@/helpers/superfluid';
 
 enum EEndStreamSteps {
 	CONFIRM,
 	ENDING,
 	SUCCESS,
+	// The stream was already gone on-chain (ended elsewhere or liquidated by
+	// Superfluid), so no transaction was sent.
+	ALREADY_ENDED,
 }
 
 export interface IEndStreamModalProps extends IModal {
@@ -111,86 +125,119 @@ const EndStreamInnerModal: FC<IEndStreamInnerModalProps> = ({
 			const sf = await Framework.create(_options);
 
 			let superToken;
-			if (_superToken.symbol === 'ETHx') {
+			if (isETHxToken(_superToken)) {
 				superToken = await sf.loadNativeAssetSuperToken(_superToken.id);
 			} else {
 				superToken = await sf.loadWrapperSuperToken(_superToken.id);
 			}
 
-			const matchingContract = donation.project.anchorContracts.find(
-				contract => contract.networkId === recurringNetworkId,
+			const anchorAddress = findAnchorContractAddress(
+				donation.project.anchorContracts,
+				recurringNetworkId,
 			);
+			if (!anchorAddress) {
+				throw new Error('Project Anchor contract address not found');
+			}
+			const recurringDonationId = parseInt(donation.id);
 
-			const deleteOp = superToken.deleteFlow({
-				sender: address,
-				receiver: matchingContract?.address || '',
+			const result = await runEndStreamFlow({
+				getFlowState: () =>
+					getRecurringFlowState(
+						sf,
+						_superToken.id,
+						address,
+						anchorAddress,
+						provider,
+					),
+				executeDeleteFlow: () =>
+					superToken
+						.deleteFlow({
+							sender: address,
+							receiver: anchorAddress,
+						})
+						.exec(signer),
+				endRecurringDonation: txHash =>
+					endRecurringDonation({
+						recurringDonationId,
+						projectId: +donation.project.id,
+						chainId: recurringNetworkId,
+						txHash,
+						superToken: _superToken,
+					}),
+				reconcileRecurringDonation: () =>
+					reconcileRecurringDonation(recurringDonationId),
 			});
 
-			const tx = await deleteOp.exec(signer);
-
-			try {
-				const info = {
-					recurringDonationId: parseInt(donation.id),
-					projectId: +donation.project.id,
-					chainId: recurringNetworkId,
-					txHash: tx.hash,
-					superToken: _superToken,
-				};
-				const projectBackendRes = await endRecurringDonation(info);
-				console.log('Project Donation End Info', projectBackendRes);
-			} catch (error) {
-				showToastError(error);
+			setStep(
+				result.outcome === 'already_ended'
+					? EEndStreamSteps.ALREADY_ENDED
+					: EEndStreamSteps.SUCCESS,
+			);
+			if (!result.backendSynced) {
+				showToastError(
+					formatMessage({
+						id: 'component.end_stream_modal.backend_sync_failed',
+					}),
+				);
 			}
-
-			const res = await tx.wait();
-			if (!res.status) {
-				throw new Error('Transaction failed');
-			}
-			setStep(EEndStreamSteps.SUCCESS);
 		} catch (error: any) {
 			setStep(EEndStreamSteps.CONFIRM);
-			if (error?.code !== 'ACTION_REJECTED') {
+			if (error instanceof StreamStateUnknownError) {
+				showToastError(
+					formatMessage({
+						id: 'component.end_stream_modal.ended_check_failed',
+					}),
+				);
+			} else if (!isUserRejectedError(error)) {
 				showToastError(error);
 			}
 			console.error('Error on recurring donation', { error });
 		}
 	};
 
-	return step === EEndStreamSteps.CONFIRM ||
-		step === EEndStreamSteps.ENDING ? (
-		<Wrapper>
-			<InlineToast
-				type={EToastType.Error}
-				message={formatMessage({
-					id: 'component.end_stream_modal.confirm_question',
-				})}
-			/>
-			<Flex gap='16px'>
-				<ActionButton
-					label={formatMessage({ id: 'label.cancel' })}
-					onClick={() => closeModal(false)}
-					buttonType='texty-gray'
-					disabled={step === EEndStreamSteps.ENDING}
+	if (step === EEndStreamSteps.CONFIRM || step === EEndStreamSteps.ENDING) {
+		return (
+			<Wrapper>
+				<InlineToast
+					type={EToastType.Error}
+					message={formatMessage({
+						id: 'component.end_stream_modal.confirm_question',
+					})}
 				/>
-				<ActionButton
-					label={formatMessage({ id: 'label.confirm' })}
-					onClick={() => onDeleteStream()}
-					disabled={step === EEndStreamSteps.ENDING}
-					loading={step === EEndStreamSteps.ENDING}
-				/>
-			</Flex>
-		</Wrapper>
-	) : (
+				<Flex gap='16px'>
+					<ActionButton
+						label={formatMessage({ id: 'label.cancel' })}
+						onClick={() => closeModal(false)}
+						buttonType='texty-gray'
+						disabled={step === EEndStreamSteps.ENDING}
+					/>
+					<ActionButton
+						label={formatMessage({ id: 'label.confirm' })}
+						onClick={() => onDeleteStream()}
+						disabled={step === EEndStreamSteps.ENDING}
+						loading={step === EEndStreamSteps.ENDING}
+					/>
+				</Flex>
+			</Wrapper>
+		);
+	}
+
+	const isAlreadyEnded = step === EEndStreamSteps.ALREADY_ENDED;
+	return (
 		<Wrapper>
 			<CenteredB>
 				{formatMessage({
-					id: 'component.end_stream_modal.ended_title',
+					id: isAlreadyEnded
+						? 'component.end_stream_modal.already_ended_title'
+						: 'component.end_stream_modal.ended_title',
 				})}
 			</CenteredB>
 			<P>
 				{formatMessage(
 					{
-						id: 'component.end_stream_modal.ended_description',
+						id: isAlreadyEnded
+							? 'component.end_stream_modal.already_ended_description'
+							: 'component.end_stream_modal.ended_description',
 					},
 					{
 						name: donation.project.title,

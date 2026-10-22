@@ -16,6 +16,8 @@ export enum EDonationSteps {
 	CONFIRM,
 	DONATING,
 	SUCCESS,
+	// The stream no longer exists on-chain, so it cannot be modified.
+	STREAM_ENDED,
 }
 
 export interface IModifyDonationInfo {
@@ -52,7 +54,10 @@ export const ModifyStreamModal: FC<IModifyStreamModalProps> = ({
 	}, [props.recurringNetworkId, props.donation.currency]);
 
 	const handleCloseModal = () => {
-		if (step === EDonationSteps.SUCCESS) {
+		if (
+			step === EDonationSteps.SUCCESS ||
+			step === EDonationSteps.STREAM_ENDED
+		) {
 			props.refetch();
 		}
 		closeModal();

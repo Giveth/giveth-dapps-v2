@@ -2,7 +2,8 @@ import { B, P, neutralColors, Flex } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import Image from 'next/image';
 import { useMemo, useState } from 'react';
-import { useSwitchChain } from 'wagmi';
+import { useIntl } from 'react-intl';
+import { Address } from 'viem';
 import { IProject } from '@/apollo/types/types';
 import { Modal } from '@/components/modals/Modal';
 import { IModal } from '@/types/common';
@@ -17,6 +18,8 @@ import ClaimWithdrawalModal from './ClaimWithdrawalModal';
 import { ClaimRecurringItem } from './ClaimRecurringItem';
 import { formatDonation } from '@/helpers/number';
 import { findAnchorContractAddress } from '@/helpers/superfluid';
+import { ensureCorrectNetwork } from '@/helpers/network';
+import { showToastError } from '@/lib/helpers';
 import config from '@/configuration';
 import NetworkLogo from '@/components/NetworkLogo';
 
@@ -36,7 +39,7 @@ const ClaimRecurringDonationModal = ({
 	setShowModal,
 	project,
 }: IClaimRecurringDonationModal) => {
-	const { switchChain } = useSwitchChain();
+	const { formatMessage } = useIntl();
 	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
 	const [showClaimWithdrawalModal, setShowClaimWithdrawalModal] =
 		useState(false);
@@ -48,7 +51,8 @@ const ClaimRecurringDonationModal = ({
 	);
 
 	const [selectedAnchorContractAddress, setSelectedAnchorContractAddress] =
-		useState('');
+		useState<Address>();
+	const [selectedChainId, setSelectedChainId] = useState<number>();
 
 	const recurringChains = [
 		{
@@ -93,13 +97,23 @@ const ClaimRecurringDonationModal = ({
 
 	// Handle select stream and switch chain before opening the claim withdrawal modal
 	const handleSelectStream = async (selectedItem: ITokenWithBalance) => {
-		await switchChain({ chainId: recurringChains[activeTab].chainId });
+		// Only open the claim modal once the wallet is on the stream's chain.
+		const isOnCorrectNetwork = await ensureCorrectNetwork(
+			recurringChains[activeTab].chainId,
+		);
+		if (!isOnCorrectNetwork) {
+			showToastError(
+				formatMessage({ id: 'label.claim_switch_network_failed' }),
+			);
+			return;
+		}
 		setSelectedStream(selectedItem);
 		setShowClaimWithdrawalModal(true);
 		setFetchFunction(() => recurringChains[activeTab].data.refetch);
 		setSelectedAnchorContractAddress(
-			recurringChains[activeTab].anchorContractAddress || '',
+			recurringChains[activeTab].anchorContractAddress,
 		);
+		setSelectedChainId(recurringChains[activeTab].chainId);
 	};
 
 	return (
@@ -172,7 +186,8 @@ const ClaimRecurringDonationModal = ({
 				</SuperfluidLogoContainer>
 				{showClaimWithdrawalModal &&
 					selectedStream &&
-					selectedAnchorContractAddress && (
+					selectedAnchorContractAddress &&
+					selectedChainId && (
 						<ClaimWithdrawalModal
 							setShowModal={setShowClaimWithdrawalModal}
 							selectedStream={selectedStream}
@@ -180,6 +195,7 @@ const ClaimRecurringDonationModal = ({
 							anchorContractAddress={
 								selectedAnchorContractAddress
 							}
+							recurringNetworkId={selectedChainId}
 							refetch={fetchFunction}
 							balanceInUsd={
 								allTokensUsd[

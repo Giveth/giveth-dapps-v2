@@ -17,9 +17,21 @@ import { showToastError } from '@/lib/helpers';
 import {
 	ICreateDraftRecurringDonation,
 	createDraftRecurringDonation,
+	reconcileRecurringDonation,
 	updateRecurringDonation,
 	updateRecurringDonationStatus,
 } from '@/services/donation';
+import {
+	StreamStateUnknownError,
+	checkStreamBeforeTransaction,
+	getRecurringFlowState,
+	reconcileSafely,
+} from '@/helpers/recurringStream';
+import {
+	isFlowDoesNotExistError,
+	isUserRejectedError,
+} from '@/helpers/transactionErrors';
+import { isETHxToken } from '@/helpers/claimRecurringDonation';
 import { wagmiConfig } from '@/wagmiConfigs';
 import InlineToast, { EToastType } from '@/components/toasts/InlineToast';
 import { TXLink } from './TXLink';
@@ -59,7 +71,13 @@ export const UpdateStreamInnerModal: FC<IModifyStreamInnerModalProps> = ({
 	const onDonate = async () => {
 		setStep(EDonationSteps.DONATING);
 		try {
-			await ensureCorrectNetwork(recurringNetworkId);
+			const isOnCorrectNetwork =
+				await ensureCorrectNetwork(recurringNetworkId);
+			if (!isOnCorrectNetwork) {
+				throw new Error(
+					formatMessage({ id: 'label.claim_switch_network_failed' }),
+				);
+			}
 			const projectAnchorContract = findAnchorContractAddress(
 				donation.project.anchorContracts,
 				recurringNetworkId,
@@ -87,10 +105,40 @@ export const UpdateStreamInnerModal: FC<IModifyStreamInnerModalProps> = ({
 
 			// ETHx is not a Wrapper Super Token and should load separately
 			let superToken;
-			if (token.symbol === 'ETHx') {
+			if (isETHxToken(token)) {
 				superToken = await sf.loadNativeAssetSuperToken(token.id);
 			} else {
 				superToken = await sf.loadWrapperSuperToken(token.id);
+			}
+
+			// The backend status can lag behind the chain (stream ended elsewhere
+			// or liquidated). Never try to update a flow that no longer exists.
+			const streamDeps = {
+				getFlowState: () =>
+					getRecurringFlowState(
+						sf,
+						token.id,
+						address,
+						projectAnchorContract,
+						provider,
+					),
+				reconcileRecurringDonation: () =>
+					reconcileRecurringDonation(+donation.id),
+			};
+			const onStreamAlreadyEnded = (backendSynced: boolean) => {
+				setStep(EDonationSteps.STREAM_ENDED);
+				if (!backendSynced) {
+					showToastError(
+						formatMessage({
+							id: 'component.end_stream_modal.backend_sync_failed',
+						}),
+					);
+				}
+			};
+			const preflight = await checkStreamBeforeTransaction(streamDeps);
+			if (preflight.status === 'already_ended') {
+				onStreamAlreadyEnded(preflight.backendSynced);
+				return;
 			}
 
 			const _flowRatePerSec = flowRatePerMonth / ONE_MONTH_SECONDS;
@@ -117,7 +165,17 @@ export const UpdateStreamInnerModal: FC<IModifyStreamInnerModalProps> = ({
 				projectDraftDonationInfo,
 			);
 
-			const tx = await projectFlowOp.exec(signer);
+			let tx;
+			try {
+				tx = await projectFlowOp.exec(signer);
+			} catch (error) {
+				if (isFlowDoesNotExistError(error)) {
+					// The stream was ended between the check and the send.
+					onStreamAlreadyEnded(await reconcileSafely(streamDeps));
+					return;
+				}
+				throw error;
+			}
 			setTx(tx.hash);
 
 			let projectDonationId = 0;
@@ -171,7 +229,13 @@ export const UpdateStreamInnerModal: FC<IModifyStreamInnerModalProps> = ({
 			}
 		} catch (error: any) {
 			setStep(EDonationSteps.CONFIRM);
-			if (error?.code !== 'ACTION_REJECTED') {
+			if (error instanceof StreamStateUnknownError) {
+				showToastError(
+					formatMessage({
+						id: 'component.end_stream_modal.ended_check_failed',
+					}),
+				);
+			} else if (!isUserRejectedError(error)) {
 				showToastError(error);
 			}
 			console.error('Error on recurring donation', { error });
@@ -224,6 +288,24 @@ export const UpdateStreamInnerModal: FC<IModifyStreamInnerModalProps> = ({
 						message={`Your recurring donation to the ${donation.project.title} is now active!`}
 					/>
 					{tx && <TXLink tx={tx} />}
+					<ActionButton
+						label={formatMessage({ id: 'label.done' })}
+						onClick={() => {
+							closeModal();
+						}}
+					/>
+				</>
+			) : step === EDonationSteps.STREAM_ENDED ? (
+				<>
+					<StyledToast
+						type={EToastType.Error}
+						message={formatMessage(
+							{
+								id: 'component.modify_stream_modal.already_ended',
+							},
+							{ name: donation.project.title },
+						)}
+					/>
 					<ActionButton
 						label={formatMessage({ id: 'label.done' })}
 						onClick={() => {
