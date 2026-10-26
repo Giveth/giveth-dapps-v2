@@ -140,6 +140,20 @@ export const UPDATE_RECURRING_DONATION_BY_ID = gql`
 	}
 `;
 
+// Asks the backend to re-check a recurring donation against the on-chain
+// Superfluid stream and mark it ended if the stream no longer exists.
+export const RECONCILE_RECURRING_DONATION_STATUS = gql`
+	mutation reconcileRecurringDonationStatus($recurringDonationId: Int!) {
+		reconcileRecurringDonationStatus(
+			recurringDonationId: $recurringDonationId
+		) {
+			id
+			status
+			finished
+		}
+	}
+`;
+
 export const UPDATE_RECURRING_DONATION_STATUS = gql`
 	mutation updateRecurringDonationStatus(
 		$status: String
